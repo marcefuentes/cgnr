@@ -11,9 +11,18 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
 	int correlationPairs[CORRELATIONS][2] = { { 2, 3 },
 						  { 2, 4 },
 						  { 2, 5 },
+						  { 2, 6 },
+						  { 2, 7 },
 						  { 3, 4 },
 						  { 3, 5 },
-						  { 4, 5 } };
+						  { 3, 6 },
+						  { 3, 7 },
+						  { 4, 5 },
+						  { 4, 6 },
+						  { 4, 7 },
+						  { 5, 6 },
+						  { 5, 7 },
+						  { 6, 7 } };
 	double binsize = 1.0/BINS;
 	double e, f, qi, qs;
 	int b;
@@ -35,8 +44,10 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
 						     &i->qBDefault,
 						     &i->qBSeen,
 						     &i->ChooseGrain,
+						     &i->Choose_ltGrain,
 						     &i->MimicGrain,
-						     &i->ImimicGrain };
+						     &i->ImimicGrain,
+						     &i->Imimic_ltGrain };
 
 		for (int v = 0; v < CONTINUOUS_V; v++)
 		{
@@ -45,12 +56,22 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
 			prun->sd[v] += *properties[v] * (*properties[v]);
 		}
 
-		prun->corr[0] += i->qBSeen * i->ChooseGrain;
-		prun->corr[1] += i->qBSeen * i->MimicGrain;
-		prun->corr[2] += i->qBSeen * i->ImimicGrain;
-		prun->corr[3] += i->ChooseGrain * i->MimicGrain;
-		prun->corr[4] += i->ChooseGrain * i->ImimicGrain;
-		prun->corr[5] += i->MimicGrain * i->ImimicGrain;
+		prun->corr[0]	+= i->qBSeen		* i->ChooseGrain;
+		prun->corr[1]	+= i->qBSeen		* i->Choose_ltGrain;
+		prun->corr[2]	+= i->qBSeen		* i->MimicGrain;
+		prun->corr[3]	+= i->qBSeen		* i->ImimicGrain;
+		prun->corr[4]	+= i->qBSeen		* i->Imimic_ltGrain;
+		prun->corr[5]	+= i->ChooseGrain	* i->Choose_ltGrain;
+		prun->corr[6]	+= i->ChooseGrain	* i->MimicGrain;
+		prun->corr[7]	+= i->ChooseGrain	* i->ImimicGrain;
+		prun->corr[8]	+= i->ChooseGrain	* i->Imimic_ltGrain;
+		prun->corr[9]	+= i->Choose_ltGrain	* i->MimicGrain;
+		prun->corr[10]	+= i->Choose_ltGrain	* i->ImimicGrain;
+		prun->corr[11]	+= i->Choose_ltGrain	* i->Imimic_ltGrain;
+		prun->corr[12]	+= i->MimicGrain	* i->ImimicGrain;
+		prun->corr[13]	+= i->MimicGrain	* i->Imimic_ltGrain;
+		prun->corr[14]	+= i->ImimicGrain	* i->Imimic_ltGrain;
+
 	}
 
 	for (int c = 0; c < CORRELATIONS; c++)

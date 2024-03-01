@@ -25,17 +25,11 @@ int	gN;					// Population size
 int	gRuns;
 int	gTime;
 int	gPeriods;				// Periods recorded
-double	gqBInit;
-double	gChooseGrainInit;			// Initial ChooseGrain
-double	gMimicGrainInit;			// Initial MimicGrain
-double	gImimicGrainInit;			// Initial ImimicGrain
 double	gqBMutationSize;			// For qBDefault
 double	gGrainMutationSize;			// For ChooseGrain and MimicGrain
 double	gDeathRate;
 int	gGroupSize;				// Number of individuals that an individual can watch (including itself)
-double	gChooseCost;
-double	gMimicCost;
-double	gImimicCost;
+double	gCost;
 int	gPartnerChoice;
 int	gReciprocity;
 int	gIndirectR;
@@ -54,7 +48,6 @@ void	caso		(struct ptype *p_first, char *filename);
 void	start_population(struct itype *i, struct itype *i_last);
 double	fitness		(struct itype *i, struct itype *i_last);	
 double	ces		(double q1, double q2);				// glogES, galpha
-double	calculate_cost	(double choose, double mimic, double imimic);
 void	update_scores	(struct itype *i, struct itype *i_last);
 
 int main(int argc, char *argv[])
@@ -145,17 +138,11 @@ void read_globals(char *filename)
 	gRuns =			read_int(fp,	"Runs,%i\n",			&gRuns,			"Runs");
 	gTime =			read_int(fp,	"Time,%i\n",			&gTime,			"Time");
 	gPeriods =		read_int(fp,	"Periods,%i\n",			&gPeriods,		"Periods");
-	gqBInit =		read_double(fp,	"qBInit,%lf\n",			&gqBInit,		"qBInit");
-	gChooseGrainInit =	read_double(fp,	"ChooseGrainInit,%lf\n",	&gChooseGrainInit,	"ChooseGrainInit");
-	gMimicGrainInit =	read_double(fp,	"MimicGrainInit,%lf\n",		&gMimicGrainInit,	"MimicGrainInit");
-	gImimicGrainInit =	read_double(fp,	"ImimicGrainInit,%lf\n",	&gImimicGrainInit,	"ImimicGrainInit");
 	gqBMutationSize =	read_double(fp,	"qBMutationSize,%lf\n",		&gqBMutationSize,	"qBMutationSize");
 	gGrainMutationSize =	read_double(fp,	"GrainMutationSize,%lf\n",	&gGrainMutationSize,	"GrainMutationSize");
 	gDeathRate =		read_double(fp,	"DeathRate,%lf\n",		&gDeathRate,		"DeathRate");
 	gGroupSize =		read_int(fp,	"GroupSize,%i\n",		&gGroupSize,		"GroupSize");
-	gChooseCost =		read_double(fp,	"ChooseCost,%lf\n",		&gChooseCost,		"ChooseCost");
-	gMimicCost =		read_double(fp,	"MimicCost,%lf\n",		&gMimicCost,		"MimicCost");
-	gImimicCost =		read_double(fp,	"ImimicCost,%lf\n",		&gImimicCost,		"ImimicCost");
+	gCost =			read_double(fp,	"Cost,%lf\n",			&gCost,			"Cost");
 	gPartnerChoice =	read_int(fp,	"PartnerChoice,%i\n",		&gPartnerChoice,	"PartnerChoice");
 	gReciprocity =		read_int(fp,	"Reciprocity,%i\n",		&gReciprocity,		"Reciprocity");
 	gIndirectR =		read_int(fp,	"IndirectR,%i\n",		&gIndirectR,		"IndirectR");
@@ -174,9 +161,7 @@ void read_globals(char *filename)
 	gGrainMutationSize =	pow(2.0, gGrainMutationSize);
 	gDeathRate =		pow(2.0, gDeathRate);
 	gGroupSize =		pow(2.0, gGroupSize);
-	gChooseCost =		pow(2.0, gChooseCost);
-	gMimicCost =		pow(2.0, gMimicCost);
-	gImimicCost =		pow(2.0, gImimicCost);
+	gCost =			pow(2.0, gCost);
 	grho =			1.0 - 1.0/pow(2.0, glogES);
 }
 
@@ -193,17 +178,11 @@ void write_globals(char *filename)
 	fprintf(fp, "N,%i,%g\n",		gN,			log(gN)/log(2));
 	fprintf(fp, "Runs,%i\n",		gRuns);
 	fprintf(fp, "Time,%i,%g\n",		gTime,			log(gTime)/log(2));
-	fprintf(fp, "qBInit,%f\n",		gqBInit);
-	fprintf(fp, "ChooseGrainInit,%f\n",	gChooseGrainInit);
-	fprintf(fp, "MimicGrainInit,%f\n",	gMimicGrainInit);
-	fprintf(fp, "ImimicGrainInit,%f\n",	gImimicGrainInit);
 	fprintf(fp, "qBMutationSize,%f,%f\n",	gqBMutationSize,	log(gqBMutationSize)/log(2));
 	fprintf(fp, "GrainMutationSize,%f,%f\n", gGrainMutationSize,	log(gGrainMutationSize)/log(2));
 	fprintf(fp, "DeathRate,%f,%f\n",	gDeathRate,		log(gDeathRate)/log(2));
 	fprintf(fp, "GroupSize,%i,%g\n",	gGroupSize,		log(gGroupSize)/log(2));
-	fprintf(fp, "ChooseCost,%f,%f\n",	gChooseCost,		log(gChooseCost)/log(2));
-	fprintf(fp, "MimicCost,%f,%f\n",	gMimicCost,		log(gMimicCost)/log(2));
-	fprintf(fp, "ImimicCost,%f,%f\n",	gImimicCost,		log(gImimicCost)/log(2));
+	fprintf(fp, "Cost,%f,%f\n",		gCost,			log(gCost)/log(2));
 	fprintf(fp, "PartnerChoice,%i\n",	gPartnerChoice);
 	fprintf(fp, "Reciprocity,%i\n",		gReciprocity);
 	fprintf(fp, "IndirectR,%i\n",		gIndirectR);
@@ -299,10 +278,19 @@ void caso(struct ptype *p_first, char *filename)
 					recruit->ChooseGrain = dtnorm(i->ChooseGrain, gGrainMutationSize, 0.0, 1.0, rng);
 					recruit->MimicGrain =  dtnorm(i->MimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
 					recruit->ImimicGrain =  dtnorm(i->ImimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
-					recruit->cost = calculate_cost(recruit->ChooseGrain, recruit->MimicGrain, recruit->ImimicGrain);
+					if (gLanguage == 1)
+					{
+						recruit->Choose_ltGrain = dtnorm(i->Choose_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
+						recruit->Imimic_ltGrain = dtnorm(i->Imimic_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
+					}
+					else
+					{
+						recruit->Choose_ltGrain = i->Choose_ltGrain;
+						recruit->Imimic_ltGrain = i->Imimic_ltGrain;
+					}
 				}
 
-				kill(recruit_first, i_first, gN);
+				kill(recruit_first, i_first, gN, gCost);
 				free_recruits(recruit_first);
 			}
 
@@ -323,12 +311,14 @@ void start_population(struct itype *i, struct itype *i_last)
 {
 	struct itype *j;
 
-	i->qBDecided = i->qBDefault = gqBInit;
+	i->qBDecided = i->qBDefault = 0.1;
 	i->qBSeenSum = 0.0;
-	i->ChooseGrain = gChooseGrainInit;
-	i->MimicGrain = gMimicGrainInit;
-	i->ImimicGrain = gImimicGrainInit;
-	i->cost = calculate_cost(i->ChooseGrain, i->MimicGrain, i->ImimicGrain);
+	i->ChooseGrain = 1.0;
+	i->Choose_ltGrain = 1.0;
+	i->MimicGrain = 1.0;
+	i->ImimicGrain = 1.0;
+	i->Imimic_ltGrain = 1.0;
+	i->cost = 0.0;
 	i->age = 0;
 
 	for (j = i + 1; j < i_last; j++)
@@ -378,13 +368,6 @@ double ces(double q1, double q2)
 	}
 
 	return w;
-}
-
-double calculate_cost(double choose, double mimic, double imimic)
-{
-	double c = -gChooseCost*log(choose) - gMimicCost*log(mimic) - gImimicCost*log(imimic);
-
-	return c;
 }
 
 void update_scores(struct itype *i, struct itype *i_last)

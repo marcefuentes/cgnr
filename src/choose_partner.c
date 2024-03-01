@@ -93,7 +93,8 @@ void choose_partner(struct itype *i, struct itype *i_last, int groupsize)
 
 bool willing(struct itype *a, struct itype *b)
 {
-	if (b->qBSeen - a->partner->qBSeen > a->ChooseGrain)
+	if ((b->qBSeen - a->partner->qBSeen > a->ChooseGrain)
+		|| (b->qBSeen_lt - a->partner->qBSeen_lt > a->Choose_ltGrain))
 	{
 		return true;
 	}

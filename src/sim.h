@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define CONTINUOUS_V 6
-#define CORRELATIONS 6
+#define CONTINUOUS_V 8
+#define CORRELATIONS 15
 #define BINS 64
 
 // Structures
@@ -37,10 +37,13 @@ struct itype
 	double		qBDecided;		// qB for next round
 	double		qBSeen;			// qB in present round
 	double		qBSeenSum;		// sum of qBSeen since birth
+	double		qBSeen_lt;		// average qBSeen since birth
 	double		wCumulative; 	
 	double		ChooseGrain;
+	double		Choose_ltGrain;
 	double		MimicGrain;
 	double		ImimicGrain;
+	double		Imimic_ltGrain;
 	double		cost;			// Information costs
 	int		age;			// It can't be killed. It isn't known to, and doesn't know, group mates
 	struct itype	*oldpartner;
@@ -52,9 +55,10 @@ struct rtype
 	double		randomwc;
 	double		qBDefault;
 	double		ChooseGrain;
+	double		Choose_ltGrain;
 	double		MimicGrain;
 	double		ImimicGrain;
-	double		cost;
+	double		Imimic_ltGrain;
 	struct rtype	*next;
 };
 
@@ -65,7 +69,7 @@ void		shuffle_partners	(struct itype *i, struct itype *i_last, int groupsize);
 void		choose_partner		(struct itype *i, struct itype *i_last, int groupsize);
 struct rtype	*create_recruits	(int deaths, double wc);
 void		free_recruits		(struct rtype *recruit);
-void		kill			(struct rtype *recruit, struct itype *i_first, int n);
+void		kill			(struct rtype *recruit, struct itype *i_first, int n, double cost);
 void		stats_period		(struct itype *i, struct itype *i_last, struct pruntype *prun, int n);
 void		stats_end		(struct pruntype *prun, struct pruntype *prun_last, struct ptype *p);
 void		stats_runs		(struct ptype *p, struct ptype *p_last, int runs);

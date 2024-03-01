@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gsl/gsl_rng.h>
+#include <math.h>
 #include "sim.h"
 
 // Global variable
@@ -52,7 +53,7 @@ struct rtype *create_recruits(int deaths, double wc)
 	return head;
 }
 
-void kill(struct rtype *recruit, struct itype *i_first, int n)
+void kill(struct rtype *recruit, struct itype *i_first, int n, double cost)
 {
 	struct itype *i;
 	int pick;
@@ -65,14 +66,21 @@ void kill(struct rtype *recruit, struct itype *i_first, int n)
 		} while ((i_first + pick)->age == 0);	// ... that is not already dead
 
 		i = i_first + pick;
-		i->qBDefault = recruit->qBDefault;
-		i->qBDecided = i->qBDefault;
-		i->qBSeenSum = 0.0;
-		i->ChooseGrain = recruit->ChooseGrain;
-		i->MimicGrain = recruit->MimicGrain;
-		i->ImimicGrain = recruit->ImimicGrain;
-		i->cost = recruit->cost;
-		i->age = 0;
+		i->qBDefault		= recruit->qBDefault;
+		i->qBDecided		= i->qBDefault;
+		i->qBSeenSum		= 0.0;
+		i->qBSeen_lt		= 0.0;
+		i->ChooseGrain		= recruit->ChooseGrain;
+		i->Choose_ltGrain	= recruit->Choose_ltGrain;
+		i->MimicGrain		= recruit->MimicGrain;
+		i->ImimicGrain		= recruit->ImimicGrain;
+		i->Imimic_ltGrain	= recruit->Imimic_ltGrain;
+	        i->cost			= -cost*(log(i->ChooseGrain) +
+						 log(i->Choose_ltGrain) +
+						 log(i->MimicGrain) +
+						 log(i->ImimicGrain) +
+						 log(i->Imimic_ltGrain));
+		i->age			= 0;
 	}
 }
 

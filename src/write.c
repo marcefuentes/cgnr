@@ -6,15 +6,26 @@ const char* headersc[CONTINUOUS_V] = { "w",
 				       "qBDefault",
 				       "qBSeen",
 				       "ChooseGrain",
+				       "Choose_ltGrain",
 				       "MimicGrain",
-				       "ImimicGrain" };
+				       "ImimicGrain",
+				       "Imimic_ltGrain" };
 
 const char* headersr[CORRELATIONS] = { "r_qB_Choose",
+				       "r_qB_Choose_lt",
 				       "r_qB_Mimic",
 				       "r_qB_Imimic",
+				       "r_qB_Imimic_lt",
+				       "r_Choose_Choose_lt",
 				       "r_Choose_Mimic",
 				       "r_Choose_Imimic",
-				       "r_Mimic_Imimic" };
+				       "r_Choose_Imimic_lt",
+				       "r_Choose_lt_Mimic",
+				       "r_Choose_lt_Imimic",
+				       "r_Choose_lt_Imimic_lt",
+				       "r_Mimic_Imimic",
+				       "r_Mimic_Imimic_lt",
+				       "r_Imimic_Imimic_lt" };
 
 void write_headers_csv(char *filename)
 {
@@ -149,8 +160,10 @@ void write_headers_i(char *filename)
 		    "qBSeenSum,"
 		    "w,"
 		    "ChooseGrain,"
+		    "Choose_ltGrain,"
 		    "MimicGrain,"
 		    "ImimicGrain,"
+		    "Imimic_ltGrain,"
 		    "cost,"
 		    "age");
 
@@ -169,7 +182,7 @@ void write_i(char *filename, float alpha, float logES, float Given, struct itype
 
 	for (; i < i_last; i++)
 	{
-		fprintf(fp, "\n%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
+		fprintf(fp, "\n%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
 			     alpha,
 			     logES,
 			     Given,
@@ -179,8 +192,10 @@ void write_i(char *filename, float alpha, float logES, float Given, struct itype
 			     i->qBSeenSum,
 			     i->wCumulative - wc,
 			     i->ChooseGrain,
+			     i->Choose_ltGrain,
 			     i->MimicGrain,
 			     i->ImimicGrain,
+			     i->Imimic_ltGrain,
 			     i->cost,
 			     i->age);
 
