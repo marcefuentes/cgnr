@@ -375,6 +375,6 @@ void update_scores(struct itype *i, struct itype *i_last)
 	for (; i < i_last; i++)
 	{
 		i->qBSeenSum += i->qBSeen;
-		i->qBSeen = i->qBSeenSum/i->age;
+		i->qBSeen_lt = i->qBSeenSum/i->age;
 	}
 }
