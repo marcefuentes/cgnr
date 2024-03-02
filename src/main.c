@@ -274,10 +274,10 @@ void caso(struct ptype *p_first, char *filename)
 						i++;
 					}
 
-					recruit->qBDefault = dtnorm(i->qBDefault, gqBMutationSize, 0.0, 1.0, rng);
-					recruit->ChooseGrain = dtnorm(i->ChooseGrain, gGrainMutationSize, 0.0, 1.0, rng);
-					recruit->MimicGrain =  dtnorm(i->MimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
-					recruit->ImimicGrain =  dtnorm(i->ImimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
+					recruit->qBDefault =	dtnorm(i->qBDefault, gqBMutationSize, 0.0, 1.0, rng);
+					recruit->ChooseGrain =	dtnorm(i->ChooseGrain, gGrainMutationSize, 0.0, 1.0, rng);
+					recruit->MimicGrain =	dtnorm(i->MimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
+					recruit->ImimicGrain =	dtnorm(i->ImimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
 					if (gLanguage == 1)
 					{
 						recruit->Choose_ltGrain = dtnorm(i->Choose_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
@@ -311,15 +311,16 @@ void start_population(struct itype *i, struct itype *i_last)
 {
 	struct itype *j;
 
-	i->qBDecided = i->qBDefault = 0.1;
-	i->qBSeenSum = 0.0;
-	i->ChooseGrain = 1.0;
-	i->Choose_ltGrain = 1.0;
-	i->MimicGrain = 1.0;
-	i->ImimicGrain = 1.0;
-	i->Imimic_ltGrain = 1.0;
-	i->cost = 0.0;
-	i->age = 0;
+	i->qBDefault =		0.1;
+	i->qBDecided =		i->qBDefault;
+	i->qBSeenSum =		0.0;
+	i->ChooseGrain =	1.0;
+	i->Choose_ltGrain =	1.0;
+	i->MimicGrain =		1.0;
+	i->ImimicGrain =	1.0;
+	i->Imimic_ltGrain =	1.0;
+	i->cost =		0.0;
+	i->age =		0;
 
 	for (j = i + 1; j < i_last; j++)
 	{

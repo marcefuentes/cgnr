@@ -56,21 +56,21 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
 			prun->sd[v] += *properties[v] * (*properties[v]);
 		}
 
-		prun->corr[0]	+= i->qBSeen		* i->ChooseGrain;
-		prun->corr[1]	+= i->qBSeen		* i->Choose_ltGrain;
-		prun->corr[2]	+= i->qBSeen		* i->MimicGrain;
-		prun->corr[3]	+= i->qBSeen		* i->ImimicGrain;
-		prun->corr[4]	+= i->qBSeen		* i->Imimic_ltGrain;
-		prun->corr[5]	+= i->ChooseGrain	* i->Choose_ltGrain;
-		prun->corr[6]	+= i->ChooseGrain	* i->MimicGrain;
-		prun->corr[7]	+= i->ChooseGrain	* i->ImimicGrain;
-		prun->corr[8]	+= i->ChooseGrain	* i->Imimic_ltGrain;
-		prun->corr[9]	+= i->Choose_ltGrain	* i->MimicGrain;
-		prun->corr[10]	+= i->Choose_ltGrain	* i->ImimicGrain;
-		prun->corr[11]	+= i->Choose_ltGrain	* i->Imimic_ltGrain;
-		prun->corr[12]	+= i->MimicGrain	* i->ImimicGrain;
-		prun->corr[13]	+= i->MimicGrain	* i->Imimic_ltGrain;
-		prun->corr[14]	+= i->ImimicGrain	* i->Imimic_ltGrain;
+		prun->corr[0] +=	i->qBSeen *		i->ChooseGrain;
+		prun->corr[1] +=	i->qBSeen *		i->Choose_ltGrain;
+		prun->corr[2] +=	i->qBSeen *		i->MimicGrain;
+		prun->corr[3] +=	i->qBSeen *		i->ImimicGrain;
+		prun->corr[4] +=	i->qBSeen *		i->Imimic_ltGrain;
+		prun->corr[5] +=	i->ChooseGrain *	i->Choose_ltGrain;
+		prun->corr[6] +=	i->ChooseGrain * 	i->MimicGrain;
+		prun->corr[7] +=	i->ChooseGrain * 	i->ImimicGrain;
+		prun->corr[8] +=	i->ChooseGrain * 	i->Imimic_ltGrain;
+		prun->corr[9] +=	i->Choose_ltGrain * 	i->MimicGrain;
+		prun->corr[10] +=	i->Choose_ltGrain * 	i->ImimicGrain;
+		prun->corr[11] +=	i->Choose_ltGrain * 	i->Imimic_ltGrain;
+		prun->corr[12] +=	i->MimicGrain * 	i->ImimicGrain;
+		prun->corr[13] +=	i->MimicGrain * 	i->Imimic_ltGrain;
+		prun->corr[14] +=	i->ImimicGrain * 	i->Imimic_ltGrain;
 
 	}
 
@@ -151,27 +151,27 @@ void stats_end(struct pruntype *prun, struct pruntype *prun_last, struct ptype *
 		{
 			for (int b = 0; b < BINS; b++)
 			{
-				p->c[v][b]  += prun->frc[v][b];
-				p->c2[v][b] += prun->frc[v][b] * prun->frc[v][b];
+				p->c[v][b] +=	prun->frc[v][b];
+				p->c2[v][b] +=	prun->frc[v][b] * prun->frc[v][b];
 			}
 
-			p->median[v]	+= prun->median[v];
-			p->median2[v]	+= prun->median[v] * prun->median[v];
+			p->median[v] +=		prun->median[v];
+			p->median2[v] +=	prun->median[v] * prun->median[v];
 
-			p->iqr[v]	+= prun->iqr[v];
-			p->iqr2[v]	+= prun->iqr[v] * prun->iqr[v];
+			p->iqr[v] +=		prun->iqr[v];
+			p->iqr2[v] +=		prun->iqr[v] * prun->iqr[v];
 			
-			p->mean[v]	+= prun->mean[v];
-			p->mean2[v]	+= prun->mean[v] * prun->mean[v];
+			p->mean[v] +=		prun->mean[v];
+			p->mean2[v] +=		prun->mean[v] * prun->mean[v];
 
-			p->sd[v]	+= prun->sd[v];
-			p->sd2[v]	+= prun->sd[v] * prun->sd[v];
+			p->sd[v] +=		prun->sd[v];
+			p->sd2[v] +=		prun->sd[v] * prun->sd[v];
 		}
 
 		for (int c = 0; c < CORRELATIONS; c++)
 		{
-			p->corr[c]	+= prun->corr[c];
-			p->corr2[c]	+= prun->corr[c] * prun->corr[c];
+			p->corr[c] += 		prun->corr[c];
+			p->corr2[c] +=		prun->corr[c] * prun->corr[c];
 		}
 	}
 }
@@ -188,20 +188,20 @@ void stats_runs(struct ptype *p, struct ptype *p_last, int runs)
 				p->c[v][b] /= runs;
 			}
 
-			p->median2[v]	= stdev(p->median[v], p->median2[v], runs);
-			p->median[v]	/= runs;
-			p->iqr2[v]	= stdev(p->iqr[v], p->iqr2[v], runs);
-			p->iqr[v]	/= runs;
-			p->mean2[v]	= stdev(p->mean[v], p->mean2[v], runs);
-			p->mean[v]	/= runs;
-			p->sd2[v]	= stdev(p->sd[v], p->sd2[v], runs);
-			p->sd[v]	/= runs;
+			p->median2[v] =	stdev(p->median[v], p->median2[v], runs);
+			p->median[v] /=	runs;
+			p->iqr2[v] =	stdev(p->iqr[v], p->iqr2[v], runs);
+			p->iqr[v] /=	runs;
+			p->mean2[v] =	stdev(p->mean[v], p->mean2[v], runs);
+			p->mean[v] /=	runs;
+			p->sd2[v] =	stdev(p->sd[v], p->sd2[v], runs);
+			p->sd[v] /=	runs;
 		}
 
 		for (int c = 0; c < CORRELATIONS; c++)
 		{
-			p->corr2[c]	= stdev(p->corr[c], p->corr2[c], runs);
-			p->corr[c]	/= runs;
+			p->corr2[c] =	stdev(p->corr[c], p->corr2[c], runs);
+			p->corr[c] /=	runs;
 		}
 	}
 }

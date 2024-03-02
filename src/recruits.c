@@ -65,22 +65,22 @@ void kill(struct rtype *recruit, struct itype *i_first, int n, double cost)
 			pick = gsl_rng_uniform_int(rng, n);	// Kills an individual...
 		} while ((i_first + pick)->age == 0);	// ... that is not already dead
 
-		i = i_first + pick;
-		i->qBDefault		= recruit->qBDefault;
-		i->qBDecided		= i->qBDefault;
-		i->qBSeenSum		= 0.0;
-		i->qBSeen_lt		= 0.0;
-		i->ChooseGrain		= recruit->ChooseGrain;
-		i->Choose_ltGrain	= recruit->Choose_ltGrain;
-		i->MimicGrain		= recruit->MimicGrain;
-		i->ImimicGrain		= recruit->ImimicGrain;
-		i->Imimic_ltGrain	= recruit->Imimic_ltGrain;
-	        i->cost			= -cost*(log(i->ChooseGrain) +
-						 log(i->Choose_ltGrain) +
-						 log(i->MimicGrain) +
-						 log(i->ImimicGrain) +
-						 log(i->Imimic_ltGrain));
-		i->age			= 0;
+		i =			i_first + pick;
+		i->qBDefault =		recruit->qBDefault;
+		i->qBDecided =		i->qBDefault;
+		i->qBSeenSum =		0.0;
+		i->qBSeen_lt =		0.0;
+		i->ChooseGrain =	recruit->ChooseGrain;
+		i->Choose_ltGrain =	recruit->Choose_ltGrain;
+		i->MimicGrain =		recruit->MimicGrain;
+		i->ImimicGrain =	recruit->ImimicGrain;
+		i->Imimic_ltGrain =	recruit->Imimic_ltGrain;
+	        i->cost =		-cost*(log(i->ChooseGrain) +
+					       log(i->Choose_ltGrain) +
+					       log(i->MimicGrain) +
+					       log(i->ImimicGrain) +
+					       log(i->Imimic_ltGrain));
+		i->age =		0;
 	}
 }
 
