@@ -62,7 +62,6 @@ logess = np.linspace(-5.0, 5.0, num)
 Given = float(given[-3:]) / 100
 # cost must be the number following the string "cost" in the variant name. This number has two digits.
 cost = -int(variant[variant.find("cost") + 4:variant.find("cost") + 6])
-qBinit = 0.1
 
 c = 101
 
@@ -77,17 +76,11 @@ for alpha in alphas:
         # standard Time,21
         f.write("Time,21\n")
         f.write("Periods,3\n")
-        f.write(f"qBInit,{qBinit}\n")
-        f.write("ChooseGrainInit,1.0\n")
-        f.write("MimicGrainInit,1.0\n")
-        f.write("ImimicGrainInit,1.0\n")
         f.write("qBMutationSize,-6\n")
         f.write("GrainMutationSize,-6\n")
         f.write(f"DeathRate,{deathrate}\n")
         f.write(f"GroupSize,{groupsize}\n")
-        f.write(f"ChooseCost,{cost}\n")
-        f.write(f"MimicCost,{cost}\n")
-        f.write(f"ImimicCost,{cost}\n")
+        f.write(f"Cost,{cost}\n")
         f.write(f"PartnerChoice,{partnerchoice}\n")
         f.write(f"Reciprocity,{reciprocity}\n")
         f.write(f"IndirectR,{indirectr}\n")
