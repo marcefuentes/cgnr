@@ -42,7 +42,7 @@ else:
     reciprocity = 0
     indirectr = 0
 
-if "l" in mechanism:
+if "lang" in variant or "l" in mechanism:
     language = 1
 else:
     language = 0
