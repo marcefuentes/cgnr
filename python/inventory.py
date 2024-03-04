@@ -61,7 +61,7 @@ for mechanism in mechanisms:
     else:
         folder_dict["Reciprocity"] = 0
         folder_dict["IndirectR"] = 0
-    if "l" in mechanism:
+    if "lang" in variant or "l" in mechanism:
         folder_dict["Language"] = 1
     else:
         folder_dict["Language"] = 0
