@@ -10,7 +10,7 @@ def ttr(traitset):
                   "Direct\nreciprocity",
                   "Indirect\nreciprocity",
                   "Fitness"]
-        rows = ["pi", "p", "i", "none"]
+        rows = ["none1", "none2", "i", "none"]
 
     elif traitset == "correlations":
         traits = ["r_qB_Choose",

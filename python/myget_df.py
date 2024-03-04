@@ -16,7 +16,7 @@ def read_files(filelist, movie):
 def get_df(row, filetype, movie):
     if row == "social":
         row = "none/given000"
-    elif row == "none":
+    elif "none" in row:
         row = "none/given100"
     else:
         row = f"{row}/given100"
