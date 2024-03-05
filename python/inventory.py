@@ -102,7 +102,5 @@ for mechanism in mechanisms:
         print(f"{c.bold}{c.green if f_equal_nlines else c.reset_format}{f_equal_nlines:>4}{c.reset_format}" if f_equal_nlines else "", end = "")
         print(f"{c.bold}{c.yellow if f_smaller_nlines else c.reset_format}{f_smaller_nlines:>4}{c.reset_format}" if f_smaller_nlines else "", end = "")
         print(f"{c.bold}{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
-        print(f"{c.bold}{c.red if f_larger_nlines else c.reset_format}{f_larger_nlines:>4}{c.reset_format}" if f_larger_nlines else "", end = "")
-        if f_larger_nlines:
-            print(f"{c.bold}{c.red}> {nlines} lines{c.reset_format}")
+        print(f"{c.bold}{c.blue if f_larger_nlines else c.reset_format}{f_larger_nlines:>4}{c.reset_format}" if f_larger_nlines else "", end = "")
         print()
