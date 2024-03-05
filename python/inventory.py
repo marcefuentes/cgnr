@@ -14,7 +14,7 @@ if len(sys.argv) > 1:
     if os.path.isdir(sys.argv[1]):
         os.chdir(sys.argv[1])
     else:
-        print(f"{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
+        print(f"{c.bold}{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
         exit()
 
 folder_dict = {}
@@ -62,17 +62,17 @@ for mechanism in mechanisms:
         folder_dict["GroupSize"] = 2
     givens = [f for f in os.listdir(mechanism) if os.path.isdir(os.path.join(mechanism, f))]
     if len(givens) == 0:
-        print(f"{c.red}empty{c.reset_format}")
+        print(f"{c.bold}{c.red}empty{c.reset_format}")
         continue
     givens.sort()
     for given in givens:
         folder_dict["Given"] = float(given[-3:]) / 100
         given_path = os.path.join(mechanism, given)
         input_files = [f for f in os.listdir(given_path) if f.endswith(input_file_extension)]
-        print(f"{c.cyan}{mechanism}{c.reset_format}\t{c.blue}{given}{c.reset_format}", end = "  ")
+        print(f"{c.white}{mechanism}{c.reset_format}\t{c.white}{given}{c.reset_format}", end = "  ")
         total_files = len(input_files)
         if total_files == 0:
-            print(f"{c.red}no {input_file_extension[1:]} files{c.reset_format}")
+            print(f"{c.bold}{c.red}no {input_file_extension[1:]} files{c.reset_format}")
             continue
         with open(os.path.join(given_path, input_files[0]), "r") as csvfile:
             reader = csv.reader(csvfile)
@@ -80,10 +80,10 @@ for mechanism in mechanisms:
                 key, value = row
                 if key == "Given":
                     if float(value) != folder_dict[key]:
-                        print(f"{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
+                        print(f"{c.bold}{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
                 elif key in folder_dict:
                     if int(value) != folder_dict[key]:
-                        print(f"{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
+                        print(f"{c.bold}{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
         f_smaller_nlines = 0
         f_equal_nlines = 0
         f_larger_nlines = 0
@@ -99,10 +99,10 @@ for mechanism in mechanisms:
                     elif len(lines) > nlines:
                         f_larger_nlines += 1
         notstarted = total_files - f_smaller_nlines - f_equal_nlines - f_larger_nlines
-        print(f"{c.green if f_equal_nlines else c.reset_format}{f_equal_nlines:>4}{c.reset_format}" if f_equal_nlines else "", end = "")
-        print(f"{c.yellow if f_smaller_nlines else c.reset_format}{f_smaller_nlines:>4}{c.reset_format}" if f_smaller_nlines else "", end = "")
-        print(f"{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
-        print(f"{c.red if f_larger_nlines else c.reset_format}{f_larger_nlines:>4}{c.reset_format}" if f_larger_nlines else "", end = "")
+        print(f"{c.bold}{c.green if f_equal_nlines else c.reset_format}{f_equal_nlines:>4}{c.reset_format}" if f_equal_nlines else "", end = "")
+        print(f"{c.bold}{c.yellow if f_smaller_nlines else c.reset_format}{f_smaller_nlines:>4}{c.reset_format}" if f_smaller_nlines else "", end = "")
+        print(f"{c.bold}{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
+        print(f"{c.bold}{c.red if f_larger_nlines else c.reset_format}{f_larger_nlines:>4}{c.reset_format}" if f_larger_nlines else "", end = "")
         if f_larger_nlines:
-            print(f"> {nlines} lines{c.reset_format}")
+            print(f"{c.bold}{c.red}> {nlines} lines{c.reset_format}")
         print()
