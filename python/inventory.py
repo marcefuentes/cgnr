@@ -77,7 +77,8 @@ for mechanism in mechanisms:
         given_path = os.path.join(mechanism, given)
         input_files = [f for f in os.listdir(given_path) if f.endswith(input_file_extension)]
         print(f"{c.cyan}{mechanism}{c.reset_format}\t{c.blue}{given}{c.reset_format}", end = "  ")
-        if len(input_files) == 0:
+        total_files = len(input_files)
+        if total_files == 0:
             print(f"{c.red}no {input_file_extension[1:]} files{c.reset_format}")
             continue
         with open(os.path.join(given_path, input_files[0]), "r") as csvfile:
@@ -104,16 +105,11 @@ for mechanism in mechanisms:
                         f_equal_nlines += 1
                     elif len(lines) > nlines:
                         f_larger_nlines += 1
-        if f_equal_nlines == len(input_files):
-            print(f"{c.green}{f_equal_nlines}{c.reset_format}")
-        else:
-            notstarted = len(input_files) - f_smaller_nlines - f_equal_nlines - f_larger_nlines
-            if notstarted:
-                print(f"{c.red}{notstarted}{c.reset_format}", end = " ")
-            if f_smaller_nlines:
-                print(f"{c.yellow}{f_smaller_nlines}{c.reset_format}", end = " ")
-            if f_equal_nlines:
-                print(f"{c.green}{f_equal_nlines}{c.reset_format}", end = " ")
-            if f_larger_nlines:
-                print(f"{c.red}{f_larger_nlines}{c.reset_format} > {nlines} lines", end = "")
-            print()
+        notstarted = total_files - f_smaller_nlines - f_equal_nlines - f_larger_nlines
+        print(f"{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
+        print(f"{c.yellow if f_smaller_nlines else c.reset_format}{f_smaller_nlines:>4}{c.reset_format}" if f_smaller_nlines else "", end = "")
+        print(f"{c.green if f_equal_nlines else c.reset_format}{f_equal_nlines:>4}{c.reset_format}" if f_equal_nlines else "", end = "")
+        print(f"{c.red if f_larger_nlines else c.reset_format}{f_larger_nlines:>4}{c.reset_format}" if f_larger_nlines else "", end = "")
+        if f_larger_nlines:
+            print(f"> {nlines} lines{c.reset_format}")
+        print()
