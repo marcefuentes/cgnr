@@ -4,23 +4,17 @@ import csv
 import os
 import sys
 
+import mycolors as c
+
 nlines = 10
 input_file_extension = ".glo"
 output_file_extension = ".csv"
-
-blue = "\033[94m"
-cyan = "\033[96m"
-green = "\033[92m"
-red = "\033[91m"
-yellow = "\033[33m"
-bold = "\033[1m"
-reset_format = "\033[0m"
 
 if len(sys.argv) > 1:
     if os.path.isdir(sys.argv[1]):
         os.chdir(sys.argv[1])
     else:
-        print(f"{red}Directory {sys.argv[1]} does not exist{reset_format}")
+        print(f"{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
         exit()
 
 folder_dict = {}
@@ -75,16 +69,16 @@ for mechanism in mechanisms:
         folder_dict["GroupSize"] = 2
     givens = [f for f in os.listdir(mechanism) if os.path.isdir(os.path.join(mechanism, f))]
     if len(givens) == 0:
-        print(f"{red}empty{reset_format}")
+        print(f"{c.red}empty{c.reset_format}")
         continue
     givens.sort()
     for given in givens:
         folder_dict["Given"] = float(given[-3:]) / 100
         given_path = os.path.join(mechanism, given)
         input_files = [f for f in os.listdir(given_path) if f.endswith(input_file_extension)]
-        print(f"{cyan}{mechanism}{reset_format}\t{blue}{given}{reset_format}", end = "  ")
+        print(f"{c.cyan}{mechanism}{c.reset_format}\t{c.blue}{given}{c.reset_format}", end = "  ")
         if len(input_files) == 0:
-            print(f"{red}no {input_file_extension[1:]} files{reset_format}")
+            print(f"{c.red}no {input_file_extension[1:]} files{c.reset_format}")
             continue
         with open(os.path.join(given_path, input_files[0]), "r") as csvfile:
             reader = csv.reader(csvfile)
@@ -92,10 +86,10 @@ for mechanism in mechanisms:
                 key, value = row
                 if key == "Given":
                     if float(value) != folder_dict[key]:
-                        print(f"{red}{key} {folder_dict[key]} {value}{reset_format}", end = " ")
+                        print(f"{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
                 elif key in folder_dict:
                     if int(value) != folder_dict[key]:
-                        print(f"{red}{key} {folder_dict[key]} {value}{reset_format}", end = " ")
+                        print(f"{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
         f_smaller_nlines = 0
         f_equal_nlines = 0
         f_larger_nlines = 0
@@ -111,15 +105,15 @@ for mechanism in mechanisms:
                     elif len(lines) > nlines:
                         f_larger_nlines += 1
         if f_equal_nlines == len(input_files):
-            print(f"{green}{f_equal_nlines}{reset_format}")
+            print(f"{c.green}{f_equal_nlines}{c.reset_format}")
         else:
             notstarted = len(input_files) - f_smaller_nlines - f_equal_nlines - f_larger_nlines
             if notstarted:
-                print(f"{red}{notstarted}{reset_format}", end = " ")
+                print(f"{c.red}{notstarted}{c.reset_format}", end = " ")
             if f_smaller_nlines:
-                print(f"{yellow}{f_smaller_nlines}{reset_format}", end = " ")
+                print(f"{c.yellow}{f_smaller_nlines}{c.reset_format}", end = " ")
             if f_equal_nlines:
-                print(f"{green}{f_equal_nlines}{reset_format}", end = " ")
+                print(f"{c.green}{f_equal_nlines}{c.reset_format}", end = " ")
             if f_larger_nlines:
-                print(f"{red}{f_larger_nlines}{reset_format} > {nlines} lines", end = "")
+                print(f"{c.red}{f_larger_nlines}{c.reset_format} > {nlines} lines", end = "")
             print()
