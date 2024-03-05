@@ -18,10 +18,9 @@ if len(sys.argv) > 1:
         exit()
 
 folder_dict = {}
-folder_dict["Independent"] = 1
-folder_dict["Shuffle"] = 0
-folder_dict["Discrete"] = 0
 folder_dict["DeathRate"] = -7
+folder_dict["Shuffle"] = 0
+folder_dict["Language"] = 0
 
 # get the name, not the full path, of the current folder
 
@@ -29,15 +28,13 @@ current_folder = os.getcwd()
 variant = current_folder.split("/")[-1]
 if "noshuffle" not in variant:
     folder_dict["Shuffle"] = 1
-if "noImimic" in variant:
-    folder_dict["Independent"] = 0
 if "_d" in variant:
     folder_dict["DeathRate"] = -3
+if "lang" in variant:
+    folder_dict["Language"] = 1
 cost_index = variant.find("cost")
 cost = variant[cost_index + 4:cost_index + 6]
-folder_dict["ChooseCost"] = -int(cost)
-folder_dict["MimicCost"] = -int(cost)
-folder_dict["ImimicCost"] = -int(cost)
+folder_dict["Cost"] = -int(cost)
 
 mechanisms = [f for f in os.listdir(current_folder) if os.path.isdir(f)]
 mechanisms.sort()
@@ -55,10 +52,6 @@ for mechanism in mechanisms:
     else:
         folder_dict["Reciprocity"] = 0
         folder_dict["IndirectR"] = 0
-    if "lang" in variant or "l" in mechanism:
-        folder_dict["Language"] = 1
-    else:
-        folder_dict["Language"] = 0
     if "_128" in variant or "128" in mechanism:
         folder_dict["GroupSize"] = 7
     elif "_16" in variant or "16" in mechanism:
