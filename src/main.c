@@ -67,17 +67,14 @@ int main(int argc, char *argv[])
 	}
 
 	char glo[13];
-	char gl2[13];
 	char csv[13];
 	char ics[13];
 	char frq[13];
 	strcpy(glo, argv[1]);
-	strcpy(gl2, argv[1]);
 	strcpy(csv, argv[1]);
 	strcpy(ics, argv[1]);
 	strcpy(frq, argv[1]);
 	strcat(glo, ".glo");
-	strcat(gl2, ".gl2");
 	strcat(csv, ".csv");
 	strcat(ics, ".ics");
 	strcat(frq, ".frq");
@@ -85,7 +82,6 @@ int main(int argc, char *argv[])
 	write_headers_csv(csv);
 	write_headers_frq(frq);
 	read_globals(glo);
-	write_globals(gl2); 
 	if (gRuns == 1)
 	{
 		write_headers_i(ics);
@@ -118,7 +114,7 @@ int main(int argc, char *argv[])
 
 	gsl_rng_free(rng);
 
-	write_time_elapsed(gl2, (float)(clock() - start)/CLOCKS_PER_SEC); 
+	write_time_elapsed(glo, (float)(clock() - start)/CLOCKS_PER_SEC); 
 
 	return 0;
 }
@@ -163,33 +159,6 @@ void read_globals(char *filename)
 	gGroupSize =		pow(2.0, gGroupSize);
 	gCost =			pow(2.0, gCost);
 	grho =			1.0 - 1.0/pow(2.0, glogES);
-}
-
-void write_globals(char *filename)
-{
-	FILE *fp;
-
-	if ((fp = fopen(filename, "a+")) == NULL)
-	{ 
-		file_write_error(filename);
-	}
-
-	fprintf(fp, "Seed,%i\n",		gSeed);
-	fprintf(fp, "N,%i,%g\n",		gN,			log(gN)/log(2));
-	fprintf(fp, "Runs,%i\n",		gRuns);
-	fprintf(fp, "Time,%i,%g\n",		gTime,			log(gTime)/log(2));
-	fprintf(fp, "qBMutationSize,%f,%f\n",	gqBMutationSize,	log(gqBMutationSize)/log(2));
-	fprintf(fp, "GrainMutationSize,%f,%f\n", gGrainMutationSize,	log(gGrainMutationSize)/log(2));
-	fprintf(fp, "DeathRate,%f,%f\n",	gDeathRate,		log(gDeathRate)/log(2));
-	fprintf(fp, "GroupSize,%i,%g\n",	gGroupSize,		log(gGroupSize)/log(2));
-	fprintf(fp, "Cost,%f,%f\n",		gCost,			log(gCost)/log(2));
-	fprintf(fp, "PartnerChoice,%i\n",	gPartnerChoice);
-	fprintf(fp, "Reciprocity,%i\n",		gReciprocity);
-	fprintf(fp, "IndirectR,%i\n",		gIndirectR);
-	fprintf(fp, "Language,%i\n",		gLanguage);
-	fprintf(fp, "Shuffle,%i\n",		gShuffle);
-
-	fclose(fp);
 }
 
 void caso(struct ptype *p_first, char *filename)

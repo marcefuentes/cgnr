@@ -3,6 +3,5 @@ bin/
 charts/
 obj/
 results/
-*.gl2
 *.ics
 *.frq
