@@ -1,1 +1,1 @@
-/home/marcelino/code/tools/mycolors.py
+../../tools/mycolors.py
