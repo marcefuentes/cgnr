@@ -20,8 +20,9 @@ TEST_TARGET = $(BINDIR)/gnr3_test
 
 release: $(RELEASE_TARGET)
 test: $(TEST_TARGET)
+	cp $(TESTDIR)/test.glo $(TESTDIR)/t.glo
 	mv $(TESTDIR)/t.csv $(TESTDIR)/old_t.csv
-	rm -f $(TESTDIR)/t.gl2 $(TESTDIR)/t.frq $(TESTDIR)/t.ics
+	rm -f $(TESTDIR)/t.frq $(TESTDIR)/t.ics
 	./$(TEST_TARGET) $(TESTDIR)/t
 	-diff $(TESTDIR)/t.csv $(TESTDIR)/old_t.csv
 
