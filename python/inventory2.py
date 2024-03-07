@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import configparser
 import csv
 import os
 import sys
@@ -50,7 +51,7 @@ def parse_path(folder_dict, path):
     folder_dict["Given"] = float(given[-3:]) / 100
     return folder_dict
 
-def process_given_directory(given, nlines, input_file_extension, output_file_extension):
+def process_given_directory(given, number_of_lines, input_file_extension, output_file_extension):
     folder_dict = {}
     folder_dict = parse_path(folder_dict, given)
     input_files = [f for f in os.listdir(given) if f.endswith(input_file_extension)]
@@ -72,25 +73,25 @@ def process_given_directory(given, nlines, input_file_extension, output_file_ext
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
                     print(f"{c.bold}{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
-    f_smaller_nlines = 0
-    f_equal_nlines = 0
-    f_larger_nlines = 0
+    f_smaller_number_of_lines = 0
+    f_equal_number_of_lines = 0
+    f_larger_number_of_lines = 0
     for f in os.listdir(given):
         if f.endswith(output_file_extension):
             output_file = os.path.join(given, f)
             with open(output_file, "r") as output:
                 lines = output.readlines()
-                if len(lines) < nlines:
-                    f_smaller_nlines += 1
-                elif len(lines) == nlines:
-                    f_equal_nlines += 1
-                elif len(lines) > nlines:
-                    f_larger_nlines += 1
-    notstarted = total_files - f_smaller_nlines - f_equal_nlines - f_larger_nlines
-    print(f"{c.bold}{c.green if f_equal_nlines else c.reset_format}{f_equal_nlines:>4}{c.reset_format}" if f_equal_nlines else "", end = "")
-    print(f"{c.bold}{c.yellow if f_smaller_nlines else c.reset_format}{f_smaller_nlines:>4}{c.reset_format}" if f_smaller_nlines else "", end = "")
+                if len(lines) < number_of_lines:
+                    f_smaller_number_of_lines += 1
+                elif len(lines) == number_of_lines:
+                    f_equal_number_of_lines += 1
+                elif len(lines) > number_of_lines:
+                    f_larger_number_of_lines += 1
+    notstarted = total_files - f_smaller_number_of_lines - f_equal_number_of_lines - f_larger_number_of_lines
+    print(f"{c.bold}{c.green if f_equal_number_of_lines else c.reset_format}{f_equal_number_of_lines:>4}{c.reset_format}" if f_equal_number_of_lines else "", end = "")
+    print(f"{c.bold}{c.yellow if f_smaller_number_of_lines else c.reset_format}{f_smaller_number_of_lines:>4}{c.reset_format}" if f_smaller_number_of_lines else "", end = "")
     print(f"{c.bold}{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
-    print(f"{c.bold}{c.blue if f_larger_nlines else c.reset_format}{f_larger_nlines:>4}{c.reset_format}" if f_larger_nlines else "", end = "")
+    print(f"{c.bold}{c.blue if f_larger_number_of_lines else c.reset_format}{f_larger_number_of_lines:>4}{c.reset_format}" if f_larger_number_of_lines else "", end = "")
     print()
 
 def main():
@@ -101,7 +102,16 @@ def main():
             print(f"{c.bold}{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
             exit()
 
-    nlines = 10
+    config_file_path = os.environ.get('CONFIG_FILE')
+    if not config_file_path:
+      raise RuntimeError("CONFIG_FILE environment variable not set")
+
+    config = configparser.ConfigParser()
+    config.read(config_file_path)
+
+    exe = config.get("DEFAULT", "exe")
+    number_of_lines = config.getint("DEFAULT", "number_of_lines")
+
     input_file_extension = ".glo"
     output_file_extension = ".csv"
 
@@ -112,7 +122,7 @@ def main():
         givens = list_of_folders(mechanism)
         for given in givens:
             process_given_directory(given,
-                                    nlines,
+                                    number_of_lines,
                                     input_file_extension,
                                     output_file_extension)
 
