@@ -9,6 +9,7 @@ import logging
 # Usage: python submit.py
 
 import mycolors as c
+from myfolder_list import folder_list
 import myslots
 
 queues = ["clk", "epyc"]
@@ -44,15 +45,6 @@ logging.basicConfig(filename=log_file,
                     level=logging.DEBUG,
                     format="%(asctime)s %(levelname)s: %(message)s")
 yesno = f"[{c.bold}{c.green}Yes{c.reset_format}/{c.bold}{c.red}No{c.reset_format}]"
-
-def folder_list(path):
-    folders = []
-    for item in os.listdir(path):
-        item_path = os.path.join(path, item)
-        if os.path.isdir(item_path):
-            folders.append(item_path)
-    folders.sort()
-    return folders
 
 def get_job_min(path):
     job_min = 9999

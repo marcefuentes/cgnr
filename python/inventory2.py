@@ -5,6 +5,7 @@ import os
 import sys
 
 import mycolors as c
+from myfolders_list import folders_list
 
 class Config:
     def __init__(self, nlines, input_file_extension, output_file_extension):
@@ -12,17 +13,17 @@ class Config:
         self.input_file_extension = input_file_extension
         self.output_file_extension = output_file_extension
 
-def parse_folder_name(folder_name):
-    folder_dict = {}
+def parse_path(folder_dict, given_path):
     folder_dict["DeathRate"] = -7
     folder_dict["Shuffle"] = 0
     folder_dict["Language"] = 0
     folder_dict["PartnerChoice"] = 0
     folder_dict["Reciprocity"] = 0
     folder_dict["IndirectR"] = 0
-    folder_dict["GroupSize"] = 0
+    folder_dict["GroupSize"] = 2
     folder_dict["Given"] = 0
     folder_dict["Cost"] = 0
+    folder_name = os.path.basename(given_path)
     if "noshuffle" not in folder_name:
         folder_dict["Shuffle"] = 1
     if "_d" in folder_name:
@@ -32,14 +33,6 @@ def parse_folder_name(folder_name):
     cost_index = folder_name.find("cost")
     cost = folder_name[cost_index + 4:cost_index + 6]
     folder_dict["Cost"] = -int(cost)
-    if "p" in folder_name:
-        folder_dict["PartnerChoice"] = 1
-    if "i" in folder_name:
-        folder_dict["Reciprocity"] = 1
-        folder_dict["IndirectR"] = 1
-    elif "r" in folder_name:
-        folder_dict["Reciprocity"] = 1
-        folder_dict["IndirectR"] = 0
     if "_128" in folder_name:
         folder_dict["GroupSize"] = 7
     elif "_16" in folder_name:
@@ -49,31 +42,20 @@ def parse_folder_name(folder_name):
     else:
         folder_dict["GroupSize"] = 2
     folder_dict["Given"] = float(folder_name[-3:]) / 100
-    return folder_dict
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
-    else:
-        folder_dict["PartnerChoice"] = 0
     if "i" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 1
     elif "r" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 0
-    else:
-        folder_dict["Reciprocity"] = 0
-        folder_dict["IndirectR"] = 0
-    if "_128" in variant or "128" in mechanism:
-        folder_dict["GroupSize"] = 7
-    elif "_16" in variant or "16" in mechanism:
-        folder_dict["GroupSize"] = 4
-    elif "_8" in variant or "8" in mechanism:
-        folder_dict["GroupSize"] = 3
-    else:
-        folder_dict["GroupSize"] = 2
+    return folder_dict
 
-def process_given_directory(given_path, folder_dict, nlines, input_file_extension, output_file_extension):
+def process_given_directory(given_path, nlines, input_file_extension, output_file_extension):
+    folder_dict = {}
+    folder_dict = parse_folder_name(folder_dict, given_path)
     folder_dict["Given"] = float(given[-3:]) / 100
     given_path = os.path.join(mechanism, given)
     input_files = [f for f in os.listdir(given_path) if f.endswith(input_file_extension)]
@@ -127,7 +109,6 @@ def main():
     config = Config(nlines, input_file_extension, output_file_extension)
 
     current_folder = os.getcwd()
-    variant = current_folder.split("/")[-1]
     mechanisms = [f for f in os.listdir(current_folder) if os.path.isdir(f)]
     mechanisms.sort()
 
@@ -138,9 +119,10 @@ def main():
             continue
         givens.sort()
         for given in givens:
-            folder_dict.update(parse_folder_name(os.path.join(current_folder, mechanism)))
-            folder_dict["Given"] = float(given[-3:]) / 100
-            process_given_directory(os.path.join(mechanism, given), folder_dict.copy(), nlines, input_file_extension, output_file_extension)
+            process_given_directory(os.path.join(mechanism, given),
+                                    config.nlines,
+                                    config.input_file_extension,
+                                    config.output_file_extension)
 
 if __name__ == "__main__":
     main()
