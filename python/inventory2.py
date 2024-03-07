@@ -7,12 +7,6 @@ import sys
 import mycolors as c
 from mylist_of_folders import list_of_folders
 
-class Config:
-    def __init__(self, nlines, input_file_extension, output_file_extension):
-        self.nlines = nlines
-        self.input_file_extension = input_file_extension
-        self.output_file_extension = output_file_extension
-
 def parse_path(folder_dict, path):
     folder_dict["DeathRate"] = -7
     folder_dict["Shuffle"] = 0
@@ -110,7 +104,6 @@ def main():
     nlines = 10
     input_file_extension = ".glo"
     output_file_extension = ".csv"
-    config = Config(nlines, input_file_extension, output_file_extension)
 
     current_folder = os.getcwd()
     mechanisms = list_of_folders(current_folder)
@@ -119,9 +112,9 @@ def main():
         givens = list_of_folders(mechanism)
         for given in givens:
             process_given_directory(given,
-                                    config.nlines,
-                                    config.input_file_extension,
-                                    config.output_file_extension)
+                                    nlines,
+                                    input_file_extension,
+                                    output_file_extension)
 
 if __name__ == "__main__":
     main()
