@@ -154,7 +154,7 @@ for queue in queues:
     running_jobs = myslots.get_slots(queue, "RUNNING")
     pending_jobs = myslots.get_slots(queue, "PENDING")
     free_slots = max_submit - running_jobs - pending_jobs
-    print(f"\n{queue}: {running_jobs} of {max_running} running, "
+    print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
           f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
     while free_slots:
         free_slots = submit_jobs(free_slots)

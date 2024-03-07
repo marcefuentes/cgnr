@@ -12,7 +12,7 @@ if not config_file_path:
 config = configparser.ConfigParser()
 config.read(config_file_path)
 
-hours = config.getint("hours")
+hours = config.getint("DEFAULT", "hours")
 queues = ["clk", "epyc"]
 
 print()
