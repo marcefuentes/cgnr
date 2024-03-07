@@ -3,6 +3,7 @@
 import configparser
 import mycolors as c
 import myslots
+import os
 
 config_file_path = os.environ.get('CONFIG_FILE')
 if not config_file_path:
