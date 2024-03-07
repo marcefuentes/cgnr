@@ -8,14 +8,14 @@ from mytraits_images import ttr
 def update(t, traitset, df_dict, movie, text, artists): 
     traits, _, _ = ttr(traitset)
     for r, key in enumerate(df_dict):
-        if (traitset == "cooperation" or traitset == "correlations") and key == "social":
+        if ("cooperation" in traitset or "correlations" in traitset) and key == "social":
             continue
         for c, trait in enumerate(traits):
             if "nothing" in trait:
                 Z = np.zeros((1, 1))
             else:
                 Z = get_Z(t, df_dict[key], trait)
-            if traitset == "cooperation":
+            if "cooperation" in traitset:
                 if "Grain" in trait:
                     if key == "none":
                         Z = 0.5 - Z

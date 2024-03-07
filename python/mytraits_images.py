@@ -12,6 +12,21 @@ def ttr(traitset):
                   "Fitness"]
         rows = ["pi", "p", "i", "none"]
 
+    elif traitset == "cooperationl":
+        traits = ["ChooseGrainmean",
+                  "Choose_ltGrainmean",
+                  "MimicGrainmean",
+                  "ImimicGrainmean",
+                  "Imimic_ltGrainmean",
+                  "wmean"]
+        titles = ["Partner choice",
+                  "Partner choice\nlifetime",
+                  "Direct\nreciprocity",
+                  "Indirect\nreciprocity",
+                  "Indirect\nreciprocity\nlifetime",
+                  "Fitness"]
+        rows = ["i", "none"]
+
     elif traitset == "correlations":
         traits = ["r_qB_Choose",
                   "r_qB_Mimic",
