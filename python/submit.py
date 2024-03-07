@@ -9,7 +9,7 @@ import logging
 # Usage: python submit.py
 
 import mycolors as c
-from myfolder_list import folder_list
+from mylist_of_folders import list_of_folders
 import myslots
 
 queues = ["clk", "epyc"]
@@ -70,11 +70,12 @@ def submit_jobs(free_slots):
             given, last_job = f.read().strip().split(",")
         last_job = int(last_job)
     else:
-        mechanisms = folder_list(os.getcwd())
-        givens = folder_list(mechanisms[0])
+        mechanisms = list_of_folders(os.getcwd())
+        givens = list_of_folders(mechanisms[0])
         given = givens[0]
-        given_folders = given.split("/")
-        given_print = "/".join(given_folders[-3:])
+    given_folders = given.split("/")
+    given_print = "/".join(given_folders[-3:])
+    if not os.path.isfile(last_job_file):
         print(f"\n{c.bold}Submit jobs in {given_print}?{c.reset_format} "
               f"{yesno} ", end="")
         user_input = input()
@@ -87,8 +88,6 @@ def submit_jobs(free_slots):
         job_min = get_job_min(given)
     else:
         job_min = last_job + 1
-    given_folders = given.split("/")
-    given_print = "/".join(given_folders[-3:])
     if os.path.isfile(os.path.join(given, f"{job_min}{output_file_extension}")):
         print(f"{c.red}{given_print}/{job_min}.csv already exists{c.reset_format}")
         exit()
@@ -119,16 +118,16 @@ def submit_jobs(free_slots):
     if last_job == job_max:
         last_job = 0
         mechanism = os.path.dirname(given)
-        givens = folder_list(mechanism)
+        givens = list_of_folders(mechanism)
         given_index = givens.index(given) + 1
         if given_index < len(givens):
             given = givens[given_index]
         else:
-            mechanisms = folder_list(os.path.dirname(mechanism))
+            mechanisms = list_of_folders(os.path.dirname(mechanism))
             mechanism_index = mechanisms.index(mechanism) + 1
             if mechanism_index < len(mechanisms):
                 mechanism = mechanisms[mechanism_index]
-                givens = folder_list(mechanism)
+                givens = list_of_folders(mechanism)
                 given = givens[0]
             else:
                 os.remove(last_job_file)

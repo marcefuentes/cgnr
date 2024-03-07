@@ -5,7 +5,7 @@ import os
 import sys
 
 import mycolors as c
-from myfolders_list import folders_list
+from mylist_of_folders import list_of_folders
 
 class Config:
     def __init__(self, nlines, input_file_extension, output_file_extension):
@@ -13,7 +13,7 @@ class Config:
         self.input_file_extension = input_file_extension
         self.output_file_extension = output_file_extension
 
-def parse_path(folder_dict, given_path):
+def parse_path(folder_dict, path):
     folder_dict["DeathRate"] = -7
     folder_dict["Shuffle"] = 0
     folder_dict["Language"] = 0
@@ -23,26 +23,27 @@ def parse_path(folder_dict, given_path):
     folder_dict["GroupSize"] = 2
     folder_dict["Given"] = 0
     folder_dict["Cost"] = 0
-    folder_name = os.path.basename(given_path)
-    if "noshuffle" not in folder_name:
+    path_folders = path.split("/")
+    variant = path_folders[-3]
+    if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
-    if "_d" in folder_name:
+    if "_d" in variant:
         folder_dict["DeathRate"] = -3
-    if "lang" in folder_name:
+    if "lang" in variant:
         folder_dict["Language"] = 1
-    cost_index = folder_name.find("cost")
-    cost = folder_name[cost_index + 4:cost_index + 6]
+    cost_index = variant.find("cost")
+    cost = variant[cost_index + 4:cost_index + 6]
     folder_dict["Cost"] = -int(cost)
-    if "_128" in folder_name:
+    if "_128" in variant:
         folder_dict["GroupSize"] = 7
-    elif "_16" in folder_name:
+    elif "_16" in variant:
         folder_dict["GroupSize"] = 4
-    elif "_8" in folder_name:
+    elif "_8" in variant:
         folder_dict["GroupSize"] = 3
     else:
         folder_dict["GroupSize"] = 2
-    folder_dict["Given"] = float(folder_name[-3:]) / 100
-
+    folder_dict["Given"] = float(variant[-3:]) / 100
+    mechanism = path_folders[-2]
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
     if "i" in mechanism:
@@ -51,20 +52,23 @@ def parse_path(folder_dict, given_path):
     elif "r" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 0
+    given = path_folders[-1]
+    folder_dict["Given"] = float(given[-3:]) / 100
     return folder_dict
 
-def process_given_directory(given_path, nlines, input_file_extension, output_file_extension):
+def process_given_directory(given, nlines, input_file_extension, output_file_extension):
     folder_dict = {}
-    folder_dict = parse_folder_name(folder_dict, given_path)
-    folder_dict["Given"] = float(given[-3:]) / 100
-    given_path = os.path.join(mechanism, given)
-    input_files = [f for f in os.listdir(given_path) if f.endswith(input_file_extension)]
-    print(f"{c.white}{mechanism}{c.reset_format}\t{c.white}{given}{c.reset_format}", end = "  ")
+    folder_dict = parse_path(folder_dict, given)
+    input_files = [f for f in os.listdir(given) if f.endswith(input_file_extension)]
+    path_folders = given.split("/")
+    mechanism = path_folders[-2]
+    given_print = path_folders[-1]
+    print(f"{c.white}{mechanism}{c.reset_format}\t{c.white}{given_print}{c.reset_format}", end = "  ")
     total_files = len(input_files)
     if total_files == 0:
         print(f"{c.bold}{c.red}no {input_file_extension[1:]} files{c.reset_format}")
         return
-    with open(os.path.join(given_path, input_files[0]), "r") as csvfile:
+    with open(os.path.join(given, input_files[0]), "r") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             key, value = row
@@ -77,9 +81,9 @@ def process_given_directory(given_path, nlines, input_file_extension, output_fil
     f_smaller_nlines = 0
     f_equal_nlines = 0
     f_larger_nlines = 0
-    for f in os.listdir(given_path):
+    for f in os.listdir(given):
         if f.endswith(output_file_extension):
-            output_file = os.path.join(given_path, f)
+            output_file = os.path.join(given, f)
             with open(output_file, "r") as output:
                 lines = output.readlines()
                 if len(lines) < nlines:
@@ -109,17 +113,12 @@ def main():
     config = Config(nlines, input_file_extension, output_file_extension)
 
     current_folder = os.getcwd()
-    mechanisms = [f for f in os.listdir(current_folder) if os.path.isdir(f)]
-    mechanisms.sort()
+    mechanisms = list_of_folders(current_folder)
 
     for mechanism in mechanisms:
-        givens = [f for f in os.listdir(mechanism) if os.path.isdir(os.path.join(mechanism, f))]
-        if len(givens) == 0:
-            print(f"{c.bold}{c.red}empty{c.reset_format}")
-            continue
-        givens.sort()
+        givens = list_of_folders(mechanism)
         for given in givens:
-            process_given_directory(os.path.join(mechanism, given),
+            process_given_directory(given,
                                     config.nlines,
                                     config.input_file_extension,
                                     config.output_file_extension)
