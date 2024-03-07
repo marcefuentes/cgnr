@@ -13,6 +13,8 @@ variant = sys.argv[1]
 mechanism = sys.argv[2]
 given = sys.argv[3]
 
+output_file_extension = ".glo"
+
 if "_d" in variant:
     deathrate = -3
 else:
@@ -53,7 +55,7 @@ else:
     shuffle = 1
 
 # create subfolder path variant/mechanism/given in current directory
-path = variant + "/" + mechanism + "/" + given
+path = f"{variant}/{mechanism}/{given}"
 os.makedirs(path, exist_ok=True)
 
 num = 21
@@ -67,7 +69,7 @@ c = 101
 
 for alpha in alphas:
     for loges in logess:
-        filename = path + "/" + str(c) + ".glo"
+        filename = f"{path}/{c}{output_file_extension}"
         f = open(filename, "w")
         f.write("Seed,1\n")
         f.write("N,12\n")

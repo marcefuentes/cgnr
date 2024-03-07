@@ -18,21 +18,21 @@ def update(t, traitset, df_dict, dffrq_dict, movie, text, artists):
             if "nothing" in trait:
                 Z = np.zeros((1, 1))
             else:
-                Z = get_Z(t, df_dict[key], trait + "mean")
+                Z = get_Z(t, df_dict[key], f"{trait}mean")
             if traitset == "gnrfrq":
                 if "Grain" in trait:
                     if key == "none":
                         Z = 0.5 - Z
                     else:
-                        Z = get_Z(t, df_dict["none"], trait + "mean") - Z
+                        Z = get_Z(t, df_dict["none"], f"{trait}mean") - Z
                 else:
-                    Z = Z - get_Z(t, df_dict["social"], trait + "mean")
+                    Z = Z - get_Z(t, df_dict["social"], f"{trait}mean")
             elif traitset == "nonefrq":
                 if c == 1:
                     given = df_dict[key]["Given"].iloc[0]
                     Z = Z*given
                 elif c == 3:
-                    Z = Z - get_Z(t, df_dict["social"], trait + "mean")
+                    Z = Z - get_Z(t, df_dict["social"], f"{trait}mean")
             elif traitset == "demography":
                 if "Dispersal" in trait:
                     Z = Z - get_Z(t, df_dict[key], "NeutralDispersalRatemean")
