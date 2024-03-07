@@ -17,7 +17,7 @@ input_file_extension = ".glo"
 output_file_extensions = [".csv", ".frq"]
 
 config = configparser.ConfigParser()
-config.read("submit.ini")
+config.read("config.ini")
 
 exe = config.get("DEFAULT", "exe")
 default_lines = config.getint("DEFAULT", "number_of_lines")
