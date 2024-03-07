@@ -54,7 +54,6 @@ if "noshuffle" in variant:
 else:
     shuffle = 1
 
-# create subfolder path variant/mechanism/given in current directory
 path = f"{variant}/{mechanism}/{given}"
 os.makedirs(path, exist_ok=True)
 
@@ -62,7 +61,6 @@ num = 21
 alphas = np.linspace(0.1, 0.9, num)
 logess = np.linspace(-5.0, 5.0, num)
 Given = float(given[-3:]) / 100
-# cost must be the number following the string "cost" in the variant name. This number has two digits.
 cost = -int(variant[variant.find("cost") + 4:variant.find("cost") + 6])
 
 c = 101
