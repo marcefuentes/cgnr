@@ -14,8 +14,6 @@ import myslots
 
 queues = ["clk", "epyc"]
 mail_user = "marcelinofuentes@gmail.com"
-input_file_extension = ".glo"
-output_file_extension = ".csv"
 
 config_file_path = os.environ.get('CONFIG_FILE')
 if not config_file_path:
@@ -28,6 +26,8 @@ exe = config.get("DEFAULT", "exe")
 number_of_lines = config.getint("DEFAULT", "number_of_lines")
 hours = config.getint("DEFAULT", "hours")
 memory = config.get("DEFAULT", "memory")
+input_file_extension = config.get("DEFAULT", "input_file_extension")
+output_file_extension = config.get("DEFAULT", "first_output_file_extension")
 
 executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
 last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
@@ -80,7 +80,7 @@ def submit_jobs(free_slots):
     else:
         job_min = last_job + 1
     if os.path.isfile(os.path.join(given, f"{job_min}{output_file_extension}")):
-        print(f"{c.red}{given_print}/{job_min}.csv already exists{c.reset_format}")
+        print(f"{c.red}{given_print}/{job_min}{output_file_extension} already exists{c.reset_format}")
         exit()
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1

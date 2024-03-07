@@ -13,25 +13,17 @@ import myslots
 
 queues = ["clk", "epyc"]
 mail_user = "marcelinofuentes@gmail.com"
-input_file_extension = ".glo"
-output_file_extensions = [".csv", ".frq"]
 
 config = configparser.ConfigParser()
 config.read("config.ini")
 
 exe = config.get("DEFAULT", "exe")
-default_lines = config.getint("DEFAULT", "number_of_lines")
-default_hours = config.getint("DEFAULT", "hours")
-default_memory = config.get("DEFAULT", "memory")
-
-if exe == "dgnr":
-    number_of_lines = config.getint("dgnr", "number_of_lines")
-    hours = config.getint("dgnr", "hours")
-    memory = config.get("dgnr", "memory")
-else:
-    number_of_lines = default_lines
-    hours = default_hours
-    memory = default_memory
+number_of_lines = config.getint("DEFAULT", "number_of_lines")
+hours = config.getint("DEFAULT", "hours")
+memory = config.get("DEFAULT", "memory")
+input_file_extension = config.get("DEFAULT", "input_file_extension")
+output_file_extensions = [config.get("DEFAULT", "first_output_file_extension"),
+                          config.get("DEFAULT", "second_output_file_extension")]
 
 executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
 last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"

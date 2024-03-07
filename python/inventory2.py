@@ -111,9 +111,9 @@ def main():
 
     exe = config.get("DEFAULT", "exe")
     number_of_lines = config.getint("DEFAULT", "number_of_lines")
-
-    input_file_extension = ".glo"
-    output_file_extension = ".csv"
+    input_file_extension = config.get("DEFAULT", "input_file_extension")
+    output_file_extension = config.get("DEFAULT", "first_output_file_extension")
+    print(input_file_extension, output_file_extension)
 
     current_folder = os.getcwd()
     mechanisms = list_of_folders(current_folder)
