@@ -16,8 +16,12 @@ mail_user = "marcelinofuentes@gmail.com"
 input_file_extension = ".glo"
 output_file_extension = ".csv"
 
+config_file_path = os.environ.get('CONFIG_FILE')
+if not config_file_path:
+  raise RuntimeError("CONFIG_FILE environment variable not set")
+
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(config_file_path)
 
 exe = config.get("DEFAULT", "exe")
 default_lines = config.getint("DEFAULT", "number_of_lines")

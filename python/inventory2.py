@@ -51,11 +51,6 @@ def parse_folder_name(folder_name):
     folder_dict["Given"] = float(folder_name[-3:]) / 100
     return folder_dict
 
-nlines = 10
-input_file_extension = ".glo"
-output_file_extension = ".csv"
-
-
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
     else:

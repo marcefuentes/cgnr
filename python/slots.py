@@ -1,9 +1,17 @@
 #! /usr/bin/env python
 
+import configparser
 import mycolors as c
 import myslots
 
-hours = 71
+config_file_path = os.environ.get('CONFIG_FILE')
+if not config_file_path:
+  raise RuntimeError("CONFIG_FILE environment variable not set")
+
+config = configparser.ConfigParser()
+config.read(config_file_path)
+
+hours = config.getint("hours")
 queues = ["clk", "epyc"]
 
 print()
