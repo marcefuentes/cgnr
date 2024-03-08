@@ -12,7 +12,7 @@ def submit_job(job_name, queue, job_array):
     config.read(config_file_path)
 
     exe = config.get("DEFAULT", "exe")
-    hours = config.get("DEFAULT", "hours")
+    hours = config.getint("DEFAULT", "hours")
     memory = config.get("DEFAULT", "memory")
     mail_user = config.get("DEFAULT", "mail_user")
 
