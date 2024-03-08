@@ -1,6 +1,7 @@
 
 import configparser
 import os
+import subprocess
 
 def submit_job(job_name, queue, job_array):
 

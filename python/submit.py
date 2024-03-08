@@ -3,7 +3,6 @@
 import configparser
 import logging
 import os
-import subprocess
 import sys
 
 import mycolors as c
