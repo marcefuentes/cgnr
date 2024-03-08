@@ -62,7 +62,7 @@ def submit_job(command):
     print(output)
     logging.info(output)
 
-def process_folders(free_slots, test=False):
+def process_folders(queue, free_slots, test=False):
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
             given, last_job = f.read().strip().split(",")
@@ -106,7 +106,7 @@ def process_folders(free_slots, test=False):
                "--mail-user", mail_user,
                "--array", job_array,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
-    if test == False:
+    if not test:
         submit_job(command)
         logging.info(f"{given_print}/{job_array} to {queue}")
     print(f"{c.green}{given_print}/{job_array}{c.reset_format}")
@@ -126,12 +126,12 @@ def process_folders(free_slots, test=False):
                 givens = list_of_folders(mechanism)
                 given = givens[0]
             else:
-                if test == False:
+                if not test:
                     os.remove(last_job_file)
                 print(f"{c.bold}{c.green}All jobs submitted{c.reset_format}")
                 print(f"{c.cyan}{free_slots}{c.reset_format} free slots\n")
                 exit()
-    if test == False:
+    if not test:
         with open(last_job_file, "w") as f:
             f.write(f"{given},{last_job}")
 
@@ -140,6 +140,8 @@ def process_folders(free_slots, test=False):
 def main():
 
     test = len(sys.argv) > 1
+    if test:
+        print(f"\n{c.bold}This is a test{c.reset_format}")
 
     for queue in queues:
         max_submit = myslots.get_max_slots(queue, hours, "maxsubmit")
@@ -147,12 +149,14 @@ def main():
         running_jobs = myslots.get_slots(queue, "RUNNING")
         pending_jobs = myslots.get_slots(queue, "PENDING")
         free_slots = max_submit - running_jobs - pending_jobs
+        if test == True and free_slots == 0:
+            free_slots = 100
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
         while free_slots:
-            free_slots = process_folders(free_slots, test)
+            free_slots = process_folders(queue, free_slots, test)
 
     print()
 
 if __name__ == "__main__":
-    sys.exit()
+    main()
