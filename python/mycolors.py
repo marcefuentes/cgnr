@@ -8,3 +8,4 @@ white        = "\033[97m"
 bold         = "\033[1m"
 reset_format = "\033[0m"
 
+yesno = f"[{c.bold}{c.green}Yes{c.reset_format}/{c.bold}{c.red}No{c.reset_format}]"

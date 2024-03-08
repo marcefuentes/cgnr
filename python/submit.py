@@ -11,10 +11,9 @@ from mylist_of_folders import list_of_folders
 import myslots
 
 # Purpose: browse through folders and submit jobs
-# Usage: python submit.py
+# Usage: python submit.py or python submit.py test
 
 queues = ["clk", "epyc"]
-mail_user = "marcelinofuentes@gmail.com"
 
 config_file_path = os.environ.get('CONFIG_FILE')
 if not config_file_path:
@@ -26,16 +25,17 @@ config.read(config_file_path)
 exe = config.get("DEFAULT", "exe")
 hours = config.getint("DEFAULT", "hours")
 memory = config.get("DEFAULT", "memory")
+executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
+mail_user = config.get("DEFAULT", "mail_user")
+
 input_file_extension = config.get("DEFAULT", "input_file_extension")
 output_file_extension = config.get("DEFAULT", "first_output_file_extension")
 
-executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
 last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
 log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
 logging.basicConfig(filename=log_file,
                     level=logging.DEBUG,
                     format="%(asctime)s %(levelname)s: %(message)s")
-yesno = f"[{c.bold}{c.green}Yes{c.reset_format}/{c.bold}{c.red}No{c.reset_format}]"
 
 def get_job_min(path):
     job_min = 9999
@@ -74,7 +74,7 @@ def process_folders(queue, free_slots, test=False):
     given_print = "/".join(given_folders[-3:])
     if not os.path.isfile(last_job_file):
         print(f"\n{c.bold}Submit jobs in {given_print}?{c.reset_format} "
-              f"{yesno} ", end="")
+              f"{c.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
