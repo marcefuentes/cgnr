@@ -66,15 +66,14 @@ def submit_job(command):
 
 def process_folder(queue, free_slots, jobs_to_submit, test=False):
 
+    num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
+    job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
+    last_job = job_array.split(",")[-1]
     given = os.getcwd()
     given_folders = given.split("/")
     given_print = "/".join(given_folders[-3:])
-
-    num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
-    last_job = job_array.split(",")[-1]
-    job_name = f"{queue}-{last_job}"
+    job_name = f"{queue}-{given_folders[-2]}{last_job}"
     job_time = f"{hours}:59:00"
-    job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
     command = ["sbatch",
                "--job-name", job_name,
                "--output", f"{job_name}.%j.out",
@@ -106,9 +105,13 @@ def main():
         print(f"\n{c.bold}This is a test{c.reset_format}")
 
     jobs_to_submit = get_jobs_to_submit()
-   
+    if len(jobs_to_submit) == 0:
+        print(f"\n{c.green}No jobs to submit. Exiting...{c.reset_format}")
+        return
+    print(f"\n{c.bold}{c.cyan}{len(jobs_to_submit)}{c.reset_format} jobs to submit")
+
     if test:
-        print(f"\n{c.bold}Will delete {output_file_extensions} of {jobs_to_submit}{c.reset_format}")
+        print(f"\n{c.bold}{c.red}Will delete {output_file_extensions} of {jobs_to_submit}{c.reset_format}")
     else:
         remove_files(jobs_to_submit)
 
@@ -122,13 +125,15 @@ def main():
             free_slots = 100
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
-        if free_slots > 0 and len(jobs_to_submit) > 0:
+        if free_slots and len(jobs_to_submit):
             free_slots, jobs_to_submit = process_folder(queue, free_slots, jobs_to_submit, test)
 
-        print(f"{c.red}{len(jobs_to_submit)} jobs remain to be submitted{c.reset_format}")
-        print(f"{c.cyan}{free_slots}{c.reset_format} free slots")
         if len(jobs_to_submit) == 0:
-            break
+            print(f"\n{c.bold}{c.green}All jobs submitted{c.reset_format}")
+            print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots")
+            return
+        else:
+            print(f"{c.bold}{c.red}{len(jobs_to_submit)}{c.reset_format} jobs remain to be submitted")
 
     print()
 
