@@ -119,7 +119,7 @@ def process_variant(queue, free_slots, test=False):
     if last_job == 0: 
         mechanism = os.path.dirname(path)
         givens = list_of_folders(mechanism)
-        given_index = givens.index(given) + 1
+        given_index = givens.index(path) + 1
         if given_index < len(givens):
             path = givens[given_index]
         else:
