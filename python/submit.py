@@ -56,41 +56,32 @@ def get_job_max(path):
     return job_max
 
 def submit_job(command):
-    output = subprocess.run(command, stdout=subprocess.PIPE, text=True)
-    output = output.stdout.strip()
-    print(output)
-    logging.info(output)
-
-def process_folders(queue, free_slots, test=False):
-    if os.path.isfile(last_job_file):
-        with open(last_job_file, "r") as f:
-            given, last_job = f.read().strip().split(",")
-        last_job = int(last_job)
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    if stderr:
+        print(stderr)
+        logging.error(stderr)
+        exit()
     else:
-        mechanisms = list_of_folders(os.getcwd())
-        givens = list_of_folders(mechanisms[0])
-        given = givens[0]
-    given_folders = given.split("/")
-    given_print = "/".join(given_folders[-3:])
-    if not os.path.isfile(last_job_file):
-        print(f"\n{c.bold}Submit jobs in {given_print}?{c.reset_format} "
-              f"{c.yesno} ", end="")
-        user_input = input()
-        if user_input.lower() == "n":
-            exit()
-        last_job = 0
-    os.chdir(given)
-    job_max = get_job_max(given)
+        print(stdout)
+        logging.info(stdout)
+
+def process_folder(queue, free_slots, last_job, test):
+    path = os.getcwd()
+    path_folders = path.split("/")
+    path_print = "/".join(path_folders[-3:])
+    job_max = get_job_max(path)
     if last_job == 0:
-        job_min = get_job_min(given)
+        job_min = get_job_min(path)
     else:
         job_min = last_job + 1
-    if os.path.isfile(os.path.join(given, f"{job_min}{output_file_extension}")):
-        print(f"{c.red}{given_print}/{job_min}{output_file_extension} already exists{c.reset_format}")
-        exit()
+    if os.path.isfile(os.path.join(path, f"{job_min}{output_file_extension}")):
+        print(f"{c.red}{path_print}/{job_min}{output_file_extension} already exists{c.reset_format}")
+        last_job = 0
+        return free_slots, last_job
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
-    job_name = f"{queue}-{given_folders[-2]}{last_job}"
+    job_name = f"{queue}-{path_folders[-2]}{last_job}"
     job_time = f"{hours}:59:00"
     job_array = f"{job_min}-{last_job}"
     command = ["sbatch",
@@ -105,7 +96,7 @@ def process_folders(queue, free_slots, test=False):
                "--mail-user", mail_user,
                "--array", job_array,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
-    info = f"{given_print}/{job_array} to {queue}"
+    info = f"{path_print}/{job_array} to {queue}"
     if test:
         print(f"Will submit {info}")
     else:
@@ -115,18 +106,41 @@ def process_folders(queue, free_slots, test=False):
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
-        mechanism = os.path.dirname(given)
+    return free_slots, last_job
+
+def process_variant(queue, free_slots, test=False):
+    if os.path.isfile(last_job_file):
+        with open(last_job_file, "r") as f:
+            path, last_job = f.read().strip().split(",")
+        last_job = int(last_job)
+    else:
+        mechanisms = list_of_folders(os.getcwd())
+        givens = list_of_folders(mechanisms[0])
+        path = givens[0]
+        path_folders = path.split("/")
+        path_print = "/".join(path_folders[-3:])
+        print(f"\n{c.bold}Submit jobs in {path_print}?{c.reset_format} "
+              f"{c.yesno} ", end="")
+        user_input = input()
+        if user_input.lower() == "n":
+            exit()
+        last_job = 0
+    os.chdir(path)
+    free_slots, last_job = process_folder(queue, free_slots, last_job, test)
+
+    if last_job == 0: 
+        mechanism = os.path.dirname(path)
         givens = list_of_folders(mechanism)
         given_index = givens.index(given) + 1
         if given_index < len(givens):
-            given = givens[given_index]
+            path = givens[given_index]
         else:
             mechanisms = list_of_folders(os.path.dirname(mechanism))
             mechanism_index = mechanisms.index(mechanism) + 1
             if mechanism_index < len(mechanisms):
                 mechanism = mechanisms[mechanism_index]
                 givens = list_of_folders(mechanism)
-                given = givens[0]
+                path = givens[0]
             else:
                 if test:
                     print(f"Will remove last_job_file")
@@ -139,7 +153,7 @@ def process_folders(queue, free_slots, test=False):
         print(f"Will write {last_job} to last_job_file")
     else:
         with open(last_job_file, "w") as f:
-            f.write(f"{given},{last_job}")
+            f.write(f"{path},{last_job}")
 
     return free_slots
 
@@ -160,7 +174,7 @@ def main():
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
         while free_slots:
-            free_slots = process_folders(queue, free_slots, test)
+            free_slots = process_variant(queue, free_slots, test)
 
     print()
 
