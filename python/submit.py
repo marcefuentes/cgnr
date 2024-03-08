@@ -24,6 +24,7 @@ config = configparser.ConfigParser()
 config.read(config_file_path)
 
 exe = config.get("DEFAULT", "exe")
+hours = config.get("DEFAULT", "hours")
 input_file_extension = config.get("DEFAULT", "input_file_extension")
 output_file_extension = config.get("DEFAULT", "first_output_file_extension")
 
