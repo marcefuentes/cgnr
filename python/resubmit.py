@@ -3,10 +3,10 @@
 import configparser
 import logging
 import os
-import subprocess
 import sys
 
 import mycolors as c
+from mysubmit_job import submit_job
 import myslots
 
 # Purpose: resubmit unfinished jobs
@@ -23,10 +23,6 @@ config.read(config_file_path)
 
 exe = config.get("DEFAULT", "exe")
 hours = config.getint("DEFAULT", "hours")
-memory = config.get("DEFAULT", "memory")
-executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
-mail_user = config.get("DEFAULT", "mail_user")
-
 input_file_extension = config.get("DEFAULT", "input_file_extension")
 output_file_extensions = [config.get("DEFAULT", "first_output_file_extension"),
                           config.get("DEFAULT", "second_output_file_extension")]
@@ -58,53 +54,45 @@ def remove_files(jobs_to_submit):
             else:
                 continue
 
-def submit_job(command):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    if process.returncode != 0:
-        print(f"{c.red}Error: command failed with return code {process.returncode}{c.reset_format}")
-        if stderr:
-            print(stderr)
-            logging.error(stderr)
-        exit()
-    else:
-        for line in stdout.split("\n"):
-            if line:
-                print(line)
-                logging.info(line)
-
 def process_folder(queue, free_slots, jobs_to_submit, test=False):
     path = os.getcwd()
     path_folders = path.split("/")
     path_print = "/".join(path_folders[-3:])
     num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
     job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
+    info = f"{path_print}/{job_array} to {queue}"
     last_job = job_array.split(",")[-1]
     job_name = f"{queue}-{path_folders[-2]}{last_job}"
-    job_time = f"{hours}:59:00"
-    command = ["sbatch",
-               "--job-name", job_name,
-               "--output", f"{job_name}.%j.out",
-               "--constraint", queue,
-               "--nodes=1",
-               "--tasks=1",
-               "--time", job_time,
-               "--mem", memory,
-               "--mail-type=begin,end",
-               "--mail-user", mail_user,
-               "--array", job_array,
-               "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
-    info = f"{path_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}"
     if test:
         print(f"Will submit {info}")
     else:
-        submit_job(command)
+        try:
+            return_code, stdout, stderr = submit_job(job_name, queue, job_array)
+        except RuntimeError as e:
+            print(f"{c.red}Error: {e}{c.reset_format}")
+            exit()
+        if return_code != 0:
+            print(f"{c.red}Error: command failed with return code {return_code}{c.reset_format}")
+            if stderr:
+                print(stderr)
+                logging.error(stderr)
+            exit()
+        else:
+            for line in stdout.split("\n"):
+                if line:
+                    print(line)
+                    logging.info(line)
         logging.info(info)
         print(f"{c.green}{info}{c.reset_format}")
     del jobs_to_submit[:num_jobs_to_submit]
-    free_slots -= num_jobs_to_submit 
+    free_slots -= num_jobs_to_submit
+    if len(jobs_to_submit) == 0:
+        print(f"\n{c.bold}{c.green}All jobs submitted{c.reset_format}")
+        print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots in {c.bold}{queue}{c.reset_format}\n")
+        exit()
+    print(f"{c.bold}{c.red}{len(jobs_to_submit)}{c.reset_format} jobs remain to be submitted")
 
-    return free_slots, jobs_to_submit
+    return jobs_to_submit
 
 def main():
 
@@ -133,15 +121,8 @@ def main():
             free_slots = 100
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
-        if free_slots and len(jobs_to_submit):
-            free_slots, jobs_to_submit = process_folder(queue, free_slots, jobs_to_submit, test)
-
-        if len(jobs_to_submit) == 0:
-            print(f"\n{c.bold}{c.green}All jobs submitted{c.reset_format}")
-            print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots in {c.bold}{queue}{c.reset_format}")
-            return
-        else:
-            print(f"{c.bold}{c.red}{len(jobs_to_submit)}{c.reset_format} jobs remain to be submitted")
+        if free_slots:
+            jobs_to_submit = process_folder(queue, free_slots, jobs_to_submit, test)
 
     print()
 
