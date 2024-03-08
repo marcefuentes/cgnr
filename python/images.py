@@ -11,7 +11,7 @@ import matplotlib.transforms
 import numpy as np
 
 from myget_df import get_df
-from mytraits_images import ttr
+from mytraits import ttr
 from myupdate_images import update
 
 def main(traitset, movie):

@@ -12,7 +12,7 @@ import matplotlib.transforms
 import numpy as np
 
 from myget_df import get_df
-from mytraits_frq import ttr
+from mytraits import ttr
 from myupdate_frq import update
 
 def main(traitset, movie):

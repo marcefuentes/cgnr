@@ -2,10 +2,10 @@
 def ttr(traitset):
 
     if traitset == "cooperation":
-        traits = ["ChooseGrainmean",
-                  "MimicGrainmean",
-                  "ImimicGrainmean",
-                  "wmean"]
+        traits = ["ChooseGrain",
+                  "MimicGrain",
+                  "ImimicGrain",
+                  "w"]
         titles = ["Partner choice",
                   "Direct\nreciprocity",
                   "Indirect\nreciprocity",
@@ -13,12 +13,12 @@ def ttr(traitset):
         rows = ["pi", "p", "i", "none"]
 
     elif traitset == "cooperationl":
-        traits = ["ChooseGrainmean",
-                  "Choose_ltGrainmean",
-                  "MimicGrainmean",
-                  "ImimicGrainmean",
-                  "Imimic_ltGrainmean",
-                  "wmean"]
+        traits = ["ChooseGrain",
+                  "Choose_ltGrain",
+                  "MimicGrain",
+                  "ImimicGrain",
+                  "Imimic_ltGrain",
+                  "w"]
         titles = ["Partner choice",
                   "Partner choice\nlifetime",
                   "Direct\nreciprocity",
@@ -39,10 +39,10 @@ def ttr(traitset):
         rows = ["pi", "p", "i", "none"]
 
     elif traitset == "none":
-        traits = ["qBSeenmean",
-                  "qBSeenmean",
-                  "wmean",
-                  "wmean"]
+        traits = ["qBSeen",
+                  "qBSeen",
+                  "w",
+                  "w"]
         titles = ["Production of $\it{B}$",
                   "Byproduct help",
                   "Fitness",

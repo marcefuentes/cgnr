@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 from myget_Z import get_Z
-from mytraits_images import ttr
+from mytraits import ttr
 
 def update(t, traitset, df_dict, movie, text, artists): 
     traits, _, _ = ttr(traitset)
@@ -13,22 +13,29 @@ def update(t, traitset, df_dict, movie, text, artists):
         for c, trait in enumerate(traits):
             if "nothing" in trait:
                 Z = np.zeros((1, 1))
-            else:
+            elif "r_" in trait:
                 Z = get_Z(t, df_dict[key], trait)
+            else:
+                Z = get_Z(t, df_dict[key], f"{trait}mean")
             if "cooperation" in traitset:
                 if "Grain" in trait:
                     if key == "none":
                         Z = 0.5 - Z
                     else:
-                        Z = get_Z(t, df_dict["none"], trait) - Z
+                        Z = get_Z(t, df_dict["none"], f"{trait}mean") - Z
                 else:
-                    Z = Z - get_Z(t, df_dict["social"], trait)
+                    Z = Z - get_Z(t, df_dict["social"], f"{trait}mean")
             elif traitset == "none":
                 if c == 1:
                     given = df_dict[key]["Given"].iloc[0]
                     Z = Z*given
                 elif c == 3:
-                    Z = Z - get_Z(t, df_dict["social"], trait)
+                    Z = Z - get_Z(t, df_dict["social"], f"{trait}mean")
+            elif traitset == "demography":
+                if "Dispersal" in trait:
+                    Z = Z - get_Z(t, df_dict[key], "NeutralDispersalRatemean")
+                elif "N" in trait:
+                    Z = Z/4096.0
             elif traitset == "correlations":
                 if trait == "r_qB_Choose" or trait == "r_qB_Mimic" or trait == "r_qB_Imimic":
                     Z = -Z
