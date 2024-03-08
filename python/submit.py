@@ -133,7 +133,7 @@ def process_folders(queue, free_slots, test=False):
                 else:
                     os.remove(last_job_file)
                 print(f"{c.bold}{c.green}All jobs submitted{c.reset_format}")
-                print(f"{c.cyan}{free_slots}{c.reset_format} free slots\n")
+                print(f"{c.cyan}{free_slots}{c.reset_format} free slots in {c.bold}{queue}{c.reset_format}\n")
                 exit()
     if test:
         print(f"Will write {last_job} to last_job_file")

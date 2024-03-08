@@ -130,7 +130,7 @@ def main():
 
         if len(jobs_to_submit) == 0:
             print(f"\n{c.bold}{c.green}All jobs submitted{c.reset_format}")
-            print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots")
+            print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots in {c.bold}{queue}{c.reset_format}")
             return
         else:
             print(f"{c.bold}{c.red}{len(jobs_to_submit)}{c.reset_format} jobs remain to be submitted")
