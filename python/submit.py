@@ -8,6 +8,7 @@ import sys
 
 import mycolors as c
 from mylist_of_folders import list_of_folders
+from mysubmit_job import submit_job
 import myslots
 
 # Purpose: browse through folders and submit jobs
@@ -23,11 +24,6 @@ config = configparser.ConfigParser()
 config.read(config_file_path)
 
 exe = config.get("DEFAULT", "exe")
-hours = config.getint("DEFAULT", "hours")
-memory = config.get("DEFAULT", "memory")
-executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
-mail_user = config.get("DEFAULT", "mail_user")
-
 input_file_extension = config.get("DEFAULT", "input_file_extension")
 output_file_extension = config.get("DEFAULT", "first_output_file_extension")
 
@@ -55,19 +51,6 @@ def get_job_max(path):
                 job_max = basename
     return job_max
 
-def submit_job(command):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    if process.returncode != 0:
-        print(f"{c.red}Error: command failed with return code {process.returncode}{c.reset_format}")
-        if stderr:
-            print(stderr)
-            logging.error(stderr)
-        exit()
-    else:
-        print(stdout)
-        logging.info(stdout)
-
 def process_folder(queue, free_slots, last_job, test):
     path = os.getcwd()
     path_folders = path.split("/")
@@ -84,25 +67,27 @@ def process_folder(queue, free_slots, last_job, test):
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
     job_name = f"{queue}-{path_folders[-2]}{last_job}"
-    job_time = f"{hours}:59:00"
     job_array = f"{job_min}-{last_job}"
-    command = ["sbatch",
-               "--job-name", job_name,
-               "--output", f"{job_name}.%j.out",
-               "--constraint", queue,
-               "--nodes=1",
-               "--tasks=1",
-               "--time", job_time,
-               "--mem", memory,
-               "--mail-type=begin,end",
-               "--mail-user", mail_user,
-               "--array", job_array,
-               "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
     info = f"{path_print}/{job_array} to {queue}"
     if test:
         print(f"Will submit {info}")
     else:
-        submit_job(command)
+        try:
+            return_code, stdout, stderr = submit_job(job_name, queue, job_array)
+        except RuntimeError as e:
+            print(f"{c.red}Error: {e}{c.reset_format}")
+            exit()
+        if return_code != 0:
+            print(f"{c.red}Error: command failed with return code {return_code}{c.reset_format}")
+            if stderr:
+                print(stderr)
+                logging.error(stderr)
+            exit()
+        else:
+            for line in stdout.split("\n"):
+                if line:
+                    print(line)
+                    logging.info(line)
         logging.info(info)
         print(f"{c.green}{info}{c.reset_format}")
     free_slots -= num_jobs_to_submit

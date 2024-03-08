@@ -61,13 +61,17 @@ def remove_files(jobs_to_submit):
 def submit_job(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
-    if stderr:
-        print(stderr)
-        logging.error(stderr)
+    if process.returncode != 0:
+        print(f"{c.red}Error: command failed with return code {process.returncode}{c.reset_format}")
+        if stderr:
+            print(stderr)
+            logging.error(stderr)
         exit()
     else:
-        print(stdout)
-        logging.info(stdout)
+        for line in stdout.split("\n"):
+            if line:
+                print(line)
+                logging.info(line)
 
 def process_folder(queue, free_slots, jobs_to_submit, test=False):
     path = os.getcwd()
