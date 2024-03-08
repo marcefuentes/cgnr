@@ -4,6 +4,7 @@ import configparser
 import logging
 import os
 import subprocess
+import sys
 
 import mycolors as c
 import myslots
@@ -55,7 +56,7 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
                     jobs_to_submit.append(int(name))
 
     if test:
-        print(f"\n{c.bold}Will delete {output_file_extensions} of {jobs_to_submit}?{c.reset_format} "
+        print(f"\n{c.bold}Will delete {output_file_extensions} of {jobs_to_submit}{c.reset_format} "
     else:
         for name in jobs_to_submit:
             for extension in output_file_extensions:
@@ -85,11 +86,13 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
                "--mail-user", mail_user,
                "--array", job_array,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
+    info = f"{given_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}"
     if test:
-        print(f"\n{c.bold}Will submit {given_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}{c.reset_format}")
+        print(f"Will process command:\n{command}\nand log {info} to {log_file}")
     else:
         submit_job(command)
-        logging.info(f"{given_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}")
+        logging.info(info)
+        print(f"{c.green}{info}{c.reset_format}")
     del jobs_to_submit[:num_jobs_to_submit]
     free_slots -= num_jobs_to_submit 
 
@@ -107,7 +110,7 @@ def main():
         running_jobs = myslots.get_slots(queue, "RUNNING")
         pending_jobs = myslots.get_slots(queue, "PENDING")
         free_slots = max_submit - running_jobs - pending_jobs
-        if test == True and free_slots == 0:
+        if test and not free_slots:
             free_slots = 100
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")

@@ -105,10 +105,13 @@ def process_folders(queue, free_slots, test=False):
                "--mail-user", mail_user,
                "--array", job_array,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
-    if not test:
+    info = f"{given_print}/{job_array} to {queue}"
+    if test:
+        print(f"Will process command:\n{command}\nand log {info} to {log_file}")
+    else:
         submit_job(command)
-        logging.info(f"{given_print}/{job_array} to {queue}")
-    print(f"{c.green}{given_print}/{job_array}{c.reset_format}")
+        logging.info(info)
+        print(f"{c.green}{info}{c.reset_format}")
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
@@ -125,12 +128,16 @@ def process_folders(queue, free_slots, test=False):
                 givens = list_of_folders(mechanism)
                 given = givens[0]
             else:
-                if not test:
+                if test:
+                    print(f"Will remove {last_job_file}")
+                else:
                     os.remove(last_job_file)
                 print(f"{c.bold}{c.green}All jobs submitted{c.reset_format}")
                 print(f"{c.cyan}{free_slots}{c.reset_format} free slots\n")
                 exit()
-    if not test:
+    if test:
+        print(f"Will write {given},{last_job} to {last_job_file}")
+    else:
         with open(last_job_file, "w") as f:
             f.write(f"{given},{last_job}")
 
@@ -148,7 +155,7 @@ def main():
         running_jobs = myslots.get_slots(queue, "RUNNING")
         pending_jobs = myslots.get_slots(queue, "PENDING")
         free_slots = max_submit - running_jobs - pending_jobs
-        if test == True and free_slots == 0:
+        if test and not free_slots:
             free_slots = 100
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
