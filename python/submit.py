@@ -24,7 +24,6 @@ config = configparser.ConfigParser()
 config.read(config_file_path)
 
 exe = config.get("DEFAULT", "exe")
-number_of_lines = config.getint("DEFAULT", "number_of_lines")
 hours = config.getint("DEFAULT", "hours")
 memory = config.get("DEFAULT", "memory")
 input_file_extension = config.get("DEFAULT", "input_file_extension")
