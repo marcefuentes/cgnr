@@ -1,16 +1,17 @@
 #! /usr/bin/env python
 
 import configparser
+import logging
 import os
 import subprocess
-import logging
-
-# Purpose: browse through folders and submit jobs
-# Usage: python submit.py
+import sys
 
 import mycolors as c
 from mylist_of_folders import list_of_folders
 import myslots
+
+# Purpose: browse through folders and submit jobs
+# Usage: python submit.py
 
 queues = ["clk", "epyc"]
 mail_user = "marcelinofuentes@gmail.com"
@@ -55,7 +56,13 @@ def get_job_max(path):
                 job_max = basename
     return job_max
 
-def submit_jobs(free_slots):
+def submit_job(command):
+    output = subprocess.run(command, stdout=subprocess.PIPE, text=True)
+    output = output.stdout.strip()
+    print(output)
+    logging.info(output)
+
+def process_folders(free_slots, test=False):
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
             given, last_job = f.read().strip().split(",")
@@ -99,12 +106,10 @@ def submit_jobs(free_slots):
                "--mail-user", mail_user,
                "--array", job_array,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
-    output = subprocess.run(command, stdout=subprocess.PIPE, text=True)
-    output = output.stdout.strip()
-    print(output)
-    logging.info(output)
+    if test == False:
+        submit_job(command)
+        logging.info(f"{given_print}/{job_array} to {queue}")
     print(f"{c.green}{given_print}/{job_array}{c.reset_format}")
-    logging.info(f"{given_print}/{job_array} to {queue}")
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
@@ -121,25 +126,33 @@ def submit_jobs(free_slots):
                 givens = list_of_folders(mechanism)
                 given = givens[0]
             else:
-                os.remove(last_job_file)
+                if test == False:
+                    os.remove(last_job_file)
                 print(f"{c.bold}{c.green}All jobs submitted{c.reset_format}")
                 print(f"{c.cyan}{free_slots}{c.reset_format} free slots\n")
                 exit()
-    with open(last_job_file, "w") as f:
-        f.write(f"{given},{last_job}")
+    if test == False:
+        with open(last_job_file, "w") as f:
+            f.write(f"{given},{last_job}")
 
     return free_slots
 
-for queue in queues:
-    max_submit = myslots.get_max_slots(queue, hours, "maxsubmit")
-    max_running = myslots.get_max_slots(queue, hours, "maxjobspu")
-    running_jobs = myslots.get_slots(queue, "RUNNING")
-    pending_jobs = myslots.get_slots(queue, "PENDING")
-    free_slots = max_submit - running_jobs - pending_jobs
-    print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
-          f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
-    while free_slots:
-        free_slots = submit_jobs(free_slots)
+def main():
 
-print()
+    test = len(sys.argv) > 1
 
+    for queue in queues:
+        max_submit = myslots.get_max_slots(queue, hours, "maxsubmit")
+        max_running = myslots.get_max_slots(queue, hours, "maxjobspu")
+        running_jobs = myslots.get_slots(queue, "RUNNING")
+        pending_jobs = myslots.get_slots(queue, "PENDING")
+        free_slots = max_submit - running_jobs - pending_jobs
+        print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
+              f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
+        while free_slots:
+            free_slots = process_folders(free_slots, test)
+
+    print()
+
+if __name__ == "__main__":
+    sys.exit()
