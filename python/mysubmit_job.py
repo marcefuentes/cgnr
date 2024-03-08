@@ -1,21 +1,14 @@
 
-import configparser
 import os
 import subprocess
+from myget_config import get_config 
 
 def submit_job(job_name, queue, job_array):
 
-    config_file_path = os.environ.get('CONFIG_FILE')
-    if not config_file_path:
-      return RuntimeError("CONFIG_FILE environment variable not set")
-
-    config = configparser.ConfigParser()
-    config.read(config_file_path)
-
-    exe = config.get("DEFAULT", "exe")
-    hours = config.getint("DEFAULT", "hours")
-    memory = config.get("DEFAULT", "memory")
-    mail_user = config.get("DEFAULT", "mail_user")
+    exe = get_config("exe")
+    hours = get_config("hours")
+    memory = get_config("memory")
+    mail_user = get_config("mail_user")
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
     job_time = f"{hours}:59:00"

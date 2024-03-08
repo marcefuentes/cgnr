@@ -1,31 +1,35 @@
 #! /usr/bin/env python
 
-import configparser
 import logging
 import os
 import sys
 
 import mycolors as c
 from mylist_of_folders import list_of_folders
+from myget_config import get_config
+from myslots import get_free_slots
 from mysubmit_job import submit_job
-import myslots
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
 
 queues = ["clk", "epyc"]
 
-config_file_path = os.environ.get('CONFIG_FILE')
-if not config_file_path:
-  raise RuntimeError("CONFIG_FILE environment variable not set")
-
-config = configparser.ConfigParser()
-config.read(config_file_path)
-
-exe = config.get("DEFAULT", "exe")
-hours = config.getint("DEFAULT", "hours")
-input_file_extension = config.get("DEFAULT", "input_file_extension")
-output_file_extension = config.get("DEFAULT", "first_output_file_extension")
+try:
+    exe = get_config("exe")
+except RuntimeError as e:
+    print(f"{c.red}{e}{c.reset_format}")
+    exit()
+try:
+    input_file_extension = get_config("input_file_extension")
+except RuntimeError as e:
+    print(f"{c.red}{e}{c.reset_format}")
+    exit()
+try:
+    output_file_extension = get_config("first_output_file_extension")
+except RuntimeError as e:
+    print(f"{c.red}{e}{c.reset_format}")
+    exit()
 
 last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
 log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
@@ -151,15 +155,10 @@ def main():
         print(f"\n{c.bold}This is a test{c.reset_format}")
 
     for queue in queues:
-        max_submit = myslots.get_max_slots(queue, hours, "maxsubmit")
-        max_running = myslots.get_max_slots(queue, hours, "maxjobspu")
-        running_jobs = myslots.get_slots(queue, "RUNNING")
-        pending_jobs = myslots.get_slots(queue, "PENDING")
-        free_slots = max_submit - running_jobs - pending_jobs
+        free_slots = get_free_slots(queue)
+        print(f"\n{c.bold}{queue}:{c.reset_format} {c.cyan}{free_slots}{c.reset_format} free slots")
         if test and not free_slots:
             free_slots = 100
-        print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
-              f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
         while free_slots:
             free_slots = process_variant(queue, free_slots, test)
 

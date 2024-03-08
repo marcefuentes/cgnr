@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 
-import configparser
-import os
+from myget_config import get_config
 import subprocess
 
-config_file_path = os.environ.get('CONFIG_FILE')
-if not config_file_path:
-  raise RuntimeError("CONFIG_FILE environment variable not set")
+remote = "cesga"
 
-config = configparser.ConfigParser()
-config.read(config_file_path)
-exe = config["DEFAULT"]["exe"]
+try:
+    exe = get_config("exe")
+except RuntimeError as e:
+    print(e)
+    exit()
 
 source_folder=f"$HOME/code/{exe}/results/"
 destination=f"$STORE/code/{exe}/results/"

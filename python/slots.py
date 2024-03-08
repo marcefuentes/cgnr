@@ -1,18 +1,9 @@
 #! /usr/bin/env python
 
-import configparser
 import mycolors as c
 import myslots
 import os
 
-config_file_path = os.environ.get('CONFIG_FILE')
-if not config_file_path:
-  raise RuntimeError("CONFIG_FILE environment variable not set")
-
-config = configparser.ConfigParser()
-config.read(config_file_path)
-
-hours = config.getint("DEFAULT", "hours")
 queues = ["clk", "epyc"]
 
 print()
@@ -21,8 +12,8 @@ print(f"{'-----':<6} {'-------':<8} {'---':<4} {'-------':<8} {'----':<8}")
 
 for queue in queues:
 
-    max_submit = myslots.get_max_slots(queue, hours, "maxsubmit")
-    max_running = myslots.get_max_slots(queue, hours, "maxjobspu")
+    max_submit = myslots.get_max_slots(queue, "maxsubmit")
+    max_running = myslots.get_max_slots(queue, "maxjobspu")
     running_jobs = myslots.get_slots(queue, "RUNNING")
     pending_jobs = myslots.get_slots(queue, "PENDING")
     free_slots = max_submit - running_jobs - pending_jobs

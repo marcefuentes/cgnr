@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 
-import configparser
-import os
+from myget_config import get_config
 import subprocess
 
 remote = "cesga"
 
-config_file_path = os.environ.get('CONFIG_FILE')
-if not config_file_path:
-  raise RuntimeError("CONFIG_FILE environment variable not set")
-
-config = configparser.ConfigParser()
-config.read(config_file_path)
-exe = config["DEFAULT"]["exe"]
+try:
+    exe = get_config("exe")
+except RuntimeError as e:
+    print(e)
+    exit()
 
 if remote == "cesga":
     source_folder=f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{exe}/results/"

@@ -1,6 +1,21 @@
-#! /usr/bin/env python
 
 import subprocess
+import mycolors as c
+from myget_config import get_config
+
+def get_max_slots(queue, jobs):
+
+    command = ["sacctmgr", "-p", "show", "qos", f"format=name,{jobs}"]
+    output = subprocess.check_output(command)
+    output = output.decode().strip().split("\n")
+    qos_name = get_qos_name(queue)
+    for line in output:
+        if line.startswith(qos_name):
+            fields = line.strip().split("|")
+            slots = int(fields[1])
+            break
+
+    return slots
 
 def get_slots(queue, state):
 
@@ -18,7 +33,22 @@ def get_slots(queue, state):
 
     return output
 
-def get_qos_name(queue, hours):
+def get_free_slots(queue):
+
+    max_submit = get_max_slots(queue, "maxsubmit")
+    running_jobs = get_slots(queue, "RUNNING")
+    pending_jobs = get_slots(queue, "PENDING")
+    free_slots = max_submit - running_jobs - pending_jobs
+
+    return free_slots
+    
+def get_qos_name(queue):
+
+    try:
+        hours = get_config("hours")
+    except RuntimeError as e:
+        print(f"{c.bold}{c.red}{e}{c.reset_format}")
+        exit()
 
     command = ["sacctmgr", "-p", "show", "qos", "format=name,maxwall"]
     output = subprocess.check_output(command)
@@ -38,16 +68,3 @@ def get_qos_name(queue, hours):
 
     return qos_name
 
-def get_max_slots(queue, hours, jobs):
-
-    command = ["sacctmgr", "-p", "show", "qos", f"format=name,{jobs}"]
-    output = subprocess.check_output(command)
-    output = output.decode().strip().split("\n")
-    qos_name = get_qos_name(queue, hours)
-    for line in output:
-        if line.startswith(qos_name):
-            fields = line.strip().split("|")
-            total_slots = int(fields[1])
-            break
-
-    return total_slots

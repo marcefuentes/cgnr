@@ -1,12 +1,19 @@
 #! /usr/bin/env python
 
-import configparser
 import csv
 import os
 import sys
 
 import mycolors as c
+from myget_config import get_config
 from mylist_of_folders import list_of_folders
+
+def get_config_value(variable):
+    try:
+        return get_config(variable)
+    except RuntimeError as e:
+        print(f"{c.bold}{c.red}Error getting config value '{variable}': {e}{c.reset_format}")
+        exit(1)
 
 def parse_path(folder_dict, path):
     folder_dict["DeathRate"] = -7
@@ -102,17 +109,10 @@ def main():
             print(f"{c.bold}{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
             exit()
 
-    config_file_path = os.environ.get('CONFIG_FILE')
-    if not config_file_path:
-      raise RuntimeError("CONFIG_FILE environment variable not set")
-
-    config = configparser.ConfigParser()
-    config.read(config_file_path)
-
-    exe = config.get("DEFAULT", "exe")
-    number_of_lines = config.getint("DEFAULT", "number_of_lines")
-    input_file_extension = config.get("DEFAULT", "input_file_extension")
-    output_file_extension = config.get("DEFAULT", "first_output_file_extension")
+    exe = get_config_value("exe")
+    number_of_lines = get_config("number_of_lines")
+    input_file_extension = get_config("input_file_extension")
+    output_file_extension = get_config("first_output_file_extension")
 
     current_folder = os.getcwd()
     mechanisms = list_of_folders(current_folder)
