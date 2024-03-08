@@ -2,18 +2,46 @@
 
 import argparse
 import os
+import numpy as np
 import pandas as pd
+import re
 import time
 
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import matplotlib.transforms
-import numpy as np
 
 from myget_df import get_df
 from mytraits import ttr
-from myupdate_frq import update
+from myupdate_Z import update_Z
+
+def update(t, traitset, df_dict, movie, text, artists): 
+    alphas = df_dict["none"]["alpha"].unique()
+    logess = df_dict["none"]["logES"].unique()
+    traits, _, _ = ttr(traitset)
+    for r, key in enumerate(df_dict):
+        if ("cooperation" in traitset or "correlations" in traitset) and key == "social":
+            continue
+        for c, trait in enumerate(traits):
+            Z = update_Z(t, df_dict, key, trait, traitset)
+
+            for a, alpha in enumerate(alphas):
+                for e, loges in enumerate(logess):
+                    d = dffrq_dict[key][(dffrq_dict[key]["alpha"] == alpha) & (dffrq_dict[key]["logES"] == loges)]
+                    freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
+                    y = d.loc[:, freq_a].values[0].flatten()
+                    artists[r, c, a, e].set_ydata(y)
+                    bgcolor = cm.RdBu_r((Z[a, e] + 1) / 2)
+                    artists[r, c, a, e].axes.set_facecolor(bgcolor)
+    if movie:
+        text.set_text(t)
+    else:
+        #text.set_text(os.path.basename(os.getcwd()))
+        text.set_text("")
+
+    return artists.flatten()
 
 def main(traitset, movie):
 

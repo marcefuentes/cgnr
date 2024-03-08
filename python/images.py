@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+import numpy as np
 import os
 import time
 
@@ -8,11 +9,26 @@ from matplotlib.animation import FuncAnimation
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.pyplot as plt
 import matplotlib.transforms
-import numpy as np
 
 from myget_df import get_df
 from mytraits import ttr
-from myupdate_images import update
+from myupdate_Z import update_Z
+
+def update(t, traitset, df_dict, movie, text, artists): 
+    traits, _, _ = ttr(traitset)
+    for r, key in enumerate(df_dict):
+        if ("cooperation" in traitset or "correlations" in traitset) and key == "social":
+            continue
+        for c, trait in enumerate(traits):
+            Z = update_Z(t, df_dict, key, trait, traitset)
+            artists[r, c].set_array(Z) 
+    if movie:
+        text.set_text(t)
+    else:
+        #text.set_text(os.path.basename(os.getcwd()))
+        text.set_text("")
+
+    return artists.flatten()
 
 def main(traitset, movie):
 

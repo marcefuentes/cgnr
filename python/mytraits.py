@@ -40,9 +40,9 @@ def ttr(traitset):
 
     elif traitset == "none":
         traits = ["qBSeen",
-                  "qBSeen",
+                  "qBSeen_byproduct",
                   "w",
-                  "w"]
+                  "w_deficit"]
         titles = ["Production of $\it{B}$",
                   "Byproduct help",
                   "Fitness",
