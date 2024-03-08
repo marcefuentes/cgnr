@@ -5,10 +5,22 @@ from myget_config import get_config
 
 def submit_job(job_name, queue, job_array):
 
-    exe = get_config("exe")
-    hours = get_config("hours")
-    memory = get_config("memory")
-    mail_user = get_config("mail_user")
+    try: 
+        exe = get_config("exe")
+    except RuntimeError as e:
+        return -1, None, e
+    try:
+        hours = get_config("hours")
+    except RuntimeError as e:
+        return -1, None, e
+    try:
+        memory = get_config("memory")
+    except RuntimeError as e:
+        return -1, None, e
+    try:
+        mail_user = get_config("mail_user")
+    except RuntimeError as e:
+        return -1, None, e
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
     job_time = f"{hours}:59:00"

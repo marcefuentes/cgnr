@@ -76,13 +76,9 @@ def process_folder(queue, free_slots, last_job, test):
     if test:
         print(f"Will submit {info}")
     else:
-        try:
-            return_code, stdout, stderr = submit_job(job_name, queue, job_array)
-        except RuntimeError as e:
-            print(f"{c.red}Error: {e}{c.reset_format}")
-            exit()
+        return_code, stdout, stderr = submit_job(job_name, queue, job_array)
         if return_code != 0:
-            print(f"{c.red}Error: command failed with return code {return_code}{c.reset_format}")
+            print(f"{c.red}sbatch command failed with return code {return_code}{c.reset_format}")
             if stderr:
                 print(stderr)
                 logging.error(stderr)
