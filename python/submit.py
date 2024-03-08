@@ -107,7 +107,7 @@ def process_folders(queue, free_slots, test=False):
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
     info = f"{given_print}/{job_array} to {queue}"
     if test:
-        print(f"Will process command:\n{command}\nand log {info} to {log_file}")
+        print(f"Will submit {info}")
     else:
         submit_job(command)
         logging.info(info)
@@ -129,14 +129,14 @@ def process_folders(queue, free_slots, test=False):
                 given = givens[0]
             else:
                 if test:
-                    print(f"Will remove {last_job_file}")
+                    print(f"Will remove last_job_file")
                 else:
                     os.remove(last_job_file)
                 print(f"{c.bold}{c.green}All jobs submitted{c.reset_format}")
                 print(f"{c.cyan}{free_slots}{c.reset_format} free slots\n")
                 exit()
     if test:
-        print(f"Will write {given},{last_job} to {last_job_file}")
+        print(f"Will write {last_job} to last_job_file")
     else:
         with open(last_job_file, "w") as f:
             f.write(f"{given},{last_job}")

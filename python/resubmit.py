@@ -38,15 +38,9 @@ logging.basicConfig(filename=log_file,
                     level=logging.DEBUG,
                     format="%(asctime)s %(levelname)s: %(message)s")
 
-def submit_job(command):
-    output = subprocess.run(command, stdout=subprocess.PIPE, text=True)
-    output = output.stdout.strip()
-    print(output)
-    logging.info(output)
-
-def process_folder(queue, free_slots, jobs_to_submit, test=False):
-    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
+def get_jobs_to_submit():
     jobs_to_submit = []
+    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     for name in names:
         if not os.path.isfile(f"{name}{output_file_extensions[0]}"):
             jobs_to_submit.append(int(name))
@@ -54,16 +48,23 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
             with open(f"{name}{output_file_extensions[0]}") as f:
                 if sum(1 for line in f) < number_of_lines:
                     jobs_to_submit.append(int(name))
+    return jobs_to_submit
 
-    if test:
-        print(f"\n{c.bold}Will delete {output_file_extensions} of {jobs_to_submit}{c.reset_format} "
-    else:
-        for name in jobs_to_submit:
-            for extension in output_file_extensions:
-                if os.path.isfile(f"{name}{extension}"):
-                    os.remove(f"{name}{extension}")
-                else:
-                    continue
+def remove_files(jobs_to_submit):
+    for name in jobs_to_submit:
+        for extension in output_file_extensions:
+            if os.path.isfile(f"{name}{extension}"):
+                os.remove(f"{name}{extension}")
+            else:
+                continue
+
+def submit_job(command):
+    output = subprocess.run(command, stdout=subprocess.PIPE, text=True)
+    output = output.stdout.strip()
+    print(output)
+    logging.info(output)
+
+def process_folder(queue, free_slots, jobs_to_submit, test=False):
 
     given = os.getcwd()
     given_folders = given.split("/")
@@ -88,7 +89,7 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
     info = f"{given_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}"
     if test:
-        print(f"Will process command:\n{command}\nand log {info} to {log_file}")
+        print(f"Will submit {info}")
     else:
         submit_job(command)
         logging.info(info)
@@ -104,6 +105,13 @@ def main():
     if test:
         print(f"\n{c.bold}This is a test{c.reset_format}")
 
+    jobs_to_submit = get_jobs_to_submit()
+   
+    if test:
+        print(f"\n{c.bold}Will delete {output_file_extensions} of {jobs_to_submit}{c.reset_format}")
+    else:
+        remove_files(jobs_to_submit)
+
     for queue in queues:
         max_submit = myslots.get_max_slots(queue, hours, "maxsubmit")
         max_running = myslots.get_max_slots(queue, hours, "maxjobspu")
@@ -115,7 +123,7 @@ def main():
         print(f"\n{c.bold}{queue}{c.reset_format}: {running_jobs} of {max_running} running, "
               f"{pending_jobs} pending, {c.cyan}{free_slots}{c.reset_format} free")
         if free_slots > 0 and len(jobs_to_submit) > 0:
-            free_slots, jobs_to_submit = process_folder(free_slots, jobs_to_submit)
+            free_slots, jobs_to_submit = process_folder(queue, free_slots, jobs_to_submit, test)
 
         print(f"{c.red}{len(jobs_to_submit)} jobs remain to be submitted{c.reset_format}")
         print(f"{c.cyan}{free_slots}{c.reset_format} free slots")
