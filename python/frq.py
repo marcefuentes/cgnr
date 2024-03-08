@@ -17,7 +17,7 @@ from myget_df import get_df
 from mytraits import ttr
 from myupdate_Z import update_Z
 
-def update(t, traitset, df_dict, movie, text, artists): 
+def update(t, traitset, df_dict, dffrq_dict, movie, text, artists): 
     alphas = df_dict["none"]["alpha"].unique()
     logess = df_dict["none"]["logES"].unique()
     traits, _, _ = ttr(traitset)
