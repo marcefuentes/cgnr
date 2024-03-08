@@ -58,9 +58,11 @@ def get_job_max(path):
 def submit_job(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
-    if stderr:
-        print(stderr)
-        logging.error(stderr)
+    if process.returncode != 0:
+        print(f"{c.red}Error: command failed with return code {process.returncode}{c.reset_format}")
+        if stderr:
+            print(stderr)
+            logging.error(stderr)
         exit()
     else:
         print(stdout)
