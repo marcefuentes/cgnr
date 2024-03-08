@@ -59,20 +59,24 @@ def remove_files(jobs_to_submit):
                 continue
 
 def submit_job(command):
-    output = subprocess.run(command, stdout=subprocess.PIPE, text=True)
-    output = output.stdout.strip()
-    print(output)
-    logging.info(output)
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    if stderr:
+        print(stderr)
+        logging.error(stderr)
+        exit()
+    else:
+        print(stdout)
+        logging.info(stdout)
 
 def process_folder(queue, free_slots, jobs_to_submit, test=False):
-
+    path = os.getcwd()
+    path_folders = path.split("/")
+    path_print = "/".join(path_folders[-3:])
     num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
     job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
     last_job = job_array.split(",")[-1]
-    given = os.getcwd()
-    given_folders = given.split("/")
-    given_print = "/".join(given_folders[-3:])
-    job_name = f"{queue}-{given_folders[-2]}{last_job}"
+    job_name = f"{queue}-{path_folders[-2]}{last_job}"
     job_time = f"{hours}:59:00"
     command = ["sbatch",
                "--job-name", job_name,
@@ -86,7 +90,7 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
                "--mail-user", mail_user,
                "--array", job_array,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
-    info = f"{given_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}"
+    info = f"{path_print}/{jobs_to_submit[0]}-{jobs_to_submit[num_jobs_to_submit - 1]} to {queue}"
     if test:
         print(f"Will submit {info}")
     else:
