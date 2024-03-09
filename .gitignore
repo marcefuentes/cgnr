@@ -4,5 +4,6 @@ charts/
 obj/
 results/
 store
+t.glo
 *.ics
 *.frq
