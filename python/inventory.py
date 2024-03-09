@@ -20,7 +20,7 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
     folder_dict = {}
 
     variant = path.split("/")[-1]
-    print(f"\n{c.bold}{variant}:{c.reset_format}\n")
+    print(f"\n{c.bold}{c.cyan}{variant}{c.reset_format}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -53,7 +53,7 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
 def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
 
     mechanism = path.split("/")[-1]
-    print(f"{c.bold}{mechanism}{c.reset_format}", end = "")
+    print(f"{c.bold}  {mechanism}{c.reset_format}", end = "")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
