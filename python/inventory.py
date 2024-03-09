@@ -127,30 +127,31 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
 
 def main():
 
+    exe = get_config_value("exe")
     number_of_lines = get_config("number_of_lines")
     input_file_extension = get_config("input_file_extension")
     output_file_extension = get_config("first_output_file_extension")
 
     if len(sys.argv) > 1:
-        if os.path.isdir(sys.argv[1]):
-            os.chdir(sys.argv[1])
-        else:
-            print(f"{c.bold}{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
-            exit()
+        if sys.argv[1] == "store"
+            mypath = f"{os.environ['STORE']}/code/{exe}/results"
     else:
-        current_path = os.getcwd()
-        current_folder = current_path.split("/")[-1]
+        mypath = f"{os.environ['HOME']}/code/{exe}/results"
 
-    if current_path.split("/")[-2] == "results":
-        print(f"\n{c.bold}{current_path}{c.reset_format}")
-        process_variant(current_path, number_of_lines, input_file_extension, output_file_extension)
+    if os.path.isdir(mypath):
+        os.chdir(mypath)
     else:
-        if current_path.split("/")[-1] != "results":
-            exe = get_config_value("exe")
-            current_path = f"{os.environ['HOME']}/code/{exe}/results"
-            os.chdir(current_path)
-        print(f"\n{c.bold}{current_path}{c.reset_format}")
-        variants = list_of_folders(current_path)
+        print(f"{c.bold}{c.red}Directory {mypath} does not exist{c.reset_format}")
+        exit()
+
+    if mypath.split("/")[-2] == "results":
+        print(f"\n{c.bold}{mypath}{c.reset_format}")
+        process_variant(mypath, number_of_lines, input_file_extension, output_file_extension)
+    else:
+        if mypath.split("/")[-1] != "results":
+            os.chdir(mypath)
+        print(f"\n{c.bold}{mypath}{c.reset_format}")
+        variants = list_of_folders(mypath)
         for variant in variants:
             process_variant(variant, number_of_lines, input_file_extension, output_file_extension)
     print()
