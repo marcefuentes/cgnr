@@ -12,7 +12,7 @@ except RuntimeError as e:
     exit()
 
 source_folder=f"$HOME/code/{exe}/results/"
-destination=f"$STORE/code/{exe}/results/"
+destination_folder=f"$STORE/code/{exe}/results/"
 
 rsync_command = ["rsync",
                  "--archive",
