@@ -44,7 +44,6 @@ def parse_path(folder_dict, path):
         folder_dict["GroupSize"] = 3
     else:
         folder_dict["GroupSize"] = 2
-    folder_dict["Given"] = float(variant[-3:]) / 100
     mechanism = path_folders[-2]
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
