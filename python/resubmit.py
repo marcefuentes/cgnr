@@ -6,8 +6,7 @@ import sys
 
 import mycolors as c
 from myget_config import get_config
-from myslots import get_free_slots
-from mysubmit_job import submit_job
+import myslurm
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
@@ -80,7 +79,7 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
     if test:
         print(f"Will submit {info}")
     else:
-        return_code, stdout, stderr = submit_job(job_name, queue, job_array)
+        return_code, stdout, stderr = myslurm.submit_job(job_name, queue, job_array)
         if return_code != 0:
             print(f"{c.red}sbatch command failed with return code {return_code}{c.reset_format}")
             if stderr:
@@ -122,7 +121,7 @@ def main():
         remove_files(jobs_to_submit)
 
     for queue in queues:
-        free_slots = get_free_slots(queue)
+        free_slots = myslurm.get_free_slots(queue)
         print(f"\n{c.bold}{queue}:{c.reset_format} {c.cyan}{free_slots}{c.reset_format} free slots")
         if test and not free_slots:
             free_slots = 100

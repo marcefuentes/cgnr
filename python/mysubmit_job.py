@@ -1,5 +1,4 @@
 
-import os
 import subprocess
 from myget_config import get_config 
 

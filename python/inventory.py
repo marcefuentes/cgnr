@@ -58,7 +58,7 @@ def parse_path(folder_dict, path):
     folder_dict["Given"] = float(given[-3:]) / 100
     return folder_dict
 
-def process_given_directory(given, number_of_lines, input_file_extension, output_file_extension):
+def process_folder(given, number_of_lines, input_file_extension, output_file_extension):
     folder_dict = {}
     folder_dict = parse_path(folder_dict, given)
     input_files = [f for f in os.listdir(given) if f.endswith(input_file_extension)]
@@ -120,10 +120,10 @@ def main():
     for mechanism in mechanisms:
         givens = list_of_folders(mechanism)
         for given in givens:
-            process_given_directory(given,
-                                    number_of_lines,
-                                    input_file_extension,
-                                    output_file_extension)
+            process_folder(given,
+                           number_of_lines,
+                           input_file_extension,
+                           output_file_extension)
 
 if __name__ == "__main__":
     main()
