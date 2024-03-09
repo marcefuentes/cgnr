@@ -3,5 +3,6 @@ bin/
 charts/
 obj/
 results/
+store/
 *.ics
 *.frq
