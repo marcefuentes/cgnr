@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import argparse
 import csv
 import os
 import sys
@@ -14,6 +15,20 @@ def get_config_value(variable):
     except RuntimeError as e:
         print(f"{c.bold}{c.red}Error getting config value '{variable}': {e}{c.reset_format}")
         exit(1)
+
+def get_results_path(use_store=False, exe=None):
+
+    if exe is None:
+        raise ValueError("exe cannot be None")
+
+    if use_store != "no":
+        store_path = os.environ.get("STORE")
+        if store_path is None:
+            raise ValueError("STORE environment variable not set")
+        return f"{store_path}/code/{exe}/results"
+    else:
+        home_path = os.environ.get("HOME")
+        return f"{home_path}/code/{exe}/results"
 
 def process_variant(path, number_of_lines, input_file_extension, output_file_extension):
 
@@ -132,11 +147,7 @@ def main():
     input_file_extension = get_config("input_file_extension")
     output_file_extension = get_config("first_output_file_extension")
 
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "store"
-            mypath = f"{os.environ['STORE']}/code/{exe}/results"
-    else:
-        mypath = f"{os.environ['HOME']}/code/{exe}/results"
+    mypath = get_results_path(use_store=args.store, exe=exe)
 
     if os.path.isdir(mypath):
         os.chdir(mypath)
@@ -144,17 +155,17 @@ def main():
         print(f"{c.bold}{c.red}Directory {mypath} does not exist{c.reset_format}")
         exit()
 
-    if mypath.split("/")[-2] == "results":
-        print(f"\n{c.bold}{mypath}{c.reset_format}")
-        process_variant(mypath, number_of_lines, input_file_extension, output_file_extension)
-    else:
-        if mypath.split("/")[-1] != "results":
-            os.chdir(mypath)
-        print(f"\n{c.bold}{mypath}{c.reset_format}")
-        variants = list_of_folders(mypath)
-        for variant in variants:
-            process_variant(variant, number_of_lines, input_file_extension, output_file_extension)
+    print(f"\n{c.bold}{mypath}{c.reset_format}")
+    variants = list_of_folders(mypath)
+    for variant in variants:
+        process_variant(variant, number_of_lines, input_file_extension, output_file_extension)
     print()
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Status of tasks",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    # It admits only one argument, which is optional and can only be "store"
+    parser.add_argument("store", nargs="?", default="no", help="store (optional): use store instead of home (only in cesga)")
+    args = parser.parse_args()
     main()
