@@ -15,24 +15,25 @@ def get_config_value(variable):
         print(f"{c.bold}{c.red}Error getting config value '{variable}': {e}{c.reset_format}")
         exit(1)
 
-def parse_path(folder_dict, path):
-    folder_dict["DeathRate"] = -7
-    folder_dict["Shuffle"] = 0
-    folder_dict["Language"] = 0
-    folder_dict["PartnerChoice"] = 0
-    folder_dict["Reciprocity"] = 0
-    folder_dict["IndirectR"] = 0
-    folder_dict["GroupSize"] = 2
-    folder_dict["Given"] = 0
-    folder_dict["Cost"] = 0
-    path_folders = path.split("/")
-    variant = path_folders[-3]
+def process_variant(path, number_of_lines, input_file_extension, output_file_extension):
+
+    folder_dict = {}
+
+    variant = path.split("/")[-1]
+    print(f"\n{c.bold}{variant}:{c.reset_format}\n")
+
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
+    else:
+        folder_dict["Shuffle"] = 0
     if "_d" in variant:
         folder_dict["DeathRate"] = -3
+    else:
+        folder_dict["DeathRate"] = -7
     if "lang" in variant:
         folder_dict["Language"] = 1
+    else:
+        folder_dict["Language"] = 0
     cost_index = variant.find("cost")
     cost = variant[cost_index + 4:cost_index + 6]
     folder_dict["Cost"] = -int(cost)
@@ -44,32 +45,47 @@ def parse_path(folder_dict, path):
         folder_dict["GroupSize"] = 3
     else:
         folder_dict["GroupSize"] = 2
-    mechanism = path_folders[-2]
+
+    mechanisms = list_of_folders(path)
+    for mechanism in mechanisms:
+        process_mechanism(mechanism, folder_dict, number_of_lines, input_file_extension, output_file_extension)
+
+def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
+
+    mechanism = path.split("/")[-1]
+    print(f"{c.bold}{mechanism}{c.reset_format}", end = "")
+
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
+    else:
+        folder_dict["PartnerChoice"] = 0
     if "i" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 1
     elif "r" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 0
-    given = path_folders[-1]
-    folder_dict["Given"] = float(given[-3:]) / 100
-    return folder_dict
+    else:
+        folder_dict["Reciprocity"] = 0
+        folder_dict["IndirectR"] = 0
 
-def process_folder(given, number_of_lines, input_file_extension, output_file_extension):
-    folder_dict = {}
-    folder_dict = parse_path(folder_dict, given)
-    input_files = [f for f in os.listdir(given) if f.endswith(input_file_extension)]
-    path_folders = given.split("/")
-    mechanism = path_folders[-2]
-    given_print = path_folders[-1]
-    print(f"{c.white}{mechanism}{c.reset_format}\t{c.white}{given_print}{c.reset_format}", end = "  ")
+    givens = list_of_folders(path)
+    for given in givens:
+        process_given(given, folder_dict, number_of_lines, input_file_extension, output_file_extension)
+
+def process_given(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
+    
+    given = path.split("/")[-1]
+    print(f"{c.bold}\t{given}{c.reset_format}", end = "  ")
+
+    folder_dict["Given"] = float(given[-3:]) / 100
+
+    input_files = [f for f in os.listdir(path) if f.endswith(input_file_extension)]
     total_files = len(input_files)
     if total_files == 0:
         print(f"{c.bold}{c.red}no {input_file_extension[1:]} files{c.reset_format}")
         return
-    with open(os.path.join(given, input_files[0]), "r") as csvfile:
+    with open(os.path.join(path, input_files[0]), "r") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             key, value = row
@@ -82,9 +98,9 @@ def process_folder(given, number_of_lines, input_file_extension, output_file_ext
     f_smaller_number_of_lines = 0
     f_equal_number_of_lines = 0
     f_larger_number_of_lines = 0
-    for f in os.listdir(given):
+    for f in os.listdir(path):
         if f.endswith(output_file_extension):
-            output_file = os.path.join(given, f)
+            output_file = os.path.join(path, f)
             with open(output_file, "r") as output:
                 lines = output.readlines()
                 if len(lines) < number_of_lines:
@@ -101,28 +117,34 @@ def process_folder(given, number_of_lines, input_file_extension, output_file_ext
     print()
 
 def main():
+
+    number_of_lines = get_config("number_of_lines")
+    input_file_extension = get_config("input_file_extension")
+    output_file_extension = get_config("first_output_file_extension")
+
     if len(sys.argv) > 1:
         if os.path.isdir(sys.argv[1]):
             os.chdir(sys.argv[1])
         else:
             print(f"{c.bold}{c.red}Directory {sys.argv[1]} does not exist{c.reset_format}")
             exit()
+    else:
+        current_path = os.getcwd()
+        current_folder = current_path.split("/")[-1]
 
-    exe = get_config_value("exe")
-    number_of_lines = get_config("number_of_lines")
-    input_file_extension = get_config("input_file_extension")
-    output_file_extension = get_config("first_output_file_extension")
-
-    current_folder = os.getcwd()
-    mechanisms = list_of_folders(current_folder)
-
-    for mechanism in mechanisms:
-        givens = list_of_folders(mechanism)
-        for given in givens:
-            process_folder(given,
-                           number_of_lines,
-                           input_file_extension,
-                           output_file_extension)
+    if current_path.split("/")[-2] == "results":
+        print(f"\n{c.bold}{current_path}{c.reset_format}")
+        process_variant(current_path, number_of_lines, input_file_extension, output_file_extension)
+    else:
+        if current_path.split("/")[-1] != "results":
+            exe = get_config_value("exe")
+            current_path = f"{os.environ['HOME']}/code/{exe}/results"
+            os.chdir(current_path)
+        print(f"\n{c.bold}{current_path}{c.reset_format}")
+        variants = list_of_folders(current_path)
+        for variant in variants:
+            process_variant(variant, number_of_lines, input_file_extension, output_file_extension)
+    print()
 
 if __name__ == "__main__":
     main()
