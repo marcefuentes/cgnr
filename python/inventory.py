@@ -20,7 +20,10 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
     folder_dict = {}
 
     variant = path.split("/")[-1]
-    print(f"\n{c.bold}{c.cyan}{variant}{c.reset_format}")
+    if os.path.islink(path):
+        print(f"{c.bold}{c.red}{variant}{c.reset_format}")
+    else:
+        print(f"\n{c.bold}{c.cyan}{variant}{c.reset_format}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -53,7 +56,10 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
 def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
 
     mechanism = path.split("/")[-1]
-    print(f"{c.bold}  {mechanism}{c.reset_format}", end = "")
+    if os.path.islink(path):
+        print(f"{c.bold}{c.red}{mechanism}{c.reset_format}", end = "")
+    else:
+        print(f"{c.bold}{mechanism}{c.reset_format}", end = "")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
@@ -76,7 +82,10 @@ def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, 
 def process_given(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
     
     given = path.split("/")[-1]
-    print(f"{c.bold}\t{given}{c.reset_format}", end = "  ")
+    if os.path.islink(path):
+        print(f"{c.bold}{c.red}\t{given}{c.reset_format}", end = "  ")
+    else:
+        print(f"{c.bold}\t{given}{c.reset_format}", end = "  ")
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
