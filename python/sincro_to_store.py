@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from myget_config import get_config
+import os
 import subprocess
-
-remote = "cesga"
+from myget_config import get_config
 
 try:
     exe = get_config("exe")
@@ -11,8 +10,8 @@ except RuntimeError as e:
     print(e)
     exit()
 
-source_folder=f"$HOME/code/{exe}/results/"
-destination_folder=f"$STORE/code/{exe}/results/"
+source_folder=f"{os.environ['HOME']}/code/{exe}/results/"
+destination_folder=f"{os.environ['STORE']}/code/{exe}/results/"
 
 rsync_command = ["rsync",
                  "--archive",
