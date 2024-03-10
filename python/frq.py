@@ -75,6 +75,14 @@ def main(traitset, movie):
     plotsize = 4
     width = plotsize*len(titles)
     height = plotsize*len(rows)
+    fig_left = 0.12
+    fig_right = 0.88
+    fig_top = 0.88
+    fig_bottom = 0.12
+    fig_wspace = 0.2
+    fig_hspace = 0.2
+    bar_height = 0.2
+    bar_width = 0.01
     linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
@@ -102,23 +110,24 @@ def main(traitset, movie):
         for c, title in enumerate(titles):
             grid = outergrid[r, c].subgridspec(nrows=nr,
                                                ncols=nc,
-                                               wspace=0,
-                                               hspace=0)
+                                               hspace=0.0,
+                                               wspace=0.0)
             axs[r, c] = grid.subplots()
 
-    left_x = axs[0, 0, 0, 0].get_position().x0
-    right_x = axs[-1, -1, -1, -1].get_position().x1
-    center_x = (left_x + right_x) / 2
-    top_y = axs[0, 0, 0, 0].get_position().y1
-    bottom_y = axs[-1, -1, -1, -1].get_position().y0
-    center_y = (top_y + bottom_y) / 2
+    fig.subplots_adjust(left=fig_left,
+                        right=fig_right,
+                        top=fig_top,
+                        bottom=fig_bottom,
+                        wspace=fig_wspace,
+                        hspace=fig_hspace)
+
     fig.supxlabel(xlabel,
-                  x=center_x,
-                  y=bottom_y - 1.2/height,
+                  x=(fig_left + fig_right) * 0.5,
+                  y=fig_bottom - 0.04*biglabel/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=left_x - 1.45/width,
-                  y=center_y,
+                  x=fig_left - 0.05*biglabel/width,
+                  y=(fig_bottom + fig_top) * 0.5,
                   fontsize=biglabel)
 
     for ax in fig.get_axes():
@@ -149,8 +158,8 @@ def main(traitset, movie):
                 if row == rows[-1]:
                     axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"],
                                                      fontsize=ticklabel)
-    fig.text(right_x,
-             bottom_y*0.5,
+    fig.text(fig_right,
+             fig_bottom * 0.5,
              "t\n0",
              fontsize=biglabel,
              color="grey",
@@ -171,22 +180,13 @@ def main(traitset, movie):
                     ax = axs[r, c, a, e] 
                     artists[r, c, a, e], = ax.plot(x, dummy_y, c="black", lw=0.1)
 
-    fig_x, fig_y = fig.get_size_inches() * fig.dpi  # Convert figure size to pixels
-
-    right_x_pixels = right_x * fig_x
-    center_y_pixels = center_y * fig_y
-
-    sm = plt.cm.ScalarMappable(cmap="RdBu_r", norm=plt.Normalize(vmin=-1, vmax=1))
-    sm._A = []  # Set empty values
-
-    axins = inset_axes(axs[-1, -1, -1, -1],
-                       width="5%",
-                       height="100%",
-                       loc="upper right",
-                       bbox_to_anchor=(0.847*right_x_pixels, 0.681*center_y_pixels, 300, 500),
-                       borderpad=0)
+    sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
+    cax = fig.add_axes([0.5 * (1 - bar_width + fig_right),
+                        0.5 * (1 - bar_height),
+                        bar_width,
+                        bar_height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
-                        cax=axins,
+                        cax=cax,
                         ticks=[-1, 0, 1])
     cbar.ax.tick_params(labelsize=ticklabel)
     cbar.outline.set_linewidth(linewidth)
