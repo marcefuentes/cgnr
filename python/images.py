@@ -100,12 +100,12 @@ def main(traitset, movie):
                         hspace=fig_hspace)
 
     fig.supxlabel(xlabel,
-                  x=(fig_left + fig_right) / 2,
-                  y=fig_bottom - 1.2/height,
+                  x=(fig_left + fig_right) * 0.5,
+                  y=fig_bottom - 0.04*biglabel/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=fig_left - 1.45/width,
-                  y=(fig_bottom + fig_top) / 2,
+                  x=fig_left - 0.05*biglabel/width,
+                  y=(fig_bottom + fig_top) * 0.5,
                   fontsize=biglabel)
 
     letterposition = 1.035
