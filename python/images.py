@@ -77,9 +77,17 @@ def main(traitset, movie):
 
     # Create figure
 
-    fig, axs = plt.subplots(nrows=len(rows),
+    fig, main_ax = plt.subplots(nrows=len(rows),
                             ncols=len(titles),
                             figsize=(width, height))
+
+    axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
+    fig.subplots_adjust(left=0.12,
+                        right=0.88,
+                        top=0.88,
+                        bottom=0.12,
+                        wspace=0.2,
+                        hspace=0.2)
 
     left_x = axs[0, 0].get_position().x0
     right_x = axs[-1, -1].get_position().x1
@@ -134,19 +142,14 @@ def main(traitset, movie):
                                              vmin=-1,
                                              vmax=1)
 
-    fig_x, fig_y = fig.get_size_inches() * fig.dpi  # Convert figure size to pixels
-
-    right_x_pixels = right_x * fig_x
-    center_y_pixels = center_y * fig_y
-
-    axins = inset_axes(axs[-1, -1],
-                       width="5%",
-                       height="100%",
-                       loc="upper right",
-                       bbox_to_anchor=(0.847*right_x_pixels, 0.681*center_y_pixels, 300, 500),
-                       borderpad=0)
+    bar_height = 0.2
+    bar_width = 0.01
+    cax = fig.add_axes([0.5 * (1 - bar_width + right_x),
+                        0.5 * (1 - bar_height),
+                        bar_width,
+                        bar_height]) # [left, bottom, width, height]
     cbar = fig.colorbar(artists[-1, -1],
-                        cax=axins,
+                        cax=cax,
                         ticks=[-1, 0, 1])
     cbar.ax.tick_params(labelsize=ticklabel)
     cbar.outline.set_linewidth(0.1)
