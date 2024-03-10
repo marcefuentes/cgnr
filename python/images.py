@@ -99,19 +99,13 @@ def main(traitset, movie):
                         wspace=fig_wspace,
                         hspace=fig_hspace)
 
-    left_x = axs[0, 0].get_position().x0
-    right_x = axs[-1, -1].get_position().x1
-    center_x = (left_x + right_x) / 2
-    top_y = axs[0, 0].get_position().y1
-    bottom_y = axs[-1, -1].get_position().y0
-    center_y = (top_y + bottom_y) / 2
     fig.supxlabel(xlabel,
-                  x=center_x,
-                  y=bottom_y - 1.2/height,
+                  x=(fig_left + fig_right) / 2,
+                  y=fig_bottom - 1.2/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=left_x - 1.45/width,
-                  y=center_y,
+                  x=fig_left - 1.45/width,
+                  y=(fig_bottom + fig_top) / 2,
                   fontsize=biglabel)
 
     letterposition = 1.035
@@ -132,8 +126,8 @@ def main(traitset, movie):
     for c, title in enumerate(titles):
         axs[0, c].set_title(title, pad=plotsize*10, fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
-    fig.text(right_x,
-             bottom_y*0.5,
+    fig.text(fig_right,
+             fig_bottom * 0.5,
              "t\n0",
              fontsize=biglabel,
              color="grey",
