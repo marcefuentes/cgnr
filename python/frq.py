@@ -136,7 +136,7 @@ def main(traitset, movie):
         for axis in ["top", "bottom", "left", "right"]:
             ax.spines[axis].set_linewidth(linewidth)
 
-    letterposition = 1 + 35 * 21/1000
+    letterposition = 1 + 35 * nr/1000
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
             letter = ord("a") + r*len(titles) + c
