@@ -125,7 +125,9 @@ def main(traitset, movie):
     for r, row in enumerate(rows):
         axs[r, 0].set_yticklabels(yticklabels, fontsize=ticklabel)
     for c, title in enumerate(titles):
-        axs[0, c].set_title(title, pad=plotsize * 10, fontsize=letterlabel)
+        axs[0, c].set_title(title,
+                            pad=plotsize * 10,
+                            fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
     fig.text(fig_right,
              fig_bottom * 0.5,

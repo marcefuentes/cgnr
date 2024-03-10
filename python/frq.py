@@ -141,12 +141,12 @@ def main(traitset, movie):
             letter = ord("a") + r*len(titles) + c
             axs[r, c, 0, 0].set_title(chr(letter),
                                       fontsize=letterlabel,
-                                      pad = 10,
+                                      pad=10,
                                       weight="bold",
                                       loc="left")
             if r == 0:
                 axs[0, c, 0, 10].set_title(title,
-                                           pad=plotsize*9,
+                                           pad=plotsize * 9,
                                            fontsize=letterlabel)
             for a in range(0, nr, step):
                 axs[r, c, a, 0].set(yticks=[ylim[1]/2.0], yticklabels=[])
