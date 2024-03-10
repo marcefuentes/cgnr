@@ -147,7 +147,7 @@ def main(traitset, movie):
                                              vmax=1)
 
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([0.5 * (1 - bar_width + right_x),
+    cax = fig.add_axes([0.5 * (1 - bar_width + 0.88),
                         0.5 * (1 - bar_height),
                         bar_width,
                         bar_height]) # [left, bottom, width, height]
