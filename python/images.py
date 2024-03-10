@@ -71,8 +71,8 @@ def main(traitset, movie):
     biglabel = plotsize*7
     letterlabel = plotsize*6
     ticklabel = plotsize*5
-    xticks = [0, nc/2 - 0.5, nc - 1]
-    yticks = [0, nr/2 - 0.5, nr - 1]
+    xticks = [0, 0.5*(nc - 1), nc - 1]
+    yticks = [0, 0.5*(nr - 1), nr - 1]
     xmin = df.logES.min()
     xmax = df.logES.max()
     ymin = df.alpha.min()
@@ -125,7 +125,7 @@ def main(traitset, movie):
     for r, row in enumerate(rows):
         axs[r, 0].set_yticklabels(yticklabels, fontsize=ticklabel)
     for c, title in enumerate(titles):
-        axs[0, c].set_title(title, pad=plotsize*10, fontsize=letterlabel)
+        axs[0, c].set_title(title, pad=plotsize * 10, fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
     fig.text(fig_right,
              fig_bottom * 0.5,
