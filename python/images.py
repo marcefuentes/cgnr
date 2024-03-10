@@ -57,6 +57,12 @@ def main(traitset, movie):
     plotsize = 4
     width = plotsize*len(titles)
     height = plotsize*len(rows)
+    fig_left = 0.12
+    fig_right = 0.88
+    fig_top = 0.88
+    fig_bottom = 0.12
+    fig_wspace = 0.2
+    fig_hspace = 0.2
     bar_height = 0.2
     bar_width = 0.01
     xlabel = "Substitutability of $\it{B}$"
@@ -86,12 +92,12 @@ def main(traitset, movie):
                             figsize=(width, height))
 
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
-    fig.subplots_adjust(left=0.12,
-                        right=0.88,
-                        top=0.88,
-                        bottom=0.12,
-                        wspace=0.2,
-                        hspace=0.2)
+    fig.subplots_adjust(left=fig_left,
+                        right=fig_right,
+                        top=fig_top,
+                        bottom=fig_bottom,
+                        wspace=fig_wspace,
+                        hspace=fig_hspace)
 
     left_x = axs[0, 0].get_position().x0
     right_x = axs[-1, -1].get_position().x1
