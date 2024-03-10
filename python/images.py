@@ -6,6 +6,7 @@ import os
 import time
 
 from matplotlib.animation import FuncAnimation
+from matplotlib.cm import ScalarMappable
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.pyplot as plt
 import matplotlib.transforms
@@ -32,8 +33,8 @@ def update(t, traitset, df_dict, movie, text, artists):
 
 def main(traitset, movie):
 
-    #this_file = os.path.basename(__file__)
-    #file_name = this_file.split(".")[0]
+    this_script = os.path.basename(__file__)
+    script_name = this_script.split(".")[0]
 
     _, titles, rows = ttr(traitset)
 
@@ -52,6 +53,7 @@ def main(traitset, movie):
 
     # Set figure properties
 
+    color_map = "RdBu_r"
     plotsize = 4
     width = plotsize*len(titles)
     height = plotsize*len(rows)
@@ -138,17 +140,18 @@ def main(traitset, movie):
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
             artists[r, c] = axs[r, c].imshow(dummy_Z,
-                                             cmap="RdBu_r",
+                                             cmap=color_map,
                                              vmin=-1,
                                              vmax=1)
 
     bar_height = 0.2
     bar_width = 0.01
+    sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([0.5 * (1 - bar_width + right_x),
                         0.5 * (1 - bar_height),
                         bar_width,
                         bar_height]) # [left, bottom, width, height]
-    cbar = fig.colorbar(artists[-1, -1],
+    cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
     cbar.ax.tick_params(labelsize=ticklabel)
@@ -156,7 +159,7 @@ def main(traitset, movie):
 
     # Save figure
 
-    name = f"{traitset}"
+    name = f"{script_name}_{traitset}"
     if movie:
         ani = FuncAnimation(fig,
                             update,
