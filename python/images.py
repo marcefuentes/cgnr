@@ -57,6 +57,8 @@ def main(traitset, movie):
     plotsize = 4
     width = plotsize*len(titles)
     height = plotsize*len(rows)
+    bar_height = 0.2
+    bar_width = 0.01
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
     biglabel = plotsize*7
@@ -144,8 +146,6 @@ def main(traitset, movie):
                                              vmin=-1,
                                              vmax=1)
 
-    bar_height = 0.2
-    bar_width = 0.01
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([0.5 * (1 - bar_width + right_x),
                         0.5 * (1 - bar_height),
