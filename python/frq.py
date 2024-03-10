@@ -1,13 +1,14 @@
 #! /usr/bin/env python
 
 import argparse
-import os
 import numpy as np
+import os
 import pandas as pd
 import re
 import time
 
 from matplotlib.animation import FuncAnimation
+from matplotlib.cm import ScalarMappable
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -45,8 +46,8 @@ def update(t, traitset, df_dict, dffrq_dict, movie, text, artists):
 
 def main(traitset, movie):
 
-    #this_file = os.path.basename(__file__)
-    #file_name = this_file.split(".")[0]
+    this_script = os.path.basename(__file__)
+    script_name = this_script.split(".")[0]
 
     _, titles, rows = ttr(traitset)
 
@@ -70,9 +71,11 @@ def main(traitset, movie):
     # Set figure properties
 
     bins = 64
+    color_map = "RdBu_r"
     plotsize = 4
     width = plotsize*len(titles)
     height = plotsize*len(rows)
+    linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
     biglabel = plotsize*7
@@ -122,7 +125,7 @@ def main(traitset, movie):
         ax.set(xticks=[], yticks=[])
         ax.set(xlim=xlim, ylim=ylim)
         for axis in ["top", "bottom", "left", "right"]:
-            ax.spines[axis].set_linewidth(0.1)
+            ax.spines[axis].set_linewidth(linewidth)
 
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
@@ -186,11 +189,11 @@ def main(traitset, movie):
                         cax=axins,
                         ticks=[-1, 0, 1])
     cbar.ax.tick_params(labelsize=ticklabel)
-    cbar.outline.set_linewidth(0.1)
+    cbar.outline.set_linewidth(linewidth)
 
     # Save figure
 
-    name = f"{traitset}_frq"
+    name = f"{script_name}_{traitset}"
     if movie:
         ani = FuncAnimation(fig,
                             update,
