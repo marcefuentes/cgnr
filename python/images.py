@@ -65,6 +65,7 @@ def main(traitset, movie):
     fig_hspace = 0.2
     bar_height = 0.2
     bar_width = 0.01
+    linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
     biglabel = plotsize*7
@@ -113,7 +114,7 @@ def main(traitset, movie):
         ax.set(xticks=xticks, yticks=yticks)
         ax.set(xticklabels=[], yticklabels=[])
         for axis in ["top", "bottom", "left", "right"]:
-            ax.spines[axis].set_linewidth(0.1)
+            ax.spines[axis].set_linewidth(linewidth)
         letter = ord("a") + i
         ax.text(0,
                 letterposition,
@@ -155,7 +156,7 @@ def main(traitset, movie):
                         cax=cax,
                         ticks=[-1, 0, 1])
     cbar.ax.tick_params(labelsize=ticklabel)
-    cbar.outline.set_linewidth(0.1)
+    cbar.outline.set_linewidth(linewidth)
 
     # Save figure
 
