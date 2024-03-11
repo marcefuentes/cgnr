@@ -19,23 +19,19 @@ def ttr(traitset):
                   "ImimicGrain",
                   "Imimic_ltGrain",
                   "w"]
-        titles = ["Partner choice",
-                  "Partner choice\nlifetime",
+        titles = ["Partner choice\n(memory 1)",
+                  "Partner choice\n(lifetime)",
                   "Direct\nreciprocity",
-                  "Indirect\nreciprocity",
-                  "Indirect\nreciprocity\nlifetime",
+                  "Indirect\nreciprocity\n(memory 1)",
+                  "Indirect\nreciprocity\n(lifetime)",
                   "Fitness"]
-        rows = ["i", "none"]
+        rows = ["pi", "p", "i", "none"]
 
     elif traitset == "correlations":
-        traits = ["r_qB_Choose",
-                  "r_qB_Mimic",
-                  "r_qB_Imimic",
-                  "r_Choose_Imimic"]
-        titles = ["Choose\nqB",
-                  "Mimic\nqB",
-                  "Imimic\nqB",
-                  "Choose\nImimic"]
+        traits = ["r_qB_Choose_lt",
+                  "r_qB_Imimic_lt",
+                  "r_Choose_lt_Imimic_lt"]
+        titles = traits
         rows = ["pi", "p", "i", "none"]
 
     elif traitset == "none":
