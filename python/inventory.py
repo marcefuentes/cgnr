@@ -30,7 +30,7 @@ def get_results_path(use_store=False, exe=None):
         home_path = os.environ.get("HOME")
         return f"{home_path}/code/{exe}/results"
 
-def process_variant(path, number_of_lines, input_file_extension, output_file_extension):
+def process_variant(path, number_of_lines, input_file_extension, output_file_extension, tsml):
 
     folder_dict = {}
 
@@ -66,9 +66,10 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
 
     mechanisms = list_of_folders(path)
     for mechanism in mechanisms:
-        process_mechanism(mechanism, folder_dict, number_of_lines, input_file_extension, output_file_extension)
+        tsml = process_mechanism(mechanism, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml)
+    return tsml
 
-def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
+def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml):
 
     mechanism = path.split("/")[-1]
     if os.path.islink(path):
@@ -92,9 +93,10 @@ def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, 
 
     givens = list_of_folders(path)
     for given in givens:
-        process_given(given, folder_dict, number_of_lines, input_file_extension, output_file_extension)
+        tsml = process_given(given, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml)
+    return tsml
 
-def process_given(path, folder_dict, number_of_lines, input_file_extension, output_file_extension):
+def process_given(path, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml):
     
     given = path.split("/")[-1]
     if os.path.islink(path):
@@ -133,12 +135,14 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
                     f_equal_number_of_lines += 1
                 elif len(lines) > number_of_lines:
                     f_larger_number_of_lines += 1
+    tsml += f_smaller_number_of_lines
     notstarted = total_files - f_smaller_number_of_lines - f_equal_number_of_lines - f_larger_number_of_lines
     print(f"{c.bold}{c.green if f_equal_number_of_lines else c.reset_format}{f_equal_number_of_lines:>4}{c.reset_format}" if f_equal_number_of_lines else "", end = "")
     print(f"{c.bold}{c.yellow if f_smaller_number_of_lines else c.reset_format}{f_smaller_number_of_lines:>4}{c.reset_format}" if f_smaller_number_of_lines else "", end = "")
     print(f"{c.bold}{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
     print(f"{c.bold}{c.blue if f_larger_number_of_lines else c.reset_format}{f_larger_number_of_lines:>4}{c.reset_format}" if f_larger_number_of_lines else "", end = "")
     print()
+    return tsml
 
 def main():
 
@@ -156,10 +160,11 @@ def main():
         exit()
 
     print(f"\n{c.bold}{mypath}{c.reset_format}")
+    tsml = 0
     variants = list_of_folders(mypath)
     for variant in variants:
-        process_variant(variant, number_of_lines, input_file_extension, output_file_extension)
-    print()
+        tsml = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, tsml)
+    print(f"\n{c.bold}Total unfinished: {c.yellow}{tsml}{c.reset_format}\n" if tsml else "")
 
 if __name__ == "__main__":
 
