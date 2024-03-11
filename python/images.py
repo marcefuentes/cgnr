@@ -149,6 +149,9 @@ def main(traitset, movie):
                                              vmin=-1,
                                              vmax=1)
 
+    fig_x, fig_y = fig.get_size_inches()
+    print(f"Figure size: {fig_x:.2f} x {fig_y:.2f} inches")
+
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([0.5 * (1 - bar_width + fig_right),
                         0.5 * (1 - bar_height),
