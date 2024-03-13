@@ -50,6 +50,8 @@ def main(traitset, movie):
     linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
+    xlabel_padding = 1.8
+    ylabel_padding = 2.0
     biglabel = plotsize*9
     letterlabel = plotsize*8
     ticklabel = plotsize*6
@@ -90,8 +92,8 @@ def main(traitset, movie):
     height = inner_height + top_margin + bottom_margin
 
     fig, main_ax = plt.subplots(nrows=len(rows),
-                            ncols=len(titles),
-                            figsize=(width, height))
+                                ncols=len(titles),
+                                figsize=(width, height))
 
     plotsize_fixed = Size.Fixed(plotsize)
     spacing_fixed = Size.Scaled(spacing)
@@ -110,10 +112,10 @@ def main(traitset, movie):
 
     fig.supxlabel(xlabel,
                   x=(left_margin + inner_width/2)/width,
-                  y=(bottom_margin - 1.8)/height,
+                  y=(bottom_margin - xlabel_padding)/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=(left_margin - 2.0)/width,
+                  x=(left_margin - ylabel_padding)/width,
                   y=(bottom_margin + inner_height/2)/height,
                   fontsize=biglabel)
 
@@ -138,7 +140,7 @@ def main(traitset, movie):
                             fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
     fig.text((left_margin + len(titles)*plotsize*3/4)/width,
-             (bottom_margin - 1.8)/height,
+             (bottom_margin - xlabel_padding)/height,
              "t\n0",
              fontsize=biglabel,
              color="grey",
