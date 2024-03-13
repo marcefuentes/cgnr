@@ -9,7 +9,6 @@ import time
 
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import matplotlib.transforms
@@ -51,6 +50,28 @@ def main(traitset, movie):
 
     _, titles, rows = ttr(traitset)
 
+    # Set figure properties
+
+    bins = 64
+    color_map = "RdBu_r"
+    plotsize = 4
+    width = plotsize*len(titles)
+    height = plotsize*len(rows)
+    fig_left = 0.12
+    fig_right = 0.88
+    fig_top = 0.88
+    fig_bottom = 0.12
+    fig_wspace = 0.2
+    fig_hspace = 0.2
+    linewidth = 0.1
+    xlabel = "Substitutability of $\it{B}$"
+    ylabel = "Influence of $\it{B}$"
+    biglabel = plotsize*7
+    letterlabel = plotsize*6
+    ticklabel = plotsize*5
+    plt.rcParams["pdf.fonttype"] = 42
+    plt.rcParams["ps.fonttype"] = 42
+
     # Get data
 
     df_dict = {}
@@ -65,35 +86,11 @@ def main(traitset, movie):
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
-    alphas = np.sort(pd.unique(df.alpha))[::-1]
-    logess = np.sort(pd.unique(df.logES))
-
-    # Set figure properties
-
-    bins = 64
-    color_map = "RdBu_r"
-    plotsize = 4
-    width = plotsize*len(titles)
-    height = plotsize*len(rows)
-    fig_left = 0.12
-    fig_right = 0.88
-    fig_top = 0.88
-    fig_bottom = 0.12
-    fig_wspace = 0.2
-    fig_hspace = 0.2
-    bar_height = 0.2
-    bar_width = 0.01
-    linewidth = 0.1
-    xlabel = "Substitutability of $\it{B}$"
-    ylabel = "Influence of $\it{B}$"
-    biglabel = plotsize*7
-    letterlabel = plotsize*6
-    ticklabel = plotsize*5
     xlim = [-2, bins + 1]
     ylim = [0, 0.25]
     step = int(nr/2)
-    plt.rcParams["pdf.fonttype"] = 42
-    plt.rcParams["ps.fonttype"] = 42
+    alphas = np.sort(pd.unique(df.alpha))[::-1]
+    logess = np.sort(pd.unique(df.logES))
 
     # Create figure
 
@@ -183,10 +180,10 @@ def main(traitset, movie):
                     artists[r, c, a, e], = ax.plot(x, dummy_y, c="black", lw=0.1)
 
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([0.5 * (1 - bar_width + fig_right),
-                        0.5 * (1 - bar_height),
-                        bar_width,
-                        bar_height]) # [left, bottom, width, height]
+    cax = fig.add_axes([0.5 * (1 - (plotsize/nc)/width + fig_right),
+                        0.5 * (1 - plotsize/height),
+                        (plotsize/nc)/width,
+                        plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
