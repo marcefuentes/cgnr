@@ -9,9 +9,10 @@ import time
 
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
-import matplotlib.cm as cm
+from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
+import matplotlib.cm as cm
 
 from myget_df import get_df
 from mytraits import ttr
@@ -55,20 +56,20 @@ def main(traitset, movie):
     bins = 64
     color_map = "RdBu_r"
     plotsize = 4
-    width = plotsize*len(titles)
-    height = plotsize*len(rows)
-    fig_left = 0.12
-    fig_right = 0.88
-    fig_top = 0.88
-    fig_bottom = 0.12
-    fig_wspace = 0.2
-    fig_hspace = 0.2
+    spacing = 0.75
+    left_margin = 2.5
+    right_margin = 2.5
+    top_margin = 2.5
+    bottom_margin = 2.5
     linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
-    biglabel = plotsize*7
-    letterlabel = plotsize*6
-    ticklabel = plotsize*5
+    xlabel_padding = 1.8
+    ylabel_padding = 2.0
+    biglabel = plotsize*9
+    letterlabel = plotsize*8
+    ticklabel = plotsize*6
+
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
 
@@ -94,6 +95,26 @@ def main(traitset, movie):
 
     # Create figure
 
+    inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
+    inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
+    width = inner_width + left_margin + right_margin
+    height = inner_height + top_margin + bottom_margin
+
+    fig, main_ax = plt.subplots(nrows=len(rows),
+                                ncols=len(titles),
+                                figsize=(width, height))
+
+    plotsize_fixed = Size.Fixed(plotsize/nc)
+    spacing_fixed = Size.Scaled(spacing)
+    divider = Divider(fig,
+                      (left_margin/width,
+                       bottom_margin/height,
+                       inner_width/width,
+                       inner_height/height),
+                      [plotsize_fixed] * nc + ([spacing_fixed] + [plotsize_fixed] * nc) * (len(titles) - 1),
+                      [plotsize_fixed] * nr + ([spacing_fixed] + [plotsize_fixed] * nr) * (len(rows) - 1),
+                      aspect=False)
+
     axs = np.empty((len(rows),
                     len(titles),
                     nr,
@@ -110,21 +131,22 @@ def main(traitset, movie):
                                                hspace=0.0,
                                                wspace=0.0)
             axs[r, c] = grid.subplots()
-
-    fig.subplots_adjust(left=fig_left,
-                        right=fig_right,
-                        top=fig_top,
-                        bottom=fig_bottom,
-                        wspace=fig_wspace,
-                        hspace=fig_hspace)
+    
+    for r, row in enumerate(rows):
+        for c, title in enumerate(titles):
+            for a in reversed(range(nr)):
+                inner_y = (len(rows) - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
+                for e in range(nc):
+                    inner_x = c * (nc + 1) + e + int(e / nc)
+                    axs[r, c, a, e].set_axes_locator(divider.new_locator(nx=inner_x, ny=inner_y))
 
     fig.supxlabel(xlabel,
-                  x=(fig_left + fig_right) * 0.5,
-                  y=fig_bottom - 0.04*biglabel/height,
+                  x=(left_margin + inner_width/2)/width,
+                  y=(bottom_margin - xlabel_padding)/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=fig_left - 0.05*biglabel/width,
-                  y=(fig_bottom + fig_top) * 0.5,
+                  x=(left_margin - ylabel_padding)/width,
+                  y=(bottom_margin + inner_height/2)/height,
                   fontsize=biglabel)
 
     for ax in fig.get_axes():
@@ -157,8 +179,8 @@ def main(traitset, movie):
                 if row == rows[-1]:
                     axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"],
                                                      fontsize=ticklabel)
-    fig.text(fig_right,
-             fig_bottom * 0.5,
+    fig.text((left_margin + len(titles)*plotsize*3/4)/width,
+             (bottom_margin - xlabel_padding)/height,
              "t\n0",
              fontsize=biglabel,
              color="grey",
@@ -180,8 +202,8 @@ def main(traitset, movie):
                     artists[r, c, a, e], = ax.plot(x, dummy_y, c="black", lw=0.1)
 
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([0.5 * (1 - (plotsize/nc)/width + fig_right),
-                        0.5 * (1 - plotsize/height),
+    cax = fig.add_axes([(left_margin + inner_width + spacing)/width,
+                        (bottom_margin + inner_height/2 - plotsize/2)/height,
                         (plotsize/nc)/width,
                         plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
