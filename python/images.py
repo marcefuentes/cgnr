@@ -54,22 +54,22 @@ def main(traitset, movie):
     # Set figure properties
 
     color_map = "RdBu_r"
-    plotsize = 4
-    width = plotsize*len(titles)
-    height = plotsize*len(rows)
-    fig_left = 0.12
-    fig_right = 0.88
-    fig_top = 0.88
-    fig_bottom = 0.12
+    plotsize = 4 # inches
+    left_margin = 3.0
+    right_margin = 3.0
+    top_margin = 2.0
+    bottom_margin = 2.5
+    width = plotsize*len(titles) + left_margin + right_margin
+    height = plotsize*len(rows) + top_margin + bottom_margin
     fig_wspace = 0.2
     fig_hspace = 0.2
-    bar_height = 0.2
-    bar_width = 0.01
+    bar_height = 3.0
+    bar_width = plotsize/21
     linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
-    biglabel = plotsize*7
-    letterlabel = plotsize*6
+    biglabel = plotsize*8
+    letterlabel = plotsize*7
     ticklabel = plotsize*5
     xticks = [0, 0.5*(nc - 1), nc - 1]
     yticks = [0, 0.5*(nr - 1), nr - 1]
@@ -93,20 +93,20 @@ def main(traitset, movie):
                             figsize=(width, height))
 
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
-    fig.subplots_adjust(left=fig_left,
-                        right=fig_right,
-                        top=fig_top,
-                        bottom=fig_bottom,
+    fig.subplots_adjust(left=left_margin/width,
+                        right=1 - right_margin/width,
+                        top=1 - top_margin/height,
+                        bottom=bottom_margin/height,
                         wspace=fig_wspace,
                         hspace=fig_hspace)
 
     fig.supxlabel(xlabel,
-                  x=(fig_left + fig_right) * 0.5,
-                  y=fig_bottom - 0.04*biglabel/height,
+                  x=(left_margin + len(titles)*plotsize/2)/width,
+                  y=(bottom_margin - 1.5)/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=fig_left - 0.05*biglabel/width,
-                  y=(fig_bottom + fig_top) * 0.5,
+                  x=(left_margin - 1.7)/width,
+                  y=(bottom_margin + len(rows)*plotsize/2)/height,
                   fontsize=biglabel)
 
     letterposition = 1.035
@@ -129,8 +129,8 @@ def main(traitset, movie):
                             pad=plotsize * 10,
                             fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
-    fig.text(fig_right,
-             fig_bottom * 0.5,
+    fig.text((left_margin + len(titles)*plotsize*3/4)/width,
+             (bottom_margin - 1.5)/height,
              "t\n0",
              fontsize=biglabel,
              color="grey",
@@ -149,14 +149,11 @@ def main(traitset, movie):
                                              vmin=-1,
                                              vmax=1)
 
-    fig_x, fig_y = fig.get_size_inches()
-    print(f"Figure size: {fig_x:.2f} x {fig_y:.2f} inches")
-
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([0.5 * (1 - bar_width + fig_right),
-                        0.5 * (1 - bar_height),
-                        bar_width,
-                        bar_height]) # [left, bottom, width, height]
+    cax = fig.add_axes([(left_margin + len(titles)*plotsize + 0.5)/width,
+                        (bottom_margin + len(rows)*plotsize/2 - bar_height/2)/height,
+                        bar_width/width,
+                        bar_height/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
