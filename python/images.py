@@ -7,6 +7,7 @@ import time
 
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
+from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
 
@@ -53,23 +54,26 @@ def main(traitset, movie):
     # Set figure properties
 
     color_map = "RdBu_r"
-    plotsize = 4 # inches
-    left_margin = 3.0
-    right_margin = 3.0
-    top_margin = 2.0
+    plotsize = 4
+    plotsize_fixed = Size.Fixed(plotsize)
+    spacing = 0.75
+    spacing_fixed = Size.Scaled(spacing)
+    left_margin = 2.5
+    right_margin = 2.5
+    top_margin = 2.5
     bottom_margin = 2.5
-    width = plotsize*len(titles) + left_margin + right_margin
-    height = plotsize*len(rows) + top_margin + bottom_margin
-    fig_wspace = 0.2
-    fig_hspace = 0.2
-    bar_height = 3.0
-    bar_width = plotsize/21
+    inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
+    inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
+    width = inner_width + left_margin + right_margin
+    height = inner_height + top_margin + bottom_margin
+    bar_height = plotsize
+    bar_width = plotsize/nc
     linewidth = 0.1
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
-    biglabel = plotsize*8
-    letterlabel = plotsize*7
-    ticklabel = plotsize*5
+    biglabel = plotsize*9
+    letterlabel = plotsize*8
+    ticklabel = plotsize*6
     xticks = [0, 0.5*(nc - 1), nc - 1]
     yticks = [0, 0.5*(nr - 1), nr - 1]
     xmin = df.logES.min()
@@ -91,21 +95,26 @@ def main(traitset, movie):
                             ncols=len(titles),
                             figsize=(width, height))
 
+    divider = Divider(fig,
+                      (left_margin/width,
+                       bottom_margin/height,
+                       inner_width/width,
+                       inner_height/height),
+                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(titles) - 1),
+                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(rows) - 1),
+                      aspect=False)
+    for r, row in enumerate(rows):
+        for c, title in enumerate(titles):
+            main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
-    fig.subplots_adjust(left=left_margin/width,
-                        right=1 - right_margin/width,
-                        top=1 - top_margin/height,
-                        bottom=bottom_margin/height,
-                        wspace=fig_wspace,
-                        hspace=fig_hspace)
 
     fig.supxlabel(xlabel,
-                  x=(left_margin + len(titles)*plotsize/2)/width,
-                  y=(bottom_margin - 1.5)/height,
+                  x=(left_margin + inner_width/2)/width,
+                  y=(bottom_margin - 1.8)/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=(left_margin - 1.7)/width,
-                  y=(bottom_margin + len(rows)*plotsize/2)/height,
+                  x=(left_margin - 2.0)/width,
+                  y=(bottom_margin + inner_height/2)/height,
                   fontsize=biglabel)
 
     letterposition = 1.035
@@ -129,7 +138,7 @@ def main(traitset, movie):
                             fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
     fig.text((left_margin + len(titles)*plotsize*3/4)/width,
-             (bottom_margin - 1.5)/height,
+             (bottom_margin - 1.8)/height,
              "t\n0",
              fontsize=biglabel,
              color="grey",
@@ -149,8 +158,8 @@ def main(traitset, movie):
                                              vmax=1)
 
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([(left_margin + len(titles)*plotsize + 0.5)/width,
-                        (bottom_margin + len(rows)*plotsize/2 - bar_height/2)/height,
+    cax = fig.add_axes([(left_margin + inner_width + spacing)/width,
+                        (bottom_margin + inner_height/2 - bar_height/2)/height,
                         bar_width/width,
                         bar_height/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
