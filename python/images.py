@@ -38,6 +38,25 @@ def main(traitset, movie):
 
     _, titles, rows = ttr(traitset)
 
+    # Set figure properties
+
+    color_map = "RdBu_r"
+    plotsize = 4
+    spacing = 0.75
+    left_margin = 2.5
+    right_margin = 2.5
+    top_margin = 2.5
+    bottom_margin = 2.5
+    linewidth = 0.1
+    xlabel = "Substitutability of $\it{B}$"
+    ylabel = "Influence of $\it{B}$"
+    biglabel = plotsize*9
+    letterlabel = plotsize*8
+    ticklabel = plotsize*6
+
+    plt.rcParams["pdf.fonttype"] = 42
+    plt.rcParams["ps.fonttype"] = 42
+
     # Get data
 
     df_dict = {}
@@ -50,30 +69,6 @@ def main(traitset, movie):
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
-
-    # Set figure properties
-
-    color_map = "RdBu_r"
-    plotsize = 4
-    plotsize_fixed = Size.Fixed(plotsize)
-    spacing = 0.75
-    spacing_fixed = Size.Scaled(spacing)
-    left_margin = 2.5
-    right_margin = 2.5
-    top_margin = 2.5
-    bottom_margin = 2.5
-    inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
-    inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
-    width = inner_width + left_margin + right_margin
-    height = inner_height + top_margin + bottom_margin
-    bar_height = plotsize
-    bar_width = plotsize/nc
-    linewidth = 0.1
-    xlabel = "Substitutability of $\it{B}$"
-    ylabel = "Influence of $\it{B}$"
-    biglabel = plotsize*9
-    letterlabel = plotsize*8
-    ticklabel = plotsize*6
     xticks = [0, 0.5*(nc - 1), nc - 1]
     yticks = [0, 0.5*(nr - 1), nr - 1]
     xmin = df.logES.min()
@@ -86,15 +81,20 @@ def main(traitset, movie):
     yticklabels = [f"{ymax:.1f}",
                    f"{(ymin + ymax)/2.:.1f}",
                    f"{ymin:.1f}"]
-    plt.rcParams["pdf.fonttype"] = 42
-    plt.rcParams["ps.fonttype"] = 42
 
     # Create figure
+
+    inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
+    inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
+    width = inner_width + left_margin + right_margin
+    height = inner_height + top_margin + bottom_margin
 
     fig, main_ax = plt.subplots(nrows=len(rows),
                             ncols=len(titles),
                             figsize=(width, height))
 
+    plotsize_fixed = Size.Fixed(plotsize)
+    spacing_fixed = Size.Scaled(spacing)
     divider = Divider(fig,
                       (left_margin/width,
                        bottom_margin/height,
@@ -159,9 +159,9 @@ def main(traitset, movie):
 
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([(left_margin + inner_width + spacing)/width,
-                        (bottom_margin + inner_height/2 - bar_height/2)/height,
-                        bar_width/width,
-                        bar_height/height]) # [left, bottom, width, height]
+                        (bottom_margin + inner_height/2 - plotsize/2)/height,
+                        (plotsize/nc)/width,
+                        plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
