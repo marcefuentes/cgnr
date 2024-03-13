@@ -97,8 +97,8 @@ def main(traitset, movie):
 
     divider = Divider(fig, (left_margin/width,
                              bottom_margin/height,
-                             (width - left_margin - right_margin)/width,
-                             (height - bottom_margin - top_margin)/height),
+                             inner_width/width,
+                             inner_height/height),
                              [spacing_fixed, plotsize_fixed]*len(titles) + [spacing_fixed],
                              [spacing_fixed, plotsize_fixed]*len(rows) + [spacing_fixed],
                              aspect=False)
