@@ -95,13 +95,14 @@ def main(traitset, movie):
                             ncols=len(titles),
                             figsize=(width, height))
 
-    divider = Divider(fig, (left_margin/width,
-                             bottom_margin/height,
-                             inner_width/width,
-                             inner_height/height),
-                             [spacing_fixed, plotsize_fixed]*len(titles) + [spacing_fixed],
-                             [spacing_fixed, plotsize_fixed]*len(rows) + [spacing_fixed],
-                             aspect=False)
+    divider = Divider(fig,
+                      (left_margin/width,
+                       bottom_margin/height,
+                       inner_width/width,
+                       inner_height/height),
+                      [spacing_fixed, plotsize_fixed]*len(titles) + [spacing_fixed],
+                      [spacing_fixed, plotsize_fixed]*len(rows) + [spacing_fixed],
+                      aspect=False)
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
             main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c+1, ny=2*r+1))
