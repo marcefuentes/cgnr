@@ -134,7 +134,7 @@ def main(traitset, movie):
     
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
-            for a in reversed(range(nr)):
+            for a in range(nr):
                 inner_y = (len(rows) - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
                 for e in range(nc):
                     inner_x = c * (nc + 1) + e + int(e / nc)
