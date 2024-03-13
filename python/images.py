@@ -7,7 +7,6 @@ import time
 
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.pyplot as plt
 import matplotlib.transforms
 
