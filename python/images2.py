@@ -56,12 +56,12 @@ def main(traitset, movie):
     color_map = "RdBu_r"
     plotsize = 4
     plotsize_fixed = Size.Fixed(plotsize)
-    spacing = 1.0
+    spacing = 0.75
     spacing_fixed = Size.Scaled(spacing)
-    left_margin = 2.0
-    right_margin = 2.0
-    top_margin = 1.5
-    bottom_margin = 1.5
+    left_margin = 2.5
+    right_margin = 2.5
+    top_margin = 2.5
+    bottom_margin = 2.5
     inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
     inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
     width = inner_width + left_margin + right_margin
@@ -100,20 +100,20 @@ def main(traitset, movie):
                        bottom_margin/height,
                        inner_width/width,
                        inner_height/height),
-                      [spacing_fixed, plotsize_fixed]*len(titles) + [spacing_fixed],
-                      [spacing_fixed, plotsize_fixed]*len(rows) + [spacing_fixed],
+                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(titles) - 1),
+                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(rows) - 1),
                       aspect=False)
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
-            main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c+1, ny=2*r+1))
+            main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
 
     fig.supxlabel(xlabel,
                   x=(left_margin + inner_width/2)/width,
-                  y=(bottom_margin - 1.0)/height,
+                  y=(bottom_margin - 1.8)/height,
                   fontsize=biglabel)
     fig.supylabel(ylabel,
-                  x=(left_margin - 1.2)/width,
+                  x=(left_margin - 2.0)/width,
                   y=(bottom_margin + inner_height/2)/height,
                   fontsize=biglabel)
 
@@ -138,7 +138,7 @@ def main(traitset, movie):
                             fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
     fig.text((left_margin + len(titles)*plotsize*3/4)/width,
-             (bottom_margin - 1.5)/height,
+             (bottom_margin - 1.8)/height,
              "t\n0",
              fontsize=biglabel,
              color="grey",
@@ -158,7 +158,7 @@ def main(traitset, movie):
                                              vmax=1)
 
     sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([(left_margin + inner_width + 0.5)/width,
+    cax = fig.add_axes([(left_margin + inner_width + spacing)/width,
                         (bottom_margin + inner_height/2 - bar_height/2)/height,
                         bar_width/width,
                         bar_height/height]) # [left, bottom, width, height]
