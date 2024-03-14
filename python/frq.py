@@ -75,7 +75,7 @@ def main(traitset, movie):
     ylim = [0, 0.25]
     step = int(nr/2)
     alphas = np.sort(df["alpha"].unique())[::-1]
-    logess = np.sort(df["alpha"].unique())
+    logess = np.sort(df["logES"].unique())
 
     # Create figure
 
@@ -157,14 +157,12 @@ def main(traitset, movie):
             for a in range(0, nr, step):
                 axs[r, c, a, 0].set(yticks=[ylim[1]/2.0], yticklabels=[])
                 if c == 0:
-                    axs[r, 0, a, 0].set_yticklabels([alphas[a]],
-                                                    fontsize=s.ticklabel)
+                    axs[r, 0, a, 0].set_yticklabels([alphas[a]])
             for e in range(0, nc, step):
                 axs[r, c, -1, e].set(xticks=[xlim[1]/2.0], xticklabels=[])
                 if row == rows[-1]:
-                    axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"],
-                                                     fontsize=s.ticklabel)
-    fig.text((s.left_margin + len(titles)*s.plotsize*3/4)/width,
+                    axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
+    fig.text((s.left_margin + inner_width)/width,
              (s.bottom_margin - s.xlabel_padding)/height,
              "t\n0",
              fontsize=s.biglabel,

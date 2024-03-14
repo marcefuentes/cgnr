@@ -124,8 +124,8 @@ def main(traitset, movie):
         axs[0, c].set_title(title,
                             pad=s.plotsize * 10,
                             fontsize=s.letterlabel)
-        axs[-1, c].set_xticklabels(xticklabels, fontsize=s.ticklabel)
-    fig.text((s.left_margin + len(titles)*s.plotsize)/width,
+        axs[-1, c].set_xticklabels(xticklabels)
+    fig.text((s.left_margin + inner_width)/width,
              (s.bottom_margin - s.xlabel_padding)/height,
              "t\n0",
              fontsize=s.biglabel,
