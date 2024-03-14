@@ -148,15 +148,17 @@ def main(traitset, movie):
             spine.set_linewidth(s.linewidth)
 
     letterposition = 1.0 + s.letterposition * nr
-    for r, row in enumerate(rows):
+    for r, _ in enumerate(rows):
         for c, title in enumerate(titles):
-            letter = ord("a") + r*len(titles) + c
+            letter = chr(ord("a") + r*len(titles) + c)
             axs[r, c, 0, 0].text(0,
                                  letterposition,
-                                 chr(letter),
+                                 letter,
                                  fontsize=s.letterlabel,
                                  transform=axs[r, c, 0, 0].transAxes,
                                  weight="bold")
+    for r, row in enumerate(rows):
+        for c, title in enumerate(titles):
             if r == 0:
                 axs[0, c, 0, 10].set_title(title,
                                            pad=s.plotsize * 10,
