@@ -123,11 +123,12 @@ def main(traitset, movie):
                 weight="bold")
     for ax in axs[:, 0]:
         ax.set_yticklabels(yticklabels)
+    for ax in axs[-1, :]:
+        ax.set_xticklabels(xticklabels)
     for c, title in enumerate(titles):
         axs[0, c].set_title(title,
                             pad=s.plotsize * 10,
                             fontsize=s.letterlabel)
-        axs[-1, c].set_xticklabels(xticklabels)
     fig.text((s.left_margin + inner_width)/width,
              (s.bottom_margin - s.xlabel_padding)/height,
              "t\n0",
