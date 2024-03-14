@@ -45,4 +45,14 @@ def ttr(traitset):
                   "Fitness deficit"]
         rows = ["given100", "given095", "given050", "given000"]
 
+    elif traitset == "test":
+        traits = ["qBSeen",
+                  "w"]
+        titles = ["Production of $\it{B}$",
+                  "Fitness"]
+        rows = ["p", "i", "none"]
+        
+    else:
+        raise ValueError("Traitset not recognized")
+
     return traits, titles, rows

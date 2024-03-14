@@ -24,7 +24,7 @@ def update(t, traitset, df_dict, dffrq_dict, movie, text, artists):
     logess = np.sort(df_dict["none"]["logES"].unique())
     traits, _, _ = ttr(traitset)
     for r, key in enumerate(df_dict):
-        if ("cooperation" in traitset or "correlations" in traitset) and key == "social":
+        if ("cooperation" in traitset or "correlations" in traitset or "test" in traitset) and key == "social":
             continue
         for c, trait in enumerate(traits):
             Z = update_Z(t, df_dict, key, trait, traitset)
@@ -39,8 +39,9 @@ def update(t, traitset, df_dict, dffrq_dict, movie, text, artists):
                     artists[r, c, a, e].axes.set_facecolor(bgcolor)
     if movie:
         text.set_text(t)
+    elif s.print_folder:
+        text.set_text(os.path.basename(os.getcwd()))
     else:
-        #text.set_text(os.path.basename(os.getcwd()))
         text.set_text("")
 
     return artists.flatten()
@@ -84,9 +85,21 @@ def main(traitset, movie):
     width = inner_width + s.left_margin + s.right_margin
     height = inner_height + s.top_margin + s.bottom_margin
 
-    fig, main_ax = plt.subplots(nrows=len(rows),
-                                ncols=len(titles),
-                                figsize=(width, height))
+    fig = plt.figure(figsize=(width, height))
+    fig.supxlabel(s.xlabel,
+                  x=(s.left_margin + inner_width/2)/width,
+                  y=(s.bottom_margin - s.xlabel_padding)/height,
+                  fontsize=s.biglabel)
+    fig.supylabel(s.ylabel,
+                  x=(s.left_margin - s.ylabel_padding)/width,
+                  y=(s.bottom_margin + inner_height/2)/height,
+                  fontsize=s.biglabel)
+    fig.text((s.left_margin + inner_width)/width,
+             (s.bottom_margin - s.xlabel_padding)/height,
+             "",
+             fontsize=s.ticklabel,
+             color="grey",
+             ha="right")
 
     plotsize_fixed = Size.Fixed(s.plotsize/nc)
     spacing_fixed = Size.Fixed(s.spacing)
@@ -99,15 +112,14 @@ def main(traitset, movie):
                       [plotsize_fixed] * nr + ([spacing_fixed] + [plotsize_fixed] * nr) * (len(rows) - 1),
                       aspect=False)
 
+    outergrid = fig.add_gridspec(nrows=len(rows),
+                                 ncols=len(titles))
     axs = np.empty((len(rows),
                     len(titles),
                     nr,
                     nc),
                     dtype=object)
 
-    fig = plt.figure(figsize=(width, height))
-    outergrid = fig.add_gridspec(nrows=len(rows),
-                                 ncols=len(titles))
     for r, _ in enumerate(rows):
         for c, _ in enumerate(titles):
             grid = outergrid[r, c].subgridspec(nrows=nr,
@@ -124,21 +136,14 @@ def main(traitset, movie):
                     inner_x = c * (nc + 1) + e + int(e / nc)
                     axs[r, c, a, e].set_axes_locator(divider.new_locator(nx=inner_x, ny=inner_y))
 
-    fig.supxlabel(s.xlabel,
-                  x=(s.left_margin + inner_width/2)/width,
-                  y=(s.bottom_margin - s.xlabel_padding)/height,
-                  fontsize=s.biglabel)
-    fig.supylabel(s.ylabel,
-                  x=(s.left_margin - s.ylabel_padding)/width,
-                  y=(s.bottom_margin + inner_height/2)/height,
-                  fontsize=s.biglabel)
-
     for ax in fig.get_axes():
-        ax.set(xlim=xlim,
-               ylim=ylim,
-               xticks=[],
-               yticks=[])
-        ax.tick_params(axis="both", labelsize=s.ticklabel, size=s.ticksize)
+        ax.set(xticks=[],
+               yticks=[],
+               xlim=xlim,
+               ylim=ylim)
+        ax.tick_params(axis="both",
+                       labelsize=s.ticklabel,
+                       size=s.ticksize)
         for spine in ax.spines.values():
             spine.set_linewidth(s.linewidth)
 
@@ -164,12 +169,6 @@ def main(traitset, movie):
                 axs[r, c, -1, e].set(xticks=[xlim[1]/2.0], xticklabels=[])
                 if row == rows[-1]:
                     axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
-    fig.text((s.left_margin + inner_width)/width,
-             (s.bottom_margin - s.xlabel_padding)/height,
-             "t\n0",
-             fontsize=s.biglabel,
-             color="grey",
-             ha="right")
 
     # Assign axs objects to variables
     # (Line2D)

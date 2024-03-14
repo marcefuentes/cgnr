@@ -19,7 +19,7 @@ from myupdate_Z import update_Z
 def update(t, traitset, df_dict, movie, text, artists): 
     traits, _, _ = ttr(traitset)
     for r, key in enumerate(df_dict):
-        if ("cooperation" in traitset or "correlations" in traitset) and key == "social":
+        if ("cooperation" in traitset or "correlations" in traitset or "test" in traitset) and key == "social":
             continue
         for c, trait in enumerate(traits):
             Z = update_Z(t, df_dict, key, trait, traitset)
