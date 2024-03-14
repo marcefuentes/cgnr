@@ -104,17 +104,19 @@ def main(traitset, movie):
                   y=(s.bottom_margin + inner_height/2)/height,
                   fontsize=s.biglabel)
 
-    letterposition = 1.0 + s.letterposition
-    for i, ax in enumerate(fig.get_axes()):
+    for ax in fig.get_axes():
         ax.set(xticks=xticks,
                yticks=yticks,
                xticklabels=[],
                yticklabels=[])
-        ax.tick_params(axis="both", labelsize=s.ticklabel, size=s.ticksize)
+        ax.tick_params(axis="both",
+                       labelsize=s.ticklabel,
+                       size=s.ticksize)
         for spine in ax.spines.values():
             spine.set_linewidth(s.linewidth)
+    for i, ax in enumerate(fig.get_axes()):
         ax.text(0,
-                letterposition,
+                1.0 + s.letterposition,
                 chr(ord("a") + i),
                 transform=ax.transAxes,
                 fontsize=s.letterlabel,

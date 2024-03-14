@@ -18,13 +18,13 @@ def ttr(traitset):
                   "MimicGrain",
                   "ImimicGrain",
                   "Imimic_ltGrain",
-                  "w"]
+                  "qBSeen"]
         titles = ["Partner choice\n(memory 1)",
                   "Partner choice\n(lifetime)",
                   "Direct\nreciprocity",
                   "Indirect\nreciprocity\n(memory 1)",
                   "Indirect\nreciprocity\n(lifetime)",
-                  "Fitness"]
+                  "qBSeen"]
         rows = ["pi", "p", "i", "none"]
 
     elif traitset == "correlations":
