@@ -127,9 +127,6 @@ def main(traitset, movie):
                                                hspace=0.0,
                                                wspace=0.0)
             axs[r, c] = grid.subplots()
-    
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(titles):
             for a in range(nr):
                 inner_y = (len(rows) - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
                 for e in range(nc):
