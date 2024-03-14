@@ -90,8 +90,8 @@ def main(traitset, movie):
                       [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(titles) - 1),
                       [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(rows) - 1),
                       aspect=False)
-    for r, row in enumerate(rows):
-        for c, title in enumerate(titles):
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(titles):
             main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
 
@@ -119,7 +119,7 @@ def main(traitset, movie):
                 transform=ax.transAxes,
                 fontsize=s.letterlabel,
                 weight="bold")
-    for r, row in enumerate(rows):
+    for r, _ in enumerate(rows):
         axs[r, 0].set_yticklabels(yticklabels)
     for c, title in enumerate(titles):
         axs[0, c].set_title(title,
@@ -139,8 +139,8 @@ def main(traitset, movie):
     artists = np.empty_like(axs) 
     dummy_Z = np.zeros((nr, nc))
 
-    for r, row in enumerate(rows):
-        for c, title in enumerate(titles):
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(titles):
             artists[r, c] = axs[r, c].imshow(dummy_Z,
                                              cmap=s.color_map,
                                              vmin=-1,
