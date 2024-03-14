@@ -149,7 +149,7 @@ def main(traitset, movie):
 
     letterposition = 1.0 + s.letterposition * nr
     for r, _ in enumerate(rows):
-        for c, title in enumerate(titles):
+        for c, _ in enumerate(titles):
             letter = chr(ord("a") + r*len(titles) + c)
             axs[r, c, 0, 0].text(0,
                                  letterposition,
@@ -157,12 +157,13 @@ def main(traitset, movie):
                                  fontsize=s.letterlabel,
                                  transform=axs[r, c, 0, 0].transAxes,
                                  weight="bold")
+    for c, title in enumerate(titles):
+        axs[0, c, 0, int(nc/2)].set_title(title,
+                                          pad=s.plotsize * 10,
+                                          fontsize=s.letterlabel)
+
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
-            if r == 0:
-                axs[0, c, 0, 10].set_title(title,
-                                           pad=s.plotsize * 10,
-                                           fontsize=s.letterlabel)
             for a in range(0, nr, step):
                 axs[r, c, a, 0].set(yticks=[ylim[1]/2.0], yticklabels=[])
                 if c == 0:
