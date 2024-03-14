@@ -108,16 +108,16 @@ def main(traitset, movie):
     fig = plt.figure(figsize=(width, height))
     outergrid = fig.add_gridspec(nrows=len(rows),
                                  ncols=len(titles))
-    for r, row in enumerate(rows):
-        for c, title in enumerate(titles):
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(titles):
             grid = outergrid[r, c].subgridspec(nrows=nr,
                                                ncols=nc,
                                                hspace=0.0,
                                                wspace=0.0)
             axs[r, c] = grid.subplots()
     
-    for r, row in enumerate(rows):
-        for c, title in enumerate(titles):
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(titles):
             for a in range(nr):
                 inner_y = (len(rows) - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
                 for e in range(nc):
@@ -134,11 +134,13 @@ def main(traitset, movie):
                   fontsize=s.biglabel)
 
     for ax in fig.get_axes():
-        ax.set(xlim=xlim, ylim=ylim)
-        ax.set(xticks=[], yticks=[])
+        ax.set(xlim=xlim,
+               ylim=ylim,
+               xticks=[],
+               yticks=[])
         ax.tick_params(axis="both", labelsize=s.ticklabel, size=s.ticksize)
-        for axis in ["top", "bottom", "left", "right"]:
-            ax.spines[axis].set_linewidth(s.linewidth)
+        for spine in ax.spines.values():
+            spine.set_linewidth(s.linewidth)
 
     letterposition = 1.0 + s.letterposition * nr
     for r, row in enumerate(rows):
@@ -176,10 +178,10 @@ def main(traitset, movie):
     x = np.arange(s.bins)
     dummy_y = np.zeros_like(x)
 
-    for r, row in enumerate(rows):
-        for c, title in enumerate(titles):
-            for a, alpha in enumerate(alphas):
-                for e, loges in enumerate(logess):
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(titles):
+            for a, _ in enumerate(alphas):
+                for e, _ in enumerate(logess):
                     ax = axs[r, c, a, e] 
                     artists[r, c, a, e], = ax.plot(x, dummy_y, c="black", lw=s.linewidth * 2)
 
