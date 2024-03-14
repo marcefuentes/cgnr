@@ -42,16 +42,16 @@ def main(traitset, movie):
 
     color_map = "RdBu_r"
     plotsize = 16
-    spacing = 0.75
-    left_margin = 2.5
-    right_margin = 2.5
-    top_margin = 2.5
-    bottom_margin = 2.5
-    linewidth = 0.1
+    spacing = plotsize*0.75/4.0
+    left_margin = plotsize*2.5/4.0
+    right_margin = plotsize*2.5/4.0
+    top_margin = plotsize*2.5/4.0
+    bottom_margin = plotsize*2.5/4.0
+    linewidth = plotsize*0.1/4.0
     xlabel = "Substitutability of $\it{B}$"
     ylabel = "Influence of $\it{B}$"
-    xlabel_padding = 1.8
-    ylabel_padding = 2.0
+    xlabel_padding = plotsize*1.8/4.0
+    ylabel_padding = plotsize*2.0/4.0
     biglabel = plotsize*9
     letterlabel = plotsize*8
     ticklabel = plotsize*6
@@ -96,7 +96,7 @@ def main(traitset, movie):
                                 figsize=(width, height))
 
     plotsize_fixed = Size.Fixed(plotsize)
-    spacing_fixed = Size.Scaled(spacing)
+    spacing_fixed = Size.Fixed(spacing)
     divider = Divider(fig,
                       (left_margin/width,
                        bottom_margin/height,
