@@ -112,7 +112,16 @@ def main(traitset, movie):
 
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
 
-    for ax in fig.get_axes():
+    letterposition = 1.0 + s.letterposition
+    for i, ax in enumerate(fig.get_axes()):
+        ax.text(0,
+                letterposition,
+                chr(ord("a") + i),
+                transform=ax.transAxes,
+                fontsize=s.letterlabel,
+                weight="bold")
+        for spine in ax.spines.values():
+            spine.set_linewidth(s.linewidth)
         ax.set(xticks=xticks,
                yticks=yticks,
                xticklabels=[],
@@ -120,15 +129,6 @@ def main(traitset, movie):
         ax.tick_params(axis="both",
                        labelsize=s.ticklabel,
                        size=s.ticksize)
-        for spine in ax.spines.values():
-            spine.set_linewidth(s.linewidth)
-    for i, ax in enumerate(fig.get_axes()):
-        ax.text(0,
-                1.0 + s.letterposition,
-                chr(ord("a") + i),
-                transform=ax.transAxes,
-                fontsize=s.letterlabel,
-                weight="bold")
     for ax in axs[:, 0]:
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:

@@ -77,6 +77,7 @@ def main(traitset, movie):
     step = int(nr/2)
     alphas = np.sort(df["alpha"].unique())[::-1]
     logess = np.sort(df["logES"].unique())
+    letterposition = 1.0 + s.letterposition * nr
 
     # Create figure
 
@@ -132,21 +133,15 @@ def main(traitset, movie):
                 for e in range(nc):
                     inner_x = c * (nc + 1) + e + int(e / nc)
                     axs[r, c, a, e].set_axes_locator(divider.new_locator(nx=inner_x, ny=inner_y))
-
-    for ax in fig.get_axes():
-        ax.set(xticks=[],
-               yticks=[],
-               xlim=xlim,
-               ylim=ylim)
-        ax.tick_params(axis="both",
-                       labelsize=s.ticklabel,
-                       size=s.ticksize)
-        for spine in ax.spines.values():
-            spine.set_linewidth(s.linewidth)
-
-    letterposition = 1.0 + s.letterposition * nr
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(titles):
+                    for spine in axs[r, c, a, e].spines.values():
+                        spine.set_linewidth(s.linewidth)
+                    axs[r, c, a, e].set(xticks=[],
+                                        yticks=[],
+                                        xlim=xlim,
+                                        ylim=ylim)
+                    axs[r, c, a, e].tick_params(axis="both",
+                                                labelsize=s.ticklabel,
+                                                size=s.ticksize)
             letter = chr(ord("a") + r*len(titles) + c)
             axs[r, c, 0, 0].text(0,
                                  letterposition,
@@ -154,20 +149,16 @@ def main(traitset, movie):
                                  fontsize=s.letterlabel,
                                  transform=axs[r, c, 0, 0].transAxes,
                                  weight="bold")
-    for ax, title in zip(axs[0, :], titles):
-        ax[0, int(nc/2)].set_title(title,
-                     pad=s.plotsize * 10,
-                     fontsize=s.letterlabel)
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(titles):
             for a in range(0, nr, step):
-                axs[r, c, a, 0].set(yticks=[ylim[1]/2.0], yticklabels=[])
+                axs[r, c, a, 0].set(yticks=[ylim[1]/2], yticklabels=[])
             for e in range(0, nc, step):
-                axs[r, c, -1, e].set(xticks=[xlim[1]/2.0], xticklabels=[])
-    for r, _ in enumerate(rows):
+                axs[r, c, -1, e].set(xticks=[xlim[1]/2], xticklabels=[])
         for a in range(0, nr, step):
             axs[r, 0, a, 0].set_yticklabels([alphas[a]])
-    for c, _ in enumerate(titles):
+    for c, title in enumerate(titles):
+        axs[0, c, 0, int(nc/2)].set_title(title,
+                                          pad=s.plotsize * 10,
+                                          fontsize=s.letterlabel)
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
 
