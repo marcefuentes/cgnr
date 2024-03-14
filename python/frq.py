@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms
 import matplotlib.cm as cm
 
+import myfigure_settings as s
 from myget_df import get_df
 from mytraits import ttr
 from myupdate_Z import update_Z
@@ -53,23 +54,6 @@ def main(traitset, movie):
 
     # Set figure properties
 
-    bins = 64
-    color_map = "RdBu_r"
-    plotsize = 16
-    spacing = 0.75
-    left_margin = 2.5
-    right_margin = 2.5
-    top_margin = 2.5
-    bottom_margin = 2.5
-    linewidth = 0.1
-    xlabel = "Substitutability of $\it{B}$"
-    ylabel = "Influence of $\it{B}$"
-    xlabel_padding = 1.8
-    ylabel_padding = 2.0
-    biglabel = plotsize*9
-    letterlabel = plotsize*8
-    ticklabel = plotsize*6
-
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
 
@@ -87,7 +71,7 @@ def main(traitset, movie):
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
-    xlim = [-2, bins + 1]
+    xlim = [-2, s.bins + 1]
     ylim = [0, 0.25]
     step = int(nr/2)
     alphas = np.sort(df["alpha"].unique())[::-1]
@@ -95,20 +79,20 @@ def main(traitset, movie):
 
     # Create figure
 
-    inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
-    inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
-    width = inner_width + left_margin + right_margin
-    height = inner_height + top_margin + bottom_margin
+    inner_width = s.plotsize*len(titles) + s.spacing*(len(titles) - 1)
+    inner_height = s.plotsize*len(rows) + s.spacing*(len(rows) - 1)
+    width = inner_width + s.left_margin + s.right_margin
+    height = inner_height + s.top_margin + s.bottom_margin
 
     fig, main_ax = plt.subplots(nrows=len(rows),
                                 ncols=len(titles),
                                 figsize=(width, height))
 
-    plotsize_fixed = Size.Fixed(plotsize/nc)
-    spacing_fixed = Size.Scaled(spacing)
+    plotsize_fixed = Size.Fixed(s.plotsize/nc)
+    spacing_fixed = Size.Fixed(s.spacing)
     divider = Divider(fig,
-                      (left_margin/width,
-                       bottom_margin/height,
+                      (s.left_margin/width,
+                       s.bottom_margin/height,
                        inner_width/width,
                        inner_height/height),
                       [plotsize_fixed] * nc + ([spacing_fixed] + [plotsize_fixed] * nc) * (len(titles) - 1),
@@ -140,49 +124,50 @@ def main(traitset, movie):
                     inner_x = c * (nc + 1) + e + int(e / nc)
                     axs[r, c, a, e].set_axes_locator(divider.new_locator(nx=inner_x, ny=inner_y))
 
-    fig.supxlabel(xlabel,
-                  x=(left_margin + inner_width/2)/width,
-                  y=(bottom_margin - xlabel_padding)/height,
-                  fontsize=biglabel)
-    fig.supylabel(ylabel,
-                  x=(left_margin - ylabel_padding)/width,
-                  y=(bottom_margin + inner_height/2)/height,
-                  fontsize=biglabel)
+    fig.supxlabel(s.xlabel,
+                  x=(s.left_margin + inner_width/2)/width,
+                  y=(s.bottom_margin - s.xlabel_padding)/height,
+                  fontsize=s.biglabel)
+    fig.supylabel(s.ylabel,
+                  x=(s.left_margin - s.ylabel_padding)/width,
+                  y=(s.bottom_margin + inner_height/2)/height,
+                  fontsize=s.biglabel)
 
     for ax in fig.get_axes():
-        ax.set(xticks=[], yticks=[])
         ax.set(xlim=xlim, ylim=ylim)
+        ax.set(xticks=[], yticks=[])
+        ax.tick_params(axis="both", labelsize=s.ticklabel, size=s.ticksize)
         for axis in ["top", "bottom", "left", "right"]:
-            ax.spines[axis].set_linewidth(linewidth)
+            ax.spines[axis].set_linewidth(s.linewidth)
 
-    letterposition = 1 + 35 * nr/1000
+    letterposition = 1.0 + s.letterposition * nr
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
             letter = ord("a") + r*len(titles) + c
             axs[r, c, 0, 0].text(0,
                                  letterposition,
                                  chr(letter),
-                                 fontsize=letterlabel,
+                                 fontsize=s.letterlabel,
                                  transform=axs[r, c, 0, 0].transAxes,
                                  weight="bold")
             if r == 0:
                 axs[0, c, 0, 10].set_title(title,
-                                           pad=plotsize * 10,
-                                           fontsize=letterlabel)
+                                           pad=s.plotsize * 10,
+                                           fontsize=s.letterlabel)
             for a in range(0, nr, step):
                 axs[r, c, a, 0].set(yticks=[ylim[1]/2.0], yticklabels=[])
                 if c == 0:
                     axs[r, 0, a, 0].set_yticklabels([alphas[a]],
-                                                    fontsize=ticklabel)
+                                                    fontsize=s.ticklabel)
             for e in range(0, nc, step):
                 axs[r, c, -1, e].set(xticks=[xlim[1]/2.0], xticklabels=[])
                 if row == rows[-1]:
                     axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"],
-                                                     fontsize=ticklabel)
-    fig.text((left_margin + len(titles)*plotsize*3/4)/width,
-             (bottom_margin - xlabel_padding)/height,
+                                                     fontsize=s.ticklabel)
+    fig.text((s.left_margin + len(titles)*s.plotsize*3/4)/width,
+             (s.bottom_margin - s.xlabel_padding)/height,
              "t\n0",
-             fontsize=biglabel,
+             fontsize=s.biglabel,
              color="grey",
              ha="right")
 
@@ -190,7 +175,7 @@ def main(traitset, movie):
     # (Line2D)
 
     artists = np.empty_like(axs) 
-    x = np.arange(bins)
+    x = np.arange(s.bins)
     dummy_y = np.zeros_like(x)
 
     for r, row in enumerate(rows):
@@ -198,18 +183,18 @@ def main(traitset, movie):
             for a, alpha in enumerate(alphas):
                 for e, loges in enumerate(logess):
                     ax = axs[r, c, a, e] 
-                    artists[r, c, a, e], = ax.plot(x, dummy_y, c="black", lw=0.1)
+                    artists[r, c, a, e], = ax.plot(x, dummy_y, c="black", lw=s.linewidth * 2)
 
-    sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([(left_margin + inner_width + spacing)/width,
-                        (bottom_margin + inner_height/2 - plotsize/2)/height,
-                        (plotsize/nc)/width,
-                        plotsize/height]) # [left, bottom, width, height]
+    sm = ScalarMappable(cmap=s.color_map, norm=plt.Normalize(-1, 1))
+    cax = fig.add_axes([(s.left_margin + inner_width + s.spacing)/width,
+                        (s.bottom_margin + inner_height/2 - s.plotsize/2)/height,
+                        (s.plotsize/nc)/width,
+                        s.plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
-    cbar.ax.tick_params(labelsize=ticklabel)
-    cbar.outline.set_linewidth(linewidth)
+    cbar.ax.tick_params(labelsize=s.ticklabel, size=s.ticksize)
+    cbar.outline.set_linewidth(s.linewidth)
 
     # Save figure
 

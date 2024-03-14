@@ -11,6 +11,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
 
+import myfigure_settings as s
 from myget_df import get_df
 from mytraits import ttr
 from myupdate_Z import update_Z
@@ -39,23 +40,6 @@ def main(traitset, movie):
     _, titles, rows = ttr(traitset)
 
     # Set figure properties
-
-    color_map = "RdBu_r"
-    plotsize = 4
-    spacing = plotsize*0.75/4.0
-    left_margin = plotsize*2.5/4.0
-    right_margin = plotsize*2.5/4.0
-    top_margin = plotsize*2.5/4.0
-    bottom_margin = plotsize*2.5/4.0
-    linewidth = plotsize*0.1/4.0
-    xlabel = "Substitutability of $\it{B}$"
-    ylabel = "Influence of $\it{B}$"
-    xlabel_padding = plotsize*1.8/4.0
-    ylabel_padding = plotsize*2.0/4.0
-    biglabel = plotsize*9
-    letterlabel = plotsize*8
-    ticklabel = plotsize*6
-    ticksize = plotsize*1.5
 
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
@@ -87,20 +71,20 @@ def main(traitset, movie):
 
     # Create figure
 
-    inner_width = plotsize*len(titles) + spacing*(len(titles) - 1)
-    inner_height = plotsize*len(rows) + spacing*(len(rows) - 1)
-    width = inner_width + left_margin + right_margin
-    height = inner_height + top_margin + bottom_margin
+    inner_width = s.plotsize*len(titles) + s.spacing*(len(titles) - 1)
+    inner_height = s.plotsize*len(rows) + s.spacing*(len(rows) - 1)
+    width = inner_width + s.left_margin + s.right_margin
+    height = inner_height + s.top_margin + s.bottom_margin
 
     fig, main_ax = plt.subplots(nrows=len(rows),
                                 ncols=len(titles),
                                 figsize=(width, height))
 
-    plotsize_fixed = Size.Fixed(plotsize)
-    spacing_fixed = Size.Fixed(spacing)
+    plotsize_fixed = Size.Fixed(s.plotsize)
+    spacing_fixed = Size.Fixed(s.spacing)
     divider = Divider(fig,
-                      (left_margin/width,
-                       bottom_margin/height,
+                      (s.left_margin/width,
+                       s.bottom_margin/height,
                        inner_width/width,
                        inner_height/height),
                       [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(titles) - 1),
@@ -111,40 +95,40 @@ def main(traitset, movie):
             main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
     axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
 
-    fig.supxlabel(xlabel,
-                  x=(left_margin + inner_width/2)/width,
-                  y=(bottom_margin - xlabel_padding)/height,
-                  fontsize=biglabel)
-    fig.supylabel(ylabel,
-                  x=(left_margin - ylabel_padding)/width,
-                  y=(bottom_margin + inner_height/2)/height,
-                  fontsize=biglabel)
+    fig.supxlabel(s.xlabel,
+                  x=(s.left_margin + inner_width/2)/width,
+                  y=(s.bottom_margin - s.xlabel_padding)/height,
+                  fontsize=s.biglabel)
+    fig.supylabel(s.ylabel,
+                  x=(s.left_margin - s.ylabel_padding)/width,
+                  y=(s.bottom_margin + inner_height/2)/height,
+                  fontsize=s.biglabel)
 
-    letterposition = 1.035
+    letterposition = 1.0 + s.letterposition
     for i, ax in enumerate(fig.get_axes()):
         ax.set(xticks=xticks, yticks=yticks)
-        ax.tick_params(axis="both", labelsize=ticklabel, size=ticksize)
         ax.set(xticklabels=[], yticklabels=[])
+        ax.tick_params(axis="both", labelsize=s.ticklabel, size=s.ticksize)
         for axis in ["top", "bottom", "left", "right"]:
-            ax.spines[axis].set_linewidth(linewidth)
+            ax.spines[axis].set_linewidth(s.linewidth)
         letter = ord("a") + i
         ax.text(0,
                 letterposition,
                 chr(letter),
                 transform=ax.transAxes,
-                fontsize=letterlabel,
+                fontsize=s.letterlabel,
                 weight="bold")
     for r, row in enumerate(rows):
         axs[r, 0].set_yticklabels(yticklabels)
     for c, title in enumerate(titles):
         axs[0, c].set_title(title,
-                            pad=plotsize * 10,
-                            fontsize=letterlabel)
-        axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
-    fig.text((left_margin + len(titles)*plotsize)/width,
-             (bottom_margin - xlabel_padding)/height,
+                            pad=s.plotsize * 10,
+                            fontsize=s.letterlabel)
+        axs[-1, c].set_xticklabels(xticklabels, fontsize=s.ticklabel)
+    fig.text((s.left_margin + len(titles)*s.plotsize)/width,
+             (s.bottom_margin - s.xlabel_padding)/height,
              "t\n0",
-             fontsize=biglabel,
+             fontsize=s.biglabel,
              color="grey",
              ha="right")
 
@@ -157,20 +141,20 @@ def main(traitset, movie):
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
             artists[r, c] = axs[r, c].imshow(dummy_Z,
-                                             cmap=color_map,
+                                             cmap=s.color_map,
                                              vmin=-1,
                                              vmax=1)
 
-    sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([(left_margin + inner_width + spacing)/width,
-                        (bottom_margin + inner_height/2 - plotsize/2)/height,
-                        (plotsize/nc)/width,
-                        plotsize/height]) # [left, bottom, width, height]
+    sm = ScalarMappable(cmap=s.color_map, norm=plt.Normalize(-1, 1))
+    cax = fig.add_axes([(s.left_margin + inner_width + s.spacing)/width,
+                        (s.bottom_margin + inner_height/2 - s.plotsize/2)/height,
+                        (s.plotsize/nc)/width,
+                        s.plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
-    cbar.ax.tick_params(labelsize=ticklabel)
-    cbar.outline.set_linewidth(linewidth)
+    cbar.ax.tick_params(labelsize=s.ticklabel, size=s.ticksize)
+    cbar.outline.set_linewidth(s.linewidth)
 
     # Save figure
 
