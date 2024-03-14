@@ -157,10 +157,10 @@ def main(traitset, movie):
                                  fontsize=s.letterlabel,
                                  transform=axs[r, c, 0, 0].transAxes,
                                  weight="bold")
-    for c, title in enumerate(titles):
-        axs[0, c, 0, int(nc/2)].set_title(title,
-                                          pad=s.plotsize * 10,
-                                          fontsize=s.letterlabel)
+    for ax, title in zip(axs[0, :], titles):
+        ax[0, int(nc/2)].set_title(title,
+                     pad=s.plotsize * 10,
+                     fontsize=s.letterlabel)
 
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
