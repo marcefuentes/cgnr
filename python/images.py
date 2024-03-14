@@ -41,7 +41,7 @@ def main(traitset, movie):
     # Set figure properties
 
     color_map = "RdBu_r"
-    plotsize = 4
+    plotsize = 16
     spacing = 0.75
     left_margin = 2.5
     right_margin = 2.5

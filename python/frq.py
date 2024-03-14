@@ -19,8 +19,8 @@ from mytraits import ttr
 from myupdate_Z import update_Z
 
 def update(t, traitset, df_dict, dffrq_dict, movie, text, artists): 
-    alphas = df_dict["none"]["alpha"].unique()
-    logess = df_dict["none"]["logES"].unique()
+    alphas = np.sort(df_dict["none"]["alpha"].unique())[::-1]
+    logess = np.sort(df_dict["none"]["logES"].unique())
     traits, _, _ = ttr(traitset)
     for r, key in enumerate(df_dict):
         if ("cooperation" in traitset or "correlations" in traitset) and key == "social":
@@ -30,7 +30,7 @@ def update(t, traitset, df_dict, dffrq_dict, movie, text, artists):
 
             for a, alpha in enumerate(alphas):
                 for e, loges in enumerate(logess):
-                    d = dffrq_dict[key][(dffrq_dict[key]["alpha"] == alpha) & (dffrq_dict[key]["logES"] == loges)]
+                    d = dffrq_dict[key][(dffrq_dict[key]["Time"] == t) & (dffrq_dict[key]["alpha"] == alpha) & (dffrq_dict[key]["logES"] == loges)]
                     freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
                     y = d.loc[:, freq_a].values[0].flatten()
                     artists[r, c, a, e].set_ydata(y)
@@ -55,7 +55,7 @@ def main(traitset, movie):
 
     bins = 64
     color_map = "RdBu_r"
-    plotsize = 4
+    plotsize = 16
     spacing = 0.75
     left_margin = 2.5
     right_margin = 2.5
@@ -90,8 +90,8 @@ def main(traitset, movie):
     xlim = [-2, bins + 1]
     ylim = [0, 0.25]
     step = int(nr/2)
-    alphas = np.sort(pd.unique(df.alpha))[::-1]
-    logess = np.sort(pd.unique(df.logES))
+    alphas = np.sort(df["alpha"].unique())[::-1]
+    logess = np.sort(df["alpha"].unique())
 
     # Create figure
 
@@ -192,7 +192,6 @@ def main(traitset, movie):
     artists = np.empty_like(axs) 
     x = np.arange(bins)
     dummy_y = np.zeros_like(x)
-    frames = ts
 
     for r, row in enumerate(rows):
         for c, title in enumerate(titles):
