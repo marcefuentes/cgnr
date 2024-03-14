@@ -167,12 +167,12 @@ def main(traitset, movie):
                 axs[r, c, a, 0].set(yticks=[ylim[1]/2.0], yticklabels=[])
             for e in range(0, nc, step):
                 axs[r, c, -1, e].set(xticks=[xlim[1]/2.0], xticklabels=[])
-    for ax in axs:
+    for r, _ in enumerate(rows):
         for a in range(0, nr, step):
-            ax[0, a, 0].set_yticklabels([alphas[a]])
-    for ax in axs[-1, :]:
+            axs[r, 0, a, 0].set_yticklabels([alphas[a]])
+    for c, _ in enumerate(titles):
         for e in range(0, nc, step):
-            ax[-1, e].set_xticklabels([f"{logess[e]:.0f}"])
+            axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
 
     # Assign axs objects to variables
     # (Line2D)
