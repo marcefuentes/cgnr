@@ -41,7 +41,7 @@ def main(traitset, movie):
     # Set figure properties
 
     color_map = "RdBu_r"
-    plotsize = 16
+    plotsize = 4
     spacing = plotsize*0.75/4.0
     left_margin = plotsize*2.5/4.0
     right_margin = plotsize*2.5/4.0
@@ -139,7 +139,7 @@ def main(traitset, movie):
                             pad=plotsize * 10,
                             fontsize=letterlabel)
         axs[-1, c].set_xticklabels(xticklabels, fontsize=ticklabel)
-    fig.text((left_margin + len(titles)*plotsize*3/4)/width,
+    fig.text((left_margin + len(titles)*plotsize)/width,
              (bottom_margin - xlabel_padding)/height,
              "t\n0",
              fontsize=biglabel,
