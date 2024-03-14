@@ -161,7 +161,6 @@ def main(traitset, movie):
         ax[0, int(nc/2)].set_title(title,
                      pad=s.plotsize * 10,
                      fontsize=s.letterlabel)
-
     for r, _ in enumerate(rows):
         for c, _ in enumerate(titles):
             for a in range(0, nr, step):
@@ -171,7 +170,7 @@ def main(traitset, movie):
     for ax in axs:
         for a in range(0, nr, step):
             ax[0, a, 0].set_yticklabels([alphas[a]])
-    for ax in axs[-1]:
+    for ax in axs[-1, :]:
         for e in range(0, nc, step):
             ax[-1, e].set_xticklabels([f"{logess[e]:.0f}"])
 
