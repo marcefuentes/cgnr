@@ -18,4 +18,5 @@ letterlabel = plotsize*8
 letterposition = 0.035
 ticklabel = plotsize*6
 ticksize = plotsize*1.5
+print_folder = False
 bins = 64

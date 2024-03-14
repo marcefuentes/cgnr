@@ -26,8 +26,9 @@ def update(t, traitset, df_dict, movie, text, artists):
             artists[r, c].set_array(Z) 
     if movie:
         text.set_text(t)
+    elif s.print_folder:
+        text.set_text(os.path.basename(os.getcwd()))
     else:
-        #text.set_text(os.path.basename(os.getcwd()))
         text.set_text("")
 
     return artists.flatten()
@@ -80,6 +81,21 @@ def main(traitset, movie):
                                 ncols=len(titles),
                                 figsize=(width, height))
 
+    fig.supxlabel(s.xlabel,
+                  x=(s.left_margin + inner_width/2)/width,
+                  y=(s.bottom_margin - s.xlabel_padding)/height,
+                  fontsize=s.biglabel)
+    fig.supylabel(s.ylabel,
+                  x=(s.left_margin - s.ylabel_padding)/width,
+                  y=(s.bottom_margin + inner_height/2)/height,
+                  fontsize=s.biglabel)
+    fig.text((s.left_margin + inner_width)/width,
+             (s.bottom_margin - s.xlabel_padding)/height,
+             "",
+             fontsize=s.ticklabel,
+             color="grey",
+             ha="right")
+
     plotsize_fixed = Size.Fixed(s.plotsize)
     spacing_fixed = Size.Fixed(s.spacing)
     divider = Divider(fig,
@@ -93,16 +109,8 @@ def main(traitset, movie):
     for r, _ in enumerate(rows):
         for c, _ in enumerate(titles):
             main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
-    axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
 
-    fig.supxlabel(s.xlabel,
-                  x=(s.left_margin + inner_width/2)/width,
-                  y=(s.bottom_margin - s.xlabel_padding)/height,
-                  fontsize=s.biglabel)
-    fig.supylabel(s.ylabel,
-                  x=(s.left_margin - s.ylabel_padding)/width,
-                  y=(s.bottom_margin + inner_height/2)/height,
-                  fontsize=s.biglabel)
+    axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
 
     for ax in fig.get_axes():
         ax.set(xticks=xticks,
@@ -125,16 +133,10 @@ def main(traitset, movie):
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
-    for c, title in enumerate(titles):
-        axs[0, c].set_title(title,
-                            pad=s.plotsize * 10,
-                            fontsize=s.letterlabel)
-    fig.text((s.left_margin + inner_width)/width,
-             (s.bottom_margin - s.xlabel_padding)/height,
-             "t\n0",
-             fontsize=s.biglabel,
-             color="grey",
-             ha="right")
+    for ax, title in zip(axs[0, :], titles):
+        ax.set_title(title,
+                     pad=s.plotsize * 10,
+                     fontsize=s.letterlabel)
 
     # Assign axs objects to variables
     # (AxesImage)
