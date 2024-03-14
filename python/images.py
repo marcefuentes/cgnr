@@ -121,8 +121,8 @@ def main(traitset, movie):
                 transform=ax.transAxes,
                 fontsize=s.letterlabel,
                 weight="bold")
-    for r, _ in enumerate(rows):
-        axs[r, 0].set_yticklabels(yticklabels)
+    for ax in axs[:, 0]:
+        ax.set_yticklabels(yticklabels)
     for c, title in enumerate(titles):
         axs[0, c].set_title(title,
                             pad=s.plotsize * 10,
