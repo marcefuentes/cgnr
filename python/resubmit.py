@@ -4,9 +4,9 @@ import logging
 import os
 import sys
 
-import mycolors as c
-from myget_config import get_config
-import myslurm
+import tools.colors as cc
+from slurm.get_config import get_config
+from slurm.tools get_free_slots, submit_job
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
@@ -16,27 +16,27 @@ queues = ["clk", "epyc"]
 try:
     exe = get_config("exe")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 try:
     input_file_extension = get_config("input_file_extension")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 try:
     first_output_file_extension = get_config("first_output_file_extension")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 try:
     second_output_file_extension = get_config("second_output_file_extension")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 try:
     number_of_lines = get_config("number_of_lines")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 
 output_file_extensions = [first_output_file_extension, second_output_file_extension]
@@ -79,9 +79,9 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
     if test:
         print(f"Will submit {info}")
     else:
-        return_code, stdout, stderr = myslurm.submit_job(job_name, queue, job_array)
+        return_code, stdout, stderr = slurm.submit_job(job_name, queue, job_array)
         if return_code != 0:
-            print(f"{c.red}sbatch command failed with return code {return_code}{c.reset_format}")
+            print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:
                 print(stderr)
                 logging.error(stderr)
@@ -92,14 +92,14 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
                     print(line)
                     logging.info(line)
         logging.info(info)
-        print(f"{c.green}{info}{c.reset_format}")
+        print(f"{cc.green}{info}{cc.reset_format}")
     del jobs_to_submit[:num_jobs_to_submit]
     free_slots -= num_jobs_to_submit
     if len(jobs_to_submit) == 0:
-        print(f"\n{c.bold}{c.green}All jobs submitted{c.reset_format}")
-        print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots in {c.bold}{queue}{c.reset_format}\n")
+        print(f"\n{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
+        print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
         exit()
-    print(f"{c.bold}{c.red}{len(jobs_to_submit)}{c.reset_format} jobs remain to be submitted")
+    print(f"{cc.bold}{cc.red}{len(jobs_to_submit)}{cc.reset_format} jobs remain to be submitted")
 
     return jobs_to_submit
 
@@ -107,22 +107,22 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{c.bold}This is a test{c.reset_format}")
+        print(f"\n{cc.bold}This is a test{cc.reset_format}")
 
     jobs_to_submit = get_jobs_to_submit()
     if len(jobs_to_submit) == 0:
-        print(f"\n{c.green}No jobs to submit. Exiting...{c.reset_format}")
+        print(f"\n{cc.green}No jobs to submit. Exiting...{cc.reset_format}")
         return
-    print(f"\n{c.bold}{c.cyan}{len(jobs_to_submit)}{c.reset_format} jobs to submit")
+    print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit")
 
     if test:
-        print(f"\n{c.bold}{c.red}Will delete {output_file_extensions} of {jobs_to_submit}{c.reset_format}")
+        print(f"\n{cc.bold}{cc.red}Will delete {output_file_extensions} of {jobs_to_submit}{cc.reset_format}")
     else:
         remove_files(jobs_to_submit)
 
     for queue in queues:
-        free_slots = myslurm.get_free_slots(queue)
-        print(f"\n{c.bold}{queue}:{c.reset_format} {c.cyan}{free_slots}{c.reset_format} free slots")
+        free_slots = slurm.get_free_slots(queue)
+        print(f"\n{cc.bold}{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
         if test and not free_slots:
             free_slots = 100
         if free_slots:

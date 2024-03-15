@@ -2,7 +2,7 @@
 
 import os
 import subprocess
-from myget_config import get_config
+from slurm.get_config import get_config
 
 try:
     exe = get_config("exe")

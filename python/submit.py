@@ -4,10 +4,10 @@ import logging
 import os
 import sys
 
-import mycolors as c
-from mylist_of_folders import list_of_folders
-from myget_config import get_config
-import myslurm
+import tools.colors as cc
+from tools.list_of_folders import list_of_folders
+from slurm.get_config import get_config
+from slurm.tools import get_free_slots, submit_job
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
@@ -17,17 +17,17 @@ queues = ["clk", "epyc"]
 try:
     exe = get_config("exe")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 try:
     input_file_extension = get_config("input_file_extension")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 try:
     output_file_extension = get_config("first_output_file_extension")
 except RuntimeError as e:
-    print(f"{c.red}{e}{c.reset_format}")
+    print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 
 last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
@@ -64,7 +64,7 @@ def process_folder(queue, free_slots, last_job, test):
     else:
         job_min = last_job + 1
     if os.path.isfile(os.path.join(path, f"{job_min}{output_file_extension}")):
-        print(f"{c.red}{path_print}/{job_min}{output_file_extension} already exists{c.reset_format}")
+        print(f"{cc.red}{path_print}/{job_min}{output_file_extension} already exists{cc.reset_format}")
         last_job = 0
         return free_slots, last_job
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
@@ -75,9 +75,9 @@ def process_folder(queue, free_slots, last_job, test):
     if test:
         print(f"Will submit {info}")
     else:
-        return_code, stdout, stderr = myslurm.submit_job(job_name, queue, job_array)
+        return_code, stdout, stderr = submit_job(job_name, queue, job_array)
         if return_code != 0:
-            print(f"{c.red}sbatch command failed with return code {return_code}{c.reset_format}")
+            print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:
                 print(stderr)
                 logging.error(stderr)
@@ -88,7 +88,7 @@ def process_folder(queue, free_slots, last_job, test):
                     print(line)
                     logging.info(line)
         logging.info(info)
-        print(f"{c.green}{info}{c.reset_format}")
+        print(f"{cc.green}{info}{cc.reset_format}")
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
@@ -105,8 +105,8 @@ def process_variant(queue, free_slots, test=False):
         path = givens[0]
         path_folders = path.split("/")
         path_print = "/".join(path_folders[-3:])
-        print(f"\n{c.bold}Submit jobs in {path_print}?{c.reset_format} "
-              f"{c.yesno} ", end="")
+        print(f"\n{cc.bold}Submit jobs in {path_print}?{cc.reset_format} "
+              f"{cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
@@ -132,8 +132,8 @@ def process_variant(queue, free_slots, test=False):
                     print(f"Will remove last_job_file")
                 else:
                     os.remove(last_job_file)
-                print(f"{c.bold}{c.green}All jobs submitted{c.reset_format}")
-                print(f"{c.bold}{c.cyan}{free_slots}{c.reset_format} free slots in {c.bold}{queue}{c.reset_format}\n")
+                print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
+                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
                 exit()
     if test:
         print(f"Will write {last_job} to last_job_file")
@@ -147,11 +147,11 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{c.bold}This is a test{c.reset_format}")
+        print(f"\n{cc.bold}This is a test{cc.reset_format}")
 
     for queue in queues:
-        free_slots = myslurm.get_free_slots(queue)
-        print(f"\n{c.bold}{queue}:{c.reset_format} {c.cyan}{free_slots}{c.reset_format} free slots")
+        free_slots = get_free_slots(queue)
+        print(f"\n{cc.bold}{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
         if test and not free_slots:
             free_slots = 100
         while free_slots:

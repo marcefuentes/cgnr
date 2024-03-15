@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from myget_config import get_config
+from slurm.get_config import get_config
 import subprocess
 
 remote = "cesga"
