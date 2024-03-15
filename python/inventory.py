@@ -7,7 +7,7 @@ import sys
 
 import tools.colors as cc
 from slurm.get_config import get_config
-from slurm.tools import get_running_jobs
+from slurm.tools import get_slots
 from tools.list_of_folders import list_of_folders
 
 def get_config_value(variable):
@@ -108,8 +108,8 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
     folder_dict["Given"] = float(given[-3:]) / 100
 
     input_files = [f for f in os.listdir(path) if f.endswith(input_file_extension)]
-    total_files = len(input_files)
-    if total_files == 0:
+    total_jobs = len(input_files)
+    if total_jobs == 0:
         print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset_format}")
         return
     with open(os.path.join(path, input_files[0]), "r") as csvfile:
@@ -122,30 +122,32 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
                     print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
-    f_smaller_number_of_lines = 0
-    f_equal_number_of_lines = 0
-    f_larger_number_of_lines = 0
+    started_jobs = 0
+    finished_jobs = 0
+    garbled_jobs = 0
+    dead_jobs = 0
     for f in os.listdir(path):
         if f.endswith(output_file_extension):
             output_file = os.path.join(path, f)
             with open(output_file, "r") as output:
                 lines = output.readlines()
                 if len(lines) < number_of_lines:
-                    f_smaller_number_of_lines += 1
+                    started_jobs += 1
                 elif len(lines) == number_of_lines:
-                    f_equal_number_of_lines += 1
+                    finished_jobs += 1
                 elif len(lines) > number_of_lines:
-                    f_larger_number_of_lines += 1
-    tsml += f_smaller_number_of_lines
-    notstarted = total_files - f_smaller_number_of_lines - f_equal_number_of_lines - f_larger_number_of_lines
-    print(f"{cc.bold}{cc.green if f_equal_number_of_lines else cc.reset_format}{f_equal_number_of_lines:>4}{cc.reset_format}" if f_equal_number_of_lines else "", end = "")
-    print(f"{cc.bold}{cc.yellow if f_smaller_number_of_lines else cc.reset_format}{f_smaller_number_of_lines:>4}{cc.reset_format}" if f_smaller_number_of_lines else "", end = "")
-    print(f"{cc.bold}{cc.red if notstarted else cc.reset_format}{notstarted:>4}{cc.reset_format}" if notstarted else "", end = "")
-    print(f"{cc.bold}{cc.blue if f_larger_number_of_lines else cc.reset_format}{f_larger_number_of_lines:>4}{cc.reset_format}" if f_larger_number_of_lines else "", end = "")
-    if f_smaller_number_of_lines:
-        running_jobs = get_running_jobs(path.split("/")[-2])
-        dead_jobs = f_smaller_number_of_lines - running_jobs
-        print(f"{cc.bold}{cc.grey if dead_jobs else cc.reset_format}{dead_jobs:>4}{cc.reset_format}" if dead_jobs else "", end = "")
+                    garbled_jobs += 1
+    not_started_jobs = total_jobs - started_jobs - finished_jobs - garbled_jobs
+    if started_jobs and "mfu" in path:
+        live_jobs = get_slots(f"{path.split('/')[-2]}" + "[0-9]+", "RUNNING")
+        dead_jobs = started_jobs - live_jobs
+        started_jobs = live_jobs
+    tsml += started_jobs
+    print(f"{cc.bold}{cc.green if   finished_jobs else      cc.reset_format}{finished_jobs:>4}{cc.reset_format}"    if finished_jobs else       "", end = "")
+    print(f"{cc.bold}{cc.yellow if  started_jobs else       cc.reset_format}{started_jobs:>4}{cc.reset_format}"     if started_jobs else        "", end = "")
+    print(f"{cc.bold}{cc.grey if    dead_jobs else          cc.reset_format}{dead_jobs:>4}{cc.reset_format}"        if dead_jobs else           "", end = "")
+    print(f"{cc.bold}{cc.red if     not_started_jobs else   cc.reset_format}{not_started_jobs:>4}{cc.reset_format}" if not_started_jobs else    "", end = "")
+    print(f"{cc.bold}{cc.blue if    garbled_jobs else       cc.reset_format}{garbled_jobs:>4}{cc.reset_format}"     if garbled_jobs else        "", end = "")
     print()
     return tsml
 
@@ -169,7 +171,8 @@ def main():
     variants = list_of_folders(mypath)
     for variant in variants:
         tsml = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, tsml)
-    print(f"\n{cc.bold}Total unfinished: {cc.yellow}{tsml}{cc.reset_format}\n" if tsml else "")
+    if tsml and "mfu" in mypath:
+        print(f"\n{cc.bold}Total running jobs: {cc.yellow}{tsml:>6}{cc.reset_format}\n" if tsml else "")
 
 if __name__ == "__main__":
 
