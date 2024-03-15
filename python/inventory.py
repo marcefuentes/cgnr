@@ -173,6 +173,8 @@ def main():
         tsml = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, tsml)
     if tsml and "mfu" in mypath:
         print(f"\n{cc.bold}Total running jobs: {cc.yellow}{tsml:>6}{cc.reset_format}\n" if tsml else "")
+    else:
+        print()
 
 if __name__ == "__main__":
 
