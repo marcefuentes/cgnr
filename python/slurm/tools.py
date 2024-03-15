@@ -1,7 +1,7 @@
 
 import subprocess
-import mycolors as c
-from myget_config import get_config
+import tools.colors as cc
+from slurm.get_config import get_config
 
 def get_max_slots(queue, jobs):
 
@@ -47,7 +47,7 @@ def get_qos_name(queue):
     try:
         hours = get_config("hours")
     except RuntimeError as e:
-        print(f"{c.bold}{c.red}{e}{c.reset_format}")
+        print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
         exit()
 
     command = ["sacctmgr", "-p", "show", "qos", "format=name,maxwall"]
