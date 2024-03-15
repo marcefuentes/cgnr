@@ -9,10 +9,10 @@ import time
 
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
+from matplotlib import colormaps
 from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
-import matplotlib.cm as cm
 
 from main_figures import settings as ss
 from main_figures import modes as mm
@@ -28,14 +28,13 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
             continue
         for c, trait in enumerate(traits):
             Z = update_Z(t, df_mechanisms, mechanism, trait, mode)
-
             for a, alpha in enumerate(alphas):
                 for e, loges in enumerate(logess):
                     d = dffrq_mechanisms[mechanism][(dffrq_mechanisms[mechanism]["Time"] == t) & (dffrq_mechanisms[mechanism]["alpha"] == alpha) & (dffrq_mechanisms[mechanism]["logES"] == loges)]
                     freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
                     y = d.loc[:, freq_a].values[0].flatten()
                     artists[r, c, a, e].set_ydata(y)
-                    bgcolor = cm.RdBu_r((Z[a, e] + 1) / 2)
+                    bgcolor = colormaps[ss.color_map]((Z[a, e] + 1) / 2)
                     artists[r, c, a, e].axes.set_facecolor(bgcolor)
     if movie:
         text.set_text(t)
