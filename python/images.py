@@ -12,17 +12,17 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms
 
 import myfigure_settings as s
+import myfigure_modes as mm
 from myget_df import get_df
-from mytraits import ttr
 from myupdate_Z import update_Z
 
-def update(t, traitset, df_dict, movie, text, artists): 
-    traits, _, _ = ttr(traitset)
-    for r, key in enumerate(df_dict):
-        if ("cooperation" in traitset or "correlations" in traitset or "test" in traitset) and key == "social":
+def update(t, mode, df_mechanisms, movie, text, artists): 
+    traits = mm.get_traits(mode)
+    for r, mechanism in enumerate(df_mechanisms):
+        if ("cooperation" in mode or "correlations" in mode or "test" in mode) and mechanism == "social":
             continue
         for c, trait in enumerate(traits):
-            Z = update_Z(t, df_dict, key, trait, traitset)
+            Z = update_Z(t, df_mechanisms, mechanism, trait, mode)
             artists[r, c].set_array(Z) 
     if movie:
         text.set_text(t)
@@ -32,12 +32,10 @@ def update(t, traitset, df_dict, movie, text, artists):
         text.set_text("")
     return artists.flatten()
 
-def main(traitset, movie):
+def main(mode, movie):
 
     this_script = os.path.basename(__file__)
     script_name = this_script.split(".")[0]
-
-    _, titles, rows = ttr(traitset)
 
     # Set figure properties
 
@@ -46,13 +44,14 @@ def main(traitset, movie):
 
     # Get data
 
-    df_dict = {}
+    mechanisms = mm.get_mechanisms(mode)
+    df_mechanisms = {}
 
-    for row in rows:
-        df_dict[row] = get_df(row, "csv", movie)
-    if "social" not in rows:
-        df_dict["social"] = get_df("social", "csv", movie)
-    df = df_dict[rows[0]]
+    for mechanism in mechanisms:
+        df_mechanisms[mechanism] = get_df(mechanism, "csv", movie)
+    if "social" not in mechanisms:
+        df_mechanisms["social"] = get_df("social", "csv", movie)
+    df = df_mechanisms[mechanisms[0]]
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
@@ -71,13 +70,16 @@ def main(traitset, movie):
 
     # Create figure
 
-    inner_width = s.plotsize*len(titles) + s.spacing*(len(titles) - 1)
-    inner_height = s.plotsize*len(rows) + s.spacing*(len(rows) - 1)
+    traits = mm.get_traits(mode)
+    ncols = len(traits)
+    nrows = len(mechanisms)
+    inner_width = s.plotsize*ncols + s.spacing*(ncols - 1)
+    inner_height = s.plotsize*nrows + s.spacing*(nrows - 1)
     width = inner_width + s.left_margin + s.right_margin
     height = inner_height + s.top_margin + s.bottom_margin
 
-    fig, main_ax = plt.subplots(nrows=len(rows),
-                                ncols=len(titles),
+    fig, main_ax = plt.subplots(nrows=nrows,
+                                ncols=ncols,
                                 figsize=(width, height))
 
     fig.supxlabel(s.xlabel,
@@ -102,14 +104,14 @@ def main(traitset, movie):
                        s.bottom_margin/height,
                        inner_width/width,
                        inner_height/height),
-                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(titles) - 1),
-                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (len(rows) - 1),
+                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (ncols - 1),
+                      [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (nrows - 1),
                       aspect=False)
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(titles):
-            main_ax[len(rows) - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
+    for r, _ in enumerate(mechanisms):
+        for c, _ in enumerate(traits):
+            main_ax[nrows - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
 
-    axs = main_ax if len(rows) > 1 else main_ax[np.newaxis, :]
+    axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 
     letterposition = 1.0 + s.letterposition
     for i, ax in enumerate(fig.get_axes()):
@@ -132,8 +134,8 @@ def main(traitset, movie):
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
-    for ax, title in zip(axs[0, :], titles):
-        ax.set_title(title,
+    for ax, trait in zip(axs[0, :], traits):
+        ax.set_title(mm.get_title(trait),
                      pad=s.plotsize * 10,
                      fontsize=s.letterlabel)
 
@@ -143,8 +145,8 @@ def main(traitset, movie):
     artists = np.empty_like(axs) 
     dummy_Z = np.zeros((nr, nc))
 
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(titles):
+    for r, _ in enumerate(mechanisms):
+        for c, _ in enumerate(traits):
             artists[r, c] = axs[r, c].imshow(dummy_Z,
                                              cmap=s.color_map,
                                              vmin=-1,
@@ -163,13 +165,13 @@ def main(traitset, movie):
 
     # Save figure
 
-    name = f"{script_name}_{traitset}"
+    name = f"{script_name}_{mode}"
     if movie:
         ani = FuncAnimation(fig,
                             update,
                             frames=ts,
-                            fargs=(traitset,
-                                   df_dict,
+                            fargs=(mode,
+                                   df_mechanisms,
                                    movie,
                                    fig.texts[2],
                                    artists,),
@@ -177,8 +179,8 @@ def main(traitset, movie):
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
         update(ts[-1],
-               traitset,
-               df_dict,
+               mode,
+               df_mechanisms,
                movie,
                fig.texts[2],
                artists,)
@@ -191,11 +193,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Results plots",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("traitset", help="Trait set: demography or cooperation")
+    parser.add_argument("mode", help="Mode: demography or cooperation")
     parser.add_argument("movie", nargs="?", default=False, help="Enable movie")
     args = parser.parse_args()
 
-    main(args.traitset, args.movie)
+    main(args.mode, args.movie)
 
     end_time = time.perf_counter()
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
