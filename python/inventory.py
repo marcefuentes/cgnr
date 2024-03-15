@@ -145,7 +145,7 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
     if f_smaller_number_of_lines:
         running_jobs = get_running_jobs(path.split("/")[-2])
         dead_jobs = f_smaller_number_of_lines - running_jobs
-        print(f"{cc.bold}{cc.greyred if dead_jobs else cc.reset_format}{dead_jobs:>4}{cc.reset_format}" if dead_jobs else "", end = "")
+        print(f"{cc.bold}{cc.grey if dead_jobs else cc.reset_format}{dead_jobs:>4}{cc.reset_format}" if dead_jobs else "", end = "")
     print()
     return tsml
 
