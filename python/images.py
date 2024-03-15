@@ -30,7 +30,6 @@ def update(t, traitset, df_dict, movie, text, artists):
         text.set_text(os.path.basename(os.getcwd()))
     else:
         text.set_text("")
-
     return artists.flatten()
 
 def main(traitset, movie):

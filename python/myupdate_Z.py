@@ -42,8 +42,5 @@ def update_Z(t, df_dict, key, trait, traitset):
             Z = Z - get_Z(t, df_dict[key], "NeutralDispersalRatemean")
         elif "N" in trait:
             Z = Z/4096.0
-    elif traitset == "correlations":
-        if trait == "r_qB_Choose" or trait == "r_qB_Mimic" or trait == "r_qB_Imimic":
-            Z = -Z
     return Z
 
