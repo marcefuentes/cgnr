@@ -38,7 +38,7 @@ def get_running_jobs(mechanism):
     command = ["squeue", "-t", "RUNNING", "-r", "-o", "%j"]
     output = subprocess.Popen(command,
                               stdout=subprocess.PIPE)
-    command = ["grep", "-E", f"^{mechanism}" + "([0-9]+|pi)"]
+    command = ["grep", "-E", f"{mechanism}" + "[0-9]+"]
     output = subprocess.Popen(command,
                               stdin=output.stdout,
                               stdout=subprocess.PIPE)
