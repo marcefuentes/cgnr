@@ -5,15 +5,15 @@ import csv
 import os
 import sys
 
-import mycolors as c
-from myget_config import get_config
-from mylist_of_folders import list_of_folders
+import tools.colors as cc
+from slurm.get_config import get_config
+from tools.list_of_folders import list_of_folders
 
 def get_config_value(variable):
     try:
         return get_config(variable)
     except RuntimeError as e:
-        print(f"{c.bold}{c.red}Error getting config value '{variable}': {e}{c.reset_format}")
+        print(f"{cc.bold}{cc.red}Error getting config value '{variable}': {e}{cc.reset_format}")
         exit(1)
 
 def get_results_path(use_store=False, exe=None):
@@ -36,9 +36,9 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
 
     variant = path.split("/")[-1]
     if os.path.islink(path):
-        print(f"{c.bold}{c.red}{variant}{c.reset_format}")
+        print(f"{cc.bold}{cc.red}{variant}{cc.reset_format}")
     else:
-        print(f"\n{c.bold}{c.cyan}{variant}{c.reset_format}")
+        print(f"\n{cc.bold}{cc.cyan}{variant}{cc.reset_format}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -73,9 +73,9 @@ def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, 
 
     mechanism = path.split("/")[-1]
     if os.path.islink(path):
-        print(f"{c.bold}{c.red}{mechanism}{c.reset_format}", end = "")
+        print(f"{cc.bold}{cc.red}{mechanism}{cc.reset_format}", end = "")
     else:
-        print(f"{c.bold}{mechanism}{c.reset_format}", end = "")
+        print(f"{cc.bold}{mechanism}{cc.reset_format}", end = "")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
@@ -100,16 +100,16 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
     
     given = path.split("/")[-1]
     if os.path.islink(path):
-        print(f"{c.bold}{c.red}\t{given}{c.reset_format}", end = "  ")
+        print(f"{cc.bold}{cc.red}\t{given}{cc.reset_format}", end = "  ")
     else:
-        print(f"{c.bold}\t{given}{c.reset_format}", end = "  ")
+        print(f"{cc.bold}\t{given}{cc.reset_format}", end = "  ")
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
     input_files = [f for f in os.listdir(path) if f.endswith(input_file_extension)]
     total_files = len(input_files)
     if total_files == 0:
-        print(f"{c.bold}{c.red}no {input_file_extension[1:]} files{c.reset_format}")
+        print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset_format}")
         return
     with open(os.path.join(path, input_files[0]), "r") as csvfile:
         reader = csv.reader(csvfile)
@@ -117,10 +117,10 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
             key, value = row
             if key == "Given":
                 if float(value) != folder_dict[key]:
-                    print(f"{c.bold}{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
+                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
-                    print(f"{c.bold}{c.red}{key} {folder_dict[key]} {value}{c.reset_format}", end = " ")
+                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
     f_smaller_number_of_lines = 0
     f_equal_number_of_lines = 0
     f_larger_number_of_lines = 0
@@ -137,10 +137,10 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
                     f_larger_number_of_lines += 1
     tsml += f_smaller_number_of_lines
     notstarted = total_files - f_smaller_number_of_lines - f_equal_number_of_lines - f_larger_number_of_lines
-    print(f"{c.bold}{c.green if f_equal_number_of_lines else c.reset_format}{f_equal_number_of_lines:>4}{c.reset_format}" if f_equal_number_of_lines else "", end = "")
-    print(f"{c.bold}{c.yellow if f_smaller_number_of_lines else c.reset_format}{f_smaller_number_of_lines:>4}{c.reset_format}" if f_smaller_number_of_lines else "", end = "")
-    print(f"{c.bold}{c.red if notstarted else c.reset_format}{notstarted:>4}{c.reset_format}" if notstarted else "", end = "")
-    print(f"{c.bold}{c.blue if f_larger_number_of_lines else c.reset_format}{f_larger_number_of_lines:>4}{c.reset_format}" if f_larger_number_of_lines else "", end = "")
+    print(f"{cc.bold}{cc.green if f_equal_number_of_lines else cc.reset_format}{f_equal_number_of_lines:>4}{cc.reset_format}" if f_equal_number_of_lines else "", end = "")
+    print(f"{cc.bold}{cc.yellow if f_smaller_number_of_lines else cc.reset_format}{f_smaller_number_of_lines:>4}{cc.reset_format}" if f_smaller_number_of_lines else "", end = "")
+    print(f"{cc.bold}{cc.red if notstarted else cc.reset_format}{notstarted:>4}{cc.reset_format}" if notstarted else "", end = "")
+    print(f"{cc.bold}{cc.blue if f_larger_number_of_lines else cc.reset_format}{f_larger_number_of_lines:>4}{cc.reset_format}" if f_larger_number_of_lines else "", end = "")
     print()
     return tsml
 
@@ -156,15 +156,15 @@ def main():
     if os.path.isdir(mypath):
         os.chdir(mypath)
     else:
-        print(f"{c.bold}{c.red}Directory {mypath} does not exist{c.reset_format}")
+        print(f"{cc.bold}{cc.red}Directory {mypath} does not exist{cc.reset_format}")
         exit()
 
-    print(f"\n{c.bold}{mypath}{c.reset_format}")
+    print(f"\n{cc.bold}{mypath}{cc.reset_format}")
     tsml = 0
     variants = list_of_folders(mypath)
     for variant in variants:
         tsml = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, tsml)
-    print(f"\n{c.bold}Total unfinished: {c.yellow}{tsml}{c.reset_format}\n" if tsml else "")
+    print(f"\n{cc.bold}Total unfinished: {cc.yellow}{tsml}{cc.reset_format}\n" if tsml else "")
 
 if __name__ == "__main__":
 

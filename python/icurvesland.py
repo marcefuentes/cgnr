@@ -10,7 +10,7 @@ from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 import numpy as np
 
-import mytheory as my
+from theory_figures import theory as tt
 
 start_time = time.perf_counter()
 this_file = os.path.basename(__file__)
@@ -30,8 +30,8 @@ plotsize = 6
 # Add data to figure
 
 def update(given, budgets, icurves):
-    qBprivate = my.qBeq(given, AA, RR)
-    w = my.fitness(qBprivate, qBprivate, given, AA, RR)
+    qBprivate = tt.qBeq(given, AA, RR)
+    w = tt.fitness(qBprivate, qBprivate, given, AA, RR)
     qB_partner = qBprivate
     budget_own = budget0*(1.0 - given)
 
@@ -39,20 +39,20 @@ def update(given, budgets, icurves):
         for r, rho in enumerate(rhos):
             budgety = budget_own + qB_partner[a, r]*given
             budgets[0, a, r].set_ydata(budgety)
-            icy = my.indifference(icx, w[a, r], alpha, rho)
+            icy = tt.indifference(icx, w[a, r], alpha, rho)
             icurves[0, a, r].set_ydata(icy)
             color = cm.Reds(w[a, r])
             icurves[0, a, r].set_color(color)
             qBp = qBprivate[a, r]
-            landscape = my.fitness(qBp, icx, given, alpha, rho)
+            landscape = tt.fitness(qBp, icx, given, alpha, rho)
             icurves[1, a, r].set_ydata(landscape)
 
     return np.concatenate([budgets.flatten(), icurves.flatten()])
 
 # Data
 
-alphas = np.linspace(my.alphamax, my.alphamin, num=num)
-logess = np.linspace(my.logesmin, my.logesmax, num=num)
+alphas = np.linspace(tt.alphamax, tt.alphamin, num=num)
+logess = np.linspace(tt.logesmin, tt.logesmax, num=num)
 rhos = 1.0 - 1.0/pow(2, logess)
 qA = np.array([0.0, 1.0])
 budgetx = qA
@@ -66,7 +66,7 @@ ics = np.zeros((num, num, n_ic, numqB))
 for i, alpha in enumerate(alphas):
     for j, rho in enumerate(rhos):
         for k, w in enumerate(ws):
-            ics[i, j, k] = my.indifference(icx, w, alpha, rho)
+            ics[i, j, k] = tt.indifference(icx, w, alpha, rho)
 norm = Normalize(vmin=0, vmax=1)
 
 # Figure properties

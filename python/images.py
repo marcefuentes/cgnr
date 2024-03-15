@@ -11,10 +11,10 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
 
-import myfigure_settings as s
-import myfigure_modes as mm
-from myget_df import get_df
-from myupdate_Z import update_Z
+from main_figures import settings as ss
+from main_figures import modes as mm
+from main_figures.get_df import get_df
+from main_figures.update_Z import update_Z
 
 def update(t, mode, df_mechanisms, movie, text, artists): 
     traits = mm.get_traits(mode)
@@ -26,7 +26,7 @@ def update(t, mode, df_mechanisms, movie, text, artists):
             artists[r, c].set_array(Z) 
     if movie:
         text.set_text(t)
-    elif s.print_folder:
+    elif ss.print_folder:
         text.set_text(os.path.basename(os.getcwd()))
     else:
         text.set_text("")
@@ -73,35 +73,35 @@ def main(mode, movie):
     traits = mm.get_traits(mode)
     ncols = len(traits)
     nrows = len(mechanisms)
-    inner_width = s.plotsize*ncols + s.spacing*(ncols - 1)
-    inner_height = s.plotsize*nrows + s.spacing*(nrows - 1)
-    width = inner_width + s.left_margin + s.right_margin
-    height = inner_height + s.top_margin + s.bottom_margin
+    inner_width = ss.plotsize*ncols + ss.spacing*(ncols - 1)
+    inner_height = ss.plotsize*nrows + ss.spacing*(nrows - 1)
+    width = inner_width + ss.left_margin + ss.right_margin
+    height = inner_height + ss.top_margin + ss.bottom_margin
 
     fig, main_ax = plt.subplots(nrows=nrows,
                                 ncols=ncols,
                                 figsize=(width, height))
 
-    fig.supxlabel(s.xlabel,
-                  x=(s.left_margin + inner_width/2)/width,
-                  y=(s.bottom_margin - s.xlabel_padding)/height,
-                  fontsize=s.biglabel)
-    fig.supylabel(s.ylabel,
-                  x=(s.left_margin - s.ylabel_padding)/width,
-                  y=(s.bottom_margin + inner_height/2)/height,
-                  fontsize=s.biglabel)
-    fig.text((s.left_margin + inner_width)/width,
-             (s.bottom_margin - s.xlabel_padding)/height,
+    fig.supxlabel(ss.xlabel,
+                  x=(ss.left_margin + inner_width/2)/width,
+                  y=(ss.bottom_margin - ss.xlabel_padding)/height,
+                  fontsize=ss.biglabel)
+    fig.supylabel(ss.ylabel,
+                  x=(ss.left_margin - ss.ylabel_padding)/width,
+                  y=(ss.bottom_margin + inner_height/2)/height,
+                  fontsize=ss.biglabel)
+    fig.text((ss.left_margin + inner_width)/width,
+             (ss.bottom_margin - ss.xlabel_padding)/height,
              "",
-             fontsize=s.ticklabel,
+             fontsize=ss.ticklabel,
              color="grey",
              ha="right")
 
-    plotsize_fixed = Size.Fixed(s.plotsize)
-    spacing_fixed = Size.Fixed(s.spacing)
+    plotsize_fixed = Size.Fixed(ss.plotsize)
+    spacing_fixed = Size.Fixed(ss.spacing)
     divider = Divider(fig,
-                      (s.left_margin/width,
-                       s.bottom_margin/height,
+                      (ss.left_margin/width,
+                       ss.bottom_margin/height,
                        inner_width/width,
                        inner_height/height),
                       [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (ncols - 1),
@@ -113,31 +113,31 @@ def main(mode, movie):
 
     axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 
-    letterposition = 1.0 + s.letterposition
+    letterposition = 1.0 + ss.letterposition
     for i, ax in enumerate(fig.get_axes()):
         ax.text(0,
                 letterposition,
                 chr(ord("a") + i),
                 transform=ax.transAxes,
-                fontsize=s.letterlabel,
+                fontsize=ss.letterlabel,
                 weight="bold")
         for spine in ax.spines.values():
-            spine.set_linewidth(s.linewidth)
+            spine.set_linewidth(ss.linewidth)
         ax.set(xticks=xticks,
                yticks=yticks,
                xticklabels=[],
                yticklabels=[])
         ax.tick_params(axis="both",
-                       labelsize=s.ticklabel,
-                       size=s.ticksize)
+                       labelsize=ss.ticklabel,
+                       size=ss.ticksize)
     for ax in axs[:, 0]:
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
     for ax, trait in zip(axs[0, :], traits):
         ax.set_title(mm.get_title(trait),
-                     pad=s.plotsize * 10,
-                     fontsize=s.letterlabel)
+                     pad=ss.plotsize * 10,
+                     fontsize=ss.letterlabel)
 
     # Assign axs objects to variables
     # (AxesImage)
@@ -148,20 +148,20 @@ def main(mode, movie):
     for r, _ in enumerate(mechanisms):
         for c, _ in enumerate(traits):
             artists[r, c] = axs[r, c].imshow(dummy_Z,
-                                             cmap=s.color_map,
+                                             cmap=ss.color_map,
                                              vmin=-1,
                                              vmax=1)
 
-    sm = ScalarMappable(cmap=s.color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([(s.left_margin + inner_width + s.spacing)/width,
-                        (s.bottom_margin + inner_height/2 - s.plotsize/2)/height,
-                        (s.plotsize/nc)/width,
-                        s.plotsize/height]) # [left, bottom, width, height]
+    sm = ScalarMappable(cmap=ss.color_map, norm=plt.Normalize(-1, 1))
+    cax = fig.add_axes([(ss.left_margin + inner_width + ss.spacing)/width,
+                        (ss.bottom_margin + inner_height/2 - ss.plotsize/2)/height,
+                        (ss.plotsize/nc)/width,
+                        ss.plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
                         cax=cax,
                         ticks=[-1, 0, 1])
-    cbar.ax.tick_params(labelsize=s.ticklabel, size=s.ticksize)
-    cbar.outline.set_linewidth(s.linewidth)
+    cbar.ax.tick_params(labelsize=ss.ticklabel, size=ss.ticksize)
+    cbar.outline.set_linewidth(ss.linewidth)
 
     # Save figure
 
