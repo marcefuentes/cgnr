@@ -10,7 +10,7 @@ from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 import numpy as np
 
-from theory_figures import theory as tt
+import theory_figures.theory as tt
 
 start_time = time.perf_counter()
 this_file = os.path.basename(__file__)
