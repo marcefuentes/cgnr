@@ -11,8 +11,8 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
 
-from main_figures import settings as ss
-from main_figures import modes as mm
+import main_figures.settings as ss
+import main_figures.modes as mm
 from main_figures.get_df import get_df
 from main_figures.update_Z import update_Z
 
