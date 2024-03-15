@@ -33,6 +33,22 @@ def get_slots(queue, state):
 
     return output
 
+def get_running_jobs(mechanism):
+
+    command = ["squeue", "-t", "RUNNING", "-r", "-o", "%j"]
+    output = subprocess.Popen(command,
+                              stdout=subprocess.PIPE)
+    command = ["grep", "-E", f"^{mechanism}" + "([0-9]+|pi)"]
+    output = subprocess.Popen(command,
+                              stdin=output.stdout,
+                              stdout=subprocess.PIPE)
+    command = ["wc", "-l"]
+    output = subprocess.check_output(command,
+                                     stdin=output.stdout)
+    output = int(output.decode().strip())
+
+    return output
+
 def get_free_slots(queue):
 
     max_submit = get_max_slots(queue, "maxsubmit")

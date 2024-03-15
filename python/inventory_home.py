@@ -7,7 +7,6 @@ import sys
 
 import tools.colors as cc
 from slurm.get_config import get_config
-from slurm.tools import get_running_jobs
 from tools.list_of_folders import list_of_folders
 
 def get_config_value(variable):
@@ -142,10 +141,6 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
     print(f"{cc.bold}{cc.yellow if f_smaller_number_of_lines else cc.reset_format}{f_smaller_number_of_lines:>4}{cc.reset_format}" if f_smaller_number_of_lines else "", end = "")
     print(f"{cc.bold}{cc.red if notstarted else cc.reset_format}{notstarted:>4}{cc.reset_format}" if notstarted else "", end = "")
     print(f"{cc.bold}{cc.blue if f_larger_number_of_lines else cc.reset_format}{f_larger_number_of_lines:>4}{cc.reset_format}" if f_larger_number_of_lines else "", end = "")
-    if f_smaller_number_of_lines:
-        running_jobs = get_running_jobs(path.split("/")[-2])
-        dead_jobs = f_smaller_number_of_lines - running_jobs
-        print(f"{cc.bold}{cc.red if dead_jobs else cc.reset_format}{dead_jobs:>4}{cc.reset_format}" if dead_jobs else "", end = "")
     print()
     return tsml
 
