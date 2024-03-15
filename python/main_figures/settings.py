@@ -16,6 +16,7 @@ ylabel_padding = plotsize*2.0/4.0
 biglabel = plotsize*9
 letterlabel = plotsize*8
 letterposition = 0.035
+titlepad = 11
 ticklabel = plotsize*6
 ticksize = plotsize*1.5
 print_folder = False

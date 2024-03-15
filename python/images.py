@@ -136,7 +136,7 @@ def main(mode, movie):
         ax.set_xticklabels(xticklabels)
     for ax, trait in zip(axs[0, :], traits):
         ax.set_title(mm.get_title(trait),
-                     pad=ss.plotsize * 10,
+                     pad=ss.plotsize * ss.titlepad,
                      fontsize=ss.letterlabel)
 
     # Assign axs objects to variables

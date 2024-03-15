@@ -158,7 +158,7 @@ def main(mode, movie):
             axs[r, 0, a, 0].set_yticklabels([alphas[a]])
     for c, trait in enumerate(traits):
         axs[0, c, 0, int(nc/2)].set_title(mm.get_title(trait),
-                                          pad=ss.plotsize * 10,
+                                          pad=ss.plotsize * ss.titlepad,
                                           fontsize=ss.letterlabel)
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
