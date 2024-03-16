@@ -1,4 +1,5 @@
 
+import re
 import subprocess
 import tools.colors as cc
 from slurm.get_config import get_config
@@ -19,12 +20,9 @@ def get_max_slots(queue, jobs):
 
 def submitted_job(mechanism, job_name):
     command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%k"]
-    output = subprocess.check_output(command)
-    for line in output:
-        
-    command_grep = ["grep", "-E", f"{mechanism}[0-9]+,{job_name}"]
-    output_grep = subprocess.Popen(command_grep, stdin=output.stdout, stdout=subprocess.PIPE)
-    if output_grep.communicate()[0]:
+    output = subprocess.check_output(command).decode()
+    match = re.search(f"{mechanism}[0-9]+,{job_name}", output)    
+    if match:
         return True
     else:
         return False
