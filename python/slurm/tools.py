@@ -19,8 +19,9 @@ def get_max_slots(queue, jobs):
 
 def submitted_job(mechanism, job_name):
     command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%k"]
-    # pipe command to grep
-    output = subprocess.Popen(command, stdout=subprocess.PIPE)
+    output = subprocess.check_output(command)
+    for line in output:
+        
     command_grep = ["grep", "-E", f"{mechanism}[0-9]+,{job_name}"]
     output_grep = subprocess.Popen(command_grep, stdin=output.stdout, stdout=subprocess.PIPE)
     if output_grep.communicate()[0]:
