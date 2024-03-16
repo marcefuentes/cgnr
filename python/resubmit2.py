@@ -6,7 +6,7 @@ import sys
 
 import tools.colors as cc
 from slurm.get_config import get_config
-from slurm.tools import get_free_slots, not_submitted, submit_job
+from slurm.tools import get_free_slots, submitted_job, submit_job
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
@@ -48,18 +48,31 @@ logging.basicConfig(filename=log_file,
                     format="%(asctime)s %(levelname)s: %(message)s")
 
 def get_jobs_to_submit():
+    jobs_to_submit = []
     path = os.getcwd()
     mechanism = path.split("/")[-2]
-    jobs_to_submit = []
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     for name in names:
-        if not os.path.isfile(f"{name}{output_file_extensions[0]}"):
-            if not_submitted(f"{mechanism}[0, 9]+", name):
-                jobs_to_submit.append(int(name))
-        else:
-            with open(f"{name}{output_file_extensions[0]}") as f:
-                if sum(1 for line in f) < number_of_lines and not_submitted(f"{mechanism}[0, 9]+", name):
+        output_file = f"{name}{output_file_extensions[0]}"
+        if os.path.isfile(output_file):
+            with open(output_file) as f:
+                current_number_of_lines = sum(1 for line in f)
+            if current_number_of_lines < number_of_lines:
+                if submitted_job(mechanism, name):
+                    print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format} running")
+                else:
+                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format} dead. Adding to submission list...")
                     jobs_to_submit.append(int(name))
+            elif current_number_of_lines == number_of_lines:
+                print(f"{cc.bold}{cc.green}{name}{cc.reset_format} complete")
+            else:
+                print(f"{cc.bold}{cc.blue}{name}{cc.reset_format} has too many lines")
+        else:
+            if submitted_job(mechanism, name):
+                print(f"{cc.bold}{name}{cc.reset_format} submitted, pending")
+            else:
+                print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not started. Adding to submission list...")
+                jobs_to_submit.append(int(name))
     return jobs_to_submit
 
 def remove_files(jobs_to_submit):
@@ -80,8 +93,13 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
     last_job = job_array.split(",")[-1]
     job_name = f"{queue}-{path_folders[-2]}{last_job}"
     if test:
-        print(f"Will submit {info}")
+        print(f"Would submit {info}")
     else:
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Submit {info}? {cc.reset_format}"
+              f"{cc.yesno} ", end="")
+        user_input = input()
+        if user_input.lower() == "n":
+            exit()
         return_code, stdout, stderr = submit_job(job_name, queue, job_array)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
@@ -95,7 +113,6 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
                     print(line)
                     logging.info(line)
         logging.info(info)
-        print(f"{cc.green}{info}{cc.reset_format}")
     del jobs_to_submit[:num_jobs_to_submit]
     free_slots -= num_jobs_to_submit
     if len(jobs_to_submit) == 0:
@@ -104,23 +121,31 @@ def process_folder(queue, free_slots, jobs_to_submit, test=False):
         exit()
     print(f"{cc.bold}{cc.red}{len(jobs_to_submit)}{cc.reset_format} jobs remain to be submitted")
 
-    return jobs_to_submit
-
 def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{cc.bold}This is a test{cc.reset_format}")
-
+        print(f"\n{cc.bold}This is a test\n{cc.reset_format}")
+    else:
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue? {cc.reset_format}"
+              f"{cc.yesno} ", end="")
+        user_input = input()
+        if user_input.lower() == "n":
+            exit()
     jobs_to_submit = get_jobs_to_submit()
     if len(jobs_to_submit) == 0:
-        print(f"\n{cc.green}No jobs to submit. Exiting...{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.green}No jobs to submit. Exiting...\n{cc.reset_format}")
         return
     print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit")
 
     if test:
-        print(f"\n{cc.bold}{cc.red}Will delete {output_file_extensions} of {jobs_to_submit}{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.red}Would delete {output_file_extensions} of {jobs_to_submit}{cc.reset_format}")
     else:
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete {output_file_extensions} of {jobs_to_submit}? {cc.reset_format}"
+              f"{cc.yesno} ", end="")
+        user_input = input()
+        if user_input.lower() == "n":
+            exit()
         remove_files(jobs_to_submit)
 
     for queue in queues:
@@ -129,7 +154,7 @@ def main():
         if test and not free_slots:
             free_slots = 100
         if free_slots:
-            jobs_to_submit = process_folder(queue, free_slots, jobs_to_submit, test)
+            process_folder(queue, free_slots, jobs_to_submit, test)
 
     print()
 

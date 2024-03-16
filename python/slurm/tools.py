@@ -17,39 +17,10 @@ def get_max_slots(queue, jobs):
 
     return slots
 
-def not_submitted(mechanism, job_name):
-    try:
-        squeue_output = subprocess.run(["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"], capture_output=True, text=True, check=True).stdout
-
-        if mechanism in squeue_output and f",{job_name}" in squeue_output:
-            return False
-        else:
-            return True
-    except subprocess.CalledProcessError as e:
-        print("Error executing subprocess command:", e)
-        return False
-    except Exception as e:
-        print("An error occurred:", e)
-        return False
-
-def oldnot_submitted(mechanism, job_name):
-
-    command_squeue = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
-    output_squeue = subprocess.Popen(command_squeue,
-                                     stdout=subprocess.PIPE)
-    command_grep0 = ["grep", "-E", f"{mechanism}"]
-    output_grep0 = subprocess.Popen(command_grep0,
-                                   stdin=output_squeue.stdout,
-                                   stdout=subprocess.PIPE)
-    command_grep1 = ["grep", "-E", f",{job_name}"]
-    output_grep1 = subprocess.Popen(command_grep1,
-                                   stdin=output_grep0.stdout,
-                                   stdout=subprocess.PIPE)
-    command_wc = ["wc", "-l"]
-    output_wc = subprocess.check_output(command_wc,
-                                        stdin=output_grep1.stdout)
-    output = int(output_wc.decode().strip())
-    if output == 0:
+def submitted_job(mechanism, job_name):
+    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", f"%j,%K|grep -E '{mechanism}[0-9]+'|grep -E {job_name}"]
+    output = subprocess.run(command, capture_output=True, text=True)
+    if output.stdout:
         return True
     else:
         return False
