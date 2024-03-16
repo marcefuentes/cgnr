@@ -1,7 +1,7 @@
 import subprocess
 
-command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", f"%j,%K | grep -E 'pi[0-9]+' | grep ,408"]
-# print the output of squeue filetered by "pi" followed by a number and 408
-subprocess.run(command)
+# print the output of squeue RUNNING,PENDING jobs whose name (as retriebed by %j) contains "pi" followed by a number and 408 (as retrieved by %K)
+subprocess.run(["squeue", "-o", "%j %K", "-s", "RUNNING,PENDING", "-u", "pi*408"], check=True)
+```
 
 
