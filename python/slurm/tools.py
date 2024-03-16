@@ -18,6 +18,21 @@ def get_max_slots(queue, jobs):
     return slots
 
 def not_submitted(mechanism, job_name):
+    try:
+        squeue_output = subprocess.run(["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"], capture_output=True, text=True, check=True).stdout
+
+        if mechanism in squeue_output and f",{job_name}" in squeue_output:
+            return False
+        else:
+            return True
+    except subprocess.CalledProcessError as e:
+        print("Error executing subprocess command:", e)
+        return False
+    except Exception as e:
+        print("An error occurred:", e)
+        return False
+
+def oldnot_submitted(mechanism, job_name):
 
     command_squeue = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
     output_squeue = subprocess.Popen(command_squeue,
