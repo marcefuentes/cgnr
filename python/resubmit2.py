@@ -69,7 +69,7 @@ def get_jobs_to_submit():
                 print(f"{cc.bold}{cc.blue}{name}{cc.reset_format} has too many lines")
         else:
             if submitted_job(mechanism, name):
-                print(f"{cc.bold}{name}{cc.reset_format} submitted, pending")
+                print(f"{cc.bold}{name}{cc.reset_format} pending")
             else:
                 print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not started. Adding to submission list...")
                 jobs_to_submit.append(int(name))

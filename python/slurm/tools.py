@@ -19,13 +19,12 @@ def get_max_slots(queue, jobs):
     return slots
 
 def submitted_job(mechanism, job_name):
-    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%k"]
-    output = subprocess.check_output(command).decode()
-    match = re.search(f"{mechanism}[0-9]+,{job_name}", output)    
-    if match:
-        return True
-    else:
-        return False
+    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    output = subprocess.check_output(command, text=True).strip().split("\n")
+    for line in output:
+        if (f"{mechanism}1" in line or f"{mechanism}2" in line or f"{mechanism}3" in line or f"{mechanism}4" in line or f"{mechanism}5" in line) and f",{job_name}" in line:
+            return True
+    return False
 
 def get_slots(key, state):
 
