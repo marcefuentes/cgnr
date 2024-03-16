@@ -17,6 +17,28 @@ def get_max_slots(queue, jobs):
 
     return slots
 
+def not_submitted(mechanism, job_name):
+
+    command_squeue = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    output_squeue = subprocess.Popen(command_squeue,
+                                     stdout=subprocess.PIPE)
+    command_grep0 = ["grep", "-E", f"{mechanism}"]
+    output_grep0 = subprocess.Popen(command_grep0,
+                                   stdin=output_squeue.stdout,
+                                   stdout=subprocess.PIPE)
+    command_grep1 = ["grep", "-E", f",{job_name}"]
+    output_grep1 = subprocess.Popen(command_grep1,
+                                   stdin=output_grep0.stdout,
+                                   stdout=subprocess.PIPE)
+    command_wc = ["wc", "-l"]
+    output_wc = subprocess.check_output(command_wc,
+                                        stdin=output_grep1.stdout)
+    output = int(output_wc.decode().strip())
+    if output == 0:
+        return True
+    else:
+        return False
+
 def get_slots(key, state):
 
     command_squeue = ["squeue", "-t", state, "-r", "-o", "%j"]

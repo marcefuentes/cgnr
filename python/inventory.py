@@ -139,7 +139,7 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
                     garbled_jobs += 1
     not_started_jobs = total_jobs - started_jobs - finished_jobs - garbled_jobs
     if started_jobs and "mfu" in path:
-        live_jobs = get_slots(f"{path.split('/')[-2]}" + "[0-9]+", "RUNNING")
+        live_jobs = get_slots(f"{path.split('/')[-2]}[0-9]+", "RUNNING")
         dead_jobs = started_jobs - live_jobs
         started_jobs = live_jobs
     tsml += started_jobs
