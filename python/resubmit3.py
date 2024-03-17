@@ -143,7 +143,7 @@ def main():
             exit()
     jobs_to_submit = get_jobs_to_submit(current_path)
     if len(jobs_to_submit) == 0:
-        print(f"\n{cc.bold}{cc.green}No jobs to submit.\n{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
         return
     print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
 
