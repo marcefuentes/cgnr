@@ -96,11 +96,8 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
         job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         last_job = jobs_to_submit[num_jobs_to_submit - 1]
         current_path_folders = current_path.split("/")
-        current_path_print = "/".join(current_path_folders[-3:])
         mechanism = current_path_folders[-2]
-        info = f"{current_path_print}/{job_array} to {queue}"
         if test:
-            print(f"{cc.bold}{cc.red}submit {info}{cc.reset_format}")
             return_code = 0
             stdout = "test"
             stderr = "test"
@@ -117,7 +114,10 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
                 if line:
                     print(line)
                     logging.info(line)
+        current_path_print = "/".join(current_path_folders[-3:])
+        info = f"{current_path_print}/{job_array} to {queue}"
         logging.info(info)
+        print(f"{cc.green}{info}{cc.reset_format}")
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
         print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
