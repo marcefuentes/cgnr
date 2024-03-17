@@ -47,8 +47,11 @@ logging.basicConfig(filename=log_file,
                     level=logging.DEBUG,
                     format="%(asctime)s %(levelname)s: %(message)s")
 
-def get_jobs_to_submit(mechanism):
+def get_jobs_to_submit(current_path):
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
+    jobs_to_submit = []
+    current_path_folders = current_path.split("/")
+    mechanism = current_path_folders[-2]
     for name in names:
         output_file = f"{name}{output_file_extensions[0]}"
         if os.path.isfile(output_file):
@@ -80,7 +83,7 @@ def remove_files(jobs_to_submit):
             else:
                 continue
 
-def submit_jobs_in_folder(mechanism, jobs_to_submit, test=False):
+def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
     for queue in queues:
         if len(jobs_to_submit) == 0:
             print(f"\n{cc.bold}{cc.green}No jobs to submit{cc.reset_format}")
@@ -92,8 +95,12 @@ def submit_jobs_in_folder(mechanism, jobs_to_submit, test=False):
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
         job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         last_job = jobs_to_submit[num_jobs_to_submit - 1]
+        current_path_folders = current_path.split("/")
+        current_path_print = "/".join(current_path_folders[-3:])
+        mechanism = current_path_folders[-2]
+        info = f"{current_path_print}/{job_array} to {queue}"
         if test:
-            print(f"{cc.bold}{cc.red}submit {mechanism}, {last_job}, {job_array}{cc.reset_format}")
+            print(f"{cc.bold}{cc.red}submit {info}{cc.reset_format}")
             return_code = 0
             stdout = "test"
             stderr = "test"
@@ -132,11 +139,9 @@ def main():
         with open(last_job_file, "r") as f:
             last_job_file_path, last_job = f.read().strip().split(",")
         if last_job_file_path == current_path:
-            print(f"\n{cc.bold}{cc.red}{last_job_file.split("/")[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
-                exit()
-    
-    mechanism = current_path.split("/")[-2]
-    jobs_to_submit = get_jobs_to_submit(mechanism)
+            print(f"\n{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
+            exit()
+    jobs_to_submit = get_jobs_to_submit(current_path)
     if len(jobs_to_submit) == 0:
         print(f"\n{cc.bold}{cc.green}No jobs to submit.\n{cc.reset_format}")
         return
@@ -152,7 +157,7 @@ def main():
             exit()
         remove_files(jobs_to_submit)
 
-    submit_jobs_in_folder(mechanism, jobs_to_submit, test)
+    submit_jobs_in_folder(current_path, jobs_to_submit, test)
 
     print()
 
