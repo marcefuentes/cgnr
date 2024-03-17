@@ -78,7 +78,7 @@ def get_qos_name(queue):
 
     return qos_name
 
-def submit_job(job_name, queue, job_array):
+def submit_job(mechanism, last_job, queue, job_array):
 
     try: 
         exe = get_config("exe")
@@ -98,6 +98,7 @@ def submit_job(job_name, queue, job_array):
         return -1, None, e
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
+    job_name = f"{mechanism}-{last_job}-{queue}"
     job_time = f"{hours}:59:00"
 
     command = ["sbatch",
