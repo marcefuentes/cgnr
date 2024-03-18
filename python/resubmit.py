@@ -124,15 +124,14 @@ def main():
     test = len(sys.argv) > 1
     if test:
         print(f"\n{cc.bold}This is a test\n{cc.reset_format}")
-        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.test"
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
         print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue? {cc.reset_format}"
               f"{cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
-        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
+    last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     logging.basicConfig(filename=log_file,
                     level=logging.DEBUG,
                     format="%(asctime)s %(levelname)s: %(message)s")
