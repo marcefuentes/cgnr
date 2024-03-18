@@ -25,6 +25,8 @@ def submitted_job(mechanism, job_name):
         for i in range(1, 6):
             if f"{mechanism}{i}" in line and f",{job_name}" in line:
                 return True
+        if f"{mechanism}-" in line and f",{job_name}" in line: 
+            return True
     return False
 
 def get_slots(key, state):

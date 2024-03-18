@@ -127,6 +127,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     running_jobs = 0
     finished_jobs = 0
     garbled_jobs = 0
+    no_header = 0
     dead_jobs = 0
 
     mechanism = current_path.split("/")[-2]
@@ -136,11 +137,13 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
         if os.path.isfile(output_file):
             with open(output_file, "r") as f:
                 current_number_of_lines = sum(1 for line in f)
-            if current_number_of_lines < number_of_lines:
+            if current_number_of_lines < number_of_lines - 1:
                 if submitted_job(mechanism, name):
                     running_jobs += 1
                 else:
                     dead_jobs += 1
+            elif current_number_of_lines == number_of_lines - 1:
+                no_header += 1
             elif current_number_of_lines == number_of_lines:
                 finished_jobs += 1
             else:
@@ -154,6 +157,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     total_running += running_jobs
     print(f"{cc.bold}{cc.green if   finished_jobs else      cc.reset_format}{finished_jobs:>4}{cc.reset_format}"    if finished_jobs else       "", end = "")
     print(f"{cc.bold}{cc.grey if    dead_jobs else          cc.reset_format}{dead_jobs:>4}{cc.reset_format}"        if dead_jobs else           "", end = "")
+    print(f"{cc.bold}{cc.orange if  no_header else          cc.reset_format}{no_header:>4}{cc.reset_format}"        if no_header else           "", end = "")
     print(f"{cc.bold}{cc.yellow if  running_jobs else       cc.reset_format}{running_jobs:>4}{cc.reset_format}"     if running_jobs else        "", end = "")
     print(f"{cc.bold}{cc.white if   pending_jobs else       cc.reset_format}{pending_jobs:>4}{cc.reset_format}"     if pending_jobs else        "", end = "")
     print(f"{cc.bold}{cc.red if     to_submit_jobs else     cc.reset_format}{to_submit_jobs:>4}{cc.reset_format}"   if to_submit_jobs else      "", end = "")
