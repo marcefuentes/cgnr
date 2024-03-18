@@ -30,12 +30,6 @@ except RuntimeError as e:
     print(f"{cc.red}{e}{cc.reset_format}")
     exit()
 
-last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
-logging.basicConfig(filename=log_file,
-                    level=logging.DEBUG,
-                    format="%(asctime)s %(levelname)s: %(message)s")
-
 def get_job_min(current_path):
     job_min = 9999
     for file in os.listdir(current_path):
@@ -97,7 +91,7 @@ def process_folder(queue, free_slots, last_job, test):
         last_job = 0
     return free_slots, last_job
 
-def process_variant(queue, free_slots, test=False):
+def process_variant(queue, free_slots, test, last_job_file):
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
             current_path, last_job = f.read().strip().split(",")
@@ -131,18 +125,12 @@ def process_variant(queue, free_slots, test=False):
                 givens = list_of_folders(mechanism)
                 current_path = givens[0]
             else:
-                if test:
-                    print(f"Would remove last_job_file")
-                else:
-                    os.remove(last_job_file)
+                os.remove(last_job_file)
                 print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
                 print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
                 exit()
-    if test:
-        print(f"Would write {last_job} to last_job_file")
-    else:
-        with open(last_job_file, "w") as f:
-            f.write(f"{current_path},{last_job}")
+    with open(last_job_file, "w") as f:
+        f.write(f"{current_path},{last_job}")
 
     return free_slots
 
@@ -151,15 +139,21 @@ def main():
     test = len(sys.argv) > 1
     if test:
         print(f"\n{cc.bold}This is a test{cc.reset_format}")
-
+        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.test"
+        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
+    else:
+        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
+    logging.basicConfig(filename=log_file,
+                        level=logging.DEBUG,
+                        format="%(asctime)s %(levelname)s: %(message)s")
     for queue in queues:
         free_slots = get_free_slots(queue)
         print(f"\n{cc.bold}{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
         if test and not free_slots:
             free_slots = 100
         while free_slots:
-            free_slots = process_variant(queue, free_slots, test)
-
+            free_slots = process_variant(queue, free_slots, test, last_job_file)
     print()
 
 if __name__ == "__main__":
