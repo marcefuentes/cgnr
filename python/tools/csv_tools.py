@@ -1,22 +1,63 @@
 
+import csv
 import os
 import pandas as pd
 
-def add_headers(extension):
-    with open(f"101{extension}") as f:
-        headers = f.readline().strip()
+def add_headers():
 
-    for c in range(102, 542):
-        name = f"{c}{extension}"
-        if not os.path.isfile(name):
-            with open(name, "w") as f:
-                f.write(f"{headers}\n")
+    try:
+        first_output_file_extension = get_config("first_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+    try:
+        second_output_file_extension = get_config("second_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+
+    for extension in [first_output_file_extension, second_output_file_extension]:
+        files = [f for f in os.listdir('.') if f.endswith(extension)]
+        with open(files[0]) as f:
+            headers = f.readline().strip()
+        for file in files:
+            with open(file, "r+") as f:
+                content = f.read()
+                if content.startswith(headers):
+                    continue
+                else:
+                    f.seek(0, 0)
+                    f.write(headers + "\n" + content)
+
+def remove_extra_headers():
+
+    try:
+        first_output_file_extension = get_config("first_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+    try:
+        second_output_file_extension = get_config("second_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+
+    for extension in [first_output_file_extension, second_output_file_extension]:
+        for file in os.listdir('.')
+            if file.endswith(extension):
+                with open(file, "r") as f:
+                    headers = f.readline().strip()
+                    content = f.read()
+                if content.startswith(headers + "\n"):
+                    with open(file, "w") as f:
+                        f.write(content)
+                    print(f"Removed extra headers from {file}")
 
 def remove_columns_from_csvs(root_dir, columns_to_remove, extension):
     for root, _, files in os.walk(root_dir):
-        for filename in files:
-            if filename.endswith(extension):
-                full_path = os.path.join(root, filename)
+        for file in files:
+            if file.endswith(extension):
+                full_path = os.path.join(root, file)
                 try:
                     df = pd.read_csv(full_path)
                     if any(col in df.columns for col in columns_to_remove):
@@ -31,35 +72,14 @@ def remove_columns_from_csvs(root_dir, columns_to_remove, extension):
 
 def divide_by_2(root_dir, column_to_change, extension):
     for root, _, files in os.walk('.'):
-        for filename in files:
-            if filename.endswith(extension):
-                full_path = os.path.join(root, filename)
+        for file in files:
+            if file.endswith(extension):
+                full_path = os.path.join(root, file)
                 df = pd.read_csv(full_path)
                 for col in df.columns:
                     if col.startswith(column_to_change):
                         df[col] = (df[col] / 2.0).round(6)
                 df.to_csv(file_path, index=False)
-
-def delete_first_line_if_file_has_11_lines():
-    extensions = [".csv", ".frq"]
-    for c in range(101, 542):
-        number_of_lines_to_keep = 10  # Use a descriptive variable name
-        for extension in extensions:
-            filename = f"{c}{extension}"
-            if not os.path.isfile(filename):
-                return  # Skip non-existent files
-
-            with open(filename, "r") as f:
-                line_count = sum(1 for line in f)
-
-            if line_count != number_of_lines_to_keep + 1:
-                return  # Skip files with incorrect line count
-
-            with open(filename, "r") as f:
-                lines = f.readlines()
-
-            with open(filename, "w") as f:
-                f.writelines(lines[1:])
 
 def move_time:
     input_extension = ".gl2"
