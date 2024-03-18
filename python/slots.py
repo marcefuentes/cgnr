@@ -7,8 +7,8 @@ import os
 queues = ["clk", "epyc"]
 
 print()
-print(f"{'Queue':<6} {'Running':<8} {'Max':<4} {'Pending':<8} {'Free':<8}")
-print(f"{'-----':<6} {'-------':<8} {'---':<4} {'-------':<8} {'----':<8}")
+print(f"{'Queue':<6} {'Max':<4} {'Running':<8} {'Pending':<8} {'Free':<8}")
+print(f"{'-----':<6} {'---':<4} {'-------':<8} {'-------':<8} {'----':<8}")
 
 for queue in queues:
 
@@ -18,6 +18,6 @@ for queue in queues:
     pending_jobs = get_slots(queue, "PENDING")
     free_slots = max_submit - running_jobs - pending_jobs
 
-    print(f"{queue:<8} {cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>5}{cc.reset_format} {max_running:>4} {cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>8}{cc.reset_format} {cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}") 
+    print(f"{queue:<4} {cc.reset_format} {max_running:>4} {cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>8}{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset_format} {cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}") 
 
 print()
