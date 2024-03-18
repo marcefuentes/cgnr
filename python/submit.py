@@ -73,8 +73,8 @@ def process_folder(queue, free_slots, last_job, test):
     job_array = f"{job_min}-{last_job}"
     info = f"{current_path_print}/{job_array} to {queue}"
     if test:
-        print(f"Will submit {info}")
-        retturn_code = 0
+        print(f"Would submit {info}")
+        return_code = 0
         stdout = "Test"
         stderr = "Test"
     else:
@@ -132,14 +132,14 @@ def process_variant(queue, free_slots, test=False):
                 current_path = givens[0]
             else:
                 if test:
-                    print(f"Will remove last_job_file")
+                    print(f"Would remove last_job_file")
                 else:
                     os.remove(last_job_file)
                 print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
                 print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
                 exit()
     if test:
-        print(f"Will write {last_job} to last_job_file")
+        print(f"Would write {last_job} to last_job_file")
     else:
         with open(last_job_file, "w") as f:
             f.write(f"{current_path},{last_job}")
