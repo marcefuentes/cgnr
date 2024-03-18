@@ -98,7 +98,8 @@ def submit_job(mechanism, last_job, queue, job_array):
         return -1, None, e
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
-    job_name = f"{mechanism}-{last_job}-{queue}"
+    #job_name = f"{mechanism}-{last_job}-{queue}"
+    job_name = f"{queue}-{mechanism}{last_job}"
     job_time = f"{hours}:59:00"
 
     command = ["sbatch",
