@@ -41,12 +41,6 @@ except RuntimeError as e:
 
 output_file_extensions = [first_output_file_extension, second_output_file_extension]
 
-last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
-logging.basicConfig(filename=log_file,
-                    level=logging.DEBUG,
-                    format="%(asctime)s %(levelname)s: %(message)s")
-
 def get_jobs_to_submit(current_path):
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     jobs_to_submit = []
@@ -130,12 +124,20 @@ def main():
     test = len(sys.argv) > 1
     if test:
         print(f"\n{cc.bold}This is a test\n{cc.reset_format}")
+        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.test"
+        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
         print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue? {cc.reset_format}"
               f"{cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
-            exit()
+        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
+    logging.basicConfig(filename=log_file,
+                    level=logging.DEBUG,
+                    format="%(asctime)s %(levelname)s: %(message)s")
+
+    exit()
     current_path = os.getcwd()
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
@@ -159,7 +161,7 @@ def main():
             exit()
         remove_files(jobs_to_submit)
 
-    submit_jobs_in_folder(current_path, jobs_to_submit, test)
+    submit_jobs_in_folder(current_path, jobs_to_submit, test, last_job_file)
 
     print()
 
