@@ -37,9 +37,9 @@ def process_variant(current_path, number_of_lines, input_file_extension, output_
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.red}{variant}{cc.reset_format}")
+        print(f"{cc.bold}{cc.red}/->{variant}{cc.reset_format}")
     else:
-        print(f"\n{cc.bold}{cc.cyan}{variant}{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.cyan}/{variant}{cc.reset_format}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -74,7 +74,7 @@ def process_mechanism(current_path, folder_dict, number_of_lines, input_file_ext
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.red}{mechanism}{cc.reset_format}", end = "")
+        print(f"{cc.bold}{cc.red}->{mechanism}{cc.reset_format}", end = "")
     else:
         print(f"{cc.bold}{mechanism}{cc.reset_format}", end = "")
 
@@ -138,7 +138,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             with open(output_file, "r") as f:
                 current_number_of_lines = sum(1 for line in f)
             if current_number_of_lines < number_of_lines - 1:
-                if submitted_job(mechanism, name):
+                if "mfu" in current_path and submitted_job(mechanism, name):
                     running_jobs += 1
                 else:
                     dead_jobs += 1
@@ -149,7 +149,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             else:
                 garbled_jobs += 1
         else:
-            if submitted_job(mechanism, name):
+            if "mfu" in current_path and submitted_job(mechanism, name):
                 pending_jobs += 1
             else:
                 to_submit_jobs += 1
