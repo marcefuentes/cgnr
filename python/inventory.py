@@ -7,7 +7,7 @@ import sys
 
 import tools.colors as cc
 from slurm.get_config import get_config
-from slurm.tools import get_slots
+from slurm.tools import get_slots, submitted_job
 from tools.list_of_folders import list_of_folders
 
 def get_config_value(variable):
@@ -31,12 +31,12 @@ def get_results_path(use_store=False, exe=None):
         home_path = os.environ.get("HOME")
         return f"{home_path}/code/{exe}/results"
 
-def process_variant(path, number_of_lines, input_file_extension, output_file_extension, tsml):
+def process_variant(current_path, number_of_lines, input_file_extension, output_file_extension, total_running):
 
     folder_dict = {}
 
-    variant = path.split("/")[-1]
-    if os.path.islink(path):
+    variant = current_path.split("/")[-1]
+    if os.path.islink(current_path):
         print(f"{cc.bold}{cc.red}{variant}{cc.reset_format}")
     else:
         print(f"\n{cc.bold}{cc.cyan}{variant}{cc.reset_format}")
@@ -65,15 +65,15 @@ def process_variant(path, number_of_lines, input_file_extension, output_file_ext
     else:
         folder_dict["GroupSize"] = 2
 
-    mechanisms = list_of_folders(path)
+    mechanisms = list_of_folders(current_path)
     for mechanism in mechanisms:
-        tsml = process_mechanism(mechanism, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml)
-    return tsml
+        total_running = process_mechanism(mechanism, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running)
+    return total_running
 
-def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml):
+def process_mechanism(current_path, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running):
 
-    mechanism = path.split("/")[-1]
-    if os.path.islink(path):
+    mechanism = current_path.split("/")[-1]
+    if os.path.islink(current_path):
         print(f"{cc.bold}{cc.red}{mechanism}{cc.reset_format}", end = "")
     else:
         print(f"{cc.bold}{mechanism}{cc.reset_format}", end = "")
@@ -92,27 +92,27 @@ def process_mechanism(path, folder_dict, number_of_lines, input_file_extension, 
         folder_dict["Reciprocity"] = 0
         folder_dict["IndirectR"] = 0
 
-    givens = list_of_folders(path)
+    givens = list_of_folders(current_path)
     for given in givens:
-        tsml = process_given(given, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml)
-    return tsml
+        total_running = process_given(given, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running)
+    return total_running
 
-def process_given(path, folder_dict, number_of_lines, input_file_extension, output_file_extension, tsml):
+def process_given(current_path, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running):
     
-    given = path.split("/")[-1]
-    if os.path.islink(path):
+    given = current_path.split("/")[-1]
+    if os.path.islink(current_path):
         print(f"{cc.bold}{cc.red}\t{given}{cc.reset_format}", end = "  ")
     else:
         print(f"{cc.bold}\t{given}{cc.reset_format}", end = "  ")
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
-    input_files = [f for f in os.listdir(path) if f.endswith(input_file_extension)]
+    input_files = [f for f in os.listdir(current_path) if f.endswith(input_file_extension)]
     total_jobs = len(input_files)
     if total_jobs == 0:
         print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset_format}")
         return
-    with open(os.path.join(path, input_files[0]), "r") as csvfile:
+    with open(os.path.join(current_path, input_files[0]), "r") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             key, value = row
@@ -122,34 +122,44 @@ def process_given(path, folder_dict, number_of_lines, input_file_extension, outp
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
                     print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
-    started_jobs = 0
+    to_submit_jobs = 0
+    pending_jobs = 0
+    running_jobs = 0
     finished_jobs = 0
     garbled_jobs = 0
     dead_jobs = 0
-    for f in os.listdir(path):
-        if f.endswith(output_file_extension):
-            output_file = os.path.join(path, f)
-            with open(output_file, "r") as output:
-                lines = output.readlines()
-                if len(lines) < number_of_lines:
-                    started_jobs += 1
-                elif len(lines) == number_of_lines:
-                    finished_jobs += 1
-                elif len(lines) > number_of_lines:
-                    garbled_jobs += 1
-    not_started_jobs = total_jobs - started_jobs - finished_jobs - garbled_jobs
-    if started_jobs and "mfu" in path:
-        live_jobs = get_slots(f"{path.split('/')[-2]}[0-9]+", "RUNNING")
-        dead_jobs = started_jobs - live_jobs
-        started_jobs = live_jobs
-    tsml += started_jobs
+
+    mechanism = current_path.split("/")[-2]
+    names = [name[:-4] for name in os.listdir(current_path) if name.endswith(input_file_extension)]
+    for name in names:
+        output_file = os.path.join(current_path, f"{name}{output_file_extension}")
+        if os.path.isfile(output_file):
+            with open(output_file, "r") as f:
+                current_number_of_lines = sum(1 for line in f)
+            if current_number_of_lines < number_of_lines:
+                if submitted_job(mechanism, name):
+                    running_jobs += 1
+                else:
+                    dead_jobs += 1
+            elif current_number_of_lines == number_of_lines:
+                finished_jobs += 1
+            else:
+                garbled_jobs += 1
+        else:
+            if submitted_job(mechanism, name):
+                pending_jobs += 1
+            else:
+                to_submit_jobs += 1
+
+    total_running += running_jobs
     print(f"{cc.bold}{cc.green if   finished_jobs else      cc.reset_format}{finished_jobs:>4}{cc.reset_format}"    if finished_jobs else       "", end = "")
-    print(f"{cc.bold}{cc.yellow if  started_jobs else       cc.reset_format}{started_jobs:>4}{cc.reset_format}"     if started_jobs else        "", end = "")
     print(f"{cc.bold}{cc.grey if    dead_jobs else          cc.reset_format}{dead_jobs:>4}{cc.reset_format}"        if dead_jobs else           "", end = "")
-    print(f"{cc.bold}{cc.red if     not_started_jobs else   cc.reset_format}{not_started_jobs:>4}{cc.reset_format}" if not_started_jobs else    "", end = "")
+    print(f"{cc.bold}{cc.yellow if  running_jobs else       cc.reset_format}{running_jobs:>4}{cc.reset_format}"     if running_jobs else        "", end = "")
+    print(f"{cc.bold}{cc.white if   pending_jobs else       cc.reset_format}{pending_jobs:>4}{cc.reset_format}"     if pending_jobs else        "", end = "")
+    print(f"{cc.bold}{cc.red if     to_submit_jobs else     cc.reset_format}{to_submit_jobs:>4}{cc.reset_format}"   if to_submit_jobs else      "", end = "")
     print(f"{cc.bold}{cc.blue if    garbled_jobs else       cc.reset_format}{garbled_jobs:>4}{cc.reset_format}"     if garbled_jobs else        "", end = "")
     print()
-    return tsml
+    return total_running
 
 def main():
 
@@ -158,21 +168,21 @@ def main():
     input_file_extension = get_config("input_file_extension")
     output_file_extension = get_config("first_output_file_extension")
 
-    mypath = get_results_path(use_store=args.store, exe=exe)
+    current_path = get_results_path(use_store=args.store, exe=exe)
 
-    if os.path.isdir(mypath):
-        os.chdir(mypath)
+    if os.path.isdir(current_path):
+        os.chdir(current_path)
     else:
-        print(f"{cc.bold}{cc.red}Directory {mypath} does not exist{cc.reset_format}")
+        print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset_format}")
         exit()
 
-    print(f"\n{cc.bold}{mypath}{cc.reset_format}")
-    tsml = 0
-    variants = list_of_folders(mypath)
+    print(f"\n{cc.bold}{current_path}{cc.reset_format}")
+    total_running = 0
+    variants = list_of_folders(current_path)
     for variant in variants:
-        tsml = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, tsml)
-    if tsml and "mfu" in mypath:
-        print(f"\n{cc.bold}Total running jobs: {cc.yellow}{tsml:>6}{cc.reset_format}\n" if tsml else "")
+        total_running = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, total_running)
+    if total_running and "mfu" in current_path:
+        print(f"\n{cc.bold}Total running jobs: {cc.yellow}{total_running:>6}{cc.reset_format}\n" if total_running else "")
     else:
         print()
 
