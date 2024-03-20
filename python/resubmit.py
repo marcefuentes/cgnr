@@ -130,20 +130,23 @@ def main():
               f"{cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
+            exit()
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     logging.basicConfig(filename=log_file,
-                    level=logging.DEBUG,
-                    format="%(asctime)s %(levelname)s: %(message)s")
+                        level=logging.DEBUG,
+                        format="%(asctime)s %(levelname)s: %(message)s")
 
-    exit()
     current_path = os.getcwd()
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
             last_job_file_path, last_job = f.read().strip().split(",")
         if last_job_file_path == current_path:
             print(f"\n{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
-            exit()
+            if test:
+                print(f"If this were not a test, the program would end here")
+            else:
+                exit()
     jobs_to_submit = get_jobs_to_submit(current_path)
     if len(jobs_to_submit) == 0:
         print(f"\n{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
