@@ -46,6 +46,7 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
 
 def main(mode, movie):
 
+    start_time = time.perf_counter()
     this_script = os.path.basename(__file__)
     script_name = this_script.split(".")[0]
 
@@ -213,9 +214,10 @@ def main(mode, movie):
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
-if __name__ == "__main__":
+    end_time = time.perf_counter()
+    print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
-    start_time = time.perf_counter()
+if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Results plots",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -225,5 +227,3 @@ if __name__ == "__main__":
 
     main(args.mode, args.movie)
 
-    end_time = time.perf_counter()
-    print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
