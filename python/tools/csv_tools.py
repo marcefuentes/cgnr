@@ -5,6 +5,16 @@ import pandas as pd
 
 from slurm.get_config import get_config
 
+def call_function(function_name, *args, **kwargs):
+    # Get the function object using getattr
+    function = getattr(csv_tools, function_name)
+
+    if not callable(function):
+        raise AttributeError(f"Function '{function_name}' not found in csv_tools.py")
+
+    # Call the function with provided arguments
+    return function(*args, **kwargs)
+
 def add_headers():
 
     try:
@@ -55,8 +65,8 @@ def remove_extra_headers():
                         f.write(content)
                     print(f"Removed extra headers from {file}")
 
-def remove_columns_from_csvs(root_dir, columns_to_remove, extension):
-    for root, _, files in os.walk(root_dir):
+def remove_columns_from_csvs(extension, columns_to_remove):
+    for root, _, files in os.walk('.'):
         for file in files:
             if file.endswith(extension):
                 full_path = os.path.join(root, file)
@@ -72,7 +82,7 @@ def remove_columns_from_csvs(root_dir, columns_to_remove, extension):
                 except Exception as e:
                     print(f"Error processing file {full_path}: {e}")
 
-def divide_by_2(root_dir, column_to_change, extension):
+def divide_by_2(extension, column_to_change):
     for root, _, files in os.walk('.'):
         for file in files:
             if file.endswith(extension):
