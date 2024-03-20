@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 import tools.colors as cc
 from slurm.tools import get_max_slots, get_slots
