@@ -3,6 +3,8 @@ import csv
 import os
 import pandas as pd
 
+from slurm.get_config import get_config
+
 def add_headers():
 
     try:
@@ -43,7 +45,7 @@ def remove_extra_headers():
         exit()
 
     for extension in [first_output_file_extension, second_output_file_extension]:
-        for file in os.listdir('.')
+        for file in os.listdir('.'):
             if file.endswith(extension):
                 with open(file, "r") as f:
                     headers = f.readline().strip()
@@ -81,7 +83,7 @@ def divide_by_2(root_dir, column_to_change, extension):
                         df[col] = (df[col] / 2.0).round(6)
                 df.to_csv(file_path, index=False)
 
-def move_time:
+def move_time():
     input_extension = ".gl2"
     output_extension = ".glo"
 
