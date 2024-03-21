@@ -28,7 +28,7 @@ def submitted_job(mechanism, job_name):
 
 def get_slots(key, state):
 
-    # %j is for job name. %f is for features required for the job.
+    # %j is for job name. %f is for features (queue) required for the job.
     command_squeue = ["squeue", "-t", state, "-r", "-o", "%f"]
     output_squeue = subprocess.Popen(command_squeue,
                                      stdout=subprocess.PIPE)
@@ -98,7 +98,7 @@ def submit_job(mechanism, last_job, queue, job_array):
         return -1, None, e
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
-    job_name = f"{mechanism}_{last_job}_{queue}"
+    job_name = f"{mechanism}_{last_job}"
     job_time = f"{hours}:59:00"
 
     command = ["sbatch",
