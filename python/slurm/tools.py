@@ -4,52 +4,12 @@ import subprocess
 import tools.colors as cc
 from slurm.get_config import get_config
 
-def get_max_slots(queue, jobs):
-
-    command = ["sacctmgr", "-p", "show", "qos", f"format=name,{jobs}"]
-    output = subprocess.check_output(command)
-    output = output.decode().strip().split("\n")
-    qos_name = get_qos_name(queue)
-    for line in output:
-        if line.startswith(qos_name):
-            fields = line.strip().split("|")
-            slots = int(fields[1])
-            break
-
-    return slots
-
-def submitted_job(mechanism, job_name):
-    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
-    #command = f"squeue -t RUNNING,PENDING -r -o %j,%K"
-    output = subprocess.check_output(command, text=True).strip().split("\n")
-    for line in output:
-        if f"{mechanism}_" in line and f",{job_name}" in line: 
-            return True
-    return False
-
-def get_slots(key, state):
-    command = f"squeue -t {state} -r -o %f | grep -E {key} | wc -l"
-    output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
-    output = int(output)
-    return output
-
-def get_free_slots(queue):
-
-    max_submit = get_max_slots(queue, "maxsubmit")
-    running_jobs = get_slots(queue, "RUNNING")
-    pending_jobs = get_slots(queue, "PENDING")
-    free_slots = max_submit - running_jobs - pending_jobs
-
-    return free_slots
-    
 def get_qos_name(queue):
-
     try:
         hours = get_config("hours")
     except RuntimeError as e:
         print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
         exit()
-
     command = ["sacctmgr", "-p", "show", "qos", "format=name,maxwall"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
@@ -65,8 +25,41 @@ def get_qos_name(queue):
         exit()
     if hours >= maxwall:
         qos_name = f"{queue}_medium"
-
     return qos_name
+
+def get_max_slots(queue, jobs):
+    command = ["sacctmgr", "-p", "show", "qos", f"format=name,{jobs}"]
+    output = subprocess.check_output(command)
+    output = output.decode().strip().split("\n")
+    qos_name = get_qos_name(queue)
+    for line in output:
+        if line.startswith(qos_name):
+            fields = line.strip().split("|")
+            slots = int(fields[1])
+            break
+    return slots
+
+def get_slots(key, state):
+    command = f"squeue -t {state} -r -o %f | grep -E {key} | wc -l"
+    output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
+    output = int(output)
+    return output
+
+def get_free_slots(queue):
+    max_submit = get_max_slots(queue, "maxsubmit")
+    running_jobs = get_slots(queue, "RUNNING")
+    pending_jobs = get_slots(queue, "PENDING")
+    free_slots = max_submit - running_jobs - pending_jobs
+    return free_slots
+
+def submitted_job(mechanism, job_name):
+    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    #command = f"squeue -t RUNNING,PENDING -r -o %j,%K"
+    output = subprocess.check_output(command, text=True).strip().split("\n")
+    for line in output:
+        if f"{mechanism}_" in line and f",{job_name}" in line: 
+            return True
+    return False
 
 def submit_job(mechanism, last_job, queue, job_array):
 
