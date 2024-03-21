@@ -10,7 +10,7 @@ def get_qos_name(queue):
     except RuntimeError as e:
         print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
         exit()
-    command = ["sacctmgr", "-p", "show", "qos", "format=name,maxwall"]
+    command = ["sacctmgr", "--parsable", "show", "qos", "format=name,maxwall"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = f"{queue}_short"
@@ -28,7 +28,7 @@ def get_qos_name(queue):
     return qos_name
 
 def get_max_slots(queue, jobs):
-    command = ["sacctmgr", "-p", "show", "qos", f"format=name,{jobs}"]
+    command = ["sacctmgr", "--parsable", "show", "qos", f"format=name,{jobs}"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = get_qos_name(queue)
@@ -39,8 +39,9 @@ def get_max_slots(queue, jobs):
             break
     return slots
 
-def get_slots(key, state):
-    command = f"squeue -t {state} -r -o %f | grep -E {key} | wc -l"
+def get_slots(queue, state):
+    # %f is for features (such as the constraint set with sbatch)
+    command = f"squeue --states={state} --array --format=%f | grep --extended-regexp {queue} | wc --lines"
     output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
     output = int(output)
     return output
@@ -53,7 +54,8 @@ def get_free_slots(queue):
     return free_slots
 
 def submitted_job(mechanism, job_name):
-    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    # %j is for job name, %K is for job array index
+    command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     for line in output:
         if f"{mechanism}_" in line and f",{job_name}" in line:
