@@ -53,23 +53,12 @@ def get_free_slots(queue):
     return free_slots
 
 def submitted_job(mechanism, job_name):
-    #command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
-    #output = subprocess.check_output(command, text=True).strip().split("\n")
-    #for line in output:
-    #    if f"{mechanism}_" in line and f",{job_name}" in line:
-    #        return True
-    #return False
-
-    # This function should print nothing to the screen. It should return True if the job is already submitted, False otherwise.
-    command = f"squeue -t RUNNING,PENDING -r -o %j,%K | grep -E {mechanism}, ',{job_name}'"
-    # If the command returns an error, the job is not submitted. Otherwise, the job is already submitted.
-    try:
-        # This function should print nothing to the screen.
-        subprocess.check_output(command, shell=True)
-        return True
-    except subprocess.CalledProcessError:
-        return False
-        
+    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    output = subprocess.check_output(command, text=True).strip().split("\n")
+    for line in output:
+        if f"{mechanism}_" in line and f",{job_name}" in line:
+            return True
+    return False
 
 def submit_job(mechanism, last_job, queue, job_array):
 
