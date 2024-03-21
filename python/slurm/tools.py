@@ -60,12 +60,9 @@ def submitted_job(mechanism, job_name):
     #        return True
     #return False
 
-    # It is crucial that the function prints nothing to the screen
-    command = f"squeue -t RUNNING,PENDING -r -o %j,%K | grep -E {mechanism}_{job_name}"
-    output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
-    if output:
-        return True
-    return False
+    # This function should print nothing to the screen
+    command = f"squeue -t RUNNING,PENDING -r -o %j,%K | grep -E {mechanism}, ',{job_name}'"
+
 
 
 def submit_job(mechanism, last_job, queue, job_array):
