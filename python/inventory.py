@@ -155,13 +155,13 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
                 to_submit_jobs += 1
 
     total_running += running_jobs
-    print(f"{cc.bold}{cc.green if   finished_jobs else      cc.reset_format}{finished_jobs:>4}{cc.reset_format}"    if finished_jobs else       "", end = "")
-    print(f"{cc.bold}{cc.grey if    dead_jobs else          cc.reset_format}{dead_jobs:>4}{cc.reset_format}"        if dead_jobs else           "", end = "")
-    print(f"{cc.bold}{cc.purple if  no_header else          cc.reset_format}{no_header:>4}{cc.reset_format}"        if no_header else           "", end = "")
-    print(f"{cc.bold}{cc.yellow if  running_jobs else       cc.reset_format}{running_jobs:>4}{cc.reset_format}"     if running_jobs else        "", end = "")
-    print(f"{cc.bold}{cc.white if   pending_jobs else       cc.reset_format}{pending_jobs:>4}{cc.reset_format}"     if pending_jobs else        "", end = "")
-    print(f"{cc.bold}{cc.red if     to_submit_jobs else     cc.reset_format}{to_submit_jobs:>4}{cc.reset_format}"   if to_submit_jobs else      "", end = "")
-    print(f"{cc.bold}{cc.blue if    garbled_jobs else       cc.reset_format}{garbled_jobs:>4}{cc.reset_format}"     if garbled_jobs else        "", end = "")
+    print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset_format}"    if finished_jobs else       "", end = "")
+    print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset_format}"     if running_jobs else        "", end = "")
+    print(f"{cc.bold}{cc.white}{pending_jobs:>4}{cc.reset_format}"     if pending_jobs else        "", end = "")
+    print(f"{cc.bold}{cc.red}{to_submit_jobs:>4}{cc.reset_format}"   if to_submit_jobs else      "", end = "")
+    print(f"{cc.bold}{cc.grey}{dead_jobs:>4}{cc.reset_format}"        if dead_jobs else           "", end = "")
+    print(f"{cc.bold}{cc.purple}{no_header:>4}{cc.reset_format}"        if no_header else           "", end = "")
+    print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset_format}"     if garbled_jobs else        "", end = "")
     print()
     return total_running
 
