@@ -116,9 +116,10 @@ def main(mode, movie):
 
     letterposition = 1.0 + ss.letterposition
     for i, ax in enumerate(fig.get_axes()):
+        letter = chr(ord("a") + i)
         ax.text(0,
                 letterposition,
-                chr(ord("a") + i),
+                letter,
                 transform=ax.transAxes,
                 fontsize=ss.letterlabel,
                 weight="bold")
