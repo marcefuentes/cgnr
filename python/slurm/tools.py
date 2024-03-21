@@ -20,6 +20,7 @@ def get_max_slots(queue, jobs):
 
 def submitted_job(mechanism, job_name):
     command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    #command = f"squeue -t RUNNING,PENDING -r -o %j,%K"
     output = subprocess.check_output(command, text=True).strip().split("\n")
     for line in output:
         if f"{mechanism}_" in line and f",{job_name}" in line: 
@@ -27,20 +28,9 @@ def submitted_job(mechanism, job_name):
     return False
 
 def get_slots(key, state):
-
-    # %j is for job name. %f is for features (queue) required for the job.
-    command_squeue = ["squeue", "-t", state, "-r", "-o", "%f"]
-    output_squeue = subprocess.Popen(command_squeue,
-                                     stdout=subprocess.PIPE)
-    command_grep = ["grep", "-E", f"{key}"]
-    output_grep = subprocess.Popen(command_grep,
-                                   stdin=output_squeue.stdout,
-                                   stdout=subprocess.PIPE)
-    command_wc = ["wc", "-l"]
-    output_wc = subprocess.check_output(command_wc,
-                                        stdin=output_grep.stdout)
-    output = int(output_wc.decode().strip())
-
+    command = f"squeue -t {state} -r -o %f | grep -E {key} | wc -l"
+    output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
+    output = int(output)
     return output
 
 def get_free_slots(queue):
