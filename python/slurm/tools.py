@@ -60,10 +60,13 @@ def submitted_job(mechanism, job_name):
     #        return True
     #return False
 
-    # This function should print nothing to the screen
+    # This function should print nothing to the screen. It should return True if the job is already submitted, False otherwise.
     command = f"squeue -t RUNNING,PENDING -r -o %j,%K | grep -E {mechanism}, ',{job_name}'"
-
-
+    output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
+    if output:
+        return True
+    else:
+        return False
 
 def submit_job(mechanism, last_job, queue, job_array):
 
