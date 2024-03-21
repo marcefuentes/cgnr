@@ -143,7 +143,10 @@ def main(mode, movie):
                     axs[r, c, a, e].tick_params(axis="both",
                                                 labelsize=ss.ticklabel,
                                                 size=ss.ticksize)
-            letter = chr(ord("a") + r*ncols + c)
+            i = r*ncols + c
+            letter = chr(ord("a") + i % 26)
+            if i >= 26:
+                letter = letter + letter
             axs[r, c, 0, 0].text(0,
                                  letterposition,
                                  letter,
