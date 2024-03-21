@@ -126,7 +126,7 @@ def main():
         print(f"\n{cc.bold}This is a test\n{cc.reset_format}")
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
-        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue?{cc.reset_format} {cc.yesno}")
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue?{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
@@ -155,7 +155,7 @@ def main():
     if test:
         print(f"\n{cc.bold}{cc.red}Would delete current {output_file_extensions} of {jobs_to_submit}{cc.reset_format}")
     else:
-        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete {output_file_extensions} of {jobs_to_submit} and resubmit?{cc.reset_format} {cc.yesno}")
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete {output_file_extensions} of {jobs_to_submit} and resubmit?{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
