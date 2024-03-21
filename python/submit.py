@@ -102,8 +102,7 @@ def process_variant(queue, free_slots, test, last_job_file):
         current_path = givens[0]
         current_path_folders = current_path.split("/")
         current_path_print = "/".join(current_path_folders[-3:])
-        print(f"\n{cc.bold}Submit jobs in {current_path_print}?{cc.reset_format} "
-              f"{cc.yesno} ", end="")
+        print(f"\n{cc.bold}Submit jobs in {current_path_print}?{cc.reset_format} {cc.yesno}")
         user_input = input()
         if user_input.lower() == "n":
             exit()

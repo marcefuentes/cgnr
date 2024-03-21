@@ -22,10 +22,7 @@ def submitted_job(mechanism, job_name):
     command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     for line in output:
-        for i in range(1, 6):
-            if f"{mechanism}{i}" in line and f",{job_name}" in line:
-                return True
-        if f"{mechanism}-" in line and f",{job_name}" in line: 
+        if f"{mechanism}_" in line and f",{job_name}" in line: 
             return True
     return False
 

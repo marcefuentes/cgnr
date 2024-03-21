@@ -3,11 +3,12 @@ import csv
 import os
 import pandas as pd
 
+import tools.csv_tools
 from slurm.get_config import get_config
 
 def call_function(function_name, *args, **kwargs):
     # Get the function object using getattr
-    function = getattr(csv_tools, function_name)
+    function = getattr(tools.csv_tools, function_name)
 
     if not callable(function):
         raise AttributeError(f"Function '{function_name}' not found in csv_tools.py")

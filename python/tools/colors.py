@@ -1,1 +1,0 @@
-/home/marcelino/bin/tools/colors.py
