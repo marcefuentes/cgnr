@@ -39,9 +39,9 @@ def get_max_slots(queue, jobs):
             break
     return slots
 
-def get_slots(key, state):
+def get_slots(queue, state):
     # %f is for features (such as the constraint set with sbatch)
-    command = f"squeue --states={state} --array --format='%f' | grep --extended-regexp {key} | wc --lines"
+    command = f"squeue --states={state} --array --format=%f | grep --extended-regexp {queue} | wc --lines"
     output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
     output = int(output)
     return output
