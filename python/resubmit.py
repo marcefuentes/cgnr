@@ -82,7 +82,7 @@ def remove_files(jobs_to_submit):
 def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
     for queue in queues:
         if len(jobs_to_submit) == 0:
-            print(f"\n{cc.bold}{cc.green}No jobs to submit{cc.reset_format}")
+            print(f"{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
             exit()
         free_slots = get_free_slots(queue)
         print(f"\n{cc.bold}{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
@@ -161,7 +161,7 @@ def main():
             exit()
         remove_files(jobs_to_submit)
 
-    submit_jobs_in_folder(current_path, jobs_to_submit, test, last_job_file)
+    submit_jobs_in_folder(current_path, jobs_to_submit, test)
 
     print()
 
