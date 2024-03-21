@@ -53,7 +53,7 @@ def get_free_slots(queue):
     return free_slots
 
 def submitted_job(mechanism, job_name):
-    command = ["squeue", "-t", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    command = ["squeue", "--states", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     for line in output:
         if f"{mechanism}_" in line and f",{job_name}" in line:
