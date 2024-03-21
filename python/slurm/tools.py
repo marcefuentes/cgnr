@@ -40,6 +40,7 @@ def get_max_slots(queue, jobs):
     return slots
 
 def get_slots(key, state):
+    # %f is for features (such as the constraint set with sbatch)
     command = f"squeue --states={state} --array --format='%f' | grep --extended-regexp {key} | wc --lines"
     output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
     output = int(output)
@@ -53,7 +54,8 @@ def get_free_slots(queue):
     return free_slots
 
 def submitted_job(mechanism, job_name):
-    command = ["squeue", "--states", "RUNNING,PENDING", "-r", "-o", "%j,%K"]
+    # %j is for job name, %K is for job array index
+    command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     for line in output:
         if f"{mechanism}_" in line and f",{job_name}" in line:
