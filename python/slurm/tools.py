@@ -10,7 +10,7 @@ def get_qos_name(queue):
     except RuntimeError as e:
         print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
         exit()
-    command = ["sacctmgr", "-p", "show", "qos", "format=name,maxwall"]
+    command = ["sacctmgr", "--parsable", "show", "qos", "format=name,maxwall"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = f"{queue}_short"
@@ -28,7 +28,7 @@ def get_qos_name(queue):
     return qos_name
 
 def get_max_slots(queue, jobs):
-    command = ["sacctmgr", "-p", "show", "qos", f"format=name,{jobs}"]
+    command = ["sacctmgr", "--parsable", "show", "qos", f"format=name,{jobs}"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = get_qos_name(queue)
@@ -40,7 +40,7 @@ def get_max_slots(queue, jobs):
     return slots
 
 def get_slots(key, state):
-    command = f"squeue -t {state} -r -o %f | grep -E {key} | wc -l"
+    command = f"squeue --states={state} --array --format='%f' | grep --extended-regexp {key} | wc --lines"
     output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
     output = int(output)
     return output
