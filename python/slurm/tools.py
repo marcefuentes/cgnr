@@ -103,7 +103,7 @@ def submit_job(mechanism, last_job, queue, job_array):
 
     command = ["sbatch",
                "--job-name", job_name,
-               "--output", f"{job_name}.%j.out",
+               "--output=%a_slurm.out",
                "--constraint", queue,
                "--nodes=1",
                "--tasks=1",
