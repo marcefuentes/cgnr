@@ -28,7 +28,8 @@ def submitted_job(mechanism, job_name):
 
 def get_slots(key, state):
 
-    command_squeue = ["squeue", "-t", state, "-r", "-o", "%j"]
+    # %j is for job name. %f is for features required for the job.
+    command_squeue = ["squeue", "-t", state, "-r", "-o", "%f"]
     output_squeue = subprocess.Popen(command_squeue,
                                      stdout=subprocess.PIPE)
     command_grep = ["grep", "-E", f"{key}"]
