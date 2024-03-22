@@ -37,9 +37,9 @@ def process_variant(current_path, number_of_lines, input_file_extension, output_
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.cyan}->{variant}{cc.reset_format}")
+        print(f"{cc.cyan}{variant}{cc.reset_format}")
     else:
-        print(f"\n{cc.bold}{cc.white}{variant}{cc.reset_format}")
+        print(f"\n{cc.white}{variant}{cc.reset_format}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -74,9 +74,9 @@ def process_mechanism(current_path, folder_dict, number_of_lines, input_file_ext
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.cyan}->{mechanism}{cc.reset_format}", end = "")
+        print(f"{cc.cyan}{mechanism}{cc.reset_format}", end = "")
     else:
-        print(f"{cc.bold}{mechanism}{cc.reset_format}", end = "")
+        print(f"{cc.white}{mechanism}{cc.reset_format}", end = "")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
@@ -101,9 +101,9 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     
     given = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.cyan}\t{given}{cc.reset_format}", end = "  ")
+        print(f"{cc.cyan}\t{given}{cc.reset_format}", end = "  ")
     else:
-        print(f"{cc.bold}\t{given}{cc.reset_format}", end = "  ")
+        print(f"{cc.white}\t{given}{cc.reset_format}", end = "  ")
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
@@ -180,7 +180,7 @@ def main():
         print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset_format}")
         exit()
 
-    print(f"\n{cc.bold}{current_path}{cc.reset_format}")
+    print(f"\n{cc.white}{current_path}{cc.reset_format}")
     total_running = 0
     variants = list_of_folders(current_path)
     for variant in variants:
