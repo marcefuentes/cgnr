@@ -31,8 +31,8 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
         mechanism = current_path_folders[-2]
         if test:
             return_code = 0
-            stdout = "test"
-            stderr = "test"
+            stderr = "This is a test"
+            stdout = "This is a test"
         else:
             return_code, stdout, stderr = st.submit_job(variant, mechanism, last_job, queue, job_array)
         if return_code != 0:
@@ -65,7 +65,7 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{cc.bold}This is a test\n{cc.reset_format}")
+        print(f"\n{cc.bold}This is a test.{cc.reset_format}")
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
         print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue?{cc.reset_format} {cc.yesno} ", end="")
@@ -85,7 +85,7 @@ def main():
         if last_job_file_path == current_path:
             print(f"\n{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
             if test:
-                print(f"If this were not a test, the program would end here\n")
+                print(f"If this were not a test, the program would end here.\n")
             else:
                 exit()
     jobs_to_submit = st.get_jobs_to_submit(current_path)
@@ -95,9 +95,9 @@ def main():
     print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
 
     if test:
-        print(f"\n{cc.bold}{cc.red}Would delete current output files of {jobs_to_submit}{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.white}Would delete output files of jobs in {cc.reset_format}{cc.bold}{cc.red}red{cc.reset_format} and {cc.bold}{cc.grey}grey{cc.reset_format}.")
     else:
-        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of {jobs_to_submit} and resubmit?{cc.reset_format} {cc.yesno} ", end="")
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.reset_format}{cc.red}red{cc.reset_format} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
