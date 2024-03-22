@@ -39,7 +39,7 @@ def process_variant(current_path, number_of_lines, input_file_extension, output_
     if os.path.islink(current_path):
         print(f"{cc.bold}{cc.red}->{variant}{cc.reset_format}")
     else:
-        print(f"\n{cc.bold}{cc.cyan}{variant}{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.white}{variant}{cc.reset_format}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
