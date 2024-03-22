@@ -65,7 +65,7 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{cc.bold}This is a test.{cc.reset_format}")
+        print(f"\n{cc.bold}This is a test.\n{cc.reset_format}")
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
         print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue?{cc.reset_format} {cc.yesno} ", end="")
@@ -83,7 +83,7 @@ def main():
         with open(last_job_file, "r") as f:
             last_job_file_path, last_job = f.read().strip().split(",")
         if last_job_file_path == current_path:
-            print(f"\n{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
+            print(f"{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
             if test:
                 print(f"If this were not a test, the program would end here.\n")
             else:
