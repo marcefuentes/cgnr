@@ -53,21 +53,21 @@ def get_jobs_to_submit(current_path):
                 current_number_of_lines = sum(1 for line in f)
             if current_number_of_lines < number_of_lines - 1:
                 if submitted_job(mechanism, name):
-                    print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format} running")
+                    print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
                 else:
-                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format} dead. Adding to submission list...")
+                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format} dead. Added to submission list", end = " ")
                     jobs_to_submit.append(int(name))
             elif current_number_of_lines == number_of_lines - 1:
-                print(f"{cc.bold}{cc.purple}{name}{cc.reset_format} has no header")
+                print(f"{cc.bold}{cc.purple}{name}{cc.reset_format} has no header", end = " ")
             elif current_number_of_lines == number_of_lines:
-                print(f"{cc.bold}{cc.green}{name}{cc.reset_format} complete")
+                print(f"{cc.bold}{cc.green}{name}{cc.reset_format}", end = " ")
             else:
-                print(f"{cc.bold}{cc.blue}{name}{cc.reset_format} has too many lines")
+                print(f"{cc.bold}{cc.blue}{name}{cc.reset_format} has too many lines", end = " ")
         else:
             if submitted_job(mechanism, name):
-                print(f"{cc.bold}{name}{cc.reset_format} pending")
+                print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
             else:
-                print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not submitted. Adding to submission list...")
+                print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not submitted. Added to submission list", end = " ")
                 jobs_to_submit.append(int(name))
     return jobs_to_submit
 
