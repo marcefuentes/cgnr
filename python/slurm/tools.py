@@ -1,4 +1,5 @@
 
+from math import sqrt
 import os
 import re
 import subprocess
@@ -124,30 +125,37 @@ def get_jobs_to_submit(current_path):
     jobs_to_submit = []
     current_path_folders = current_path.split("/")
     mechanism = current_path_folders[-2]
-    for name in names:
-        output_file = f"{name}{output_file_extension}"
-        if os.path.isfile(output_file):
-            with open(output_file) as f:
-                current_number_of_lines = sum(1 for line in f)
-            if current_number_of_lines < number_of_lines - 1:
-                if submitted_job(mechanism, name):
-                    print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
+    start_num = int(names[0])
+    end_num = int(names[-1])
+    row_length = int(sqrt(float(len(names))))
+    current_num = end_num - row_length + 1
+    while current_num >= start_num:
+        for num in range(current_num, current_num + row_length):
+            name = str(num)
+            output_file = f"{name}{output_file_extension}"
+            if os.path.isfile(output_file):
+                with open(output_file) as f:
+                    current_number_of_lines = sum(1 for line in f)
+                if current_number_of_lines < number_of_lines - 1:
+                    if submitted_job(mechanism, name):
+                        print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
+                    else:
+                        print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")
+                        jobs_to_submit.append(int(name))
+                elif current_number_of_lines == number_of_lines - 1:
+                    print(f"{cc.bold}{cc.purple}{name}{cc.reset_format}", end = " ")
+                elif current_number_of_lines == number_of_lines:
+                    print(f"{cc.bold}{cc.green}{name}{cc.reset_format}", end = " ")
                 else:
-                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format} dead. Added to submission list", end = " ")
+                    print(f"{cc.bold}{cc.blue}{name}{cc.reset_format}", end = " ")
+            else:
+                if submitted_job(mechanism, name):
+                    print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
+                else:
+                    print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")
                     jobs_to_submit.append(int(name))
-            elif current_number_of_lines == number_of_lines - 1:
-                print(f"{cc.bold}{cc.purple}{name}{cc.reset_format} has no header", end = " ")
-            elif current_number_of_lines == number_of_lines:
-                print(f"{cc.bold}{cc.green}{name}{cc.reset_format}", end = " ")
-            else:
-                print(f"{cc.bold}{cc.blue}{name}{cc.reset_format} has too many lines", end = " ")
-        else:
-            if submitted_job(mechanism, name):
-                print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
-            else:
-                print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not submitted. Added to submission list", end = " ")
-                jobs_to_submit.append(int(name))
-    print()
+        print()
+        current_num -= row_length
 
     return jobs_to_submit
 
