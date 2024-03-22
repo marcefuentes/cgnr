@@ -1,4 +1,5 @@
 
+import os
 import re
 import subprocess
 import tools.colors as cc
@@ -101,4 +102,51 @@ def submit_job(mechanism, last_job, queue, job_array):
     stdout, stderr = process.communicate()
 
     return process.returncode, stdout, stderr
+
+def get_jobs_to_submit(current_path):
+
+    try:
+        input_file_extension = get_config("input_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+    try:
+        output_file_extension = get_config("first_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+    try:
+        number_of_lines = get_config("number_of_lines")
+    except RuntimeError as e:
+        return -1, None, e
+
+    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
+    jobs_to_submit = []
+    current_path_folders = current_path.split("/")
+    mechanism = current_path_folders[-2]
+    for name in names:
+        output_file = f"{name}{output_file_extension}"
+        if os.path.isfile(output_file):
+            with open(output_file) as f:
+                current_number_of_lines = sum(1 for line in f)
+            if current_number_of_lines < number_of_lines - 1:
+                if submitted_job(mechanism, name):
+                    print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
+                else:
+                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format} dead. Added to submission list", end = " ")
+                    jobs_to_submit.append(int(name))
+            elif current_number_of_lines == number_of_lines - 1:
+                print(f"{cc.bold}{cc.purple}{name}{cc.reset_format} has no header", end = " ")
+            elif current_number_of_lines == number_of_lines:
+                print(f"{cc.bold}{cc.green}{name}{cc.reset_format}", end = " ")
+            else:
+                print(f"{cc.bold}{cc.blue}{name}{cc.reset_format} has too many lines", end = " ")
+        else:
+            if submitted_job(mechanism, name):
+                print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
+            else:
+                print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not submitted. Added to submission list", end = " ")
+                jobs_to_submit.append(int(name))
+
+    return jobs_to_submit
 
