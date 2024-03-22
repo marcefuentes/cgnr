@@ -147,6 +147,27 @@ def get_jobs_to_submit(current_path):
             else:
                 print(f"{cc.bold}{cc.red}{name}{cc.reset_format} not submitted. Added to submission list", end = " ")
                 jobs_to_submit.append(int(name))
+    print()
 
     return jobs_to_submit
+
+def remove_files(jobs_to_submit):
+    try:
+        first_output_file_extension = get_config("first_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+    try:
+        second_output_file_extension = get_config("second_output_file_extension")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
+
+    output_file_extensions = [first_output_file_extension, second_output_file_extension]
+    for name in jobs_to_submit:
+        for extension in output_file_extensions:
+            if os.path.isfile(f"{name}{extension}"):
+                os.remove(f"{name}{extension}")
+            else:
+                continue
 

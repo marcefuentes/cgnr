@@ -4,50 +4,14 @@ import logging
 import os
 import sys
 
+import slurm.tools as st
 import tools.colors as cc
 from slurm.get_config import get_config
-from slurm.tools import get_free_slots, get_jobs_to_submit, submitted_job, submit_job
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
 
 queues = ["clk", "epyc"]
-
-try:
-    exe = get_config("exe")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
-    exit()
-try:
-    input_file_extension = get_config("input_file_extension")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
-    exit()
-try:
-    first_output_file_extension = get_config("first_output_file_extension")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
-    exit()
-try:
-    second_output_file_extension = get_config("second_output_file_extension")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
-    exit()
-try:
-    number_of_lines = get_config("number_of_lines")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
-    exit()
-
-output_file_extensions = [first_output_file_extension, second_output_file_extension]
-
-def remove_files(jobs_to_submit):
-    for name in jobs_to_submit:
-        for extension in output_file_extensions:
-            if os.path.isfile(f"{name}{extension}"):
-                os.remove(f"{name}{extension}")
-            else:
-                continue
 
 def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
     for queue in queues:
@@ -68,7 +32,7 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
             stdout = "test"
             stderr = "test"
         else:
-            return_code, stdout, stderr = submit_job(mechanism, last_job, queue, job_array)
+            return_code, stdout, stderr = st.submit_job(mechanism, last_job, queue, job_array)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:
@@ -90,6 +54,12 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
     print(f"{cc.bold}{cc.red}{len(jobs_to_submit)}{cc.reset_format} jobs remain to be submitted")
 
 def main():
+
+    try:
+        exe = get_config("exe")
+    except RuntimeError as e:
+        print(f"{cc.red}{e}{cc.reset_format}")
+        exit()
 
     test = len(sys.argv) > 1
     if test:
@@ -116,7 +86,7 @@ def main():
                 print(f"If this were not a test, the program would end here")
             else:
                 exit()
-    jobs_to_submit = get_jobs_to_submit(current_path)
+    jobs_to_submit = st.get_jobs_to_submit(current_path)
     if len(jobs_to_submit) == 0:
         print(f"\n{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
         return
@@ -129,7 +99,7 @@ def main():
         user_input = input()
         if user_input.lower() == "n":
             exit()
-        remove_files(jobs_to_submit)
+        st.remove_files(jobs_to_submit)
 
     submit_jobs_in_folder(current_path, jobs_to_submit, test)
 
