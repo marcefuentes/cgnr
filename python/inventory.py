@@ -37,7 +37,7 @@ def process_variant(current_path, number_of_lines, input_file_extension, output_
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.red}->{variant}{cc.reset_format}")
+        print(f"{cc.bold}{cc.cyan}->{variant}{cc.reset_format}")
     else:
         print(f"\n{cc.bold}{cc.white}{variant}{cc.reset_format}")
 
@@ -74,7 +74,7 @@ def process_mechanism(current_path, folder_dict, number_of_lines, input_file_ext
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.red}->{mechanism}{cc.reset_format}", end = "")
+        print(f"{cc.bold}{cc.cyan}->{mechanism}{cc.reset_format}", end = "")
     else:
         print(f"{cc.bold}{mechanism}{cc.reset_format}", end = "")
 
@@ -101,7 +101,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     
     given = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.bold}{cc.red}\t{given}{cc.reset_format}", end = "  ")
+        print(f"{cc.bold}{cc.cyan}\t{given}{cc.reset_format}", end = "  ")
     else:
         print(f"{cc.bold}\t{given}{cc.reset_format}", end = "  ")
 
