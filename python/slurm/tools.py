@@ -141,7 +141,7 @@ def get_jobs_to_submit(current_path):
                     if submitted_job(variant, mechanism, name):
                         print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
                     else:
-                        print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")
+                        print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")
                         jobs_to_submit.append(int(name))
                 elif current_number_of_lines == number_of_lines - 1:
                     print(f"{cc.bold}{cc.purple}{name}{cc.reset_format}", end = " ")
@@ -153,7 +153,7 @@ def get_jobs_to_submit(current_path):
                 if submitted_job(variant, mechanism, name):
                     print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
                 else:
-                    print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")
+                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")
                     jobs_to_submit.append(int(name))
         print()
         current_num -= row_length
