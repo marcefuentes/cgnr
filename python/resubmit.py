@@ -26,13 +26,14 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
         job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         last_job = jobs_to_submit[num_jobs_to_submit - 1]
         current_path_folders = current_path.split("/")
+        variant = current_path_folders[-3]
         mechanism = current_path_folders[-2]
         if test:
             return_code = 0
             stdout = "test"
             stderr = "test"
         else:
-            return_code, stdout, stderr = st.submit_job(mechanism, last_job, queue, job_array)
+            return_code, stdout, stderr = st.submit_job(variant, mechanism, last_job, queue, job_array)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:

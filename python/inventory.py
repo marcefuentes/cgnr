@@ -130,6 +130,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     no_header = 0
     dead_jobs = 0
 
+    variant = current_path.split("/")[-3]
     mechanism = current_path.split("/")[-2]
     names = [name[:-4] for name in os.listdir(current_path) if name.endswith(input_file_extension)]
     for name in names:
@@ -138,7 +139,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             with open(output_file, "r") as f:
                 current_number_of_lines = sum(1 for line in f)
             if current_number_of_lines < number_of_lines - 1:
-                if "mfu" in current_path and submitted_job(mechanism, name):
+                if "mfu" in current_path and submitted_job(variant, mechanism, name):
                     running_jobs += 1
                 else:
                     dead_jobs += 1
@@ -149,7 +150,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             else:
                 garbled_jobs += 1
         else:
-            if "mfu" in current_path and submitted_job(mechanism, name):
+            if "mfu" in current_path and submitted_job(variant, mechanism, name):
                 pending_jobs += 1
             else:
                 to_submit_jobs += 1
