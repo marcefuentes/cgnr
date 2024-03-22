@@ -124,6 +124,7 @@ def get_jobs_to_submit(current_path):
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     jobs_to_submit = []
     current_path_folders = current_path.split("/")
+    variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
     start_num = int(names[0])
     end_num = int(names[-1])
@@ -137,7 +138,7 @@ def get_jobs_to_submit(current_path):
                 with open(output_file) as f:
                     current_number_of_lines = sum(1 for line in f)
                 if current_number_of_lines < number_of_lines - 1:
-                    if submitted_job(mechanism, name):
+                    if submitted_job(variant, mechanism, name):
                         print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
                     else:
                         print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")
@@ -149,7 +150,7 @@ def get_jobs_to_submit(current_path):
                 else:
                     print(f"{cc.bold}{cc.blue}{name}{cc.reset_format}", end = " ")
             else:
-                if submitted_job(mechanism, name):
+                if submitted_job(variant, mechanism, name):
                     print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
                 else:
                     print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")

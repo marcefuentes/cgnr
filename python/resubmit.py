@@ -7,6 +7,7 @@ import sys
 import slurm.tools as st
 import tools.colors as cc
 from slurm.get_config import get_config
+from slurm.tools import get_free_slots
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
@@ -84,7 +85,7 @@ def main():
         if last_job_file_path == current_path:
             print(f"\n{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
             if test:
-                print(f"If this were not a test, the program would end here")
+                print(f"If this were not a test, the program would end here\n")
             else:
                 exit()
     jobs_to_submit = st.get_jobs_to_submit(current_path)
@@ -94,9 +95,9 @@ def main():
     print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
 
     if test:
-        print(f"\n{cc.bold}{cc.red}Would delete current {output_file_extensions} of {jobs_to_submit}{cc.reset_format}")
+        print(f"\n{cc.bold}{cc.red}Would delete current output files of {jobs_to_submit}{cc.reset_format}")
     else:
-        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete {output_file_extensions} of {jobs_to_submit} and resubmit?{cc.reset_format} {cc.yesno} ", end="")
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of {jobs_to_submit} and resubmit?{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
