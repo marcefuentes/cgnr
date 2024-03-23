@@ -26,11 +26,11 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
         if not free_slots:
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
-        queue_job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit])) ####
+        queue_job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         if test:
             return_code = 0
             stderr = "This is a test"
-            stdout = queue_job_array
+            stdout = f"This is a test\n{queue_job_array}"
         else:
             variant = current_path_folders[-3]
             mechanism = current_path_folders[-2]
