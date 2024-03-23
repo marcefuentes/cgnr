@@ -23,6 +23,4 @@ for queue in queues:
     print(f"{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset_format}", end = "")
     print(f"{cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}")
 
-    #{max_running:>6}{cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>9}{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset_format} {cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}") 
-
 print()
