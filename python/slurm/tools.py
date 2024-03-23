@@ -18,14 +18,13 @@ def get_qos_name(queue):
     qos_name = f"{queue}_short"
     for line in output:
         if line.startswith(qos_name):
-            fields = line.strip().split("|")
-            maxwall = int(fields[1].split(":")[0])
+            _, maxwall = line.strip().split("|")
+            maxwall_hours = int(maxwall.split(":")[0])
             break
-    if maxwall is None:
+    if maxwall_hours is None:
         print(f"{red}QOS {qos_name} not found{reset_format}")
-        logging.error(f"QOS {qos_name} not found")
         exit()
-    if hours >= maxwall:
+    if hours >= maxwall_hours:
         qos_name = f"{queue}_medium"
     return qos_name
 
