@@ -28,8 +28,8 @@ def get_qos_name(queue):
         qos_name = f"{queue}_medium"
     return qos_name
 
-def get_max_slots(queue, jobs):
-    command = ["sacctmgr", "--parsable2", "show", "qos", f"format=name,{jobs}"]
+def get_max_slots(queue, specification):
+    command = ["sacctmgr", "--parsable2", "show", "qos", f"format=name,{specification}"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = get_qos_name(queue)
