@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import tools.colors as cc
-from slurm.tools import get_max_slots, get_slots
+from slurm.tools import get_qos_limit, get_slots
 import os
 
 queues = ["clk", "epyc"]
@@ -12,8 +12,8 @@ print(f"{'Queue':<6} {'Max':<4} {'Running':<8} {'Pending':<8} {'Free':<8}")
 
 for queue in queues:
 
-    max_submit = get_max_slots(queue, "maxsubmit")
-    max_running = get_max_slots(queue, "maxjobspu")
+    max_submit = get_qos_limit(queue, "maxsubmit")
+    max_running = get_qos_limit(queue, "maxjobspu")
     running_jobs = get_slots(queue, "RUNNING")
     pending_jobs = get_slots(queue, "PENDING")
     free_slots = max_submit - running_jobs - pending_jobs

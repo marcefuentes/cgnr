@@ -24,12 +24,13 @@ def get_qos_name(queue):
         qos_name = f"{queue}_medium"
     return qos_name
 
-def get_max_slots(queue, specification):
+def get_qos_limit(queue, specification):
     qos_name = get_qos_name(queue)
     command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, f"format={specification}"]
     output = subprocess.check_output(command)
-    output = int(output.decode().strip())
-    return output
+    limit = output.decode().strip()
+    limit = int(output)
+    return limit
 
 def get_slots(queue, state):
     # %f is the feature (such as the constraint set with sbatch)
@@ -39,7 +40,7 @@ def get_slots(queue, state):
     return output
 
 def get_free_slots(queue):
-    max_submit = get_max_slots(queue, "maxsubmit")
+    max_submit = get_qos_limit(queue, "maxsubmit")
     running_jobs = get_slots(queue, "RUNNING")
     pending_jobs = get_slots(queue, "PENDING")
     free_slots = max_submit - running_jobs - pending_jobs
