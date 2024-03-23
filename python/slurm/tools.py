@@ -55,17 +55,6 @@ def get_free_slots(queue):
     free_slots = max_submit - running_jobs - pending_jobs
     return free_slots
 
-def job_is_queued(current_path_folders, job_array_index):
-    # %j is the job name, %K is the job array index
-    command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
-    output = subprocess.check_output(command, text=True).strip().split("\n")
-    variant = current_path_folders[-3]
-    mechanism = current_path_folders[-2]
-    for line in output:
-        if line.startswith(f"{mechanism}_") and line.endswith(f"_{variant},{job_array_index}"):
-            return True
-    return False
-
 def submit_job(current_path_folders, job_array_string, queue):
 
     try: 
@@ -90,11 +79,9 @@ def submit_job(current_path_folders, job_array_string, queue):
     mechanism = current_path_folders[-2]
     job_name = f"{mechanism}_{job_array_string[-3:]}_{variant}"
     job_time = f"{hours}:59:00"
-
-    # %a is the array index
     command = ["sbatch",
                "--job-name", job_name,
-               "--output=%a_slurm.out",
+               "--output=%a_slurm.out", # %a is the array index
                "--constraint", queue,
                "--nodes=1",
                "--tasks=1",
@@ -108,6 +95,17 @@ def submit_job(current_path_folders, job_array_string, queue):
     stdout, stderr = process.communicate()
 
     return process.returncode, stdout, stderr
+
+def job_is_queued(current_path_folders, job_array_index):
+    # %j is the job name, %K is the job array index
+    command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
+    output = subprocess.check_output(command, text=True).strip().split("\n")
+    variant = current_path_folders[-3]
+    mechanism = current_path_folders[-2]
+    for line in output:
+        if line.startswith(f"{mechanism}_") and line.endswith(f"_{variant},{job_array_index}"):
+            return True
+    return False
 
 def get_jobs_to_submit(current_path_folders):
 
