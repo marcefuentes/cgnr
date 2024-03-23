@@ -25,15 +25,11 @@ def get_qos_name(queue):
     return qos_name
 
 def get_max_slots(queue, specification):
-    command = ["sacctmgr", "--parsable2", "show", "qos", f"format=name,{specification}"]
-    output = subprocess.check_output(command)
-    output = output.decode().strip().split("\n")
     qos_name = get_qos_name(queue)
-    for line in output:
-        if line.startswith(qos_name):
-            _, slots = line.strip().split("|")
-            slots = int(slots)
-            return slots
+    command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, f"format={specification}"]
+    output = subprocess.check_output(command)
+    output = int(output.decode().strip())
+    return output
 
 def get_slots(queue, state):
     # %f is the feature (such as the constraint set with sbatch)
