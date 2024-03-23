@@ -69,7 +69,8 @@ def submit_job(current_path_folders, job_array_string, queue):
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
-    job_name = f"{mechanism}_{job_array_string[-3:]}_{variant}"
+    given = current_path_folders[-1]
+    job_name = f"{mechanism}_{given}_{variant}"
     job_time = f"{hours}:59:00"
     command = ["sbatch",
                "--job-name", job_name,
