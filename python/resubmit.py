@@ -28,7 +28,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         if test:
             return_code = 0
             stderr = "This is a test"
-            stdout = f"This is a test\n{job_array_string}"
+            stdout = f"This is a test"
         else:
             return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, queue)
         if return_code != 0:
