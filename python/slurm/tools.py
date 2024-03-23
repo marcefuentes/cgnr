@@ -42,7 +42,7 @@ def get_max_slots(queue, jobs):
     return slots
 
 def get_slots(queue, state):
-    # %f is for features (such as the constraint set with sbatch)
+    # %f is the feature (such as the constraint set with sbatch)
     command = f"squeue --states={state} --array --format=%f | grep --extended-regexp {queue} | wc --lines"
     output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
     output = int(output)
@@ -56,7 +56,7 @@ def get_free_slots(queue):
     return free_slots
 
 def job_is_queued(current_path_folders, job_array_index):
-    # %j is for job name, %K is for job array index
+    # %j is the job name, %K is the job array index
     command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     variant = current_path_folders[-3]
@@ -91,6 +91,7 @@ def submit_job(current_path_folders, job_array, queue):
     job_name = f"{mechanism}_{job_array[-3:]}_{variant}"
     job_time = f"{hours}:59:00"
 
+    # %a is the array index
     command = ["sbatch",
                "--job-name", job_name,
                "--output=%a_slurm.out",
