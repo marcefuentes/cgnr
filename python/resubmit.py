@@ -32,9 +32,7 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
             stderr = "This is a test"
             stdout = f"This is a test\n{queue_job_array}"
         else:
-            variant = current_path_folders[-3]
-            mechanism = current_path_folders[-2]
-            return_code, stdout, stderr = st.submit_job(variant, mechanism, queue_job_array, queue)
+            return_code, stdout, stderr = st.submit_job(current_path_folders, queue_job_array, queue)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:

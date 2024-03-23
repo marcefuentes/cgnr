@@ -71,9 +71,7 @@ def process_folder(queue, free_slots, last_job, test):
         stdout = "Test"
         stderr = "Test"
     else:
-        variant = current_path_folders[-3]
-        mechanism = current_path_folders[-2]
-        return_code, stdout, stderr = submit_job(variant, mechanism, job_array, queue)
+        return_code, stdout, stderr = submit_job(current_path_folders, job_array, queue)
     if return_code != 0:
         print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
         if stderr:

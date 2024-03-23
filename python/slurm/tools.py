@@ -64,7 +64,7 @@ def job_is_queued(variant, mechanism, job_array_index):
             return True
     return False
 
-def submit_job(variant, mechanism, job_array, queue):
+def submit_job(current_path_folders, job_array, queue):
 
     try: 
         exe = get_config("exe")
@@ -84,6 +84,8 @@ def submit_job(variant, mechanism, job_array, queue):
         return -1, None, e
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
+    variant = current_path_folders[-3]
+    mechanism = current_path_folders[-2]
     job_name = f"{mechanism}_{job_array[-1]}_{variant}"
     job_time = f"{hours}:59:00"
 
