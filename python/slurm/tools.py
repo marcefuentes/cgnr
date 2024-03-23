@@ -32,19 +32,19 @@ def get_qos_limit(queue, specification):
     limit = int(output)
     return limit
 
-def get_squeue_stats(queue, state):
-    # %f is the feature (such as the constraint set with sbatch)
-    command = f"squeue --states={state} --array --noheader --format=%f | grep {queue} | wc --lines"
-    output = subprocess.check_output(command, shell="True")
-    stats = output.decode().strip()
-    stats = int(stats)
-    return stats
-
 def get_free_slots(queue):
     max_submit = get_qos_limit(queue, "maxsubmit")
     submitted_jobs = get_squeue_stats(queue, "running,pending")
     free_slots = max_submit - submitted_jobs
     return free_slots
+
+def get_squeue_stats(queue, state):
+    # %f is the feature (such as the constraint set with sbatch)
+    command = f"squeue --states={state} --array --noheader --format=%f | grep {queue} | wc --lines"
+    output = subprocess.check_output(command, shell=True)
+    stats = output.decode().strip()
+    stats = int(stats)
+    return stats
 
 def submit_job(current_path_folders, job_array_string, queue):
 
@@ -94,8 +94,9 @@ def job_is_queued(current_path_folders, job_array_index):
     output = subprocess.check_output(command, text=True).strip().split("\n")
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
+    given = current_path_folders[-1]
     for line in output:
-        if line.startswith(f"{mechanism}_") and line.endswith(f"_{variant},{job_array_index}"):
+        if line == f"{mechanism}_{given}_{variant},{job_array_index}":
             return True
     return False
 
