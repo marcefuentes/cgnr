@@ -91,7 +91,7 @@ def submit_job(current_path_folders, job_array_string, queue):
 
 def job_is_queued(current_path_folders, job_array_index):
     # %j is the job name, %K is the job array index
-    command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--noheader", "--format=%j,%K"]
+    command = ["squeue", "--states", "running,pending", "--array", "--noheader", "--format=%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
