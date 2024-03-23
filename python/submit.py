@@ -52,7 +52,6 @@ def process_folder(queue, free_slots, last_job, test):
     current_path = os.getcwd()
     current_path_folders = current_path.split("/")
     current_path_print = "/".join(current_path_folders[-3:])
-    job_max = get_job_max(current_path)
     if last_job == 0:
         job_min = get_job_min(current_path)
     else:
@@ -61,10 +60,9 @@ def process_folder(queue, free_slots, last_job, test):
         print(f"{cc.red}{current_path_print}/{job_min}{output_file_extension} already exists{cc.reset_format}")
         last_job = 0
         return free_slots, last_job
+    job_max = get_job_max(current_path)
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
-    variant = current_path_folders[-3]
-    mechanism = current_path_folders[-2]
     job_array = f"{job_min}-{last_job}"
     info = f"{current_path_print}/{job_array} to {queue}"
     if test:
@@ -73,7 +71,9 @@ def process_folder(queue, free_slots, last_job, test):
         stdout = "Test"
         stderr = "Test"
     else:
-        return_code, stdout, stderr = submit_job(variant, mechanism, last_job, queue, job_array)
+        variant = current_path_folders[-3]
+        mechanism = current_path_folders[-2]
+        return_code, stdout, stderr = submit_job(variant, mechanism, job_array, queue)
     if return_code != 0:
         print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
         if stderr:
@@ -125,12 +125,18 @@ def process_variant(queue, free_slots, test, last_job_file):
                 givens = list_of_folders(mechanism)
                 current_path = givens[0]
             else:
-                os.remove(last_job_file)
+                if test:
+                    print(f"{cc.bold}Would remove {last_job_file}.{cc.reset_format}")
+                else:
+                    os.remove(last_job_file)
                 print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
                 print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
                 exit()
-    with open(last_job_file, "w") as f:
-        f.write(f"{current_path},{last_job}")
+    if test:
+        print(f"{cc.bold}Would write {current_path},{last_job} to {last_job_file}.{cc.reset_format}")
+    else:
+        with open(last_job_file, "w") as f:
+            f.write(f"{current_path},{last_job}")
 
     return free_slots
 
@@ -139,11 +145,8 @@ def main():
     test = len(sys.argv) > 1
     if test:
         print(f"\n{cc.bold}This is a test{cc.reset_format}")
-        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.test"
-        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
-    else:
-        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
+    last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+    log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     logging.basicConfig(filename=log_file,
                         level=logging.DEBUG,
                         format="%(asctime)s %(levelname)s: %(message)s")

@@ -15,6 +15,8 @@ from slurm.tools import get_free_slots
 queues = ["clk", "epyc"]
 
 def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
+    current_path_folders = current_path.split("/")
+    current_path_print = "/".join(current_path_folders[-3:])
     for queue in queues:
         if len(jobs_to_submit) == 0:
             print(f"{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
@@ -24,17 +26,15 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
         if not free_slots:
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
-        job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
-        last_job = jobs_to_submit[num_jobs_to_submit - 1]
-        current_path_folders = current_path.split("/")
-        variant = current_path_folders[-3]
-        mechanism = current_path_folders[-2]
+        queue_job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit])) ####
         if test:
             return_code = 0
             stderr = "This is a test"
-            stdout = "This is a test"
+            stdout = queue_job_array
         else:
-            return_code, stdout, stderr = st.submit_job(variant, mechanism, last_job, queue, job_array)
+            variant = current_path_folders[-3]
+            mechanism = current_path_folders[-2]
+            return_code, stdout, stderr = st.submit_job(variant, mechanism, queue_job_array, queue)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:
@@ -46,14 +46,13 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
                 if line:
                     print(line)
                     logging.info(line)
-        current_path_print = "/".join(current_path_folders[-3:])
-        info = f"{current_path_print}/{job_array} to {queue}"
+        info = f"{current_path_print}/{queue_job_array} to {queue}"
         logging.info(info)
         print(f"{cc.green}{info}{cc.reset_format}")
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
         print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
-    print(f"{cc.bold}{cc.red}{len(jobs_to_submit)}{cc.reset_format} jobs remain to be submitted")
+    print(f"{cc.bold}{cc.red}{num_jobs_to_submit}{cc.reset_format} jobs remain to be submitted")
 
 def main():
 
@@ -81,7 +80,7 @@ def main():
     current_path = os.getcwd()
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
-            last_job_file_path, last_job = f.read().strip().split(",")
+            last_job_file_path, _ = f.read().strip().split(",")
         if last_job_file_path == current_path:
             print(f"{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
             if test:

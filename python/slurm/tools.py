@@ -55,16 +55,16 @@ def get_free_slots(queue):
     free_slots = max_submit - running_jobs - pending_jobs
     return free_slots
 
-def submitted_job(variant, mechanism, job_name):
+def job_is_queued(variant, mechanism, job_array_index):
     # %j is for job name, %K is for job array index
     command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
     for line in output:
-        if f"_{variant}" in line and f"{mechanism}_" in line and f",{job_name}" in line:
+        if line.startswith(f"{mechanism}_") and line.endswith(f"_{variant},{job_array_index}"):
             return True
     return False
 
-def submit_job(variant, mechanism, last_job, queue, job_array):
+def submit_job(variant, mechanism, job_array, queue):
 
     try: 
         exe = get_config("exe")
@@ -84,7 +84,7 @@ def submit_job(variant, mechanism, last_job, queue, job_array):
         return -1, None, e
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
-    job_name = f"{mechanism}_{last_job}_{variant}"
+    job_name = f"{mechanism}_{job_array[-1]}_{variant}"
     job_time = f"{hours}:59:00"
 
     command = ["sbatch",
@@ -121,11 +121,11 @@ def get_jobs_to_submit(current_path):
     except RuntimeError as e:
         return -1, None, e
 
-    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     jobs_to_submit = []
     current_path_folders = current_path.split("/")
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
+    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     start_num = int(names[0])
     end_num = int(names[-1])
     row_length = int(sqrt(float(len(names))))
@@ -138,7 +138,7 @@ def get_jobs_to_submit(current_path):
                 with open(output_file) as f:
                     current_number_of_lines = sum(1 for line in f)
                 if current_number_of_lines < number_of_lines - 1:
-                    if submitted_job(variant, mechanism, name):
+                    if job_is_queued(variant, mechanism, name):
                         print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
                     else:
                         print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")
@@ -150,7 +150,7 @@ def get_jobs_to_submit(current_path):
                 else:
                     print(f"{cc.bold}{cc.blue}{name}{cc.reset_format}", end = " ")
             else:
-                if submitted_job(variant, mechanism, name):
+                if job_is_queued(variant, mechanism, name):
                     print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
                 else:
                     print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")

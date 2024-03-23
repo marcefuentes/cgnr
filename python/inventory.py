@@ -7,7 +7,7 @@ import sys
 
 import tools.colors as cc
 from slurm.get_config import get_config
-from slurm.tools import submitted_job
+from slurm.tools import job_is_queued
 from tools.list_of_folders import list_of_folders
 
 def get_config_value(variable):
@@ -139,7 +139,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             with open(output_file, "r") as f:
                 current_number_of_lines = sum(1 for line in f)
             if current_number_of_lines < number_of_lines - 1:
-                if "mfu" in current_path and submitted_job(variant, mechanism, name):
+                if "mfu" in current_path and job_is_queued(variant, mechanism, name):
                     running_jobs += 1
                 else:
                     dead_jobs += 1
@@ -150,7 +150,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             else:
                 garbled_jobs += 1
         else:
-            if "mfu" in current_path and submitted_job(variant, mechanism, name):
+            if "mfu" in current_path and job_is_queued(variant, mechanism, name):
                 pending_jobs += 1
             else:
                 to_submit_jobs += 1
