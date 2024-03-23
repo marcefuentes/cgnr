@@ -18,6 +18,6 @@ for queue in queues:
     pending_jobs = get_squeue_stats(queue, "pending")
     free_slots = max_submit - running_jobs - pending_jobs
 
-    print(f"{queue:<4} {cc.reset_format} {max_running:>4} {cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>8}{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset_format} {cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}") 
+    print(f"{queue:<4}  {max_running:>4} {cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>8}{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset_format} {cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}") 
 
 print()
