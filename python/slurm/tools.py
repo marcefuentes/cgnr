@@ -32,7 +32,7 @@ def get_qos_limit(queue, specification):
     limit = int(output)
     return limit
 
-def get_slots(queue, state):
+def get_squeue_stats(queue, state):
     # %f is the feature (such as the constraint set with sbatch)
     command = f"squeue --states={state} --array --format=%f | grep --extended-regexp {queue} | wc --lines"
     output = subprocess.check_output(command, shell=True).decode("utf-8").strip()
@@ -41,8 +41,8 @@ def get_slots(queue, state):
 
 def get_free_slots(queue):
     max_submit = get_qos_limit(queue, "maxsubmit")
-    running_jobs = get_slots(queue, "RUNNING")
-    pending_jobs = get_slots(queue, "PENDING")
+    running_jobs = get_squeue_stats(queue, "RUNNING")
+    pending_jobs = get_squeue_stats(queue, "PENDING")
     free_slots = max_submit - running_jobs - pending_jobs
     return free_slots
 
