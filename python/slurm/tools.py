@@ -66,7 +66,7 @@ def job_is_queued(current_path_folders, job_array_index):
             return True
     return False
 
-def submit_job(current_path_folders, job_array, queue):
+def submit_job(current_path_folders, job_array_string, queue):
 
     try: 
         exe = get_config("exe")
@@ -88,7 +88,7 @@ def submit_job(current_path_folders, job_array, queue):
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
-    job_name = f"{mechanism}_{job_array[-3:]}_{variant}"
+    job_name = f"{mechanism}_{job_array_string[-3:]}_{variant}"
     job_time = f"{hours}:59:00"
 
     # %a is the array index
@@ -102,7 +102,7 @@ def submit_job(current_path_folders, job_array, queue):
                "--mem", memory,
                "--mail-type=fail",
                "--mail-user", mail_user,
-               "--array", job_array,
+               "--array", job_array_string,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
     process = subprocess.Popen(command, stdout=subprocess.PIPE, text=True, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()

@@ -63,15 +63,15 @@ def process_folder(queue, free_slots, last_job, test):
     job_max = get_job_max(current_path)
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
-    job_array = f"{job_min}-{last_job}"
-    info = f"{current_path_print}/{job_array} to {queue}"
+    job_array_string = f"{job_min}-{last_job}"
+    info = f"{current_path_print}/{job_array_string} to {queue}"
     if test:
         print(f"Would submit {info}")
         return_code = 0
         stdout = "Test"
         stderr = "Test"
     else:
-        return_code, stdout, stderr = submit_job(current_path_folders, job_array, queue)
+        return_code, stdout, stderr = submit_job(current_path_folders, job_array_string, queue)
     if return_code != 0:
         print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
         if stderr:

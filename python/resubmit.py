@@ -24,13 +24,13 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         if not free_slots:
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
-        queue_job_array = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
+        job_array_string = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         if test:
             return_code = 0
             stderr = "This is a test"
-            stdout = f"This is a test\n{queue_job_array}"
+            stdout = f"This is a test\n{job_array_string}"
         else:
-            return_code, stdout, stderr = st.submit_job(current_path_folders, queue_job_array, queue)
+            return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, queue)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
             if stderr:
@@ -43,7 +43,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
                     print(line)
                     logging.info(line)
         current_path_print = "/".join(current_path_folders[-3:])
-        info = f"{current_path_print}/{queue_job_array} to {queue}"
+        info = f"{current_path_print}/{job_array_string} to {queue}"
         logging.info(info)
         print(f"{cc.green}{info}{cc.reset_format}")
         del jobs_to_submit[:num_jobs_to_submit]
