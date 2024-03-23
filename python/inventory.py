@@ -99,7 +99,8 @@ def process_mechanism(current_path, folder_dict, number_of_lines, input_file_ext
 
 def process_given(current_path, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running):
     
-    given = current_path.split("/")[-1]
+    current_path_folders = current_path.split("/")
+    given = current_path_folders[-1]
     if os.path.islink(current_path):
         print(f"{cc.cyan}\t{given}{cc.reset_format}", end = "  ")
     else:
@@ -130,8 +131,6 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     no_header = 0
     dead_jobs = 0
 
-    variant = current_path.split("/")[-3]
-    mechanism = current_path.split("/")[-2]
     names = [name[:-4] for name in os.listdir(current_path) if name.endswith(input_file_extension)]
     for name in names:
         output_file = os.path.join(current_path, f"{name}{output_file_extension}")
@@ -139,7 +138,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             with open(output_file, "r") as f:
                 current_number_of_lines = sum(1 for line in f)
             if current_number_of_lines < number_of_lines - 1:
-                if "mfu" in current_path and job_is_queued(variant, mechanism, name):
+                if "mfu" in current_path and job_is_queued(current_path_folders, name):
                     running_jobs += 1
                 else:
                     dead_jobs += 1
@@ -150,7 +149,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             else:
                 garbled_jobs += 1
         else:
-            if "mfu" in current_path and job_is_queued(variant, mechanism, name):
+            if "mfu" in current_path and job_is_queued(current_path_folders, name):
                 pending_jobs += 1
             else:
                 to_submit_jobs += 1

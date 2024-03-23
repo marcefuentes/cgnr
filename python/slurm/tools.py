@@ -55,10 +55,12 @@ def get_free_slots(queue):
     free_slots = max_submit - running_jobs - pending_jobs
     return free_slots
 
-def job_is_queued(variant, mechanism, job_array_index):
+def job_is_queued(current_path_folders, job_array_index):
     # %j is for job name, %K is for job array index
     command = ["squeue", "--states", "RUNNING,PENDING", "--array", "--format=%j,%K"]
     output = subprocess.check_output(command, text=True).strip().split("\n")
+    variant = current_path_folders[-3]
+    mechanism = current_path_folders[-2]
     for line in output:
         if line.startswith(f"{mechanism}_") and line.endswith(f"_{variant},{job_array_index}"):
             return True
@@ -124,8 +126,6 @@ def get_jobs_to_submit(current_path_folders):
         return -1, None, e
 
     jobs_to_submit = []
-    variant = current_path_folders[-3]
-    mechanism = current_path_folders[-2]
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
     start_num = int(names[0])
     end_num = int(names[-1])
@@ -139,7 +139,7 @@ def get_jobs_to_submit(current_path_folders):
                 with open(output_file) as f:
                     current_number_of_lines = sum(1 for line in f)
                 if current_number_of_lines < number_of_lines - 1:
-                    if job_is_queued(variant, mechanism, name):
+                    if job_is_queued(current_path_folders, name):
                         print(f"{cc.bold}{cc.yellow}{name}{cc.reset_format}", end = " ")
                     else:
                         print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")
@@ -151,7 +151,7 @@ def get_jobs_to_submit(current_path_folders):
                 else:
                     print(f"{cc.bold}{cc.blue}{name}{cc.reset_format}", end = " ")
             else:
-                if job_is_queued(variant, mechanism, name):
+                if job_is_queued(current_path_folders, name):
                     print(f"{cc.bold}{name}{cc.reset_format}", end = " ")
                 else:
                     print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")
