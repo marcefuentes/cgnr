@@ -12,18 +12,14 @@ def get_qos_name(queue):
     except RuntimeError as e:
         print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
         exit()
-    command = ["sacctmgr", "--parsable2", "show", "qos", "format=name,maxwall"]
-    output = subprocess.check_output(command)
-    output = output.decode().strip().split("\n")
     qos_name = f"{queue}_short"
-    for line in output:
-        if line.startswith(qos_name):
-            _, maxwall = line.strip().split("|")
-            maxwall_hours = int(maxwall.split(":")[0])
-            break
-    if maxwall_hours is None:
+    command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, "format=maxwall"]
+    output = subprocess.check_output(command)
+    if output is None:
         print(f"{red}QOS {qos_name} not found{reset_format}")
         exit()
+    maxwall = output.decode().strip()
+    maxwall_hours = int(maxwall.split(":")[0])
     if hours >= maxwall_hours:
         qos_name = f"{queue}_medium"
     return qos_name
