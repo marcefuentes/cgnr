@@ -49,7 +49,8 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
         print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
-    print(f"{cc.bold}{cc.red}{num_jobs_to_submit}{cc.reset_format} jobs remain to be submitted")
+        if free_slots == 0:
+            print(f"{cc.bold}{cc.red}{num_jobs_to_submit}{cc.reset_format} jobs remain to be submitted")
 
 def main():
 
