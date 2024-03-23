@@ -106,7 +106,7 @@ def submit_job(current_path_folders, job_array, queue):
 
     return process.returncode, stdout, stderr
 
-def get_jobs_to_submit(current_path):
+def get_jobs_to_submit(current_path_folders):
 
     try:
         input_file_extension = get_config("input_file_extension")
@@ -124,7 +124,6 @@ def get_jobs_to_submit(current_path):
         return -1, None, e
 
     jobs_to_submit = []
-    current_path_folders = current_path.split("/")
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]

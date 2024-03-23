@@ -14,9 +14,7 @@ from slurm.tools import get_free_slots
 
 queues = ["clk", "epyc"]
 
-def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
-    current_path_folders = current_path.split("/")
-    current_path_print = "/".join(current_path_folders[-3:])
+def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
     for queue in queues:
         if len(jobs_to_submit) == 0:
             print(f"{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
@@ -44,6 +42,7 @@ def submit_jobs_in_folder(current_path, jobs_to_submit, test=False):
                 if line:
                     print(line)
                     logging.info(line)
+        current_path_print = "/".join(current_path_folders[-3:])
         info = f"{current_path_print}/{queue_job_array} to {queue}"
         logging.info(info)
         print(f"{cc.green}{info}{cc.reset_format}")
@@ -85,22 +84,23 @@ def main():
                 print(f"If this were not a test, the program would end here.\n")
             else:
                 exit()
-    jobs_to_submit = st.get_jobs_to_submit(current_path)
+    current_path_folders = current_path.split("/")
+    jobs_to_submit = st.get_jobs_to_submit(current_path_folders)
     if len(jobs_to_submit) == 0:
         print(f"\n{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
         return
     print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
 
     if test:
-        print(f"\n{cc.bold}{cc.white}Would delete output files of jobs in {cc.reset_format}{cc.bold}{cc.red}red{cc.reset_format} and {cc.bold}{cc.grey}grey{cc.reset_format}.")
+        print(f"\n{cc.bold}{cc.white}Would delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format}.")
     else:
-        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.reset_format}{cc.red}red{cc.reset_format} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
+        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
         st.remove_files(jobs_to_submit)
 
-    submit_jobs_in_folder(current_path, jobs_to_submit, test)
+    submit_jobs_in_folder(current_path_folders, jobs_to_submit, test)
 
     print()
 
