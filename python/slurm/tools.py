@@ -39,8 +39,9 @@ def get_free_slots(queue):
     return free_slots
 
 def get_squeue_stats(queue, state):
+    qos_name = get_qos_name(queue)
     # %f is the feature (such as the constraint set with sbatch)
-    command = f"squeue --states={state} --array --noheader --format=%f | grep {queue} | wc --lines"
+    command = f"squeue --states={state} --array --noheader --format=%f --qos={qos_name} | wc --lines"
     output = subprocess.check_output(command, shell=True)
     stats = output.decode().strip()
     stats = int(stats)
