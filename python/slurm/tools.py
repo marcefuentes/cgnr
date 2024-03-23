@@ -12,7 +12,7 @@ def get_qos_name(queue):
     except RuntimeError as e:
         print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
         exit()
-    command = ["sacctmgr", "--parsable", "show", "qos", "format=name,maxwall"]
+    command = ["sacctmgr", "--parsable2", "show", "qos", "format=name,maxwall"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = f"{queue}_short"
@@ -30,16 +30,15 @@ def get_qos_name(queue):
     return qos_name
 
 def get_max_slots(queue, jobs):
-    command = ["sacctmgr", "--parsable", "show", "qos", f"format=name,{jobs}"]
+    command = ["sacctmgr", "--parsable2", "show", "qos", f"format=name,{jobs}"]
     output = subprocess.check_output(command)
     output = output.decode().strip().split("\n")
     qos_name = get_qos_name(queue)
     for line in output:
         if line.startswith(qos_name):
-            fields = line.strip().split("|")
-            slots = int(fields[1])
-            break
-    return slots
+            _, slots = line.strip().split("|")
+            slots = int(slots)
+            return slots
 
 def get_slots(queue, state):
     # %f is the feature (such as the constraint set with sbatch)
