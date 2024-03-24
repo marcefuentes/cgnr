@@ -10,12 +10,11 @@ def get_qos_name(queue):
     hours = get_config("hours")
     qos_name = f"{queue}_short"
     command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, "format=maxwall"]
-    output = subprocess.check_output(command)
+    output = subprocess.check_output(command).decode().strip()
     if output is None:
         print(f"{red}QOS {qos_name} not found{reset}")
         exit()
-    maxwall = output.decode().strip()
-    maxwall_hours = int(maxwall.split(":")[0])
+    maxwall_hours = int(output.split(":")[0])
     if hours >= maxwall_hours:
         qos_name = f"{queue}_medium"
     return qos_name
@@ -23,8 +22,7 @@ def get_qos_name(queue):
 def get_qos_limit(queue, specification):
     qos_name = get_qos_name(queue)
     command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, f"format={specification}"]
-    output = subprocess.check_output(command)
-    limit = output.decode().strip()
+    output = subprocess.check_output(command).decode().strip()
     limit = int(output)
     return limit
 
@@ -38,10 +36,10 @@ def get_squeue_stats(key, value, state):
     if key == "qos":
         value = get_qos_name(value)
     # %f is the feature (such as the constraint set with sbatch)
-    command = f"squeue --states={state} --array --noheader --format=%f --{key}={value} | wc --lines"
-    output = subprocess.check_output(command, shell=True)
-    stats = output.decode().strip()
-    stats = int(stats)
+    #command = f"squeue --states={state} --array --noheader --format=%f --{key}={value} | wc --lines"
+    command = ["squeue", "--states", state, "--array", "--noheader", "--format=%f", f"--{key}", value]
+    output = subprocess.check_output(command).decode().strip()
+    stats = len(output).splitlines()
     return stats
 
 def submit_job(current_path_folders, job_array_string, queue):
@@ -77,7 +75,7 @@ def submit_job(current_path_folders, job_array_string, queue):
 def job_is_queued(current_path_folders, job_array_index):
     # %j is the job name, %K is the job array index
     command = ["squeue", "--states", "running,pending", "--array", "--noheader", "--format=%j,%K"]
-    output = subprocess.check_output(command, text=True).strip().split("\n")
+    output = subprocess.check_output(command, text=True).strip().splitlines()
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
     given = current_path_folders[-1]
