@@ -72,13 +72,13 @@ def submit_job(current_path_folders, job_array_string, queue):
     job_time = f"{hours}:59:00"
     command = ["sbatch",
                "--job-name", job_name,
-               "--output=%a_slurm.out", # %a is the array index
+               "--output", "%a_slurm.out", # %a is the array index
                "--constraint", queue,
-               "--nodes=1",
-               "--tasks=1",
+               "--nodes", 1,
+               "--tasks", 1,
                "--time", job_time,
                "--mem", memory,
-               "--mail-type=fail",
+               "--mail-type", "fail",
                "--mail-user", mail_user,
                "--array", job_array_string,
                "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
@@ -96,7 +96,7 @@ def job_is_queued(current_path_folders, job_array_index):
                "--states", "running,pending",
                "--array",
                "--noheader",
-               "--format=%j,%K"]
+               "--format", "%j,%K"]
     output = subprocess.check_output(command).strip().splitlines()
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
