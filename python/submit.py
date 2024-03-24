@@ -32,7 +32,7 @@ def get_job_max(current_path):
                 job_max = basename
     return job_max
 
-def process_folder(queue, free_slots, last_job, test):
+def process_folder(constraint, free_slots, last_job, test):
     output_file_extension, *_ = get_config("output_file_extensions")
     current_path = os.getcwd()
     current_path_folders = current_path.split("/")
@@ -49,14 +49,14 @@ def process_folder(queue, free_slots, last_job, test):
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
     job_array_string = f"{job_min}-{last_job}"
-    info = f"{current_path_print}/{job_array_string} to {queue}"
+    info = f"{current_path_print}/{job_array_string} to {constraint}"
     if test:
         print(f"Would submit {info}")
         return_code = 0
         stdout = "Test"
         stderr = "Test"
     else:
-        return_code, stdout, stderr = submit_job(current_path_folders, job_array_string, queue)
+        return_code, stdout, stderr = submit_job(current_path_folders, job_array_string, constraint)
     if return_code != 0:
         print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset}")
         if stderr:
@@ -75,7 +75,7 @@ def process_folder(queue, free_slots, last_job, test):
         last_job = 0
     return free_slots, last_job
 
-def process_variant(queue, free_slots, test, last_job_file):
+def process_variant(constraint, free_slots, test, last_job_file):
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r") as f:
             current_path, last_job = f.read().strip().split(",")
@@ -92,7 +92,7 @@ def process_variant(queue, free_slots, test, last_job_file):
             exit()
         last_job = 0
     os.chdir(current_path)
-    free_slots, last_job = process_folder(queue, free_slots, last_job, test)
+    free_slots, last_job = process_folder(constraint, free_slots, last_job, test)
 
     if last_job == 0: 
         mechanism = os.path.dirname(current_path)
@@ -113,7 +113,7 @@ def process_variant(queue, free_slots, test, last_job_file):
                 else:
                     os.remove(last_job_file)
                 print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset}")
-                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset} free slots in {cc.bold}{queue}{cc.reset}\n")
+                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset} free slots in {cc.bold}{constraint}{cc.reset}\n")
                 exit()
     if test:
         print(f"Would write {current_path},{last_job} to {last_job_file}.{cc.reset}")
@@ -134,14 +134,14 @@ def main():
     logging.basicConfig(filename=log_file,
                         level=logging.DEBUG,
                         format="%(asctime)s %(levelname)s: %(message)s")
-    queues = get_config("queues")
-    for queue in queues:
-        free_slots = get_free_slots(queue)
-        print(f"\n{cc.bold}{queue}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
+    constraints = get_config("constraints")
+    for constraint in constraints:
+        free_slots = get_free_slots(constraint)
+        print(f"\n{cc.bold}{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
         if test and not free_slots:
             free_slots = 100
         while free_slots:
-            free_slots = process_variant(queue, free_slots, test, last_job_file)
+            free_slots = process_variant(constraint, free_slots, test, last_job_file)
     print()
 
 if __name__ == "__main__":

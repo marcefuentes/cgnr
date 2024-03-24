@@ -18,7 +18,7 @@ def get_config(variable):
     if variable in config['DEFAULT']:
         if variable in ("hours", "number_of_lines"):
             return config.getint('DEFAULT', variable)
-        elif variable in ("output_file_extensions", "queues"):
+        elif variable in ("output_file_extensions", "constraints"):
             return config.get("DEFAULT", variable).split(",")
         else:
             return config.get('DEFAULT', variable)

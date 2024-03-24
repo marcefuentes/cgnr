@@ -6,9 +6,9 @@ import subprocess
 import tools.colors as cc
 from slurm.get_config import get_config
 
-def get_qos_name(queue):
+def get_qos_name(constraint):
     hours = get_config("hours")
-    qos_name = f"{queue}_short"
+    qos_name = f"{constraint}_short"
     command = ["sacctmgr",
                "--noheader",
                "--parsable2",
@@ -21,11 +21,11 @@ def get_qos_name(queue):
         exit()
     maxwall_hours = int(output.split(":")[0])
     if hours >= maxwall_hours:
-        qos_name = f"{queue}_medium"
+        qos_name = f"{constraint}_medium"
     return qos_name
 
-def get_qos_limit(queue, specification):
-    qos_name = get_qos_name(queue)
+def get_qos_limit(constraint, specification):
+    qos_name = get_qos_name(constraint)
     command = ["sacctmgr",
                "--noheader",
                "--parsable2",
@@ -36,9 +36,9 @@ def get_qos_limit(queue, specification):
     limit = int(output)
     return limit
 
-def get_free_slots(queue):
-    max_submit = get_qos_limit(queue, "maxsubmit")
-    submitted_jobs = get_squeue_stats("qos", queue, "running,pending")
+def get_free_slots(constraint):
+    max_submit = get_qos_limit(constraint, "maxsubmit")
+    submitted_jobs = get_squeue_stats("qos", constraint, "running,pending")
     free_slots = max_submit - submitted_jobs
     return free_slots
 
@@ -57,7 +57,7 @@ def get_squeue_stats(key, value, state):
     stats = len(output)
     return stats
 
-def submit_job(current_path_folders, job_array_string, queue):
+def submit_job(current_path_folders, job_array_string, constraint):
 
     exe = get_config("exe")
     hours = get_config("hours")
@@ -73,7 +73,7 @@ def submit_job(current_path_folders, job_array_string, queue):
     command = ["sbatch",
                "--job-name", job_name,
                "--output", "%a_slurm.out", # %a is the array index
-               "--constraint", queue,
+               "--constraint", constraint,
                "--nodes", "1",
                "--tasks", "1",
                "--time", job_time,

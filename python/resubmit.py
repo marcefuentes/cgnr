@@ -13,13 +13,13 @@ from slurm.tools import get_free_slots
 # Usage: python resubmit.py
 
 def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
-    queues = get_config("queues")
-    for queue in queues:
+    constraints = get_config("constraints")
+    for constraint in constraints:
         if len(jobs_to_submit) == 0:
             print(f"{cc.green}No jobs to submit\n{cc.reset}")
             exit()
-        free_slots = get_free_slots(queue)
-        print(f"\n{queue}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
+        free_slots = get_free_slots(constraint)
+        print(f"\n{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
         if not free_slots:
             print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")
             continue
@@ -30,7 +30,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
             stderr = "This is a test"
             stdout = "This is a test"
         else:
-            return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, queue)
+            return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, constraint)
         if return_code != 0:
             print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset}")
             if stderr:
@@ -43,12 +43,12 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
                     print(line)
                     logging.info(line)
         current_path_print = "/".join(current_path_folders[-3:])
-        info = f"{current_path_print}/{job_array_string} to {queue}"
+        info = f"{current_path_print}/{job_array_string} to {constraint}"
         logging.info(info)
         print(f"{cc.green}{info}{cc.reset}")
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
-        print(f"{cc.cyan}{free_slots}{cc.reset} free slots in {queue}{cc.reset}")
+        print(f"{cc.cyan}{free_slots}{cc.reset} free slots in {constraint}{cc.reset}")
         if not free_slots:
             print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")
 
