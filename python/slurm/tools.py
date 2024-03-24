@@ -10,13 +10,13 @@ def get_qos_name(queue):
     try:
         hours = get_config("hours")
     except RuntimeError as e:
-        print(f"{cc.bold}{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.bold}{cc.red}{e}{cc.reset}")
         exit()
     qos_name = f"{queue}_short"
     command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, "format=maxwall"]
     output = subprocess.check_output(command)
     if output is None:
-        print(f"{red}QOS {qos_name} not found{reset_format}")
+        print(f"{red}QOS {qos_name} not found{reset}")
         exit()
     maxwall = output.decode().strip()
     maxwall_hours = int(maxwall.split(":")[0])
@@ -107,12 +107,12 @@ def get_jobs_to_submit(current_path_folders):
     try:
         input_file_extension = get_config("input_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
         output_file_extension = get_config("first_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
         number_of_lines = get_config("number_of_lines")
@@ -134,21 +134,21 @@ def get_jobs_to_submit(current_path_folders):
                     current_number_of_lines = sum(1 for line in f)
                 if current_number_of_lines < number_of_lines - 1:
                     if job_is_queued(current_path_folders, name):
-                        print(f"{cc.yellow}{name}{cc.reset_format}", end = " ")
+                        print(f"{cc.yellow}{name}{cc.reset}", end = " ")
                     else:
-                        print(f"{cc.red}{name}{cc.reset_format}", end = " ")
+                        print(f"{cc.red}{name}{cc.reset}", end = " ")
                         jobs_to_submit.append(name)
                 elif current_number_of_lines == number_of_lines - 1:
-                    print(f"{cc.bold}{cc.purple}{name}{cc.reset_format}", end = " ")
+                    print(f"{cc.bold}{cc.purple}{name}{cc.reset}", end = " ")
                 elif current_number_of_lines == number_of_lines:
-                    print(f"{cc.green}{name}{cc.reset_format}", end = " ")
+                    print(f"{cc.green}{name}{cc.reset}", end = " ")
                 else:
-                    print(f"{cc.blue}{name}{cc.reset_format}", end = " ")
+                    print(f"{cc.blue}{name}{cc.reset}", end = " ")
             else:
                 if job_is_queued(current_path_folders, name):
-                    print(f"{name}{cc.reset_format}", end = " ")
+                    print(f"{name}{cc.reset}", end = " ")
                 else:
-                    print(f"{cc.grey}{name}{cc.reset_format}", end = " ")
+                    print(f"{cc.grey}{name}{cc.reset}", end = " ")
                     jobs_to_submit.append(name)
         print()
         current_num -= row_length
@@ -159,12 +159,12 @@ def remove_files(jobs_to_submit):
     try:
         first_output_file_extension = get_config("first_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
         second_output_file_extension = get_config("second_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
 
     output_file_extensions = [first_output_file_extension, second_output_file_extension]

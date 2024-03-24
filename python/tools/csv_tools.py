@@ -21,12 +21,12 @@ def add_headers():
     try:
         first_output_file_extension = get_config("first_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
         second_output_file_extension = get_config("second_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
 
     for extension in [first_output_file_extension, second_output_file_extension]:
@@ -47,12 +47,12 @@ def remove_extra_headers():
     try:
         first_output_file_extension = get_config("first_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
         second_output_file_extension = get_config("second_output_file_extension")
     except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset_format}")
+        print(f"{cc.red}{e}{cc.reset}")
         exit()
 
     for extension in [first_output_file_extension, second_output_file_extension]:

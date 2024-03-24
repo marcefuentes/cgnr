@@ -14,7 +14,7 @@ def get_config_value(variable):
     try:
         return get_config(variable)
     except RuntimeError as e:
-        print(f"{cc.bold}{cc.red}Error getting config value '{variable}': {e}{cc.reset_format}")
+        print(f"{cc.bold}{cc.red}Error getting config value '{variable}': {e}{cc.reset}")
         exit(1)
 
 def get_results_path(use_store=False):
@@ -36,9 +36,9 @@ def process_variant(current_path, total_running):
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.cyan}{variant}{cc.reset_format}")
+        print(f"{cc.cyan}{variant}{cc.reset}")
     else:
-        print(f"\n{cc.white}{variant}{cc.reset_format}")
+        print(f"\n{cc.white}{variant}{cc.reset}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -73,9 +73,9 @@ def process_mechanism(current_path, folder_dict, total_running):
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.cyan}{mechanism}{cc.reset_format}", end = "")
+        print(f"{cc.cyan}{mechanism}{cc.reset}", end = "")
     else:
-        print(f"{cc.white}{mechanism}{cc.reset_format}", end = "")
+        print(f"{cc.white}{mechanism}{cc.reset}", end = "")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
@@ -105,16 +105,16 @@ def process_given(current_path, folder_dict, total_running):
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
     if os.path.islink(current_path):
-        print(f"{cc.cyan}\t{given}{cc.reset_format}", end = "  ")
+        print(f"{cc.cyan}\t{given}{cc.reset}", end = "  ")
     else:
-        print(f"{cc.white}\t{given}{cc.reset_format}", end = "  ")
+        print(f"{cc.white}\t{given}{cc.reset}", end = "  ")
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
     input_files = [f for f in os.listdir(current_path) if f.endswith(input_file_extension)]
     total_jobs = len(input_files)
     if total_jobs == 0:
-        print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset_format}")
+        print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset}")
         return
     with open(os.path.join(current_path, input_files[0]), "r") as csvfile:
         reader = csv.reader(csvfile)
@@ -122,10 +122,10 @@ def process_given(current_path, folder_dict, total_running):
             key, value = row
             if key == "Given":
                 if float(value) != folder_dict[key]:
-                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
+                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset}", end = " ")
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
-                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
+                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset}", end = " ")
 
     finished_jobs = 0
     garbled_jobs = 0
@@ -157,13 +157,13 @@ def process_given(current_path, folder_dict, total_running):
     to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
 
     total_running += running_jobs
-    print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset_format}" if finished_jobs else   "", end = "")
-    print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset_format}" if running_jobs else    "", end = "")
-    print(f"{cc.bold}{cc.white}{pending_jobs:>4}{cc.reset_format}"  if pending_jobs else    "", end = "")
-    print(f"{cc.bold}{cc.grey}{to_submit_jobs:>4}{cc.reset_format}" if to_submit_jobs else  "", end = "")
-    print(f"{cc.bold}{cc.red}{dead_jobs:>4}{cc.reset_format}"       if dead_jobs else       "", end = "")
-    print(f"{cc.bold}{cc.purple}{no_header:>4}{cc.reset_format}"    if no_header else       "", end = "")
-    print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset_format}"   if garbled_jobs else    "", end = "")
+    print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset}" if finished_jobs else   "", end = "")
+    print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset}" if running_jobs else    "", end = "")
+    print(f"{cc.bold}{cc.white}{pending_jobs:>4}{cc.reset}"  if pending_jobs else    "", end = "")
+    print(f"{cc.bold}{cc.grey}{to_submit_jobs:>4}{cc.reset}" if to_submit_jobs else  "", end = "")
+    print(f"{cc.bold}{cc.red}{dead_jobs:>4}{cc.reset}"       if dead_jobs else       "", end = "")
+    print(f"{cc.bold}{cc.purple}{no_header:>4}{cc.reset}"    if no_header else       "", end = "")
+    print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset}"   if garbled_jobs else    "", end = "")
     print()
     return total_running
 
@@ -174,16 +174,16 @@ def main():
     if os.path.isdir(current_path):
         os.chdir(current_path)
     else:
-        print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset_format}")
+        print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset}")
         exit()
 
-    print(f"\n{cc.white}{current_path}{cc.reset_format}")
+    print(f"\n{cc.white}{current_path}{cc.reset}")
     total_running = 0
     variants = list_of_folders(current_path)
     for variant in variants:
         total_running = process_variant(variant, total_running)
     if total_running and "mfu" in current_path:
-        print(f"\n{cc.bold}Total running jobs: {cc.yellow}{total_running:>6}{cc.reset_format}\n" if total_running else "")
+        print(f"\n{cc.bold}Total running jobs: {cc.yellow}{total_running:>6}{cc.reset}\n" if total_running else "")
     else:
         print()
 

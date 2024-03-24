@@ -19,8 +19,8 @@ for queue in queues:
 
     print(f"{queue:<4}", end = "")
     print(f"{max_running:>6}", end = "")
-    print(f"{cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>9}{cc.reset_format}", end = "")
-    print(f"{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset_format}", end = "")
-    print(f"{cc.bold}{cc.cyan}{free_slots:>5}{cc.reset_format}")
+    print(f"{cc.bold}{cc.yellow if running_jobs < max_running else cc.green}{running_jobs:>9}{cc.reset}", end = "")
+    print(f"{cc.bold}{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>9}{cc.reset}", end = "")
+    print(f"{cc.bold}{cc.cyan}{free_slots:>5}{cc.reset}")
 
 print()

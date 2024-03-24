@@ -17,17 +17,17 @@ queues = ["clk", "epyc"]
 try:
     exe = get_config("exe")
 except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
+    print(f"{cc.red}{e}{cc.reset}")
     exit()
 try:
     input_file_extension = get_config("input_file_extension")
 except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
+    print(f"{cc.red}{e}{cc.reset}")
     exit()
 try:
     output_file_extension = get_config("first_output_file_extension")
 except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset_format}")
+    print(f"{cc.red}{e}{cc.reset}")
     exit()
 
 def get_job_min(current_path):
@@ -57,7 +57,7 @@ def process_folder(queue, free_slots, last_job, test):
     else:
         job_min = last_job + 1
     if os.path.isfile(os.path.join(current_path, f"{job_min}{output_file_extension}")):
-        print(f"{cc.red}{current_path_print}/{job_min}{output_file_extension} already exists{cc.reset_format}")
+        print(f"{cc.red}{current_path_print}/{job_min}{output_file_extension} already exists{cc.reset}")
         last_job = 0
         return free_slots, last_job
     job_max = get_job_max(current_path)
@@ -73,7 +73,7 @@ def process_folder(queue, free_slots, last_job, test):
     else:
         return_code, stdout, stderr = submit_job(current_path_folders, job_array_string, queue)
     if return_code != 0:
-        print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset_format}")
+        print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset}")
         if stderr:
             print(stderr)
             logging.error(stderr)
@@ -84,7 +84,7 @@ def process_folder(queue, free_slots, last_job, test):
                 print(line)
                 logging.info(line)
     logging.info(info)
-    print(f"{cc.green}{info}{cc.reset_format}")
+    print(f"{cc.green}{info}{cc.reset}")
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
@@ -101,7 +101,7 @@ def process_variant(queue, free_slots, test, last_job_file):
         current_path = givens[0]
         current_path_folders = current_path.split("/")
         current_path_print = "/".join(current_path_folders[-3:])
-        print(f"\n{cc.bold}Submit jobs in {current_path_print}?{cc.reset_format} {cc.yesno} ", end="")
+        print(f"\n{cc.bold}Submit jobs in {current_path_print}?{cc.reset} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
@@ -124,14 +124,14 @@ def process_variant(queue, free_slots, test, last_job_file):
                 current_path = givens[0]
             else:
                 if test:
-                    print(f"Would remove {last_job_file}.{cc.reset_format}")
+                    print(f"Would remove {last_job_file}.{cc.reset}")
                 else:
                     os.remove(last_job_file)
-                print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
-                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
+                print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset}")
+                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset} free slots in {cc.bold}{queue}{cc.reset}\n")
                 exit()
     if test:
-        print(f"Would write {current_path},{last_job} to {last_job_file}.{cc.reset_format}")
+        print(f"Would write {current_path},{last_job} to {last_job_file}.{cc.reset}")
     else:
         with open(last_job_file, "w") as f:
             f.write(f"{current_path},{last_job}")
@@ -142,7 +142,7 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\nThis is a test{cc.reset_format}")
+        print(f"\nThis is a test{cc.reset}")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     logging.basicConfig(filename=log_file,
@@ -150,7 +150,7 @@ def main():
                         format="%(asctime)s %(levelname)s: %(message)s")
     for queue in queues:
         free_slots = get_free_slots(queue)
-        print(f"\n{cc.bold}{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
+        print(f"\n{cc.bold}{queue}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
         if test and not free_slots:
             free_slots = 100
         while free_slots:
