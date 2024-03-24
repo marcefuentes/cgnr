@@ -13,8 +13,7 @@ def get_qos_name(queue):
                "--noheader",
                "--parsable2",
                "show",
-               "qos",
-               qos_name,
+               "qos", qos_name,
                "format=maxwall"]
     output = subprocess.check_output(command).decode().strip()
     if output is None:
@@ -31,8 +30,7 @@ def get_qos_limit(queue, specification):
                "--noheader",
                "--parsable2",
                "show",
-               "qos",
-               qos_name,
+               "qos", qos_name,
                f"format={specification}"]
     output = subprocess.check_output(command).decode().strip()
     limit = int(output)
@@ -47,14 +45,14 @@ def get_free_slots(queue):
 def get_squeue_stats(key, value, state):
     if key == "qos":
         value = get_qos_name(value)
+    key = f"--{key}"
     # %f is the feature (such as the constraint set with sbatch)
     command = ["squeue",
-               "--states",
-               state,
+               "--states", state,
                "--array",
                "--noheader",
                "--format=%f",
-               f"--{key}", value]
+               key, value]
     output = subprocess.check_output(command).decode().strip().splitlines()
     stats = len(output)
     return stats
@@ -95,8 +93,7 @@ def submit_job(current_path_folders, job_array_string, queue):
 def job_is_queued(current_path_folders, job_array_index):
     # %j is the job name, %K is the job array index
     command = ["squeue",
-               "--states",
-               "running,pending",
+               "--states", "running,pending",
                "--array",
                "--noheader",
                "--format=%j,%K"]
