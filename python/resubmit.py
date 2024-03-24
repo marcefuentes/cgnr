@@ -28,7 +28,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         if test:
             return_code = 0
             stderr = "This is a test"
-            stdout = f"This is a test"
+            stdout = "This is a test"
         else:
             return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, queue)
         if return_code != 0:
@@ -48,9 +48,9 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         print(f"{cc.green}{info}{cc.reset_format}")
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
-        print(f"{cc.cyan}{free_slots}{cc.reset_format} free slots in {queue}{cc.reset_format}\n")
+        print(f"{cc.cyan}{free_slots}{cc.reset_format} free slots in {queue}{cc.reset_format}")
         if free_slots == 0:
-            print(f"{cc.red}{num_jobs_to_submit}{cc.reset_format} jobs remain to be submitted")
+            print(f"{cc.red}{len(jobs_to_submit)}{cc.reset_format} jobs remain to be submitted")
 
 def main():
 
