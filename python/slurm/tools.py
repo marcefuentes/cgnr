@@ -38,8 +38,8 @@ def get_squeue_stats(key, value, state):
     # %f is the feature (such as the constraint set with sbatch)
     #command = f"squeue --states={state} --array --noheader --format=%f --{key}={value} | wc --lines"
     command = ["squeue", "--states", state, "--array", "--noheader", "--format=%f", f"--{key}", value]
-    output = subprocess.check_output(command).decode().strip()
-    stats = len(output).splitlines()
+    output = subprocess.check_output(command).decode().strip().splitlines()
+    stats = len(output)
     return stats
 
 def submit_job(current_path_folders, job_array_string, queue):
