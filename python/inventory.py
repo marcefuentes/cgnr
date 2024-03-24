@@ -10,17 +10,8 @@ from slurm.get_config import get_config
 from slurm.tools import get_squeue_stats
 from tools.list_of_folders import list_of_folders
 
-def get_config_value(variable):
-    try:
-        return get_config(variable)
-    except RuntimeError as e:
-        print(f"{cc.bold}{cc.red}Error getting config value '{variable}': {e}{cc.reset}")
-        exit(1)
-
 def get_results_path(use_store=False):
-
-    exe = get_config_value("exe")
-
+    exe = get_config("exe")
     if use_store != "no":
         store_path = os.environ.get("STORE")
         if store_path is None:
