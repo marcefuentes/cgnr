@@ -17,10 +17,9 @@ def get_config_value(variable):
         print(f"{cc.bold}{cc.red}Error getting config value '{variable}': {e}{cc.reset_format}")
         exit(1)
 
-def get_results_path(use_store=False, exe=None):
+def get_results_path(use_store=False):
 
-    if exe is None:
-        raise ValueError("exe cannot be None")
+    exe = get_config_value("exe")
 
     if use_store != "no":
         store_path = os.environ.get("STORE")
@@ -31,7 +30,7 @@ def get_results_path(use_store=False, exe=None):
         home_path = os.environ.get("HOME")
         return f"{home_path}/code/{exe}/results"
 
-def process_variant(current_path, number_of_lines, input_file_extension, output_file_extension, total_running):
+def process_variant(current_path, total_running):
 
     folder_dict = {}
 
@@ -67,10 +66,10 @@ def process_variant(current_path, number_of_lines, input_file_extension, output_
 
     mechanisms = list_of_folders(current_path)
     for mechanism in mechanisms:
-        total_running = process_mechanism(mechanism, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running)
+        total_running = process_mechanism(mechanism, folder_dict, total_running)
     return total_running
 
-def process_mechanism(current_path, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running):
+def process_mechanism(current_path, folder_dict, total_running):
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
@@ -94,11 +93,15 @@ def process_mechanism(current_path, folder_dict, number_of_lines, input_file_ext
 
     givens = list_of_folders(current_path)
     for given in givens:
-        total_running = process_given(given, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running)
+        total_running = process_given(given, folder_dict, total_running)
     return total_running
 
-def process_given(current_path, folder_dict, number_of_lines, input_file_extension, output_file_extension, total_running):
+def process_given(current_path, folder_dict, total_running):
     
+    number_of_lines = get_config("number_of_lines")
+    input_file_extension = get_config("input_file_extension")
+    output_file_extension = get_config("first_output_file_extension")
+
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
     if os.path.islink(current_path):
@@ -153,7 +156,6 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     dead_jobs = one_line_jobs - running_jobs
     to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
 
-
     total_running += running_jobs
     print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset_format}" if finished_jobs else   "", end = "")
     print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset_format}" if running_jobs else    "", end = "")
@@ -167,12 +169,7 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
 
 def main():
 
-    exe = get_config_value("exe")
-    number_of_lines = get_config("number_of_lines")
-    input_file_extension = get_config("input_file_extension")
-    output_file_extension = get_config("first_output_file_extension")
-
-    current_path = get_results_path(use_store=args.store, exe=exe)
+    current_path = get_results_path(use_store=args.store)
 
     if os.path.isdir(current_path):
         os.chdir(current_path)
@@ -184,7 +181,7 @@ def main():
     total_running = 0
     variants = list_of_folders(current_path)
     for variant in variants:
-        total_running = process_variant(variant, number_of_lines, input_file_extension, output_file_extension, total_running)
+        total_running = process_variant(variant, total_running)
     if total_running and "mfu" in current_path:
         print(f"\n{cc.bold}Total running jobs: {cc.yellow}{total_running:>6}{cc.reset_format}\n" if total_running else "")
     else:
