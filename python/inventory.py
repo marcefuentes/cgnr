@@ -130,7 +130,9 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     garbled_jobs = 0
     no_header = 0
     dead_jobs = 0
+    one_line_jobs = 0
 
+    '''
     names = [name[:-4] for name in os.listdir(current_path) if name.endswith(input_file_extension)]
     for name in names:
         output_file = os.path.join(current_path, f"{name}{output_file_extension}")
@@ -153,6 +155,29 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
                 pending_jobs += 1
             else:
                 to_submit_jobs += 1
+    '''
+
+    output_files = [f for f in os.listdir(current_path) if f.endswith(output_file_extension)]
+    for output_file in output_files:
+        with open(os.path.join(current_path, output_file), "r") as f:
+            n_lines = sum(1 for line in f)
+            if n_lines == number_of_lines:
+                finished_jobs += 1
+            elif n_lines == 1:
+                one_line_jobs += 1
+            elif n_lines == number_of_lines - 1:
+                no_header += 1
+            else:
+                garbled_jobs += 1
+    mechanism = current_path_folders[-2]
+    variant = current_path_folders[-3]
+    jobname =  f"{mechanism}_{given}_{variant}"
+    if "mfu" in current_path:
+        running_jobs = get_squeue_stats("name", jobname, "running")
+        pending_jobs = get_squeue_stats("name", jobname, "pending")
+    dead_jobs = one_line_jobs - running_jobs
+    to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
+
 
     total_running += running_jobs
     print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset_format}" if finished_jobs else   "", end = "")

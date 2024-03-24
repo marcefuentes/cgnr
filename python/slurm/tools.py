@@ -34,14 +34,15 @@ def get_qos_limit(queue, specification):
 
 def get_free_slots(queue):
     max_submit = get_qos_limit(queue, "maxsubmit")
-    submitted_jobs = get_squeue_stats(queue, "running,pending")
+    submitted_jobs = get_squeue_stats("qos", queue, "running,pending")
     free_slots = max_submit - submitted_jobs
     return free_slots
 
-def get_squeue_stats(queue, state):
-    qos_name = get_qos_name(queue)
+def get_squeue_stats(key, value, state):
+    if key == "qos":
+        qos_name = get_qos_name(value)
     # %f is the feature (such as the constraint set with sbatch)
-    command = f"squeue --states={state} --array --noheader --format=%f --qos={qos_name} | wc --lines"
+    command = f"squeue --states={state} --array --noheader --format=%f --{key}={value} | wc --lines"
     output = subprocess.check_output(command, shell=True)
     stats = output.decode().strip()
     stats = int(stats)

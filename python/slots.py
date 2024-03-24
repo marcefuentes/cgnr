@@ -13,8 +13,8 @@ for queue in queues:
 
     max_submit = get_qos_limit(queue, "maxsubmit")
     max_running = get_qos_limit(queue, "maxjobspu")
-    running_jobs = get_squeue_stats(queue, "running")
-    pending_jobs = get_squeue_stats(queue, "pending")
+    running_jobs = get_squeue_stats("qos", queue, "running")
+    pending_jobs = get_squeue_stats("qos", queue, "pending")
     free_slots = max_submit - running_jobs - pending_jobs
 
     print(f"{queue:<4}", end = "")
