@@ -51,7 +51,7 @@ def get_squeue_stats(key, value, state):
                "--states", state,
                "--array",
                "--noheader",
-               "--format=%f",
+               "--format", "%f",
                key, value]
     output = subprocess.check_output(command).decode().strip().splitlines()
     stats = len(output)
