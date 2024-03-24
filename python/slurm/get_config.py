@@ -15,7 +15,7 @@ def get_config(variable):
     config = configparser.ConfigParser()
     config.read(config_file_path)
 
-    if variable in config['DEFAULT']:
+    if config.has_option('DEFAULT', variable):
         if variable in ("hours", "number_of_lines"):
             return config.getint('DEFAULT', variable)
         elif variable in ("output_file_extensions", "constraints"):
