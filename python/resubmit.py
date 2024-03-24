@@ -90,12 +90,12 @@ def main():
     if len(jobs_to_submit) == 0:
         print(f"\n{cc.green}No jobs to submit\n{cc.reset_format}")
         return
-    print(f"\n{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
+    print(f"\n{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.\n")
 
     if test:
-        print(f"\n{cc.white}Would delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format}.")
+        print(f"{cc.white}Would delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format}.")
     else:
-        print(f"\n{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
+        print(f"{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
