@@ -38,10 +38,8 @@ def get_squeue_stats(key, value, state):
     if key == "qos":
         value = get_qos_name(value)
     # %f is the feature (such as the constraint set with sbatch)
-    #command = f"squeue --states={state} --array --noheader --format=%f --{key}={value} | wc --lines"
-    command = ["squeue", "--states", state, "--array", "--noheader", "--format=%f", f"--{key}={value}", "|", "wc", "--lines"]
-    #output = subprocess.check_output(command, shell=True)
-    output = subprocess.check_output(command)
+    command = f"squeue --states={state} --array --noheader --format=%f --{key}={value} | wc --lines"
+    output = subprocess.check_output(command, shell=True)
     stats = output.decode().strip()
     stats = int(stats)
     return stats
