@@ -97,7 +97,7 @@ def job_is_queued(current_path_folders, job_array_index):
                "--array",
                "--noheader",
                "--format", "%j,%K"]
-    output = subprocess.check_output(command).strip().splitlines()
+    output = subprocess.check_output(command, text="True").strip().splitlines()
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
     given = current_path_folders[-1]
