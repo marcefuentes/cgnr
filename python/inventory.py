@@ -161,6 +161,7 @@ def process_given(current_path, folder_dict, total_pending, total_running):
 
 def main():
 
+    queues = [get_config("queue0"), get_config("queue1")]
     current_path = get_results_path(use_store=args.store)
 
     if os.path.isdir(current_path):
@@ -177,8 +178,11 @@ def main():
         total_pending, total_running = process_variant(variant, total_pending, total_running)
     if "mfu" in current_path:
         print(f"\nTotal: {cc.yellow}{total_running:>15}{cc.reset}{total_pending:>4}")
-        total_pending = get_squeue_stats("qos", "clk", "pending") + get_squeue_stats("qos", "epyc", "pending")
-        total_running = get_squeue_stats("qos", "clk", "running") + get_squeue_stats("qos", "epyc", "running")
+        total_pending = 0
+        total_running = 0
+        for queue in queues:
+            total_pending += get_squeue_stats("qos", queue, "pending")
+            total_running += get_squeue_stats("qos", queue, "running")
         print(f"Total (by queue): {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}\n")
     else:
         print()
