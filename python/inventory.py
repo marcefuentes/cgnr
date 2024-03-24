@@ -123,39 +123,11 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
                     print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset_format}", end = " ")
-    to_submit_jobs = 0
-    pending_jobs = 0
-    running_jobs = 0
+
     finished_jobs = 0
     garbled_jobs = 0
     no_header = 0
-    dead_jobs = 0
     one_line_jobs = 0
-
-    '''
-    names = [name[:-4] for name in os.listdir(current_path) if name.endswith(input_file_extension)]
-    for name in names:
-        output_file = os.path.join(current_path, f"{name}{output_file_extension}")
-        if os.path.isfile(output_file):
-            with open(output_file, "r") as f:
-                current_number_of_lines = sum(1 for line in f)
-            if current_number_of_lines < number_of_lines - 1:
-                if "mfu" in current_path and job_is_queued(current_path_folders, name):
-                    running_jobs += 1
-                else:
-                    dead_jobs += 1
-            elif current_number_of_lines == number_of_lines - 1:
-                no_header += 1
-            elif current_number_of_lines == number_of_lines:
-                finished_jobs += 1
-            else:
-                garbled_jobs += 1
-        else:
-            if "mfu" in current_path and job_is_queued(current_path_folders, name):
-                pending_jobs += 1
-            else:
-                to_submit_jobs += 1
-    '''
 
     output_files = [f for f in os.listdir(current_path) if f.endswith(output_file_extension)]
     for output_file in output_files:
@@ -175,6 +147,9 @@ def process_given(current_path, folder_dict, number_of_lines, input_file_extensi
     if "mfu" in current_path:
         running_jobs = get_squeue_stats("name", jobname, "running")
         pending_jobs = get_squeue_stats("name", jobname, "pending")
+    else:
+        running_jobs = 0
+        pending_jobs = 0
     dead_jobs = one_line_jobs - running_jobs
     to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
 
