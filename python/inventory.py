@@ -30,7 +30,7 @@ def get_results_path(use_store=False):
         home_path = os.environ.get("HOME")
         return f"{home_path}/code/{exe}/results"
 
-def process_variant(current_path, total_running):
+def process_variant(current_path, total_pending, total_running):
 
     folder_dict = {}
 
@@ -66,10 +66,10 @@ def process_variant(current_path, total_running):
 
     mechanisms = list_of_folders(current_path)
     for mechanism in mechanisms:
-        total_running = process_mechanism(mechanism, folder_dict, total_running)
-    return total_running
+        total_pending, total_running = process_mechanism(mechanism, folder_dict, total_pending, total_running)
+    return total_pending, total_running
 
-def process_mechanism(current_path, folder_dict, total_running):
+def process_mechanism(current_path, folder_dict, total_pending, total_running):
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
@@ -93,10 +93,10 @@ def process_mechanism(current_path, folder_dict, total_running):
 
     givens = list_of_folders(current_path)
     for given in givens:
-        total_running = process_given(given, folder_dict, total_running)
-    return total_running
+        total_pending, total_running = process_given(given, folder_dict, total_pending, total_running)
+    return total_pending, total_running
 
-def process_given(current_path, folder_dict, total_running):
+def process_given(current_path, folder_dict, total_pending, total_running):
     
     number_of_lines = get_config("number_of_lines")
     input_file_extension = get_config("input_file_extension")
@@ -156,6 +156,7 @@ def process_given(current_path, folder_dict, total_running):
     dead_jobs = one_line_jobs - running_jobs
     to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
 
+    total_pending += pending_jobs
     total_running += running_jobs
     print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset}" if finished_jobs else   "", end = "")
     print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset}" if running_jobs else    "", end = "")
@@ -165,7 +166,7 @@ def process_given(current_path, folder_dict, total_running):
     print(f"{cc.bold}{cc.purple}{no_header:>4}{cc.reset}"    if no_header else       "", end = "")
     print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset}"   if garbled_jobs else    "", end = "")
     print()
-    return total_running
+    return total_pending, total_running
 
 def main():
 
@@ -178,12 +179,16 @@ def main():
         exit()
 
     print(f"\n{cc.white}{current_path}{cc.reset}")
+    total_pending = 0
     total_running = 0
     variants = list_of_folders(current_path)
     for variant in variants:
-        total_running = process_variant(variant, total_running)
-    if total_running and "mfu" in current_path:
-        print(f"\n{cc.bold}Total running jobs: {cc.yellow}{total_running:>6}{cc.reset}\n" if total_running else "")
+        total_pending, total_running = process_variant(variant, total_pending, total_running)
+    if "mfu" in current_path:
+        print(f"\nTotal: {cc.yellow}{total_running:>15}{cc.reset}{total_pending:>4}")
+        total_pending = get_squeue_stats("qos", "clk", "pending") + get_squeue_stats("qos", "epyc", "pending")
+        total_running = get_squeue_stats("qos", "clk", "running") + get_squeue_stats("qos", "epyc", "running")
+        print(f"Total (by queue): {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}\n")
     else:
         print()
 
