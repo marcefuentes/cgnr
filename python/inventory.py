@@ -162,7 +162,6 @@ def process_given(current_path, folder_dict, total_pending, total_running):
 def main():
 
     queues = get_config("queues")
-    print(queues)
     current_path = get_results_path(use_store=args.store)
 
     if os.path.isdir(current_path):
