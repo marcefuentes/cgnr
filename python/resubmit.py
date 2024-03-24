@@ -17,10 +17,10 @@ queues = ["clk", "epyc"]
 def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
     for queue in queues:
         if len(jobs_to_submit) == 0:
-            print(f"{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
+            print(f"{cc.green}No jobs to submit\n{cc.reset_format}")
             exit()
         free_slots = get_free_slots(queue)
-        print(f"\n{cc.bold}{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
+        print(f"\n{queue}:{cc.reset_format} {cc.cyan}{free_slots}{cc.reset_format} free slots")
         if not free_slots:
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
@@ -48,9 +48,9 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         print(f"{cc.green}{info}{cc.reset_format}")
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
-        print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
+        print(f"{cc.cyan}{free_slots}{cc.reset_format} free slots in {queue}{cc.reset_format}\n")
         if free_slots == 0:
-            print(f"{cc.bold}{cc.red}{num_jobs_to_submit}{cc.reset_format} jobs remain to be submitted")
+            print(f"{cc.red}{num_jobs_to_submit}{cc.reset_format} jobs remain to be submitted")
 
 def main():
 
@@ -62,7 +62,7 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{cc.bold}This is a test.\n{cc.reset_format}")
+        print(f"\nThis is a test.\n")
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
         print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Continue?{cc.reset_format} {cc.yesno} ", end="")
@@ -80,7 +80,7 @@ def main():
         with open(last_job_file, "r") as f:
             last_job_file_path, _ = f.read().strip().split(",")
         if last_job_file_path == current_path:
-            print(f"{cc.bold}{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit.py first.{cc.reset_format}")
+            print(f"{cc.red}{last_job_file.split('/')[-1]} points to this folder. Run submit first.{cc.reset_format}")
             if test:
                 print(f"If this were not a test, the program would end here.\n")
             else:
@@ -88,14 +88,14 @@ def main():
     current_path_folders = current_path.split("/")
     jobs_to_submit = st.get_jobs_to_submit(current_path_folders)
     if len(jobs_to_submit) == 0:
-        print(f"\n{cc.bold}{cc.green}No jobs to submit\n{cc.reset_format}")
+        print(f"\n{cc.green}No jobs to submit\n{cc.reset_format}")
         return
-    print(f"\n{cc.bold}{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
+    print(f"\n{cc.cyan}{len(jobs_to_submit)}{cc.reset_format} jobs to submit.")
 
     if test:
-        print(f"\n{cc.bold}{cc.white}Would delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format}.")
+        print(f"\n{cc.white}Would delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format}.")
     else:
-        print(f"\n{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
+        print(f"\n{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset_format} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
