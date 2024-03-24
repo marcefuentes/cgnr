@@ -12,9 +12,8 @@ from slurm.tools import get_free_slots
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
 
-queues = ["clk", "epyc"]
-
 def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
+    queues = get_config("queues")
     for queue in queues:
         if len(jobs_to_submit) == 0:
             print(f"{cc.green}No jobs to submit\n{cc.reset}")
@@ -22,6 +21,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         free_slots = get_free_slots(queue)
         print(f"\n{queue}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
         if not free_slots:
+            print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
         job_array_string = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
@@ -49,17 +49,12 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
         print(f"{cc.cyan}{free_slots}{cc.reset} free slots in {queue}{cc.reset}")
-        if free_slots == 0:
+        if not free_slots:
             print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")
 
 def main():
 
-    try:
-        exe = get_config("exe")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-
+    exe = get_config("exe")
     test = len(sys.argv) > 1
     if test:
         print(f"\nThis is a test.\n")

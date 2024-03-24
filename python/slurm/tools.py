@@ -7,11 +7,7 @@ import tools.colors as cc
 from slurm.get_config import get_config
 
 def get_qos_name(queue):
-    try:
-        hours = get_config("hours")
-    except RuntimeError as e:
-        print(f"{cc.bold}{cc.red}{e}{cc.reset}")
-        exit()
+    hours = get_config("hours")
     qos_name = f"{queue}_short"
     command = ["sacctmgr", "--noheader", "--parsable2", "show", "qos", qos_name, "format=maxwall"]
     output = subprocess.check_output(command)
@@ -50,22 +46,10 @@ def get_squeue_stats(key, value, state):
 
 def submit_job(current_path_folders, job_array_string, queue):
 
-    try: 
-        exe = get_config("exe")
-    except RuntimeError as e:
-        return -1, None, e
-    try:
-        hours = get_config("hours")
-    except RuntimeError as e:
-        return -1, None, e
-    try:
-        memory = get_config("memory")
-    except RuntimeError as e:
-        return -1, None, e
-    try:
-        mail_user = get_config("mail_user")
-    except RuntimeError as e:
-        return -1, None, e
+    exe = get_config("exe")
+    hours = get_config("hours")
+    memory = get_config("memory")
+    mail_user = get_config("mail_user")
 
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
     variant = current_path_folders[-3]
@@ -104,20 +88,9 @@ def job_is_queued(current_path_folders, job_array_index):
 
 def get_jobs_to_submit(current_path_folders):
 
-    try:
-        input_file_extension = get_config("input_file_extension")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-    try:
-        output_file_extension = get_config("output_file_extension_0")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-    try:
-        number_of_lines = get_config("number_of_lines")
-    except RuntimeError as e:
-        return -1, None, e
+    input_file_extension = get_config("input_file_extension")
+    output_file_extension, *_ = get_config("output_file_extensions")
+    number_of_lines = get_config("number_of_lines")
 
     jobs_to_submit = []
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
@@ -156,20 +129,9 @@ def get_jobs_to_submit(current_path_folders):
     return jobs_to_submit
 
 def remove_files(jobs_to_submit):
-    try:
-        output_file_extension_0 = get_config("output_file_extension_0")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-    try:
-        output_file_extension_1 = get_config("output_file_extension_1")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-
-    output_file_extensions = [output_file_extension_0, output_file_extension_1]
+    extensions = get_config("output_file_extensions")
     for name in jobs_to_submit:
-        for extension in output_file_extensions:
+        for extension in extensions:
             if os.path.isfile(f"{name}{extension}"):
                 os.remove(f"{name}{extension}")
             else:

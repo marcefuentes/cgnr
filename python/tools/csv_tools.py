@@ -18,18 +18,9 @@ def call_function(function_name, *args, **kwargs):
 
 def add_headers():
 
-    try:
-        output_file_extension_0 = get_config("output_file_extension_0")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-    try:
-        output_file_extension_1 = get_config("output_file_extension_1")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
+    extensions = get_config("output_file_extensions")
 
-    for extension in [output_file_extension_0, output_file_extension_1]:
+    for extension in extensions:
         files = [f for f in os.listdir('.') if f.endswith(extension)]
         with open(files[0]) as f:
             headers = f.readline().strip()
@@ -44,18 +35,9 @@ def add_headers():
 
 def remove_extra_headers():
 
-    try:
-        output_file_extension_0 = get_config("output_file_extension_0")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
-    try:
-        output_file_extension_1 = get_config("output_file_extension_1")
-    except RuntimeError as e:
-        print(f"{cc.red}{e}{cc.reset}")
-        exit()
+    extensions = get_config("output_file_extensions")
 
-    for extension in [output_file_extension_0, output_file_extension_1]:
+    for extension in extensions:
         for file in os.listdir('.'):
             if file.endswith(extension):
                 with open(file, "r") as f:

@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
-import tools.colors as cc
-from slurm.tools import get_qos_limit, get_squeue_stats
 import os
 
-queues = ["clk", "epyc"]
+import tools.colors as cc
+from slurm.get_config import get_config
+from slurm.tools import get_qos_limit, get_squeue_stats
+
+queues = get_config("queues")
 
 print()
 print(f"{'Queue':<7}{'Max':<5}{'Running':<9}{'Pending':<9}{'Free':<9}")

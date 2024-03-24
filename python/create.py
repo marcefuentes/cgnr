@@ -4,6 +4,8 @@ import numpy as np
 import os
 import sys
 
+import slurm.get_config as get_config
+
 # the script accepts exactly three arguments
 if len(sys.argv) != 4:
     print("Usage: python create.py <variant> <mechanism> <given>")
@@ -13,7 +15,7 @@ variant = sys.argv[1]
 mechanism = sys.argv[2]
 given = sys.argv[3]
 
-output_file_extension = ".glo"
+output_file_extension = get_config("input_file_extension")
 
 if "_d" in variant:
     deathrate = -3

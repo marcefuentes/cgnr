@@ -5,11 +5,7 @@ import subprocess
 
 remote = "cesga"
 
-try:
-    exe = get_config("exe")
-except RuntimeError as e:
-    print(e)
-    exit()
+exe = get_config("exe")
 
 if remote == "cesga":
     source_folder=f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{exe}/results/"

@@ -12,25 +12,8 @@ from slurm.tools import get_free_slots, submit_job
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
 
-queues = ["clk", "epyc"]
-
-try:
-    exe = get_config("exe")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset}")
-    exit()
-try:
-    input_file_extension = get_config("input_file_extension")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset}")
-    exit()
-try:
-    output_file_extension = get_config("output_file_extension_0")
-except RuntimeError as e:
-    print(f"{cc.red}{e}{cc.reset}")
-    exit()
-
 def get_job_min(current_path):
+    input_file_extension = get_config("input_file_extension")
     job_min = 9999
     for file in os.listdir(current_path):
         if file.endswith(input_file_extension):
@@ -40,6 +23,7 @@ def get_job_min(current_path):
     return job_min
 
 def get_job_max(current_path):
+    input_file_extension = get_config("input_file_extension")
     job_max = 0
     for file in os.listdir(current_path):
         if file.endswith(input_file_extension):
@@ -49,6 +33,7 @@ def get_job_max(current_path):
     return job_max
 
 def process_folder(queue, free_slots, last_job, test):
+    output_file_extension, *_ = get_config("output_file_extensions")
     current_path = os.getcwd()
     current_path_folders = current_path.split("/")
     current_path_print = "/".join(current_path_folders[-3:])
@@ -143,11 +128,13 @@ def main():
     test = len(sys.argv) > 1
     if test:
         print(f"\nThis is a test{cc.reset}")
+    exe = get_config("exe")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     logging.basicConfig(filename=log_file,
                         level=logging.DEBUG,
                         format="%(asctime)s %(levelname)s: %(message)s")
+    queues = get_config("queues")
     for queue in queues:
         free_slots = get_free_slots(queue)
         print(f"\n{cc.bold}{queue}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")

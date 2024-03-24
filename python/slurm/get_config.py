@@ -4,6 +4,8 @@
 import configparser
 import os
 
+import tools.colors as cc
+
 def get_config(variable):
 
     config_file_path = os.environ.get('CONFIG_FILE')
@@ -14,9 +16,12 @@ def get_config(variable):
     config.read(config_file_path)
 
     if variable in config['DEFAULT']:
-        if variable == "hours" or variable == "number_of_lines":
+        if variable in ("hours", "number_of_lines"):
             return config.getint('DEFAULT', variable)
+        elif variable in ("output_file_extensions", "queues"):
+            return config.get("DEFAULT", variable).split(",")
         else:
             return config.get('DEFAULT', variable)
     else:
-        return RuntimeError(f"{variable} not found in {config_file_path}")
+        print(f"{cc.bold}{cc.red}{variable} not found in {config_file_path}{cc.reset}")
+        return 0
