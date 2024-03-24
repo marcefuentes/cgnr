@@ -19,17 +19,17 @@ def call_function(function_name, *args, **kwargs):
 def add_headers():
 
     try:
-        first_output_file_extension = get_config("first_output_file_extension")
+        output_file_extension_0 = get_config("output_file_extension_0")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
-        second_output_file_extension = get_config("second_output_file_extension")
+        output_file_extension_1 = get_config("output_file_extension_1")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
 
-    for extension in [first_output_file_extension, second_output_file_extension]:
+    for extension in [output_file_extension_0, output_file_extension_1]:
         files = [f for f in os.listdir('.') if f.endswith(extension)]
         with open(files[0]) as f:
             headers = f.readline().strip()
@@ -45,17 +45,17 @@ def add_headers():
 def remove_extra_headers():
 
     try:
-        first_output_file_extension = get_config("first_output_file_extension")
+        output_file_extension_0 = get_config("output_file_extension_0")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
-        second_output_file_extension = get_config("second_output_file_extension")
+        output_file_extension_1 = get_config("output_file_extension_1")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
 
-    for extension in [first_output_file_extension, second_output_file_extension]:
+    for extension in [output_file_extension_0, output_file_extension_1]:
         for file in os.listdir('.'):
             if file.endswith(extension):
                 with open(file, "r") as f:

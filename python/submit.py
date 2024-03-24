@@ -25,7 +25,7 @@ except RuntimeError as e:
     print(f"{cc.red}{e}{cc.reset}")
     exit()
 try:
-    output_file_extension = get_config("first_output_file_extension")
+    output_file_extension = get_config("output_file_extension_0")
 except RuntimeError as e:
     print(f"{cc.red}{e}{cc.reset}")
     exit()

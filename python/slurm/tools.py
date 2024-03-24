@@ -110,7 +110,7 @@ def get_jobs_to_submit(current_path_folders):
         print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
-        output_file_extension = get_config("first_output_file_extension")
+        output_file_extension = get_config("output_file_extension_0")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
@@ -157,17 +157,17 @@ def get_jobs_to_submit(current_path_folders):
 
 def remove_files(jobs_to_submit):
     try:
-        first_output_file_extension = get_config("first_output_file_extension")
+        output_file_extension_0 = get_config("output_file_extension_0")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
     try:
-        second_output_file_extension = get_config("second_output_file_extension")
+        output_file_extension_1 = get_config("output_file_extension_1")
     except RuntimeError as e:
         print(f"{cc.red}{e}{cc.reset}")
         exit()
 
-    output_file_extensions = [first_output_file_extension, second_output_file_extension]
+    output_file_extensions = [output_file_extension_0, output_file_extension_1]
     for name in jobs_to_submit:
         for extension in output_file_extensions:
             if os.path.isfile(f"{name}{extension}"):

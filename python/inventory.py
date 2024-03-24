@@ -91,7 +91,7 @@ def process_given(current_path, folder_dict, total_pending, total_running):
     
     number_of_lines = get_config("number_of_lines")
     input_file_extension = get_config("input_file_extension")
-    output_file_extension = get_config("first_output_file_extension")
+    output_file_extension = get_config("output_file_extension_0")
 
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
@@ -161,7 +161,7 @@ def process_given(current_path, folder_dict, total_pending, total_running):
 
 def main():
 
-    queues = [get_config("queue0"), get_config("queue1")]
+    queues = [get_config("queue_0"), get_config("queue_1")]
     current_path = get_results_path(use_store=args.store)
 
     if os.path.isdir(current_path):
