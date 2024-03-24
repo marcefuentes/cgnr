@@ -124,14 +124,14 @@ def process_variant(queue, free_slots, test, last_job_file):
                 current_path = givens[0]
             else:
                 if test:
-                    print(f"{cc.bold}Would remove {last_job_file}.{cc.reset_format}")
+                    print(f"Would remove {last_job_file}.{cc.reset_format}")
                 else:
                     os.remove(last_job_file)
                 print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset_format}")
                 print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset_format} free slots in {cc.bold}{queue}{cc.reset_format}\n")
                 exit()
     if test:
-        print(f"{cc.bold}Would write {current_path},{last_job} to {last_job_file}.{cc.reset_format}")
+        print(f"Would write {current_path},{last_job} to {last_job_file}.{cc.reset_format}")
     else:
         with open(last_job_file, "w") as f:
             f.write(f"{current_path},{last_job}")
@@ -142,7 +142,7 @@ def main():
 
     test = len(sys.argv) > 1
     if test:
-        print(f"\n{cc.bold}This is a test{cc.reset_format}")
+        print(f"\nThis is a test{cc.reset_format}")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     logging.basicConfig(filename=log_file,
