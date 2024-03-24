@@ -136,7 +136,7 @@ def get_jobs_to_submit(current_path_folders):
                     if job_is_queued(current_path_folders, name):
                         print(f"{cc.yellow}{name}{cc.reset_format}", end = " ")
                     else:
-                        print(f"{cc.bold}{cc.red}{name}{cc.reset_format}", end = " ")
+                        print(f"{cc.red}{name}{cc.reset_format}", end = " ")
                         jobs_to_submit.append(name)
                 elif current_number_of_lines == number_of_lines - 1:
                     print(f"{cc.bold}{cc.purple}{name}{cc.reset_format}", end = " ")
@@ -148,7 +148,7 @@ def get_jobs_to_submit(current_path_folders):
                 if job_is_queued(current_path_folders, name):
                     print(f"{name}{cc.reset_format}", end = " ")
                 else:
-                    print(f"{cc.bold}{cc.grey}{name}{cc.reset_format}", end = " ")
+                    print(f"{cc.grey}{name}{cc.reset_format}", end = " ")
                     jobs_to_submit.append(name)
         print()
         current_num -= row_length
