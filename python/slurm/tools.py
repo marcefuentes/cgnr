@@ -4,7 +4,7 @@ import os
 import re
 import subprocess
 import tools.colors as cc
-from slurm.get_config import get_config
+from tools.get_config import get_config
 
 def get_qos_name(constraint):
     hours = get_config("hours")

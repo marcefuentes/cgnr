@@ -6,7 +6,7 @@ import sys
 
 import slurm.tools as st
 import tools.colors as cc
-from slurm.get_config import get_config
+from tools.get_config import get_config
 from slurm.tools import get_free_slots
 
 # Purpose: resubmit unfinished jobs

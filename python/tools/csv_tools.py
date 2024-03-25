@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 import tools.csv_tools
-from slurm.get_config import get_config
+from tools.get_config import get_config
 
 def call_function(function_name, *args, **kwargs):
     # Get the function object using getattr

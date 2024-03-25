@@ -4,7 +4,7 @@ import numpy as np
 import os
 import sys
 
-import slurm.get_config as get_config
+import tools.get_config as get_config
 
 # the script accepts exactly three arguments
 if len(sys.argv) != 4:
