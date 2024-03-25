@@ -4,10 +4,9 @@ import logging
 import os
 import sys
 
-import slurm.tools as st
+import slurm_tols.slurm_tools as st
 import tools.colors as cc
 from tools.get_config import get_config
-from slurm.tools import get_free_slots
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
@@ -18,7 +17,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         if len(jobs_to_submit) == 0:
             print(f"{cc.green}No jobs to submit\n{cc.reset}")
             exit()
-        free_slots = get_free_slots(constraint)
+        free_slots = st.get_free_slots(constraint)
         print(f"\n{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
         if not free_slots:
             print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")

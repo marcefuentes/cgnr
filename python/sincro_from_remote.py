@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from tools.get_config import get_config
 import subprocess
+
+from tools.get_config import get_config
 
 remote = "cesga"
 

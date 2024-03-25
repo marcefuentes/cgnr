@@ -4,7 +4,7 @@ import os
 
 import tools.colors as cc
 from tools.get_config import get_config
-from slurm.tools import get_qos_limit, get_squeue_stats
+from slurm_tools.slurm_tools import get_qos_limit, get_squeue_stats
 
 constraints = get_config("constraints")
 

@@ -7,7 +7,7 @@ import sys
 import tools.colors as cc
 from tools.list_of_folders import list_of_folders
 from tools.get_config import get_config
-from slurm.tools import get_free_slots, submit_job
+from slurm_tools.slurm_tools import get_free_slots, submit_job
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test

@@ -5,10 +5,10 @@ import csv
 import os
 import sys
 
-import tools.colors as cc
+from tools import colors as cc
 from tools.get_config import get_config
-from slurm.tools import get_squeue_stats
 from tools.list_of_folders import list_of_folders
+from slurm_tools.slurm_tools import get_squeue_stats
 
 def get_results_path(use_store=False):
     exe = get_config("exe")
