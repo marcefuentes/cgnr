@@ -8,7 +8,7 @@ import sys
 from tools import colors as cc
 from tools.get_config import get_config
 from tools.list_of_folders import list_of_folders
-from slurm_tools.slurm_tools import get_squeue_stats
+from slurm_tools.slurm_tools import get_squeue_stats, get_qos_limit
 
 def get_results_path(use_store=False):
     exe = get_config("exe")
@@ -177,13 +177,16 @@ def main():
     for variant in variants:
         total_pending, total_running = process_variant(variant, total_pending, total_running)
     if "mfu" in current_path:
-        print(f"\nTotal: {cc.yellow}{total_running:>20}{cc.reset}{total_pending:>4}")
-        total_pending = 0
-        total_running = 0
+        print(f"\nTotal {cc.yellow}{total_running:>20}{cc.reset}{total_pending:>4}")
+        pending = 0
+        running = 0
+        max_submit = 0
         for constraint in constraints:
-            total_pending += get_squeue_stats("qos", constraint, "pending")
-            total_running += get_squeue_stats("qos", constraint, "running")
-        print(f"Total (by constraint): {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}\n")
+            pending += get_squeue_stats("qos", constraint, "pending")
+            running += get_squeue_stats("qos", constraint, "running")
+            max_submit += get_qos_limit(constraint, "maxsubmit")
+            free_slots = max_submit - running - pending
+        print(f"Total (by constraint) {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}{cc.cyan}{free_slots:>4}{cc.reset}\n")
     else:
         print()
 
