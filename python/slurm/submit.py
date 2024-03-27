@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import logging
 import os
 import sys
@@ -123,11 +124,10 @@ def process_variant(constraint, free_slots, test, last_job_file):
 
     return free_slots
 
-def main():
+def main(test=False):
 
-    test = len(sys.argv) > 1
     if test:
-        print(f"\nThis is a test{cc.reset}")
+        print(f"\nThis is a test")
     exe = get_config("exe")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
@@ -145,4 +145,8 @@ def main():
     print()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Submit jobs")
+    parser.add_argument("--test", action="store_true", help="Run in test mode")
+    args = parser.parse_args()
+
+    main(test=args.test)

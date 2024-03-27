@@ -5,14 +5,16 @@ import csv
 import os
 import sys
 
+import submit
+
+from slurm_tools.slurm_tools import get_squeue_stats, get_qos_limit
 from tools import colors as cc
 from tools.get_config import get_config
 from tools.list_of_folders import list_of_folders
-from slurm_tools.slurm_tools import get_squeue_stats, get_qos_limit
 
 def get_results_path(use_store=False):
     exe = get_config("exe")
-    if use_store != "no":
+    if use_store:
         store_path = os.environ.get("STORE")
         if store_path is None:
             raise ValueError("STORE environment variable not set")
@@ -161,6 +163,12 @@ def process_given(current_path, folder_dict, total_pending, total_running):
 
 def main():
 
+    parser = argparse.ArgumentParser(description="Status of tasks",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--store", action="store_true", help="use store instead of home (only in cesga)")
+    parser.add_argument("--test", action="store_true", help="run submit.py in test mode (only in cesga)")
+    args = parser.parse_args()
+
     constraints = get_config("constraints")
     current_path = get_results_path(use_store=args.store)
 
@@ -176,7 +184,7 @@ def main():
     variants = list_of_folders(current_path)
     for variant in variants:
         total_pending, total_running = process_variant(variant, total_pending, total_running)
-    if "mfu" in current_path:
+    if "mfu" in current_path and args.store == False:
         print(f"\nTotal {cc.yellow}{total_running:>20}{cc.reset}{total_pending:>4}")
         pending = 0
         running = 0
@@ -186,15 +194,15 @@ def main():
             running += get_squeue_stats("qos", constraint, "running")
             max_submit += get_qos_limit(constraint, "maxsubmit")
             free_slots = max_submit - running - pending
-        print(f"Total (by constraint) {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}{cc.cyan}{free_slots:>4}{cc.reset}\n")
+        print(f"Total (by constraint) {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}{cc.reset}\n")
+        if free_slots:
+            print(f"{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset} jobs {cc.yesno} ", end="")
+            user_input = input()
+            if user_input.lower() == "n":
+                exit()
+            submit.main(test=args.test)
     else:
         print()
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description="Status of tasks",
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    # It admits only one argument, which is optional and can only be "store"
-    parser.add_argument("store", nargs="?", default="no", help="store (optional): use store instead of home (only in cesga)")
-    args = parser.parse_args()
     main()
