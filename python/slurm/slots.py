@@ -22,7 +22,10 @@ for constraint in constraints:
     free_slots = max_submit - running_jobs - pending_jobs
 
     print(f"{qos_name:<12}", end = "")
-    print(f"{max_running:>5}", end = "")
+    if max_running > running_jobs:
+        print(f"{max_running:>5}", end = "")
+    else:
+        print(f"{:5}", end = "")
     print(f"{cc.yellow}{cc.bold if running_jobs == max_running else cc.yellow}{running_jobs:>9}{cc.reset}", end = "")
     print(f"{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>4}{cc.reset}", end = "")
     print(f"{cc.bold}{cc.cyan}{free_slots:>4}{cc.reset}")
