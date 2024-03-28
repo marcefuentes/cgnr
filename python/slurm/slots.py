@@ -2,6 +2,7 @@
 
 import os
 
+import submit
 import slurm_tools.slurm_tools as st
 import tools.colors as cc
 from tools.get_config import get_config
@@ -26,4 +27,10 @@ for constraint in constraints:
     print(f"{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>4}{cc.reset}", end = "")
     print(f"{cc.bold}{cc.cyan}{free_slots:>4}{cc.reset}")
 
+    if free_slots:
+        print(f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset} jobs {cc.yesno} ", end="")
+        user_input = input()
+        if user_input.lower() == "n":
+            exit()
+        submit.main()
 print()
