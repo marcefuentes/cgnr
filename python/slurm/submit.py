@@ -82,6 +82,9 @@ def process_variant(constraint, free_slots, test, last_job_file):
             current_path, last_job = f.read().strip().split(",")
         last_job = int(last_job)
     else:
+        if test:
+            print("Submission is about to start in a new variant. Cannot run with --test option")
+            exit()
         mechanisms = list_of_folders(os.getcwd())
         givens = list_of_folders(mechanisms[0])
         current_path = givens[0]

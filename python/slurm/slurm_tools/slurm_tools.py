@@ -9,6 +9,15 @@ from tools.get_config import get_config
 
 def get_qos_name(constraint):
     hours = get_config("hours")
+    if constraint == "none":
+        command = ["scontrol", "show", "partition", "short", "-o"]
+        output = subprocess.check_output(command).decode()
+        match = re.search(r"MaxTime=(\d+):", output)
+        maxtime_hours = int(match.group(1))
+        if hours >= maxtime_hours:
+            return "medium"
+        else:
+            return "short"
     qos_name = f"{constraint}_short"
     command = ["sacctmgr",
                "--noheader",
@@ -65,6 +74,7 @@ def submit_job(current_path_folders, job_array_string, constraint):
     memory = get_config("memory")
     mail_user = get_config("mail_user")
 
+    constraint = "" if constraint == "none" else constraint
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]
