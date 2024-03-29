@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import os
-
 import submit
 import slurm_tools.slurm_tools as st
 import tools.colors as cc
@@ -27,7 +25,7 @@ def main():
         print(f"{max_running if max_running > running_jobs else ' ' * 5:>5}", end = "")
         print(f"{cc.yellow}{cc.bold if running_jobs == max_running else cc.yellow}{running_jobs:>9}{cc.reset}", end = "")
         print(f"{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>4}{cc.reset}", end = "")
-        print(f"{cc.bold}{cc.cyan}{free_slots:>4}{cc.reset}")
+        print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
 
         if free_slots:
             print(f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset} jobs {cc.yesno} ", end="")
