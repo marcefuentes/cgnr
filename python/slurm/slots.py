@@ -8,6 +8,7 @@ from tools.get_config import get_config
 def main():
 
     constraints = get_config("constraints")
+    total_free_slots = 0
 
     print()
     #print(f"{'Qos':<12}{'Max':>5}{'Running':>9}{'Pending':>5}{'Free':>5}")
@@ -20,6 +21,7 @@ def main():
         running_jobs = st.get_squeue_stats("qos", constraint, "running")
         pending_jobs = st.get_squeue_stats("qos", constraint, "pending")
         free_slots = max_submit - running_jobs - pending_jobs
+        total_free_slots += free_slots
 
         print(f"{qos_name:<12}", end = "")
         print(f"{max_running if max_running > running_jobs else ' ' * 5:>5}", end = "")
@@ -27,12 +29,12 @@ def main():
         print(f"{cc.red if pending_jobs == 0 else cc.white}{pending_jobs:>4}{cc.reset}", end = "")
         print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
 
-        if free_slots:
-            print(f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset} jobs {cc.yesno} ", end="")
-            user_input = input()
-            if user_input.lower() == "n":
-                exit()
-            submit.main()
+    if total_free_slots:
+        print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset} jobs {cc.yesno} ", end="")
+        user_input = input()
+        if user_input.lower() == "n":
+            exit()
+        submit.main()
     print()
 
 if __name__ == "__main__":
