@@ -5,10 +5,10 @@ import logging
 import os
 import sys
 
+import slurm_tools.slurm_tools as st
 import tools.colors as cc
 from tools.list_of_folders import list_of_folders
 from tools.get_config import get_config
-from slurm_tools.slurm_tools import get_free_slots, submit_job
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
@@ -43,7 +43,7 @@ def process_folder(constraint, free_slots, last_job, test):
     else:
         job_min = last_job + 1
     if os.path.isfile(os.path.join(current_path, f"{job_min}{output_file_extension}")):
-        print(f"{cc.red}{current_path_print}/{job_min}{output_file_extension} already exists{cc.reset}")
+        print(f"{cc.red}{current_path_print}/{job_min}{output_file_extension} already exists.{cc.reset}")
         last_job = 0
         return free_slots, last_job
     job_max = get_job_max(current_path)
@@ -52,14 +52,14 @@ def process_folder(constraint, free_slots, last_job, test):
     job_array_string = f"{job_min}-{last_job}"
     info = f"{current_path_print}/{job_array_string} to {constraint}"
     if test:
-        print(f"Would submit {info}")
+        print(f"Would submit {info}.")
         return_code = 0
         stdout = "Test"
         stderr = "Test"
     else:
-        return_code, stdout, stderr = submit_job(current_path_folders, job_array_string, constraint)
+        return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, constraint)
     if return_code != 0:
-        print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset}")
+        print(f"{cc.red}sbatch command failed with return code {return_code}.{cc.reset}")
         if stderr:
             print(stderr)
             logging.error(stderr)
@@ -70,7 +70,7 @@ def process_folder(constraint, free_slots, last_job, test):
                 print(line)
                 logging.info(line)
     logging.info(info)
-    print(f"{cc.green}{info}{cc.reset}")
+    print(f"{cc.green}{info}.{cc.reset}")
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
@@ -83,7 +83,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
         last_job = int(last_job)
     else:
         if test:
-            print("Submission is about to start in a new variant. Cannot run with --test option")
+            print("Submission is about to start in a new variant. Cannot run with --test option.")
             exit()
         mechanisms = list_of_folders(os.getcwd())
         givens = list_of_folders(mechanisms[0])
@@ -116,8 +116,8 @@ def process_variant(constraint, free_slots, test, last_job_file):
                     print(f"Would remove {last_job_file}.{cc.reset}")
                 else:
                     os.remove(last_job_file)
-                print(f"{cc.bold}{cc.green}All jobs submitted{cc.reset}")
-                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset} free slots in {cc.bold}{constraint}{cc.reset}\n")
+                print(f"{cc.bold}{cc.green}All jobs submitted.{cc.reset}")
+                print(f"{cc.bold}{cc.cyan}{free_slots}{cc.reset} free slots in {cc.bold}{constraint}{cc.reset}.\n")
                 exit()
     if test:
         print(f"Would write {current_path},{last_job} to {last_job_file}.{cc.reset}")
@@ -130,7 +130,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
 def main(test=False):
 
     if test:
-        print(f"\nThis is a test")
+        print(f"\nThis is a test.")
     exe = get_config("exe")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
@@ -139,8 +139,8 @@ def main(test=False):
                         format="%(asctime)s %(levelname)s: %(message)s")
     constraints = get_config("constraints")
     for constraint in constraints:
-        free_slots = get_free_slots(constraint)
-        print(f"\n{cc.bold}{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
+        free_slots = st.get_free_slots(constraint)
+        print(f"\n{cc.bold}{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots.")
         if test and not free_slots:
             free_slots = 100
         while free_slots:

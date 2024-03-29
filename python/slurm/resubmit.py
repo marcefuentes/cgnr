@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+import argparse
 import logging
 import os
 import sys
 
-import slurm_tols.slurm_tools as st
+import slurm_tools.slurm_tools as st
 import tools.colors as cc
 from tools.get_config import get_config
 
@@ -15,12 +16,12 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
     constraints = get_config("constraints")
     for constraint in constraints:
         if len(jobs_to_submit) == 0:
-            print(f"{cc.green}No jobs to submit\n{cc.reset}")
+            print(f"{cc.green}No jobs to submit.\n{cc.reset}")
             exit()
         free_slots = st.get_free_slots(constraint)
-        print(f"\n{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots")
+        print(f"\n{constraint}:{cc.reset} {cc.cyan}{free_slots}{cc.reset} free slots.")
         if not free_slots:
-            print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")
+            print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted.")
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
         job_array_string = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
@@ -31,7 +32,7 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         else:
             return_code, stdout, stderr = st.submit_job(current_path_folders, job_array_string, constraint)
         if return_code != 0:
-            print(f"{cc.red}sbatch command failed with return code {return_code}{cc.reset}")
+            print(f"{cc.red}sbatch command failed with return code {return_code}.{cc.reset}")
             if stderr:
                 print(stderr)
                 logging.error(stderr)
@@ -44,17 +45,16 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
         current_path_print = "/".join(current_path_folders[-3:])
         info = f"{current_path_print}/{job_array_string} to {constraint}"
         logging.info(info)
-        print(f"{cc.green}{info}{cc.reset}")
+        print(f"{cc.green}{info}.{cc.reset}")
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
-        print(f"{cc.cyan}{free_slots}{cc.reset} free slots in {constraint}{cc.reset}")
+        print(f"{cc.cyan}{free_slots}{cc.reset} free slots in {constraint}.{cc.reset}")
         if not free_slots:
-            print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted")
+            print(f"{cc.red}{len(jobs_to_submit)}{cc.reset} jobs remain to be submitted.")
 
-def main():
+def main(test=False):
 
     exe = get_config("exe")
-    test = len(sys.argv) > 1
     if test:
         print(f"\nThis is a test.\n")
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
@@ -82,7 +82,7 @@ def main():
     current_path_folders = current_path.split("/")
     jobs_to_submit = st.get_jobs_to_submit(current_path_folders)
     if len(jobs_to_submit) == 0:
-        print(f"\n{cc.green}No jobs to submit\n{cc.reset}")
+        print(f"\n{cc.green}No jobs to submit.\n{cc.reset}")
         return
     print(f"\n{cc.cyan}{len(jobs_to_submit)}{cc.reset} jobs to submit.\n")
 
@@ -100,4 +100,8 @@ def main():
     print()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Submit jobs")
+    parser.add_argument("--test", action="store_true", help="Run in test mode")
+    args = parser.parse_args()
+
+    main(test=args.test)
