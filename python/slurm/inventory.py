@@ -3,11 +3,9 @@
 import argparse
 import csv
 import os
-import sys
 
-import submit
-
-from slurm_tools.slurm_tools import get_squeue_stats, get_qos_limit
+import slots
+from slurm_tools.slurm_tools import get_squeue_stats
 from tools import colors as cc
 from tools.get_config import get_config
 from tools.list_of_folders import list_of_folders
@@ -166,10 +164,8 @@ def main():
     parser = argparse.ArgumentParser(description="Status of tasks",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--store", action="store_true", help="use store instead of home (only in cesga)")
-    parser.add_argument("--test", action="store_true", help="run submit.py in test mode (only in cesga)")
     args = parser.parse_args()
 
-    constraints = get_config("constraints")
     current_path = get_results_path(use_store=args.store)
 
     if os.path.isdir(current_path):
@@ -186,21 +182,7 @@ def main():
         total_pending, total_running = process_variant(variant, total_pending, total_running)
     if "mfu" in current_path and args.store == False:
         print(f"\nTotal {cc.yellow}{total_running:>20}{cc.reset}{total_pending:>4}")
-        pending = 0
-        running = 0
-        max_submit = 0
-        for constraint in constraints:
-            pending += get_squeue_stats("qos", constraint, "pending")
-            running += get_squeue_stats("qos", constraint, "running")
-            max_submit += get_qos_limit(constraint, "maxsubmit")
-            free_slots = max_submit - running - pending
-        print(f"Total (by constraint) {cc.yellow}{total_running:>4}{cc.reset}{total_pending:>4}{cc.reset}\n")
-        if free_slots:
-            print(f"{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset} jobs {cc.yesno} ", end="")
-            user_input = input()
-            if user_input.lower() == "n":
-                exit()
-            submit.main(test=args.test)
+        slots.main()
     else:
         print()
 
