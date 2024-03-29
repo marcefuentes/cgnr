@@ -183,6 +183,8 @@ def main():
     if "mfu" in current_path and args.store == False:
         print(f"\nTotal {cc.yellow}{total_running:>20}{cc.reset}{total_pending:>4}")
         slots.main()
+    else:
+        print()
 
 if __name__ == "__main__":
     main()
