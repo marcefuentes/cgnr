@@ -24,7 +24,7 @@ def main():
         total_free_slots += free_slots
 
         print(f"{qos_name:<12}", end = "")
-        print(f"({max_running if max_running > running else ' ' * 5:>5})", end = "")
+        print(f"{max_running if max_running > running else ' ' * 5:>5})", end = "")
         print(f"{cc.yellow}{cc.bold if running == max_running else cc.yellow}{running:>9}{cc.reset}", end = "")
         print(f"{cc.red if pending == 0 else cc.white}{pending:>4}{cc.reset}", end = "")
         print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
