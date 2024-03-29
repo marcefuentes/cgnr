@@ -138,14 +138,16 @@ def process_given(current_path, folder_dict, total_pending, total_running):
     mechanism = current_path_folders[-2]
     variant = current_path_folders[-3]
     jobname =  f"{mechanism}_{given}_{variant}"
-    if "mfu" in current_path:
+    if "mfu" in current_path and "Store" not in current_path:
         running_jobs = get_squeue_stats("name", jobname, "running")
         pending_jobs = get_squeue_stats("name", jobname, "pending")
+        dead_jobs = one_line_jobs - running_jobs
+        to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
     else:
         running_jobs = 0
-        pending_jobs = 0
-    dead_jobs = one_line_jobs - running_jobs
-    to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
+        pending_jobs = one_line_jobs
+        dead_jobs = 0
+        to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
 
     total_pending += pending_jobs
     total_running += running_jobs
