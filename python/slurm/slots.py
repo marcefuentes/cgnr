@@ -36,9 +36,11 @@ def main():
         print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset} jobs {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
+            print()
             exit()
         submit.main()
-    print()
+    else:
+        print()
 
 if __name__ == "__main__":
     main()
