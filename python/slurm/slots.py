@@ -28,11 +28,8 @@ def main():
             print(f"({max_running:>3})", end = "")
         else:
             print(f"{' ' * 5:>5}", end="")
-        if running == max_running:
-            print(f"{cc.bold}{cc.yellow}{running:>9}{cc.reset}", end = "")
-        else:
-            print(f"{cc.yellow}{running if running else ' ' * 9:>9}{cc.reset}", end = "")
-        print(f"{pending if pending else ' ' * 4:>4}{cc.reset}", end = "")
+        print(f"{cc.yellow}{running if running else ' ' * 9:>9}{cc.reset}", end = "")
+        print(f"{cc.white}{pending if pending else ' ' * 4:>4}{cc.reset}", end = "")
         print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
 
     if total_free_slots:
