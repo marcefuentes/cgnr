@@ -89,45 +89,41 @@ def main(mode, movie):
 
     fig = plt.figure(figsize=(width, height))
     fig.supxlabel(ss.xlabel,
-                  x=(ss.left_margin + inner_width/2)/width,
-                  y=(ss.bottom_margin - ss.xlabel_padding)/height,
-                  fontsize=ss.biglabel)
+        x=(ss.left_margin + inner_width/2)/width,
+        y=(ss.bottom_margin - ss.xlabel_padding)/height,
+        fontsize=ss.biglabel)
     fig.supylabel(ss.ylabel,
-                  x=(ss.left_margin - ss.ylabel_padding)/width,
-                  y=(ss.bottom_margin + inner_height/2)/height,
-                  fontsize=ss.biglabel)
+        x=(ss.left_margin - ss.ylabel_padding)/width,
+        y=(ss.bottom_margin + inner_height/2)/height,
+        fontsize=ss.biglabel)
     fig.text((ss.left_margin + inner_width)/width,
-             (ss.bottom_margin - ss.xlabel_padding)/height,
-             "",
-             fontsize=ss.ticklabel,
-             color="grey",
-             ha="right")
+        (ss.bottom_margin - ss.xlabel_padding)/height,
+        "",
+        fontsize=ss.ticklabel,
+        color="grey",
+        ha="right")
 
     plotsize_fixed = Size.Fixed(ss.plotsize/nc)
     spacing_fixed = Size.Fixed(ss.spacing)
     divider = Divider(fig,
-                      (ss.left_margin/width,
-                       ss.bottom_margin/height,
-                       inner_width/width,
-                       inner_height/height),
-                      [plotsize_fixed] * nc + ([spacing_fixed] + [plotsize_fixed] * nc) * (ncols - 1),
-                      [plotsize_fixed] * nr + ([spacing_fixed] + [plotsize_fixed] * nr) * (nrows - 1),
-                      aspect=False)
+        (ss.left_margin/width,
+        ss.bottom_margin/height,
+        inner_width/width,
+        inner_height/height),
+        [plotsize_fixed] * nc + ([spacing_fixed] + [plotsize_fixed] * nc) * (ncols - 1),
+        [plotsize_fixed] * nr + ([spacing_fixed] + [plotsize_fixed] * nr) * (nrows - 1),
+        aspect=False)
 
     outergrid = fig.add_gridspec(nrows=nrows,
-                                 ncols=ncols)
-    axs = np.empty((nrows,
-                    ncols,
-                    nr,
-                    nc),
-                    dtype=object)
+        ncols=ncols)
+    axs = np.empty((nrows, ncols, nr, nc), dtype=object)
 
     for r, _ in enumerate(mechanisms):
         for c, _ in enumerate(traits):
             grid = outergrid[r, c].subgridspec(nrows=nr,
-                                               ncols=nc,
-                                               hspace=0.0,
-                                               wspace=0.0)
+                ncols=nc,
+                hspace=0.0,
+                wspace=0.0)
             axs[r, c] = grid.subplots()
             for a in range(nr):
                 inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
@@ -137,22 +133,22 @@ def main(mode, movie):
                     for spine in axs[r, c, a, e].spines.values():
                         spine.set_linewidth(ss.linewidth)
                     axs[r, c, a, e].set(xticks=[],
-                                        yticks=[],
-                                        xlim=xlim,
-                                        ylim=ylim)
+                        yticks=[],
+                        xlim=xlim,
+                        ylim=ylim)
                     axs[r, c, a, e].tick_params(axis="both",
-                                                labelsize=ss.ticklabel,
-                                                size=ss.ticksize)
+                        labelsize=ss.ticklabel,
+                        size=ss.ticksize)
             i = r*ncols + c
             letter = chr(ord("a") + i % 26)
             if i >= 26:
                 letter = letter + letter
             axs[r, c, 0, 0].text(0,
-                                 letterposition,
-                                 letter,
-                                 fontsize=ss.letterlabel,
-                                 transform=axs[r, c, 0, 0].transAxes,
-                                 weight="bold")
+                letterposition,
+                letter,
+                fontsize=ss.letterlabel,
+                transform=axs[r, c, 0, 0].transAxes,
+                weight="bold")
             for a in range(0, nr, step):
                 axs[r, c, a, 0].set(yticks=[ylim[1]/2], yticklabels=[])
             for e in range(0, nc, step):
@@ -161,8 +157,8 @@ def main(mode, movie):
             axs[r, 0, a, 0].set_yticklabels([alphas[a]])
     for c, trait in enumerate(traits):
         axs[0, c, 0, int(nc/2)].set_title(mm.get_title(trait),
-                                          pad=ss.plotsize * ss.titlepad,
-                                          fontsize=ss.letterlabel)
+            pad=ss.plotsize * ss.titlepad,
+            fontsize=ss.letterlabel)
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
 
@@ -182,12 +178,12 @@ def main(mode, movie):
 
     sm = ScalarMappable(cmap=ss.color_map, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([(ss.left_margin + inner_width + ss.spacing)/width,
-                        (ss.bottom_margin + inner_height/2 - ss.plotsize/2)/height,
-                        (ss.plotsize/nc)/width,
-                        ss.plotsize/height]) # [left, bottom, width, height]
+        (ss.bottom_margin + inner_height/2 - ss.plotsize/2)/height,
+        (ss.plotsize/nc)/width,
+        ss.plotsize/height]) # [left, bottom, width, height]
     cbar = fig.colorbar(sm,
-                        cax=cax,
-                        ticks=[-1, 0, 1])
+        cax=cax,
+        ticks=[-1, 0, 1])
     cbar.ax.tick_params(labelsize=ss.ticklabel, size=ss.ticksize)
     cbar.outline.set_linewidth(ss.linewidth)
 
@@ -196,24 +192,24 @@ def main(mode, movie):
     name = f"{script_name}_{mode}"
     if movie:
         ani = FuncAnimation(fig,
-                            update,
-                            frames=ts,
-                            fargs=(mode,
-                                   df_mechanisms,
-                                   dffrq_mechanisms,
-                                   movie,
-                                   fig.texts[2],
-                                   artists,),
-                            blit=True)
+            update,
+            frames=ts,
+            fargs=(mode,
+                df_mechanisms,
+                dffrq_mechanisms,
+                movie,
+                fig.texts[2],
+                artists,),
+            blit=True)
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
         update(ts[-1],
-               mode,
-               df_mechanisms,
-               dffrq_mechanisms,
-               movie,
-               fig.texts[2],
-               artists,)
+            mode,
+            df_mechanisms,
+            dffrq_mechanisms,
+            movie,
+            fig.texts[2],
+            artists,)
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
@@ -223,7 +219,7 @@ def main(mode, movie):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Results plots",
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("mode", help="Mode: demography or cooperation")
     parser.add_argument("movie", nargs="?", default=False, help="Enable movie")
     args = parser.parse_args()
