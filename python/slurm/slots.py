@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import submit
-import modules.modules as st
+import modules.slurm_tools as st
 import tools.colors as cc
 from tools.get_config import get_config
 
