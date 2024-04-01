@@ -86,22 +86,22 @@ plt.rcParams["ps.fonttype"] = 42
 # Create figure
 
 axs = np.empty((2,
-                len(alphas),
-                len(rhos)),
-               dtype=object)
+        len(alphas),
+        len(rhos)),
+    dtype=object)
 
 fig = plt.figure(figsize=(width, height))
 outergrid = fig.add_gridspec(nrows=1,
-                             ncols=2,
-                             left=0.15,
-                             right=0.85,
-                             top=0.8,
-                             bottom=0.2)
+    ncols=2,
+    left=0.15,
+    right=0.85,
+    top=0.8,
+    bottom=0.2)
 for g in range(2):
     grid = outergrid[g].subgridspec(nrows=num,
-                                    ncols=num,
-                                    wspace=0,
-                                    hspace=0)
+        ncols=num,
+        wspace=0,
+        hspace=0)
     axs[g] = grid.subplots()
 
 left_x = axs[0, 0, 0].get_position().x0
@@ -111,13 +111,13 @@ top_y = axs[0, 0, 0].get_position().y1
 bottom_y = axs[-1, -1, -1].get_position().y0
 center_y = (top_y + bottom_y) / 2
 fig.supxlabel(xlabel,
-              x=center_x,
-              y=bottom_y*0.3,
-              fontsize=biglabel)
+    x=center_x,
+    y=bottom_y*0.3,
+    fontsize=biglabel)
 fig.supylabel(ylabel,
-              x=left_x*0.4,
-              y=center_y,
-              fontsize=biglabel)
+    x=left_x*0.4,
+    y=center_y,
+    fontsize=biglabel)
 
 for ax in fig.get_axes():
     ax.set(xticks=[], yticks=[])
@@ -128,19 +128,19 @@ for ax in fig.get_axes():
 for g in range(2):
     letter = ord("a") + g
     axs[g, 0, 0].set_title(chr(letter),
-                           fontsize=plotsize*5,
-                           weight="bold",
-                           loc="left")
+        fontsize=plotsize*5,
+        weight="bold",
+        loc="left")
     if g == 0:
         for a in range(0, num, step):
             axs[g, a, 0].set_ylabel(f"{alphas[a]:.1f}",
-                                    rotation="horizontal",
-                                    horizontalalignment="right",
-                                    verticalalignment="center",
-                                    fontsize=ticklabel)
+                rotation="horizontal",
+                horizontalalignment="right",
+                verticalalignment="center",
+                fontsize=ticklabel)
     for r in range(0, num, step):
         axs[g, -1, r].set_xlabel(f"{logess[r]:.0f}",
-                                 fontsize=ticklabel)
+            fontsize=ticklabel)
 
 # Assign axs objects to variables
 # (Line2D)
@@ -157,25 +157,25 @@ for g in range(2):
                 for c in range(n_ic): 
                     axs[0, a, r].plot(icx, ics[a, r, c], c="0.850")
             budgets[g, a, r], = axs[g, a, r].plot(budgetx,
-                                                  dummy_budgety,
-                                                  c="0.300",
-                                                  linewidth=4,
-                                                  alpha=0.8)
+                dummy_budgety,
+                c="0.300",
+                linewidth=4,
+                alpha=0.8)
             icurves[g, a, r], = axs[g, a, r].plot(icx,
-                                                  dummy_icy,
-                                                  linewidth=4,
-                                                  alpha=0.8)
+                dummy_icy,
+                linewidth=4,
+                alpha=0.8)
 
 # Add colorbar
 axins = inset_axes(axs[0, -1, -1],
-                   width="5%",
-                   height="100%",
-                   loc="upper right",
-                   bbox_to_anchor=(880, 200, 200, 200),
-                   borderpad=0)
+    width="5%",
+    height="100%",
+    loc="upper right",
+    bbox_to_anchor=(880, 200, 200, 200),
+    borderpad=0)
 cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap="Reds"),
-                    cax=axins,
-                    ticks=[0, 0.5, 1])
+    cax=axins,
+    ticks=[0, 0.5, 1])
 cbar.ax.tick_params(labelsize=ticklabel)
 cbar.outline.set_linewidth(0.2)
 
@@ -183,10 +183,10 @@ cbar.outline.set_linewidth(0.2)
 
 if len(givens) > 1:
     ani = FuncAnimation(fig,
-                        update,
-                        frames=givens,
-                        fargs=(budgets, icurves,),
-                        blit=True)
+        update,
+        frames=givens,
+        fargs=(budgets, icurves,),
+        blit=True)
     ani.save(f"{file_name}.mp4", writer="ffmpeg", fps=10)
 else:
     update(givens[0], budgets, icurves,)
