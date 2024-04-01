@@ -5,7 +5,7 @@ import csv
 import os
 
 import slots
-from slurm_tools.slurm_tools import get_squeue_stats
+from modules.modules import get_squeue_stats
 from tools import colors as cc
 from tools.get_config import get_config
 from tools.list_of_folders import list_of_folders

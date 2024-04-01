@@ -11,10 +11,10 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import matplotlib.pyplot as plt
 import matplotlib.transforms
 
-import main_figures.settings as ss
-import main_figures.modes as mm
-from main_figures.get_df import get_df
-from main_figures.update_Z import update_Z
+import modules.settings as ss
+import modules.modes as mm
+from modules.get_df import get_df
+from modules.update_Z import update_Z
 
 def update(t, mode, df_mechanisms, movie, text, artists): 
     traits = mm.get_traits(mode)
