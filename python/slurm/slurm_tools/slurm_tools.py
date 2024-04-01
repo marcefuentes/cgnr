@@ -20,11 +20,11 @@ def get_qos_name(constraint):
             return "short"
     qos_name = f"{constraint}_short"
     command = ["sacctmgr",
-               "--noheader",
-               "--parsable2",
-               "show",
-               "qos", qos_name,
-               "format=maxwall"]
+        "--noheader",
+        "--parsable2",
+        "show",
+        "qos", qos_name,
+        "format=maxwall"]
     output = subprocess.check_output(command).decode().strip()
     if output is None:
         print(f"{red}QOS {qos_name} not found{reset}")
@@ -37,11 +37,11 @@ def get_qos_name(constraint):
 def get_qos_limit(constraint, specification):
     qos_name = get_qos_name(constraint)
     command = ["sacctmgr",
-               "--noheader",
-               "--parsable2",
-               "show",
-               "qos", qos_name,
-               f"format={specification}"]
+        "--noheader",
+        "--parsable2",
+        "show",
+        "qos", qos_name,
+        f"format={specification}"]
     output = subprocess.check_output(command).decode().strip()
     limit = int(output)
     return limit
@@ -58,11 +58,11 @@ def get_squeue_stats(key, value, state):
     key = f"--{key}"
     # %f is the feature (such as the constraint set with sbatch)
     command = ["squeue",
-               "--states", state,
-               "--array",
-               "--noheader",
-               "--format", "%f",
-               key, value]
+        "--states", state,
+        "--array",
+        "--noheader",
+        "--format", "%f",
+        key, value]
     output = subprocess.check_output(command).decode().strip().splitlines()
     stats = len(output)
     return stats
@@ -82,21 +82,21 @@ def submit_job(current_path_folders, job_array_string, constraint):
     job_name = f"{mechanism}_{given}_{variant}"
     job_time = f"{hours}:59:00"
     command = ["sbatch",
-               "--job-name", job_name,
-               "--output", "%a_slurm.out", # %a is the array index
-               "--constraint", constraint,
-               "--nodes", "1",
-               "--tasks", "1",
-               "--time", job_time,
-               "--mem", memory,
-               "--mail-type", "fail",
-               "--mail-user", mail_user,
-               "--array", job_array_string,
-               "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
+        "--job-name", job_name,
+        "--output", "%a_slurm.out", # %a is the array index
+        "--constraint", constraint,
+        "--nodes", "1",
+        "--tasks", "1",
+        "--time", job_time,
+        "--mem", memory,
+        "--mail-type", "fail",
+        "--mail-user", mail_user,
+        "--array", job_array_string,
+        "--wrap", f"srun {executable} ${{SLURM_ARRAY_TASK_ID}}"]
     process = subprocess.Popen(command,
-                               stdout=subprocess.PIPE,
-                               text=True,
-                               stderr=subprocess.PIPE)
+        stdout=subprocess.PIPE,
+        text=True,
+        stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
 
     return process.returncode, stdout, stderr
@@ -104,10 +104,10 @@ def submit_job(current_path_folders, job_array_string, constraint):
 def job_is_queued(current_path_folders, job_array_index):
     # %j is the job name, %K is the job array index
     command = ["squeue",
-               "--states", "running,pending",
-               "--array",
-               "--noheader",
-               "--format", "%j,%K"]
+        "--states", "running,pending",
+        "--array",
+        "--noheader",
+        "--format", "%j,%K"]
     output = subprocess.check_output(command, text="True").strip().splitlines()
     variant = current_path_folders[-3]
     mechanism = current_path_folders[-2]

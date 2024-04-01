@@ -135,8 +135,8 @@ def main(test=False):
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     logging.basicConfig(filename=log_file,
-                        level=logging.DEBUG,
-                        format="%(asctime)s %(levelname)s: %(message)s")
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)s: %(message)s")
     constraints = get_config("constraints")
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
