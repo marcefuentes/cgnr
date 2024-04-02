@@ -18,7 +18,8 @@ else:
 
 destination_folder=f"/home/marcelino/code/{exe}/results/"
 
-rsync_command = ["rsync",
+rsync_command = [
+    "rsync",
     "--archive",
     "--info=progress2",
     "--compress",
@@ -26,6 +27,7 @@ rsync_command = ["rsync",
     "--exclude=*.png",
     "--rsh=ssh",
     f"{remote}:{source_folder}",
-    destination_folder]
+    destination_folder
+]
 subprocess.run(rsync_command, check=True)
 
