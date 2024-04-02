@@ -65,9 +65,11 @@ def main(test=False):
             exit()
         log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-    logging.basicConfig(filename=log_file,
+    logging.basicConfig(
+        filename=log_file,
         level=logging.DEBUG,
-        format="%(asctime)s %(levelname)s: %(message)s")
+        format="%(asctime)s %(levelname)s: %(message)s"
+    )
 
     current_path = os.getcwd()
     if os.path.isfile(last_job_file):
