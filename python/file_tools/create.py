@@ -64,22 +64,25 @@ alphas = np.linspace(0.1, 0.9, num)
 logess = np.linspace(-5.0, 5.0, num)
 Given = float(given[-3:]) / 100
 cost = -int(variant[variant.find("cost") + 4:variant.find("cost") + 6])
+standard_params = {
+    "Seed": 1,
+    "N": 12,
+    "Runs": 30,
+    "Time": 21,
+    "Periods": 3,
+    "qBMutationSize": -6,
+    "GrainMutationSize": -6,
+}
 
 c = 101
+filename_format = f"{path}/{c}{output_file_extension}"
 
 for alpha in alphas:
     for loges in logess:
-        filename = f"{path}/{c}{output_file_extension}"
+        filename = filename_format.format(c=c)
         f = open(filename, "w")
-        f.write("Seed,1\n")
-        f.write("N,12\n")
-        # standard Runs,30
-        f.write("Runs,30\n")
-        # standard Time,21
-        f.write("Time,21\n")
-        f.write("Periods,3\n")
-        f.write("qBMutationSize,-6\n")
-        f.write("GrainMutationSize,-6\n")
+        for key, value in standard_params.items():
+            f.write(f"{key},{value}\n")
         f.write(f"DeathRate,{deathrate}\n")
         f.write(f"GroupSize,{groupsize}\n")
         f.write(f"Cost,{cost}\n")
