@@ -19,7 +19,8 @@ from modules.update_Z import update_Z
 def update(t, mode, df_mechanisms, movie, text, artists): 
     traits = mm.get_traits(mode)
     for r, mechanism in enumerate(df_mechanisms):
-        if ("cooperation" in mode or "correlations" in mode or "test" in mode) and mechanism == "social":
+        kws = ["cooperation", "correlations", "test"]
+        if any(kw in mode for kw in kws) and mechanism == "social":
             continue
         for c, trait in enumerate(traits):
             Z = update_Z(t, df_mechanisms, mechanism, trait, mode)
@@ -62,12 +63,16 @@ def main(mode, movie):
     xmax = df.logES.max()
     ymin = df.alpha.min()
     ymax = df.alpha.max()
-    xticklabels = [f"{xmin:.0f}",
+    xticklabels = [
+        f"{xmin:.0f}",
         f"{(xmin + xmax)/2.:.0f}",
-        f"{xmax:.0f}"]
-    yticklabels = [f"{ymax:.1f}",
+        f"{xmax:.0f}"
+    ]
+    yticklabels = [
+        f"{ymax:.1f}",
         f"{(ymin + ymax)/2.:.1f}",
-        f"{ymin:.1f}"]
+        f"{ymin:.1f}"
+    ]
 
     # Create figure
 
@@ -79,35 +84,45 @@ def main(mode, movie):
     width = inner_width + ss.left_margin + ss.right_margin
     height = inner_height + ss.top_margin + ss.bottom_margin
 
-    fig, main_ax = plt.subplots(nrows=nrows,
+    fig, main_ax = plt.subplots(
+        nrows=nrows,
         ncols=ncols,
-        figsize=(width, height))
+        figsize=(width, height)
+    )
 
-    fig.supxlabel(ss.xlabel,
+    fig.supxlabel(
+        ss.xlabel,
         x=(ss.left_margin + inner_width/2)/width,
         y=(ss.bottom_margin - ss.xlabel_padding)/height,
-        fontsize=ss.biglabel)
-    fig.supylabel(ss.ylabel,
+        fontsize=ss.biglabel
+    )
+    fig.supylabel(
+        ss.ylabel,
         x=(ss.left_margin - ss.ylabel_padding)/width,
         y=(ss.bottom_margin + inner_height/2)/height,
-        fontsize=ss.biglabel)
-    fig.text((ss.left_margin + inner_width)/width,
+        fontsize=ss.biglabel
+    )
+    fig.text(
+        (ss.left_margin + inner_width)/width,
         (ss.bottom_margin - ss.xlabel_padding)/height,
         "",
         fontsize=ss.ticklabel,
         color="grey",
-        ha="right")
+        ha="right"
+    )
 
     plotsize_fixed = Size.Fixed(ss.plotsize)
     spacing_fixed = Size.Fixed(ss.spacing)
-    divider = Divider(fig,
+    divider = Divider(
+        fig,
         (ss.left_margin/width,
         ss.bottom_margin/height,
         inner_width/width,
         inner_height/height),
         [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (ncols - 1),
         [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (nrows - 1),
-        aspect=False)
+        aspect=False
+    )
     for r, _ in enumerate(mechanisms):
         for c, _ in enumerate(traits):
             main_ax[nrows - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
@@ -119,29 +134,37 @@ def main(mode, movie):
         letter = chr(ord("a") + i % 26)
         if i >= 26:
             letter = letter + letter
-        ax.text(0,
+        ax.text(
+            0,
             letterposition,
             letter,
             transform=ax.transAxes,
             fontsize=ss.letterlabel,
-            weight="bold")
+            weight="bold"
+        )
         for spine in ax.spines.values():
             spine.set_linewidth(ss.linewidth)
-        ax.set(xticks=xticks,
+        ax.set(
+            xticks=xticks,
             yticks=yticks,
             xticklabels=[],
-            yticklabels=[])
-        ax.tick_params(axis="both",
+            yticklabels=[]
+        )
+        ax.tick_params(
+            axis="both",
             labelsize=ss.ticklabel,
-            size=ss.ticksize)
+            size=ss.ticksize
+        )
     for ax in axs[:, 0]:
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
     for ax, trait in zip(axs[0, :], traits):
-        ax.set_title(mm.get_title(trait),
+        ax.set_title(
+            mm.get_title(trait),
             pad=ss.plotsize * ss.titlepad,
-            fontsize=ss.letterlabel)
+            fontsize=ss.letterlabel
+        )
 
     # Assign axs objects to variables
     # (AxesImage)
@@ -151,19 +174,25 @@ def main(mode, movie):
 
     for r, _ in enumerate(mechanisms):
         for c, _ in enumerate(traits):
-            artists[r, c] = axs[r, c].imshow(dummy_Z,
+            artists[r, c] = axs[r, c].imshow(
+                dummy_Z,
                 cmap=ss.color_map,
                 vmin=-1,
-                vmax=1)
+                vmax=1
+            )
 
     sm = ScalarMappable(cmap=ss.color_map, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([(ss.left_margin + inner_width + ss.spacing)/width,
+    cax = fig.add_axes([
+        (ss.left_margin + inner_width + ss.spacing)/width,
         (ss.bottom_margin + inner_height/2 - ss.plotsize/2)/height,
         (ss.plotsize/nc)/width,
-        ss.plotsize/height]) # [left, bottom, width, height]
-    cbar = fig.colorbar(sm,
+        ss.plotsize/height
+    ]) # [left, bottom, width, height]
+    cbar = fig.colorbar(
+        sm,
         cax=cax,
-        ticks=[-1, 0, 1])
+        ticks=[-1, 0, 1]
+    )
     cbar.ax.tick_params(labelsize=ss.ticklabel, size=ss.ticksize)
     cbar.outline.set_linewidth(ss.linewidth)
 
@@ -171,23 +200,29 @@ def main(mode, movie):
 
     name = f"{script_name}_{mode}"
     if movie:
-        ani = FuncAnimation(fig,
+        ani = FuncAnimation(
+            fig,
             update,
             frames=ts,
-            fargs=(mode,
+            fargs=(
+                mode,
                 df_mechanisms,
                 movie,
                 fig.texts[2],
-                artists,),
-            blit=True)
+                artists,
+            ),
+            blit=True
+        )
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(ts[-1],
+        update(
+            ts[-1],
             mode,
             df_mechanisms,
             movie,
             fig.texts[2],
-            artists,)
+            artists,
+        )
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
@@ -199,7 +234,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Results plots",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("mode", help="Mode: demography or cooperation")
-    parser.add_argument("movie", nargs="?", default=False, help="Enable movie")
+    parser.add_argument(
+        "movie",
+        nargs="?",
+        default=False,
+        help="Enable movie"
+    )
     args = parser.parse_args()
 
     main(args.mode, args.movie)
