@@ -1,11 +1,6 @@
 
 import numpy as np
 
-alphamin = 0.1
-alphamax = 0.9
-logesmin = -5.0
-logesmax = 5.0
-
 def fitness(x, y, given, alpha, rho):
     qA = 1.0 - y
     qB = y*(1.0 - given) + x*given

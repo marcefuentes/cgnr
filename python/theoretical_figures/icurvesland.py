@@ -10,6 +10,7 @@ from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 import numpy as np
 
+from tools.get_config import get_config
 import modules.theory as tt
 
 start_time = time.perf_counter()
@@ -51,8 +52,12 @@ def update(given, budgets, icurves):
 
 # Data
 
-alphas = np.linspace(tt.alphamax, tt.alphamin, num=num)
-logess = np.linspace(tt.logesmin, tt.logesmax, num=num)
+alpha_min = get_config("alpha_min")
+alpha_max = get_config("alpha_max")
+loges_min = get_config("loges_min")
+loges_max = get_config("loges_max")
+alphas = np.linspace(alpha_max, alpha_min, num=num)
+logess = np.linspace(loges_min, loges_max, num=num)
 rhos = 1.0 - 1.0/pow(2, logess)
 qA = np.array([0.0, 1.0])
 budgetx = qA

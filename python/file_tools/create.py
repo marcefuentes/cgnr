@@ -4,7 +4,7 @@ import numpy as np
 import os
 import sys
 
-import tools.get_config as get_config
+from tools.get_config import get_config
 
 # the script accepts exactly three arguments
 if len(sys.argv) != 4:
@@ -16,6 +16,10 @@ mechanism = sys.argv[2]
 given = sys.argv[3]
 
 output_file_extension = get_config("input_file_extension")
+alpha_min = get_config("alpha_min")
+alpha_max = get_config("alpha_max")
+loges_min = get_config("loges_min")
+loges_max = get_config("loges_max")
 
 if "_d" in variant:
     deathrate = -3
@@ -60,8 +64,8 @@ path = f"{variant}/{mechanism}/{given}"
 os.makedirs(path, exist_ok=True)
 
 num = 21
-alphas = np.linspace(0.1, 0.9, num)
-logess = np.linspace(-5.0, 5.0, num)
+alphas = np.linspace(alpha_min, alpha_max, num)
+logess = np.linspace(loges_min, loges_max, num)
 Given = float(given[-3:]) / 100
 cost = -int(variant[variant.find("cost") + 4:variant.find("cost") + 6])
 standard_params = {

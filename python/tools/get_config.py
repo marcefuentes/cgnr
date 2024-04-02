@@ -18,6 +18,8 @@ def get_config(variable):
     if config.has_option('DEFAULT', variable):
         if variable in ("hours", "number_of_lines"):
             return config.getint('DEFAULT', variable)
+        elif variable in ("alpha_min", "alpha_max", "loges_min", "loges_max"):
+            return config.getfloat('DEFAULT', variable)
         elif variable in ("output_file_extensions", "constraints"):
             return config.get("DEFAULT", variable).split(",")
         else:
