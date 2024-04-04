@@ -91,7 +91,7 @@ def main(test=False):
     if test:
         print(f"{cc.white}Would delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset}.")
     else:
-        print(f"{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset} {cc.yesno} ", end="")
+        print(f"{cc.bold}{cc.red}This is not a test! {cc.white}Delete output files of jobs in {cc.red}red{cc.white} and {cc.grey}grey{cc.reset} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             exit()
