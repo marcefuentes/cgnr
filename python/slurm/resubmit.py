@@ -102,6 +102,7 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(
         description="Resubmit unfinished jobs",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter

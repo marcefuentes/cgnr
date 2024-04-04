@@ -33,7 +33,7 @@ def update(t, mode, df_mechanisms, movie, text, artists):
         text.set_text("")
     return artists.flatten()
 
-def main(mode, movie):
+def main(mode, movie=False):
 
     start_time = time.perf_counter()
     this_script = os.path.basename(__file__)
@@ -230,17 +230,24 @@ def main(mode, movie):
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description="Results plots",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("mode", help="Mode: demography or cooperation")
+    parser = argparse.ArgumentParser(
+        description="Plot results",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    choices = list(mm.traits.keys())
     parser.add_argument(
-        "movie",
-        nargs="?",
-        default=False,
-        help="Enable movie"
+        "mode",
+        choices=choices,
+        help="Mode (required)"
+    )
+    parser.add_argument(
+        "--movie",
+        action="store_true",
+        help="Enable movie (default: False)"
     )
     args = parser.parse_args()
 
-    main(args.mode, args.movie)
+    if args.mode not in choices:
+        parser.error(f"Invalid mode: {args.mode}")
 
+    main(mode=args.mode, movie=args.movie)

@@ -150,6 +150,7 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(
         description="Submit jobs",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
