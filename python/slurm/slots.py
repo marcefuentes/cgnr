@@ -33,7 +33,7 @@ def main():
         print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
 
     if total_free_slots:
-        print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset} jobs {cc.yesno} ", end="")
+        print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             print()
