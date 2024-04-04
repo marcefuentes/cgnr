@@ -10,9 +10,9 @@ from tools import colors as cc
 from tools.get_config import get_config
 from tools.list_of_folders import list_of_folders
 
-def get_results_path(use_store=False):
+def get_results_path(store=False):
     exe = get_config("exe")
-    if use_store:
+    if store:
         store_path = os.environ.get("STORE")
         if store_path is None:
             raise ValueError("STORE environment variable not set")
@@ -163,9 +163,9 @@ def process_given(current_path, folder_dict):
     print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset}"   if garbled_jobs else    "", end = "")
     print()
 
-def main(use_store=False):
+def main(store=False):
 
-    current_path = get_results_path(use_store)
+    current_path = get_results_path(store)
 
     if os.path.isdir(current_path):
         os.chdir(current_path)
@@ -176,7 +176,7 @@ def main(use_store=False):
     print(f"\n{cc.white}{current_path}{cc.reset}")
     for variant in list_of_folders(current_path):
         process_variant(variant)
-    if "mfu" in current_path and use_store == False:
+    if "mfu" in current_path and not store:
         slots.main()
     else:
         print()
@@ -193,4 +193,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    main(use_store=args.store)
+    main(store=args.store)
