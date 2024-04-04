@@ -140,12 +140,19 @@ def process_given(current_path, folder_dict):
         running_jobs = get_squeue_stats("name", jobname, "running")
         pending_jobs = get_squeue_stats("name", jobname, "pending")
         dead_jobs = one_line_jobs - running_jobs
-        to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
     else:
         running_jobs = 0
         pending_jobs = one_line_jobs
         dead_jobs = 0
-        to_submit_jobs = total_jobs - pending_jobs - running_jobs - finished_jobs - garbled_jobs - no_header - dead_jobs
+    to_submit_jobs = (
+        total_jobs
+        - pending_jobs
+        - running_jobs
+        - finished_jobs
+        - garbled_jobs
+        - no_header
+        - dead_jobs
+    )
 
     print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset}" if finished_jobs else   "", end = "")
     print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset}" if running_jobs else    "", end = "")
@@ -160,7 +167,11 @@ def main():
 
     parser = argparse.ArgumentParser(description="Status of tasks",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--store", action="store_true", help="use store instead of home (only in cesga)")
+    parser.add_argument(
+        "--store",
+        action="store_true",
+        help="use store instead of home (only in cesga)"
+    )
     args = parser.parse_args()
 
     current_path = get_results_path(use_store=args.store)
