@@ -243,7 +243,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--movie",
         action="store_true",
-        help="Enable movie (default: False)"
+        help="Enable movie)"
     )
     args = parser.parse_args()
 
