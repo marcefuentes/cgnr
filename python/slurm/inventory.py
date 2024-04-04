@@ -163,8 +163,25 @@ def process_given(current_path, folder_dict):
     print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset}"   if garbled_jobs else    "", end = "")
     print()
 
-def main():
+def main(use_store=False):
 
+    current_path = get_results_path(use_store)
+
+    if os.path.isdir(current_path):
+        os.chdir(current_path)
+    else:
+        print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset}")
+        exit()
+
+    print(f"\n{cc.white}{current_path}{cc.reset}")
+    for variant in list_of_folders(current_path):
+        process_variant(variant)
+    if "mfu" in current_path and use_store == False:
+        slots.main()
+    else:
+        print()
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Status of tasks",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -176,21 +193,4 @@ def main():
     )
     args = parser.parse_args()
 
-    current_path = get_results_path(use_store=args.store)
-
-    if os.path.isdir(current_path):
-        os.chdir(current_path)
-    else:
-        print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset}")
-        exit()
-
-    print(f"\n{cc.white}{current_path}{cc.reset}")
-    for variant in list_of_folders(current_path):
-        process_variant(variant)
-    if "mfu" in current_path and args.store == False:
-        slots.main()
-    else:
-        print()
-
-if __name__ == "__main__":
-    main()
+    main(use_store=args.store)
