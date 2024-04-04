@@ -165,8 +165,10 @@ def process_given(current_path, folder_dict):
 
 def main():
 
-    parser = argparse.ArgumentParser(description="Status of tasks",
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description="Status of tasks",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
         "--store",
         action="store_true",
