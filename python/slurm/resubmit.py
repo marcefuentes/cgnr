@@ -103,7 +103,11 @@ def main(test=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Submit jobs")
-    parser.add_argument("--test", action="store_true", help="Run in test mode")
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="Run in test mode"
+    )
     args = parser.parse_args()
 
     main(test=args.test)
