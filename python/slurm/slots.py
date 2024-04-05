@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+
 import submit
 import modules.slurm_tools as st
 import tools.colors as cc
@@ -33,12 +35,17 @@ def main():
         print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
 
     if total_free_slots:
-        print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
-        user_input = input()
-        if user_input.lower() == "n":
-            print()
-            exit()
-        submit.main()
+        exe = get_config("exe")
+        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+        if os.path.isfile(last_job_file):
+            print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
+            user_input = input()
+            if user_input.lower() == "n":
+                print()
+                exit()
+            submit.main()
+        else:
+            print(f"\nTo submit jobs, go to a variant folder with no running or finished jobs and run submit\n")
     else:
         print()
 
