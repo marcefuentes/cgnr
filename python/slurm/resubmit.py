@@ -102,7 +102,11 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Submit jobs")
+
+    parser = argparse.ArgumentParser(
+        description="Resubmit unfinished jobs",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
         "--test",
         action="store_true",
