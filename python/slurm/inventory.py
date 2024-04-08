@@ -177,6 +177,8 @@ def main(store=False):
     for variant in list_of_folders(current_path):
         process_variant(variant)
     if "mfu" in current_path and not store:
+        # Print - 30 times
+        print(f"\n{cc.white}{'-' * 30}{cc.reset}\n")
         free_slots = slots()
         if free_slots:
             exe = get_config("exe")
