@@ -4,6 +4,7 @@ import argparse
 import csv
 import os
 
+import submit
 from modules.slurm_tools import get_squeue_stats, slots
 from tools import colors as cc
 from tools.get_config import get_config
@@ -176,7 +177,19 @@ def main(store=False):
     for variant in list_of_folders(current_path):
         process_variant(variant)
     if "mfu" in current_path and not store:
-        slots()
+        free_slots = slots()
+        if free_slots:
+        exe = get_config("exe")
+        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+        if os.path.isfile(last_job_file):
+            print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
+            user_input = input()
+            if user_input.lower() == "n":
+                print()
+                exit()
+            submit.main()
+        else:
+            print(f"\nTo submit jobs, go to a variant folder with no running or finished jobs and run submit\n")
     else:
         print()
 
