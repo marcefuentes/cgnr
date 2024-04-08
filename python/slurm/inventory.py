@@ -178,7 +178,7 @@ def main(store=False):
         process_variant(variant)
     if "mfu" in current_path and not store:
         # Print - 30 times
-        print(f"\n{cc.white}{'-' * 30}{cc.reset}\n")
+        print(f"\n{cc.white}{'-' * 30}{cc.reset}")
         free_slots = slots()
         if free_slots:
             exe = get_config("exe")

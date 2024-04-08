@@ -51,11 +51,8 @@ def get_qos_limit(constraint, specification):
     return limit
 
 def slots():
-
     constraints = get_config("constraints")
     total_free_slots = 0
-
-    print()
     #print(f"{'Qos':<12}{'Max':>5}{'Running':>9}{'Pending':>5}{'Free':>5}")
 
     for constraint in constraints:
