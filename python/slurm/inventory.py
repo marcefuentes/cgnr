@@ -4,8 +4,7 @@ import argparse
 import csv
 import os
 
-import slots
-from modules.slurm_tools import get_squeue_stats
+from modules.slurm_tools import get_squeue_stats, slots
 from tools import colors as cc
 from tools.get_config import get_config
 from tools.list_of_folders import list_of_folders
@@ -177,7 +176,7 @@ def main(store=False):
     for variant in list_of_folders(current_path):
         process_variant(variant)
     if "mfu" in current_path and not store:
-        slots.main()
+        slots()
     else:
         print()
 
