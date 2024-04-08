@@ -179,17 +179,19 @@ def main(store=False):
     if "mfu" in current_path and not store:
         free_slots = slots()
         if free_slots:
-        exe = get_config("exe")
-        last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-        if os.path.isfile(last_job_file):
-            print(f"\n{cc.bold}Submit {cc.cyan}{total_free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
-            user_input = input()
-            if user_input.lower() == "n":
-                print()
-                exit()
-            submit.main()
+            exe = get_config("exe")
+            last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+            if os.path.isfile(last_job_file):
+                print(f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
+                user_input = input()
+                if user_input.lower() == "n":
+                    print()
+                    exit()
+                submit.main()
+            else:
+                print(f"\nTo submit jobs, go to a variant folder with no running or finished jobs and run submit\n")
         else:
-            print(f"\nTo submit jobs, go to a variant folder with no running or finished jobs and run submit\n")
+            print()
     else:
         print()
 

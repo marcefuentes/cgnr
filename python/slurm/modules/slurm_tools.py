@@ -76,7 +76,6 @@ def slots():
         print(f"{cc.yellow}{running if running else ' ' * 5:>5}{cc.reset}", end = "")
         print(f"{cc.white}{pending if pending else ' ' * 4:>4}{cc.reset}", end = "")
         print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
-        print()
 
     return total_free_slots
 
