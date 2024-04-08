@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-from tools.get_config import get_config
+from common_modules.get_config import get_config
 
 exe = get_config("exe")
 

@@ -6,8 +6,8 @@ import os
 import sys
 
 import modules.slurm_tools as st
-import tools.colors as cc
-from tools.get_config import get_config
+import common_modules.colors as cc
+from common_modules.get_config import get_config
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py

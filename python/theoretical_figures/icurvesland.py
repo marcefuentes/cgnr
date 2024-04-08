@@ -10,7 +10,7 @@ from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 import numpy as np
 
-from tools.get_config import get_config
+from common_modules.get_config import get_config
 import modules.theory as tt
 
 start_time = time.perf_counter()

@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 import files.modules
-from tools.get_config import get_config
+from common_modules.get_config import get_config
 
 def call_function(function_name, *args, **kwargs):
     # Get the function object using getattr

@@ -4,8 +4,8 @@ import os
 import re
 import subprocess
 
-import tools.colors as cc
-from tools.get_config import get_config
+import common_modules.colors as cc
+from common_modules.get_config import get_config
 
 def get_qos_name(constraint):
     hours = get_config("hours")

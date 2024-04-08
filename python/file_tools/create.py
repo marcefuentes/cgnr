@@ -4,7 +4,7 @@ import numpy as np
 import os
 import sys
 
-from tools.get_config import get_config
+from common_modules.get_config import get_config
 
 # the script accepts exactly three arguments
 if len(sys.argv) != 4:

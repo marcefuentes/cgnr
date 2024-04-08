@@ -7,8 +7,8 @@ import os
 import submit
 from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
-from tools import colors as cc
-from tools.get_config import get_config
+from common_modules import colors as cc
+from common_modules.get_config import get_config
 
 def get_results_path(store=False):
     exe = get_config("exe")

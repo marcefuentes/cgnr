@@ -6,9 +6,9 @@ import os
 import sys
 
 import modules.slurm_tools as st
-import tools.colors as cc
+import common_modules.colors as cc
 from modules.list_of_folders import list_of_folders
-from tools.get_config import get_config
+from common_modules.get_config import get_config
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
