@@ -1,8 +1,11 @@
 
+""" This module contains the function update_zmatrix, which is used to update the zmatrix for a given mechanism, trait, and mode. """
+
 import numpy as np
 import pandas as pd
 
 def get_zmatrix(t, df, trait):
+    """ Returns the zmatrix for a given time, dataframe, and trait. """
     m = df.Time == t
     zmatrix = pd.pivot(df.loc[m],
         values=trait,
@@ -13,6 +16,7 @@ def get_zmatrix(t, df, trait):
     return zmatrix
 
 def update_zmatrix(t, df_dict, mechanism, trait, mode):
+    """ Returns the updated zmatrix for a given time, dataframe dictionary, mechanism, trait, and mode. """
     if "nothing" in trait:
         zmatrix = np.zeros((1, 1))
     elif "r_" in trait:

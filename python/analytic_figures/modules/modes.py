@@ -1,5 +1,5 @@
 
-# Purpose: Store the traits and rows for the different modes of the figure
+""" Store the traits and rows for the different modes of the figure """
 
 title = {
     "ChooseGrain":          "Partner choice\n(memory 1)",
@@ -78,18 +78,21 @@ mechanisms = {
 }
 
 def get_title(trait):
+    """ Return the title of the trait """
     try:
         return title[trait]
     except KeyError:
         return trait
 
 def get_traits(mode):
+    """ Return the traits for the mode """
     try:
         return traits[mode]
     except KeyError as exc:
         raise ValueError(f"{mode} not found") from exc
 
 def get_mechanisms(mode):
+    """ Return the mechanisms for the mode """
     try:
         return mechanisms[mode]
     except KeyError:

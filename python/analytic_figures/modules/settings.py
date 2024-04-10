@@ -1,5 +1,5 @@
 
-# This file contains the settings for the figures.
+""" This file contains the settings for the figures. """
 
 COLOR_MAP = "RdBu_r"
 PLOT_SIZE = 4

@@ -1,9 +1,12 @@
 
+""" This module reads the csv files in the given directory and returns a concatenated dataframe. """
+
 import os
 from glob import glob
 import pandas as pd
 
 def read_files(filelist, movie):
+    """ Read the csv files in the given directory and return a concatenated dataframe. """
     df_list = [None] * len(filelist)
     for i, file in enumerate(filelist):
         df = pd.read_csv(file)
@@ -14,6 +17,7 @@ def read_files(filelist, movie):
     return dfc
 
 def get_df(row, filetype, movie):
+    """ Return a concatenated dataframe of the csv files in the given directory. """
     if row == "social":
         row = "none/given000"
     elif "none" in row:
