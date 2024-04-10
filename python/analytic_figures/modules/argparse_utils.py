@@ -18,12 +18,12 @@ def parse_args(trait_choices):
     parser.add_argument(
         "--histogram",
         action="store_true",
-        help="Add histogram)"
+        help="Add histogram"
     )
     parser.add_argument(
         "--movie",
         action="store_true",
-        help="Enable movie)"
+        help="Enable movie"
     )
 
     args = parser.parse_args()
