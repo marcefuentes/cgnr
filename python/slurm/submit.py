@@ -2,13 +2,13 @@
 
 """ Submit jobs. """
 
-import argparse
 import logging
 import os
 import sys
 
 import common_modules.colors as cc
 from common_modules.get_config import get_config
+from modules.argparse_utils import parse_args
 import modules.slurm_tools as st
 from modules.list_of_folders import list_of_folders
 
@@ -166,16 +166,5 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(
-        description="Submit jobs",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
-        "--test",
-        action="store_true",
-        help="Run in test mode"
-    )
-    args = parser.parse_args()
-
+    args = parse_args()
     main(test=args.test)

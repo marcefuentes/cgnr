@@ -15,7 +15,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 
 import modules.settings as ss
 import modules.modes as mm
-from modules.argparse_utils import parse_arguments
+from modules.argparse_utils import parse_args
 from modules.get_df import get_df
 from modules.update_zmatrix import update_zmatrix
 
@@ -372,5 +372,5 @@ def main(mode, histogram=False, movie=False):
 
 if __name__ == "__main__":
     trait_choices = list(mm.traits.keys())
-    args = parse_arguments(trait_choices)
+    args = parse_args(trait_choices)
     main(mode=args.mode, histogram=args.histogram, movie=args.movie)

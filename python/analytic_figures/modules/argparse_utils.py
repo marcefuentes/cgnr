@@ -3,7 +3,7 @@
 
 import argparse
 
-def parse_arguments(trait_choices):
+def parse_args(trait_choices):
     """Parse arguments"""
 
     parser = argparse.ArgumentParser(
