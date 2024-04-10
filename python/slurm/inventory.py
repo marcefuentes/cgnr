@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-import argparse
 import csv
 import os
 
-import submit
-from modules.slurm_tools import get_squeue_stats, slots
-from modules.list_of_folders import list_of_folders
 from common_modules import colors as cc
 from common_modules.get_config import get_config
+from common_modules.argparse_utils import flag_parser
+from modules.slurm_tools import get_squeue_stats, slots
+from modules.list_of_folders import list_of_folders
+import submit
 
 def get_results_path(store=False):
     exe = get_config("exe")
@@ -198,15 +198,8 @@ def main(store=False):
         print()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Status of tasks",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
-        "--store",
-        action="store_true",
-        help="use store instead of home (only in cesga)"
-    )
-    args = parser.parse_args()
-
-    main(store=args.store)
+    description="Status of tasks"
+    arg = "--store"
+    help_text="use store instead of home (only in cesga)"
+    arg = flag_parser(description, arg, help_text)
+    main(store=arg.store)

@@ -8,7 +8,7 @@ import sys
 
 import common_modules.colors as cc
 from common_modules.get_config import get_config
-from modules.argparse_utils import parse_args
+from common_modules.argparse_utils import flag_parser
 import modules.slurm_tools as st
 from modules.list_of_folders import list_of_folders
 
@@ -166,5 +166,8 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-    args = parse_args()
-    main(test=args.test)
+    description = "Submit jobs."
+    flag = "--test"
+    help_text = "Run in test mode."
+    arg = flag_parser(description, flag, help_text)
+    main(test=arg.test)
