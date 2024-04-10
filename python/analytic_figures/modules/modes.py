@@ -86,8 +86,8 @@ def get_title(trait):
 def get_traits(mode):
     try:
         return traits[mode]
-    except KeyError:
-        raise ValueError(f"{mode} not found")
+    except KeyError as exc:
+        raise ValueError(f"{mode} not found") from exc
 
 def get_mechanisms(mode):
     try:
