@@ -16,6 +16,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 
 import modules.settings as ss
 import modules.modes as mm
+from modules.argparse_utils import parse_arguments
 from modules.get_df import get_df
 from modules.update_zmatrix import update_zmatrix
 
@@ -49,7 +50,7 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
         text.set_text("")
     return artists.flatten()
 
-def main(mode, movie):
+def main(mode, movie=False):
 
     start_time = time.perf_counter()
     this_script = os.path.basename(__file__)
@@ -254,24 +255,6 @@ def main(mode, movie):
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Plot results",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    choices = list(mm.traits.keys())
-    parser.add_argument(
-        "mode",
-        choices=choices,
-        help="Mode (required)"
-    )
-    parser.add_argument(
-        "--movie",
-        action="store_true",
-        help="Enable movie)"
-    )
-    args = parser.parse_args()
-
-    if args.mode not in choices:
-        parser.error(f"Invalid mode: {args.mode}")
-
+    trait_choices = list(mm.traits.keys())
+    args = parse_arguments(trait_choices)
     main(mode=args.mode, movie=args.movie)
