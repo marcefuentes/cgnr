@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+""" Show status of simulations."""
+
 import csv
 import os
+import sys
 
 from common_modules import colors as cc
 from common_modules.get_config import get_config
@@ -11,17 +14,18 @@ from modules.list_of_folders import list_of_folders
 import submit
 
 def get_results_path(store=False):
+    """Get the path to the results folder."""
     exe = get_config("exe")
     if store:
         store_path = os.environ.get("STORE")
         if store_path is None:
             raise ValueError("STORE environment variable not set")
         return f"{store_path}/code/{exe}/results"
-    else:
-        home_path = os.environ.get("HOME")
-        return f"{home_path}/code/{exe}/results"
+    home_path = os.environ.get("HOME")
+    return f"{home_path}/code/{exe}/results"
 
 def process_variant(current_path):
+    """Process a variant folder."""
 
     folder_dict = {}
 
@@ -60,6 +64,7 @@ def process_variant(current_path):
         process_mechanism(mechanism, folder_dict)
 
 def process_mechanism(current_path, folder_dict):
+    """Process a mechanism folder."""
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
@@ -86,7 +91,8 @@ def process_mechanism(current_path, folder_dict):
         process_given(given, folder_dict)
 
 def process_given(current_path, folder_dict):
-    
+    """Process a given folder."""
+
     number_of_lines = get_config("number_of_lines")
     input_file_extension = get_config("input_file_extension")
     output_file_extension, *_ = get_config("output_file_extensions")
@@ -105,7 +111,7 @@ def process_given(current_path, folder_dict):
     if total_jobs == 0:
         print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset}")
         return
-    with open(os.path.join(current_path, input_files[0]), "r") as csvfile:
+    with open(os.path.join(current_path, input_files[0]), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             key, value = row
@@ -123,7 +129,7 @@ def process_given(current_path, folder_dict):
 
     output_files = [f for f in os.listdir(current_path) if f.endswith(output_file_extension)]
     for output_file in output_files:
-        with open(os.path.join(current_path, output_file), "r") as f:
+        with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
             n_lines = sum(1 for line in f)
             if n_lines == number_of_lines:
                 finished_jobs += 1
@@ -164,6 +170,7 @@ def process_given(current_path, folder_dict):
     print()
 
 def main(store=False):
+    """Main function."""
 
     current_path = get_results_path(store)
 
@@ -171,7 +178,7 @@ def main(store=False):
         os.chdir(current_path)
     else:
         print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset}")
-        exit()
+        sys.exit()
 
     print(f"\n{cc.white}{current_path}{cc.reset}")
     for variant in list_of_folders(current_path):
@@ -184,22 +191,30 @@ def main(store=False):
             exe = get_config("exe")
             last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
             if os.path.isfile(last_job_file):
-                print(f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset}{cc.bold} jobs{cc.reset} {cc.yesno} ", end="")
+                msg = (
+                    f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset}{cc.bold} jobs{cc.reset} "
+                    f"{cc.yesno} "
+                )
+                print(msg, end="")
                 user_input = input()
                 if user_input.lower() == "n":
                     print()
-                    exit()
+                    sys.exit()
                 submit.main()
             else:
-                print(f"\nTo submit jobs, go to a variant folder with no running or finished jobs and run submit\n")
+                msg = (
+                    "\nTo submit jobs, go to a variant folder with "
+                    "no running or finished jobs and run submit\n"
+                )
+                print(msg)
         else:
             print()
     else:
         print()
 
 if __name__ == "__main__":
-    description = "Show status of simulations."
-    flag = "--store"
-    flag_help = "inventory 'Store' filesystem in cesga"
-    args = parse_args(description, flag, flag_help)
+    DESCRIPTION = "Show status of simulations."
+    FLAG = "--store"
+    FLAG_HELP = "inventory 'Store' filesystem in cesga"
+    args = parse_args(DESCRIPTION, FLAG, FLAG_HELP)
     main(store=args.store)
