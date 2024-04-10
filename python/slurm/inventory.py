@@ -31,9 +31,9 @@ def process_variant(current_path):
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.cyan}{variant}{cc.reset}")
+        print(f"{cc.CYAN}{variant}{cc.RESET}")
     else:
-        print(f"\n{cc.white}{variant}{cc.reset}")
+        print(f"\n{cc.WHITE}{variant}{cc.RESET}")
 
     if "noshuffle" not in variant:
         folder_dict["Shuffle"] = 1
@@ -68,9 +68,9 @@ def process_mechanism(current_path, folder_dict):
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{cc.cyan}{mechanism}{cc.reset}", end = "")
+        print(f"{cc.CYAN}{mechanism}{cc.RESET}", end = "")
     else:
-        print(f"{cc.white}{mechanism}{cc.reset}", end = "")
+        print(f"{cc.WHITE}{mechanism}{cc.RESET}", end = "")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
@@ -100,16 +100,16 @@ def process_given(current_path, folder_dict):
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
     if os.path.islink(current_path):
-        print(f"{cc.cyan}\t{given}{cc.reset}", end = "  ")
+        print(f"{cc.CYAN}\t{given}{cc.RESET}", end = "  ")
     else:
-        print(f"{cc.white}\t{given}{cc.reset}", end = "  ")
+        print(f"{cc.WHITE}\t{given}{cc.RESET}", end = "  ")
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
     input_files = [f for f in os.listdir(current_path) if f.endswith(input_file_extension)]
     total_jobs = len(input_files)
     if total_jobs == 0:
-        print(f"{cc.bold}{cc.red}no {input_file_extension[1:]} files{cc.reset}")
+        print(f"{cc.BOLD}{cc.RED}no {input_file_extension[1:]} files{cc.RESET}")
         return
     with open(os.path.join(current_path, input_files[0]), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
@@ -117,10 +117,10 @@ def process_given(current_path, folder_dict):
             key, value = row
             if key == "Given":
                 if float(value) != folder_dict[key]:
-                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset}", end = " ")
+                    print(f"{cc.BOLD}{cc.RED}{key} {folder_dict[key]} {value}{cc.RESET}", end = " ")
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
-                    print(f"{cc.bold}{cc.red}{key} {folder_dict[key]} {value}{cc.reset}", end = " ")
+                    print(f"{cc.BOLD}{cc.RED}{key} {folder_dict[key]} {value}{cc.RESET}", end = " ")
 
     finished_jobs = 0
     garbled_jobs = 0
@@ -160,13 +160,13 @@ def process_given(current_path, folder_dict):
         - dead_jobs
     )
 
-    print(f"{cc.bold}{cc.green}{finished_jobs:>4}{cc.reset}" if finished_jobs else   "", end = "")
-    print(f"{cc.bold}{cc.yellow}{running_jobs:>4}{cc.reset}" if running_jobs else    "", end = "")
-    print(f"{cc.bold}{cc.white}{pending_jobs:>4}{cc.reset}"  if pending_jobs else    "", end = "")
-    print(f"{cc.bold}{cc.grey}{to_submit_jobs:>4}{cc.reset}" if to_submit_jobs else  "", end = "")
-    print(f"{cc.bold}{cc.red}{dead_jobs:>4}{cc.reset}"       if dead_jobs else       "", end = "")
-    print(f"{cc.bold}{cc.purple}{no_header:>4}{cc.reset}"    if no_header else       "", end = "")
-    print(f"{cc.bold}{cc.blue}{garbled_jobs:>4}{cc.reset}"   if garbled_jobs else    "", end = "")
+    print(f"{cc.BOLD}{cc.GREEN}{finished_jobs:>4}{cc.RESET}" if finished_jobs else   "", end = "")
+    print(f"{cc.BOLD}{cc.YELLOW}{running_jobs:>4}{cc.RESET}" if running_jobs else    "", end = "")
+    print(f"{cc.BOLD}{cc.WHITE}{pending_jobs:>4}{cc.RESET}"  if pending_jobs else    "", end = "")
+    print(f"{cc.BOLD}{cc.GREY}{to_submit_jobs:>4}{cc.RESET}" if to_submit_jobs else  "", end = "")
+    print(f"{cc.BOLD}{cc.RED}{dead_jobs:>4}{cc.RESET}"       if dead_jobs else       "", end = "")
+    print(f"{cc.BOLD}{cc.purple}{no_header:>4}{cc.RESET}"    if no_header else       "", end = "")
+    print(f"{cc.BOLD}{cc.BLUE}{garbled_jobs:>4}{cc.RESET}"   if garbled_jobs else    "", end = "")
     print()
 
 def main(store=False):
@@ -177,23 +177,23 @@ def main(store=False):
     if os.path.isdir(current_path):
         os.chdir(current_path)
     else:
-        print(f"{cc.bold}{cc.red}Directory {current_path} does not exist{cc.reset}")
+        print(f"{cc.BOLD}{cc.RED}Directory {current_path} does not exist{cc.RESET}")
         sys.exit()
 
-    print(f"\n{cc.white}{current_path}{cc.reset}")
+    print(f"\n{cc.WHITE}{current_path}{cc.RESET}")
     for variant in list_of_folders(current_path):
         process_variant(variant)
     if "mfu" in current_path and not store:
         # Print - 30 times
-        print(f"\n{cc.white}{'-' * 30}{cc.reset}")
+        print(f"\n{cc.WHITE}{'-' * 30}{cc.RESET}")
         free_slots = slots()
         if free_slots:
             exe = get_config("exe")
             last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
             if os.path.isfile(last_job_file):
                 msg = (
-                    f"\n{cc.bold}Submit {cc.cyan}{free_slots}{cc.reset}{cc.bold} jobs{cc.reset} "
-                    f"{cc.yesno} "
+                    f"\n{cc.BOLD}Submit {cc.CYAN}{free_slots}{cc.RESET}{cc.BOLD} jobs{cc.RESET} "
+                    f"{cc.YESNO} "
                 )
                 print(msg, end="")
                 user_input = input()

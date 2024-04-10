@@ -32,7 +32,7 @@ def get_qos_name(constraint):
     ]
     output = subprocess.check_output(command).decode().strip()
     if output is None:
-        print(f"{cc.red}QOS {qos_name} not found{cc.reset}")
+        print(f"{cc.RED}QOS {qos_name} not found{cc.RESET}")
         sys.exit()
     maxwall_hours = int(output.split(":", maxsplit=1)[0])
     if hours >= maxwall_hours:
@@ -75,9 +75,9 @@ def slots():
             print(f"({max_running:>3})", end = "")
         else:
             print(f"{' ' * 5:>5}", end="")
-        print(f"{cc.yellow}{running if running else ' ' * 5:>5}{cc.reset}", end = "")
-        print(f"{cc.white}{pending if pending else ' ' * 4:>4}{cc.reset}", end = "")
-        print(f"{cc.bold}{cc.cyan}{free_slots if free_slots else '':>4}{cc.reset}")
+        print(f"{cc.YELLOW}{running if running else ' ' * 5:>5}{cc.RESET}", end = "")
+        print(f"{cc.WHITE}{pending if pending else ' ' * 4:>4}{cc.RESET}", end = "")
+        print(f"{cc.BOLD}{cc.CYAN}{free_slots if free_slots else '':>4}{cc.RESET}")
 
     return total_free_slots
 
@@ -186,21 +186,21 @@ def get_jobs_to_submit(current_path_folders):
                     current_number_of_lines = sum(1 for line in f)
                 if current_number_of_lines < number_of_lines - 1:
                     if job_is_queued(current_path_folders, name):
-                        print(f"{cc.yellow}{name}{cc.reset}", end = " ")
+                        print(f"{cc.YELLOW}{name}{cc.RESET}", end = " ")
                     else:
-                        print(f"{cc.red}{name}{cc.reset}", end = " ")
+                        print(f"{cc.RED}{name}{cc.RESET}", end = " ")
                         jobs_to_submit.append(name)
                 elif current_number_of_lines == number_of_lines - 1:
-                    print(f"{cc.bold}{cc.purple}{name}{cc.reset}", end = " ")
+                    print(f"{cc.BOLD}{cc.purple}{name}{cc.RESET}", end = " ")
                 elif current_number_of_lines == number_of_lines:
-                    print(f"{cc.green}{name}{cc.reset}", end = " ")
+                    print(f"{cc.GREEN}{name}{cc.RESET}", end = " ")
                 else:
-                    print(f"{cc.blue}{name}{cc.reset}", end = " ")
+                    print(f"{cc.BLUE}{name}{cc.RESET}", end = " ")
             else:
                 if job_is_queued(current_path_folders, name):
-                    print(f"{name}{cc.reset}", end = " ")
+                    print(f"{name}{cc.RESET}", end = " ")
                 else:
-                    print(f"{cc.grey}{name}{cc.reset}", end = " ")
+                    print(f"{cc.GREY}{name}{cc.RESET}", end = " ")
                     jobs_to_submit.append(name)
         print()
         current_num -= row_length

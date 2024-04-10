@@ -36,7 +36,7 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
             constraint
         )
     if return_code != 0:
-        print(f"{cc.red}sbatch command failed with return code {return_code}.{cc.reset}")
+        print(f"{cc.RED}sbatch command failed with return code {return_code}.{cc.RESET}")
         if stderr:
             print(stderr)
             logging.error(stderr)
@@ -47,4 +47,4 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
                 print(line)
                 logging.info(line)
     logging.info(info)
-    print(f"{cc.green}{info}.{cc.reset}")
+    print(f"{cc.GREEN}{info}.{cc.RESET}")
