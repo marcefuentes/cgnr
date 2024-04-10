@@ -135,7 +135,7 @@ def main(mode, histogram=False, movie=False):
         y=(ss.BOTTOM_MARGIN + inner_height/2)/height,
         fontsize=ss.BIG_LABEL_SIZE
     )
-    
+
     if ss.PRINT_FOLDER:
         bottom_text = os.path.basename(os.getcwd())
     else:
