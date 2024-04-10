@@ -1,7 +1,7 @@
 
-from glob import glob
 import os
 import pandas as pd
+from glob import glob
 
 def read_files(filelist, movie):
     df_list = [None] * len(filelist)
@@ -21,7 +21,7 @@ def get_df(row, filetype, movie):
     else:
         row = f"{row}/given100"
     filelist = glob(os.path.join(row, f"*.{filetype}"))
-    if filelist == []:
+    if not filelist:
         print(f"No {row}/*.{filetype} files found.")
         exit()
     df = read_files(filelist, movie)
