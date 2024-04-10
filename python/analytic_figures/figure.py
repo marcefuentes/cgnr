@@ -49,10 +49,6 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
                 artists[r, c].set_array(zmatrix)
     if movie:
         text.set_text(t)
-    elif ss.PRINT_FOLDER:
-        text.set_text(os.path.basename(os.getcwd()))
-    else:
-        text.set_text("")
     return artists.flatten()
 
 def main(mode, histogram=False, movie=False):
@@ -139,10 +135,15 @@ def main(mode, histogram=False, movie=False):
         y=(ss.BOTTOM_MARGIN + inner_height/2)/height,
         fontsize=ss.BIG_LABEL_SIZE
     )
+    
+    if ss.PRINT_FOLDER:
+        bottom_text = os.path.basename(os.getcwd())
+    else:
+        bottom_text = ""
     fig.text(
         (ss.LEFT_MARGIN + inner_width)/width,
         (ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
-        "",
+        bottom_text,
         fontsize=ss.TICK_LABEL_SIZE,
         color="grey",
         ha="right"
