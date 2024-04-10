@@ -7,7 +7,7 @@ title = {
     "MimicGrain":           "Direct\nreciprocity",
     "ImimicGrain":          "Indirect\nreciprocity\n(memory 1)",
     "Imimic_ltGrain":       "Indirect\nreciprocity\n(lifetime)",
-    "qBSeen":               """Production of $\it{B}$""",
+    "qBSeen":               "Production of $\it{B}$",
     "qBSeen_byproduct":     "Byproduct help",
     "w":                    "Fitness",
     "w_deficit":            "Fitness deficit",
