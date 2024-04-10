@@ -1,5 +1,5 @@
 
-""" This module contains the function parse_arguments() that parses the arguments of the command line. """
+""" Parses the arguments of the command line. """
 
 import argparse
 
