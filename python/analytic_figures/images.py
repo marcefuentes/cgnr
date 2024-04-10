@@ -28,7 +28,7 @@ def update(t, mode, df_mechanisms, movie, text, artists):
             artists[r, c].set_array(zmatrix)
     if movie:
         text.set_text(t)
-    elif ss.print_folder:
+    elif ss.PRINT_FOLDER:
         text.set_text(os.path.basename(os.getcwd()))
     else:
         text.set_text("")
@@ -80,10 +80,10 @@ def main(mode, movie=False):
     traits = mm.get_traits(mode)
     ncols = len(traits)
     nrows = len(mechanisms)
-    inner_width = ss.plotsize*ncols + ss.spacing*(ncols - 1)
-    inner_height = ss.plotsize*nrows + ss.spacing*(nrows - 1)
-    width = inner_width + ss.left_margin + ss.right_margin
-    height = inner_height + ss.top_margin + ss.bottom_margin
+    inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
+    inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
+    width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
+    height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
 
     fig, main_ax = plt.subplots(
         nrows=nrows,
@@ -92,36 +92,36 @@ def main(mode, movie=False):
     )
 
     fig.supxlabel(
-        ss.xlabel,
-        x=(ss.left_margin + inner_width/2)/width,
-        y=(ss.bottom_margin - ss.xlabel_padding)/height,
-        fontsize=ss.biglabel
+        ss.X_LABEL,
+        x=(ss.LEFT_MARGIN + inner_width/2)/width,
+        y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
+        fontsize=ss.BIG_LABEL_SIZE
     )
     fig.supylabel(
-        ss.ylabel,
-        x=(ss.left_margin - ss.ylabel_padding)/width,
-        y=(ss.bottom_margin + inner_height/2)/height,
-        fontsize=ss.biglabel
+        ss.Y_LABEL,
+        x=(ss.LEFT_MARGIN - ss.Y_LABEL_SIZE)/width,
+        y=(ss.BOTTOM_MARGIN + inner_height/2)/height,
+        fontsize=ss.BIG_LABEL_SIZE
     )
     fig.text(
-        (ss.left_margin + inner_width)/width,
-        (ss.bottom_margin - ss.xlabel_padding)/height,
+        (ss.LEFT_MARGIN + inner_width)/width,
+        (ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
         "",
-        fontsize=ss.ticklabel,
+        fontsize=ss.TICK_LABEL_SIZE,
         color="grey",
         ha="right"
     )
 
-    plotsize_fixed = Size.Fixed(ss.plotsize)
-    spacing_fixed = Size.Fixed(ss.spacing)
+    plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
+    spacing_fixed = Size.Fixed(ss.SPACING)
     divider = Divider(
         fig,
-        (ss.left_margin/width,
-        ss.bottom_margin/height,
+        (ss.LEFT_MARGIN/width,
+        ss.BOTTOM_MARGIN/height,
         inner_width/width,
         inner_height/height),
-        [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (ncols - 1),
-        [plotsize_fixed] + [spacing_fixed, plotsize_fixed] * (nrows - 1),
+        [plot_size_fixed] + [spacing_fixed, plot_size_fixed] * (ncols - 1),
+        [plot_size_fixed] + [spacing_fixed, plot_size_fixed] * (nrows - 1),
         aspect=False
     )
     for r, _ in enumerate(mechanisms):
@@ -130,21 +130,21 @@ def main(mode, movie=False):
 
     axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 
-    letterposition = 1.0 + ss.letterposition
+    letter_position = 1.0 + ss.LETTER_POSITION
     for i, ax in enumerate(fig.get_axes()):
         letter = chr(ord("a") + i % 26)
         if i >= 26:
             letter = letter + letter
         ax.text(
             0,
-            letterposition,
+            letter_position,
             letter,
             transform=ax.transAxes,
-            fontsize=ss.letterlabel,
+            fontsize=ss.LETTER_LABEL_SIZE,
             weight="bold"
         )
         for spine in ax.spines.values():
-            spine.set_linewidth(ss.linewidth)
+            spine.set_linewidth(ss.LINE_WIDTH)
         ax.set(
             xticks=xticks,
             yticks=yticks,
@@ -153,8 +153,8 @@ def main(mode, movie=False):
         )
         ax.tick_params(
             axis="both",
-            labelsize=ss.ticklabel,
-            size=ss.ticksize
+            labelsize=ss.TICK_LABEL_SIZE,
+            size=ss.TICK_SIZE,
         )
     for ax in axs[:, 0]:
         ax.set_yticklabels(yticklabels)
@@ -163,8 +163,8 @@ def main(mode, movie=False):
     for ax, trait in zip(axs[0, :], traits):
         ax.set_title(
             mm.get_title(trait),
-            pad=ss.plotsize * ss.titlepad,
-            fontsize=ss.letterlabel
+            pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+            fontsize=ss.LETTER_LABEL_SIZE
         )
 
     # Assign axs objects to variables
@@ -177,25 +177,25 @@ def main(mode, movie=False):
         for c, _ in enumerate(traits):
             artists[r, c] = axs[r, c].imshow(
                 dummy_zmatrix,
-                cmap=ss.color_map,
+                cmap=ss.COLOR_MAP,
                 vmin=-1,
                 vmax=1
             )
 
-    sm = ScalarMappable(cmap=ss.color_map, norm=plt.Normalize(-1, 1))
+    sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([
-        (ss.left_margin + inner_width + ss.spacing)/width,
-        (ss.bottom_margin + inner_height/2 - ss.plotsize/2)/height,
-        (ss.plotsize/nc)/width,
-        ss.plotsize/height
+        (ss.LEFT_MARGIN + inner_width + ss.SPACING)/width,
+        (ss.BOTTOM_MARGIN + inner_height/2 - ss.PLOT_SIZE/2)/height,
+        (ss.PLOT_SIZE/nc)/width,
+        ss.PLOT_SIZE/height
     ]) # [left, bottom, width, height]
     cbar = fig.colorbar(
         sm,
         cax=cax,
         ticks=[-1, 0, 1]
     )
-    cbar.ax.tick_params(labelsize=ss.ticklabel, size=ss.ticksize)
-    cbar.outline.set_linewidth(ss.linewidth)
+    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+    cbar.outline.set_linewidth(ss.LINE_WIDTH)
 
     # Save figure
 
