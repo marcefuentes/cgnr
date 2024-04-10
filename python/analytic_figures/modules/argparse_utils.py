@@ -3,11 +3,11 @@
 
 import argparse
 
-def parse_args(trait_choices):
+def parse_args(description, trait_choices):
     """Parse arguments"""
 
     parser = argparse.ArgumentParser(
-        description="Plot results",
+        description=f"description: {description}", 
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
