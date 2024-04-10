@@ -155,11 +155,23 @@ def main(mode, histogram=False, movie=False):
 
     spacing_fixed = Size.Fixed(ss.SPACING)
     if histogram:
-        column_fixed = [plot_size_fixed] * nc + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
-        row_fixed = [plot_size_fixed] * nr + ([spacing_fixed] + [plot_size_fixed] * nr) * (nrows - 1)
+        column_fixed = (
+            [plot_size_fixed] * nc
+            + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
+        )
+        row_fixed = (
+            [plot_size_fixed] * nr + ([spacing_fixed]
+            + [plot_size_fixed] * nr) * (nrows - 1)
+        )
     else:
-        column_fixed = [plot_size_fixed] + [spacing_fixed, plot_size_fixed] * (ncols - 1)
-        row_fixed = [plot_size_fixed] + [spacing_fixed, plot_size_fixed] * (nrows - 1)
+        column_fixed = (
+            [plot_size_fixed]
+            + [spacing_fixed, plot_size_fixed] * (ncols - 1)
+        )
+        row_fixed = (
+            [plot_size_fixed]
+            + [spacing_fixed, plot_size_fixed] * (nrows - 1)
+        )
     divider = Divider(
         fig,
         (ss.LEFT_MARGIN/width,
@@ -188,7 +200,8 @@ def main(mode, histogram=False, movie=False):
                     inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
                     for e in range(nc):
                         inner_x = c * (nc + 1) + e + int(e / nc)
-                        axs[r, c, a, e].set_axes_locator(divider.new_locator(nx=inner_x, ny=inner_y))
+                        new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
+                        axs[r, c, a, e].set_axes_locator(new_locator)
                         for spine in axs[r, c, a, e].spines.values():
                             spine.set_linewidth(ss.LINE_WIDTH)
                         axs[r, c, a, e].set(

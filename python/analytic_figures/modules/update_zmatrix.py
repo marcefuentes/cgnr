@@ -17,9 +17,12 @@ def get_zmatrix(t, df, trait):
 
 def update_zmatrix(t, df_dict, mechanism, trait, mode):
     """ Returns the updated zmatrix for a given time, dataframe dictionary, mechanism, trait, and mode. """
+
     if "nothing" in trait:
         zmatrix = np.zeros((1, 1))
-    elif "r_" in trait:
+        return zmatrix
+
+    if "r_" in trait:
         zmatrix = get_zmatrix(t, df_dict[mechanism], trait)
     elif "byproduct" in trait:
         zmatrix = get_zmatrix(t, df_dict[mechanism], "qBmean")
@@ -27,6 +30,7 @@ def update_zmatrix(t, df_dict, mechanism, trait, mode):
         zmatrix = get_zmatrix(t, df_dict[mechanism], "wmean")
     else:
         zmatrix = get_zmatrix(t, df_dict[mechanism], f"{trait}mean")
+
     if "cooperation" in mode:
         if "Grain" in trait:
             if mechanism == "none":
@@ -46,4 +50,5 @@ def update_zmatrix(t, df_dict, mechanism, trait, mode):
             zmatrix = zmatrix - get_zmatrix(t, df_dict[mechanism], "NeutralDispersalRatemean")
         elif "N" in trait:
             zmatrix = zmatrix/4096.0
+
     return zmatrix
