@@ -126,8 +126,8 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-    description = "Resubmit unfinished jobs."
-    flag = "--test"
-    flag_help = "Run test"
-    args = parse_args(description, flag, flag_help)
+    DESCRIPTION = "Resubmit unfinished jobs."
+    FLAG = "--test"
+    FLAG_HELP = "Run test"
+    args = parse_args(DESCRIPTION, FLAG, FLAG_HELP)
     main(test=args.test)
