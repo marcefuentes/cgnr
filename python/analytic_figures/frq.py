@@ -2,7 +2,6 @@
 
 """ Creates a plot with the frequency of each trait for each mechanism. """
 
-import argparse
 import os
 import re
 import time
