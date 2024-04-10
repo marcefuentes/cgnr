@@ -166,5 +166,5 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-    args = parse_args()
+    args = parse_args("Submit jobs.")
     main(test=args.test)

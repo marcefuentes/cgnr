@@ -198,5 +198,5 @@ def main(store=False):
         print()
 
 if __name__ == "__main__":
-    args = parse_args()
+    args = parse_args("Show status of simulations.")
     main(store=args.store)
