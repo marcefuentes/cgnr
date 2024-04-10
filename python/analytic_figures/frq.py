@@ -1,25 +1,25 @@
 #!/usr/bin/env python
 
+""" Creates a plot with the frequency of each trait for each mechanism. """
+
 import argparse
-import numpy as np
 import os
-import pandas as pd
 import re
 import time
+import numpy as np
 
+import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
 from matplotlib import colormaps
 from mpl_toolkits.axes_grid1 import Divider, Size
-import matplotlib.pyplot as plt
-import matplotlib.transforms
 
 import modules.settings as ss
 import modules.modes as mm
 from modules.get_df import get_df
 from modules.update_Z import update_Z
 
-def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists): 
+def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
     alphas = np.sort(df_mechanisms["none"]["alpha"].unique())[::-1]
     logess = np.sort(df_mechanisms["none"]["logES"].unique())
     traits = mm.get_traits(mode)
@@ -187,7 +187,7 @@ def main(mode, movie):
     # Assign axs objects to variables
     # (Line2D)
 
-    artists = np.empty_like(axs) 
+    artists = np.empty_like(axs)
     x = np.arange(ss.bins)
     dummy_y = np.zeros_like(x)
 
@@ -195,7 +195,7 @@ def main(mode, movie):
         for c, _ in enumerate(traits):
             for a, _ in enumerate(alphas):
                 for e, _ in enumerate(logess):
-                    ax = axs[r, c, a, e] 
+                    ax = axs[r, c, a, e]
                     artists[r, c, a, e], = ax.plot(
                         x,
                         dummy_y,
