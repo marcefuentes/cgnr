@@ -17,7 +17,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import modules.settings as ss
 import modules.modes as mm
 from modules.get_df import get_df
-from modules.update_Z import update_Z
+from modules.update_zmatrix import update_zmatrix
 
 def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
     alphas = np.sort(df_mechanisms["none"]["alpha"].unique())[::-1]
@@ -28,7 +28,7 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
         if any(kw in mode for kw in kws) and mechanism == "social":
             continue
         for c, trait in enumerate(traits):
-            Z = update_Z(t, df_mechanisms, mechanism, trait, mode)
+            zmatrix = update_zmatrix(t, df_mechanisms, mechanism, trait, mode)
             for a, alpha in enumerate(alphas):
                 for e, loges in enumerate(logess):
                     d = dffrq_mechanisms[mechanism][
@@ -39,7 +39,7 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
                     freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
                     y = d.loc[:, freq_a].values[0].flatten()
                     artists[r, c, a, e].set_ydata(y)
-                    bgcolor = colormaps[ss.color_map]((Z[a, e] + 1) / 2)
+                    bgcolor = colormaps[ss.color_map]((zmatrix[a, e] + 1) / 2)
                     artists[r, c, a, e].axes.set_facecolor(bgcolor)
     if movie:
         text.set_text(t)

@@ -15,7 +15,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import modules.settings as ss
 import modules.modes as mm
 from modules.get_df import get_df
-from modules.update_Z import update_Z
+from modules.update_zmatrix import update_zmatrix
 
 def update(t, mode, df_mechanisms, movie, text, artists):
     traits = mm.get_traits(mode)
@@ -24,8 +24,8 @@ def update(t, mode, df_mechanisms, movie, text, artists):
         if any(kw in mode for kw in kws) and mechanism == "social":
             continue
         for c, trait in enumerate(traits):
-            Z = update_Z(t, df_mechanisms, mechanism, trait, mode)
-            artists[r, c].set_array(Z)
+            zmatrix = update_zmatrix(t, df_mechanisms, mechanism, trait, mode)
+            artists[r, c].set_array(zmatrix)
     if movie:
         text.set_text(t)
     elif ss.print_folder:
@@ -171,12 +171,12 @@ def main(mode, movie=False):
     # (AxesImage)
 
     artists = np.empty_like(axs)
-    dummy_Z = np.zeros((nr, nc))
+    dummy_zmatrix = np.zeros((nr, nc))
 
     for r, _ in enumerate(mechanisms):
         for c, _ in enumerate(traits):
             artists[r, c] = axs[r, c].imshow(
-                dummy_Z,
+                dummy_zmatrix,
                 cmap=ss.color_map,
                 vmin=-1,
                 vmax=1
