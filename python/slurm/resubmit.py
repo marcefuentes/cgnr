@@ -14,9 +14,10 @@ import modules.slurm_tools as st
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
 
-def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
+def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test):
     """ Submit jobs in the current folder """
 
+    current_path_print = "/".join(current_path_folders[-3:])
     constraints = get_config("constraints")
     for constraint in constraints:
         if len(jobs_to_submit) == 0:
@@ -29,10 +30,12 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
         job_array_string = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
+        info = f"{current_path_print}/{job_array_string} to {constraint}"
         if test:
+            print(f"Would submit {info}.")
             return_code = 0
-            stderr = "This is a test"
-            stdout = "This is a test"
+            stderr = "Test"
+            stdout = "Test"
         else:
             return_code, stdout, stderr = st.submit_job(
                 current_path_folders,
@@ -50,8 +53,6 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test=False):
                 if line:
                     print(line)
                     logging.info(line)
-        current_path_print = "/".join(current_path_folders[-3:])
-        info = f"{current_path_print}/{job_array_string} to {constraint}"
         logging.info(info)
         print(f"{cc.green}{info}.{cc.reset}")
         del jobs_to_submit[:num_jobs_to_submit]
