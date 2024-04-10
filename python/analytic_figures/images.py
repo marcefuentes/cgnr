@@ -1,22 +1,23 @@
 #!/usr/bin/env python
 
+""" Plot results """
+
 import argparse
-import numpy as np
 import os
 import time
+import numpy as np
 
+import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
 from mpl_toolkits.axes_grid1 import Divider, Size
-import matplotlib.pyplot as plt
-import matplotlib.transforms
 
 import modules.settings as ss
 import modules.modes as mm
 from modules.get_df import get_df
 from modules.update_Z import update_Z
 
-def update(t, mode, df_mechanisms, movie, text, artists): 
+def update(t, mode, df_mechanisms, movie, text, artists):
     traits = mm.get_traits(mode)
     for r, mechanism in enumerate(df_mechanisms):
         kws = ["cooperation", "correlations", "test"]
@@ -24,7 +25,7 @@ def update(t, mode, df_mechanisms, movie, text, artists):
             continue
         for c, trait in enumerate(traits):
             Z = update_Z(t, df_mechanisms, mechanism, trait, mode)
-            artists[r, c].set_array(Z) 
+            artists[r, c].set_array(Z)
     if movie:
         text.set_text(t)
     elif ss.print_folder:
@@ -169,7 +170,7 @@ def main(mode, movie=False):
     # Assign axs objects to variables
     # (AxesImage)
 
-    artists = np.empty_like(axs) 
+    artists = np.empty_like(axs)
     dummy_Z = np.zeros((nr, nc))
 
     for r, _ in enumerate(mechanisms):
