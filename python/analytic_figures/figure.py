@@ -372,5 +372,5 @@ def main(mode, histogram=False, movie=False):
 
 if __name__ == "__main__":
     trait_choices = list(mm.traits.keys())
-    args = parse_args("Plot results", trait_choices)
+    args = parse_args("Plot results.", trait_choices)
     main(mode=args.mode, histogram=args.histogram, movie=args.movie)

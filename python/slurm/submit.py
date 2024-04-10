@@ -166,5 +166,8 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-    args = parse_args("Submit jobs.")
+    description = "Submit jobs."
+    flag = "--test"
+    flag_help = "Run test"
+    args = parse_args(description, flag, flag_help)
     main(test=args.test)

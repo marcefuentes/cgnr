@@ -198,5 +198,8 @@ def main(store=False):
         print()
 
 if __name__ == "__main__":
-    args = parse_args("Show status of simulations.")
+    description = "Show status of simulations."
+    flag = "--store"
+    flag_help = "inventory 'Store' filesystem in cesga"
+    args = parse_args(description, flag, flag_help)
     main(store=args.store)
