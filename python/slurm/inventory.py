@@ -5,7 +5,7 @@ import os
 
 from common_modules import colors as cc
 from common_modules.get_config import get_config
-from common_modules.argparse_utils import flag_parser
+from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
 import submit
@@ -198,8 +198,5 @@ def main(store=False):
         print()
 
 if __name__ == "__main__":
-    description="Status of tasks"
-    arg = "--store"
-    help_text="use store instead of home (only in cesga)"
-    arg = flag_parser(description, arg, help_text)
-    main(store=arg.store)
+    args = parse_args()
+    main(store=args.store)

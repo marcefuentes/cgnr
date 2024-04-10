@@ -8,7 +8,7 @@ import sys
 
 import common_modules.colors as cc
 from common_modules.get_config import get_config
-from common.modules.argparse_utils import flag_parser
+from modules.argparse_utils import parse_args
 import modules.slurm_tools as st
 
 # Purpose: resubmit unfinished jobs
@@ -126,8 +126,5 @@ def main(test=False):
     print()
 
 if __name__ == "__main__":
-    description = "Resubmit unfinished jobs."
-    flag = "--test"
-    help_text = "Run in test mode."
-    arg = flag_parser(description, flag, help_text)
-    main(test=arg.test)
+    args = parse_args()
+    main(test=args.test)
