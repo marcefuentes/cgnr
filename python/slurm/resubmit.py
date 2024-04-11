@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 
-import common_modules.colors as cc
+import common_modules.color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 import modules.slurm_tools as st
@@ -64,10 +64,10 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test):
 def main(test=False):
     """ Main function """
 
-    exe = get_config("exe")
+    EXE = get_config("exe")
     if test:
         print("\nThis is a test.\n")
-        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
+        log_file = f"/home/ulc/ba/mfu/code/{EXE}/results/submit.test"
     else:
         msg = (
             f"\n{color.BOLD}{color.RED}This is not a test! {color.WHITE}Continue?{color.RESET} "
@@ -77,8 +77,8 @@ def main(test=False):
         user_input = input()
         if user_input.lower() == "n":
             sys.exit()
-        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
-    last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+        log_file = f"/home/ulc/ba/mfu/code/{EXE}/results/submit.log"
+    last_job_file = f"/home/ulc/ba/mfu/code/{EXE}/results/last_submitted_job.tmp"
     logging.basicConfig(
         filename=log_file,
         level=logging.DEBUG,

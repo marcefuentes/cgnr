@@ -6,7 +6,7 @@ import csv
 import os
 import sys
 
-from common_modules import colors as cc
+from common_modules import color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots

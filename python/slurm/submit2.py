@@ -5,7 +5,7 @@
 import os
 import sys
 
-import common_modules.colors as cc
+import common_modules.color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.list_of_folders import list_of_folders
