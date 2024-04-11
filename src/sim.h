@@ -64,7 +64,7 @@ struct rtype
 
 // Functions
 
-void		decide_qB		(struct itype *i, struct itype *i_last);
+void		decide_qB		(struct itype *i, struct itype *i_last, int imimic);
 void		shuffle_partners	(struct itype *i, struct itype *i_last, int groupsize);
 void		choose_partner		(struct itype *i, struct itype *i_last, int groupsize);
 struct rtype	*create_recruits	(int deaths, double wc);
