@@ -24,5 +24,5 @@ def get_config(variable):
         if variable in ("output_file_extensions", "constraints"):
             return config.get("DEFAULT", variable).split(",")
         return config.get('DEFAULT', variable)
-    print(f"{cc.BOLD}{cc.RED}{variable} not found in {config_file_path}{cc.RESET}")
+    print(f"{color.BOLD}{color.RED}{variable} not found in {config_file_path}{color.RESET}")
     return 0

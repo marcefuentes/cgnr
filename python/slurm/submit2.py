@@ -47,8 +47,8 @@ def process_folder(constraint, free_slots, last_job, test):
         job_min = last_job + 1
     if os.path.isfile(os.path.join(current_path, f"{job_min}{output_file_extension}")):
         msg = (
-            f"{cc.RED}{current_path_print}/{job_min}{output_file_extension} "
-            f"already exists.{cc.RESET}"
+            f"{color.RED}{current_path_print}/{job_min}{output_file_extension} "
+            f"already exists.{color.RESET}"
         )
         print(msg)
         last_job = 0
@@ -78,7 +78,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
         current_path = givens[0]
         current_path_folders = current_path.split("/")
         current_path_print = "/".join(current_path_folders[-3:])
-        print(f"\n{cc.BOLD}Submit jobs in {current_path_print}?{cc.RESET} {cc.YESNO} ", end="")
+        print(f"\n{color.BOLD}Submit jobs in {current_path_print}?{color.RESET} {color.YESNO} ", end="")
         user_input = input()
         if user_input.lower() == "n":
             sys.exit()
@@ -101,18 +101,18 @@ def process_variant(constraint, free_slots, test, last_job_file):
                 current_path = givens[0]
             else:
                 if test:
-                    print(f"Would remove {last_job_file}.{cc.RESET}")
+                    print(f"Would remove {last_job_file}.{color.RESET}")
                 else:
                     os.remove(last_job_file)
-                print(f"{cc.BOLD}{cc.GREEN}All jobs submitted.{cc.RESET}")
+                print(f"{color.BOLD}{color.GREEN}All jobs submitted.{color.RESET}")
                 msg = (
-                    f"{cc.BOLD}{cc.CYAN}{free_slots}{cc.RESET} "
-                    f"free slots in {cc.BOLD}{constraint}{cc.RESET}.\n"
+                    f"{color.BOLD}{color.CYAN}{free_slots}{color.RESET} "
+                    f"free slots in {color.BOLD}{constraint}{color.RESET}.\n"
                 )
                 print(msg)
                 sys.exit()
     if test:
-        print(f"Would write {current_path},{last_job} to {last_job_file}.{cc.RESET}")
+        print(f"Would write {current_path},{last_job} to {last_job_file}.{color.RESET}")
     else:
         with open(last_job_file, "w", encoding="utf-8") as f:
             f.write(f"{current_path},{last_job}")
@@ -128,7 +128,7 @@ def main(test=False):
     constraints = get_config("constraints")
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
-        print(f"\n{cc.BOLD}{constraint}:{cc.RESET} {cc.CYAN}{free_slots}{cc.RESET} free slots.")
+        print(f"\n{color.BOLD}{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots.")
         if test and not free_slots:
             free_slots = 100
         while free_slots:
