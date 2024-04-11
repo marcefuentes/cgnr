@@ -2,11 +2,11 @@
 """ Store the traits and rows for the different modes of the figure """
 
 title = {
-    "ChooseGrain":          "Partner choice\n(memory 1)",
-    "Choose_ltGrain":       "Partner choice\n(lifetime)",
+    "ChooseGrain":          "Partner choice\n(short memory)",
+    "Choose_ltGrain":       "Partner choice\n(long memory)",
     "MimicGrain":           "Direct\nreciprocity",
-    "ImimicGrain":          "Indirect\nreciprocity\n(memory 1)",
-    "Imimic_ltGrain":       "Indirect\nreciprocity\n(lifetime)",
+    "ImimicGrain":          "Indirect\nreciprocity\n(short memory)",
+    "Imimic_ltGrain":       "Indirect\nreciprocity\n(long memory)",
     "qBSeen":               r"Production of $\it{B}$",
     "qBSeen_byproduct":     "Byproduct help",
     "w":                    "Fitness",
