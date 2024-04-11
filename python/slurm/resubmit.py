@@ -18,8 +18,8 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test):
     """ Submit jobs in the current folder """
 
     current_path_print = "/".join(current_path_folders[-3:])
-    constraints = get_config("constraints")
-    for constraint in constraints:
+    CONSTRAINTS = get_config("constraints")
+    for constraint in CONSTRAINTS:
         if len(jobs_to_submit) == 0:
             print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")
             sys.exit()

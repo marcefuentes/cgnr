@@ -17,27 +17,27 @@ from modules.argparse_utils import parse_args
 
 def get_job_min(current_path):
     """ Get the minimum job number in the current folder. """
-    input_file_extension = get_config("input_file_extension")
+    INPUT_FILE_EXTENSION = get_config("input_file_extension")
     job_min = 9999
     for file in os.listdir(current_path):
-        if file.endswith(input_file_extension):
+        if file.endswith(INPUT_FILE_EXTENSION):
             basename = int(file.split(".")[0])
             job_min = min(job_min, basename)
     return job_min
 
 def get_job_max(current_path):
     """ Get the maximum job number in the current folder. """
-    input_file_extension = get_config("input_file_extension")
+    INPUT_FILE_EXTENSION = get_config("input_file_extension")
     job_max = 0
     for file in os.listdir(current_path):
-        if file.endswith(input_file_extension):
+        if file.endswith(INPUT_FILE_EXTENSION):
             basename = int(file.split(".")[0])
             job_max = max(job_max, basename)
     return job_max
 
 def process_folder(constraint, free_slots, last_job, test):
     """ Submit jobs in the current folder """
-    output_file_extension, *_ = get_config("output_file_extensions")
+    OUTPUT_FILE_EXTENSION, *_ = get_config("output_file_extensions")
     current_path = os.getcwd()
     current_path_folders = current_path.split("/")
     current_path_print = "/".join(current_path_folders[-3:])
@@ -45,9 +45,9 @@ def process_folder(constraint, free_slots, last_job, test):
         job_min = get_job_min(current_path)
     else:
         job_min = last_job + 1
-    if os.path.isfile(os.path.join(current_path, f"{job_min}{output_file_extension}")):
+    if os.path.isfile(os.path.join(current_path, f"{job_min}{OUTPUT_FILE_EXTENSION}")):
         msg = (
-            f"{color.RED}{current_path_print}/{job_min}{output_file_extension} "
+            f"{color.RED}{current_path_print}/{job_min}{OUTPUT_FILE_EXTENSION} "
             f"already exists.{color.RESET}"
         )
         print(msg)
@@ -147,16 +147,16 @@ def main(test=False):
     """ Main function. """
     if test:
         print("\nThis is a test.")
-    exe = get_config("exe")
-    last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-    log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
+    EXE = get_config("exe")
+    last_job_file = f"/home/ulc/ba/mfu/code/{EXE}/results/last_submitted_job.tmp"
+    log_file = f"/home/ulc/ba/mfu/code/{EXE}/results/submit.log"
     logging.basicConfig(
         filename=log_file,
         level=logging.DEBUG,
         format="%(asctime)s %(levelname)s: %(message)s"
     )
-    constraints = get_config("constraints")
-    for constraint in constraints:
+    CONSTRAINTS = get_config("constraints")
+    for constraint in CONSTRAINTS:
         free_slots = st.get_free_slots(constraint)
         print(f"\n{color.BOLD}{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots.")
         if test and not free_slots:

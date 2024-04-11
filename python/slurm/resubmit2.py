@@ -17,8 +17,8 @@ import modules.slurm_tools as st
 def process_folder(test):
     """ Prepare jobs in the current folder """
 
-    exe = get_config("exe")
-    last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
+    EXE = get_config("exe")
+    last_job_file = f"/home/ulc/ba/mfu/code/{EXE}/results/last_submitted_job.tmp"
 
     current_path = os.getcwd()
     if os.path.isfile(last_job_file):
@@ -57,8 +57,8 @@ def process_folder(test):
             sys.exit()
         st.remove_files(jobs_to_submit)
 
-    constraints = get_config("constraints")
-    for constraint in constraints:
+    CONSTRAINTS = get_config("constraints")
+    for constraint in CONSTRAINTS:
         if len(jobs_to_submit) == 0:
             print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")
             sys.exit()
