@@ -265,7 +265,7 @@ void caso(struct ptype *p_first, char *filename)
 
 			if (gReciprocity == 1)
 			{
-				decide_qB(i_first, i_last, gIndirectR);
+				decide_qB(i_first, i_last);
 			}
 		}
 
