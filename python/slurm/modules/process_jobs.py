@@ -4,7 +4,7 @@
 import logging
 import sys
 
-import common_modules.color as color
+from common_modules import color
 from common_modules.get_config import get_config
 from modules.slurm_tools import submit_job
 

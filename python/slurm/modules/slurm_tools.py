@@ -7,7 +7,7 @@ import re
 import subprocess
 import sys
 
-import common_modules.color as color
+from common_modules import color
 from common_modules.get_config import get_config
 
 def get_qos_name(constraint):
