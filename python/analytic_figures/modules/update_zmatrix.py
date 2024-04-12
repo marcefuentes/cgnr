@@ -31,33 +31,32 @@ def update_zmatrix(dict_z):
         zmatrix = np.zeros((1, 1))
         return zmatrix
 
-    if "r_" in trait:
+    if "r_" in trait or mode == "demography":
         zmatrix = get_zmatrix(t, df, trait)
-    elif "byproduct" in trait:
+        if mode == "demography":
+            if "Dispersal" in trait:
+                zmatrix = zmatrix - get_zmatrix(t, df, "NeutralDispersalRatemean")
+                return zmatrix
+            if "N" in trait:
+                zmatrix = zmatrix/4096.0
+        return zmatrix
+    if "byproduct" in trait:
         zmatrix = get_zmatrix(t, df, "qBmean")
-    elif "deficit" in trait:
-        zmatrix = get_zmatrix(t, df, "wmean")
-    else:
-        zmatrix = get_zmatrix(t, df, f"{trait}mean")
-
-    if "cooperation" in mode:
-        if "Grain" in trait:
-            if mechanism == "none":
-                zmatrix = 0.5 - zmatrix
-            else:
-                zmatrix = get_zmatrix(t, df_none, f"{trait}mean") - zmatrix
-        else:
-            zmatrix = zmatrix - get_zmatrix(t, df_social, f"{trait}mean")
-    elif mode == "none":
-        if "byproduct" in trait:
-            given = df_dict[mechanism]["Given"].iloc[0]
-            zmatrix = zmatrix * given
-        elif "deficit" in trait:
+        given = df_dict[mechanism]["Given"].iloc[0]
+        zmatrix = zmatrix * given
+        return zmatrix
+    
+    zmatrix = get_zmatrix(t, df, f"{trait}mean")
+    if "Grain" in trait:
+        if mechanism == "none":
+            zmatrix = 0.5 - zmatrix
+            return zmatrix
+        zmatrix = get_zmatrix(t, df_none, f"{trait}mean") - zmatrix
+        return zmatrix
+    if "w" in trait:
+        if "deficit" in trait or mode != "none":
             zmatrix = zmatrix - get_zmatrix(t, df_social, "wmean")
-    elif mode == "demography":
-        if "Dispersal" in trait:
-            zmatrix = zmatrix - get_zmatrix(t, df, "NeutralDispersalRatemean")
-        elif "N" in trait:
-            zmatrix = zmatrix/4096.0
-
+            return zmatrix
+    if "qBSeen" in trait and mode != "none":
+        zmatrix = zmatrix - get_zmatrix(t, df_social, "qBSeenmean")
     return zmatrix
