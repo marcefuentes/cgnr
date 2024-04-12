@@ -77,6 +77,14 @@ mechanisms = {
     "test":     ["p", "i", "none"]
 }
 
+variants_cols = {
+    "default":  ["noshuffle", "shuffle"]
+}
+
+variants_rows = {
+    "default":  ["nolt", "lt"]
+}
+
 given = "given100"
 
 def get_title(trait):
