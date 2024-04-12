@@ -99,7 +99,7 @@ rows = {
 
 traits = {
     "p": "ChooseGrain",
-    "r": "MimicGrain",
+    #"i": "MimicGrain",
     "i": "ImimicGrain",
 }
 
