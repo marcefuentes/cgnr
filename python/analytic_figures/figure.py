@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Creates a plot with the frequency of each trait for each mechanism. """
+""" Creates plots. """
 
 import os
 import re
@@ -20,26 +20,37 @@ from modules.argparse_utils import parse_args
 from modules.get_df import get_df
 from modules.update_zmatrix import update_zmatrix
 
-def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
+def update(t, mode, dfs, df_none, df_social, dffrqs, movie, text, artists):
     """ Update the plot with the data at time t. """
 
-    if dffrq_mechanisms:
-        alphas = np.sort(df_mechanisms["none"]["alpha"].unique())[::-1]
-        logess = np.sort(df_mechanisms["none"]["logES"].unique())
+    
+    if dffrqs:
+        alphas = np.sort(dffrqs[0]["alpha"].unique())[::-1]
+        logess = np.sort(dffrqs[0]["logES"].unique())
     traits = mm.get_traits(mode)
-    for r, mechanism in enumerate(df_mechanisms):
+    rows = mm.get_mechanisms(mode)
+    for r, row in enumerate(rows):
         kws = ["cooperation", "correlations", "test"]
-        if any(kw in mode for kw in kws) and mechanism == "social":
+        if any(kw in mode for kw in kws) and row == "social":
             continue
         for c, trait in enumerate(traits):
-            zmatrix = update_zmatrix(t, df_mechanisms, mechanism, trait, mode)
-            if dffrq_mechanisms:
+            dict_z = {
+                "t": t,
+                "mode": mode,
+                "row": row,
+                "trait": trait,
+                "df": dfs[r],
+                "df_none": df_none,
+                "df_social": df_social,
+            }
+            zmatrix = update_zmatrix(dict_z)
+            if dffrqs:
                 for a, alpha in enumerate(alphas):
                     for e, loges in enumerate(logess):
-                        d = dffrq_mechanisms[mechanism][
-                            (dffrq_mechanisms[mechanism]["Time"] == t) \
-                            & (dffrq_mechanisms[mechanism]["alpha"] == alpha) \
-                            & (dffrq_mechanisms[mechanism]["logES"] == loges)
+                        d = dffrqs[r][
+                            (dffrqs[r]["Time"] == t) \
+                            & (dffrqs[r]["alpha"] == alpha) \
+                            & (dffrqs[r]["logES"] == loges)
                         ]
                         freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
                         y = d.loc[:, freq_a].values[0].flatten()
@@ -51,6 +62,35 @@ def update(t, mode, df_mechanisms, dffrq_mechanisms, movie, text, artists):
     if movie:
         text.set_text(t)
     return artists.flatten()
+
+"""
+def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
+    Update the plot with the data at time t. 
+
+    if dffrqs:
+        alphas = np.sort(dfs["none"]["alpha"].unique())[::-1]
+        logess = np.sort(dfs["none"]["logES"].unique())
+    for r, _ in enumerate(dfs):
+        for c, _ in enumerate(dfs[r]):
+            zmatrix = update_zmatrix(t, dfs, row, trait, mode)
+            if dffrqs:
+                for a, alpha in enumerate(alphas):
+                    for e, loges in enumerate(logess):
+                        d = dffrqs[row][
+                            (dffrqs[row]["Time"] == t) \
+                            & (dffrqs[row]["alpha"] == alpha) \
+                            & (dffrqs[row]["logES"] == loges)
+                        ]
+                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
+                        y = d.loc[:, freq_a].values[0].flatten()
+                        artists[r, c, a, e].set_ydata(y)
+                        bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
+                        artists[r, c, a, e].axes.set_facecolor(bgcolor)
+            else:
+                artists[r, c].set_array(zmatrix)
+    if movie:
+        text.set_text(t)
+    return artists.flatten()"""
 
 def main(mode, histogram=False, movie=False):
     """ Create the figure. """
@@ -66,18 +106,24 @@ def main(mode, histogram=False, movie=False):
 
     # Get data
 
-    mechanisms = mm.get_mechanisms(mode)
-    df_mechanisms = {}
-    dffrq_mechanisms = {}
+    rows = mm.get_mechanisms(mode)
+    dfs = []
+    dffrqs = []
 
     csv0, csv1 = get_config("output_file_extensions")
-    for mechanism in mechanisms:
-        df_mechanisms[mechanism] = get_df(mechanism, csv0, movie)
+    for row in rows:
+        dfs.append(get_df(row, csv0, movie))
         if histogram:
-            dffrq_mechanisms[mechanism] = get_df(mechanism, csv1, movie)
-    if "social" not in mechanisms:
-        df_mechanisms["social"] = get_df("social", csv0, movie)
-    df = df_mechanisms[mechanisms[0]]
+            dffrqs.append(get_df(row, csv1, movie))
+    if "none" not in rows:
+        df_none = get_df("none", csv0, movie)
+    else:
+        df_none = dfs[rows.index("none")]
+    if "social" not in rows:
+        df_social = get_df("social", csv0, movie)
+    else:
+        df_social = dfs[rows.index("social")]
+    df = dfs[0]
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
@@ -110,7 +156,7 @@ def main(mode, histogram=False, movie=False):
 
     traits = mm.get_traits(mode)
     ncols = len(traits)
-    nrows = len(mechanisms)
+    nrows = len(rows)
     inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
     inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
     width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
@@ -190,7 +236,7 @@ def main(mode, histogram=False, movie=False):
         outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
         axs = np.empty((nrows, ncols, nr, nc), dtype=object)
 
-        for r, _ in enumerate(mechanisms):
+        for r, _ in enumerate(rows):
             for c, _ in enumerate(traits):
                 grid = outergrid[r, c].subgridspec(
                     nrows=nr,
@@ -245,7 +291,7 @@ def main(mode, histogram=False, movie=False):
             for e in range(0, nc, step):
                 axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
     else:
-        for r, _ in enumerate(mechanisms):
+        for r, _ in enumerate(rows):
             for c, _ in enumerate(traits):
                 main_ax[nrows - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
 
@@ -296,7 +342,7 @@ def main(mode, histogram=False, movie=False):
     dummy_y = np.zeros_like(x)
 
     if histogram:
-        for r, _ in enumerate(mechanisms):
+        for r, _ in enumerate(rows):
             for c, _ in enumerate(traits):
                 for a, _ in enumerate(alphas):
                     for e, _ in enumerate(logess):
@@ -310,7 +356,7 @@ def main(mode, histogram=False, movie=False):
     else:
         dummy_zmatrix = np.zeros((nr, nc))
 
-        for r, _ in enumerate(mechanisms):
+        for r, _ in enumerate(rows):
             for c, _ in enumerate(traits):
                 artists[r, c] = axs[r, c].imshow(
                     dummy_zmatrix,
@@ -347,8 +393,10 @@ def main(mode, histogram=False, movie=False):
             frames=ts,
             fargs=(
                 mode,
-                df_mechanisms,
-                dffrq_mechanisms,
+                dfs,
+                df_none,
+                df_social,
+                dffrqs,
                 movie,
                 fig.texts[2],
                 artists,
@@ -360,8 +408,10 @@ def main(mode, histogram=False, movie=False):
         update(
             ts[-1],
             mode,
-            df_mechanisms,
-            dffrq_mechanisms,
+            dfs,
+            df_none,
+            df_social,
+            dffrqs,
             movie,
             fig.texts[2],
             artists,
