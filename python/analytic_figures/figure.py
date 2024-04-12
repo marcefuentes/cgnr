@@ -116,15 +116,15 @@ def main(mode, histogram=False, movie=False):
         dfs.append(get_df(row, csv0, movie))
         if histogram:
             dffrqs.append(get_df(row, csv1, movie))
-    if "none" not in rows:
-        df_none = get_df("none", csv0, movie)
-    else:
+    if "none" in rows:
         df_none = dfs[rows.index("none")]
-    if "social" not in rows:
-        df_social = get_df("social", csv0, movie)
     else:
+        df_none = get_df("none", csv0, movie)
+    if "social" in rows:
         df_social = dfs[rows.index("social")]
-    df = dfs[0]
+    else:
+        df_social = get_df("social", csv0, movie)
+    df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
