@@ -18,10 +18,11 @@ import modules.modes as mm
 from modules.argparse_utils import parse_args
 from modules.update_zmatrix import update_zmatrix
 
-def update_variant(t, dict_update):
+def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
     mode =      dict_update["mode"]
+    variant =   dict_update["variant"]
     columns =   dict_update["columns"]
     rows =      dict_update["rows"]
     dfs =       dict_update["dfs"]
@@ -32,17 +33,26 @@ def update_variant(t, dict_update):
     text =      dict_update["text"]
     artists =   dict_update["artists"]
 
+    dict_z = {
+        "t": t,
+        "mode": mode
+    }
+    if variant:
+        dict_z["df_none"] = df_none
+        dict_z["df_social"] = df_social
+    else:
+        dict_z["trait"] = mm.get_trait(mode)
+
     for r, row in enumerate(rows):
+        dict_z["mechanism"] = row,
         for c, column in enumerate(columns):
-            dict_z = {
-                "t":            t,
-                "mode":         mode,
-                "mechanism":    row,
-                "trait":        column,
-                "df":           dfs[r],
-                "df_none":      df_none,
-                "df_social":    df_social
-            }
+            if variant:
+                dict_z["df"] =          dfs[r]
+                dict_z["trait"] =       column
+            else:
+                dict_z["df"] =          dfs[r][c]
+                dict_z["df_none"] =     df_none[r][c]
+                dict_z["df_social"] =   df_social[r][c]
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
                 for a, alpha in enumerate(dict_update["alphas"]):
@@ -62,36 +72,6 @@ def update_variant(t, dict_update):
     if movie:
         text.set_text(t)
     return artists.flatten()
-
-"""
-def update_trait(t, mode, dfs, dffrqs, movie, text, artists):
-    Update the plot with the data at time t. 
-
-    if dffrqs:
-        alphas = np.sort(dfs["none"]["alpha"].unique())[::-1]
-        logess = np.sort(dfs["none"]["logES"].unique())
-    for r, _ in enumerate(dfs):
-        for c, _ in enumerate(dfs[r]):
-            zmatrix = update_zmatrix(t, dfs, row, column, mode)
-            if dffrqs:
-                for a, alpha in enumerate(alphas):
-                    for e, loges in enumerate(logess):
-                        d = dffrqs[row][
-                            (dffrqs[row]["Time"] == t) \
-                            & (dffrqs[row]["alpha"] == alpha) \
-                            & (dffrqs[row]["logES"] == loges)
-                        ]
-                        freq_a = [col for col in d.columns if re.match(fr"^{column}\d+$", col)]
-                        y = d.loc[:, freq_a].values[0].flatten()
-                        artists[r, c, a, e].set_ydata(y)
-                        bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
-                        artists[r, c, a, e].axes.set_facecolor(bgcolor)
-            else:
-                artists[r, c].set_array(zmatrix)
-    if movie:
-        text.set_text(t)
-    return artists.flatten()
-"""
 
 def main(mode, histogram=False, movie=False):
     """ Create the figure. """
@@ -379,6 +359,7 @@ def main(mode, histogram=False, movie=False):
 
     dict_update = {
         "mode": mode,
+        "variant": variant,
         "columns": columns,
         "rows": rows,
         "dfs": dfs,
@@ -397,20 +378,14 @@ def main(mode, histogram=False, movie=False):
         dict_animation = {
             "fig": fig,
             "frames": ts,
+            "func": update,
             "fargs": (dict_update,),
             "blit": True
         }
-        if variant:
-            dict_animation["func"] = update_variant
-        else:
-            dict_animation["func"] = update_trait
         ani = FuncAnimation(**dict_animation)
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        if variant:
-            update_variant(ts[-1], dict_update)
-        else:
-            update_trait(ts[-1], dict_update)
+        update(ts[-1], dict_update)
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 

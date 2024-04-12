@@ -90,9 +90,9 @@ rows = {
     "default":  ["pi", "p", "i", "none"],
     "none":     ["given100", "given095", "given050", "given000"],
     "test":     ["p", "i", "none"],
-    "p":        ["no_shuffle", "shuffle"],
-    "r":        ["no_shuffle", "shuffle"],
-    "i":        ["no_shuffle", "shuffle"]
+    "p":        ["noshuffle", "shuffle"],
+    "r":        ["noshuffle", "shuffle"],
+    "i":        ["noshuffle", "shuffle"]
 }
 
 traits = {
@@ -177,10 +177,13 @@ def get_data_trait(mode, histogram, movie):
     rows = get_rows(mode)
     columns = get_columns(mode)
 
-    dfs = [len(columns)][len(rows)]
-    df_nones = [len(columns)][len(rows)]
-    df_socials = [len(columns)][len(rows)]
-    dffrqs = [len(columns)][len(rows)]
+    dfs = [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    df_nones = [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    df_socials = [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    if histogram:
+        dffrqs = [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    else:
+        dffrqs = []
     csv0, csv1 = get_config("output_file_extensions")
     for r, row in enumerate(rows):
         for c, column in enumerate(columns):
