@@ -1,6 +1,9 @@
 
 """ Store the columns and rows for the different modes of the figure """
 
+from common_modules.get_config import get_config
+from modules.get_df import get_df
+
 title = {
     "ChooseGrain":          "Partner choice\n(short memory)",
     "Choose_ltGrain":       "Partner choice\n(long memory)",
@@ -127,3 +130,35 @@ def get_trait(mode):
         return traits[mode]
     except KeyError:
         return mode
+
+def get_data_mechanisms(mode, histogram, movie):
+    """ Get the data. """
+
+    dfs = []
+    dffrqs = []
+
+    rows = get_rows(mode)
+
+    csv0, csv1 = get_config("output_file_extensions")
+    for row in rows:
+        if row == "social":
+            path = "none/given000"
+        elif "none" in row:
+            path = f"none/{given}"
+        else:
+            path = f"{row}/{given}"
+        dfs.append(get_df(path, csv0, movie))
+        if histogram:
+            dffrqs.append(get_df(path, csv1, movie))
+    if "none" in rows:
+        df_none = dfs[rows.index("none")]
+    else:
+        path = "none/given100"
+        df_none = get_df(path, csv0, movie)
+    if "social" in rows:
+        df_social = dfs[rows.index("social")]
+    else:
+        path = "none/given000"
+        df_social = get_df(path, csv0, movie)
+    return dfs, df_none, df_social, dffrqs
+

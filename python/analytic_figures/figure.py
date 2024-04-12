@@ -15,9 +15,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 
 import modules.settings as ss
 import modules.modes as mm
-from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
-from modules.get_df import get_df
 from modules.update_zmatrix import update_zmatrix
 
 def update(t, dict_update):
@@ -94,35 +92,6 @@ def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
         text.set_text(t)
     return artists.flatten()"""
 
-def get_data_mechanisms(rows, histogram, movie):
-    """ Get the data. """
-
-    dfs = []
-    dffrqs = []
-
-    csv0, csv1 = get_config("output_file_extensions")
-    for row in rows:
-        if row == "social":
-            path = "none/given000"
-        elif "none" in row:
-            path = f"none/{mm.given}"
-        else:
-            path = f"{row}/{mm.given}"
-        dfs.append(get_df(path, csv0, movie))
-        if histogram:
-            dffrqs.append(get_df(path, csv1, movie))
-    if "none" in rows:
-        df_none = dfs[rows.index("none")]
-    else:
-        path = "none/given100"
-        df_none = get_df(path, csv0, movie)
-    if "social" in rows:
-        df_social = dfs[rows.index("social")]
-    else:
-        path = "none/given000"
-        df_social = get_df(path, csv0, movie)
-    return dfs, df_none, df_social, dffrqs
-
 def main(mode, histogram=False, movie=False):
     """ Create the figure. """
 
@@ -138,7 +107,7 @@ def main(mode, histogram=False, movie=False):
     # Get data
 
     rows = mm.get_rows(mode)
-    dfs, df_none, df_social, dffrqs = get_data_mechanisms(rows, histogram, movie)
+    dfs, df_none, df_social, dffrqs = mm.get_data_mechanisms(mode, histogram, movie)
     df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()
