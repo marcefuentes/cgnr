@@ -1,103 +1,139 @@
 #!/usr/bin/env python
 
+import argparse
+import math
 import numpy as np
 import os
 import sys
 
 from common_modules.get_config import get_config
 
-# the script accepts exactly three arguments
-if len(sys.argv) != 4:
-    print("Usage: python create.py <variant> <mechanism> <given>")
-    sys.exit()
+def parse_args():
+    """Parse command line arguments"""
 
-variant = sys.argv[1]
-mechanism = sys.argv[2]
-given = sys.argv[3]
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--groupsize",
+        type=int,
+        default=4,
+        help="group size"
+    )
+    parser.add_argument(
+        "--cost",
+        type=float,
+        default=-15,
+        help="cost value"
+    )
+    parser.add_argument(
+        "--partnerchoice",
+        action="store_const",
+        const=1,
+        default=0,
+        help="Enable partnerchoice (1 if present)"
+    )
+    parser.add_argument(
+        "--indirectr",
+        action="store_const",
+        const=1,
+        default=0,
+        help="Enable indirectr (1 if present)"
+    )
+    parser.add_argument(
+        "--language",
+        action="store_const",
+        const=1,
+        default=0,
+        help="Enable language (1 if present)"
+    )
+    parser.add_argument(
+        "--shuffle",
+        action="store_const",
+        const=1,
+        default=0,
+        help="Enable shuffle (1 if present)"
+    )
+    parser.add_argument(
+        "--given",
+        type=str,
+        required=True,
+        help="given value"
+    )
+    return parser.parse_args()
 
-INPUT_FILE_EXTENSION = get_config("input_file_extension")
-ALPHA_MIN = get_config("alpha_min")
-ALPHA_MAX = get_config("alpha_max")
-LOGES_MIN = get_config("loges_min")
-LOGES_MAX = get_config("loges_max")
+def main():
+    """Main function"""
 
-if "_d" in variant:
-    deathrate = -3
-else:
-    deathrate = -7
+    INPUT_FILE_EXTENSION = get_config("input_file_extension")
+    ALPHA_MIN = get_config("alpha_min")
+    ALPHA_MAX = get_config("alpha_max")
+    LOGES_MIN = get_config("loges_min")
+    LOGES_MAX = get_config("loges_max")
 
-if "128" in variant or "128" in mechanism:
-    groupsize = 7
-elif "16" in variant or "16" in mechanism:
-    groupsize = 4
-elif "8" in variant or "8" in mechanism:
-    groupsize = 3
-else:
-    groupsize = 2
-
-if "p" in mechanism:
-    partnerchoice = 1
-else:
-    partnerchoice = 0
-
-if "i" in mechanism:
-    reciprocity = 1
-    indirectr = 1
-elif "r" in mechanism:
-    reciprocity = 1
-    indirectr = 0
-else:
+    args = parse_args()
     reciprocity = 0
-    indirectr = 0
 
-if "lang" in variant or "l" in mechanism:
-    language = 1
-else:
-    language = 0
+    if args.language == 1:
+        variant = "lang_"
+    else:
+        variant = "nolang_"
+    if args.shuffle == 1:
+        variant = f"{variant}shuffle_"
+    else:
+        variant = f"{variant}noshuffle_"
+    cost_str = str(abs(args.cost))
+    variant = f"{variant}cost{cost_str}_"
+    groupsize_str = str(args.groupsize)
+    variant = f"{variant}{groupsize_str}"
 
-if "noshuffle" in variant:
-    shuffle = 0
-else:
-    shuffle = 1
+    mechanism = ""
+    if args.partnerchoice == 1:
+        mechanism = "p"
+    if args.indirectr == 1:
+        reciprocity = 1
+        mechanism = f"{mechanism}i"
+    if args.partnerchoice == 0 and args.indirectr == 0:
+        mechanism = "none"
+    path = f"{variant}/{mechanism}/given{args.given}"
+    os.makedirs(path, exist_ok=True)
 
-path = f"{variant}/{mechanism}/{given}"
-os.makedirs(path, exist_ok=True)
+    groupsize = int(math.log(args.groupsize)/math.log(2))
+    given = float(args.given) / 100
 
-num = 21
-alphas = np.linspace(ALPHA_MIN, ALPHA_MAX, num)
-logess = np.linspace(LOGES_MIN, LOGES_MAX, num)
-Given = float(given[-3:]) / 100
-cost = -int(variant[variant.find("cost") + 4:variant.find("cost") + 6])
-standard_params = {
-    "Seed": 1,
-    "N": 12,
-    "Runs": 30,
-    "Time": 21,
-    "Periods": 3,
-    "qBMutationSize": -6,
-    "GrainMutationSize": -6,
-}
+    num = 21
+    alphas = np.linspace(ALPHA_MIN, ALPHA_MAX, num)
+    logess = np.linspace(LOGES_MIN, LOGES_MAX, num)
+    standard_params = {
+        "Seed": 1,
+        "N": 12,
+        "Runs": 30,
+        "Time": 21,
+        "Periods": 3,
+        "qBMutationSize": -6,
+        "GrainMutationSize": -6,
+        "DeathRate": -7,
+    }
 
-c = 101
-filename_format = f"{path}/{c}{INPUT_FILE_EXTENSION}"
+    c = 101
 
-for alpha in alphas:
-    for loges in logess:
-        filename = filename_format.format(c=c)
-        f = open(filename, "w")
-        for key, value in standard_params.items():
-            f.write(f"{key},{value}\n")
-        f.write(f"DeathRate,{deathrate}\n")
-        f.write(f"GroupSize,{groupsize}\n")
-        f.write(f"Cost,{cost}\n")
-        f.write(f"PartnerChoice,{partnerchoice}\n")
-        f.write(f"Reciprocity,{reciprocity}\n")
-        f.write(f"IndirectR,{indirectr}\n")
-        f.write(f"Language,{language}\n")
-        f.write(f"Shuffle,{shuffle}\n")
-        f.write(f"alpha,{alpha:.6}\n")
-        f.write(f"logES,{loges}\n")
-        f.write(f"Given,{Given}\n")
+    for alpha in alphas:
+        for loges in logess:
+            filename = f"{path}/{c}{INPUT_FILE_EXTENSION}"
+            f = open(filename, "w")
+            for key, value in standard_params.items():
+                f.write(f"{key},{value}\n")
+            f.write(f"GroupSize,{groupsize}\n")
+            f.write(f"Cost,{args.cost}\n")
+            f.write(f"PartnerChoice,{args.partnerchoice}\n")
+            f.write(f"Reciprocity,{reciprocity}\n")
+            f.write(f"IndirectR,{args.indirectr}\n")
+            f.write(f"Language,{args.language}\n")
+            f.write(f"Shuffle,{args.shuffle}\n")
+            f.write(f"alpha,{alpha:.6}\n")
+            f.write(f"logES,{loges}\n")
+            f.write(f"Given,{given}\n")
 
-        f.close()
-        c = c + 1
+            f.close()
+            c = c + 1
+
+if __name__ == "__main__":
+    main()
