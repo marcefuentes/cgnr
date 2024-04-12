@@ -393,14 +393,15 @@ def main(mode, histogram=False, movie=False):
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
 
+    dict_animation = {
+        "fig": fig,
+        "func": update,
+        "frames": ts,
+        "fargs": (dict_update,),
+        "blit": True
+    }
     if movie:
-        ani = FuncAnimation(
-            fig,
-            update,
-            frames=ts,
-            fargs=(dict_update,),
-            blit=True
-        )
+        ani = FuncAnimation(**dict_animation)
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
         update(ts[-1], dict_update)
