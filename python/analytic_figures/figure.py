@@ -94,7 +94,7 @@ def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
         text.set_text(t)
     return artists.flatten()"""
 
-def get_data(rows, histogram, movie):
+def get_data_mechanisms(rows, histogram, movie):
     """ Get the data. """
 
     dfs = []
@@ -138,7 +138,7 @@ def main(mode, histogram=False, movie=False):
     # Get data
 
     rows = mm.get_rows(mode)
-    dfs, df_none, df_social, dffrqs = get_data(rows, histogram, movie)
+    dfs, df_none, df_social, dffrqs = get_data_mechanisms(rows, histogram, movie)
     df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()
