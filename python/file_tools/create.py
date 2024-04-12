@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+"""Create input files for the simulations"""
+
 import argparse
 import math
-import numpy as np
 import os
-import sys
+import numpy as np
 
 from common_modules.get_config import get_config
 
@@ -63,11 +64,11 @@ def parse_args():
 def main():
     """Main function"""
 
-    INPUT_FILE_EXTENSION = get_config("input_file_extension")
-    ALPHA_MIN = get_config("alpha_min")
-    ALPHA_MAX = get_config("alpha_max")
-    LOGES_MIN = get_config("loges_min")
-    LOGES_MAX = get_config("loges_max")
+    input_file_extension = get_config("input_file_extension")
+    alpha_min = get_config("alpha_min")
+    alpha_max = get_config("alpha_max")
+    loges_min = get_config("loges_min")
+    loges_max = get_config("loges_max")
 
     args = parse_args()
     reciprocity = 0
@@ -100,8 +101,8 @@ def main():
     given = float(args.given) / 100
 
     num = 21
-    alphas = np.linspace(ALPHA_MIN, ALPHA_MAX, num)
-    logess = np.linspace(LOGES_MIN, LOGES_MAX, num)
+    alphas = np.linspace(alpha_min, alpha_max, num)
+    logess = np.linspace(loges_min, loges_max, num)
     standard_params = {
         "Seed": 1,
         "N": 12,
@@ -117,22 +118,20 @@ def main():
 
     for alpha in alphas:
         for loges in logess:
-            filename = f"{path}/{c}{INPUT_FILE_EXTENSION}"
-            f = open(filename, "w")
-            for key, value in standard_params.items():
-                f.write(f"{key},{value}\n")
-            f.write(f"GroupSize,{groupsize}\n")
-            f.write(f"Cost,{args.cost}\n")
-            f.write(f"PartnerChoice,{args.partnerchoice}\n")
-            f.write(f"Reciprocity,{reciprocity}\n")
-            f.write(f"IndirectR,{args.indirectr}\n")
-            f.write(f"Language,{args.language}\n")
-            f.write(f"Shuffle,{args.shuffle}\n")
-            f.write(f"alpha,{alpha:.6}\n")
-            f.write(f"logES,{loges}\n")
-            f.write(f"Given,{given}\n")
-
-            f.close()
+            filename = f"{path}/{c}{input_file_extension}"
+            with open(filename, "w", encoding="utf-8") as f:
+                for key, value in standard_params.items():
+                    f.write(f"{key},{value}\n")
+                f.write(f"GroupSize,{groupsize}\n")
+                f.write(f"Cost,{args.cost}\n")
+                f.write(f"PartnerChoice,{args.partnerchoice}\n")
+                f.write(f"Reciprocity,{reciprocity}\n")
+                f.write(f"IndirectR,{args.indirectr}\n")
+                f.write(f"Language,{args.language}\n")
+                f.write(f"Shuffle,{args.shuffle}\n")
+                f.write(f"alpha,{alpha:.6}\n")
+                f.write(f"logES,{loges}\n")
+                f.write(f"Given,{given}\n")
             c = c + 1
 
 if __name__ == "__main__":
