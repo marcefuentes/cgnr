@@ -107,7 +107,11 @@ def main(mode, histogram=False, movie=False):
     # Get data
 
     rows = mm.get_rows(mode)
-    dfs, df_none, df_social, dffrqs = mm.get_data_mechanisms(mode, histogram, movie)
+    if mm.is_mechanisms(mode):
+        dfs, df_none, df_social, dffrqs = mm.get_data_mechanisms(mode, histogram, movie)
+    else:
+        dfs, dffrqs = mm.get_data(mode, histogram, movie)
+        df = dfs[0][0]
     df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()

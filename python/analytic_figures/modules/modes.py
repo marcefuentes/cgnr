@@ -102,6 +102,8 @@ traits = {
 }
 
 given = "given100"
+cost = 15
+groupsize = 128
 
 def get_title(trait):
     """ Return the title of the trait """
@@ -130,6 +132,13 @@ def get_trait(mode):
         return traits[mode]
     except KeyError:
         return mode
+
+def is_mechanisms(mode):
+    """ Return True if the mode is a mechanism """
+
+    # get a list of the first 8 keys of the dictionary "columns"
+    keys = list(columns.keys())[:8]
+    return mode in keys
 
 def get_data_mechanisms(mode, histogram, movie):
     """ Get the data. """
@@ -162,3 +171,26 @@ def get_data_mechanisms(mode, histogram, movie):
         df_social = get_df(path, csv0, movie)
     return dfs, df_none, df_social, dffrqs
 
+def get_data_trait(mode, histogram, movie):
+    """ Get the data. """
+
+    rows = get_rows(mode)
+    columns = get_columns(mode)
+
+    dfs = [len(columns)][len(rows)]
+    dffrqs = [len(columns)][len(rows)]
+    csv0, csv1 = get_config("output_file_extensions")
+    for r, row in enumerate(rows):
+        for c, column in enumerate(columns):
+            folder = f"{column}_{row}_cost{cost}_{groupsize}"
+            path = f"{folder}/{mode}/{given}"
+            if histogram:
+                dffrqs[c][r] = get_df(path, csv1, movie)
+            df = (get_df(path, csv0, movie))
+            df_none = get_df(f"{folder}/none/{given}", csv0, movie)
+            df_social = get_df(f"{folder}/none/given000", csv0, movie)
+            dfcolumns = ["t", "alpha", "logES", "Given", f"mode{mean}"]
+            df = df[dfcolumns]
+            df[mode] = df_none[mode] - df[mode]
+            dfs[c][r] = df
+    return dfs, dffrqs
