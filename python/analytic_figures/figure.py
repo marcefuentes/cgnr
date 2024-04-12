@@ -15,6 +15,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 
 import modules.settings as ss
 import modules.modes as mm
+from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.get_df import get_df
 from modules.update_zmatrix import update_zmatrix
@@ -69,12 +70,13 @@ def main(mode, histogram=False, movie=False):
     df_mechanisms = {}
     dffrq_mechanisms = {}
 
+    csv0, csv1 = get_config("output_file_extensions")
     for mechanism in mechanisms:
-        df_mechanisms[mechanism] = get_df(mechanism, "csv", movie)
+        df_mechanisms[mechanism] = get_df(mechanism, csv0, movie)
         if histogram:
-            dffrq_mechanisms[mechanism] = get_df(mechanism, "frq", movie)
+            dffrq_mechanisms[mechanism] = get_df(mechanism, csv1, movie)
     if "social" not in mechanisms:
-        df_mechanisms["social"] = get_df("social", "csv", movie)
+        df_mechanisms["social"] = get_df("social", csv0, movie)
     df = df_mechanisms[mechanisms[0]]
     ts = df.Time.unique()
     nr = df.alpha.nunique()

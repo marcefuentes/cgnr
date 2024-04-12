@@ -26,9 +26,9 @@ def get_df(row, filetype, movie):
         row = f"none/{given}"
     else:
         row = f"{row}/{given}"
-    filelist = glob(os.path.join(row, f"*.{filetype}"))
+    filelist = glob(os.path.join(row, f"*{filetype}"))
     if not filelist:
-        print(f"No {row}/*.{filetype} files found.")
+        print(f"No {row}/*{filetype} files found.")
         exit()
     df = read_files(filelist, movie)
     return df

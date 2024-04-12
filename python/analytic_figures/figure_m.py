@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Creates a plot with the frequency of each trait for each mechanism. """
+""" Creates plots. """
 
 import os
 import re
@@ -39,6 +39,34 @@ def update(t, mode, df_rows, dffrq_rows, movie, text, artists):
                             (dffrq_rows[row]["Time"] == t) \
                             & (dffrq_rows[row]["alpha"] == alpha) \
                             & (dffrq_rows[row]["logES"] == loges)
+                        ]
+                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
+                        y = d.loc[:, freq_a].values[0].flatten()
+                        artists[r, c, a, e].set_ydata(y)
+                        bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
+                        artists[r, c, a, e].axes.set_facecolor(bgcolor)
+            else:
+                artists[r, c].set_array(zmatrix)
+    if movie:
+        text.set_text(t)
+    return artists.flatten()
+
+def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
+    """ Update the plot with the data at time t. """
+
+    if dffrqs:
+        alphas = np.sort(dfs["none"]["alpha"].unique())[::-1]
+        logess = np.sort(dfs["none"]["logES"].unique())
+    for r, _ in enumerate(dfs):
+        for c, _ in enumerate(dfs[r]):
+            zmatrix = update_zmatrix(t, dfs, row, trait, mode)
+            if dffrqs:
+                for a, alpha in enumerate(alphas):
+                    for e, loges in enumerate(logess):
+                        d = dffrqs[row][
+                            (dffrqs[row]["Time"] == t) \
+                            & (dffrqs[row]["alpha"] == alpha) \
+                            & (dffrqs[row]["logES"] == loges)
                         ]
                         freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
                         y = d.loc[:, freq_a].values[0].flatten()
