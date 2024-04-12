@@ -18,7 +18,7 @@ import modules.modes as mm
 from modules.argparse_utils import parse_args
 from modules.update_zmatrix import update_zmatrix
 
-def update(t, dict_update):
+def update_variant(t, dict_update):
     """ Update the plot with the data at time t. """
 
     mode =      dict_update["mode"]
@@ -393,18 +393,24 @@ def main(mode, histogram=False, movie=False):
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
 
-    dict_animation = {
-        "fig": fig,
-        "func": update,
-        "frames": ts,
-        "fargs": (dict_update,),
-        "blit": True
-    }
     if movie:
+        dict_animation = {
+            "fig": fig,
+            "frames": ts,
+            "fargs": (dict_update,),
+            "blit": True
+        }
+        if variant:
+            dict_animation["func"] = update_variant
+        else:
+            dict_animation["func"] = update_trait
         ani = FuncAnimation(**dict_animation)
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(ts[-1], dict_update)
+        if variant:
+            update_variant(ts[-1], dict_update)
+        else:
+            update_trait(ts[-1], dict_update)
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
