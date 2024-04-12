@@ -38,9 +38,6 @@ def update(t, dict_update):
     traits = mm.get_traits(mode)
     rows = mm.get_mechanisms(mode)
     for r, row in enumerate(rows):
-        kws = ["cooperation", "correlations", "test"]
-        if any(kw in mode for kw in kws) and row == "social":
-            continue
         for c, trait in enumerate(traits):
             dict_z = {
                 "t": t,
