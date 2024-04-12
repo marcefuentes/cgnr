@@ -133,14 +133,14 @@ def get_trait(mode):
     except KeyError:
         return mode
 
-def is_mechanisms(mode):
+def is_variant(mode):
     """ Return True if the mode is a mechanism """
 
     # get a list of the first 8 keys of the dictionary "columns"
     keys = list(columns.keys())[:8]
     return mode in keys
 
-def get_data_mechanisms(mode, histogram, movie):
+def get_data_variant(mode, histogram, movie):
     """ Get the data. """
 
     dfs = []
@@ -178,6 +178,8 @@ def get_data_trait(mode, histogram, movie):
     columns = get_columns(mode)
 
     dfs = [len(columns)][len(rows)]
+    df_nones = [len(columns)][len(rows)]
+    df_socials = [len(columns)][len(rows)]
     dffrqs = [len(columns)][len(rows)]
     csv0, csv1 = get_config("output_file_extensions")
     for r, row in enumerate(rows):
@@ -186,11 +188,7 @@ def get_data_trait(mode, histogram, movie):
             path = f"{folder}/{mode}/{given}"
             if histogram:
                 dffrqs[c][r] = get_df(path, csv1, movie)
-            df = (get_df(path, csv0, movie))
-            df_none = get_df(f"{folder}/none/{given}", csv0, movie)
-            df_social = get_df(f"{folder}/none/given000", csv0, movie)
-            dfcolumns = ["t", "alpha", "logES", "Given", f"mode{mean}"]
-            df = df[dfcolumns]
-            df[mode] = df_none[mode] - df[mode]
-            dfs[c][r] = df
-    return dfs, dffrqs
+            dfs[c][r] = (get_df(path, csv0, movie))
+            df_nones[c][r] = get_df(f"{folder}/none/{given}", csv0, movie)
+            df_socials[c][r] = get_df(f"{folder}/none/given000", csv0, movie)
+    return dfs, df_nones, df_socials, dffrqs

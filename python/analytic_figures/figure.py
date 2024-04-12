@@ -64,7 +64,7 @@ def update(t, dict_update):
     return artists.flatten()
 
 """
-def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
+def update_trait(t, mode, dfs, dffrqs, movie, text, artists):
     Update the plot with the data at time t. 
 
     if dffrqs:
@@ -90,7 +90,8 @@ def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
                 artists[r, c].set_array(zmatrix)
     if movie:
         text.set_text(t)
-    return artists.flatten()"""
+    return artists.flatten()
+"""
 
 def main(mode, histogram=False, movie=False):
     """ Create the figure. """
@@ -107,12 +108,13 @@ def main(mode, histogram=False, movie=False):
     # Get data
 
     rows = mm.get_rows(mode)
-    if mm.is_mechanisms(mode):
-        dfs, df_none, df_social, dffrqs = mm.get_data_mechanisms(mode, histogram, movie)
+    variant = mm.is_variant(mode)
+    if variant:
+        dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
+        df = df_none
     else:
-        dfs, dffrqs = mm.get_data(mode, histogram, movie)
+        dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
         df = dfs[0][0]
-    df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
