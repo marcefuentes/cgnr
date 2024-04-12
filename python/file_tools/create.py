@@ -17,13 +17,13 @@ def parse_args():
         "--groupsize",
         type=int,
         default=4,
-        help="group size"
+        help="group size (default=4)"
     )
     parser.add_argument(
         "--cost",
         type=float,
-        default=-15,
-        help="cost value"
+        default=15,
+        help="cost value (default=15)"
     )
     parser.add_argument(
         "--partnerchoice",
@@ -56,8 +56,8 @@ def parse_args():
     parser.add_argument(
         "--given",
         type=str,
-        required=True,
-        help="given value"
+        default="100",
+        help="given value (default=100)"
     )
     return parser.parse_args()
 
@@ -81,7 +81,7 @@ def main():
         variant = f"{variant}shuffle_"
     else:
         variant = f"{variant}noshuffle_"
-    cost_str = str(abs(args.cost))
+    cost_str = str(args.cost)
     variant = f"{variant}cost{cost_str}_"
     groupsize_str = str(args.groupsize)
     variant = f"{variant}{groupsize_str}"
@@ -123,7 +123,7 @@ def main():
                 for key, value in standard_params.items():
                     f.write(f"{key},{value}\n")
                 f.write(f"GroupSize,{groupsize}\n")
-                f.write(f"Cost,{args.cost}\n")
+                f.write(f"Cost,{-args.cost}\n")
                 f.write(f"PartnerChoice,{args.partnerchoice}\n")
                 f.write(f"Reciprocity,{reciprocity}\n")
                 f.write(f"IndirectR,{args.indirectr}\n")
