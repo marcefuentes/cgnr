@@ -24,6 +24,8 @@ def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
     mode = dict_update["mode"]
+    traits = dict_update["traits"]
+    rows = dict_update["rows"]
     dfs = dict_update["dfs"]
     df_none = dict_update["df_none"]
     df_social = dict_update["df_social"]
@@ -31,12 +33,6 @@ def update(t, dict_update):
     movie = dict_update["movie"]
     text = dict_update["text"]
     artists = dict_update["artists"]
-
-    if dffrqs:
-        alphas = np.sort(dffrqs[0]["alpha"].unique())[::-1]
-        logess = np.sort(dffrqs[0]["logES"].unique())
-    traits = mm.get_traits(mode)
-    rows = mm.get_mechanisms(mode)
     for r, row in enumerate(rows):
         for c, trait in enumerate(traits):
             dict_z = {
@@ -46,12 +42,12 @@ def update(t, dict_update):
                 "trait": trait,
                 "df": dfs[r],
                 "df_none": df_none,
-                "df_social": df_social,
+                "df_social": df_social
             }
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
-                for a, alpha in enumerate(alphas):
-                    for e, loges in enumerate(logess):
+                for a, alpha in enumerate(dict_update["alphas"]):
+                    for e, loges in enumerate(dict_update["logess"]):
                         d = dffrqs[r][
                             (dffrqs[r]["Time"] == t) \
                             & (dffrqs[r]["alpha"] == alpha) \
@@ -393,6 +389,8 @@ def main(mode, histogram=False, movie=False):
 
     dict_update = {
         "mode": mode,
+        "traits": traits,
+        "rows": rows,
         "dfs": dfs,
         "df_none": df_none,
         "df_social": df_social,
@@ -401,6 +399,10 @@ def main(mode, histogram=False, movie=False):
         "text": fig.texts[2],
         "artists": artists
     }
+    if histogram:
+        dict_update["alphas"] = alphas
+        dict_update["logess"] = logess
+
     if movie:
         ani = FuncAnimation(
             fig,
