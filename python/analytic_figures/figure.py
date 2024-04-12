@@ -24,7 +24,7 @@ def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
     mode =      dict_update["mode"]
-    traits =    dict_update["traits"]
+    columns =   dict_update["columns"]
     rows =      dict_update["rows"]
     dfs =       dict_update["dfs"]
     df_none =   dict_update["df_none"]
@@ -35,12 +35,12 @@ def update(t, dict_update):
     artists =   dict_update["artists"]
 
     for r, row in enumerate(rows):
-        for c, trait in enumerate(traits):
+        for c, column in enumerate(columns):
             dict_z = {
                 "t":            t,
                 "mode":         mode,
-                "row":          row,
-                "trait":        trait,
+                "mechanism":    row,
+                "trait":        column,
                 "df":           dfs[r],
                 "df_none":      df_none,
                 "df_social":    df_social
@@ -54,7 +54,7 @@ def update(t, dict_update):
                             & (dffrqs[r]["alpha"] == alpha) \
                             & (dffrqs[r]["logES"] == loges)
                         ]
-                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
+                        freq_a = [col for col in d.columns if re.match(fr"^{column}\d+$", col)]
                         y = d.loc[:, freq_a].values[0].flatten()
                         artists[r, c, a, e].set_ydata(y)
                         bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
@@ -74,7 +74,7 @@ def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
         logess = np.sort(dfs["none"]["logES"].unique())
     for r, _ in enumerate(dfs):
         for c, _ in enumerate(dfs[r]):
-            zmatrix = update_zmatrix(t, dfs, row, trait, mode)
+            zmatrix = update_zmatrix(t, dfs, row, column, mode)
             if dffrqs:
                 for a, alpha in enumerate(alphas):
                     for e, loges in enumerate(logess):
@@ -83,7 +83,7 @@ def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
                             & (dffrqs[row]["alpha"] == alpha) \
                             & (dffrqs[row]["logES"] == loges)
                         ]
-                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
+                        freq_a = [col for col in d.columns if re.match(fr"^{column}\d+$", col)]
                         y = d.loc[:, freq_a].values[0].flatten()
                         artists[r, c, a, e].set_ydata(y)
                         bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
@@ -108,7 +108,7 @@ def main(mode, histogram=False, movie=False):
 
     # Get data
 
-    rows = mm.get_mechanisms(mode)
+    rows = mm.get_rows(mode)
     dfs = []
     dffrqs = []
 
@@ -156,8 +156,8 @@ def main(mode, histogram=False, movie=False):
 
     # Create figure
 
-    traits = mm.get_traits(mode)
-    ncols = len(traits)
+    columns = mm.get_columns(mode)
+    ncols = len(columns)
     nrows = len(rows)
     inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
     inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
@@ -239,7 +239,7 @@ def main(mode, histogram=False, movie=False):
         axs = np.empty((nrows, ncols, nr, nc), dtype=object)
 
         for r, _ in enumerate(rows):
-            for c, _ in enumerate(traits):
+            for c, _ in enumerate(columns):
                 grid = outergrid[r, c].subgridspec(
                     nrows=nr,
                     ncols=nc,
@@ -284,9 +284,9 @@ def main(mode, histogram=False, movie=False):
                     axs[r, c, -1, e].set(xticks=[xlim[1]/2], xticklabels=[])
             for a in range(0, nr, step):
                 axs[r, 0, a, 0].set_yticklabels([alphas[a]])
-        for c, trait in enumerate(traits):
+        for c, column in enumerate(columns):
             axs[0, c, 0, int(nc/2)].set_title(
-                mm.get_title(trait),
+                mm.get_title(column),
                 pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
                 fontsize=ss.LETTER_LABEL_SIZE
             )
@@ -294,7 +294,7 @@ def main(mode, histogram=False, movie=False):
                 axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
     else:
         for r, _ in enumerate(rows):
-            for c, _ in enumerate(traits):
+            for c, _ in enumerate(columns):
                 main_ax[nrows - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
 
         axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
@@ -329,9 +329,9 @@ def main(mode, histogram=False, movie=False):
             ax.set_yticklabels(yticklabels)
         for ax in axs[-1, :]:
             ax.set_xticklabels(xticklabels)
-        for ax, trait in zip(axs[0, :], traits):
+        for ax, column in zip(axs[0, :], columns):
             ax.set_title(
-                mm.get_title(trait),
+                mm.get_title(column),
                 pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
                 fontsize=ss.LETTER_LABEL_SIZE
             )
@@ -345,7 +345,7 @@ def main(mode, histogram=False, movie=False):
 
     if histogram:
         for r, _ in enumerate(rows):
-            for c, _ in enumerate(traits):
+            for c, _ in enumerate(columns):
                 for a, _ in enumerate(alphas):
                     for e, _ in enumerate(logess):
                         ax = axs[r, c, a, e]
@@ -359,7 +359,7 @@ def main(mode, histogram=False, movie=False):
         dummy_zmatrix = np.zeros((nr, nc))
 
         for r, _ in enumerate(rows):
-            for c, _ in enumerate(traits):
+            for c, _ in enumerate(columns):
                 artists[r, c] = axs[r, c].imshow(
                     dummy_zmatrix,
                     cmap=ss.COLOR_MAP,
@@ -390,7 +390,7 @@ def main(mode, histogram=False, movie=False):
 
     dict_update = {
         "mode": mode,
-        "traits": traits,
+        "columns": columns,
         "rows": rows,
         "dfs": dfs,
         "df_none": df_none,
@@ -422,6 +422,6 @@ def main(mode, histogram=False, movie=False):
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-    trait_choices = list(mm.traits.keys())
-    args = parse_args("Plot results.", trait_choices)
+    column_choices = list(mm.columns.keys())
+    args = parse_args("Plot results.", column_choices)
     main(mode=args.mode, histogram=args.histogram, movie=args.movie)

@@ -1,5 +1,5 @@
 
-""" Store the traits and rows for the different modes of the figure """
+""" Store the columns and rows for the different modes of the figure """
 
 title = {
     "ChooseGrain":          "Partner choice\n(short memory)",
@@ -13,7 +13,7 @@ title = {
     "w_deficit":            "Fitness deficit",
 }
 
-traits = {
+columns = {
     "cooperation": [
         "ChooseGrain",
         "MimicGrain",
@@ -71,7 +71,7 @@ traits = {
     ]
 }
 
-mechanisms = {
+rows = {
     "default":  ["pi", "p", "i", "none"],
     "none":     ["given100", "given095", "given050", "given000"],
     "test":     ["p", "i", "none"]
@@ -94,16 +94,16 @@ def get_title(trait):
     except KeyError:
         return trait
 
-def get_traits(mode):
-    """ Return the traits for the mode """
+def get_columns(mode):
+    """ Return the columns for the mode """
     try:
-        return traits[mode]
+        return columns[mode]
     except KeyError as exc:
         raise ValueError(f"{mode} not found") from exc
 
-def get_mechanisms(mode):
-    """ Return the mechanisms for the mode """
+def get_rows(mode):
+    """ Return the rows for the mode """
     try:
-        return mechanisms[mode]
+        return rows[mode]
     except KeyError:
-        return mechanisms["default"]
+        return rows["default"]

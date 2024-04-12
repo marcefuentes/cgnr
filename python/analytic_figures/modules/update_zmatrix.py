@@ -21,7 +21,7 @@ def update_zmatrix(dict_z):
 
     t = dict_z["t"]
     mode = dict_z["mode"]
-    mechanism = dict_z["row"]
+    mechanism = dict_z["mechanism"]
     trait = dict_z["trait"]
     df = dict_z["df"]
     df_none = dict_z["df_none"]
