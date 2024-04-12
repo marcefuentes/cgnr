@@ -63,16 +63,16 @@ def process_folder(test):
             print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")
             sys.exit()
         free_slots = st.get_free_slots(constraint)
-        print(f"\n{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots.")
+        print(f"\n{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots")
         if not free_slots:
-            print(f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted.")
+            print(f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted")
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
         job_array_string = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         process_jobs(current_path_folders, job_array_string, constraint, test)
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
-        print(f"{color.CYAN}{free_slots}{color.RESET} free slots in {constraint}.{color.RESET}")
+        print(f"{color.CYAN}{free_slots}{color.RESET} free slots in {constraint}{color.RESET}")
         if not free_slots:
             print(f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted.")
 

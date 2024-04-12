@@ -104,10 +104,10 @@ def process_variant(constraint, free_slots, test, last_job_file):
                     print(f"Would remove {last_job_file}.{color.RESET}")
                 else:
                     os.remove(last_job_file)
-                print(f"{color.BOLD}{color.GREEN}All jobs submitted.{color.RESET}")
+                print(f"{color.BOLD}{color.GREEN}All jobs submitted{color.RESET}")
                 msg = (
                     f"{color.BOLD}{color.CYAN}{free_slots}{color.RESET} "
-                    f"free slots in {color.BOLD}{constraint}{color.RESET}.\n"
+                    f"free slots in {color.BOLD}{constraint}{color.RESET}\n"
                 )
                 print(msg)
                 sys.exit()
@@ -128,7 +128,7 @@ def main(test=False):
     constraints = get_config("constraints")
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
-        print(f"\n{color.BOLD}{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots.")
+        print(f"\n{color.BOLD}{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots")
         if test and not free_slots:
             free_slots = 100
         while free_slots:
