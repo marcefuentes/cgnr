@@ -414,7 +414,7 @@ def main(mode, histogram=False, movie=False):
         )
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(ts[-1], dict_update,)
+        update(ts[-1], dict_update)
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
