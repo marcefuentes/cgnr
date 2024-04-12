@@ -6,7 +6,7 @@ import csv
 import os
 import sys
 
-from common_modules import color
+import common_modules.color as color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
@@ -35,16 +35,16 @@ def process_variant(current_path):
     else:
         print(f"\n{color.WHITE}{variant}{color.RESET}")
 
-    if "noshuffle" not in variant:
-        folder_dict["Shuffle"] = 1
-    else:
+    if "noshuffle" in variant:
         folder_dict["Shuffle"] = 0
+    else:
+        folder_dict["Shuffle"] = 1
     if "_d" in variant:
         folder_dict["DeathRate"] = -3
     else:
         folder_dict["DeathRate"] = -7
-    if "lang" in variant:
-        folder_dict["Language"] = 1
+    if "nolang" in variant:
+        folder_dict["Language"] = 0
     else:
         folder_dict["Language"] = 0
     cost_index = variant.find("cost")
