@@ -6,7 +6,7 @@ import csv
 import os
 import sys
 
-import common_modules.color as color
+from common_modules import color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
@@ -46,7 +46,7 @@ def process_variant(current_path):
     if "nolang" in variant:
         folder_dict["Language"] = 0
     else:
-        folder_dict["Language"] = 0
+        folder_dict["Language"] = 1
     cost_index = variant.find("cost")
     cost = variant[cost_index + 4:cost_index + 6]
     folder_dict["Cost"] = -int(cost)
