@@ -5,10 +5,9 @@ import os
 from glob import glob
 import pandas as pd
 
-from modules.modes import given
-
 def read_files(filelist, movie):
     """ Read the csv files in the given directory and return a concatenated dataframe. """
+
     df_list = [None] * len(filelist)
     for i, file in enumerate(filelist):
         df = pd.read_csv(file)
@@ -18,17 +17,12 @@ def read_files(filelist, movie):
     dfc = pd.concat(df_list, ignore_index=True)
     return dfc
 
-def get_df(row, filetype, movie):
+def get_df(path, filetype, movie):
     """ Return a concatenated dataframe of the csv files in the given directory. """
-    if row == "social":
-        row = "none/given000"
-    elif "none" in row:
-        row = f"none/{given}"
-    else:
-        row = f"{row}/{given}"
-    filelist = glob(os.path.join(row, f"*{filetype}"))
+
+    filelist = glob(os.path.join(path, f"*{filetype}"))
     if not filelist:
-        print(f"No {row}/*{filetype} files found.")
+        print(f"No {path}/*{filetype} files found.")
         exit()
     df = read_files(filelist, movie)
     return df

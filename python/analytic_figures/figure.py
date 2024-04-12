@@ -109,22 +109,31 @@ def main(mode, histogram=False, movie=False):
     # Get data
 
     rows = mm.get_rows(mode)
+
     dfs = []
     dffrqs = []
 
     csv0, csv1 = get_config("output_file_extensions")
     for row in rows:
-        dfs.append(get_df(row, csv0, movie))
+        if row == "social":
+            path = "none/given000"
+        elif "none" in row:
+            path = f"none/{mm.given}"
+        else:
+            path = f"{row}/{mm.given}"
+        dfs.append(get_df(path, csv0, movie))
         if histogram:
-            dffrqs.append(get_df(row, csv1, movie))
+            dffrqs.append(get_df(path, csv1, movie))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
     else:
-        df_none = get_df("none", csv0, movie)
+        path = "none/given100"
+        df_none = get_df(path, csv0, movie)
     if "social" in rows:
         df_social = dfs[rows.index("social")]
     else:
-        df_social = get_df("social", csv0, movie)
+        path = "none/given000"
+        df_social = get_df(path, csv0, movie)
     df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()

@@ -68,21 +68,34 @@ columns = {
     "test": [
         "qBSeen",
         "w"
-    ]
+    ],
+    "p": [
+        "nolang",
+        "lang"
+    ],
+    "r": [
+        "nolang",
+        "lang"
+    ],
+    "i": [
+        "nolang",
+        "lang"
+    ],
 }
 
 rows = {
     "default":  ["pi", "p", "i", "none"],
     "none":     ["given100", "given095", "given050", "given000"],
-    "test":     ["p", "i", "none"]
+    "test":     ["p", "i", "none"],
+    "p":        ["no_shuffle", "shuffle"],
+    "r":        ["no_shuffle", "shuffle"],
+    "i":        ["no_shuffle", "shuffle"]
 }
 
-variants_cols = {
-    "default":  ["noshuffle", "shuffle"]
-}
-
-variants_rows = {
-    "default":  ["nolt", "lt"]
+traits = {
+    "p": "ChooseGrain",
+    "r": "MimicGrain",
+    "i": "ImimicGrain",
 }
 
 given = "given100"
@@ -107,3 +120,10 @@ def get_rows(mode):
         return rows[mode]
     except KeyError:
         return rows["default"]
+
+def get_trait(mode):
+    """ Return the trait for the mode """
+    try:
+        return traits[mode]
+    except KeyError:
+        return mode
