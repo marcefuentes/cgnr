@@ -15,14 +15,14 @@ import submit
 
 def get_results_path(store=False):
     """Get the path to the results folder."""
-    EXE = get_config("exe")
+    exe = get_config("exe")
     if store:
         store_path = os.environ.get("STORE")
         if store_path is None:
             raise ValueError("STORE environment variable not set")
-        return f"{store_path}/code/{EXE}/results"
+        return f"{store_path}/code/{exe}/results"
     home_path = os.environ.get("HOME")
-    return f"{home_path}/code/{EXE}/results"
+    return f"{home_path}/code/{exe}/results"
 
 def process_variant(current_path):
     """Process a variant folder."""
@@ -93,9 +93,9 @@ def process_mechanism(current_path, folder_dict):
 def process_given(current_path, folder_dict):
     """Process a given folder."""
 
-    NUMBER_OF_LINES = get_config("number_of_lines")
-    INPUT_FILE_EXTENSION = get_config("input_file_extension")
-    OUTPUT_FILE_EXTENSION, *_ = get_config("output_file_extensions")
+    number_of_lines = get_config("number_of_lines")
+    input_file_extension = get_config("input_file_extension")
+    output_file_extension, *_ = get_config("output_file_extensions")
 
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
@@ -106,10 +106,10 @@ def process_given(current_path, folder_dict):
 
     folder_dict["Given"] = float(given[-3:]) / 100
 
-    input_files = [f for f in os.listdir(current_path) if f.endswith(INPUT_FILE_EXTENSION)]
+    input_files = [f for f in os.listdir(current_path) if f.endswith(input_file_extension)]
     total_jobs = len(input_files)
     if total_jobs == 0:
-        print(f"{color.BOLD}{color.RED}no {INPUT_FILE_EXTENSION[1:]} files{color.RESET}")
+        print(f"{color.BOLD}{color.RED}no {input_file_extension[1:]} files{color.RESET}")
         return
     with open(os.path.join(current_path, input_files[0]), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
@@ -127,15 +127,15 @@ def process_given(current_path, folder_dict):
     no_header = 0
     one_line_jobs = 0
 
-    output_files = [f for f in os.listdir(current_path) if f.endswith(OUTPUT_FILE_EXTENSION)]
+    output_files = [f for f in os.listdir(current_path) if f.endswith(output_file_extension)]
     for output_file in output_files:
         with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
             n_lines = sum(1 for line in f)
-            if n_lines == NUMBER_OF_LINES:
+            if n_lines == number_of_lines:
                 finished_jobs += 1
             elif n_lines == 1:
                 one_line_jobs += 1
-            elif n_lines == NUMBER_OF_LINES - 1:
+            elif n_lines == number_of_lines - 1:
                 no_header += 1
             else:
                 garbled_jobs += 1
@@ -188,8 +188,8 @@ def main(store=False):
         print(f"\n{color.WHITE}{'-' * 30}{color.RESET}")
         free_slots = slots()
         if free_slots:
-            EXE = get_config("exe")
-            last_job_file = f"/home/ulc/ba/mfu/code/{EXE}/results/last_submitted_job.tmp"
+            exe = get_config("exe")
+            last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
             if os.path.isfile(last_job_file):
                 msg = (
                     f"\n{color.BOLD}Submit {color.CYAN}{free_slots}{color.RESET}{color.BOLD} jobs{color.RESET} "

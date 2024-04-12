@@ -18,8 +18,8 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test):
     """ Submit jobs in the current folder """
 
     current_path_print = "/".join(current_path_folders[-3:])
-    CONSTRAINTS = get_config("constraints")
-    for constraint in CONSTRAINTS:
+    constraints = get_config("constraints")
+    for constraint in constraints:
         if len(jobs_to_submit) == 0:
             print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")
             sys.exit()
@@ -64,10 +64,10 @@ def submit_jobs_in_folder(current_path_folders, jobs_to_submit, test):
 def main(test=False):
     """ Main function """
 
-    EXE = get_config("exe")
+    exe = get_config("exe")
     if test:
         print("\nThis is a test.\n")
-        log_file = f"/home/ulc/ba/mfu/code/{EXE}/results/submit.test"
+        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.test"
     else:
         msg = (
             f"\n{color.BOLD}{color.RED}This is not a test! {color.WHITE}Continue?{color.RESET} "
@@ -77,8 +77,8 @@ def main(test=False):
         user_input = input()
         if user_input.lower() == "n":
             sys.exit()
-        log_file = f"/home/ulc/ba/mfu/code/{EXE}/results/submit.log"
-    last_job_file = f"/home/ulc/ba/mfu/code/{EXE}/results/last_submitted_job.tmp"
+        log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
+    last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     logging.basicConfig(
         filename=log_file,
         level=logging.DEBUG,

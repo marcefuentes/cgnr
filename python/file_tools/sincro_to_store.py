@@ -5,10 +5,10 @@ import subprocess
 
 from common_modules.get_config import get_config
 
-EXE = get_config("exe")
+exe = get_config("exe")
 
-source_folder=f"{os.environ['HOME']}/code/{EXE}/results/"
-destination_folder=f"{os.environ['STORE']}/code/{EXE}/results/"
+source_folder=f"{os.environ['HOME']}/code/{exe}/results/"
+destination_folder=f"{os.environ['STORE']}/code/{exe}/results/"
 
 rsync_command = [
     "rsync",

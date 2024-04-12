@@ -6,17 +6,17 @@ from common_modules.get_config import get_config
 
 remote = "cesga"
 
-EXE = get_config("exe")
+exe = get_config("exe")
 
 if remote == "cesga":
-    source_folder=f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{EXE}/results/"
+    source_folder=f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{exe}/results/"
 elif remote == "ci":
-    source_folder=f"/home/marcelino/code/{EXE}/results/"
+    source_folder=f"/home/marcelino/code/{exe}/results/"
 else:
     print("Error: remote must be 'cesga' or 'ci'")
     exit()
 
-destination_folder=f"/home/marcelino/code/{EXE}/results/"
+destination_folder=f"/home/marcelino/code/{exe}/results/"
 
 rsync_command = [
     "rsync",
