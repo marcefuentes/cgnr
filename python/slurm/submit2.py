@@ -5,7 +5,7 @@
 import os
 import sys
 
-from common_modules.color import color
+import common_modules.color as color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.list_of_folders import list_of_folders
@@ -57,7 +57,7 @@ def process_folder(constraint, free_slots, last_job, test):
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
     job_array_string = f"{job_min}-{last_job}"
-    process_jobs(current_path, job_array_string, constraint, test)
+    process_jobs(current_path_folders, job_array_string, constraint, test)
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
