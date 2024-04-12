@@ -4,7 +4,7 @@
 import configparser
 import os
 
-import common_modules.color
+import common_modules.color as color
 
 def get_config(variable):
     """ Reads the config file and returns the value of the variable passed as argument """
