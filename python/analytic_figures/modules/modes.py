@@ -99,8 +99,15 @@ rows = {
 
 traits = {
     "p": "ChooseGrain",
+    #"p": "Choose_ltGrain",
     #"i": "MimicGrain",
-    "i": "ImimicGrain",
+    #"i": "ImimicGrain"
+    "i": "Imimic_ltGrain"
+    "pi": "ChooseGrain"
+    #"pi": "Choose_ltGrain"
+    #"pi": "MimicGrain"
+    #"pi": "ImimicGrain"
+    #"pi": "Imimic_ltGrain"
 }
 
 given = "given100"
