@@ -20,9 +20,18 @@ from modules.argparse_utils import parse_args
 from modules.get_df import get_df
 from modules.update_zmatrix import update_zmatrix
 
-def update(t, mode, dfs, df_none, df_social, dffrqs, movie, text, artists):
+def update(t, dict_update):
     """ Update the plot with the data at time t. """
-    
+
+    mode = dict_update["mode"]
+    dfs = dict_update["dfs"]
+    df_none = dict_update["df_none"]
+    df_social = dict_update["df_social"]
+    dffrqs = dict_update["dffrqs"]
+    movie = dict_update["movie"]
+    text = dict_update["text"]
+    artists = dict_update["artists"]
+
     if dffrqs:
         alphas = np.sort(dffrqs[0]["alpha"].unique())[::-1]
         logess = np.sort(dffrqs[0]["logES"].unique())
@@ -385,36 +394,27 @@ def main(mode, histogram=False, movie=False):
     if histogram:
         name = f"{name}_histogram"
 
+    dict_update = {
+        "mode": mode,
+        "dfs": dfs,
+        "df_none": df_none,
+        "df_social": df_social,
+        "dffrqs": dffrqs,
+        "movie": movie,
+        "text": fig.texts[2],
+        "artists": artists
+    }
     if movie:
         ani = FuncAnimation(
             fig,
             update,
             frames=ts,
-            fargs=(
-                mode,
-                dfs,
-                df_none,
-                df_social,
-                dffrqs,
-                movie,
-                fig.texts[2],
-                artists,
-            ),
+            fargs=(dict_update,),
             blit=True
         )
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(
-            ts[-1],
-            mode,
-            dfs,
-            df_none,
-            df_social,
-            dffrqs,
-            movie,
-            fig.texts[2],
-            artists,
-        )
+        update(ts[-1], dict_update,)
         plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
