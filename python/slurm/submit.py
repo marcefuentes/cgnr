@@ -6,7 +6,7 @@ import logging
 import os
 import sys
 
-import common_modules.color as color
+from common_modules.color import color
 from common_modules.get_config import get_config
 import modules.slurm_tools as st
 from modules.list_of_folders import list_of_folders

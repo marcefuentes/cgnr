@@ -5,7 +5,7 @@
 import os
 import sys
 
-import common_modules.color as color
+from common_modules.color import color
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 from modules.process_jobs import process_jobs
