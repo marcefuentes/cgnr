@@ -14,6 +14,8 @@ title = {
     "qBSeen_byproduct":     "Byproduct help",
     "w":                    "Fitness",
     "w_deficit":            "Fitness deficit",
+    "nolang":               "",
+    "lang":                 "",
 }
 
 columns = {
