@@ -23,26 +23,27 @@ from modules.update_zmatrix import update_zmatrix
 def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
-    mode = dict_update["mode"]
-    traits = dict_update["traits"]
-    rows = dict_update["rows"]
-    dfs = dict_update["dfs"]
-    df_none = dict_update["df_none"]
+    mode =      dict_update["mode"]
+    traits =    dict_update["traits"]
+    rows =      dict_update["rows"]
+    dfs =       dict_update["dfs"]
+    df_none =   dict_update["df_none"]
     df_social = dict_update["df_social"]
-    dffrqs = dict_update["dffrqs"]
-    movie = dict_update["movie"]
-    text = dict_update["text"]
-    artists = dict_update["artists"]
+    dffrqs =    dict_update["dffrqs"]
+    movie =     dict_update["movie"]
+    text =      dict_update["text"]
+    artists =   dict_update["artists"]
+
     for r, row in enumerate(rows):
         for c, trait in enumerate(traits):
             dict_z = {
-                "t": t,
-                "mode": mode,
-                "row": row,
-                "trait": trait,
-                "df": dfs[r],
-                "df_none": df_none,
-                "df_social": df_social
+                "t":            t,
+                "mode":         mode,
+                "row":          row,
+                "trait":        trait,
+                "df":           dfs[r],
+                "df_none":      df_none,
+                "df_social":    df_social
             }
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
