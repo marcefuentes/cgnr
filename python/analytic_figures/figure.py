@@ -22,7 +22,6 @@ from modules.update_zmatrix import update_zmatrix
 
 def update(t, mode, dfs, df_none, df_social, dffrqs, movie, text, artists):
     """ Update the plot with the data at time t. """
-
     
     if dffrqs:
         alphas = np.sort(dffrqs[0]["alpha"].unique())[::-1]
