@@ -2,15 +2,15 @@
 
 """ Submit jobs. """
 
-import logging
 import os
 import sys
 
 import common_modules.color as color
 from common_modules.get_config import get_config
-import modules.slurm_tools as st
-from modules.list_of_folders import list_of_folders
 from modules.argparse_utils import parse_args
+from modules.list_of_folders import list_of_folders
+from modules.process_jobs import process_jobs
+import modules.slurm_tools as st
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
@@ -57,31 +57,7 @@ def process_folder(constraint, free_slots, last_job, test):
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
     job_array_string = f"{job_min}-{last_job}"
-    info = f"{current_path_print}/{job_array_string} to {constraint}"
-    if test:
-        print(f"Would submit {info}.")
-        return_code = 0
-        stdout = "Test"
-        stderr = "Test"
-    else:
-        return_code, stdout, stderr = st.submit_job(
-            current_path_folders,
-            job_array_string,
-            constraint
-        )
-    if return_code != 0:
-        print(f"{color.RED}sbatch command failed with return code {return_code}.{color.RESET}")
-        if stderr:
-            print(stderr)
-            logging.error(stderr)
-        sys.exit()
-    else:
-        for line in stdout.split("\n"):
-            if line:
-                print(line)
-                logging.info(line)
-    logging.info(info)
-    print(f"{color.GREEN}{info}.{color.RESET}")
+    process_jobs(current_path_folders, job_array_string, constraint, test)
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
         last_job = 0
@@ -149,12 +125,6 @@ def main(test=False):
         print("\nThis is a test.")
     exe = get_config("exe")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-    log_file = f"/home/ulc/ba/mfu/code/{exe}/results/submit.log"
-    logging.basicConfig(
-        filename=log_file,
-        level=logging.DEBUG,
-        format="%(asctime)s %(levelname)s: %(message)s"
-    )
     constraints = get_config("constraints")
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
