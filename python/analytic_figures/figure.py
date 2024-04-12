@@ -94,21 +94,8 @@ def update_by_mechanism(t, mode, dfs, dffrqs, movie, text, artists):
         text.set_text(t)
     return artists.flatten()"""
 
-def main(mode, histogram=False, movie=False):
-    """ Create the figure. """
-
-    start_time = time.perf_counter()
-    this_script = os.path.basename(__file__)
-    script_name = this_script.split(".")[0]
-
-    # Set figure properties
-
-    plt.rcParams["pdf.fonttype"] = 42
-    plt.rcParams["ps.fonttype"] = 42
-
-    # Get data
-
-    rows = mm.get_rows(mode)
+def get_data(rows, histogram, movie):
+    """ Get the data. """
 
     dfs = []
     dffrqs = []
@@ -134,6 +121,24 @@ def main(mode, histogram=False, movie=False):
     else:
         path = "none/given000"
         df_social = get_df(path, csv0, movie)
+    return dfs, df_none, df_social, dffrqs
+
+def main(mode, histogram=False, movie=False):
+    """ Create the figure. """
+
+    start_time = time.perf_counter()
+    this_script = os.path.basename(__file__)
+    script_name = this_script.split(".")[0]
+
+    # Set figure properties
+
+    plt.rcParams["pdf.fonttype"] = 42
+    plt.rcParams["ps.fonttype"] = 42
+
+    # Get data
+
+    rows = mm.get_rows(mode)
+    dfs, df_none, df_social, dffrqs = get_data(rows, histogram, movie)
     df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()
