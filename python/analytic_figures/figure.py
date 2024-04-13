@@ -163,9 +163,9 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     else:
         bottom_text = ""
     fig.text(
-        (ss.LEFT_MARGIN + inner_width)/width,
-        (ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
-        bottom_text,
+        x=(ss.LEFT_MARGIN + inner_width)/width,
+        y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
+        s=bottom_text,
         fontsize=ss.TICK_LABEL_SIZE,
         color="grey",
         ha="right"
