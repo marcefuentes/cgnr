@@ -8,61 +8,61 @@ dict_traits = {
     "ChooseGrain": {
         "mean":     "ChooseGrainmean",
         "frq":      "ChooseGrain",
-        "title":    "Partner choice\n(short memory)"
+        "title":    "Partner choice\n(short memory)",
         "relative": "none-"
     },
     "Choose_ltGrain": {
         "mean":     "Choose_ltGrainmean",
         "frq":      "Choose_ltGrain",
-        "title":    "Partner choice\n(long memory)"
+        "title":    "Partner choice\n(long memory)",
         "relative": "none-"
     },
     "MimicGrain": {
         "mean":     "MimicGrainmean",
         "frq":      "MimicGrain",
-        "title":    "Direct\nreciprocity"
+        "title":    "Direct\nreciprocity",
         "relative": "none-"
     },
     "ImimicGrain": {
         "mean":     "ImimicGrainmean",
         "frq":      "ImimicGrain",
-        "title":    "Indirect\nreciprocity\n(short memory)"
+        "title":    "Indirect\nreciprocity\n(short memory)",
         "relative": "none-"
     },
     "Imimic_ltGrain": {
         "mean":     "Imimic_ltGrainmean",
         "frq":      "Imimic_ltGrain",
-        "title":    "Indirect\nreciprocity\n(long memory)"
+        "title":    "Indirect\nreciprocity\n(long memory)",
         "relative": "none-"
     },
     "qBSeen": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    "Production of $\it{B}$"
+        "title":    "Production of $\it{B}$",
         "relative": "no"
     },
     "qBSeen_byproduct": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    "Byproduct help"
+        "title":    "Byproduct help",
         "relative": "given"
     },
     "qBSeen_excess": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    "Production of $\it{B}$"
+        "title":    "Production of $\it{B}$",
         "relative": "-social"
     },
     "w": {
         "mean":     "wmean",
         "frq":      "w",
-        "title":    "Fitness"
+        "title":    "Fitness",
         "relative": "no"
     },
     "w_excess": {
         "mean":     "wmean",
         "frq":      "w",
-        "title":    "Fitness"
+        "title":    "Fitness",
         "relative": "-social"
     }
 }
@@ -123,66 +123,67 @@ dict_columns = {
         "qBSeen",
         "w"
     ],
-    "p": [
+    "trait": [
         "nolang",
-        "lang"
-    ],
-    "r": [
-        "nolang",
-        "lang"
-    ],
-    "i": [
+        "lang",
         "nolang",
         "lang"
     ],
 }
 
 dict_rows = {
-    "default":  ["pi", "p", "i", "none"],
-    "none":     ["given100", "given095", "given050", "given000"],
-    "test":     ["p", "i", "none"],
-    "p":        ["noshuffle", "shuffle"],
-    "r":        ["noshuffle", "shuffle"],
-    "i":        ["noshuffle", "shuffle"]
+    "default": [
+        "pi",
+        "p",
+        "i",
+        "none"
+    ],
+    "none": [
+        "given100",
+        "given095",
+        "given050",
+        "given000"
+    ],
+    "test": [
+        "p",
+        "i",
+        "none"
+    ],
+    "trait": [
+        "noshuffle",
+        "shuffle",
+        "noshuffle",
+        "shuffle"
+    ],
 }
 
-def look_in_dict(dictionary, name, field):
+given_folder = "given100"
+
+def look_in(dictionary, key, field):
     """ Return a value from a dictionary """
 
-    if name in dictionary:
-        return dictionary[name][field]
+    if key in dictionary:
+        return dictionary[key][field]
     return ""
 
-def get_trait_data(column):
-    """ Return the title of the column """
+def get_columns(key):
+    """ Return the columns for the key """
 
-    if column in traits:
-        return traits[column]["data"]
-    else:
-        return "no"
-
-def get_columns(mode):
-    """ Return the columns for the mode """
-
+    if key in dict_traits:
+        return dict_columns["trait"]
     try:
-        return columns[mode]
+        return dict_columns[key]
     except KeyError as exc:
         raise ValueError(f"{mode} not found") from exc
 
-def get_rows(mode):
-    """ Return the rows for the mode """
+def get_rows(key):
+    """ Return the rows for the keye """
 
-    try:
-        return rows[mode]
-    except KeyError:
-        return rows["default"]
-
-def is_variant(mode):
-    """ Return True if the mode is a mechanism """
-
-    # get a list of the first 8 keys of the dictionary "columns"
-    keys = list(columns.keys())[:8]
-    return mode in keys
+    if key in dict_traits:
+        return dict_rows["trait"]
+    if key in dict_rows:
+        return dict_rows[key]
+    return dict_rows["default"]
 
 def get_data_variant(mode, histogram, movie):
     """ Get the data. """
@@ -197,16 +198,16 @@ def get_data_variant(mode, histogram, movie):
         if row == "social":
             path = "none/given000"
         elif "none" in row:
-            path = f"none/{given}"
+            path = f"none/{given_folder}"
         else:
-            path = f"{row}/{given}"
+            path = f"{row}/{given_folder}"
         dfs.append(get_df(path, csv0, movie))
         if histogram:
             dffrqs.append(get_df(path, csv1, movie))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
     else:
-        path = "none/given100"
+        path = f"none/{given_folder}"
         df_none = get_df(path, csv0, movie)
     if "social" in rows:
         df_social = dfs[rows.index("social")]
@@ -221,21 +222,21 @@ def get_data_trait(mode, histogram, movie):
     rows = get_rows(mode)
     columns = get_columns(mode)
 
-    dfs = [[None for _ in range(len(columns))] for _ in range(len(rows))]
-    df_nones = [[None for _ in range(len(columns))] for _ in range(len(rows))]
-    df_socials = [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    dfs =           [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    df_nones =      [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    df_socials =    [[None for _ in range(len(columns))] for _ in range(len(rows))]
     if histogram:
-        dffrqs = [[None for _ in range(len(columns))] for _ in range(len(rows))]
+        dffrqs =    [[None for _ in range(len(columns))] for _ in range(len(rows))]
     else:
-        dffrqs = []
+        dffrqs =    []
     csv0, csv1 = get_config("output_file_extensions")
     for r, row in enumerate(rows):
         for c, column in enumerate(columns):
             folder = f"{column}_{row}_cost{cost}_{groupsize}"
-            path = f"{folder}/{mode}/{given}"
+            path = f"{folder}/{mode}/{given_folder}"
             if histogram:
-                dffrqs[c][r] = get_df(path, csv1, movie)
-            dfs[c][r] = (get_df(path, csv0, movie))
-            df_nones[c][r] = get_df(f"{folder}/none/{given}", csv0, movie)
-            df_socials[c][r] = get_df(f"{folder}/none/given000", csv0, movie)
+                dffrqs[c][r] =  get_df(path, csv1, movie)
+            dfs[c][r] =         get_df(path, csv0, movie)
+            df_nones[c][r] =    get_df(f"{folder}/none/{given_folder}", csv0, movie)
+            df_socials[c][r] =  get_df(f"{folder}/none/given000", csv0, movie)
     return dfs, df_nones, df_socials, dffrqs

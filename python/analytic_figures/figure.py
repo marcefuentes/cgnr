@@ -21,40 +21,41 @@ from modules.update_zmatrix import update_zmatrix
 def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
-    mode =      dict_update["mode"]
-    variant =   dict_update["variant"]
-    columns =   dict_update["columns"]
-    rows =      dict_update["rows"]
-    dfs =       dict_update["dfs"]
-    df_none =   dict_update["df_none"]
-    df_social = dict_update["df_social"]
-    dffrqs =    dict_update["dffrqs"]
-    movie =     dict_update["movie"]
-    text =      dict_update["text"]
-    artists =   dict_update["artists"]
+    mode =          dict_update["mode"]
+    mode_is_trait = dict_update["mode_is_trait"]
+    columns =       dict_update["columns"]
+    rows =          dict_update["rows"]
+    dfs =           dict_update["dfs"]
+    df_none =       dict_update["df_none"]
+    df_social =     dict_update["df_social"]
+    dffrqs =        dict_update["dffrqs"]
+    movie =         dict_update["movie"]
+    text =          dict_update["text"]
+    artists =       dict_update["artists"]
 
     dict_z = {
         "t": t,
         "mode": mode
     }
-    if variant:
+    if mode_is_trait:
+        dict_z["trait"] = mm.look_in(mm.dict_traits, mode, "mean")
+    else:
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
-    else:
-        dict_z["trait"] = mm.get_trait(mode)
 
     for r, row in enumerate(rows):
         dict_z["mechanism"] = row,
         for c, column in enumerate(columns):
-            if variant:
-                dict_z["df"] =          dfs[r]
-                dict_z["trait"] =       column
-            else:
+            if mode_is_trait:
                 dict_z["df"] =          dfs[r][c]
                 dict_z["df_none"] =     df_none[r][c]
                 dict_z["df_social"] =   df_social[r][c]
+            else:
+                dict_z["df"] =          dfs[r]
+                dict_z["trait"] =       column
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
+                column = mm.look_in(mm.dict_traits, column, "frq")
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
                         d = dffrqs[r][
@@ -88,13 +89,13 @@ def main(mode, histogram=False, movie=False):
     # Get data
 
     rows = mm.get_rows(mode)
-    variant = mm.is_variant(mode)
-    if variant:
-        dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
-        df = df_none
-    else:
+    mode_is_trait = mode in mm.dict_traits
+    if mode_is_trait:
         dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
         df = dfs[0][0]
+    else:
+        dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
+        df = df_none
     ts = df.Time.unique()
     nr = df.alpha.nunique()
     nc = df.logES.nunique()
@@ -254,11 +255,12 @@ def main(mode, histogram=False, movie=False):
             for a in range(0, nr, step):
                 axs[r, 0, a, 0].set_yticklabels([alphas[a]])
         for c, column in enumerate(columns):
-            axs[0, c, 0, int(nc/2)].set_title(
-                mm.get_title(column),
-                pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-                fontsize=ss.LETTER_LABEL_SIZE
-            )
+            if not mode_is_trait:
+                axs[0, c, 0, int(nc/2)].set_title(
+                    mm.look_in(mm.dict_traits, column, "title"),
+                    pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+                    fontsize=ss.LETTER_LABEL_SIZE
+                )
             for e in range(0, nc, step):
                 axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
     else:
@@ -301,11 +303,12 @@ def main(mode, histogram=False, movie=False):
         for ax in axs[-1, :]:
             ax.set_xticklabels(xticklabels)
         for ax, column in zip(axs[0, :], columns):
-            ax.set_title(
-                mm.get_title(column),
-                pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-                fontsize=ss.LETTER_LABEL_SIZE
-            )
+            if not mode_is_trait:
+                ax.set_title(
+                    mm.look_in(mm.dict_traits, column, "title"),
+                    pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+                    fontsize=ss.LETTER_LABEL_SIZE
+                )
 
     # Assign axs objects to variables
     # (Line2D)
@@ -361,7 +364,7 @@ def main(mode, histogram=False, movie=False):
 
     dict_update = {
         "mode": mode,
-        "variant": variant,
+        "mode_is_trait": mode_is_trait,
         "columns": columns,
         "rows": rows,
         "dfs": dfs,
@@ -395,6 +398,6 @@ def main(mode, histogram=False, movie=False):
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-    column_choices = list(mm.columns.keys())
+    column_choices = list(mm.dict_columns.keys())
     args = parse_args("Plot results.", column_choices)
     main(mode=args.mode, histogram=args.histogram, movie=args.movie)
