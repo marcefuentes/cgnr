@@ -25,7 +25,7 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
     current_path_print = "/".join(current_path_folders[-3:])
     info = f"{current_path_print}/{job_array_string} to {constraint}"
     if test:
-        print(f"Would submit {info}.")
+        print(f"Would submit {info}")
         return_code = 0
         stderr = "Test"
         stdout = "Test"
@@ -36,7 +36,7 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
             constraint
         )
     if return_code != 0:
-        print(f"{color.RED}sbatch command failed with return code {return_code}.{color.RESET}")
+        print(f"{color.RED}sbatch command failed with return code {return_code}{color.RESET}")
         if stderr:
             print(stderr)
             logging.error(stderr)
@@ -47,4 +47,4 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
                 print(line)
                 logging.info(line)
     logging.info(info)
-    print(f"{color.GREEN}{info}.{color.RESET}")
+    print(f"{color.GREEN}{info}{color.RESET}")
