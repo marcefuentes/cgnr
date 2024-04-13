@@ -1,5 +1,5 @@
 
-""" Update the zmatrix for a given mechanism, trait, and mode. """
+""" Update the zmatrix for a given trait, and mode. """
 
 import numpy as np
 import pandas as pd
@@ -21,11 +21,10 @@ def get_zmatrix(t, df, trait):
 
 def update_zmatrix(dict_z):
     """ Return the updated zmatrix for a given time,
-    dataframe dictionary, mechanism, trait, and mode. """
+    dataframe dictionary, trait, and mode. """
 
     t =             dict_z["t"]
     mode =          dict_z["mode"]
-    mechanism =     dict_z["mechanism"]
     trait_in =      dict_z["trait"]
     df =            dict_z["df"]
     df_none =       dict_z["df_none"]

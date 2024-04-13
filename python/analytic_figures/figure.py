@@ -44,14 +44,14 @@ def update(t, dict_update):
         dict_z["df_social"] = df_social
 
     for r, row in enumerate(rows):
-        dict_z["mechanism"] = row,
+        if not mode_is_trait:
+            dict_z["df"] =          dfs[r]
         for c, column in enumerate(columns):
             if mode_is_trait:
                 dict_z["df"] =          dfs[r][c]
                 dict_z["df_none"] =     df_none[r][c]
                 dict_z["df_social"] =   df_social[r][c]
             else:
-                dict_z["df"] =          dfs[r]
                 dict_z["trait"] =       column
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
