@@ -146,13 +146,13 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         )
 
     fig.supxlabel(
-        ss.X_LABEL,
+        t=ss.X_LABEL,
         x=(ss.LEFT_MARGIN + inner_width/2)/width,
         y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
         fontsize=ss.BIG_LABEL_SIZE
     )
     fig.supylabel(
-        ss.Y_LABEL,
+        t=ss.Y_LABEL,
         x=(ss.LEFT_MARGIN - ss.Y_LABEL_SIZE)/width,
         y=(ss.BOTTOM_MARGIN + inner_height/2)/height,
         fontsize=ss.BIG_LABEL_SIZE
