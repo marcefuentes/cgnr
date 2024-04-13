@@ -2,8 +2,6 @@
 
 """Create input files for the simulations"""
 
-import argparse
-import math
 import os
 import numpy as np
 
@@ -83,5 +81,5 @@ def main(args):
             c = c + 1
 
 if __name__ == "__main__":
-    args = parse_args("Create input files for simulations")
-    main(args)
+    parsed_args = parse_args("Create input files for simulations")
+    main(parsed_args)
