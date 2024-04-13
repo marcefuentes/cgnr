@@ -15,6 +15,6 @@ def parse_args(description, flag, flag_help):
         action="store_true",
         help=flag_help
     )
-    args = parser.parse_args()
 
+    args = parser.parse_args()
     return args

@@ -35,7 +35,6 @@ def update(t, dict_update):
 
     dict_z = {
         "t": t,
-        "mode": mode
     }
     if mode_is_trait:
         dict_z["trait"] = mm.look_in(mm.dict_traits, mode, "mean")
@@ -55,7 +54,10 @@ def update(t, dict_update):
                 dict_z["trait"] =       column
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
-                column = mm.look_in(mm.dict_traits, column, "frq")
+                if mode_is_trait:
+                    column = mm.look_in(mm.dict_traits, mode, "frq")
+                else:
+                    column = mm.look_in(mm.dict_traits, column, "frq")
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
                         d = dffrqs[r][
@@ -74,7 +76,7 @@ def update(t, dict_update):
         text.set_text(t)
     return artists.flatten()
 
-def main(mode, histogram=False, movie=False):
+def main(mode, histogram=False, movie=False, mode_is_trait=False):
     """ Create the figure. """
 
     start_time = time.perf_counter()
@@ -88,8 +90,10 @@ def main(mode, histogram=False, movie=False):
 
     # Get data
 
+    # get the name of the current folder
+    if os.path.basename(os.getcwd()) == "results":
+        mode_is_trait = True
     rows = mm.get_rows(mode)
-    mode_is_trait = mode in mm.dict_traits
     if mode_is_trait:
         dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
         df = dfs[0][0]
@@ -398,6 +402,10 @@ def main(mode, histogram=False, movie=False):
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-    column_choices = list(mm.dict_columns.keys())
-    args = parse_args("Plot results.", column_choices)
-    main(mode=args.mode, histogram=args.histogram, movie=args.movie)
+    args, mode_is_trait = parse_args()
+    main(
+        mode=args.mode,
+        histogram=args.histogram,
+        movie=args.movie,
+        mode_is_trait=mode_is_trait
+    )

@@ -78,6 +78,7 @@ def process_folder(test):
 
 def main(test):
     """ Main function """
+
     process_folder(test)
 
 if __name__ == "__main__":

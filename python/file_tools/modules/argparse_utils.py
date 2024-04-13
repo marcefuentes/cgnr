@@ -61,7 +61,7 @@ def parse_args(description):
         "--given",
         type=float,
         default=default_given,
-        help=f"given value"
+        help="given value"
     )
 
     args = parser.parse_args()

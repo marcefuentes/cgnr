@@ -17,6 +17,7 @@ import modules.slurm_tools as st
 
 def get_job_min(current_path):
     """ Get the minimum job number in the current folder. """
+
     input_file_extension = get_config("input_file_extension")
     job_min = 9999
     for file in os.listdir(current_path):
@@ -27,6 +28,7 @@ def get_job_min(current_path):
 
 def get_job_max(current_path):
     """ Get the maximum job number in the current folder. """
+
     input_file_extension = get_config("input_file_extension")
     job_max = 0
     for file in os.listdir(current_path):
@@ -37,6 +39,7 @@ def get_job_max(current_path):
 
 def process_folder(constraint, free_slots, last_job, test):
     """ Submit jobs in the current folder """
+
     output_file_extension, *_ = get_config("output_file_extensions")
     current_path = os.getcwd()
     current_path_folders = current_path.split("/")
@@ -65,6 +68,7 @@ def process_folder(constraint, free_slots, last_job, test):
 
 def process_variant(constraint, free_slots, test, last_job_file):
     """ Process the parent directory. """
+
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r", encoding="utf-8") as f:
             current_path, last_job = f.read().strip().split(",")
@@ -121,6 +125,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
 
 def main(test=False):
     """ Main function. """
+
     if test:
         print("\nThis is a test.")
     exe = get_config("exe")
