@@ -16,12 +16,37 @@ def get_config(variable):
     config = configparser.ConfigParser()
     config.read(config_file_path)
 
+    int_variables = [
+        "hours",
+        "number_of_lines",
+        "N",
+        "Runs",
+        "Periods",
+        "qBMutationSize",
+        "GrainMutationSize",
+        "DeathRate",
+        "GroupSize",
+        "Cost",
+        "grid"
+    ]
+    float_variables = [
+        "alpha_min",
+        "alpha_max",
+        "loges_min",
+        "loges_max",
+        "Given"
+    ]
+    list_variables = [
+        "output_file_extensions",
+        "constraints"
+    ]
+
     if config.has_option('DEFAULT', variable):
-        if variable in ("hours", "number_of_lines"):
+        if variable in int_variables:
             return config.getint('DEFAULT', variable)
-        if variable in ("alpha_min", "alpha_max", "loges_min", "loges_max"):
+        if variable in float_variables:
             return config.getfloat('DEFAULT', variable)
-        if variable in ("output_file_extensions", "constraints"):
+        if variable in list_variables:
             return config.get("DEFAULT", variable).split(",")
         return config.get('DEFAULT', variable)
     print(f"{color.BOLD}{color.RED}{variable} not found in {config_file_path}{color.RESET}")

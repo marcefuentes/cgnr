@@ -264,7 +264,9 @@ def main(mode, histogram=False, movie=False):
     else:
         for r, _ in enumerate(rows):
             for c, _ in enumerate(columns):
-                main_ax[nrows - r - 1, c].set_axes_locator(divider.new_locator(nx=2*c, ny=2*r))
+                main_ax[nrows - r - 1, c].set_axes_locator(
+                    divider.new_locator(nx=2*c, ny=2*r)
+                )
 
         axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 

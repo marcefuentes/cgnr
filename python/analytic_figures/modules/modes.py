@@ -4,27 +4,76 @@
 from common_modules.get_config import get_config
 from modules.get_df import get_df
 
-title = {
-    "ChooseGrain":          "Partner choice\n(short memory)",
-    "Choose_ltGrain":       "Partner choice\n(long memory)",
-    "MimicGrain":           "Direct\nreciprocity",
-    "ImimicGrain":          "Indirect\nreciprocity\n(short memory)",
-    "Imimic_ltGrain":       "Indirect\nreciprocity\n(long memory)",
-    "qBSeen":               r"Production of $\it{B}$",
-    "qBSeen_byproduct":     "Byproduct help",
-    "w":                    "Fitness",
-    "w_deficit":            "Fitness deficit",
-    "nolang":               "",
-    "lang":                 "",
+dict_traits = {
+    "ChooseGrain": {
+        "mean":     "ChooseGrainmean",
+        "frq":      "ChooseGrain",
+        "title":    "Partner choice\n(short memory)"
+        "relative": "none-"
+    },
+    "Choose_ltGrain": {
+        "mean":     "Choose_ltGrainmean",
+        "frq":      "Choose_ltGrain",
+        "title":    "Partner choice\n(long memory)"
+        "relative": "none-"
+    },
+    "MimicGrain": {
+        "mean":     "MimicGrainmean",
+        "frq":      "MimicGrain",
+        "title":    "Direct\nreciprocity"
+        "relative": "none-"
+    },
+    "ImimicGrain": {
+        "mean":     "ImimicGrainmean",
+        "frq":      "ImimicGrain",
+        "title":    "Indirect\nreciprocity\n(short memory)"
+        "relative": "none-"
+    },
+    "Imimic_ltGrain": {
+        "mean":     "Imimic_ltGrainmean",
+        "frq":      "Imimic_ltGrain",
+        "title":    "Indirect\nreciprocity\n(long memory)"
+        "relative": "none-"
+    },
+    "qBSeen": {
+        "mean":     "qBSeenmean",
+        "frq":      "qBSeen",
+        "title":    "Production of $\it{B}$"
+        "relative": "no"
+    },
+    "qBSeen_byproduct": {
+        "mean":     "qBSeenmean",
+        "frq":      "qBSeen",
+        "title":    "Byproduct help"
+        "relative": "given"
+    },
+    "qBSeen_excess": {
+        "mean":     "qBSeenmean",
+        "frq":      "qBSeen",
+        "title":    "Production of $\it{B}$"
+        "relative": "-social"
+    },
+    "w": {
+        "mean":     "wmean",
+        "frq":      "w",
+        "title":    "Fitness"
+        "relative": "no"
+    },
+    "w_excess": {
+        "mean":     "wmean",
+        "frq":      "w",
+        "title":    "Fitness"
+        "relative": "-social"
+    }
 }
 
-columns = {
+dict_columns = {
     "cooperation": [
         "ChooseGrain",
         "MimicGrain",
         "ImimicGrain",
-        "qBSeen",
-        "w"
+        "qBSeen_excess",
+        "w_excess"
     ],
     "cooperationlt": [
         "ChooseGrain",
@@ -32,8 +81,8 @@ columns = {
         "MimicGrain",
         "ImimicGrain",
         "Imimic_ltGrain",
-        "qBSeen",
-        "w"
+        "qBSeen_excess",
+        "w_excess"
     ],
     "correlationsqB": [
         "r_qB_Choose",
@@ -68,7 +117,7 @@ columns = {
         "qBSeen",
         "qBSeen_byproduct",
         "w",
-        "w_deficit"
+        "w_excess"
     ],
     "test": [
         "qBSeen",
@@ -88,7 +137,7 @@ columns = {
     ],
 }
 
-rows = {
+dict_rows = {
     "default":  ["pi", "p", "i", "none"],
     "none":     ["given100", "given095", "given050", "given000"],
     "test":     ["p", "i", "none"],
@@ -97,32 +146,24 @@ rows = {
     "i":        ["noshuffle", "shuffle"]
 }
 
-traits = {
-    "p": "ChooseGrain",
-    #"p": "Choose_ltGrain",
-    #"i": "MimicGrain",
-    #"i": "ImimicGrain"
-    "i": "Imimic_ltGrain"
-    "pi": "ChooseGrain"
-    #"pi": "Choose_ltGrain"
-    #"pi": "MimicGrain"
-    #"pi": "ImimicGrain"
-    #"pi": "Imimic_ltGrain"
-}
+def look_in_dict(dictionary, name, field):
+    """ Return a value from a dictionary """
 
-given = "given100"
-cost = 15
-groupsize = 128
+    if name in dictionary:
+        return dictionary[name][field]
+    return ""
 
-def get_title(trait):
-    """ Return the title of the trait """
-    try:
-        return title[trait]
-    except KeyError:
-        return trait
+def get_trait_data(column):
+    """ Return the title of the column """
+
+    if column in traits:
+        return traits[column]["data"]
+    else:
+        return "no"
 
 def get_columns(mode):
     """ Return the columns for the mode """
+
     try:
         return columns[mode]
     except KeyError as exc:
@@ -130,17 +171,11 @@ def get_columns(mode):
 
 def get_rows(mode):
     """ Return the rows for the mode """
+
     try:
         return rows[mode]
     except KeyError:
         return rows["default"]
-
-def get_trait(mode):
-    """ Return the trait for the mode """
-    try:
-        return traits[mode]
-    except KeyError:
-        return mode
 
 def is_variant(mode):
     """ Return True if the mode is a mechanism """

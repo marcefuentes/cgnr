@@ -13,17 +13,19 @@ def parse_args():
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser()
+    default_groupsize = get_config("GroupSize")
     parser.add_argument(
         "--groupsize",
         type=int,
-        default=4,
-        help="group size (default=4)"
+        default=default_groupsize,
+        help="group size (default={default_groupsize})"
     )
+    default_cost = get_config("Cost")
     parser.add_argument(
         "--cost",
         type=float,
-        default=15,
-        help="cost value (default=15)"
+        default=default_cost,
+        help="cost value (default={default_cost})"
     )
     parser.add_argument(
         "--partnerchoice",
@@ -53,25 +55,19 @@ def parse_args():
         default=0,
         help="Enable shuffle (1 if present)"
     )
+    default_given = get_config("Given")
     parser.add_argument(
         "--given",
-        type=str,
-        default="100",
-        help="given value (default=100)"
+        type=float,
+        default=default_given,
+        help=f"given value (default={default_given})"
     )
     return parser.parse_args()
 
 def main():
     """Main function"""
 
-    input_file_extension = get_config("input_file_extension")
-    alpha_min = get_config("alpha_min")
-    alpha_max = get_config("alpha_max")
-    loges_min = get_config("loges_min")
-    loges_max = get_config("loges_max")
-
     args = parse_args()
-    reciprocity = 0
 
     if args.language == 1:
         variant = "lang_"
@@ -81,40 +77,48 @@ def main():
         variant = f"{variant}shuffle_"
     else:
         variant = f"{variant}noshuffle_"
-    cost_str = str(args.cost)
+    cost_str = str(-int(args.cost))
     variant = f"{variant}cost{cost_str}_"
-    groupsize_str = str(args.groupsize)
+    groupsize_str = str(pow(2, args.groupsize))
     variant = f"{variant}{groupsize_str}"
 
     mechanism = ""
     if args.partnerchoice == 1:
         mechanism = "p"
+
+    reciprocity = 0
     if args.indirectr == 1:
         reciprocity = 1
         mechanism = f"{mechanism}i"
+
     if args.partnerchoice == 0 and args.indirectr == 0:
         mechanism = "none"
-    path = f"{variant}/{mechanism}/given{args.given}"
+
+    given_str = str(int((args.given) * 100)).zfill(3)
+    path = f"{variant}/{mechanism}/given{given_str}"
     os.makedirs(path, exist_ok=True)
 
-    groupsize = int(math.log(args.groupsize)/math.log(2))
-    given = float(args.given) / 100
+    alpha_min = get_config("alpha_min")
+    alpha_max = get_config("alpha_max")
+    loges_min = get_config("loges_min")
+    loges_max = get_config("loges_max")
+    grid = get_config("grid")
+    alphas = np.linspace(alpha_min, alpha_max, grid)
+    logess = np.linspace(loges_min, loges_max, grid)
 
-    num = 21
-    alphas = np.linspace(alpha_min, alpha_max, num)
-    logess = np.linspace(loges_min, loges_max, num)
+    input_file_extension = get_config("input_file_extension")
+    c = 101
+
     standard_params = {
         "Seed": 1,
-        "N": 12,
-        "Runs": 30,
-        "Time": 21,
-        "Periods": 3,
-        "qBMutationSize": -6,
-        "GrainMutationSize": -6,
-        "DeathRate": -7,
+        "N": get_config("N"),
+        "Runs": get_config("Runs"),
+        "Time": get_config("Time"),
+        "Periods": get_config("Periods"),
+        "qBMutationSize": get_config("qBMutationSize"),
+        "GrainMutationSize": get_config("GrainMutationSize"),
+        "DeathRate": get_config("DeathRate")
     }
-
-    c = 101
 
     for alpha in alphas:
         for loges in logess:
@@ -122,8 +126,8 @@ def main():
             with open(filename, "w", encoding="utf-8") as f:
                 for key, value in standard_params.items():
                     f.write(f"{key},{value}\n")
-                f.write(f"GroupSize,{groupsize}\n")
-                f.write(f"Cost,{-args.cost}\n")
+                f.write(f"GroupSize,{args.groupsize}\n")
+                f.write(f"Cost,{args.cost}\n")
                 f.write(f"PartnerChoice,{args.partnerchoice}\n")
                 f.write(f"Reciprocity,{reciprocity}\n")
                 f.write(f"IndirectR,{args.indirectr}\n")
@@ -131,7 +135,7 @@ def main():
                 f.write(f"Shuffle,{args.shuffle}\n")
                 f.write(f"alpha,{alpha:.6}\n")
                 f.write(f"logES,{loges}\n")
-                f.write(f"Given,{given}\n")
+                f.write(f"Given,{args.given}\n")
             c = c + 1
 
 if __name__ == "__main__":
