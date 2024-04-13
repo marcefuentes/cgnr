@@ -90,10 +90,8 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     # Get data
 
-    # get the name of the current folder
-    if os.path.basename(os.getcwd()) == "results":
-        mode_is_trait = True
     rows = mm.get_rows(mode)
+
     if mode_is_trait:
         dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
         df = dfs[0][0]
