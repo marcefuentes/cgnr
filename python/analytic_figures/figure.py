@@ -171,13 +171,9 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         ha="right"
     )
 
-    if histogram:
-        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
-    else:
-        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
-
     spacing_fixed = Size.Fixed(ss.SPACING)
     if histogram:
+        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
         column_fixed = (
             [plot_size_fixed] * nc
             + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
@@ -187,6 +183,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             + [plot_size_fixed] * nr) * (nrows - 1)
         )
     else:
+        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
         column_fixed = (
             [plot_size_fixed]
             + [spacing_fixed, plot_size_fixed] * (ncols - 1)
