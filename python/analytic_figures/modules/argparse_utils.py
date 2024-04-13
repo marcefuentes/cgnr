@@ -4,7 +4,7 @@
 import argparse
 
 def parse_args(description, trait_choices):
-    """Parse arguments"""
+    """Parse command line arguments."""
 
     parser = argparse.ArgumentParser(
         description=f"description: {description}", 

@@ -8,66 +8,10 @@ import os
 import numpy as np
 
 from common_modules.get_config import get_config
+from modules.argparse_utils import parse_args
 
-def parse_args():
-    """Parse command line arguments"""
-
-    parser = argparse.ArgumentParser()
-    default_groupsize = get_config("GroupSize")
-    parser.add_argument(
-        "--groupsize",
-        type=int,
-        default=default_groupsize,
-        help="group size (default={default_groupsize})"
-    )
-    default_cost = get_config("Cost")
-    parser.add_argument(
-        "--cost",
-        type=float,
-        default=default_cost,
-        help="cost value (default={default_cost})"
-    )
-    parser.add_argument(
-        "--partnerchoice",
-        action="store_const",
-        const=1,
-        default=0,
-        help="Enable partnerchoice (1 if present)"
-    )
-    parser.add_argument(
-        "--indirectr",
-        action="store_const",
-        const=1,
-        default=0,
-        help="Enable indirectr (1 if present)"
-    )
-    parser.add_argument(
-        "--language",
-        action="store_const",
-        const=1,
-        default=0,
-        help="Enable language (1 if present)"
-    )
-    parser.add_argument(
-        "--shuffle",
-        action="store_const",
-        const=1,
-        default=0,
-        help="Enable shuffle (1 if present)"
-    )
-    default_given = get_config("Given")
-    parser.add_argument(
-        "--given",
-        type=float,
-        default=default_given,
-        help=f"given value (default={default_given})"
-    )
-    return parser.parse_args()
-
-def main():
+def main(args):
     """Main function"""
-
-    args = parse_args()
 
     if args.language == 1:
         variant = "lang_"
@@ -139,4 +83,5 @@ def main():
             c = c + 1
 
 if __name__ == "__main__":
-    main()
+    args = parse_args("Create input files for simulations")
+    main(args)

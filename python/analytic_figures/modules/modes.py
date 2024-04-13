@@ -124,10 +124,10 @@ dict_columns = {
         "w"
     ],
     "trait": [
-        "nolang",
-        "lang",
-        "nolang",
-        "lang"
+        "nolang_noshuffle",
+        "nolang_shuffle",
+        "lang_noshuffle",
+        "lang_shuffle"
     ],
 }
 
@@ -150,10 +150,8 @@ dict_rows = {
         "none"
     ],
     "trait": [
-        "noshuffle",
-        "shuffle",
-        "noshuffle",
-        "shuffle"
+        "_cost15_128",
+        "_cost15_4"
     ],
 }
 
@@ -216,11 +214,11 @@ def get_data_variant(mode, histogram, movie):
         df_social = get_df(path, csv0, movie)
     return dfs, df_none, df_social, dffrqs
 
-def get_data_trait(mode, histogram, movie):
+def get_data_trait(mechanism, histogram, movie):
     """ Get the data. """
 
-    rows = get_rows(mode)
-    columns = get_columns(mode)
+    rows = get_rows("trait")
+    columns = get_columns("trait")
 
     dfs =           [[None for _ in range(len(columns))] for _ in range(len(rows))]
     df_nones =      [[None for _ in range(len(columns))] for _ in range(len(rows))]
@@ -232,8 +230,7 @@ def get_data_trait(mode, histogram, movie):
     csv0, csv1 = get_config("output_file_extensions")
     for r, row in enumerate(rows):
         for c, column in enumerate(columns):
-            folder = f"{column}_{row}_cost{cost}_{groupsize}"
-            path = f"{folder}/{mode}/{given_folder}"
+            path = f"{column}_{row}/{mechanism}/{given_folder}"
             if histogram:
                 dffrqs[c][r] =  get_df(path, csv1, movie)
             dfs[c][r] =         get_df(path, csv0, movie)
