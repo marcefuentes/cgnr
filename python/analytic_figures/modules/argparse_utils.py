@@ -13,13 +13,11 @@ def parse_args():
         mode_is_trait = True
         description = "description: Plot results for a trait"
         choices = list(mm.dict_traits.keys())
-        default = "w"
         arg_help = "trait (required)"
     else:
         mode_is_trait = False
         description = "description: Plot results in this folder"
         choices = list(mm.dict_columns.keys())
-        default = "cooperation"
         arg_help = "mode (required)"
 
     parser = argparse.ArgumentParser(
@@ -29,7 +27,6 @@ def parse_args():
     parser.add_argument(
         "mode",
         type=str,
-        default=default,
         choices=choices,
         help=arg_help
     )
