@@ -349,6 +349,8 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         aspect=False
     )
 
+    artists = create_artists(fig, main_ax, divider, alphas, logess, rows, columns, histogram=False, mode_is_trait=False)
+
     sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([
         (ss.LEFT_MARGIN + inner_width + ss.SPACING)/width,
@@ -363,8 +365,6 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     )
     cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
     cbar.outline.set_linewidth(ss.LINE_WIDTH)
-
-    artists = create_artists(fig, main_ax, divider, alphas, logess, rows, columns, histogram=False, mode_is_trait=False)
 
     # Save figure
 
