@@ -275,19 +275,21 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
         df = df_none
 
-    rows = mm.get_rows(mode)
-    columns = mm.get_columns(mode)
-    ncols = len(columns)
-    nrows = len(rows)
-    inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
-    inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
-    width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
-    height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
     ts = df.Time.unique()
     alphas = np.sort(df["alpha"].unique())[::-1]
     logess = np.sort(df["logES"].unique())
     nr = len(alphas)
     nc = len(logess)
+
+    rows = mm.get_rows(mode)
+    columns = mm.get_columns(mode)
+    ncols = len(columns)
+    nrows = len(rows)
+
+    inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
+    inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
+    width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
+    height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
 
     if histogram:
         fig = plt.figure(figsize=(width, height))
