@@ -322,6 +322,17 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             + [spacing_fixed, plot_size_fixed] * (nrows - 1)
         )
 
+    divider = Divider(
+        fig,
+        (ss.LEFT_MARGIN/width,
+        ss.BOTTOM_MARGIN/height,
+        inner_width/width,
+        inner_height/height),
+        column_fixed,
+        row_fixed,
+        aspect=False
+    )
+
     fig.supxlabel(
         t=ss.X_LABEL,
         x=(ss.LEFT_MARGIN + inner_width/2)/width,
@@ -346,17 +357,6 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         fontsize=ss.TICK_LABEL_SIZE,
         color="grey",
         ha="right"
-    )
-
-    divider = Divider(
-        fig,
-        (ss.LEFT_MARGIN/width,
-        ss.BOTTOM_MARGIN/height,
-        inner_width/width,
-        inner_height/height),
-        column_fixed,
-        row_fixed,
-        aspect=False
     )
 
     if histogram:
