@@ -79,7 +79,7 @@ def update(t, dict_update):
     return artists.flatten()
 
 def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait):
-    """ Create Image artists. """
+    """ Create AxesImage artists. """
 
     nrows = len(rows)
     nr = len(alphas)
@@ -283,8 +283,13 @@ def fix_positions(ncols, nrows):
     )
     return column_fixed, row_fixed
 
-def prettify_fig(fig, width, height, inner_width, inner_height, column_fixed, row_fixed):
+def prettify_fig(fig, measurements, column_fixed, row_fixed):
     """ Prettify the figure. """
+
+    width = measurements["width"]
+    height = measurements["height"]
+    inner_width = measurements["inner_width"]
+    inner_height = measurements["inner_height"]
 
     divider = Divider(
         fig,
@@ -325,8 +330,13 @@ def prettify_fig(fig, width, height, inner_width, inner_height, column_fixed, ro
 
     return divider
 
-def add_colorbar(fig, width, height, inner_width, inner_height, nc):
+def add_colorbar(fig, measurements, nc):
     """ Add colorbar. """
+
+    width = measurements["width"]
+    height = measurements["height"]
+    inner_width = measurements["inner_width"]
+    inner_height = measurements["inner_height"]
 
     sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([
@@ -379,6 +389,12 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
     width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
     height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
+    measurements = {
+        "width": width,
+        "height": height,
+        "inner_width": inner_width,
+        "inner_height": inner_height
+    }
 
     if histogram:
         fig = plt.figure(figsize=(width, height))
@@ -393,10 +409,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     divider = prettify_fig(
         fig,
-        width,
-        height,
-        inner_width,
-        inner_height,
+        measurements,
         column_fixed,
         row_fixed
     )
@@ -423,7 +436,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             mode_is_trait
         )
 
-    add_colorbar(fig, width, height, inner_width, inner_height, nc)
+    add_colorbar(fig, measurements, nc)
 
     # Save figure
 
