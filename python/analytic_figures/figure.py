@@ -33,9 +33,9 @@ def update(t, dict_update):
     text =          dict_update.get("text")
     artists =       dict_update.get("artists")
 
-    dict_z = {
-        "t": t,
-    }
+    dict_z = {}
+    dict_z["t"] = t
+
     if mode_is_trait:
         dict_z["trait"] = mm.look_in(mm.dict_traits, mode, "mean")
     else:
