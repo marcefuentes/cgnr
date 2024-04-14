@@ -78,8 +78,44 @@ def update(t, dict_update):
         text.set_text(t)
     return artists.flatten()
 
-def create_artists(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_trait):
-    """ Create AxesImage artists. """
+def init_artists(axs, nrows, ncols):
+    """ Initialize AxesImage artists. """
+
+    artists = np.empty_like(axs)
+    dummy_zmatrix = np.zeros((1, 1))
+
+    for r in range(nrows):
+        for c in range(ncols):
+            artists[r, c] = axs[r, c].imshow(
+                dummy_zmatrix,
+                cmap=ss.COLOR_MAP,
+                vmin=-1,
+                vmax=1
+            )
+    return artists
+
+def init_artists_histogram(axs, nrows, ncols, nr, nc):
+    """ Initialize Line2D artists. """
+
+    artists = np.empty_like(axs)
+    x = np.arange(ss.BINS)
+    dummy_y = np.zeros_like(x)
+
+    for r in range(nrows):
+        for c in range(ncols):
+            for a in range(nr):
+                for e in range(nc):
+                    ax = axs[r, c, a, e]
+                    artists[r, c, a, e], = ax.plot(
+                        x,
+                        dummy_y,
+                        c="black",
+                        lw=ss.LINE_WIDTH * 2
+                    )
+    return artists
+
+def prettify_axes(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_trait):
+    """ Prettify axes. """
 
     nr = len(alphas)
     nc = len(logess)
@@ -149,21 +185,10 @@ def create_artists(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_
                 fontsize=ss.LETTER_LABEL_SIZE
             )
 
-    artists = np.empty_like(axs)
-    dummy_zmatrix = np.zeros((nr, nc))
+    return axs
 
-    for r in range(nrows):
-        for c in range(ncols):
-            artists[r, c] = axs[r, c].imshow(
-                dummy_zmatrix,
-                cmap=ss.COLOR_MAP,
-                vmin=-1,
-                vmax=1
-            )
+def prettify_axes_histogram(
 
-    return artists
-
-def create_artists_histogram(
     outergrid,
     divider,
     alphas,
@@ -173,7 +198,7 @@ def create_artists_histogram(
     columns,
     mode_is_trait
 ):
-    """ Create Line2D artists. """
+    """ Prettify axes for histogram. """
 
     nr = len(alphas)
     nc = len(logess)
@@ -241,26 +266,9 @@ def create_artists_histogram(
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
 
-    # Assign axs objects to variables
+    return axs
 
-    artists = np.empty_like(axs)
-    x = np.arange(ss.BINS)
-    dummy_y = np.zeros_like(x)
-
-    for r in range(nrows):
-        for c in range(ncols):
-            for a in range(nr):
-                for e in range(nc):
-                    ax = axs[r, c, a, e]
-                    artists[r, c, a, e], = ax.plot(
-                        x,
-                        dummy_y,
-                        c="black",
-                        lw=ss.LINE_WIDTH * 2
-                    )
-    return artists
-
-def fix_positions_histogram(ncols, nrows, nc, nr):
+def fix_positions_histogram(nrows, ncols, nr, nc):
     """ Fix positions for histogram. """
 
     spacing_fixed = Size.Fixed(ss.SPACING)
@@ -275,7 +283,7 @@ def fix_positions_histogram(ncols, nrows, nc, nr):
     )
     return column_fixed, row_fixed
 
-def fix_positions(ncols, nrows):
+def fix_positions(nrows, ncols):
     """ Fix positions. """
 
     spacing_fixed = Size.Fixed(ss.SPACING)
@@ -360,9 +368,9 @@ def add_colorbar(fig, measurements, nc):
     cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
     cbar.outline.set_linewidth(ss.LINE_WIDTH)
 
-def create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait):
+def create_fig(nrows, ncols, measurements, alphas, logess, columns, mode_is_trait):
     """ Create the figure. """
-        
+
     width = measurements["width"]
     height = measurements["height"]
 
@@ -371,7 +379,7 @@ def create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trai
         ncols=ncols,
         figsize=(width, height)
     )
-    column_fixed, row_fixed = fix_positions(ncols, nrows)
+    column_fixed, row_fixed = fix_positions(nrows, ncols)
     axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
     divider = prettify_fig(
         fig,
@@ -379,7 +387,7 @@ def create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trai
         column_fixed,
         row_fixed
     )
-    artists = create_artists(
+    axs = prettify_axes(
         axs,
         divider,
         alphas,
@@ -389,19 +397,21 @@ def create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trai
         columns,
         mode_is_trait
     )
+    artists = init_artists(axs, nrows, ncols)
     add_colorbar(fig, measurements, len(logess))
+
     return fig, artists
 
-def create_fig_histogram(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait):
+def create_fig_histogram(nrows, ncols, measurements, alphas, logess, columns, mode_is_trait):
     """ Create the figure with histogram. """
 
     width = measurements["width"]
     height = measurements["height"]
-    nr = len(alphas)
     nc = len(logess)
+    nr = len(alphas)
 
     fig = plt.figure(figsize=(width, height))
-    column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nc, nr)
+    column_fixed, row_fixed = fix_positions_histogram(nrows, ncols, nr, nc)
     outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
     divider = prettify_fig(
         fig,
@@ -409,7 +419,7 @@ def create_fig_histogram(ncols, nrows, measurements, alphas, logess, columns, mo
         column_fixed,
         row_fixed
     )
-    artists = create_artists_histogram(
+    axs = prettify_axes_histogram(
         outergrid,
         divider,
         alphas,
@@ -419,7 +429,9 @@ def create_fig_histogram(ncols, nrows, measurements, alphas, logess, columns, mo
         columns,
         mode_is_trait
     )
+    artists = init_artists_histogram(axs, nrows, ncols, nr, nc)
     add_colorbar(fig, measurements, nc)
+
     return fig, artists
 
 def main(mode, histogram=False, movie=False, mode_is_trait=False):
@@ -449,8 +461,8 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     rows = mm.get_rows(mode)
     columns = mm.get_columns(mode)
-    ncols = len(columns)
     nrows = len(rows)
+    ncols = len(columns)
 
     inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
     inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
@@ -464,9 +476,25 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     }
 
     if histogram:
-        fig, artists = create_fig_histogram(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait)
+        fig, artists = create_fig_histogram(
+            nrows,
+            ncols,
+            measurements,
+            alphas,
+            logess,
+            columns,
+            mode_is_trait
+        )
     else:
-        fig, artists = create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait)
+        fig, artists = create_fig(
+            nrows,
+            ncols,
+            measurements,
+            alphas,
+            logess,
+            columns,
+            mode_is_trait
+            )
 
     # Save figure
 
