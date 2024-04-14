@@ -164,7 +164,7 @@ def create_artists(axs, divider, alphas, logess, rows, columns, mode_is_trait):
 
     return artists
 
-def create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_is_trait):
+def create_artists_histogram(outergrid, divider, alphas, logess, rows, columns, mode_is_trait):
     """ Create Line2D artists. """
 
     ncols = len(columns)
@@ -177,7 +177,6 @@ def create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_i
     step = int(nr/2)
     letter_position = 1.0 + ss.LETTER_POSITION * nr
 
-    outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
     axs = np.empty((nrows, ncols, nr, nc), dtype=object)
 
     for r, _ in enumerate(rows):
@@ -401,6 +400,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     if histogram:
         fig = plt.figure(figsize=(width, height))
         column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nc, nr)
+        outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
     else:
         fig, main_ax = plt.subplots(
             nrows=nrows,
@@ -419,7 +419,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     if histogram:
         artists = create_artists_histogram(
-            fig,
+            outergrid,
             divider,
             alphas,
             logess,
