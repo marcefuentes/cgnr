@@ -254,6 +254,24 @@ def create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_i
                     )
     return artists
 
+def add_colorbar(fig, width, height, inner_width, inner_height, nc):
+    """ Add colorbar. """
+
+    sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
+    cax = fig.add_axes([
+        (ss.LEFT_MARGIN + inner_width + ss.SPACING)/width,
+        (ss.BOTTOM_MARGIN + inner_height/2 - ss.PLOT_SIZE/2)/height,
+        (ss.PLOT_SIZE/nc)/width,
+        ss.PLOT_SIZE/height
+    ]) # [left, bottom, width, height]
+    cbar = fig.colorbar(
+        sm,
+        cax=cax,
+        ticks=[-1, 0, 1]
+    )
+    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+    cbar.outline.set_linewidth(ss.LINE_WIDTH)
+
 def main(mode, histogram=False, movie=False, mode_is_trait=False):
     """ Create the figure. """
 
@@ -364,20 +382,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     else:
         artists = create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait)
 
-    sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
-    cax = fig.add_axes([
-        (ss.LEFT_MARGIN + inner_width + ss.SPACING)/width,
-        (ss.BOTTOM_MARGIN + inner_height/2 - ss.PLOT_SIZE/2)/height,
-        (ss.PLOT_SIZE/nc)/width,
-        ss.PLOT_SIZE/height
-    ]) # [left, bottom, width, height]
-    cbar = fig.colorbar(
-        sm,
-        cax=cax,
-        ticks=[-1, 0, 1]
-    )
-    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
-    cbar.outline.set_linewidth(ss.LINE_WIDTH)
+    add_colorbar(fig, width, height, inner_width, inner_height, nc)
 
     # Save figure
 
