@@ -81,7 +81,6 @@ def update(t, dict_update):
 def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait):
     """ Create Image artists. """
 
-    ncols = len(columns)
     nrows = len(rows)
     nr = len(alphas)
     nc = len(logess)
@@ -383,7 +382,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     if histogram:
         fig = plt.figure(figsize=(width, height))
-        column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nr, nc)
+        column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nc, nr)
     else:
         fig, main_ax = plt.subplots(
             nrows=nrows,
