@@ -391,12 +391,37 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         )
         column_fixed, row_fixed = fix_positions(ncols, nrows)
 
-    divider = prettify_fig(fig, width, height, inner_width, inner_height, column_fixed, row_fixed)
+    divider = prettify_fig(
+        fig,
+        width,
+        height,
+        inner_width,
+        inner_height,
+        column_fixed,
+        row_fixed
+    )
 
     if histogram:
-        artists = create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_is_trait)
+        artists = create_artists_histogram(
+            fig,
+            divider,
+            alphas,
+            logess,
+            rows,
+            columns,
+            mode_is_trait
+        )
     else:
-        artists = create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait)
+        artists = create_artists(
+            fig,
+            main_ax,
+            divider,
+            alphas,
+            logess,
+            rows,
+            columns,
+            mode_is_trait
+        )
 
     add_colorbar(fig, width, height, inner_width, inner_height, nc)
 
