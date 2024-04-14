@@ -21,17 +21,17 @@ from modules.update_zmatrix import update_zmatrix
 def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
-    mode =          dict_update.get("mode")
-    mode_is_trait = dict_update.get("mode_is_trait")
-    columns =       dict_update.get("columns")
-    rows =          dict_update.get("rows")
-    dfs =           dict_update.get("dfs")
-    df_none =       dict_update.get("df_none")
-    df_social =     dict_update.get("df_social")
-    dffrqs =        dict_update.get("dffrqs")
-    movie =         dict_update.get("movie")
-    text =          dict_update.get("text")
-    artists =       dict_update.get("artists")
+    mode =          dict_update["mode"]
+    mode_is_trait = dict_update["mode_is_trait"]
+    columns =       dict_update["columns"]
+    rows =          dict_update["rows"]
+    dfs =           dict_update["dfs"]
+    df_none =       dict_update["df_none"]
+    df_social =     dict_update["df_social"]
+    dffrqs =        dict_update["dffrqs"]
+    movie =         dict_update["movie"]
+    text =          dict_update["text"]
+    artists =       dict_update["artists"]
 
     dict_z = {}
     dict_z["t"] = t
@@ -78,11 +78,11 @@ def update(t, dict_update):
         text.set_text(t)
     return artists.flatten()
 
-def init_artists(axs, nrows, ncols):
+def init_artists(axs, nrows, ncols, nr, nc):
     """ Initialize AxesImage artists. """
 
     artists = np.empty_like(axs)
-    dummy_zmatrix = np.zeros((1, 1))
+    dummy_zmatrix = np.zeros((nr, nc))
 
     for r in range(nrows):
         for c in range(ncols):
@@ -388,7 +388,7 @@ def create_fig(nrows, ncols, measurements, alphas, logess, columns, mode_is_trai
         columns,
         mode_is_trait
     )
-    artists = init_artists(axs, nrows, ncols)
+    artists = init_artists(axs, nrows, ncols, len(alphas), len(logess))
     add_colorbar(fig, measurements, len(logess))
 
     return fig, artists
