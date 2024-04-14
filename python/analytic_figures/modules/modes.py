@@ -38,7 +38,7 @@ dict_traits = {
     "qBSeen": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    "Production of $\it{B}$",
+        "title":    r"Production of $\it{B}$",
         "relative": "no"
     },
     "qBSeen_byproduct": {
@@ -50,7 +50,7 @@ dict_traits = {
     "qBSeen_excess": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    "Production of $\it{B}$",
+        "title":    r"Production of $\it{B}$",
         "relative": "-social"
     },
     "w": {
@@ -159,7 +159,7 @@ rows_trait = [
     "_cost15_4"
 ]
 
-given_folder = "given100"
+GIVEN_FOLDER = "given100"
 
 def look_in(dictionary, key, field):
     """ Return a value from a dictionary """
@@ -175,7 +175,7 @@ def get_columns(key):
     try:
         return dict_columns[key]
     except KeyError as exc:
-        raise ValueError(f"{mode} not found") from exc
+        raise ValueError(f"{key} not found") from exc
 
 def get_rows(key):
     """ Return the rows for the keye """
@@ -199,16 +199,16 @@ def get_data_variant(mode, histogram, movie):
         if row == "social":
             path = "none/given000"
         elif "none" in row:
-            path = f"none/{given_folder}"
+            path = f"none/{GIVEN_FOLDER}"
         else:
-            path = f"{row}/{given_folder}"
+            path = f"{row}/{GIVEN_FOLDER}"
         dfs.append(get_df(path, csv0, movie))
         if histogram:
             dffrqs.append(get_df(path, csv1, movie))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
     else:
-        path = f"none/{given_folder}"
+        path = f"none/{GIVEN_FOLDER}"
         df_none = get_df(path, csv0, movie)
     if "social" in rows:
         df_social = dfs[rows.index("social")]
@@ -227,16 +227,16 @@ def get_data_trait(mechanism, histogram, movie):
     df_nones =      [[None for _ in range(ncolumns)] for _ in range(nrows)]
     df_socials =    [[None for _ in range(ncolumns)] for _ in range(nrows)]
     if histogram:
-        dffrqs =    [[None for _ in range(len(columns))] for _ in range(nrows)]
+        dffrqs =    [[None for _ in range(len(ncolumns))] for _ in range(nrows)]
     else:
         dffrqs =    []
     csv0, csv1 = get_config("output_file_extensions")
     for r, row in enumerate(rows_trait):
         for c, column in enumerate(columns_trait):
-            path = f"{column}_{row}/{mechanism}/{given_folder}"
+            path = f"{column}_{row}/{mechanism}/{GIVEN_FOLDER}"
             if histogram:
                 dffrqs[c][r] =  get_df(path, csv1, movie)
             dfs[c][r] =         get_df(path, csv0, movie)
-            df_nones[c][r] =    get_df(f"{folder}/none/{given_folder}", csv0, movie)
-            df_socials[c][r] =  get_df(f"{folder}/none/given000", csv0, movie)
+            df_nones[c][r] =    get_df(f"{column}_{row}/none/{GIVEN_FOLDER}", csv0, movie)
+            df_socials[c][r] =  get_df(f"{column}_{row}/none/given000", csv0, movie)
     return dfs, df_nones, df_socials, dffrqs

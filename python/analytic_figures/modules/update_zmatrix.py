@@ -4,8 +4,8 @@
 import numpy as np
 import pandas as pd
 
-import modules.modes as mm
 from common_modules.get_config import get_config
+import modules.modes as mm
 
 def get_zmatrix(t, df, trait):
     """ Returns the zmatrix for a given time, dataframe, and trait. """
@@ -50,10 +50,10 @@ def update_zmatrix(dict_z):
         zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
         return zmatrix
     if relative == "given":
-        zmatrix = zmatrix * mm.given
+        zmatrix = zmatrix * mm.GIVEN_FOLDER
         return zmatrix
     if relative == "neutral":
-        zmatrix = zmatrix - get_zmatrix(t, df, f"{Neutral}{trait}")
+        zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
         return zmatrix
     if relative == "N":
         zmatrix = zmatrix/get_config("N")
