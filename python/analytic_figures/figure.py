@@ -42,7 +42,7 @@ def update(t, dict_update):
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
 
-    for r, row in enumerate(rows):
+    for r, _ in enumerate(rows):
         if not mode_is_trait:
             dict_z["df"] =          dfs[r]
         for c, column in enumerate(columns):
