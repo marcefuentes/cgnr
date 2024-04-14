@@ -188,7 +188,6 @@ def prettify_axes(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_t
     return axs
 
 def prettify_axes_histogram(
-
     outergrid,
     divider,
     alphas,
