@@ -42,16 +42,18 @@ def update(t, dict_update):
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
 
-    for r, _ in enumerate(rows):
+    for r, row in enumerate(rows):
         if not mode_is_trait:
-            dict_z["df"] =          dfs[r]
+            dict_z["df"] = dfs[r]
         for c, column in enumerate(columns):
             if mode_is_trait:
-                dict_z["df"] =          dfs[r][c]
-                dict_z["df_none"] =     df_none[r][c]
-                dict_z["df_social"] =   df_social[r][c]
+                dict_z["df"] = dfs[r][c]
+                dict_z["df_none"] = df_none[r][c]
+                dict_z["df_social"] = df_social[r][c]
             else:
-                dict_z["trait"] =       column
+                dict_z["trait"] = column
+            if row == "none" and mode != "none":
+                dict_z["none"] = True
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
                 if mode_is_trait:
@@ -76,6 +78,182 @@ def update(t, dict_update):
         text.set_text(t)
     return artists.flatten()
 
+def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait):
+    """ Create Image artists. """
+
+    ncols = len(columns)
+    nrows = len(rows)
+    nr = len(alphas)
+    nc = len(logess)
+
+    xticks = [0, 0.5*(nc - 1), nc - 1]
+    yticks = [0, 0.5*(nr - 1), nr - 1]
+    xmin = min(logess)
+    xmax = max(logess)
+    ymin = min(alphas)
+    ymax = max(alphas)
+    xticklabels = [
+        f"{xmin:.0f}",
+        f"{(xmin + xmax)/2.:.0f}",
+        f"{xmax:.0f}"
+    ]
+    yticklabels = [
+        f"{ymax:.1f}",
+        f"{(ymin + ymax)/2.:.1f}",
+        f"{ymin:.1f}"
+    ]
+
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(columns):
+            main_ax[nrows - r - 1, c].set_axes_locator(
+                divider.new_locator(nx=2*c, ny=2*r)
+            )
+
+    axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
+
+    letter_position = 1.0 + ss.LETTER_POSITION
+    for i, ax in enumerate(fig.get_axes()):
+        letter = chr(ord("a") + i % 26)
+        if i >= 26:
+            letter = letter + letter
+        ax.text(
+            0,
+            letter_position,
+            letter,
+            transform=ax.transAxes,
+            fontsize=ss.LETTER_LABEL_SIZE,
+            weight="bold"
+        )
+        for spine in ax.spines.values():
+            spine.set_linewidth(ss.LINE_WIDTH)
+        ax.set(
+            xticks=xticks,
+            yticks=yticks,
+            xticklabels=[],
+            yticklabels=[]
+        )
+        ax.tick_params(
+            axis="both",
+            labelsize=ss.TICK_LABEL_SIZE,
+            size=ss.TICK_SIZE,
+        )
+    for ax in axs[:, 0]:
+        ax.set_yticklabels(yticklabels)
+    for ax in axs[-1, :]:
+        ax.set_xticklabels(xticklabels)
+    for ax, column in zip(axs[0, :], columns):
+        if not mode_is_trait:
+            ax.set_title(
+                mm.look_in(mm.dict_traits, column, "title"),
+                pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+                fontsize=ss.LETTER_LABEL_SIZE
+            )
+
+    artists = np.empty_like(axs)
+    dummy_zmatrix = np.zeros((nr, nc))
+
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(columns):
+            artists[r, c] = axs[r, c].imshow(
+                dummy_zmatrix,
+                cmap=ss.COLOR_MAP,
+                vmin=-1,
+                vmax=1
+            )
+
+    return artists
+
+def create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_is_trait):
+    """ Create Line2D artists. """
+
+    ncols = len(columns)
+    nrows = len(rows)
+    nr = len(alphas)
+    nc = len(logess)
+
+    xlim = [-2, ss.BINS + 1]
+    ylim = [0, 0.25]
+    step = int(nr/2)
+    letter_position = 1.0 + ss.LETTER_POSITION * nr
+
+    outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
+    axs = np.empty((nrows, ncols, nr, nc), dtype=object)
+
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(columns):
+            grid = outergrid[r, c].subgridspec(
+                nrows=nr,
+                ncols=nc,
+                hspace=0.0,
+                wspace=0.0
+            )
+            axs[r, c] = grid.subplots()
+            for a in range(nr):
+                inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
+                for e in range(nc):
+                    inner_x = c * (nc + 1) + e + int(e / nc)
+                    new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
+                    axs[r, c, a, e].set_axes_locator(new_locator)
+                    for spine in axs[r, c, a, e].spines.values():
+                        spine.set_linewidth(ss.LINE_WIDTH)
+                    axs[r, c, a, e].set(
+                        xticks=[],
+                        yticks=[],
+                        xlim=xlim,
+                        ylim=ylim
+                    )
+                    axs[r, c, a, e].tick_params(
+                        axis="both",
+                        labelsize=ss.TICK_LABEL_SIZE,
+                        size=ss.TICK_SIZE
+                    )
+            i = r*ncols + c
+            letter = chr(ord("a") + i % 26)
+            if i >= 26:
+                letter = letter + letter
+            axs[r, c, 0, 0].text(
+                0,
+                letter_position,
+                letter,
+                fontsize=ss.LETTER_LABEL_SIZE,
+                transform=axs[r, c, 0, 0].transAxes,
+                weight="bold"
+            )
+            for a in range(0, nr, step):
+                axs[r, c, a, 0].set(yticks=[ylim[1]/2], yticklabels=[])
+            for e in range(0, nc, step):
+                axs[r, c, -1, e].set(xticks=[xlim[1]/2], xticklabels=[])
+        for a in range(0, nr, step):
+            axs[r, 0, a, 0].set_yticklabels([alphas[a]])
+    for c, column in enumerate(columns):
+        if not mode_is_trait:
+            axs[0, c, 0, int(nc/2)].set_title(
+                mm.look_in(mm.dict_traits, column, "title"),
+                pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+                fontsize=ss.LETTER_LABEL_SIZE
+            )
+        for e in range(0, nc, step):
+            axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
+
+    # Assign axs objects to variables
+
+    artists = np.empty_like(axs)
+    x = np.arange(ss.BINS)
+    dummy_y = np.zeros_like(x)
+
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(columns):
+            for a, _ in enumerate(alphas):
+                for e, _ in enumerate(logess):
+                    ax = axs[r, c, a, e]
+                    artists[r, c, a, e], = ax.plot(
+                        x,
+                        dummy_y,
+                        c="black",
+                        lw=ss.LINE_WIDTH * 2
+                    )
+    return artists
+
 def main(mode, histogram=False, movie=False, mode_is_trait=False):
     """ Create the figure. """
 
@@ -90,51 +268,38 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     # Get data
 
-    rows = mm.get_rows(mode)
-
     if mode_is_trait:
         dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
         df = dfs[0][0]
     else:
         dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
         df = df_none
+
     ts = df.Time.unique()
-    nr = df.alpha.nunique()
-    nc = df.logES.nunique()
-    if histogram:
-        xlim = [-2, ss.BINS + 1]
-        ylim = [0, 0.25]
-        step = int(nr/2)
-        alphas = np.sort(df["alpha"].unique())[::-1]
-        logess = np.sort(df["logES"].unique())
-        letter_position = 1.0 + ss.LETTER_POSITION * nr
-    else:
-        xticks = [0, 0.5*(nc - 1), nc - 1]
-        yticks = [0, 0.5*(nr - 1), nr - 1]
-        xmin = df.logES.min()
-        xmax = df.logES.max()
-        ymin = df.alpha.min()
-        ymax = df.alpha.max()
-        xticklabels = [
-            f"{xmin:.0f}",
-            f"{(xmin + xmax)/2.:.0f}",
-            f"{xmax:.0f}"
-        ]
-        yticklabels = [
-            f"{ymax:.1f}",
-            f"{(ymin + ymax)/2.:.1f}",
-            f"{ymin:.1f}"
-        ]
+    alphas = np.sort(df["alpha"].unique())[::-1]
+    logess = np.sort(df["logES"].unique())
+    nr = len(alphas)
+    nc = len(logess)
 
-    # Create figure
-
+    rows = mm.get_rows(mode)
     columns = mm.get_columns(mode)
     ncols = len(columns)
     nrows = len(rows)
+
     inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
     inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
     width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
     height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
+
+    if histogram:
+        fig = plt.figure(figsize=(width, height))
+    else:
+        fig, main_ax = plt.subplots(
+            nrows=nrows,
+            ncols=ncols,
+            figsize=(width, height)
+        )
+
     spacing_fixed = Size.Fixed(ss.SPACING)
     if histogram:
         plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
@@ -155,15 +320,6 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         row_fixed = (
             [plot_size_fixed]
             + [spacing_fixed, plot_size_fixed] * (nrows - 1)
-        )
-
-    if histogram:
-        fig = plt.figure(figsize=(width, height))
-    else:
-        fig, main_ax = plt.subplots(
-            nrows=nrows,
-            ncols=ncols,
-            figsize=(width, height)
         )
 
     fig.supxlabel(
@@ -204,141 +360,9 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     )
 
     if histogram:
-        outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
-        axs = np.empty((nrows, ncols, nr, nc), dtype=object)
-
-        for r, _ in enumerate(rows):
-            for c, _ in enumerate(columns):
-                grid = outergrid[r, c].subgridspec(
-                    nrows=nr,
-                    ncols=nc,
-                    hspace=0.0,
-                    wspace=0.0
-                )
-                axs[r, c] = grid.subplots()
-                for a in range(nr):
-                    inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
-                    for e in range(nc):
-                        inner_x = c * (nc + 1) + e + int(e / nc)
-                        new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
-                        axs[r, c, a, e].set_axes_locator(new_locator)
-                        for spine in axs[r, c, a, e].spines.values():
-                            spine.set_linewidth(ss.LINE_WIDTH)
-                        axs[r, c, a, e].set(
-                            xticks=[],
-                            yticks=[],
-                            xlim=xlim,
-                            ylim=ylim
-                        )
-                        axs[r, c, a, e].tick_params(
-                            axis="both",
-                            labelsize=ss.TICK_LABEL_SIZE,
-                            size=ss.TICK_SIZE
-                        )
-                i = r*ncols + c
-                letter = chr(ord("a") + i % 26)
-                if i >= 26:
-                    letter = letter + letter
-                axs[r, c, 0, 0].text(
-                    0,
-                    letter_position,
-                    letter,
-                    fontsize=ss.LETTER_LABEL_SIZE,
-                    transform=axs[r, c, 0, 0].transAxes,
-                    weight="bold"
-                )
-                for a in range(0, nr, step):
-                    axs[r, c, a, 0].set(yticks=[ylim[1]/2], yticklabels=[])
-                for e in range(0, nc, step):
-                    axs[r, c, -1, e].set(xticks=[xlim[1]/2], xticklabels=[])
-            for a in range(0, nr, step):
-                axs[r, 0, a, 0].set_yticklabels([alphas[a]])
-        for c, column in enumerate(columns):
-            if not mode_is_trait:
-                axs[0, c, 0, int(nc/2)].set_title(
-                    mm.look_in(mm.dict_traits, column, "title"),
-                    pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-                    fontsize=ss.LETTER_LABEL_SIZE
-                )
-            for e in range(0, nc, step):
-                axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
+        artists = create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_is_trait)
     else:
-        for r, _ in enumerate(rows):
-            for c, _ in enumerate(columns):
-                main_ax[nrows - r - 1, c].set_axes_locator(
-                    divider.new_locator(nx=2*c, ny=2*r)
-                )
-
-        axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
-
-        letter_position = 1.0 + ss.LETTER_POSITION
-        for i, ax in enumerate(fig.get_axes()):
-            letter = chr(ord("a") + i % 26)
-            if i >= 26:
-                letter = letter + letter
-            ax.text(
-                0,
-                letter_position,
-                letter,
-                transform=ax.transAxes,
-                fontsize=ss.LETTER_LABEL_SIZE,
-                weight="bold"
-            )
-            for spine in ax.spines.values():
-                spine.set_linewidth(ss.LINE_WIDTH)
-            ax.set(
-                xticks=xticks,
-                yticks=yticks,
-                xticklabels=[],
-                yticklabels=[]
-            )
-            ax.tick_params(
-                axis="both",
-                labelsize=ss.TICK_LABEL_SIZE,
-                size=ss.TICK_SIZE,
-            )
-        for ax in axs[:, 0]:
-            ax.set_yticklabels(yticklabels)
-        for ax in axs[-1, :]:
-            ax.set_xticklabels(xticklabels)
-        for ax, column in zip(axs[0, :], columns):
-            if not mode_is_trait:
-                ax.set_title(
-                    mm.look_in(mm.dict_traits, column, "title"),
-                    pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-                    fontsize=ss.LETTER_LABEL_SIZE
-                )
-
-    # Assign axs objects to variables
-    # (Line2D)
-
-    artists = np.empty_like(axs)
-    x = np.arange(ss.BINS)
-    dummy_y = np.zeros_like(x)
-
-    if histogram:
-        for r, _ in enumerate(rows):
-            for c, _ in enumerate(columns):
-                for a, _ in enumerate(alphas):
-                    for e, _ in enumerate(logess):
-                        ax = axs[r, c, a, e]
-                        artists[r, c, a, e], = ax.plot(
-                            x,
-                            dummy_y,
-                            c="black",
-                            lw=ss.LINE_WIDTH * 2
-                        )
-    else:
-        dummy_zmatrix = np.zeros((nr, nc))
-
-        for r, _ in enumerate(rows):
-            for c, _ in enumerate(columns):
-                artists[r, c] = axs[r, c].imshow(
-                    dummy_zmatrix,
-                    cmap=ss.COLOR_MAP,
-                    vmin=-1,
-                    vmax=1
-                )
+        artists = create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait)
 
     sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([
