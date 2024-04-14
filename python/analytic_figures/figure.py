@@ -78,7 +78,7 @@ def update(t, dict_update):
         text.set_text(t)
     return artists.flatten()
 
-def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is_trait):
+def create_artists(axs, divider, alphas, logess, rows, columns, mode_is_trait):
     """ Create AxesImage artists. """
 
     nrows = len(rows)
@@ -101,8 +101,6 @@ def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is
         f"{(ymin + ymax)/2.:.1f}",
         f"{ymin:.1f}"
     ]
-
-    axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 
     for r, _ in enumerate(rows):
         for c, _ in enumerate(columns):
@@ -410,6 +408,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             figsize=(width, height)
         )
         column_fixed, row_fixed = fix_positions(ncols, nrows)
+        axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 
     divider = prettify_fig(
         fig,
@@ -430,8 +429,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         )
     else:
         artists = create_artists(
-            fig,
-            main_ax,
+            axs,
             divider,
             alphas,
             logess,
