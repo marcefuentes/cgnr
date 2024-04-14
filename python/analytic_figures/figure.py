@@ -360,6 +360,68 @@ def add_colorbar(fig, measurements, nc):
     cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
     cbar.outline.set_linewidth(ss.LINE_WIDTH)
 
+def create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait):
+    """ Create the figure. """
+        
+    width = measurements["width"]
+    height = measurements["height"]
+
+    fig, main_ax = plt.subplots(
+        nrows=nrows,
+        ncols=ncols,
+        figsize=(width, height)
+    )
+    column_fixed, row_fixed = fix_positions(ncols, nrows)
+    axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
+    divider = prettify_fig(
+        fig,
+        measurements,
+        column_fixed,
+        row_fixed
+    )
+    artists = create_artists(
+        axs,
+        divider,
+        alphas,
+        logess,
+        nrows,
+        ncols,
+        columns,
+        mode_is_trait
+    )
+    add_colorbar(fig, measurements, len(logess))
+    return fig, artists
+
+def create_fig_histogram(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait):
+    """ Create the figure with histogram. """
+
+    width = measurements["width"]
+    height = measurements["height"]
+    nr = len(alphas)
+    nc = len(logess)
+
+    fig = plt.figure(figsize=(width, height))
+    column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nc, nr)
+    outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
+    divider = prettify_fig(
+        fig,
+        measurements,
+        column_fixed,
+        row_fixed
+    )
+    artists = create_artists_histogram(
+        outergrid,
+        divider,
+        alphas,
+        logess,
+        nrows,
+        ncols,
+        columns,
+        mode_is_trait
+    )
+    add_colorbar(fig, measurements, nc)
+    return fig, artists
+
 def main(mode, histogram=False, movie=False, mode_is_trait=False):
     """ Create the figure. """
 
@@ -384,8 +446,6 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     ts = df.Time.unique()
     alphas = np.sort(df["alpha"].unique())[::-1]
     logess = np.sort(df["logES"].unique())
-    nr = len(alphas)
-    nc = len(logess)
 
     rows = mm.get_rows(mode)
     columns = mm.get_columns(mode)
@@ -404,51 +464,9 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     }
 
     if histogram:
-        fig = plt.figure(figsize=(width, height))
-        column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nc, nr)
-        outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
-        divider = prettify_fig(
-            fig,
-            measurements,
-            column_fixed,
-            row_fixed
-        )
-        artists = create_artists_histogram(
-            outergrid,
-            divider,
-            alphas,
-            logess,
-            nrows,
-            ncols,
-            columns,
-            mode_is_trait
-        )
-        add_colorbar(fig, measurements, nc)
+        fig, artists = create_fig_histogram(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait)
     else:
-        fig, main_ax = plt.subplots(
-            nrows=nrows,
-            ncols=ncols,
-            figsize=(width, height)
-        )
-        column_fixed, row_fixed = fix_positions(ncols, nrows)
-        axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
-        divider = prettify_fig(
-            fig,
-            measurements,
-            column_fixed,
-            row_fixed
-        )
-        artists = create_artists(
-            axs,
-            divider,
-            alphas,
-            logess,
-            nrows,
-            ncols,
-            columns,
-            mode_is_trait
-        )
-        add_colorbar(fig, measurements, nc)
+        fig, artists = create_fig(ncols, nrows, measurements, alphas, logess, columns, mode_is_trait)
 
     # Save figure
 
