@@ -102,13 +102,13 @@ def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is
         f"{ymin:.1f}"
     ]
 
+    axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
+
     for r, _ in enumerate(rows):
         for c, _ in enumerate(columns):
-            main_ax[nrows - r - 1, c].set_axes_locator(
+            axs[nrows - r - 1, c].set_axes_locator(
                 divider.new_locator(nx=2*c, ny=2*r)
             )
-
-    axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
 
     letter_position = 1.0 + ss.LETTER_POSITION
     for i, ax in enumerate(fig.get_axes()):
