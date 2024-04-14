@@ -397,10 +397,10 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-    args, mode_is_trait = parse_args()
+    args, is_trait = parse_args()
     main(
         mode=args.mode,
         histogram=args.histogram,
         movie=args.movie,
-        mode_is_trait=mode_is_trait
+        mode_is_trait=is_trait
     )
