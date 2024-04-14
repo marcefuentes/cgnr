@@ -163,7 +163,16 @@ def create_artists(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_
 
     return artists
 
-def create_artists_histogram(outergrid, divider, alphas, logess, nrows, ncols, columns, mode_is_trait):
+def create_artists_histogram(
+    outergrid,
+    divider,
+    alphas,
+    logess,
+    nrows,
+    ncols,
+    columns,
+    mode_is_trait
+):
     """ Create Line2D artists. """
 
     nr = len(alphas)
