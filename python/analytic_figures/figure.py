@@ -110,32 +110,36 @@ def create_artists(fig, main_ax, divider, alphas, logess, rows, columns, mode_is
                 divider.new_locator(nx=2*c, ny=2*r)
             )
 
+    i = 0
     letter_position = 1.0 + ss.LETTER_POSITION
-    for i, ax in enumerate(fig.get_axes()):
-        letter = chr(ord("a") + i % 26)
-        if i >= 26:
-            letter = letter + letter
-        ax.text(
-            0,
-            letter_position,
-            letter,
-            transform=ax.transAxes,
-            fontsize=ss.LETTER_LABEL_SIZE,
-            weight="bold"
-        )
-        for spine in ax.spines.values():
-            spine.set_linewidth(ss.LINE_WIDTH)
-        ax.set(
-            xticks=xticks,
-            yticks=yticks,
-            xticklabels=[],
-            yticklabels=[]
-        )
-        ax.tick_params(
-            axis="both",
-            labelsize=ss.TICK_LABEL_SIZE,
-            size=ss.TICK_SIZE,
-        )
+    for r, _ in enumerate(rows):
+        for c, _ in enumerate(columns):
+            ax = axs[r, c]
+            i = r*len(columns) + c
+            letter = chr(ord("a") + i % 26)
+            if i >= 26:
+                letter = letter + letter
+            ax.text(
+                0,
+                letter_position,
+                letter,
+                transform=ax.transAxes,
+                fontsize=ss.LETTER_LABEL_SIZE,
+                weight="bold"
+            )
+            for spine in ax.spines.values():
+                spine.set_linewidth(ss.LINE_WIDTH)
+            ax.set(
+                xticks=xticks,
+                yticks=yticks,
+                xticklabels=[],
+                yticklabels=[]
+            )
+            ax.tick_params(
+                axis="both",
+                labelsize=ss.TICK_LABEL_SIZE,
+                size=ss.TICK_SIZE,
+            )
     for ax in axs[:, 0]:
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
