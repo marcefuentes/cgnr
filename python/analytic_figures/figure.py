@@ -497,7 +497,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             mode_is_trait
             )
 
-    # Save figure
+    # Add data and save
 
     name = f"{script_name}_{mode}"
     if histogram:
