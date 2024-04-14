@@ -4,66 +4,94 @@
 from common_modules.get_config import get_config
 from modules.get_df import get_df
 
+columns_nolang_lang = [
+    "nolang_noshuffle",
+    "nolang_shuffle",
+    "lang_noshuffle",
+    "lang_shuffle"
+]
+
+columns_lang = [
+    "lang_noshuffle",
+    "lang_shuffle"
+]
+
 dict_traits = {
     "ChooseGrain": {
         "mean":     "ChooseGrainmean",
         "frq":      "ChooseGrain",
         "title":    "Partner choice\n(short memory)",
-        "relative": "none-"
+        "relative": "none-",
+        "columns":  columns_nolang_lang
     },
     "Choose_ltGrain": {
         "mean":     "Choose_ltGrainmean",
         "frq":      "Choose_ltGrain",
         "title":    "Partner choice\n(long memory)",
-        "relative": "none-"
+        "relative": "none-",
+        "columns":  columns_lang
     },
     "MimicGrain": {
         "mean":     "MimicGrainmean",
         "frq":      "MimicGrain",
         "title":    "Direct\nreciprocity",
-        "relative": "none-"
+        "relative": "none-",
+        "columns":  columns_nolang_lang
     },
     "ImimicGrain": {
         "mean":     "ImimicGrainmean",
         "frq":      "ImimicGrain",
         "title":    "Indirect\nreciprocity\n(short memory)",
-        "relative": "none-"
+        "relative": "none-",
+        "columns":  columns_nolang_lang
     },
     "Imimic_ltGrain": {
         "mean":     "Imimic_ltGrainmean",
         "frq":      "Imimic_ltGrain",
         "title":    "Indirect\nreciprocity\n(long memory)",
-        "relative": "none-"
+        "relative": "none-",
+        "columns":  columns_lang
     },
     "qBSeen": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    r"Production of $\it{B}$",
-        "relative": "no"
+        "relative": "no",
+        "columns":  columns_nolang_lang
     },
     "qBSeen_byproduct": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    "Byproduct help",
-        "relative": "given"
+        "relative": "given",
+        "columns":  columns_nolang_lang
     },
     "qBSeen_excess": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    r"Production of $\it{B}$",
-        "relative": "-social"
+        "relative": "-social",
+        "columns":  columns_nolang_lang
     },
     "w": {
         "mean":     "wmean",
         "frq":      "w",
         "title":    "Fitness",
-        "relative": "no"
+        "relative": "no",
+        "columns":  columns_nolang_lang
     },
     "w_excess": {
         "mean":     "wmean",
         "frq":      "w",
         "title":    "Fitness",
-        "relative": "-social"
+        "relative": "-social",
+        "columns":  columns_nolang_lang
+    },
+    "all_lang": {
+        "columns":  columns_lang
+    },
+    "all": {
+        "columns":  columns_nolang_lang
     }
 }
 
@@ -154,13 +182,6 @@ rows_trait = [
     "cost15_4"
 ]
 
-columns_trait = [
-    "nolang_noshuffle",
-    "nolang_shuffle",
-    "lang_noshuffle",
-    "lang_shuffle"
-]
-
 mechanisms_trait = [
    "p",
    "pi",
@@ -182,7 +203,7 @@ def look_in(dictionary, key, field):
 def get_columns(key):
     """ Return the columns for the key """
     if key in dict_traits:
-        return columns_trait
+        return dict_traits[key]["columns"]
     try:
         return dict_columns[key]
     except KeyError as exc:
@@ -228,9 +249,10 @@ def get_data_variant(mode, histogram, movie):
         df_social = get_df(path, csv0, movie)
     return dfs, df_none, df_social, dffrqs
 
-def get_data_trait(histogram, movie):
+def get_data_trait(mode, histogram, movie):
     """ Get the data. """
 
+    columns_trait = get_columns(mode)
     nrows = len(rows_trait)
     ncolumns = len(columns_trait)
 

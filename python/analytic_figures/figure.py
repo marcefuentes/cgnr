@@ -450,7 +450,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     # Get data
 
     if mode_is_trait:
-        dfs, df_none, df_social, dffrqs = mm.get_data_trait(histogram, movie)
+        dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
         df = dfs[0][0]
     else:
         dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
@@ -531,8 +531,27 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         ani = FuncAnimation(**dict_animation)
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(ts[-1], dict_update)
-        plt.savefig(f"{name}.png", transparent=False)
+        if mode in ("all", "all_lang"):
+            if mode == "all":
+                traits = [
+                    "ChooseGrain",
+                    "MimicGrain",
+                    "ImimicGrain",
+                    "w_excess",
+                    "qBSeen_excess"
+                ]
+            else:
+                traits = [
+                    "Choose_ltGrain",
+                    "Imimic_ltGrain"
+                ]
+            for trait in traits:
+                dict_update["mode"] = trait
+                update(ts[-1], dict_update)
+                plt.savefig(f"{script_name}_{trait}.png", transparent=False)
+        else:
+            update(ts[-1], dict_update)
+            plt.savefig(f"{name}.png", transparent=False)
     plt.close()
 
     end_time = time.perf_counter()

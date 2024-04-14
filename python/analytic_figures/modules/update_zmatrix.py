@@ -10,6 +10,9 @@ import modules.modes as mm
 def get_zmatrix(t, df, trait):
     """ Returns the zmatrix for a given time, dataframe, and trait. """
 
+    if trait not in df.columns:
+        print(f"Trait {trait} not in the dataframe.")
+        return None
     m = df.Time == t
     zmatrix = pd.pivot(df.loc[m],
         values=trait,
