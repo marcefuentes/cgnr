@@ -78,10 +78,9 @@ def update(t, dict_update):
         text.set_text(t)
     return artists.flatten()
 
-def create_artists(axs, divider, alphas, logess, rows, columns, mode_is_trait):
+def create_artists(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_trait):
     """ Create AxesImage artists. """
 
-    nrows = len(rows)
     nr = len(alphas)
     nc = len(logess)
 
@@ -102,18 +101,18 @@ def create_artists(axs, divider, alphas, logess, rows, columns, mode_is_trait):
         f"{ymin:.1f}"
     ]
 
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(columns):
+    for r in range(nrows):
+        for c in range(ncols):
             axs[nrows - r - 1, c].set_axes_locator(
                 divider.new_locator(nx=2*c, ny=2*r)
             )
 
     i = 0
     letter_position = 1.0 + ss.LETTER_POSITION
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(columns):
+    for r in range(nrows):
+        for c in range(ncols):
             ax = axs[r, c]
-            i = r*len(columns) + c
+            i = r*ncols + c
             letter = chr(ord("a") + i % 26)
             if i >= 26:
                 letter = letter + letter
@@ -153,8 +152,8 @@ def create_artists(axs, divider, alphas, logess, rows, columns, mode_is_trait):
     artists = np.empty_like(axs)
     dummy_zmatrix = np.zeros((nr, nc))
 
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(columns):
+    for r in range(nrows):
+        for c in range(ncols):
             artists[r, c] = axs[r, c].imshow(
                 dummy_zmatrix,
                 cmap=ss.COLOR_MAP,
@@ -433,7 +432,8 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             divider,
             alphas,
             logess,
-            rows,
+            nrows,
+            ncols,
             columns,
             mode_is_trait
         )
