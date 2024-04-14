@@ -25,19 +25,22 @@ def get_zmatrix(t, df, trait):
 def update_zmatrix(dict_z):
     """ Return the updated zmatrix for a given time and trait. """
 
-    t = dict_z.get("t")
-    trait_in = dict_z.get("trait")
-    df = dict_z.get("df")
-    df_none = dict_z.get("df_none")
-    df_social = dict_z.get("df_social")
-    none = dict_z.get("none")
+    t = dict_z["t"]
+    trait_in = dict_z["trait"]
+    df = dict_z["df"]
+    df_none = dict_z["df_none"]
+    df_social = dict_z["df_social"]
+    none = dict_z["none"]
 
     if "nothing" in trait_in:
         zmatrix = np.zeros((1, 1))
         return zmatrix
 
-    trait = mm.look_in(mm.dict_traits, trait_in, "mean")
-    relative = mm.look_in(mm.dict_traits, trait_in, "relative")
+    if trait_in not in mm.dict_traits:
+        print(f"Trait {trait_in} not in the dictionary.")
+        exit()
+    trait = mm.dict_traits[trait_in]["mean"]
+    relative = mm.dict_traits[trait_in]["relative"]
     zmatrix = get_zmatrix(t, df, trait)
 
     if relative == "-none":
@@ -59,6 +62,7 @@ def update_zmatrix(dict_z):
         zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
         return zmatrix
     if relative == "N":
-        zmatrix = zmatrix/get_config("N")
+        N = float(pow(2, get_config("N")))
+        zmatrix = zmatrix/N
         return zmatrix
     return zmatrix

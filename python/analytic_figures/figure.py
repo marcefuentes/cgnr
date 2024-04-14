@@ -21,32 +21,32 @@ from modules.update_zmatrix import update_zmatrix
 def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
-    mode =          dict_update["mode"]
-    mode_is_trait = dict_update["mode_is_trait"]
-    columns =       dict_update["columns"]
-    rows =          dict_update["rows"]
-    dfs =           dict_update["dfs"]
-    df_none =       dict_update["df_none"]
-    df_social =     dict_update["df_social"]
-    dffrqs =        dict_update["dffrqs"]
-    movie =         dict_update["movie"]
-    text =          dict_update["text"]
-    artists =       dict_update["artists"]
+    mode =                  dict_update["mode"]
+    mode_is_single_trait =  dict_update["mode_is_single_trait"]
+    columns =               dict_update["columns"]
+    rows =                  dict_update["rows"]
+    dfs =                   dict_update["dfs"]
+    df_none =               dict_update["df_none"]
+    df_social =             dict_update["df_social"]
+    dffrqs =                dict_update["dffrqs"]
+    movie =                 dict_update["movie"]
+    text =                  dict_update["text"]
+    artists =               dict_update["artists"]
 
     dict_z = {}
     dict_z["t"] = t
 
-    if mode_is_trait:
+    if mode_is_single_trait:
         dict_z["trait"] = mode
     else:
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
 
     for r, row in enumerate(rows):
-        if not mode_is_trait:
+        if not mode_is_single_trait:
             dict_z["df"] = dfs[r]
         for c, column in enumerate(columns):
-            if mode_is_trait:
+            if mode_is_single_trait:
                 dict_z["df"] = dfs[r][c]
                 dict_z["df_none"] = df_none[r][c]
                 dict_z["df_social"] = df_social[r][c]
@@ -54,12 +54,14 @@ def update(t, dict_update):
                 dict_z["trait"] = column
             if row == "none" and mode != "none":
                 dict_z["none"] = True
+            else:
+                dict_z["none"] = False
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
-                if mode_is_trait:
-                    column = mm.look_in(mm.dict_traits, mode, "frq")
+                if mode_is_single_trait:
+                    column = mm.dict_traits[mode]["frq"]
                 else:
-                    column = mm.look_in(mm.dict_traits, column, "frq")
+                    column = mm.dict_traits[column]["frq"]
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
                         d = dffrqs[r][
@@ -114,7 +116,7 @@ def init_artists_histogram(axs, nrows, ncols, nr, nc):
                     )
     return artists
 
-def prettify_axes(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_trait):
+def prettify_axes(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_single_trait):
     """ Prettify axes. """
 
     nr = len(alphas)
@@ -178,12 +180,15 @@ def prettify_axes(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_t
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
     for ax, column in zip(axs[0, :], columns):
-        if not mode_is_trait:
-            ax.set_title(
-                mm.look_in(mm.dict_traits, column, "title"),
-                pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-                fontsize=ss.LETTER_LABEL_SIZE
-            )
+        if mode_is_single_trait:
+            title = mm.dict_variants_all[column]["title"]
+        else:
+            title = mm.dict_traits[column]["title"]
+        ax.set_title(
+            title,
+            pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+            fontsize=ss.LETTER_LABEL_SIZE
+        )
 
     return axs
 
@@ -195,7 +200,7 @@ def prettify_axes_histogram(
     nrows,
     ncols,
     columns,
-    mode_is_trait
+    mode_is_single_trait
 ):
     """ Prettify axes for histogram. """
 
@@ -248,12 +253,15 @@ def prettify_axes_histogram(
         for a in range(0, nr, step):
             axs[r, 0, a, 0].set_yticklabels([alphas[a]])
     for c, column in enumerate(columns):
-        if not mode_is_trait:
-            axs[0, c, 0, int(nc/2)].set_title(
-                mm.look_in(mm.dict_traits, column, "title"),
-                pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-                fontsize=ss.LETTER_LABEL_SIZE
-            )
+        if mode_is_single_trait:
+            title = mm.dict_variants_all[column]["title"]
+        else:
+            title = mm.dict_traits[column]["title"]
+        axs[0, c, 0, int(nc/2)].set_title(
+            title,
+            pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+            fontsize=ss.LETTER_LABEL_SIZE
+        )
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
 
@@ -359,7 +367,7 @@ def add_colorbar(fig, measurements, nc):
     cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
     cbar.outline.set_linewidth(ss.LINE_WIDTH)
 
-def create_fig(nrows, ncols, measurements, alphas, logess, columns, mode_is_trait):
+def create_fig(nrows, ncols, measurements, alphas, logess, columns, mode_is_single_trait):
     """ Create the figure. """
 
     width = measurements["width"]
@@ -386,14 +394,14 @@ def create_fig(nrows, ncols, measurements, alphas, logess, columns, mode_is_trai
         nrows,
         ncols,
         columns,
-        mode_is_trait
+        mode_is_single_trait
     )
     artists = init_artists(axs, nrows, ncols, len(alphas), len(logess))
     add_colorbar(fig, measurements, len(logess))
 
     return fig, artists
 
-def create_fig_histogram(nrows, ncols, measurements, alphas, logess, columns, mode_is_trait):
+def create_fig_histogram(nrows, ncols, measurements, alphas, logess, columns, mode_is_single_trait):
     """ Create the figure with histogram. """
 
     width = measurements["width"]
@@ -428,14 +436,14 @@ def create_fig_histogram(nrows, ncols, measurements, alphas, logess, columns, mo
         nrows,
         ncols,
         columns,
-        mode_is_trait
+        mode_is_single_trait
     )
     artists = init_artists_histogram(axs, nrows, ncols, nr, nc)
     add_colorbar(fig, measurements, nc)
 
     return fig, artists
 
-def main(mode, histogram=False, movie=False, mode_is_trait=False):
+def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     """ Create the figure. """
 
     start_time = time.perf_counter()
@@ -449,19 +457,26 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     # Get data
 
-    if mode_is_trait:
-        dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
+    if mode_is_single_trait:
+        dfs, df_none, df_social, dffrqs = mm.get_data_single_trait(mode, histogram, movie)
         df = dfs[0][0]
     else:
-        dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)
+        dfs, df_none, df_social, dffrqs = mm.get_data_multitrait(mode, histogram, movie)
         df = df_none
 
     ts = df.Time.unique()
     alphas = np.sort(df["alpha"].unique())[::-1]
     logess = np.sort(df["logES"].unique())
 
-    rows = mm.get_rows(mode)
-    columns = mm.get_columns(mode)
+    if mode_is_single_trait:
+        rows = mm.list_rows_single_trait
+        columns = mm.dict_traits[mode]["columns"]
+    else:
+        if mode in mm.dict_multitrait_rows:
+            columns = mm.dict_multitrait_rows[mode]
+        else:
+            columns = mm.dict_multitrait_rows["default"]
+        columns = mm.dict_multitraits_modes[mode]
     nrows = len(rows)
     ncols = len(columns)
 
@@ -484,7 +499,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             alphas,
             logess,
             columns,
-            mode_is_trait
+            mode_is_single_trait
         )
     else:
         fig, artists = create_fig(
@@ -494,7 +509,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             alphas,
             logess,
             columns,
-            mode_is_trait
+            mode_is_single_trait
             )
 
     # Add data and save
@@ -505,7 +520,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     dict_update = {
         "mode": mode,
-        "mode_is_trait": mode_is_trait,
+        "mode_is_single_trait": mode_is_single_trait,
         "columns": columns,
         "rows": rows,
         "dfs": dfs,
@@ -563,5 +578,5 @@ if __name__ == "__main__":
         mode=args.mode,
         histogram=args.histogram,
         movie=args.movie,
-        mode_is_trait=is_trait
+        mode_is_single_trait=is_trait
     )
