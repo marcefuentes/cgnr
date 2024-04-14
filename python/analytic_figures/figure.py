@@ -163,11 +163,9 @@ def create_artists(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_
 
     return artists
 
-def create_artists_histogram(outergrid, divider, alphas, logess, rows, columns, mode_is_trait):
+def create_artists_histogram(outergrid, divider, alphas, logess, nrows, ncols, columns, mode_is_trait):
     """ Create Line2D artists. """
 
-    ncols = len(columns)
-    nrows = len(rows)
     nr = len(alphas)
     nc = len(logess)
 
@@ -178,8 +176,8 @@ def create_artists_histogram(outergrid, divider, alphas, logess, rows, columns, 
 
     axs = np.empty((nrows, ncols, nr, nc), dtype=object)
 
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(columns):
+    for r in range(nrows):
+        for c in range(ncols):
             grid = outergrid[r, c].subgridspec(
                 nrows=nr,
                 ncols=nc,
@@ -240,8 +238,8 @@ def create_artists_histogram(outergrid, divider, alphas, logess, rows, columns, 
     x = np.arange(ss.BINS)
     dummy_y = np.zeros_like(x)
 
-    for r, _ in enumerate(rows):
-        for c, _ in enumerate(columns):
+    for r in range(nrows):
+        for c in range(ncols):
             for a, _ in enumerate(alphas):
                 for e, _ in enumerate(logess):
                     ax = axs[r, c, a, e]
@@ -422,7 +420,8 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             divider,
             alphas,
             logess,
-            rows,
+            nrows,
+            ncols,
             columns,
             mode_is_trait
         )
