@@ -37,7 +37,7 @@ def update(t, dict_update):
     dict_z["t"] = t
 
     if mode_is_trait:
-        dict_z["trait"] = mm.look_in(mm.dict_traits, mode, "mean")
+        dict_z["trait"] = mode
     else:
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
@@ -450,7 +450,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     # Get data
 
     if mode_is_trait:
-        dfs, df_none, df_social, dffrqs = mm.get_data_trait(mode, histogram, movie)
+        dfs, df_none, df_social, dffrqs = mm.get_data_trait(histogram, movie)
         df = dfs[0][0]
     else:
         dfs, df_none, df_social, dffrqs = mm.get_data_variant(mode, histogram, movie)

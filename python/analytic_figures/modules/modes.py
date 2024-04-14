@@ -67,6 +67,26 @@ dict_traits = {
     }
 }
 
+dict_rows = {
+    "default": [
+        "pi",
+        "p",
+        "i",
+        "none"
+    ],
+    "none": [
+        "given100",
+        "given095",
+        "given050",
+        "given000"
+    ],
+    "test": [
+        "p",
+        "i",
+        "none"
+    ]
+}
+
 dict_columns = {
     "cooperation": [
         "ChooseGrain",
@@ -125,6 +145,15 @@ dict_columns = {
     ]
 }
 
+rows_trait = [
+    "cost15_128",
+    "cost15_128",
+    "cost15_128",
+    "cost15_4",
+    "cost15_4",
+    "cost15_4"
+]
+
 columns_trait = [
     "nolang_noshuffle",
     "nolang_shuffle",
@@ -132,31 +161,13 @@ columns_trait = [
     "lang_shuffle"
 ]
 
-dict_rows = {
-    "default": [
-        "pi",
-        "p",
-        "i",
-        "none"
-    ],
-    "none": [
-        "given100",
-        "given095",
-        "given050",
-        "given000"
-    ],
-    "test": [
-        "p",
-        "i",
-        "none"
-    ]
-}
-
-rows_trait = [
-    "_cost15_128",
-    "_cost15_128",
-    "_cost15_4",
-    "_cost15_4"
+mechanisms_trait = [
+   "p",
+   "pi",
+   "i",
+   "p",
+   "pi",
+    "i"
 ]
 
 GIVEN_FOLDER = "given100"
@@ -217,7 +228,7 @@ def get_data_variant(mode, histogram, movie):
         df_social = get_df(path, csv0, movie)
     return dfs, df_none, df_social, dffrqs
 
-def get_data_trait(mechanism, histogram, movie):
+def get_data_trait(histogram, movie):
     """ Get the data. """
 
     nrows = len(rows_trait)
@@ -231,12 +242,12 @@ def get_data_trait(mechanism, histogram, movie):
     else:
         dffrqs =    []
     csv0, csv1 = get_config("output_file_extensions")
-    for r, row in enumerate(rows_trait):
+    for r, row, mechanism in zip(range(nrows), rows_trait, mechanisms_trait):
         for c, column in enumerate(columns_trait):
             path = f"{column}_{row}/{mechanism}/{GIVEN_FOLDER}"
             if histogram:
-                dffrqs[c][r] =  get_df(path, csv1, movie)
-            dfs[c][r] =         get_df(path, csv0, movie)
-            df_nones[c][r] =    get_df(f"{column}_{row}/none/{GIVEN_FOLDER}", csv0, movie)
-            df_socials[c][r] =  get_df(f"{column}_{row}/none/given000", csv0, movie)
+                dffrqs[r][c] =  get_df(path, csv1, movie)
+            dfs[r][c] =         get_df(path, csv0, movie)
+            df_nones[r][c] =    get_df(f"{column}_{row}/none/{GIVEN_FOLDER}", csv0, movie)
+            df_socials[r][c] =  get_df(f"{column}_{row}/none/given000", csv0, movie)
     return dfs, df_nones, df_socials, dffrqs
