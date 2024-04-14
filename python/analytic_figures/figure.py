@@ -249,8 +249,8 @@ def create_artists_histogram(
 
     for r in range(nrows):
         for c in range(ncols):
-            for a, _ in enumerate(alphas):
-                for e, _ in enumerate(logess):
+            for a in range(nr):
+                for e in range(nc):
                     ax = axs[r, c, a, e]
                     artists[r, c, a, e], = ax.plot(
                         x,
