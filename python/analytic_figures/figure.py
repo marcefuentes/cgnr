@@ -284,6 +284,48 @@ def fix_positions(ncols, nrows):
     )
     return column_fixed, row_fixed
 
+def prettify_fig(fig, width, height, inner_width, inner_height, column_fixed, row_fixed):
+    """ Prettify the figure. """
+
+    divider = Divider(
+        fig,
+        (ss.LEFT_MARGIN/width,
+        ss.BOTTOM_MARGIN/height,
+        inner_width/width,
+        inner_height/height),
+        column_fixed,
+        row_fixed,
+        aspect=False
+    )
+
+    fig.supxlabel(
+        t=ss.X_LABEL,
+        x=(ss.LEFT_MARGIN + inner_width/2)/width,
+        y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
+        fontsize=ss.BIG_LABEL_SIZE
+    )
+    fig.supylabel(
+        t=ss.Y_LABEL,
+        x=(ss.LEFT_MARGIN - ss.Y_LABEL_SIZE)/width,
+        y=(ss.BOTTOM_MARGIN + inner_height/2)/height,
+        fontsize=ss.BIG_LABEL_SIZE
+    )
+
+    if ss.PRINT_FOLDER:
+        bottom_text = os.path.basename(os.getcwd())
+    else:
+        bottom_text = ""
+    fig.text(
+        x=(ss.LEFT_MARGIN + inner_width)/width,
+        y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
+        s=bottom_text,
+        fontsize=ss.TICK_LABEL_SIZE,
+        color="grey",
+        ha="right"
+    )
+
+    return divider
+
 def add_colorbar(fig, width, height, inner_width, inner_height, nc):
     """ Add colorbar. """
 
@@ -350,42 +392,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         )
         column_fixed, row_fixed = fix_positions(ncols, nrows)
 
-    divider = Divider(
-        fig,
-        (ss.LEFT_MARGIN/width,
-        ss.BOTTOM_MARGIN/height,
-        inner_width/width,
-        inner_height/height),
-        column_fixed,
-        row_fixed,
-        aspect=False
-    )
-
-    fig.supxlabel(
-        t=ss.X_LABEL,
-        x=(ss.LEFT_MARGIN + inner_width/2)/width,
-        y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
-        fontsize=ss.BIG_LABEL_SIZE
-    )
-    fig.supylabel(
-        t=ss.Y_LABEL,
-        x=(ss.LEFT_MARGIN - ss.Y_LABEL_SIZE)/width,
-        y=(ss.BOTTOM_MARGIN + inner_height/2)/height,
-        fontsize=ss.BIG_LABEL_SIZE
-    )
-
-    if ss.PRINT_FOLDER:
-        bottom_text = os.path.basename(os.getcwd())
-    else:
-        bottom_text = ""
-    fig.text(
-        x=(ss.LEFT_MARGIN + inner_width)/width,
-        y=(ss.BOTTOM_MARGIN - ss.X_LABEL_SIZE)/height,
-        s=bottom_text,
-        fontsize=ss.TICK_LABEL_SIZE,
-        color="grey",
-        ha="right"
-    )
+    divider = prettify_fig(fig, width, height, inner_width, inner_height, column_fixed, row_fixed)
 
     if histogram:
         artists = create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_is_trait)
