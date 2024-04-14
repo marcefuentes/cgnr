@@ -254,6 +254,36 @@ def create_artists_histogram(fig, divider, alphas, logess, rows, columns, mode_i
                     )
     return artists
 
+def fix_positions_histogram(ncols, nrows, nc, nr):
+    """ Fix positions for histogram. """
+
+    spacing_fixed = Size.Fixed(ss.SPACING)
+    plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
+    column_fixed = (
+        [plot_size_fixed] * nc
+        + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
+    )
+    row_fixed = (
+        [plot_size_fixed] * nr + ([spacing_fixed]
+        + [plot_size_fixed] * nr) * (nrows - 1)
+    )
+    return column_fixed, row_fixed
+
+def fix_positions(ncols, nrows):
+    """ Fix positions. """
+
+    spacing_fixed = Size.Fixed(ss.SPACING)
+    plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
+    column_fixed = (
+        [plot_size_fixed]
+        + [spacing_fixed, plot_size_fixed] * (ncols - 1)
+    )
+    row_fixed = (
+        [plot_size_fixed]
+        + [spacing_fixed, plot_size_fixed] * (nrows - 1)
+    )
+    return column_fixed, row_fixed
+
 def add_colorbar(fig, width, height, inner_width, inner_height, nc):
     """ Add colorbar. """
 
@@ -311,34 +341,14 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
 
     if histogram:
         fig = plt.figure(figsize=(width, height))
+        column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nr, nc)
     else:
         fig, main_ax = plt.subplots(
             nrows=nrows,
             ncols=ncols,
             figsize=(width, height)
         )
-
-    spacing_fixed = Size.Fixed(ss.SPACING)
-    if histogram:
-        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
-        column_fixed = (
-            [plot_size_fixed] * nc
-            + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
-        )
-        row_fixed = (
-            [plot_size_fixed] * nr + ([spacing_fixed]
-            + [plot_size_fixed] * nr) * (nrows - 1)
-        )
-    else:
-        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
-        column_fixed = (
-            [plot_size_fixed]
-            + [spacing_fixed, plot_size_fixed] * (ncols - 1)
-        )
-        row_fixed = (
-            [plot_size_fixed]
-            + [spacing_fixed, plot_size_fixed] * (nrows - 1)
-        )
+        column_fixed, row_fixed = fix_positions(ncols, nrows)
 
     divider = Divider(
         fig,
