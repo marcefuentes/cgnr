@@ -188,7 +188,7 @@ def prettify_axes(axs, divider, alphas, logess, nrows, ncols, columns, mode_is_t
     return axs
 
 def prettify_axes_histogram(
-    outergrid,
+    axs,
     divider,
     alphas,
     logess,
@@ -207,32 +207,24 @@ def prettify_axes_histogram(
     step = int(nr/2)
     letter_position = 1.0 + ss.LETTER_POSITION * nr
 
-    axs = np.empty((nrows, ncols, nr, nc), dtype=object)
-
     for r in range(nrows):
         for c in range(ncols):
-            grid = outergrid[r, c].subgridspec(
-                nrows=nr,
-                ncols=nc,
-                hspace=0.0,
-                wspace=0.0
-            )
-            axs[r, c] = grid.subplots()
             for a in range(nr):
                 inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
                 for e in range(nc):
                     inner_x = c * (nc + 1) + e + int(e / nc)
                     new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
-                    axs[r, c, a, e].set_axes_locator(new_locator)
-                    for spine in axs[r, c, a, e].spines.values():
+                    ax = axs[r, c, a, e]
+                    ax.set_axes_locator(new_locator)
+                    for spine in ax.spines.values():
                         spine.set_linewidth(ss.LINE_WIDTH)
-                    axs[r, c, a, e].set(
+                    ax.set(
                         xticks=[],
                         yticks=[],
                         xlim=xlim,
                         ylim=ylim
                     )
-                    axs[r, c, a, e].tick_params(
+                    ax.tick_params(
                         axis="both",
                         labelsize=ss.TICK_LABEL_SIZE,
                         size=ss.TICK_SIZE
@@ -412,6 +404,16 @@ def create_fig_histogram(nrows, ncols, measurements, alphas, logess, columns, mo
     fig = plt.figure(figsize=(width, height))
     column_fixed, row_fixed = fix_positions_histogram(nrows, ncols, nr, nc)
     outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
+    axs = np.empty((nrows, ncols, nr, nc), dtype=object)
+    for r in range(nrows):
+        for c in range(ncols):
+            grid = outergrid[r, c].subgridspec(
+                nrows=nr,
+                ncols=nc,
+                hspace=0.0,
+                wspace=0.0
+            )
+            axs[r, c] = grid.subplots()
     divider = prettify_fig(
         fig,
         measurements,
@@ -419,7 +421,7 @@ def create_fig_histogram(nrows, ncols, measurements, alphas, logess, columns, mo
         row_fixed
     )
     axs = prettify_axes_histogram(
-        outergrid,
+        axs,
         divider,
         alphas,
         logess,
