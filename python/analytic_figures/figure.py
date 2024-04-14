@@ -473,10 +473,10 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
         columns = mm.dict_traits[mode]["columns"]
     else:
         if mode in mm.dict_multitrait_rows:
-            columns = mm.dict_multitrait_rows[mode]
+            rows = mm.dict_multitrait_rows[mode]
         else:
-            columns = mm.dict_multitrait_rows["default"]
-        columns = mm.dict_multitraits_modes[mode]
+            rows = mm.dict_multitrait_rows["default"]
+        columns = mm.dict_multitrait_modes[mode]
     nrows = len(rows)
     ncols = len(columns)
 
