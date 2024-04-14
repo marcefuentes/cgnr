@@ -135,6 +135,27 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
     inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
     width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
     height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
+    spacing_fixed = Size.Fixed(ss.SPACING)
+    if histogram:
+        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
+        column_fixed = (
+            [plot_size_fixed] * nc
+            + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
+        )
+        row_fixed = (
+            [plot_size_fixed] * nr + ([spacing_fixed]
+            + [plot_size_fixed] * nr) * (nrows - 1)
+        )
+    else:
+        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
+        column_fixed = (
+            [plot_size_fixed]
+            + [spacing_fixed, plot_size_fixed] * (ncols - 1)
+        )
+        row_fixed = (
+            [plot_size_fixed]
+            + [spacing_fixed, plot_size_fixed] * (nrows - 1)
+        )
 
     if histogram:
         fig = plt.figure(figsize=(width, height))
@@ -171,27 +192,6 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         ha="right"
     )
 
-    spacing_fixed = Size.Fixed(ss.SPACING)
-    if histogram:
-        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE/nc)
-        column_fixed = (
-            [plot_size_fixed] * nc
-            + ([spacing_fixed] + [plot_size_fixed] * nc) * (ncols - 1)
-        )
-        row_fixed = (
-            [plot_size_fixed] * nr + ([spacing_fixed]
-            + [plot_size_fixed] * nr) * (nrows - 1)
-        )
-    else:
-        plot_size_fixed = Size.Fixed(ss.PLOT_SIZE)
-        column_fixed = (
-            [plot_size_fixed]
-            + [spacing_fixed, plot_size_fixed] * (ncols - 1)
-        )
-        row_fixed = (
-            [plot_size_fixed]
-            + [spacing_fixed, plot_size_fixed] * (nrows - 1)
-        )
     divider = Divider(
         fig,
         (ss.LEFT_MARGIN/width,

@@ -122,14 +122,15 @@ dict_columns = {
     "test": [
         "qBSeen",
         "w"
-    ],
-    "trait": [
-        "nolang_noshuffle",
-        "nolang_shuffle",
-        "lang_noshuffle",
-        "lang_shuffle"
-    ],
+    ]
 }
+
+columns_trait = [
+    "nolang_noshuffle",
+    "nolang_shuffle",
+    "lang_noshuffle",
+    "lang_shuffle"
+]
 
 dict_rows = {
     "default": [
@@ -148,12 +149,15 @@ dict_rows = {
         "p",
         "i",
         "none"
-    ],
-    "trait": [
-        "_cost15_128",
-        "_cost15_4"
-    ],
+    ]
 }
+
+rows_trait = [
+    "_cost15_128",
+    "_cost15_128",
+    "_cost15_4",
+    "_cost15_4"
+]
 
 given_folder = "given100"
 
@@ -166,9 +170,8 @@ def look_in(dictionary, key, field):
 
 def get_columns(key):
     """ Return the columns for the key """
-
     if key in dict_traits:
-        return dict_columns["trait"]
+        return columns_trait
     try:
         return dict_columns[key]
     except KeyError as exc:
@@ -178,7 +181,7 @@ def get_rows(key):
     """ Return the rows for the keye """
 
     if key in dict_traits:
-        return dict_rows["trait"]
+        return rows_trait
     if key in dict_rows:
         return dict_rows[key]
     return dict_rows["default"]
@@ -217,19 +220,19 @@ def get_data_variant(mode, histogram, movie):
 def get_data_trait(mechanism, histogram, movie):
     """ Get the data. """
 
-    rows = get_rows("trait")
-    columns = get_columns("trait")
+    nrows = len(rows_trait)
+    ncolumns = len(columns_trait)
 
-    dfs =           [[None for _ in range(len(columns))] for _ in range(len(rows))]
-    df_nones =      [[None for _ in range(len(columns))] for _ in range(len(rows))]
-    df_socials =    [[None for _ in range(len(columns))] for _ in range(len(rows))]
+    dfs =           [[None for _ in range(ncolumns)] for _ in range(nrows)]
+    df_nones =      [[None for _ in range(ncolumns)] for _ in range(nrows)]
+    df_socials =    [[None for _ in range(ncolumns)] for _ in range(nrows)]
     if histogram:
-        dffrqs =    [[None for _ in range(len(columns))] for _ in range(len(rows))]
+        dffrqs =    [[None for _ in range(len(columns))] for _ in range(nrows)]
     else:
         dffrqs =    []
     csv0, csv1 = get_config("output_file_extensions")
-    for r, row in enumerate(rows):
-        for c, column in enumerate(columns):
+    for r, row in enumerate(rows_trait):
+        for c, column in enumerate(columns_trait):
             path = f"{column}_{row}/{mechanism}/{given_folder}"
             if histogram:
                 dffrqs[c][r] =  get_df(path, csv1, movie)
