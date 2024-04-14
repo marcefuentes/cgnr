@@ -21,17 +21,17 @@ from modules.update_zmatrix import update_zmatrix
 def update(t, dict_update):
     """ Update the plot with the data at time t. """
 
-    mode =          dict_update["mode"]
-    mode_is_trait = dict_update["mode_is_trait"]
-    columns =       dict_update["columns"]
-    rows =          dict_update["rows"]
-    dfs =           dict_update["dfs"]
-    df_none =       dict_update["df_none"]
-    df_social =     dict_update["df_social"]
-    dffrqs =        dict_update["dffrqs"]
-    movie =         dict_update["movie"]
-    text =          dict_update["text"]
-    artists =       dict_update["artists"]
+    mode =          dict_update.get("mode")
+    mode_is_trait = dict_update.get("mode_is_trait")
+    columns =       dict_update.get("columns")
+    rows =          dict_update.get("rows")
+    dfs =           dict_update.get("dfs")
+    df_none =       dict_update.get("df_none")
+    df_social =     dict_update.get("df_social")
+    dffrqs =        dict_update.get("dffrqs")
+    movie =         dict_update.get("movie")
+    text =          dict_update.get("text")
+    artists =       dict_update.get("artists")
 
     dict_z = {
         "t": t,
