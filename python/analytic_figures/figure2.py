@@ -42,16 +42,18 @@ def update(t, dict_update):
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
 
-    for r, _ in enumerate(rows):
+    for r, row in enumerate(rows):
         if not mode_is_trait:
-            dict_z["df"] =          dfs[r]
+            dict_z["df"] = dfs[r]
         for c, column in enumerate(columns):
             if mode_is_trait:
-                dict_z["df"] =          dfs[r][c]
-                dict_z["df_none"] =     df_none[r][c]
-                dict_z["df_social"] =   df_social[r][c]
+                dict_z["df"] = dfs[r][c]
+                dict_z["df_none"] = df_none[r][c]
+                dict_z["df_social"] = df_social[r][c]
             else:
-                dict_z["trait"] =       column
+                dict_z["trait"] = column
+            if row == "none" and mode != "none":
+                dict_z["none"] = True
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
                 if mode_is_trait:

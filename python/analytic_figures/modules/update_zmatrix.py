@@ -22,11 +22,12 @@ def get_zmatrix(t, df, trait):
 def update_zmatrix(dict_z):
     """ Return the updated zmatrix for a given time and trait. """
 
-    t =             dict_z["t"]
-    trait_in =      dict_z["trait"]
-    df =            dict_z["df"]
-    df_none =       dict_z["df_none"]
-    df_social =     dict_z["df_social"]
+    t = dict_z.get("t")
+    trait_in = dict_z.get("trait")
+    df = dict_z.get("df")
+    df_none = dict_z.get("df_none")
+    df_social = dict_z.get("df_social")
+    none = dict_z.get("none")
 
     if "nothing" in trait_in:
         zmatrix = np.zeros((1, 1))
@@ -40,7 +41,10 @@ def update_zmatrix(dict_z):
         zmatrix = zmatrix - get_zmatrix(t, df_none, trait)
         return zmatrix
     if relative == "none-":
-        zmatrix = get_zmatrix(t, df_none, trait) - zmatrix
+        if none:
+            zmatrix = 0.5 - zmatrix
+        else:
+            zmatrix = get_zmatrix(t, df_none, trait) - zmatrix
         return zmatrix
     if relative == "-social":
         zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
