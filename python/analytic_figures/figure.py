@@ -407,23 +407,12 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
         fig = plt.figure(figsize=(width, height))
         column_fixed, row_fixed = fix_positions_histogram(ncols, nrows, nc, nr)
         outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
-    else:
-        fig, main_ax = plt.subplots(
-            nrows=nrows,
-            ncols=ncols,
-            figsize=(width, height)
+        divider = prettify_fig(
+            fig,
+            measurements,
+            column_fixed,
+            row_fixed
         )
-        column_fixed, row_fixed = fix_positions(ncols, nrows)
-        axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
-
-    divider = prettify_fig(
-        fig,
-        measurements,
-        column_fixed,
-        row_fixed
-    )
-
-    if histogram:
         artists = create_artists_histogram(
             outergrid,
             divider,
@@ -434,7 +423,21 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             columns,
             mode_is_trait
         )
+        add_colorbar(fig, measurements, nc)
     else:
+        fig, main_ax = plt.subplots(
+            nrows=nrows,
+            ncols=ncols,
+            figsize=(width, height)
+        )
+        column_fixed, row_fixed = fix_positions(ncols, nrows)
+        axs = main_ax if nrows > 1 else main_ax[np.newaxis, :]
+        divider = prettify_fig(
+            fig,
+            measurements,
+            column_fixed,
+            row_fixed
+        )
         artists = create_artists(
             axs,
             divider,
@@ -445,8 +448,7 @@ def main(mode, histogram=False, movie=False, mode_is_trait=False):
             columns,
             mode_is_trait
         )
-
-    add_colorbar(fig, measurements, nc)
+        add_colorbar(fig, measurements, nc)
 
     # Save figure
 
