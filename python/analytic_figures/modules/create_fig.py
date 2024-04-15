@@ -3,36 +3,15 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-#from matplotlib import gridspec
 
-from modules.add_colorbar import add_colorbar
 from modules.fix_positions import create_divider
-from modules.prettify_fig import prettify_fig
-import modules.settings as ss
 
-def create_measurements(nrows, ncols):
-    """ Create measurements for figure. """
-
-    inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
-    inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
-    width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
-    height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
-    measurements = {
-        "width": width,
-        "height": height,
-        "inner_width": inner_width,
-        "inner_height": inner_height
-    }
-
-    return measurements
-
-def create_fig(nrows, ncols, nc, nr=None):
+def create_fig(measurements, nrows, ncols, nc=None, nr=None):
     """ Create figure with subplots. """
 
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
 
-    measurements = create_measurements(nrows, ncols)
     width = measurements["width"]
     height = measurements["height"]
 
@@ -58,8 +37,5 @@ def create_fig(nrows, ncols, nc, nr=None):
                 )
                 axs[r, c] = grid.subplots()
         divider = create_divider(fig, measurements, nrows, ncols, nr=nr, nc=nc)
-
-    prettify_fig(fig, measurements)
-    add_colorbar(fig, measurements, nc)
 
     return fig, axs, divider

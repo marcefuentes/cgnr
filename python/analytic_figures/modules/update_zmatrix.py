@@ -62,7 +62,7 @@ def update_zmatrix(dict_z):
         zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
         return zmatrix
     if relative == "N":
-        N = float(pow(2, get_config("N")))
-        zmatrix = zmatrix/N
+        n = float(pow(2, get_config("N")))
+        zmatrix = zmatrix/n
         return zmatrix
     return zmatrix

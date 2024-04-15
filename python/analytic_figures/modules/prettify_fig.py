@@ -5,6 +5,22 @@ import os
 
 import modules.settings as ss
 
+def create_measurements(nrows, ncols):
+    """ Create measurements for figure. """
+
+    inner_height = ss.PLOT_SIZE*nrows + ss.SPACING*(nrows - 1)
+    inner_width = ss.PLOT_SIZE*ncols + ss.SPACING*(ncols - 1)
+    width = inner_width + ss.LEFT_MARGIN + ss.RIGHT_MARGIN
+    height = inner_height + ss.TOP_MARGIN + ss.BOTTOM_MARGIN
+    measurements = {
+        "width": width,
+        "height": height,
+        "inner_width": inner_width,
+        "inner_height": inner_height
+    }
+
+    return measurements
+
 def prettify_fig(fig, measurements):
     """ Prettify the figure. """
 

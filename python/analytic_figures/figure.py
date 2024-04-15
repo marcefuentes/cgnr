@@ -13,10 +13,12 @@ from matplotlib import colormaps
 
 import modules.settings as ss
 import modules.modes as mm
+from modules.add_colorbar import add_colorbar
 from modules.argparse_utils import parse_args
 from modules.create_fig import create_fig
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
+from modules.prettify_fig import prettify_fig, create_measurements
 from modules.update_zmatrix import update_zmatrix
 
 def update(t, dict_update):
@@ -119,9 +121,10 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
             titles.append(mm.dict_traits[column]["title"])
     nrows = len(rows)
     ncols = len(columns)
+    measurements = create_measurements(nrows, ncols)
 
     if histogram:
-        fig, axs, divider = create_fig(nrows, ncols, nc, nr=nr)
+        fig, axs, divider = create_fig(measurements, nrows, ncols, nc=nc, nr=nr)
         axs = prettify_plot_axes(
             axs,
             divider,
@@ -133,7 +136,7 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
         )
         artists = init_plot_artists(axs, nrows, ncols, nr, nc)
     else:
-        fig, axs, divider = create_fig(nrows, ncols, nc)
+        fig, axs, divider = create_fig(measurements, nrows, ncols)
         axs = prettify_imshow_axes(
             axs,
             divider,
@@ -144,6 +147,9 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
             titles
         )
         artists = init_imshow_artists(axs, nrows, ncols, nr, nc)
+
+    prettify_fig(fig, measurements)
+    add_colorbar(fig, measurements, nc)
 
     # Add data and save
 
