@@ -6,23 +6,23 @@ import modules.settings as ss
 def prettify_imshow_axes(
     axs,
     divider,
-    alphas,
-    logess,
+    y_values,
+    x_values,
     nrows,
     ncols,
     titles
 ):
     """ Prettify (nrows x ncols) matrix of axes. """
 
-    nr = len(alphas)
-    nc = len(logess)
+    nr = len(y_values)
+    nc = len(x_values)
 
     xticks = [0, 0.5*(nc - 1), nc - 1]
     yticks = [0, 0.5*(nr - 1), nr - 1]
-    xmin = min(logess)
-    xmax = max(logess)
-    ymin = min(alphas)
-    ymax = max(alphas)
+    xmin = min(x_values)
+    xmax = max(x_values)
+    ymin = min(y_values)
+    ymax = max(y_values)
     xticklabels = [
         f"{xmin:.0f}",
         f"{(xmin + xmax)/2.:.0f}",
@@ -86,16 +86,16 @@ def prettify_imshow_axes(
 def prettify_plot_axes(
     axs,
     divider,
-    alphas,
-    logess,
+    y_values,
+    x_values,
     nrows,
     ncols,
     titles
 ):
     """ Prettify (nrows x ncols x nr x nc) matrix of axes. """
 
-    nr = len(alphas)
-    nc = len(logess)
+    nr = len(y_values)
+    nc = len(x_values)
 
     xlim = [-2, ss.BINS + 1]
     ylim = [0, 0.25]
@@ -141,7 +141,7 @@ def prettify_plot_axes(
             for e in range(0, nc, step):
                 axs[r, c, -1, e].set(xticks=[xlim[1]/2], xticklabels=[])
         for a in range(0, nr, step):
-            axs[r, 0, a, 0].set_yticklabels([alphas[a]])
+            axs[r, 0, a, 0].set_yticklabels([y_values[a]])
     for c in range(ncols):
         axs[0, c, 0, int(nc/2)].set_title(
             titles[c],
@@ -149,6 +149,6 @@ def prettify_plot_axes(
             fontsize=ss.LETTER_LABEL_SIZE
         )
         for e in range(0, nc, step):
-            axs[-1, c, -1, e].set_xticklabels([f"{logess[e]:.0f}"])
+            axs[-1, c, -1, e].set_xticklabels([f"{x_values[e]:.0f}"])
 
     return axs
