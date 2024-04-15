@@ -42,10 +42,11 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     titles = []
 
     if mode_is_single_trait:
-        rows = mm.list_rows_single_trait
+        rows = mm.list_single_trait_rows
         columns = mm.dict_traits[mode]["columns"]
         for column in columns:
             titles.append(mm.dict_variants_all[column]["title"])
+        right_titles = mm.list_single_trait_right_titles
     else:
         if mode in mm.dict_multitrait_rows:
             rows = mm.dict_multitrait_rows[mode]
@@ -79,7 +80,8 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
             logess,
             nrows,
             ncols,
-            titles
+            titles,
+            right_titles=right_titles
         )
         artists = init_imshow_artists(axs, nrows, ncols, nr, nc)
 

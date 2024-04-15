@@ -10,7 +10,8 @@ def prettify_imshow_axes(
     x_values,
     nrows,
     ncols,
-    titles
+    titles,
+    right_titles=None
 ):
     """ Prettify (nrows x ncols) matrix of axes. """
 
@@ -80,6 +81,18 @@ def prettify_imshow_axes(
             pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
             fontsize=ss.LETTER_LABEL_SIZE
         )
+    if right_titles:
+        for ax, title in zip(axs[:, -1], right_titles):
+            ax.annotate(
+                title,
+                xy=(1, 0.5),
+                xycoords="axes fraction",
+                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
+                textcoords="offset points",
+                va="center",
+                ha="left",
+                fontsize=ss.LETTER_LABEL_SIZE
+            )
 
     return axs
 

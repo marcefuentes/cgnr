@@ -185,7 +185,7 @@ dict_multitrait_modes = {
     ]
 }
 
-list_rows_single_trait = [
+list_single_trait_rows = [
     "cost15_128",
     "cost15_128",
     "cost15_128",
@@ -194,13 +194,22 @@ list_rows_single_trait = [
     "cost15_4"
 ]
 
-list_mechanisms_single_trait = [
+list_single_trait_mechanisms = [
    "p",
    "pi",
    "i",
    "p",
    "pi",
     "i"
+]
+
+list_single_trait_right_titles = [
+    "P",
+    "PR",
+    "R",
+    "P",
+    "PR",
+    "R"
 ]
 
 GIVEN_FOLDER = "given100"
@@ -242,8 +251,8 @@ def get_data_single_trait(trait, histogram, movie):
     """ Get the data. """
 
     columns = dict_traits[trait]["columns"]
-    rows = list_rows_single_trait
-    mechanisms = list_mechanisms_single_trait
+    rows = list_single_trait_rows
+    mechanisms = list_single_trait_mechanisms
     nrows = len(rows)
     ncolumns = len(columns)
 
