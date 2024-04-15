@@ -263,4 +263,5 @@ def get_data_single_trait(trait, histogram, movie):
             dfs[r][c] =         get_df(path, csv0, movie)
             df_nones[r][c] =    get_df(f"{column}_{row}/none/{GIVEN_FOLDER}", csv0, movie)
             df_socials[r][c] =  get_df(f"{column}_{row}/none/given000", csv0, movie)
+
     return dfs, df_nones, df_socials, dffrqs
