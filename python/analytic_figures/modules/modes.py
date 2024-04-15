@@ -95,7 +95,7 @@ dict_traits = {
     "w_excess": {
         "mean":     "wmean",
         "frq":      "w",
-        "title":    "Fitness",
+        "title":    "Fitness\n(relative)",
         "relative": "-social",
         "columns":  dict_variants_all
     },
