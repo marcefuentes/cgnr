@@ -8,13 +8,12 @@ def prettify_imshow_axes(
     divider,
     y_values,
     x_values,
-    nrows,
-    ncols,
-    titles,
-    right_titles=None
+    row_titles,
+    column_titles
 ):
     """ Prettify (nrows x ncols) matrix of axes. """
 
+    nrows, ncols = axs.shape
     nr = len(y_values)
     nc = len(x_values)
 
@@ -75,14 +74,14 @@ def prettify_imshow_axes(
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
-    for ax, title in zip(axs[0, :], titles):
+    for ax, title in zip(axs[0, :], column_titles):
         ax.set_title(
             title,
             pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
             fontsize=ss.LETTER_LABEL_SIZE
         )
-    if right_titles:
-        for ax, title in zip(axs[:, -1], right_titles):
+    if row_titles:
+        for ax, title in zip(axs[:, -1], row_titles):
             ax.annotate(
                 title,
                 xy=(1, 0.5),
@@ -101,14 +100,12 @@ def prettify_plot_axes(
     divider,
     y_values,
     x_values,
-    nrows,
-    ncols,
-    titles
+    row_titles,
+    column_titles
 ):
     """ Prettify (nrows x ncols x nr x nc) matrix of axes. """
 
-    nr = len(y_values)
-    nc = len(x_values)
+    nrows, ncols, nr, nc = axs.shape
 
     xlim = [-2, ss.BINS + 1]
     ylim = [0, 0.25]
@@ -157,11 +154,23 @@ def prettify_plot_axes(
             axs[r, 0, a, 0].set_yticklabels([y_values[a]])
     for c in range(ncols):
         axs[0, c, 0, int(nc/2)].set_title(
-            titles[c],
+            column_titles[c],
             pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
             fontsize=ss.LETTER_LABEL_SIZE
         )
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{x_values[e]:.0f}"])
+    for r in range(nrows):
+        for a in range(0, nr, step):
+            axs[r, -1, a, -1].annotate(
+                row_titles[a],
+                xy=(1, 0.5),
+                xycoords="axes fraction",
+                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
+                textcoords="offset points",
+                va="center",
+                ha="left",
+                fontsize=ss.LETTER_LABEL_SIZE
+            )
 
     return axs

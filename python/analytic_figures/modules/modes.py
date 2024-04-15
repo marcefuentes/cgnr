@@ -1,31 +1,34 @@
 
 """ Store the columns and rows for the different modes of the figure """
 
-from common_modules.get_config import get_config
-from modules.get_df import get_df
-
-dict_variants_all = {
-    "nolang_noshuffle": {
-        "title":    "Short memory\nNo shuffle"
-    },
-    "nolang_shuffle": {
-        "title":    "Short memory\nShuffle"
-    },
-    "lang_noshuffle": {
-        "title":    "Long memory\nNo shuffle"
-    },
-    "lang_shuffle": {
-        "title":    "Long memory\nShuffle"
-    }
+dict_variant_titles = {
+    "nolang_noshuffle": "Short memory\nNo shuffle",
+    "nolang_shuffle":   "Short memory\nShuffle",
+    "lang_noshuffle":   "Long memory\nNo shuffle",
+    "lang_shuffle":     "Long memory\nShuffle"
 }
 
-dict_variants_lang = {
-    "lang_noshuffle": {
-        "title":    "Long memory\nNo shuffle"
-    },
-    "lang_shuffle": {
-        "title":    "Long memory\nShuffle"
-    }
+all_lang = [
+    "nolang_noshuffle",
+    "nolang_shuffle",
+    "lang_noshuffle",
+    "lang_shuffle"
+]
+
+lang = [
+    "lang_noshuffle",
+    "lang_shuffle"
+]
+
+dict_row_titles = {
+    "none":     "",
+    "p":        "P",
+    "pi":       "PR",
+    "i":        "R",
+    "given100": "1",
+    "given095": "0.95",
+    "given050": "0.5",
+    "given000": "0"
 }
 
 dict_traits = {
@@ -34,83 +37,84 @@ dict_traits = {
         "frq":      "ChooseGrain",
         "title":    "Partner choice\n(short memory)",
         "relative": "none-",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
     "Choose_ltGrain": {
         "mean":     "Choose_ltGrainmean",
         "frq":      "Choose_ltGrain",
         "title":    "Partner choice\n(long memory)",
         "relative": "none-",
-        "columns":  dict_variants_lang
+        "variants": lang
     },
     "MimicGrain": {
         "mean":     "MimicGrainmean",
         "frq":      "MimicGrain",
         "title":    "Direct\nreciprocity",
         "relative": "none-",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
     "ImimicGrain": {
         "mean":     "ImimicGrainmean",
         "frq":      "ImimicGrain",
         "title":    "Indirect\nreciprocity\n(short memory)",
         "relative": "none-",
-        "columns":  dict_variants_all
+        "variants": all_lang 
     },
     "Imimic_ltGrain": {
         "mean":     "Imimic_ltGrainmean",
         "frq":      "Imimic_ltGrain",
         "title":    "Indirect\nreciprocity\n(long memory)",
         "relative": "none-",
-        "columns":  dict_variants_lang
+        "variants": lang
     },
     "qBSeen": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    r"Production of $\it{B}$",
+        "title":    r"Production of $\it{B}$\n(absolute)",
         "relative": "no",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
     "qBSeen_byproduct": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    "Byproduct help",
         "relative": "given",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
     "qBSeen_excess": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    r"Production of $\it{B}$",
         "relative": "-social",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
     "w": {
         "mean":     "wmean",
         "frq":      "w",
-        "title":    "Fitness",
+        "title":    "Fitness\n(absolute)",
         "relative": "no",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
     "w_excess": {
         "mean":     "wmean",
         "frq":      "w",
-        "title":    "Fitness\n(relative)",
+        "title":    "Fitness",
         "relative": "-social",
-        "columns":  dict_variants_all
+        "variants": all_lang
     },
-    "all_lang": {
-        "columns":  dict_variants_lang
+    "w_excess": {
+        "mean":     "wmean",
+        "frq":      "w",
+        "title":    "Fitness",
+        "relative": "-social",
+        "variants": all_lang
     },
-    "all": {
-        "columns":  dict_variants_all
-    }
 }
 
 dict_multitrait_rows = {
     "default": [
-        "pi",
         "p",
+        "pi",
         "i",
         "none"
     ],
@@ -127,7 +131,7 @@ dict_multitrait_rows = {
     ]
 }
 
-dict_multitrait_modes = {
+dict_multitrait_columns = {
     "cooperation": [
         "ChooseGrain",
         "MimicGrain",
@@ -185,92 +189,26 @@ dict_multitrait_modes = {
     ]
 }
 
-list_single_trait_rows = [
-    "cost15_128",
-    "cost15_128",
-    "cost15_128",
-    "cost15_4",
-    "cost15_4",
-    "cost15_4"
-]
+dict_single_trait_rows_0 = {
+    "default": [
+        "cost15_128",
+        "cost15_128",
+        "cost15_128",
+        "cost15_4",
+        "cost15_4",
+        "cost15_4"
+    ]
+}
 
-list_single_trait_mechanisms = [
-   "p",
-   "pi",
-   "i",
-   "p",
-   "pi",
-    "i"
-]
-
-list_single_trait_right_titles = [
-    "P",
-    "PR",
-    "R",
-    "P",
-    "PR",
-    "R"
-]
+dict_single_trait_rows_1 = {
+    "default": [
+        "p",
+        "pi",
+        "i",
+        "p",
+        "pi",
+        "i"
+    ],
+}
 
 GIVEN_FOLDER = "given100"
-
-def get_data_multitrait(mode, histogram, movie):
-    """ Get the data. """
-
-    dfs = []
-    dffrqs = []
-
-    rows = dict_multitrait_rows.get(mode, "default")
-
-    csv0, csv1 = get_config("output_file_extensions")
-    for row in rows:
-        if row == "social":
-            path = "none/given000"
-        elif "none" in row:
-            path = f"none/{GIVEN_FOLDER}"
-        elif "none" in mode:
-            path = f"none/{row}"
-        else:
-            path = f"{row}/{GIVEN_FOLDER}"
-        dfs.append(get_df(path, csv0, movie))
-        if histogram:
-            dffrqs.append(get_df(path, csv1, movie))
-    if "none" in rows:
-        df_none = dfs[rows.index("none")]
-    else:
-        path = f"none/{GIVEN_FOLDER}"
-        df_none = get_df(path, csv0, movie)
-    if "social" in rows:
-        df_social = dfs[rows.index("social")]
-    else:
-        path = "none/given000"
-        df_social = get_df(path, csv0, movie)
-    return dfs, df_none, df_social, dffrqs
-
-def get_data_single_trait(trait, histogram, movie):
-    """ Get the data. """
-
-    columns = dict_traits[trait]["columns"]
-    rows = list_single_trait_rows
-    mechanisms = list_single_trait_mechanisms
-    nrows = len(rows)
-    ncolumns = len(columns)
-
-    dfs =           [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    df_nones =      [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    df_socials =    [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    if histogram:
-        dffrqs =    [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    else:
-        dffrqs =    []
-    csv0, csv1 = get_config("output_file_extensions")
-    for r, row, mechanism in zip(range(nrows), rows, mechanisms):
-        for c, column in enumerate(columns):
-            path = f"{column}_{row}/{mechanism}/{GIVEN_FOLDER}"
-            if histogram:
-                dffrqs[r][c] =  get_df(path, csv1, movie)
-            dfs[r][c] =         get_df(path, csv0, movie)
-            df_nones[r][c] =    get_df(f"{column}_{row}/none/{GIVEN_FOLDER}", csv0, movie)
-            df_socials[r][c] =  get_df(f"{column}_{row}/none/given000", csv0, movie)
-
-    return dfs, df_nones, df_socials, dffrqs

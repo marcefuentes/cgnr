@@ -5,9 +5,10 @@ import numpy as np
 
 import modules.settings as ss
 
-def init_imshow_artists(axs, nrows, ncols, nr, nc):
+def init_imshow_artists(axs, nr, nc):
     """ Initialize (nrows x ncols) matrix of AxesImage artists. """
 
+    nrows, ncols = axs.shape
     artists = np.empty_like(axs)
     dummy_zmatrix = np.zeros((nr, nc))
 
@@ -21,9 +22,10 @@ def init_imshow_artists(axs, nrows, ncols, nr, nc):
             )
     return artists
 
-def init_plot_artists(axs, nrows, ncols, nr, nc):
+def init_plot_artists(axs):
     """ Initialize(nrows x ncols x nr x nc) matrix of Line2D artists. """
 
+    nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
     x = np.arange(ss.BINS)
     dummy_y = np.zeros_like(x)

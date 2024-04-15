@@ -17,7 +17,7 @@ def parse_args():
     else:
         mode_is_trait = False
         description = "description: Plot results in this folder"
-        choices = list(mm.dict_multitrait_modes.keys())
+        choices = list(mm.dict_multitrait_columns.keys())
         arg_help = "mode (required)"
 
     parser = argparse.ArgumentParser(
