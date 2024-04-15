@@ -211,10 +211,7 @@ def get_data_multitrait(mode, histogram, movie):
     dfs = []
     dffrqs = []
 
-    if mode in dict_multitrait_rows:
-        rows = dict_multitrait_rows[mode]
-    else:
-        rows = dict_multitrait_rows["default"]
+    rows = dict_multitrait_rows.get(mode, "default")
 
     csv0, csv1 = get_config("output_file_extensions")
     for row in rows:
