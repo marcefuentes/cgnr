@@ -3,14 +3,12 @@
 """ Creates plots. """
 
 import os
-import re
 import time
 import numpy as np
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-import modules.settings as ss
 import modules.modes as mm
 from modules.add_colorbar import add_colorbar
 from modules.argparse_utils import parse_args
