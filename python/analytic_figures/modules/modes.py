@@ -222,6 +222,8 @@ def get_data_multitrait(mode, histogram, movie):
             path = "none/given000"
         elif "none" in row:
             path = f"none/{GIVEN_FOLDER}"
+        elif "none" in mode:
+            path = f"none/{row}"
         else:
             path = f"{row}/{GIVEN_FOLDER}"
         dfs.append(get_df(path, csv0, movie))

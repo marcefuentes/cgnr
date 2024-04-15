@@ -56,7 +56,7 @@ def update_zmatrix(dict_z):
         zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
         return zmatrix
     if relative == "given":
-        zmatrix = zmatrix * mm.GIVEN_FOLDER
+        zmatrix = zmatrix * df.iloc[0]["Given"]
         return zmatrix
     if relative == "neutral":
         zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")

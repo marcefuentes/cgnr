@@ -107,8 +107,7 @@ def init_artists_histogram(axs, nrows, ncols, nr, nc):
         for c in range(ncols):
             for a in range(nr):
                 for e in range(nc):
-                    ax = axs[r, c, a, e]
-                    artists[r, c, a, e], = ax.plot(
+                    artists[r, c, a, e], = axs[r, c, a, e].plot(
                         x,
                         dummy_y,
                         c="black",
