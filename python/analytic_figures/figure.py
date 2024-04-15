@@ -62,9 +62,9 @@ def update(t, dict_update):
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
                 if mode_is_single_trait:
-                    column = mm.dict_traits[mode]["frq"]
+                    trait = mm.dict_traits[mode]["frq"]
                 else:
-                    column = mm.dict_traits[column]["frq"]
+                    trait = mm.dict_traits[column]["frq"]
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
                         d = dffrqs[r][
@@ -72,7 +72,7 @@ def update(t, dict_update):
                             & (dffrqs[r]["alpha"] == alpha) \
                             & (dffrqs[r]["logES"] == loges)
                         ]
-                        freq_a = [col for col in d.columns if re.match(fr"^{column}\d+$", col)]
+                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
                         y = d.loc[:, freq_a].values[0].flatten()
                         artists[r, c, a, e].set_ydata(y)
                         bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
