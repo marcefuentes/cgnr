@@ -16,7 +16,7 @@ def add_colorbar(fig, measurements, nc):
 
     sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes([
-        (ss.LEFT_MARGIN + inner_width + ss.SPACING)/width,
+        (ss.LEFT_MARGIN + inner_width + ss.SPACING * 2.5)/width,
         (ss.BOTTOM_MARGIN + inner_height/2 - ss.PLOT_SIZE/2)/height,
         (ss.PLOT_SIZE/nc)/width,
         ss.PLOT_SIZE/height
