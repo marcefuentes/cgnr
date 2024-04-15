@@ -9,7 +9,6 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from matplotlib import colormaps
 
 import modules.settings as ss
 import modules.modes as mm
@@ -19,69 +18,7 @@ from modules.create_fig import create_fig
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.prettify_fig import prettify_fig, create_measurements
-from modules.update_zmatrix import update_zmatrix
-
-def update(t, dict_update):
-    """ Update the plot with the data at time t. """
-
-    mode =                  dict_update["mode"]
-    mode_is_single_trait =  dict_update["mode_is_single_trait"]
-    columns =               dict_update["columns"]
-    rows =                  dict_update["rows"]
-    dfs =                   dict_update["dfs"]
-    df_none =               dict_update["df_none"]
-    df_social =             dict_update["df_social"]
-    dffrqs =                dict_update["dffrqs"]
-    movie =                 dict_update["movie"]
-    text =                  dict_update["text"]
-    artists =               dict_update["artists"]
-
-    dict_z = {}
-    dict_z["t"] = t
-
-    if mode_is_single_trait:
-        dict_z["trait"] = mode
-    else:
-        dict_z["df_none"] = df_none
-        dict_z["df_social"] = df_social
-
-    for r, row in enumerate(rows):
-        if not mode_is_single_trait:
-            dict_z["df"] = dfs[r]
-        for c, column in enumerate(columns):
-            if mode_is_single_trait:
-                dict_z["df"] = dfs[r][c]
-                dict_z["df_none"] = df_none[r][c]
-                dict_z["df_social"] = df_social[r][c]
-            else:
-                dict_z["trait"] = column
-            if row == "none" and mode != "none":
-                dict_z["none"] = True
-            else:
-                dict_z["none"] = False
-            zmatrix = update_zmatrix(dict_z)
-            if dffrqs:
-                if mode_is_single_trait:
-                    trait = mm.dict_traits[mode]["frq"]
-                else:
-                    trait = mm.dict_traits[column]["frq"]
-                for a, alpha in enumerate(dict_update["alphas"]):
-                    for e, loges in enumerate(dict_update["logess"]):
-                        d = dffrqs[r][
-                            (dffrqs[r]["Time"] == t) \
-                            & (dffrqs[r]["alpha"] == alpha) \
-                            & (dffrqs[r]["logES"] == loges)
-                        ]
-                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
-                        y = d.loc[:, freq_a].values[0].flatten()
-                        artists[r, c, a, e].set_ydata(y)
-                        bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
-                        artists[r, c, a, e].axes.set_facecolor(bgcolor)
-            else:
-                artists[r, c].set_array(zmatrix)
-    if movie:
-        text.set_text(t)
-    return artists.flatten()
+from modules.update import update
 
 def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     """ Create the figure. """
