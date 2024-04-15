@@ -161,16 +161,15 @@ def prettify_plot_axes(
         for e in range(0, nc, step):
             axs[-1, c, -1, e].set_xticklabels([f"{x_values[e]:.0f}"])
     for r in range(nrows):
-        for a in range(0, nr, step):
-            axs[r, -1, a, -1].annotate(
-                row_titles[a],
-                xy=(1, 0.5),
-                xycoords="axes fraction",
-                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
-                textcoords="offset points",
-                va="center",
-                ha="left",
-                fontsize=ss.LETTER_LABEL_SIZE
-            )
+        axs[r, -1, int(nr/2), -1].annotate(
+            row_titles[r],
+            xy=(1, 0.5),
+            xycoords="axes fraction",
+            xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
+            textcoords="offset points",
+            va="center",
+            ha="left",
+            fontsize=ss.LETTER_LABEL_SIZE
+        )
 
     return axs
