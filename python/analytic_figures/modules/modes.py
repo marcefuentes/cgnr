@@ -116,6 +116,12 @@ dict_traits = {
         "relative": "-social",
         "variants": all_lang
     },
+    "all_lang": {
+        "variants": all_lang
+    },
+    "lang": {
+        "variants": lang
+    }
 }
 
 dict_multitrait_rows = {

@@ -29,12 +29,12 @@ def get_zmatrix(t, df, trait):
 def update_zmatrix(dict_z):
     """ Return the updated zmatrix for a given time and trait. """
 
-    t = dict_z["t"]
-    trait_in = dict_z["trait"]
-    df = dict_z["df"]
-    df_none = dict_z["df_none"]
-    df_social = dict_z["df_social"]
-    none = dict_z["none"]
+    t =             dict_z["t"]
+    trait_in =      dict_z["trait"]
+    df =            dict_z["df"]
+    df_none =       dict_z["df_none"]
+    df_social =     dict_z["df_social"]
+    none =          dict_z["none"]
 
     if "nothing" in trait_in:
         zmatrix = np.zeros((1, 1))
