@@ -129,8 +129,8 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
         ani = FuncAnimation(**dict_animation)
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
-        if mode in ("all", "all_lang"):
-            if mode == "all_lang":
+        if mode in ("all_lang_traits", "all_traits"):
+            if mode == "all_lang_traits":
                 traits = [
                     "Choose_ltGrain",
                     "Imimic_ltGrain"

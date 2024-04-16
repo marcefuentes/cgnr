@@ -70,14 +70,8 @@ def get_data_single_trait(mode, histogram, movie):
     csv0, csv1 = get_config("output_file_extensions")
 
     columns = mm.dict_traits[mode]["variants"]
-    if mode in mm.dict_single_trait_rows_0:
-        rows_0 = mm.dict_single_trait_rows_0[mode]
-    else:
-        rows_0 = mm.dict_single_trait_rows_0["default"]
-    if mode in mm.dict_single_trait_rows_1:
-        rows_1 = mm.dict_single_trait_rows_1[mode]
-    else:
-        rows_1 = mm.dict_single_trait_rows_1["default"]
+    rows_0 = mm.dict_single_trait_rows_0.get(mode, mm.dict_single_trait_rows_0["default"])
+    rows_1 = mm.dict_single_trait_rows_1.get(mode, mm.dict_single_trait_rows_1["default"])
 
     nrows = len(rows_0)
     ncolumns = len(columns)

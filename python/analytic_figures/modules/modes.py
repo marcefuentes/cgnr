@@ -8,14 +8,14 @@ dict_variant_titles = {
     "lang_shuffle":     "Long memory\nShuffle"
 }
 
-all_lang = [
+all_variants = [
     "nolang_noshuffle",
     "nolang_shuffle",
     "lang_noshuffle",
     "lang_shuffle"
 ]
 
-lang = [
+all_lang_variants = [
     "lang_noshuffle",
     "lang_shuffle"
 ]
@@ -37,91 +37,91 @@ dict_traits = {
         "frq":      "ChooseGrain",
         "title":    "Partner choice\n(short memory)",
         "relative": "none-",
-        "variants": all_lang
+        "variants": all_variants
     },
     "Choose_ltGrain": {
         "mean":     "Choose_ltGrainmean",
         "frq":      "Choose_ltGrain",
         "title":    "Partner choice\n(long memory)",
         "relative": "none-",
-        "variants": lang
+        "variants": all_lang_variants
     },
     "MimicGrain": {
         "mean":     "MimicGrainmean",
         "frq":      "MimicGrain",
         "title":    "Direct\nreciprocity",
         "relative": "none-",
-        "variants": all_lang
+        "variants": all_variants
     },
     "ImimicGrain": {
         "mean":     "ImimicGrainmean",
         "frq":      "ImimicGrain",
         "title":    "Indirect\nreciprocity\n(short memory)",
         "relative": "none-",
-        "variants": all_lang 
+        "variants": all_variants 
     },
     "Imimic_ltGrain": {
         "mean":     "Imimic_ltGrainmean",
         "frq":      "Imimic_ltGrain",
         "title":    "Indirect\nreciprocity\n(long memory)",
         "relative": "none-",
-        "variants": lang
+        "variants": all_lang_variants
     },
     "qBSeen": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    r"Production of $\it{B}$",
         "relative": "no",
-        "variants": all_lang
+        "variants": all_variants
     },
     "qBSeen_byproduct": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    "Byproduct help",
         "relative": "given",
-        "variants": all_lang
+        "variants": all_variants
     },
     "qBSeen_excess": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    r"Production of $\it{B}$",
         "relative": "-social",
-        "variants": all_lang
+        "variants": all_variants
     },
     "qBSeen_excess_none": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
         "title":    """Production of $\it{B}$\n(relative)""",
         "relative": "-social",
-        "variants": all_lang
+        "variants": all_variants
     },
     "w": {
         "mean":     "wmean",
         "frq":      "w",
         "title":    "Fitness",
         "relative": "no",
-        "variants": all_lang
+        "variants": all_variants
     },
     "w_excess": {
         "mean":     "wmean",
         "frq":      "w",
         "title":    "Fitness",
         "relative": "-social",
-        "variants": all_lang
+        "variants": all_variants
     },
     "w_excess_none": {
         "mean":     "wmean",
         "frq":      "w",
         "title":    "Fitness\n(relative)",
         "relative": "-social",
-        "variants": all_lang
+        "variants": all_variants
     },
-    "all_lang": {
-        "variants": all_lang
+    "all_traits": {
+        "variants": all_variants
     },
-    "lang": {
-        "variants": lang
-    }
+    "all_lang_traits": {
+        "variants": all_lang_variants
+    },
 }
 
 dict_multitrait_rows = {
