@@ -44,18 +44,12 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     row_titles = []
 
     if mode_is_single_trait:
-        if mode in mm.dict_single_trait_rows_1:
-            rows = mm.dict_single_trait_rows_1[mode]
-        else:
-            rows = mm.dict_single_trait_rows_1["default"]
+        rows = mm.dict_single_trait_rows_1.get(mode, mm.dict_single_trait_rows_1["default"])
         columns = mm.dict_traits[mode]["variants"]
         for column in columns:
             column_titles.append(mm.dict_variant_titles[column])
     else:
-        if mode in mm.dict_multitrait_rows:
-            rows = mm.dict_multitrait_rows[mode]
-        else:
-            rows = mm.dict_multitrait_rows["default"]
+        rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
         columns = mm.dict_multitrait_columns[mode]
         for column in columns:
             column_titles.append(mm.dict_traits[column]["title"])

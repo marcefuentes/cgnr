@@ -35,10 +35,7 @@ def get_data_multitrait(mode, histogram, movie):
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    if mode in mm.dict_multitrait_rows:
-        rows = mm.dict_multitrait_rows[mode]
-    else:
-        rows = mm.dict_multitrait_rows["default"]
+    rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
 
     dfs = []
     dffrqs = []
