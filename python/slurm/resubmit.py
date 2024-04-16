@@ -14,8 +14,9 @@ import modules.slurm_tools as st
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
 
+
 def process_folder(test):
-    """ Prepare jobs in the current folder """
+    """Prepare jobs in the current folder"""
 
     exe = get_config("exe")
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
@@ -25,7 +26,9 @@ def process_folder(test):
         with open(last_job_file, "r", encoding="utf-8") as f:
             last_job_file_path, _ = f.read().strip().split(",")
         if last_job_file_path == current_path:
-            print(f"{color.RED}{last_job_file.split('/')[-1]} points to this folder.{color.RESET}")
+            print(
+                f"{color.RED}{last_job_file.split('/')[-1]} points to this folder.{color.RESET}"
+            )
             print(f"{color.RED}Run submit first.{color.RESET}")
             if test:
                 print("If this were not a test, the program would stop here.\n")
@@ -63,23 +66,33 @@ def process_folder(test):
             print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")
             sys.exit()
         free_slots = st.get_free_slots(constraint)
-        print(f"\n{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots")
+        print(
+            f"\n{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots"
+        )
         if not free_slots:
-            print(f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted")
+            print(
+                f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted"
+            )
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
         job_array_string = ",".join(map(str, jobs_to_submit[:num_jobs_to_submit]))
         process_jobs(current_path_folders, job_array_string, constraint, test)
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
-        print(f"{color.CYAN}{free_slots}{color.RESET} free slots in {constraint}{color.RESET}")
+        print(
+            f"{color.CYAN}{free_slots}{color.RESET} free slots in {constraint}{color.RESET}"
+        )
         if not free_slots:
-            print(f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted.")
+            print(
+                f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted."
+            )
+
 
 def main(test):
-    """ Main function """
+    """Main function"""
 
     process_folder(test)
+
 
 if __name__ == "__main__":
     DESCRIPTION = "Resubmit unfinished jobs."

@@ -1,4 +1,3 @@
-
 """ Submit jobs """
 
 import logging
@@ -8,8 +7,9 @@ from common_modules import color
 from common_modules.get_config import get_config
 from modules.slurm_tools import submit_job
 
+
 def process_jobs(current_path_folders, job_array_string, constraint, test):
-    """ Submit jobs """
+    """Submit jobs"""
 
     exe = get_config("exe")
     if test:
@@ -20,7 +20,7 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
     logging.basicConfig(
         filename=log_file,
         level=logging.DEBUG,
-        format="%(asctime)s %(levelname)s: %(message)s"
+        format="%(asctime)s %(levelname)s: %(message)s",
     )
     current_path_print = "/".join(current_path_folders[-3:])
     info = f"{current_path_print}/{job_array_string} to {constraint}"
@@ -31,12 +31,12 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
         stdout = "Test"
     else:
         return_code, stdout, stderr = submit_job(
-            current_path_folders,
-            job_array_string,
-            constraint
+            current_path_folders, job_array_string, constraint
         )
     if return_code != 0:
-        print(f"{color.RED}sbatch command failed with return code {return_code}{color.RESET}")
+        print(
+            f"{color.RED}sbatch command failed with return code {return_code}{color.RESET}"
+        )
         if stderr:
             print(stderr)
             logging.error(stderr)

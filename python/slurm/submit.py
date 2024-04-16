@@ -15,8 +15,9 @@ import modules.slurm_tools as st
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test
 
+
 def get_job_min(current_path):
-    """ Get the minimum job number in the current folder. """
+    """Get the minimum job number in the current folder."""
 
     input_file_extension = get_config("input_file_extension")
     job_min = 9999
@@ -26,8 +27,9 @@ def get_job_min(current_path):
             job_min = min(job_min, basename)
     return job_min
 
+
 def get_job_max(current_path):
-    """ Get the maximum job number in the current folder. """
+    """Get the maximum job number in the current folder."""
 
     input_file_extension = get_config("input_file_extension")
     job_max = 0
@@ -37,8 +39,9 @@ def get_job_max(current_path):
             job_max = max(job_max, basename)
     return job_max
 
+
 def process_folder(constraint, free_slots, last_job, test):
-    """ Submit jobs in the current folder """
+    """Submit jobs in the current folder"""
 
     output_file_extension, *_ = get_config("output_file_extensions")
     current_path = os.getcwd()
@@ -66,8 +69,9 @@ def process_folder(constraint, free_slots, last_job, test):
         last_job = 0
     return free_slots, last_job
 
+
 def process_variant(constraint, free_slots, test, last_job_file):
-    """ Process the parent directory. """
+    """Process the parent directory."""
 
     if os.path.isfile(last_job_file):
         with open(last_job_file, "r", encoding="utf-8") as f:
@@ -75,14 +79,19 @@ def process_variant(constraint, free_slots, test, last_job_file):
         last_job = int(last_job)
     else:
         if test:
-            print("Submission is about to start in a new variant. Cannot run with --test option.")
+            print(
+                "Submission is about to start in a new variant. Cannot run with --test option."
+            )
             sys.exit()
         mechanisms = list_of_folders(os.getcwd())
         givens = list_of_folders(mechanisms[0])
         current_path = givens[0]
         current_path_folders = current_path.split("/")
         current_path_print = "/".join(current_path_folders[-3:])
-        print(f"\n{color.BOLD}Submit jobs in {current_path_print}?{color.RESET} {color.YESNO} ", end="")
+        print(
+            f"\n{color.BOLD}Submit jobs in {current_path_print}?{color.RESET} {color.YESNO} ",
+            end="",
+        )
         user_input = input()
         if user_input.lower() == "n":
             sys.exit()
@@ -123,8 +132,9 @@ def process_variant(constraint, free_slots, test, last_job_file):
 
     return free_slots
 
+
 def main(test=False):
-    """ Main function. """
+    """Main function."""
 
     if test:
         print("\nThis is a test.")
@@ -133,12 +143,15 @@ def main(test=False):
     constraints = get_config("constraints")
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
-        print(f"\n{color.BOLD}{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots")
+        print(
+            f"\n{color.BOLD}{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots"
+        )
         if test and not free_slots:
             free_slots = 100
         while free_slots:
             free_slots = process_variant(constraint, free_slots, test, last_job_file)
     print()
+
 
 if __name__ == "__main__":
     DESCRIPTION = "Submit jobs."
