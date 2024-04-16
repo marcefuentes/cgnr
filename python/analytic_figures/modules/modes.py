@@ -70,7 +70,7 @@ dict_traits = {
     "qBSeen": {
         "mean":     "qBSeenmean",
         "frq":      "qBSeen",
-        "title":    r"Production of $\it{B}$\n",
+        "title":    r"Production of $\it{B}$",
         "relative": "no",
         "variants": all_lang
     },
@@ -88,10 +88,17 @@ dict_traits = {
         "relative": "-social",
         "variants": all_lang
     },
+    "qBSeen_excess_none": {
+        "mean":     "qBSeenmean",
+        "frq":      "qBSeen",
+        "title":    """Production of $\it{B}$\n(relative)""",
+        "relative": "-social",
+        "variants": all_lang
+    },
     "w": {
         "mean":     "wmean",
         "frq":      "w",
-        "title":    "Fitness\n",
+        "title":    "Fitness",
         "relative": "no",
         "variants": all_lang
     },
@@ -179,6 +186,7 @@ dict_multitrait_columns = {
     ],
     "none": [
         "qBSeen",
+        "qBSeen_excess_none",
         "qBSeen_byproduct",
         "w",
         "w_excess_none"
