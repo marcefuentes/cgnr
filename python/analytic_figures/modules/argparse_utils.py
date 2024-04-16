@@ -1,10 +1,10 @@
-
 """ Parses the arguments of the command line. """
 
 import argparse
 import os
 
 import modules.modes as mm
+
 
 def parse_args():
     """Parse command line arguments."""
@@ -21,26 +21,12 @@ def parse_args():
         arg_help = "mode (required)"
 
     parser = argparse.ArgumentParser(
-        description=description,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument(
-        "mode",
-        type=str,
-        choices=choices,
-        help=arg_help
-    )
+    parser.add_argument("mode", type=str, choices=choices, help=arg_help)
 
-    parser.add_argument(
-        "--histogram",
-        action="store_true",
-        help="add histogram"
-    )
-    parser.add_argument(
-        "--movie",
-        action="store_true",
-        help="enable movie"
-    )
+    parser.add_argument("--histogram", action="store_true", help="add histogram")
+    parser.add_argument("--movie", action="store_true", help="enable movie")
 
     args = parser.parse_args()
     if args.mode not in choices:

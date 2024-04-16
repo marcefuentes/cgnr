@@ -1,4 +1,3 @@
-
 """ Update data in artists. """
 
 import re
@@ -11,30 +10,29 @@ from common_modules.get_config import get_config
 import modules.modes as mm
 import modules.settings as ss
 
+
 def get_zmatrix(t, df, trait):
-    """ Returns the zmatrix for a given time, dataframe, and trait. """
+    """Returns the zmatrix for a given time, dataframe, and trait."""
 
     if trait not in df.columns:
         print(f"Trait {trait} not in the dataframe.")
         return None
     m = df.Time == t
-    zmatrix = pd.pivot(df.loc[m],
-        values=trait,
-        index="alpha",
-        columns="logES")
+    zmatrix = pd.pivot(df.loc[m], values=trait, index="alpha", columns="logES")
     zmatrix = zmatrix.sort_index(axis=0, ascending=False)
     zmatrix = zmatrix.to_numpy()
     return zmatrix
 
-def update_zmatrix(dict_z):
-    """ Return the updated zmatrix for a given time and trait. """
 
-    t =             dict_z["t"]
-    trait_in =      dict_z["trait"]
-    df =            dict_z["df"]
-    df_none =       dict_z["df_none"]
-    df_social =     dict_z["df_social"]
-    none =          dict_z["none"]
+def update_zmatrix(dict_z):
+    """Return the updated zmatrix for a given time and trait."""
+
+    t = dict_z["t"]
+    trait_in = dict_z["trait"]
+    df = dict_z["df"]
+    df_none = dict_z["df_none"]
+    df_social = dict_z["df_social"]
+    none = dict_z["none"]
 
     if "nothing" in trait_in:
         zmatrix = np.zeros((1, 1))
@@ -67,24 +65,25 @@ def update_zmatrix(dict_z):
         return zmatrix
     if relative == "N":
         n = float(pow(2, get_config("N")))
-        zmatrix = zmatrix/n
+        zmatrix = zmatrix / n
         return zmatrix
     return zmatrix
 
-def update(t, dict_update):
-    """ Update the plot with the data at time t. """
 
-    mode =                  dict_update["mode"]
-    mode_is_single_trait =  dict_update["mode_is_single_trait"]
-    columns =               dict_update["columns"]
-    rows =                  dict_update["rows"]
-    dfs =                   dict_update["dfs"]
-    df_none =               dict_update["df_none"]
-    df_social =             dict_update["df_social"]
-    dffrqs =                dict_update["dffrqs"]
-    movie =                 dict_update["movie"]
-    text =                  dict_update["text"]
-    artists =               dict_update["artists"]
+def update(t, dict_update):
+    """Update the plot with the data at time t."""
+
+    mode = dict_update["mode"]
+    mode_is_single_trait = dict_update["mode_is_single_trait"]
+    columns = dict_update["columns"]
+    rows = dict_update["rows"]
+    dfs = dict_update["dfs"]
+    df_none = dict_update["df_none"]
+    df_social = dict_update["df_social"]
+    dffrqs = dict_update["dffrqs"]
+    movie = dict_update["movie"]
+    text = dict_update["text"]
+    artists = dict_update["artists"]
 
     dict_z = {}
     dict_z["t"] = t
@@ -118,11 +117,13 @@ def update(t, dict_update):
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
                         d = dffrqs[r][
-                            (dffrqs[r]["Time"] == t) \
-                            & (dffrqs[r]["alpha"] == alpha) \
+                            (dffrqs[r]["Time"] == t)
+                            & (dffrqs[r]["alpha"] == alpha)
                             & (dffrqs[r]["logES"] == loges)
                         ]
-                        freq_a = [col for col in d.columns if re.match(fr"^{trait}\d+$", col)]
+                        freq_a = [
+                            col for col in d.columns if re.match(rf"^{trait}\d+$", col)
+                        ]
                         y = d.loc[:, freq_a].values[0].flatten()
                         artists[r, c, a, e].set_ydata(y)
                         bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)

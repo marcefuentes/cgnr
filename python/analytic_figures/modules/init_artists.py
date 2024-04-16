@@ -1,12 +1,12 @@
-
 """ Initialize artists for plotting. """
 
 import numpy as np
 
 import modules.settings as ss
 
+
 def init_imshow_artists(axs, nr, nc):
-    """ Initialize (nrows x ncols) matrix of AxesImage artists. """
+    """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     nrows, ncols = axs.shape
     artists = np.empty_like(axs)
@@ -15,15 +15,13 @@ def init_imshow_artists(axs, nr, nc):
     for r in range(nrows):
         for c in range(ncols):
             artists[r, c] = axs[r, c].imshow(
-                dummy_zmatrix,
-                cmap=ss.COLOR_MAP,
-                vmin=-1,
-                vmax=1
+                dummy_zmatrix, cmap=ss.COLOR_MAP, vmin=-1, vmax=1
             )
     return artists
 
+
 def init_plot_artists(axs):
-    """ Initialize(nrows x ncols x nr x nc) matrix of Line2D artists. """
+    """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
@@ -34,10 +32,7 @@ def init_plot_artists(axs):
         for c in range(ncols):
             for a in range(nr):
                 for e in range(nc):
-                    artists[r, c, a, e], = axs[r, c, a, e].plot(
-                        x,
-                        dummy_y,
-                        c="black",
-                        lw=ss.LINE_WIDTH * 2
+                    (artists[r, c, a, e],) = axs[r, c, a, e].plot(
+                        x, dummy_y, c="black", lw=ss.LINE_WIDTH * 2
                     )
     return artists
