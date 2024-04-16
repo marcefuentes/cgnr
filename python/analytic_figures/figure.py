@@ -130,18 +130,18 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
         ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
     else:
         if mode in ("all", "all_lang"):
-            if mode == "all":
+            if mode == "all_lang":
+                traits = [
+                    "Choose_ltGrain",
+                    "Imimic_ltGrain"
+                ]
+            else:
                 traits = [
                     "ChooseGrain",
                     "MimicGrain",
                     "ImimicGrain",
                     "w_excess",
                     "qBSeen_excess"
-                ]
-            else:
-                traits = [
-                    "Choose_ltGrain",
-                    "Imimic_ltGrain"
                 ]
             for trait in traits:
                 dict_update["mode"] = trait
