@@ -45,8 +45,8 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     row_titles = []
 
     if mode_is_single_trait:
-        rows = mm.dict_single_trait_rows_1.get(
-            mode, mm.dict_single_trait_rows_1["default"]
+        rows = mm.dict_single_trait_mechanisms.get(
+            mode, mm.dict_single_trait_mechanisms["default"]
         )
         columns = mm.dict_traits[mode]["variants"]
         for column in columns:

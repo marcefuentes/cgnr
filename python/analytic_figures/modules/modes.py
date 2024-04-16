@@ -159,7 +159,7 @@ dict_multitrait_columns = {
     "test": ["qBSeen", "w"],
 }
 
-dict_single_trait_rows_0 = {
+dict_single_trait_variant_suffixes = {
     "default": [
         "cost15_128",
         "cost15_128",
@@ -170,7 +170,7 @@ dict_single_trait_rows_0 = {
     ]
 }
 
-dict_single_trait_rows_1 = {
+dict_single_trait_mechanisms = {
     "default": ["p", "pi", "i", "p", "pi", "i"],
 }
 

@@ -70,11 +70,18 @@ def update(t, dict_update):
                     trait = mm.dict_traits[column]["frq"]
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
-                        d = dffrqs[r][
-                            (dffrqs[r]["Time"] == t)
-                            & (dffrqs[r]["alpha"] == alpha)
-                            & (dffrqs[r]["logES"] == loges)
-                        ]
+                        if mode_is_single_trait:
+                            d = dffrqs[r][c][
+                                (dffrqs[r][c]["Time"] == t)
+                                & (dffrqs[r][c]["alpha"] == alpha)
+                                & (dffrqs[r][c]["logES"] == loges)
+                            ]
+                        else:
+                            d = dffrqs[r][
+                                (dffrqs[r]["Time"] == t)
+                                & (dffrqs[r]["alpha"] == alpha)
+                                & (dffrqs[r]["logES"] == loges)
+                            ]
                         freq_a = [
                             col for col in d.columns if re.match(rf"^{trait}\d+$", col)
                         ]

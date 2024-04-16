@@ -48,35 +48,56 @@ def get_data_single_trait(mode, histogram, movie):
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    columns = mm.dict_traits[mode]["variants"]
-    rows_0 = mm.dict_single_trait_rows_0.get(
-        mode, mm.dict_single_trait_rows_0["default"]
+    variant_prefixes = mm.dict_traits[mode]["variants"]
+    variant_suffixes = mm.dict_single_trait_variant_suffixes.get(
+        mode, mm.dict_single_trait_variant_suffixes["default"]
     )
-    rows_1 = mm.dict_single_trait_rows_1.get(
-        mode, mm.dict_single_trait_rows_1["default"]
+    mechanisms = mm.dict_single_trait_mechanisms.get(
+        mode, mm.dict_single_trait_mechanisms["default"]
     )
 
-    nrows = len(rows_0)
-    ncolumns = len(columns)
+    nrows = len(mechanisms)
+    ncolumns = len(variant_prefixes)
 
-    dfs = [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    df_nones = [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    df_socials = [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    if histogram:
-        dffrqs = [[None for _ in range(ncolumns)] for _ in range(nrows)]
-    else:
-        dffrqs = []
+    dfs = []
+    df_nones = []
+    df_socials = []
+    dffrqs = []
 
-    for r, row_0, row_1 in zip(range(nrows), rows_0, rows_1):
-        for c, column in enumerate(columns):
-            path = f"{column}_{row_0}/{row_1}/{mm.GIVEN_FOLDER}"
-            none_path = f"{column}_{row_0}/none/{mm.GIVEN_FOLDER}"
-            social_path = f"{column}_{row_0}/none/given000"
-            if histogram:
-                dffrqs[r][c] = get_df(path, csv1, movie)
-            dfs[r][c] = get_df(path, csv0, movie)
-            df_nones[r][c] = get_df(none_path, csv0, movie)
-            df_socials[r][c] = get_df(social_path, csv0, movie)
+    for suffix, mechanism in zip(variant_suffixes, mechanisms):
+        dfs.append(
+            [
+                get_df(
+                    f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv0, movie
+                )
+                for prefix in variant_prefixes
+            ]
+        )
+        df_nones.append(
+            [
+                get_df(
+                    f"{prefix}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie
+                )
+                for prefix in variant_prefixes
+            ]
+        )
+        df_socials.append(
+            [
+                get_df(
+                    f"{prefix}_{suffix}/none/given000", csv0, movie
+                )
+                for prefix in variant_prefixes
+            ]
+        )
+        if histogram:
+            dffrqs.append(
+                [
+                    get_df(
+                        f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv1, movie
+                    )
+                    for prefix in variant_prefixes
+                ]
+            )
 
     return dfs, df_nones, df_socials, dffrqs
 
