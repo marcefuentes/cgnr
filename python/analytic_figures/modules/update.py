@@ -24,52 +24,6 @@ def get_zmatrix(t, df, trait):
     return zmatrix
 
 
-def update_zmatrix(dict_z):
-    """Return the updated zmatrix for a given time and trait."""
-
-    t = dict_z["t"]
-    trait_in = dict_z["trait"]
-    df = dict_z["df"]
-    df_none = dict_z["df_none"]
-    df_social = dict_z["df_social"]
-    none = dict_z["none"]
-
-    if "nothing" in trait_in:
-        zmatrix = np.zeros((1, 1))
-        return zmatrix
-
-    if trait_in not in mm.dict_traits:
-        print(f"Trait {trait_in} not in the dictionary.")
-        exit()
-    trait = mm.dict_traits[trait_in]["mean"]
-    relative = mm.dict_traits[trait_in]["relative"]
-    zmatrix = get_zmatrix(t, df, trait)
-
-    if relative == "-none":
-        zmatrix = zmatrix - get_zmatrix(t, df_none, trait)
-        return zmatrix
-    if relative == "none-":
-        if none:
-            zmatrix = 0.5 - zmatrix
-        else:
-            zmatrix = get_zmatrix(t, df_none, trait) - zmatrix
-        return zmatrix
-    if relative == "-social":
-        zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
-        return zmatrix
-    if relative == "given":
-        zmatrix = zmatrix * df.iloc[0]["Given"]
-        return zmatrix
-    if relative == "neutral":
-        zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
-        return zmatrix
-    if relative == "N":
-        n = float(pow(2, get_config("N")))
-        zmatrix = zmatrix / n
-        return zmatrix
-    return zmatrix
-
-
 def update(t, dict_update):
     """Update the plot with the data at time t."""
 
@@ -133,3 +87,49 @@ def update(t, dict_update):
     if movie:
         text.set_text(t)
     return artists.flatten()
+
+
+def update_zmatrix(dict_z):
+    """Return the updated zmatrix for a given time and trait."""
+
+    t = dict_z["t"]
+    trait_in = dict_z["trait"]
+    df = dict_z["df"]
+    df_none = dict_z["df_none"]
+    df_social = dict_z["df_social"]
+    none = dict_z["none"]
+
+    if "nothing" in trait_in:
+        zmatrix = np.zeros((1, 1))
+        return zmatrix
+
+    if trait_in not in mm.dict_traits:
+        print(f"Trait {trait_in} not in the dictionary.")
+        exit()
+    trait = mm.dict_traits[trait_in]["mean"]
+    relative = mm.dict_traits[trait_in]["relative"]
+    zmatrix = get_zmatrix(t, df, trait)
+
+    if relative == "-none":
+        zmatrix = zmatrix - get_zmatrix(t, df_none, trait)
+        return zmatrix
+    if relative == "none-":
+        if none:
+            zmatrix = 0.5 - zmatrix
+        else:
+            zmatrix = get_zmatrix(t, df_none, trait) - zmatrix
+        return zmatrix
+    if relative == "-social":
+        zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
+        return zmatrix
+    if relative == "given":
+        zmatrix = zmatrix * df.iloc[0]["Given"]
+        return zmatrix
+    if relative == "neutral":
+        zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
+        return zmatrix
+    if relative == "N":
+        n = float(pow(2, get_config("N")))
+        zmatrix = zmatrix / n
+        return zmatrix
+    return zmatrix

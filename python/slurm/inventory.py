@@ -27,74 +27,6 @@ def get_results_path(store=False):
     return f"{home_path}/code/{exe}/results"
 
 
-def process_variant(current_path):
-    """Process a variant folder."""
-
-    folder_dict = {}
-
-    variant = current_path.split("/")[-1]
-    if os.path.islink(current_path):
-        print(f"{color.CYAN}{variant}{color.RESET}")
-    else:
-        print(f"\n{color.WHITE}{variant}{color.RESET}")
-
-    if "noshuffle" in variant:
-        folder_dict["Shuffle"] = 0
-    else:
-        folder_dict["Shuffle"] = 1
-    if "_d" in variant:
-        folder_dict["DeathRate"] = -3
-    else:
-        folder_dict["DeathRate"] = -7
-    if "nolang" in variant:
-        folder_dict["Language"] = 0
-    else:
-        folder_dict["Language"] = 1
-    cost_index = variant.find("cost")
-    cost = variant[cost_index + 4 : cost_index + 6]
-    folder_dict["Cost"] = -int(cost)
-    if "_128" in variant:
-        folder_dict["GroupSize"] = 7
-    elif "_16" in variant:
-        folder_dict["GroupSize"] = 4
-    elif "_8" in variant:
-        folder_dict["GroupSize"] = 3
-    else:
-        folder_dict["GroupSize"] = 2
-
-    mechanisms = list_of_folders(current_path)
-    for mechanism in mechanisms:
-        process_mechanism(mechanism, folder_dict)
-
-
-def process_mechanism(current_path, folder_dict):
-    """Process a mechanism folder."""
-
-    mechanism = current_path.split("/")[-1]
-    if os.path.islink(current_path):
-        print(f"{color.CYAN}{mechanism}{color.RESET}", end="")
-    else:
-        print(f"{color.WHITE}{mechanism}{color.RESET}", end="")
-
-    if "p" in mechanism:
-        folder_dict["PartnerChoice"] = 1
-    else:
-        folder_dict["PartnerChoice"] = 0
-    if "i" in mechanism:
-        folder_dict["Reciprocity"] = 1
-        folder_dict["IndirectR"] = 1
-    elif "r" in mechanism:
-        folder_dict["Reciprocity"] = 1
-        folder_dict["IndirectR"] = 0
-    else:
-        folder_dict["Reciprocity"] = 0
-        folder_dict["IndirectR"] = 0
-
-    givens = list_of_folders(current_path)
-    for given in givens:
-        process_given(given, folder_dict)
-
-
 def process_given(current_path, folder_dict):
     """Process a given folder."""
 
@@ -228,6 +160,74 @@ def process_given(current_path, folder_dict):
         end="",
     )
     print()
+
+
+def process_mechanism(current_path, folder_dict):
+    """Process a mechanism folder."""
+
+    mechanism = current_path.split("/")[-1]
+    if os.path.islink(current_path):
+        print(f"{color.CYAN}{mechanism}{color.RESET}", end="")
+    else:
+        print(f"{color.WHITE}{mechanism}{color.RESET}", end="")
+
+    if "p" in mechanism:
+        folder_dict["PartnerChoice"] = 1
+    else:
+        folder_dict["PartnerChoice"] = 0
+    if "i" in mechanism:
+        folder_dict["Reciprocity"] = 1
+        folder_dict["IndirectR"] = 1
+    elif "r" in mechanism:
+        folder_dict["Reciprocity"] = 1
+        folder_dict["IndirectR"] = 0
+    else:
+        folder_dict["Reciprocity"] = 0
+        folder_dict["IndirectR"] = 0
+
+    givens = list_of_folders(current_path)
+    for given in givens:
+        process_given(given, folder_dict)
+
+
+def process_variant(current_path):
+    """Process a variant folder."""
+
+    folder_dict = {}
+
+    variant = current_path.split("/")[-1]
+    if os.path.islink(current_path):
+        print(f"{color.CYAN}{variant}{color.RESET}")
+    else:
+        print(f"\n{color.WHITE}{variant}{color.RESET}")
+
+    if "noshuffle" in variant:
+        folder_dict["Shuffle"] = 0
+    else:
+        folder_dict["Shuffle"] = 1
+    if "_d" in variant:
+        folder_dict["DeathRate"] = -3
+    else:
+        folder_dict["DeathRate"] = -7
+    if "nolang" in variant:
+        folder_dict["Language"] = 0
+    else:
+        folder_dict["Language"] = 1
+    cost_index = variant.find("cost")
+    cost = variant[cost_index + 4 : cost_index + 6]
+    folder_dict["Cost"] = -int(cost)
+    if "_128" in variant:
+        folder_dict["GroupSize"] = 7
+    elif "_16" in variant:
+        folder_dict["GroupSize"] = 4
+    elif "_8" in variant:
+        folder_dict["GroupSize"] = 3
+    else:
+        folder_dict["GroupSize"] = 2
+
+    mechanisms = list_of_folders(current_path)
+    for mechanism in mechanisms:
+        process_mechanism(mechanism, folder_dict)
 
 
 def main(store=False):

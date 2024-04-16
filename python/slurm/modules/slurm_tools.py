@@ -10,6 +10,100 @@ from common_modules import color
 from common_modules.get_config import get_config
 
 
+def get_free_slots(constraint):
+    """Returns the number of free slots for the given constraint."""
+
+    max_submit = get_qos_limit(constraint, "maxsubmit")
+    submitted_jobs = get_squeue_stats("qos", constraint, "running,pending")
+    free_slots = max_submit - submitted_jobs
+    return free_slots
+
+
+def get_jobs_to_submit(current_path_folders):
+    """Returns a list of job array indices that need to be submitted."""
+
+    input_file_extension = get_config("input_file_extension")
+    output_file_extension, *_ = get_config("output_file_extensions")
+    number_of_lines = get_config("number_of_lines")
+
+    jobs_to_submit = []
+    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
+    start_num = int(names[0])
+    end_num = int(names[-1])
+    row_length = int(sqrt(float(len(names))))
+    current_num = end_num - row_length + 1
+    while current_num >= start_num:
+        for num in range(current_num, current_num + row_length):
+            name = str(num)
+            output_file = f"{name}{output_file_extension}"
+            if os.path.isfile(output_file):
+                with open(output_file, "r", encoding="utf-8") as f:
+                    current_number_of_lines = sum(1 for line in f)
+                if current_number_of_lines < number_of_lines - 1:
+                    if job_is_queued(current_path_folders, name):
+                        print(f"{color.YELLOW}{name}{color.RESET}", end=" ")
+                    else:
+                        print(f"{color.RED}{name}{color.RESET}", end=" ")
+                        jobs_to_submit.append(name)
+                elif current_number_of_lines == number_of_lines - 1:
+                    print(f"{color.BOLD}{color.PURPLE}{name}{color.RESET}", end=" ")
+                elif current_number_of_lines == number_of_lines:
+                    print(f"{color.GREEN}{name}{color.RESET}", end=" ")
+                else:
+                    print(f"{color.BLUE}{name}{color.RESET}", end=" ")
+            else:
+                if job_is_queued(current_path_folders, name):
+                    print(f"{name}{color.RESET}", end=" ")
+                else:
+                    print(f"{color.GREY}{name}{color.RESET}", end=" ")
+                    jobs_to_submit.append(name)
+        print()
+        current_num -= row_length
+
+    return jobs_to_submit
+
+
+def get_squeue_stats(key, value, state):
+    """Returns the number of jobs that match the given key, value, and state."""
+
+    if key == "qos":
+        value = get_qos_name(value)
+    key = f"--{key}"
+    # %f is the feature (such as the constraint set with sbatch)
+    command = [
+        "squeue",
+        "--states",
+        state,
+        "--array",
+        "--noheader",
+        "--format",
+        "%f",
+        key,
+        value,
+    ]
+    output = subprocess.check_output(command).decode().strip().splitlines()
+    stats = len(output)
+    return stats
+
+
+def get_qos_limit(constraint, specification):
+    """Returns the value of the given specification for the given constraint."""
+
+    qos_name = get_qos_name(constraint)
+    command = [
+        "sacctmgr",
+        "--noheader",
+        "--parsable2",
+        "show",
+        "qos",
+        qos_name,
+        f"format={specification}",
+    ]
+    output = subprocess.check_output(command).decode().strip()
+    limit = int(output)
+    return limit
+
+
 def get_qos_name(constraint):
     """Returns the name of the QOS that corresponds to the given constraint."""
 
@@ -42,22 +136,39 @@ def get_qos_name(constraint):
     return qos_name
 
 
-def get_qos_limit(constraint, specification):
-    """Returns the value of the given specification for the given constraint."""
+def job_is_queued(current_path_folders, job_array_index):
+    """Returns True if the job with the given job array index is queued."""
+    # %j is the job name, %K is the job array index
 
-    qos_name = get_qos_name(constraint)
     command = [
-        "sacctmgr",
+        "squeue",
+        "--states",
+        "running,pending",
+        "--array",
         "--noheader",
-        "--parsable2",
-        "show",
-        "qos",
-        qos_name,
-        f"format={specification}",
+        "--format",
+        "%j,%K",
     ]
-    output = subprocess.check_output(command).decode().strip()
-    limit = int(output)
-    return limit
+    output = subprocess.check_output(command, text="True").strip().splitlines()
+    variant = current_path_folders[-3]
+    mechanism = current_path_folders[-2]
+    given = current_path_folders[-1]
+    for line in output:
+        if line == f"{mechanism}_{given}_{variant},{job_array_index}":
+            return True
+    return False
+
+
+def remove_files(jobs_to_submit):
+    """Removes the output files for the given job array indices."""
+
+    extensions = get_config("output_file_extensions")
+    for name in jobs_to_submit:
+        for extension in extensions:
+            if os.path.isfile(f"{name}{extension}"):
+                os.remove(f"{name}{extension}")
+            else:
+                continue
 
 
 def slots():
@@ -91,38 +202,6 @@ def slots():
         )
 
     return total_free_slots
-
-
-def get_free_slots(constraint):
-    """Returns the number of free slots for the given constraint."""
-
-    max_submit = get_qos_limit(constraint, "maxsubmit")
-    submitted_jobs = get_squeue_stats("qos", constraint, "running,pending")
-    free_slots = max_submit - submitted_jobs
-    return free_slots
-
-
-def get_squeue_stats(key, value, state):
-    """Returns the number of jobs that match the given key, value, and state."""
-
-    if key == "qos":
-        value = get_qos_name(value)
-    key = f"--{key}"
-    # %f is the feature (such as the constraint set with sbatch)
-    command = [
-        "squeue",
-        "--states",
-        state,
-        "--array",
-        "--noheader",
-        "--format",
-        "%f",
-        key,
-        value,
-    ]
-    output = subprocess.check_output(command).decode().strip().splitlines()
-    stats = len(output)
-    return stats
 
 
 def submit_job(current_path_folders, job_array_string, constraint):
@@ -171,82 +250,3 @@ def submit_job(current_path_folders, job_array_string, constraint):
         stdout, stderr = process.communicate()
 
     return process.returncode, stdout, stderr
-
-
-def job_is_queued(current_path_folders, job_array_index):
-    """Returns True if the job with the given job array index is queued."""
-    # %j is the job name, %K is the job array index
-
-    command = [
-        "squeue",
-        "--states",
-        "running,pending",
-        "--array",
-        "--noheader",
-        "--format",
-        "%j,%K",
-    ]
-    output = subprocess.check_output(command, text="True").strip().splitlines()
-    variant = current_path_folders[-3]
-    mechanism = current_path_folders[-2]
-    given = current_path_folders[-1]
-    for line in output:
-        if line == f"{mechanism}_{given}_{variant},{job_array_index}":
-            return True
-    return False
-
-
-def get_jobs_to_submit(current_path_folders):
-    """Returns a list of job array indices that need to be submitted."""
-
-    input_file_extension = get_config("input_file_extension")
-    output_file_extension, *_ = get_config("output_file_extensions")
-    number_of_lines = get_config("number_of_lines")
-
-    jobs_to_submit = []
-    names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
-    start_num = int(names[0])
-    end_num = int(names[-1])
-    row_length = int(sqrt(float(len(names))))
-    current_num = end_num - row_length + 1
-    while current_num >= start_num:
-        for num in range(current_num, current_num + row_length):
-            name = str(num)
-            output_file = f"{name}{output_file_extension}"
-            if os.path.isfile(output_file):
-                with open(output_file, "r", encoding="utf-8") as f:
-                    current_number_of_lines = sum(1 for line in f)
-                if current_number_of_lines < number_of_lines - 1:
-                    if job_is_queued(current_path_folders, name):
-                        print(f"{color.YELLOW}{name}{color.RESET}", end=" ")
-                    else:
-                        print(f"{color.RED}{name}{color.RESET}", end=" ")
-                        jobs_to_submit.append(name)
-                elif current_number_of_lines == number_of_lines - 1:
-                    print(f"{color.BOLD}{color.PURPLE}{name}{color.RESET}", end=" ")
-                elif current_number_of_lines == number_of_lines:
-                    print(f"{color.GREEN}{name}{color.RESET}", end=" ")
-                else:
-                    print(f"{color.BLUE}{name}{color.RESET}", end=" ")
-            else:
-                if job_is_queued(current_path_folders, name):
-                    print(f"{name}{color.RESET}", end=" ")
-                else:
-                    print(f"{color.GREY}{name}{color.RESET}", end=" ")
-                    jobs_to_submit.append(name)
-        print()
-        current_num -= row_length
-
-    return jobs_to_submit
-
-
-def remove_files(jobs_to_submit):
-    """Removes the output files for the given job array indices."""
-
-    extensions = get_config("output_file_extensions")
-    for name in jobs_to_submit:
-        for extension in extensions:
-            if os.path.isfile(f"{name}{extension}"):
-                os.remove(f"{name}{extension}")
-            else:
-                continue

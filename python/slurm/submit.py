@@ -16,18 +16,6 @@ import modules.slurm_tools as st
 # Usage: python submit.py or python submit.py test
 
 
-def get_job_min(current_path):
-    """Get the minimum job number in the current folder."""
-
-    input_file_extension = get_config("input_file_extension")
-    job_min = 9999
-    for file in os.listdir(current_path):
-        if file.endswith(input_file_extension):
-            basename = int(file.split(".")[0])
-            job_min = min(job_min, basename)
-    return job_min
-
-
 def get_job_max(current_path):
     """Get the maximum job number in the current folder."""
 
@@ -38,6 +26,18 @@ def get_job_max(current_path):
             basename = int(file.split(".")[0])
             job_max = max(job_max, basename)
     return job_max
+
+
+def get_job_min(current_path):
+    """Get the minimum job number in the current folder."""
+
+    input_file_extension = get_config("input_file_extension")
+    job_min = 9999
+    for file in os.listdir(current_path):
+        if file.endswith(input_file_extension):
+            basename = int(file.split(".")[0])
+            job_min = min(job_min, basename)
+    return job_min
 
 
 def process_folder(constraint, free_slots, last_job, test):

@@ -6,20 +6,6 @@ import pandas as pd
 from common_modules.get_config import get_config
 
 
-def call_function(function_name, *args, **kwargs):
-    """Function to call a function based on its name (optional)."""
-
-    functions = {
-        "add_headers": add_headers,
-        # Add more functions here if needed
-    }
-
-    if function_name not in functions:
-        raise AttributeError(f"Function '{function_name}' not found in csv_tools.py")
-
-    return functions[function_name](*args, **kwargs)
-
-
 def add_headers():
     """Add headers to files that don't have them."""
 
@@ -38,39 +24,18 @@ def add_headers():
                 f.write(headers + "\n" + content)
 
 
-def remove_extra_headers():
-    """Remove extra headers from files."""
+def call_function(function_name, *args, **kwargs):
+    """Function to call a function based on its name (optional)."""
 
-    extensions = get_config("output_file_extensions")
+    functions = {
+        "add_headers": add_headers,
+        # Add more functions here if needed
+    }
 
-    for extension in extensions:
-        for file in os.listdir("."):
-            if file.endswith(extension):
-                with open(file, "r", encoding="utf-8") as f:
-                    headers = f.readline().strip()
-                    content = f.read()
-                if content.startswith(headers + "\n"):
-                    with open(file, "w", encoding="utf-8") as f:
-                        f.write(content)
-                    print(f"Removed extra headers from {file}")
+    if function_name not in functions:
+        raise AttributeError(f"Function '{function_name}' not found in csv_tools.py")
 
-
-def remove_columns_from_csvs(extension, columns_to_remove):
-    """Remove columns from CSV files."""
-
-    for root, _, files in os.walk("."):
-        for file in files:
-            if file.endswith(extension):
-                full_path = os.path.join(root, file)
-                try:
-                    df = pd.read_csv(full_path)
-                    if any(col in df.columns for col in columns_to_remove):
-                        df.drop(columns_to_remove, inplace=True)
-                        df.to_csv(full_path, index=False)  # Avoid writing index column
-                    else:
-                        print(f"Info: Skipping {full_path} - Columns not found")
-                except FileNotFoundError:
-                    print(f"Error: File not found: {full_path}")
+    return functions[function_name](*args, **kwargs)
 
 
 def divide_by_2(extension, column_to_change):
@@ -110,3 +75,38 @@ def move_time():
                 f.write(content)
                 f.write(time)
             os.remove(input_file)
+
+
+def remove_columns_from_csvs(extension, columns_to_remove):
+    """Remove columns from CSV files."""
+
+    for root, _, files in os.walk("."):
+        for file in files:
+            if file.endswith(extension):
+                full_path = os.path.join(root, file)
+                try:
+                    df = pd.read_csv(full_path)
+                    if any(col in df.columns for col in columns_to_remove):
+                        df.drop(columns_to_remove, inplace=True)
+                        df.to_csv(full_path, index=False)  # Avoid writing index column
+                    else:
+                        print(f"Info: Skipping {full_path} - Columns not found")
+                except FileNotFoundError:
+                    print(f"Error: File not found: {full_path}")
+
+
+def remove_extra_headers():
+    """Remove extra headers from files."""
+
+    extensions = get_config("output_file_extensions")
+
+    for extension in extensions:
+        for file in os.listdir("."):
+            if file.endswith(extension):
+                with open(file, "r", encoding="utf-8") as f:
+                    headers = f.readline().strip()
+                    content = f.read()
+                if content.startswith(headers + "\n"):
+                    with open(file, "w", encoding="utf-8") as f:
+                        f.write(content)
+                    print(f"Removed extra headers from {file}")
