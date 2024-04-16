@@ -44,9 +44,13 @@ def update(t, dict_update):
 
     if mode_is_single_trait:
         dict_z["trait"] = mode
+        if dffrqs:
+            trait = mm.dict_traits[mode]["frq"]
     else:
         dict_z["df_none"] = df_none
         dict_z["df_social"] = df_social
+        if dffrqs:
+            trait = mm.dict_traits[columns[0]]["frq"]
 
     for r, row in enumerate(rows):
         if not mode_is_single_trait:
@@ -65,19 +69,15 @@ def update(t, dict_update):
             zmatrix = update_zmatrix(dict_z)
             if dffrqs:
                 if mode_is_single_trait:
-                    trait = mm.dict_traits[mode]["frq"]
+                    df = dffrqs[r][c]
                 else:
-                    trait = mm.dict_traits[column]["frq"]
+                    df = dffrqs[r]
                 for a, alpha in enumerate(dict_update["alphas"]):
                     for e, loges in enumerate(dict_update["logess"]):
-                        if mode_is_single_trait:
-                            d = dffrqs[r][c]
-                        else:
-                            d = dffrqs[r]
-                        d = d[
-                            (d["Time"] == t)
-                            & (d["alpha"] == alpha)
-                            & (d["logES"] == loges)
+                        d = df[
+                            (df["Time"] == t)
+                            & (df["alpha"] == alpha)
+                            & (df["logES"] == loges)
                         ]
                         freq_a = [
                             col for col in d.columns if re.match(rf"^{trait}\d+$", col)
