@@ -8,48 +8,37 @@ import numpy as np
 from common_modules.get_config import get_config
 from modules.argparse_utils import parse_args
 
+
 def main(args):
     """Main function"""
 
+    input_file_extension = get_config("input_file_extension")
+    counter = 101
+
     if args.language == 1:
-        variant = "lang_"
+        path = "lang_"
     else:
-        variant = "nolang_"
-    if args.shuffle == 1:
-        variant = f"{variant}shuffle_"
-    else:
-        variant = f"{variant}noshuffle_"
-    cost_str = str(-int(args.cost))
-    variant = f"{variant}cost{cost_str}_"
-    groupsize_str = str(pow(2, args.groupsize))
-    variant = f"{variant}{groupsize_str}"
+        path = "nolang_"
 
-    mechanism = ""
-    if args.partnerchoice == 1:
-        mechanism = "p"
+    path += f"{'shuffled_' if args.shuffle else 'noshuffle_'}"
+    path += f"cost{str(-int(args.cost))}_"
+    path += f"{str(pow(2, args.groupsize))}/"
 
+    if args.partnerchoice:
+        path += "p"
     reciprocity = 0
-    if args.indirectr == 1:
+    if args.indirectr:
         reciprocity = 1
-        mechanism = f"{mechanism}i"
+        path += "i"
+    if not args.partnerchoice and not args.indirectr:
+        path += "none"
 
-    if args.partnerchoice == 0 and args.indirectr == 0:
-        mechanism = "none"
-
-    given_str = str(int((args.given) * 100)).zfill(3)
-    path = f"{variant}/{mechanism}/given{given_str}"
+    path += f"/given{str(int((args.given) * 100)).zfill(3)}"
     os.makedirs(path, exist_ok=True)
 
-    alpha_min = get_config("alpha_min")
-    alpha_max = get_config("alpha_max")
-    loges_min = get_config("loges_min")
-    loges_max = get_config("loges_max")
     grid = get_config("grid")
-    alphas = np.linspace(alpha_min, alpha_max, grid)
-    logess = np.linspace(loges_min, loges_max, grid)
-
-    input_file_extension = get_config("input_file_extension")
-    c = 101
+    alphas = np.linspace(get_config("alpha_min"), get_config("alpha_max"), grid)
+    logess = np.linspace(get_config("loges_min"), get_config("loges_max"), grid)
 
     standard_params = {
         "Seed": 1,
@@ -59,12 +48,12 @@ def main(args):
         "Periods": get_config("Periods"),
         "qBMutationSize": get_config("qBMutationSize"),
         "GrainMutationSize": get_config("GrainMutationSize"),
-        "DeathRate": get_config("DeathRate")
+        "DeathRate": get_config("DeathRate"),
     }
 
     for alpha in alphas:
         for loges in logess:
-            filename = f"{path}/{c}{input_file_extension}"
+            filename = f"{path}/{counter}{input_file_extension}"
             with open(filename, "w", encoding="utf-8") as f:
                 for key, value in standard_params.items():
                     f.write(f"{key},{value}\n")
@@ -78,7 +67,8 @@ def main(args):
                 f.write(f"alpha,{alpha:.6}\n")
                 f.write(f"logES,{loges}\n")
                 f.write(f"Given,{args.given}\n")
-            c = c + 1
+            counter = counter + 1
+
 
 if __name__ == "__main__":
     parsed_args = parse_args("Create input files for simulations")

@@ -1,12 +1,14 @@
-
 #!/usr/bin/env python3
+
+""" Manages CSV operations by calling functions from modules.py """
 
 import sys
 
-from file_tools.modules.modules import call_function
+from modules.csv_tools import call_function
+
 
 def main():
-    """Manages CSV operations by calling functions from modules.py"""
+    """Main function"""
 
     # Check for required arguments (function name and potentially arguments)
     if len(sys.argv) < 2:
@@ -24,6 +26,6 @@ def main():
         print(f"Error: {e}")
         sys.exit(1)
 
-if __name__ == "__main__":
-  main()
 
+if __name__ == "__main__":
+    main()

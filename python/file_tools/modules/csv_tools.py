@@ -1,55 +1,64 @@
+"""Module to perform operations on CSV files."""
 
-import csv
 import os
 import pandas as pd
 
-import files.modules
 from common_modules.get_config import get_config
 
+
 def call_function(function_name, *args, **kwargs):
-    # Get the function object using getattr
-    function = getattr(tools.modules, function_name)
+    """Function to call a function based on its name (optional)."""
 
-    if not callable(function):
-        raise AttributeError(f"Function '{function_name}' not found in modules.py")
+    functions = {
+        "add_headers": add_headers,
+        # Add more functions here if needed
+    }
 
-    # Call the function with provided arguments
-    return function(*args, **kwargs)
+    if function_name not in functions:
+        raise AttributeError(f"Function '{function_name}' not found in csv_tools.py")
+
+    return functions[function_name](*args, **kwargs)
+
 
 def add_headers():
+    """Add headers to files that don't have them."""
 
     extensions = get_config("output_file_extensions")
 
     for extension in extensions:
-        files = [f for f in os.listdir('.') if f.endswith(extension)]
-        with open(files[0]) as f:
+        files = [f for f in os.listdir(".") if f.endswith(extension)]
+        with open(files[0], "r", encoding="utf-8") as f:
             headers = f.readline().strip()
         for file in files:
-            with open(file, "r+") as f:
+            with open(file, "r+", encoding="utf-8") as f:
                 content = f.read()
                 if content.startswith(headers):
                     continue
-                else:
-                    f.seek(0, 0)
-                    f.write(headers + "\n" + content)
+                f.seek(0, 0)
+                f.write(headers + "\n" + content)
+
 
 def remove_extra_headers():
+    """Remove extra headers from files."""
 
     extensions = get_config("output_file_extensions")
 
     for extension in extensions:
-        for file in os.listdir('.'):
+        for file in os.listdir("."):
             if file.endswith(extension):
-                with open(file, "r") as f:
+                with open(file, "r", encoding="utf-8") as f:
                     headers = f.readline().strip()
                     content = f.read()
                 if content.startswith(headers + "\n"):
-                    with open(file, "w") as f:
+                    with open(file, "w", encoding="utf-8") as f:
                         f.write(content)
                     print(f"Removed extra headers from {file}")
 
+
 def remove_columns_from_csvs(extension, columns_to_remove):
-    for root, _, files in os.walk('.'):
+    """Remove columns from CSV files."""
+
+    for root, _, files in os.walk("."):
         for file in files:
             if file.endswith(extension):
                 full_path = os.path.join(root, file)
@@ -62,11 +71,12 @@ def remove_columns_from_csvs(extension, columns_to_remove):
                         print(f"Info: Skipping {full_path} - Columns not found")
                 except FileNotFoundError:
                     print(f"Error: File not found: {full_path}")
-                except Exception as e:
-                    print(f"Error processing file {full_path}: {e}")
+
 
 def divide_by_2(extension, column_to_change):
-    for root, _, files in os.walk('.'):
+    """Divide values in a column by 2."""
+
+    for root, _, files in os.walk("."):
         for file in files:
             if file.endswith(extension):
                 full_path = os.path.join(root, file)
@@ -74,9 +84,12 @@ def divide_by_2(extension, column_to_change):
                 for col in df.columns:
                     if col.startswith(column_to_change):
                         df[col] = (df[col] / 2.0).round(6)
-                df.to_csv(file_path, index=False)
+                df.to_csv(full_path, index=False)
+
 
 def move_time():
+    """Move the TimeElapsed line from .gl2 to .glo files."""
+
     input_extension = ".gl2"
     output_extension = ".glo"
 
@@ -84,16 +97,16 @@ def move_time():
         input_file = f"{c}{input_extension}"
         output_file = f"{c}{output_extension}"
         if os.path.isfile(input_file):
-            with open(input_file, "r") as f:
+            with open(input_file, "r", encoding="utf-8") as f:
                 line = f.readline()
                 while line:
                     if line.startswith("TimeElapsed"):
                         time = line
                         break
                     line = f.readline()
-            with open(output_file, "r") as f:
+            with open(output_file, "r", encoding="utf-8") as f:
                 content = f.read()
-            with open(output_file, "w") as f:
+            with open(output_file, "w", encoding="utf-8") as f:
                 f.write(content)
                 f.write(time)
             os.remove(input_file)
