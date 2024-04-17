@@ -53,14 +53,8 @@ def update_histogram(t, kwargs, zmatrix, r, c):
 
     for a, alpha in enumerate(kwargs["alphas"]):
         for e, loges in enumerate(kwargs["logess"]):
-            d = df[
-                (df["Time"] == t)
-                & (df["alpha"] == alpha)
-                & (df["logES"] == loges)
-            ]
-            freq_a = [
-                col for col in d.columns if re.match(rf"^{trait}\d+$", col)
-            ]
+            d = df[(df["Time"] == t) & (df["alpha"] == alpha) & (df["logES"] == loges)]
+            freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
             y = d.loc[:, freq_a].values[0].flatten()
             kwargs["artists"][r, c, a, e].set_ydata(y)
             bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
@@ -83,10 +77,7 @@ def update_zmatrix(t, kwargs, r, c):
         df_social = kwargs["df_social"]
         df = kwargs["dfs"][r]
 
-    if kwargs["rows"][r] == "none" and kwargs["mode"] != "none":
-        none = True
-    else:
-        none = False
+    none = bool(kwargs["rows"][r] == "none" and kwargs["mode"] != "none")
 
     if "nothing" in trait_in:
         zmatrix = np.zeros((1, 1))
