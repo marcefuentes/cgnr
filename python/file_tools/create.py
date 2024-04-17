@@ -20,7 +20,7 @@ def main(args):
     else:
         path = "nolang_"
 
-    path += f"{'shuffled_' if args.shuffle else 'noshuffle_'}"
+    path += f"{'shuffle_' if args.shuffle else 'noshuffle_'}"
     path += f"cost{str(-int(args.cost))}_"
     path += f"{str(pow(2, args.groupsize))}/"
 
