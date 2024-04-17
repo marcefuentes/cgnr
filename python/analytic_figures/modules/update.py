@@ -24,73 +24,72 @@ def get_zmatrix(t, df, trait):
     return zmatrix
 
 
-def update(t, dict_update):
+def update(t, kwargs):
     """Update the plot with the data at time t."""
 
-    mode = dict_update["mode"]
-    mode_is_single_trait = dict_update["mode_is_single_trait"]
-    columns = dict_update["columns"]
-    rows = dict_update["rows"]
-    dfs = dict_update["dfs"]
-    df_none = dict_update["df_none"]
-    df_social = dict_update["df_social"]
-    dffrqs = dict_update["dffrqs"]
-    movie = dict_update["movie"]
-    text = dict_update["text"]
-    artists = dict_update["artists"]
+    if kwargs["movie"]:
+        kwargs["text"].set_text(t)
 
     dict_z = {}
     dict_z["t"] = t
 
-    if mode_is_single_trait:
-        dict_z["trait"] = mode
-        if dffrqs:
-            trait = mm.dict_traits[mode]["frq"]
+    if kwargs["mode_is_single_trait"]:
+        dict_z["trait"] = kwargs["mode"]
     else:
-        dict_z["df_none"] = df_none
-        dict_z["df_social"] = df_social
-        if dffrqs:
-            trait = mm.dict_traits[columns[0]]["frq"]
+        dict_z["df_none"] = kwargs["df_none"]
+        dict_z["df_social"] = kwargs["df_social"]
 
-    for r, row in enumerate(rows):
-        if not mode_is_single_trait:
-            dict_z["df"] = dfs[r]
-        for c, column in enumerate(columns):
-            if mode_is_single_trait:
-                dict_z["df"] = dfs[r][c]
-                dict_z["df_none"] = df_none[r][c]
-                dict_z["df_social"] = df_social[r][c]
+    for r, row in enumerate(kwargs["rows"]):
+        if not kwargs["mode_is_single_trait"]:
+            dict_z["df"] = kwargs["dfs"][r]
+        for c, column in enumerate(kwargs["columns"]):
+            if kwargs["mode_is_single_trait"]:
+                dict_z["df"] = kwargs["dfs"][r][c]
+                dict_z["df_none"] = kwargs["df_none"][r][c]
+                dict_z["df_social"] = kwargs["df_social"][r][c]
             else:
                 dict_z["trait"] = column
-            if row == "none" and mode != "none":
+            if row == "none" and kwargs["mode"] != "none":
                 dict_z["none"] = True
             else:
                 dict_z["none"] = False
             zmatrix = update_zmatrix(dict_z)
-            if dffrqs:
-                if mode_is_single_trait:
-                    df = dffrqs[r][c]
-                else:
-                    df = dffrqs[r]
-                for a, alpha in enumerate(dict_update["alphas"]):
-                    for e, loges in enumerate(dict_update["logess"]):
-                        d = df[
-                            (df["Time"] == t)
-                            & (df["alpha"] == alpha)
-                            & (df["logES"] == loges)
-                        ]
-                        freq_a = [
-                            col for col in d.columns if re.match(rf"^{trait}\d+$", col)
-                        ]
-                        y = d.loc[:, freq_a].values[0].flatten()
-                        artists[r, c, a, e].set_ydata(y)
-                        bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
-                        artists[r, c, a, e].axes.set_facecolor(bgcolor)
+            if kwargs["dffrqs"]:
+                kwargs["artists"][r, c] = update_histogram(t, kwargs, zmatrix, r, c)
             else:
-                artists[r, c].set_array(zmatrix)
-    if movie:
-        text.set_text(t)
-    return artists.flatten()
+                kwargs["artists"][r, c].set_array(zmatrix)
+
+    return kwargs["artists"].flatten()
+
+
+def update_histogram(t, kwargs, zmatrix, r, c):
+    """Update the histogram with the data at time t."""
+
+    artists = kwargs["artists"][r, c]
+
+    if kwargs["mode_is_single_trait"]:
+        df = kwargs["dffrqs"][r][c]
+        trait = mm.dict_traits[kwargs["mode"]]["frq"]
+    else:
+        df = kwargs["dffrqs"][r]
+        trait = mm.dict_traits[kwargs["columns"][0]]["frq"]
+
+    for a, alpha in enumerate(kwargs["alphas"]):
+        for e, loges in enumerate(kwargs["logess"]):
+            d = df[
+                (df["Time"] == t)
+                & (df["alpha"] == alpha)
+                & (df["logES"] == loges)
+            ]
+            freq_a = [
+                col for col in d.columns if re.match(rf"^{trait}\d+$", col)
+            ]
+            y = d.loc[:, freq_a].values[0].flatten()
+            artists[a, e].set_ydata(y)
+            bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
+            artists[a, e].axes.set_facecolor(bgcolor)
+
+    return artists
 
 
 def update_zmatrix(dict_z):
