@@ -30,30 +30,9 @@ def update(t, kwargs):
     if kwargs["movie"]:
         kwargs["text"].set_text(t)
 
-    dict_z = {}
-    dict_z["t"] = t
-
-    if kwargs["mode_is_single_trait"]:
-        dict_z["trait"] = kwargs["mode"]
-    else:
-        dict_z["df_none"] = kwargs["df_none"]
-        dict_z["df_social"] = kwargs["df_social"]
-
-    for r, row in enumerate(kwargs["rows"]):
-        if not kwargs["mode_is_single_trait"]:
-            dict_z["df"] = kwargs["dfs"][r]
-        for c, column in enumerate(kwargs["columns"]):
-            if kwargs["mode_is_single_trait"]:
-                dict_z["df"] = kwargs["dfs"][r][c]
-                dict_z["df_none"] = kwargs["df_none"][r][c]
-                dict_z["df_social"] = kwargs["df_social"][r][c]
-            else:
-                dict_z["trait"] = column
-            if row == "none" and kwargs["mode"] != "none":
-                dict_z["none"] = True
-            else:
-                dict_z["none"] = False
-            zmatrix = update_zmatrix(dict_z)
+    for r, _ in enumerate(kwargs["rows"]):
+        for c, _ in enumerate(kwargs["columns"]):
+            zmatrix = update_zmatrix(t, kwargs, r, c)
             if kwargs["dffrqs"]:
                 kwargs["artists"][r, c] = update_histogram(t, kwargs, zmatrix, r, c)
             else:
@@ -64,8 +43,6 @@ def update(t, kwargs):
 
 def update_histogram(t, kwargs, zmatrix, r, c):
     """Update the histogram with the data at time t."""
-
-    artists = kwargs["artists"][r, c]
 
     if kwargs["mode_is_single_trait"]:
         df = kwargs["dffrqs"][r][c]
@@ -85,22 +62,31 @@ def update_histogram(t, kwargs, zmatrix, r, c):
                 col for col in d.columns if re.match(rf"^{trait}\d+$", col)
             ]
             y = d.loc[:, freq_a].values[0].flatten()
-            artists[a, e].set_ydata(y)
+            kwargs["artists"][r, c, a, e].set_ydata(y)
             bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
-            artists[a, e].axes.set_facecolor(bgcolor)
+            kwargs["artists"][r, c, a, e].axes.set_facecolor(bgcolor)
 
-    return artists
+    return kwargs["artists"][r, c]
 
 
-def update_zmatrix(dict_z):
+def update_zmatrix(t, kwargs, r, c):
     """Return the updated zmatrix for a given time and trait."""
 
-    t = dict_z["t"]
-    trait_in = dict_z["trait"]
-    df = dict_z["df"]
-    df_none = dict_z["df_none"]
-    df_social = dict_z["df_social"]
-    none = dict_z["none"]
+    if kwargs["mode_is_single_trait"]:
+        trait_in = kwargs["mode"]
+        df = kwargs["dfs"][r][c]
+        df_none = kwargs["df_none"][r][c]
+        df_social = kwargs["df_social"][r][c]
+    else:
+        trait_in = kwargs["columns"][c]
+        df_none = kwargs["df_none"]
+        df_social = kwargs["df_social"]
+        df = kwargs["dfs"][r]
+
+    if kwargs["rows"][r] == "none" and kwargs["mode"] != "none":
+        none = True
+    else:
+        none = False
 
     if "nothing" in trait_in:
         zmatrix = np.zeros((1, 1))
