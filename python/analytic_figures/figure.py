@@ -9,11 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-import modules.modes as mm
 from modules.add_colorbar import add_colorbar
 from modules.argparse_utils import parse_args
 from modules.create_fig import create_fig
-from modules.get_data import get_data_single_trait, get_data_multitrait, get_rows_columns
+from modules.get_data import (
+    get_data_single_trait,
+    get_data_multitrait,
+    get_rows_columns,
+)
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.prettify_fig import prettify_fig, create_measurements
@@ -42,7 +45,9 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     nr = len(alphas)
     nc = len(logess)
 
-    rows, row_titles, columns, column_titles = get_rows_columns(mode, mode_is_single_trait)
+    rows, row_titles, columns, column_titles = get_rows_columns(
+        mode, mode_is_single_trait
+    )
 
     nrows = len(rows)
     ncols = len(columns)
