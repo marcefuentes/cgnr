@@ -13,7 +13,7 @@ import modules.modes as mm
 from modules.add_colorbar import add_colorbar
 from modules.argparse_utils import parse_args
 from modules.create_fig import create_fig
-from modules.get_data import get_data_single_trait, get_data_multitrait
+from modules.get_data import get_data_single_trait, get_data_multitrait, get_rows_columns
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.prettify_fig import prettify_fig, create_measurements
@@ -41,23 +41,8 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     logess = np.sort(df["logES"].unique())
     nr = len(alphas)
     nc = len(logess)
-    column_titles = []
-    row_titles = []
 
-    if mode_is_single_trait:
-        rows = mm.dict_single_trait_mechanisms.get(
-            mode, mm.dict_single_trait_mechanisms["default"]
-        )
-        columns = mm.dict_traits[mode]["variants"]
-        for column in columns:
-            column_titles.append(mm.dict_variant_titles[column])
-    else:
-        rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
-        columns = mm.dict_multitrait_columns[mode]
-        for column in columns:
-            column_titles.append(mm.dict_traits[column]["title"])
-    for row in rows:
-        row_titles.append(mm.dict_row_titles[row])
+    rows, row_titles, columns, column_titles = get_rows_columns(mode, mode_is_single_trait)
 
     nrows = len(rows)
     ncols = len(columns)
