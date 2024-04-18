@@ -109,8 +109,10 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
             else:
                 traits = [
                     "ChooseGrain",
+                    "Choose_ltGrain",
                     "MimicGrain",
                     "ImimicGrain",
+                    "Imimic_ltGrain",
                     "w_excess",
                     "qBSeen_excess",
                 ]

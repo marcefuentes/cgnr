@@ -1,13 +1,13 @@
 """ Store the columns and rows for the different modes of the figure """
 
 dict_variant_titles = {
-    "nolang_noshuffle": "Short memory\nNo shuffling",
-    "nolang_shuffle": "Short memory\nShuffling",
-    "lang_noshuffle": "Long memory\nNo shuffling",
-    "lang_shuffle": "Long memory\nShuffling",
+    "nolang_noshuffle": "No shuffling\nShort memory",
+    "lang_noshuffle": "No shuffling\nLong memory",
+    "nolang_shuffle": "Shuffling\nShort memory",
+    "lang_shuffle": "Shuffling\nLong memory",
 }
 
-all_variants = ["nolang_noshuffle", "nolang_shuffle", "lang_noshuffle", "lang_shuffle"]
+all_variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
 
 all_lang_variants = ["lang_noshuffle", "lang_shuffle"]
 
