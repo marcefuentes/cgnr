@@ -14,46 +14,15 @@ from modules.list_of_folders import list_of_folders
 import submit
 
 
-def get_results_path(store=False):
-    """Get the path to the results folder."""
-
-    exe = get_config("exe")
-    if store:
-        store_path = os.environ.get("STORE")
-        if store_path is None:
-            raise ValueError("STORE environment variable not set")
-        return f"{store_path}/code/{exe}/results"
-    home_path = os.environ.get("HOME")
-    return f"{home_path}/code/{exe}/results"
-
-
-def process_given(current_path, folder_dict):
-    """Process a given folder."""
-
-    number_of_lines = get_config("number_of_lines")
-    input_file_extension = get_config("input_file_extension")
-    output_file_extension, *_ = get_config("output_file_extensions")
+def find_errors(current_path, input_file, folder_dict):
+    """Process a given folder for errors in input files."""
 
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
-    if os.path.islink(current_path):
-        print(f"{color.CYAN}\t{given}{color.RESET}", end="  ")
-    else:
-        print(f"{color.WHITE}\t{given}{color.RESET}", end="  ")
-
     folder_dict["Given"] = float(given[-3:]) / 100
 
-    input_files = [
-        f for f in os.listdir(current_path) if f.endswith(input_file_extension)
-    ]
-    total_jobs = len(input_files)
-    if total_jobs == 0:
-        print(
-            f"{color.BOLD}{color.RED}no {input_file_extension[1:]} files{color.RESET}"
-        )
-        return
     with open(
-        os.path.join(current_path, input_files[0]), "r", encoding="utf-8"
+        os.path.join(current_path, input_file), "r", encoding="utf-8"
     ) as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
@@ -71,31 +40,47 @@ def process_given(current_path, folder_dict):
                         end=" ",
                     )
 
+
+def get_results_path(store=False):
+    """Get the path to the results folder."""
+
+    exe = get_config("exe")
+    if store:
+        store_path = os.environ.get("STORE")
+        if store_path is None:
+            raise ValueError("STORE environment variable not set")
+        return f"{store_path}/code/{exe}/results"
+    home_path = os.environ.get("HOME")
+    return f"{home_path}/code/{exe}/results"
+
+
+def job_status(current_path, total_jobs):
+    """Find status of jobs in a given folder."""
+
+    output_file_extension, *_ = get_config("output_file_extensions")
     finished_jobs = 0
     garbled_jobs = 0
     no_header = 0
     one_line_jobs = 0
 
-    output_files = [
-        f for f in os.listdir(current_path) if f.endswith(output_file_extension)
-    ]
-    for output_file in output_files:
+    for output_file in [f for f in os.listdir(current_path) if f.endswith(output_file_extension)]:
         with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
             n_lines = sum(1 for line in f)
-            if n_lines == number_of_lines:
+            if n_lines == get_config("number_of_lines"):
                 finished_jobs += 1
             elif n_lines == 1:
                 one_line_jobs += 1
-            elif n_lines == number_of_lines - 1:
+            elif n_lines == get_config("number_of_lines") - 1:
                 no_header += 1
             else:
                 garbled_jobs += 1
-    mechanism = current_path_folders[-2]
-    variant = current_path_folders[-3]
-    jobname = f"{mechanism}_{given}_{variant}"
+
+    job_name = f"{current_path.split('/')[-2]}"
+    job_name += f"_{current_path.split('/')[-1]}"
+    job_name += f"_{current_path.split('/')[-3]}"
     if "mfu" in current_path and "Store" not in current_path:
-        running_jobs = get_squeue_stats("name", jobname, "running")
-        pending_jobs = get_squeue_stats("name", jobname, "pending")
+        running_jobs = get_squeue_stats("name", job_name, "running")
+        pending_jobs = get_squeue_stats("name", job_name, "pending")
         dead_jobs = one_line_jobs - running_jobs
     else:
         running_jobs = 0
@@ -162,6 +147,33 @@ def process_given(current_path, folder_dict):
     print()
 
 
+def process_given(current_path, folder_dict):
+    """Process a given folder."""
+
+    current_path_folders = current_path.split("/")
+    given = current_path_folders[-1]
+
+    if os.path.islink(current_path):
+        print(f"{color.CYAN}\t{given}{color.RESET}", end="  ")
+    else:
+        print(f"{color.WHITE}\t{given}{color.RESET}", end="  ")
+
+    input_file_extension = get_config("input_file_extension")
+    input_files = [
+        f for f in os.listdir(current_path) if f.endswith(input_file_extension)
+    ]
+
+    find_errors(current_path, input_files[0], folder_dict)
+
+    total_jobs = len(input_files)
+    if total_jobs == 0:
+        print(
+            f"{color.BOLD}{color.RED}no {input_file_extension[1:]} files{color.RESET}"
+        )
+        return
+
+    job_status(current_path, total_jobs)
+
 def process_mechanism(current_path, folder_dict):
     """Process a mechanism folder."""
 
@@ -201,27 +213,13 @@ def process_variant(current_path):
     else:
         print(f"\n{color.WHITE}{variant}{color.RESET}")
 
-    if "noshuffle" in variant:
-        folder_dict["Shuffle"] = 0
-    else:
-        folder_dict["Shuffle"] = 1
-    if "_d" in variant:
-        folder_dict["DeathRate"] = -3
-    else:
-        folder_dict["DeathRate"] = -7
-    if "nolang" in variant:
-        folder_dict["Language"] = 0
-    else:
-        folder_dict["Language"] = 1
+    folder_dict["Shuffle"] = "noshuffle" not in variant
+    folder_dict["Language"] = "nolang" not in variant
     cost_index = variant.find("cost")
     cost = variant[cost_index + 4 : cost_index + 6]
     folder_dict["Cost"] = -int(cost)
     if "_128" in variant:
         folder_dict["GroupSize"] = 7
-    elif "_16" in variant:
-        folder_dict["GroupSize"] = 4
-    elif "_8" in variant:
-        folder_dict["GroupSize"] = 3
     else:
         folder_dict["GroupSize"] = 2
 
@@ -256,11 +254,10 @@ def main(store=False):
                 f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
             )
             if os.path.isfile(last_job_file):
-                msg = (
-                    f"\n{color.BOLD}Submit {color.CYAN}{free_slots}{color.RESET}{color.BOLD} jobs{color.RESET} "
-                    f"{color.YESNO} "
+                print(
+                    f"\n{color.BOLD}Submit {color.CYAN}{free_slots}{color.RESET}" +
+                    f"{color.BOLD} jobs{color.RESET} {color.YESNO} ", end=""
                 )
-                print(msg, end="")
                 user_input = input()
                 if user_input.lower() == "n":
                     print()
