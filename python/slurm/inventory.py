@@ -21,9 +21,7 @@ def find_errors(current_path, input_file, folder_dict):
     given = current_path_folders[-1]
     folder_dict["Given"] = float(given[-3:]) / 100
 
-    with open(
-        os.path.join(current_path, input_file), "r", encoding="utf-8"
-    ) as csvfile:
+    with open(os.path.join(current_path, input_file), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             key, value = row
@@ -63,7 +61,9 @@ def job_status(current_path, total_jobs):
     no_header = 0
     one_line_jobs = 0
 
-    for output_file in [f for f in os.listdir(current_path) if f.endswith(output_file_extension)]:
+    for output_file in [
+        f for f in os.listdir(current_path) if f.endswith(output_file_extension)
+    ]:
         with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
             n_lines = sum(1 for line in f)
             if n_lines == get_config("number_of_lines"):
@@ -174,6 +174,7 @@ def process_given(current_path, folder_dict):
 
     job_status(current_path, total_jobs)
 
+
 def process_mechanism(current_path, folder_dict):
     """Process a mechanism folder."""
 
@@ -255,8 +256,9 @@ def main(store=False):
             )
             if os.path.isfile(last_job_file):
                 print(
-                    f"\n{color.BOLD}Submit {color.CYAN}{free_slots}{color.RESET}" +
-                    f"{color.BOLD} jobs{color.RESET} {color.YESNO} ", end=""
+                    f"\n{color.BOLD}Submit {color.CYAN}{free_slots}{color.RESET}"
+                    + f"{color.BOLD} jobs{color.RESET} {color.YESNO} ",
+                    end="",
                 )
                 user_input = input()
                 if user_input.lower() == "n":
