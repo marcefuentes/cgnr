@@ -31,5 +31,6 @@ def parse_args():
     args = parser.parse_args()
     if args.mode not in choices:
         parser.error(f"Invalid mode: {args.mode}")
+    args.mode_is_trait = mode_is_trait
 
-    return args, mode_is_trait
+    return args

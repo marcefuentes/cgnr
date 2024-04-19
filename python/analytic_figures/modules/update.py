@@ -46,7 +46,7 @@ def update(t, kwargs):
 def update_histogram(t, kwargs, zmatrix, r, c):
     """Update the histogram with the data at time t."""
 
-    if kwargs["mode_is_single_trait"]:
+    if kwargs["mode_is_trait"]:
         df = kwargs["dffrqs"][r][c]
         trait = mm.dict_traits[kwargs["mode"]]["frq"]
     else:
@@ -68,7 +68,7 @@ def update_histogram(t, kwargs, zmatrix, r, c):
 def update_zmatrix(t, kwargs, r, c):
     """Return the updated zmatrix for a given time and trait."""
 
-    if kwargs["mode_is_single_trait"]:
+    if kwargs["mode_is_trait"]:
         trait_in = kwargs["mode"]
         df = kwargs["dfs"][r][c]
         df_none = kwargs["df_none"][r][c]

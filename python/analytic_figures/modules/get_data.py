@@ -106,13 +106,13 @@ def get_df(path, filetype, movie):
     return df
 
 
-def get_rows_columns(mode, mode_is_single_trait):
+def get_rows_columns(mode, mode_is_trait):
     """Get the rows and columns for the given mode."""
 
     column_titles = []
     row_titles = []
 
-    if mode_is_single_trait:
+    if mode_is_trait:
         rows = mm.dict_single_trait_mechanisms.get(
             mode, mm.dict_single_trait_mechanisms["default"]
         )

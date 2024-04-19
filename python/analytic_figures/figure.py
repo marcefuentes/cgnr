@@ -19,7 +19,8 @@ from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.prettify_fig import prettify_fig, create_measurements
 from modules.process_plt import process_plt
 
-def main(args, mode_is_trait):
+
+def main(args):
     """Create the figure."""
 
     start_time = time.perf_counter()
@@ -27,11 +28,15 @@ def main(args, mode_is_trait):
 
     # Get data
 
-    if mode_is_trait:
-        dfs, df_none, df_social, dffrqs = get_data_single_trait(args.mode, args.histogram, args.movie)
+    if args.mode_is_trait:
+        dfs, df_none, df_social, dffrqs = get_data_single_trait(
+            args.mode, args.histogram, args.movie
+        )
         df = dfs[0][0]
     else:
-        dfs, df_none, df_social, dffrqs = get_data_multitrait(args.mode, args.histogram, args.movie)
+        dfs, df_none, df_social, dffrqs = get_data_multitrait(
+            args.mode, args.histogram, args.movie
+        )
         df = df_none
 
     ts = df.Time.unique()
@@ -41,7 +46,7 @@ def main(args, mode_is_trait):
     nc = len(logess)
 
     rows, row_titles, columns, column_titles = get_rows_columns(
-        args.mode, mode_is_trait
+        args.mode, args.mode_is_trait
     )
 
     nrows = len(rows)
@@ -77,14 +82,14 @@ def main(args, mode_is_trait):
 
     dict_update = {
         "mode": args.mode,
-        "mode_is_trait": mode_is_trait,
+        "mode_is_trait": args.mode_is_trait,
         "columns": columns,
         "rows": rows,
         "dfs": dfs,
         "df_none": df_none,
         "df_social": df_social,
         "dffrqs": dffrqs,
-        "args.movie": args.movie,
+        "movie": args.movie,
         "text": fig.texts[2],
         "artists": artists,
     }
@@ -92,12 +97,12 @@ def main(args, mode_is_trait):
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
 
-    process_plt(fig, ts, args.movie, dict_update, script_name)
+    process_plt(fig, ts, dict_update, script_name)
 
     end_time = time.perf_counter()
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 
 if __name__ == "__main__":
-    parsed_args, is_trait = parse_args()
-    main(parsedargs, is_trait)
+    parsed_args = parse_args()
+    main(parsed_args)
