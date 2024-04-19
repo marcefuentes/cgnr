@@ -41,15 +41,15 @@ def main(args):
         "x_values": np.sort(df["logES"].unique()),
     }
 
-    rows, axes_data["row_titles"], columns, axes_data["column_titles"] = get_rows_columns(
-        args.mode, args.mode_is_trait
+    rows, axes_data["row_titles"], columns, axes_data["column_titles"] = (
+        get_rows_columns(args.mode, args.mode_is_trait)
     )
 
     layout = {
         "nrows": len(rows),
         "ncols": len(columns),
-        "nr" : len(axes_data["y_values"]),
-        "nc" : len(axes_data["x_values"]),
+        "nr": len(axes_data["y_values"]),
+        "nc": len(axes_data["x_values"]),
         "histogram": args.histogram,
     }
 
@@ -77,7 +77,9 @@ def main(args):
         file_name += "_histogram"
     else:
         prettify_imshow_axes(axes_data)
-        update_data["artists"] = init_imshow_artists(axes_data["axs"], layout["nr"], layout["nc"])
+        update_data["artists"] = init_imshow_artists(
+            axes_data["axs"], layout["nr"], layout["nc"]
+        )
 
     # Add data and save
 
