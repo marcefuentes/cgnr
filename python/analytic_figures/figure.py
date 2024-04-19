@@ -36,26 +36,26 @@ def main(args):
         )
         df = df_none
 
-    dict_axs = {
+    axes_data = {
         "y_values": np.sort(df["alpha"].unique())[::-1],
         "x_values": np.sort(df["logES"].unique()),
     }
 
-    rows, dict_axs["row_titles"], columns, dict_axs["column_titles"] = get_rows_columns(
+    rows, axes_data["row_titles"], columns, axes_data["column_titles"] = get_rows_columns(
         args.mode, args.mode_is_trait
     )
 
     layout = {
         "nrows": len(rows),
         "ncols": len(columns),
-        "nr" : len(dict_axs["y_values"]),
-        "nc" : len(dict_axs["x_values"]),
+        "nr" : len(axes_data["y_values"]),
+        "nc" : len(axes_data["x_values"]),
         "histogram": args.histogram,
     }
 
-    fig, dict_axs["axs"], dict_axs["divider"] = create_fig(layout)
+    fig, axes_data["axs"], axes_data["divider"] = create_fig(layout)
 
-    dict_update = {
+    update_data = {
         "mode": args.mode,
         "mode_is_trait": args.mode_is_trait,
         "columns": columns,
@@ -70,18 +70,18 @@ def main(args):
 
     file_name = os.path.basename(__file__).split(".")[0]
     if args.histogram:
-        dict_update["alphas"] = dict_axs["y_values"]
-        dict_update["logess"] = dict_axs["x_values"]
-        prettify_plot_axes(dict_axs)
-        dict_update["artists"] = init_plot_artists(dict_axs["axs"])
+        update_data["alphas"] = axes_data["y_values"]
+        update_data["logess"] = axes_data["x_values"]
+        prettify_plot_axes(axes_data)
+        update_data["artists"] = init_plot_artists(axes_data["axs"])
         file_name += "_histogram"
     else:
-        prettify_imshow_axes(dict_axs)
-        dict_update["artists"] = init_imshow_artists(dict_axs["axs"], layout["nr"], layout["nc"])
+        prettify_imshow_axes(axes_data)
+        update_data["artists"] = init_imshow_artists(axes_data["axs"], layout["nr"], layout["nc"])
 
     # Add data and save
 
-    process_plt(fig, df.Time.unique(), dict_update, file_name)
+    process_plt(fig, df.Time.unique(), update_data, file_name)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
 
