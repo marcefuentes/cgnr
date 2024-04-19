@@ -54,22 +54,10 @@ def main(args):
     if args.histogram:
         layout["nr"] = len(alphas)
         layout["nc"] = len(logess)
-        fig, axs, divider = create_fig(measurements, layout)
-        axs = prettify_plot_axes(
-            axs, divider, alphas, logess, row_titles, column_titles
-        )
-        artists = init_plot_artists(axs)
-    else:
-        fig, axs, divider = create_fig(measurements, layout)
-        axs = prettify_imshow_axes(
-            axs, divider, alphas, logess, row_titles, column_titles
-        )
-        artists = init_imshow_artists(axs, len(alphas), len(logess))
 
+    fig, axs, divider = create_fig(measurements, layout)
     prettify_fig(fig, measurements)
     add_colorbar(fig, measurements, len(logess))
-
-    # Add data and save
 
     dict_update = {
         "mode": args.mode,
@@ -82,14 +70,24 @@ def main(args):
         "dffrqs": dffrqs,
         "movie": args.movie,
         "text": fig.texts[2],
-        "artists": artists,
     }
 
     file_name = os.path.basename(__file__).split(".")[0]
     if args.histogram:
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
+        axs = prettify_plot_axes(
+            axs, divider, alphas, logess, row_titles, column_titles
+        )
+        dict_update["artists"] = init_plot_artists(axs)
         file_name += "_histogram"
+    else:
+        axs = prettify_imshow_axes(
+            axs, divider, alphas, logess, row_titles, column_titles
+        )
+        dict_update["artists"] = init_imshow_artists(axs, len(alphas), len(logess))
+
+    # Add data and save
 
     process_plt(fig, df.Time.unique(), dict_update, file_name)
 
