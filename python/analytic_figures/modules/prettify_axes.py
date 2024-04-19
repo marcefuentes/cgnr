@@ -32,28 +32,29 @@ def add_imshow_ticks(kwargs):
     nrows, ncols = kwargs["axs"].shape
     nr = len(kwargs["y_values"])
     nc = len(kwargs["x_values"])
-
-    xticks = [0, 0.5 * (nc - 1), nc - 1]
-    yticks = [0, 0.5 * (nr - 1), nr - 1]
     xmin = min(kwargs["x_values"])
     xmax = max(kwargs["x_values"])
     ymin = min(kwargs["y_values"])
     ymax = max(kwargs["y_values"])
-    xticklabels = [f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"]
-    yticklabels = [f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"]
 
     for r in range(nrows):
         for c in range(ncols):
-            kwargs["axs"][r, c].set(xticks=xticks, yticks=yticks, xticklabels=[], yticklabels=[])
+            kwargs["axs"][r, c].set(
+                xticks=[0, 0.5 * (nc - 1), nc - 1],
+                yticks=[0, 0.5 * (nr - 1), nr - 1],
+                xticklabels=[],
+                yticklabels=[],
+            )
             kwargs["axs"][r, c].tick_params(
                 axis="both",
                 labelsize=ss.TICK_LABEL_SIZE,
                 size=ss.TICK_SIZE,
             )
     for ax in kwargs["axs"][:, 0]:
-        ax.set_yticklabels(yticklabels)
+        ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
     for ax in kwargs["axs"][-1, :]:
-        ax.set_xticklabels(xticklabels)
+        ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
+
 
 def add_imshow_titles(kwargs):
     """Add titles to (nrows x ncols) matrix of axes."""
@@ -79,7 +80,7 @@ def add_imshow_titles(kwargs):
 def add_plot_letters(kwargs):
     """Add letters to (nrows x ncols x nr x nc) matrix of axes."""
 
-    nrows, ncols, nr, nc = kwargs["axs"].shape
+    nrows, ncols, nr, _ = kwargs["axs"].shape
 
     letter_position = 1.0 + ss.LETTER_POSITION * nr
 
@@ -153,6 +154,7 @@ def add_plot_titles(kwargs):
             ha="left",
             fontsize=ss.LETTER_LABEL_SIZE,
         )
+
 
 def prettify_imshow_axes(kwargs):
     """Prettify (nrows x ncols) matrix of axes."""
