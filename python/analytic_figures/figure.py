@@ -24,7 +24,6 @@ def main(args):
     """Create the figure."""
 
     start_time = time.perf_counter()
-    file_name = os.path.basename(__file__).split(".")[0]
 
     # Get data
 
@@ -72,9 +71,6 @@ def main(args):
 
     # Add data and save
 
-    if args.histogram:
-        file_name += "_args.histogram"
-
     dict_update = {
         "mode": args.mode,
         "mode_is_trait": args.mode_is_trait,
@@ -88,9 +84,12 @@ def main(args):
         "text": fig.texts[2],
         "artists": artists,
     }
+
+    file_name = os.path.basename(__file__).split(".")[0]
     if args.histogram:
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
+        file_name += "_histogram"
 
     process_plt(fig, df.Time.unique(), dict_update, file_name)
 
