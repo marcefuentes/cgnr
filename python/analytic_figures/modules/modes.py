@@ -9,7 +9,15 @@ dict_variant_titles = {
 
 all_variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
 
-all_lang_variants = ["lang_noshuffle", "lang_shuffle"]
+all_traits = [
+    "ChooseGrain",
+    "Choose_ltGrain",
+    "MimicGrain",
+    "ImimicGrain",
+    "Imimic_ltGrain",
+    "w_excess",
+    "qBSeen_excess",
+]
 
 dict_row_titles = {
     "none": "",
@@ -35,7 +43,7 @@ dict_traits = {
         "frq": "Choose_ltGrain",
         "title": "Partner choice\n(long memory)",
         "relative": "none-",
-        "variants": all_lang_variants,
+        "variants": all_variants,
     },
     "MimicGrain": {
         "mean": "MimicGrainmean",
@@ -56,7 +64,7 @@ dict_traits = {
         "frq": "Imimic_ltGrain",
         "title": "Indirect\nreciprocity\n(long memory)",
         "relative": "none-",
-        "variants": all_lang_variants,
+        "variants": all_variants,
     },
     "qBSeen": {
         "mean": "qBSeenmean",
@@ -108,7 +116,6 @@ dict_traits = {
         "variants": all_variants,
     },
     "all_traits": {"variants": all_variants},
-    "all_lang_traits": {"variants": all_lang_variants},
 }
 
 dict_multitrait_rows = {

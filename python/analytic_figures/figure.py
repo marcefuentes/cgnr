@@ -6,9 +6,6 @@ import os
 import time
 import numpy as np
 
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-
 from modules.add_colorbar import add_colorbar
 from modules.argparse_utils import parse_args
 from modules.create_fig import create_fig
@@ -20,8 +17,7 @@ from modules.get_data import (
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.prettify_fig import prettify_fig, create_measurements
-from modules.update import update
-
+from modules.process_plt import process_plt
 
 def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     """Create the figure."""
@@ -71,9 +67,8 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
 
     # Add data and save
 
-    name = f"{script_name}_{mode}"
     if histogram:
-        name = f"{name}_histogram"
+        script_name += "_histogram"
 
     dict_update = {
         "mode": mode,
@@ -92,38 +87,7 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
 
-    if movie:
-        dict_animation = {
-            "fig": fig,
-            "frames": ts,
-            "func": update,
-            "fargs": (dict_update,),
-            "blit": True,
-        }
-        ani = FuncAnimation(**dict_animation)
-        ani.save(f"{name}.mp4", writer="ffmpeg", fps=10)
-    else:
-        if mode in ("all_lang_traits", "all_traits"):
-            if mode == "all_lang_traits":
-                traits = ["Choose_ltGrain", "Imimic_ltGrain"]
-            else:
-                traits = [
-                    "ChooseGrain",
-                    "Choose_ltGrain",
-                    "MimicGrain",
-                    "ImimicGrain",
-                    "Imimic_ltGrain",
-                    "w_excess",
-                    "qBSeen_excess",
-                ]
-            for trait in traits:
-                dict_update["mode"] = trait
-                update(ts[-1], dict_update)
-                plt.savefig(f"{script_name}_{trait}.png", transparent=False)
-        else:
-            update(ts[-1], dict_update)
-            plt.savefig(f"{name}.png", transparent=False)
-    plt.close()
+    process_plt(fig, ts, movie, dict_update, script_name)
 
     end_time = time.perf_counter()
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
