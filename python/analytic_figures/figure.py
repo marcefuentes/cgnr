@@ -36,22 +36,24 @@ def main(args):
         )
         df = df_none
 
-    alphas = np.sort(df["alpha"].unique())[::-1]
-    logess = np.sort(df["logES"].unique())
+    dict_axs = {
+        "y_values": np.sort(df["alpha"].unique())[::-1],
+        "x_values": np.sort(df["logES"].unique()),
+    }
 
-    rows, row_titles, columns, column_titles = get_rows_columns(
+    rows, dict_axs["row_titles"], columns, dict_axs["column_titles"] = get_rows_columns(
         args.mode, args.mode_is_trait
     )
 
     layout = {
         "nrows": len(rows),
         "ncols": len(columns),
-        "nr" : len(alphas),
-        "nc" : len(logess),
+        "nr" : len(dict_axs["y_values"]),
+        "nc" : len(dict_axs["x_values"]),
         "histogram": args.histogram,
     }
 
-    fig, axs, divider = create_fig(layout)
+    fig, dict_axs["axs"], dict_axs["divider"] = create_fig(layout)
 
     dict_update = {
         "mode": args.mode,
@@ -68,18 +70,14 @@ def main(args):
 
     file_name = os.path.basename(__file__).split(".")[0]
     if args.histogram:
-        dict_update["alphas"] = alphas
-        dict_update["logess"] = logess
-        prettify_plot_axes(
-            axs, divider, alphas, logess, row_titles, column_titles
-        )
-        dict_update["artists"] = init_plot_artists(axs)
+        dict_update["alphas"] = dict_axs["y_values"]
+        dict_update["logess"] = dict_axs["x_values"]
+        prettify_plot_axes(dict_axs)
+        dict_update["artists"] = init_plot_artists(dict_axs["axs"])
         file_name += "_histogram"
     else:
-        prettify_imshow_axes(
-            axs, divider, alphas, logess, row_titles, column_titles
-        )
-        dict_update["artists"] = init_imshow_artists(axs, len(alphas), len(logess))
+        prettify_imshow_axes(dict_axs)
+        dict_update["artists"] = init_imshow_artists(dict_axs["axs"], layout["nr"], layout["nc"])
 
     # Add data and save
 

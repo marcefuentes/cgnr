@@ -3,10 +3,13 @@
 import modules.settings as ss
 
 
-def prettify_imshow_axes(axs, divider, y_values, x_values, row_titles, column_titles):
+def prettify_imshow_axes(kwargs):
     """Prettify (nrows x ncols) matrix of axes."""
 
+    axs = kwargs["axs"]
     nrows, ncols = axs.shape
+    x_values = kwargs["x_values"]
+    y_values = kwargs["y_values"]
     nr = len(y_values)
     nc = len(x_values)
 
@@ -22,7 +25,7 @@ def prettify_imshow_axes(axs, divider, y_values, x_values, row_titles, column_ti
     for r in range(nrows):
         for c in range(ncols):
             axs[nrows - r - 1, c].set_axes_locator(
-                divider.new_locator(nx=2 * c, ny=2 * r)
+                kwargs["divider"].new_locator(nx=2 * c, ny=2 * r)
             )
 
     i = 0
@@ -54,12 +57,12 @@ def prettify_imshow_axes(axs, divider, y_values, x_values, row_titles, column_ti
         ax.set_yticklabels(yticklabels)
     for ax in axs[-1, :]:
         ax.set_xticklabels(xticklabels)
-    for ax, title in zip(axs[0, :], column_titles):
+    for ax, title in zip(axs[0, :], kwargs["column_titles"]):
         ax.set_title(
             title, pad=ss.PLOT_SIZE * ss.TITLE_PADDING, fontsize=ss.LETTER_LABEL_SIZE
         )
-    if row_titles:
-        for ax, title in zip(axs[:, -1], row_titles):
+    if kwargs["row_titles"]:
+        for ax, title in zip(axs[:, -1], kwargs["row_titles"]):
             ax.annotate(
                 title,
                 xy=(1, 0.5),
@@ -72,9 +75,12 @@ def prettify_imshow_axes(axs, divider, y_values, x_values, row_titles, column_ti
             )
 
 
-def prettify_plot_axes(axs, divider, y_values, x_values, row_titles, column_titles):
+def prettify_plot_axes(kwargs):
     """Prettify (nrows x ncols x nr x nc) matrix of axes."""
 
+    axs = kwargs["axs"]
+    x_values = kwargs["x_values"]
+    y_values = kwargs["y_values"]
     nrows, ncols, nr, nc = axs.shape
 
     xlim = [-2, ss.BINS + 1]
@@ -88,7 +94,7 @@ def prettify_plot_axes(axs, divider, y_values, x_values, row_titles, column_titl
                 inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
                 for e in range(nc):
                     inner_x = c * (nc + 1) + e + int(e / nc)
-                    new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
+                    new_locator = kwargs["divider"].new_locator(nx=inner_x, ny=inner_y)
                     ax = axs[r, c, a, e]
                     ax.set_axes_locator(new_locator)
                     for spine in ax.spines.values():
@@ -117,7 +123,7 @@ def prettify_plot_axes(axs, divider, y_values, x_values, row_titles, column_titl
             axs[r, 0, a, 0].set_yticklabels([y_values[a]])
     for c in range(ncols):
         axs[0, c, 0, int(nc / 2)].set_title(
-            column_titles[c],
+            kwargs["column_titles"][c],
             pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
             fontsize=ss.LETTER_LABEL_SIZE,
         )
@@ -125,7 +131,7 @@ def prettify_plot_axes(axs, divider, y_values, x_values, row_titles, column_titl
             axs[-1, c, -1, e].set_xticklabels([f"{x_values[e]:.0f}"])
     for r in range(nrows):
         axs[r, -1, int(nr / 2), -1].annotate(
-            row_titles[r],
+            kwargs["row_titles"][r],
             xy=(1, 0.5),
             xycoords="axes fraction",
             xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
