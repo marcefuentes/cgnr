@@ -2,6 +2,8 @@
 
 import os
 from glob import glob
+import sys
+
 import pandas as pd
 
 from common_modules.get_config import get_config
@@ -99,7 +101,7 @@ def get_df(path, filetype, movie):
     filelist = glob(os.path.join(path, f"*{filetype}"))
     if not filelist:
         print(f"No {path}/*{filetype} files found.")
-        exit()
+        sys.exit()
     df = read_files(filelist, movie)
     return df
 

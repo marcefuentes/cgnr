@@ -1,6 +1,8 @@
 """ Update data in artists. """
 
 import re
+import sys
+
 import numpy as np
 import pandas as pd
 
@@ -84,8 +86,8 @@ def update_zmatrix(t, kwargs, r, c):
         return zmatrix
 
     if trait_in not in mm.dict_traits:
-        print(f"Trait {trait_in} not in the dictionary.")
-        exit()
+        print(f"Trait {trait_in} not in dictionary modes.py/dict_traits.")
+        sys.exit()
     trait = mm.dict_traits[trait_in]["mean"]
     relative = mm.dict_traits[trait_in]["relative"]
     zmatrix = get_zmatrix(t, df, trait)
