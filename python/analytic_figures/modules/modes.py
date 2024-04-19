@@ -90,7 +90,7 @@ dict_traits = {
     "qBSeen_excess_none": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
-        "title": """Production of $\it{B}$\n(relative)""",
+        "title": r"Production of $\it{B}$" + "\n(relative)",
         "relative": "-social",
         "variants": all_variants,
     },
@@ -120,7 +120,7 @@ dict_traits = {
 
 dict_multitrait_rows = {
     "default": ["p", "pi", "i", "none"],
-    "none": ["given100", "given095", "given050", "given000"],
+    "none": ["given100", "given000"],
     "test": ["p", "i", "none"],
 }
 
