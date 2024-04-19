@@ -46,12 +46,10 @@ def main(args):
     layout = {
         "nrows": len(rows),
         "ncols": len(columns),
-        "color_bar_nc": len(logess),
+        "nr" : len(alphas),
+        "nc" : len(logess),
+        "histogram": args.histogram,
     }
-
-    if args.histogram:
-        layout["nr"] = len(alphas)
-        layout["nc"] = len(logess)
 
     fig, axs, divider = create_fig(layout)
 
