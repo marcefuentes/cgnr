@@ -19,20 +19,19 @@ from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.prettify_fig import prettify_fig, create_measurements
 from modules.process_plt import process_plt
 
-def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
+def main(args, mode_is_trait):
     """Create the figure."""
 
     start_time = time.perf_counter()
-    this_script = os.path.basename(__file__)
-    script_name = this_script.split(".")[0]
+    script_name = os.path.basename(__file__).split(".")[0]
 
     # Get data
 
-    if mode_is_single_trait:
-        dfs, df_none, df_social, dffrqs = get_data_single_trait(mode, histogram, movie)
+    if mode_is_trait:
+        dfs, df_none, df_social, dffrqs = get_data_single_trait(args.mode, args.histogram, args.movie)
         df = dfs[0][0]
     else:
-        dfs, df_none, df_social, dffrqs = get_data_multitrait(mode, histogram, movie)
+        dfs, df_none, df_social, dffrqs = get_data_multitrait(args.mode, args.histogram, args.movie)
         df = df_none
 
     ts = df.Time.unique()
@@ -42,7 +41,7 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     nc = len(logess)
 
     rows, row_titles, columns, column_titles = get_rows_columns(
-        mode, mode_is_single_trait
+        args.mode, mode_is_trait
     )
 
     nrows = len(rows)
@@ -53,7 +52,7 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
         "ncols": ncols,
     }
 
-    if histogram:
+    if args.histogram:
         layout["nr"] = nr
         layout["nc"] = nc
         fig, axs, divider = create_fig(measurements, layout)
@@ -73,37 +72,32 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
 
     # Add data and save
 
-    if histogram:
-        script_name += "_histogram"
+    if args.histogram:
+        script_name += "_args.histogram"
 
     dict_update = {
-        "mode": mode,
-        "mode_is_single_trait": mode_is_single_trait,
+        "mode": args.mode,
+        "mode_is_trait": mode_is_trait,
         "columns": columns,
         "rows": rows,
         "dfs": dfs,
         "df_none": df_none,
         "df_social": df_social,
         "dffrqs": dffrqs,
-        "movie": movie,
+        "args.movie": args.movie,
         "text": fig.texts[2],
         "artists": artists,
     }
-    if histogram:
+    if args.histogram:
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
 
-    process_plt(fig, ts, movie, dict_update, script_name)
+    process_plt(fig, ts, args.movie, dict_update, script_name)
 
     end_time = time.perf_counter()
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 
 if __name__ == "__main__":
-    args, is_trait = parse_args()
-    main(
-        mode=args.mode,
-        histogram=args.histogram,
-        movie=args.movie,
-        mode_is_single_trait=is_trait,
-    )
+    parsed_args, is_trait = parse_args()
+    main(parsedargs, is_trait)
