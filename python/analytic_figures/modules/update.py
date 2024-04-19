@@ -92,24 +92,19 @@ def update_zmatrix(t, kwargs, r, c):
 
     if relative == "-none":
         zmatrix = zmatrix - get_zmatrix(t, df_none, trait)
-        return zmatrix
-    if relative == "none-":
+    elif relative == "none-":
         if none:
             zmatrix = 0.5 - zmatrix
         else:
             zmatrix = get_zmatrix(t, df_none, trait) - zmatrix
-        return zmatrix
-    if relative == "-social":
+    elif relative == "-social":
         zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
-        return zmatrix
-    if relative == "given":
+    elif relative == "given":
         zmatrix = zmatrix * df.iloc[0]["Given"]
-        return zmatrix
-    if relative == "neutral":
+    elif relative == "neutral":
         zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
-        return zmatrix
-    if relative == "N":
+    elif relative == "N":
         n = float(pow(2, get_config("N")))
         zmatrix = zmatrix / n
-        return zmatrix
+
     return zmatrix
