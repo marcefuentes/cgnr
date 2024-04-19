@@ -24,7 +24,7 @@ def main(args):
     """Create the figure."""
 
     start_time = time.perf_counter()
-    script_name = os.path.basename(__file__).split(".")[0]
+    file_name = os.path.basename(__file__).split(".")[0]
 
     # Get data
 
@@ -39,27 +39,22 @@ def main(args):
         )
         df = df_none
 
-    ts = df.Time.unique()
     alphas = np.sort(df["alpha"].unique())[::-1]
     logess = np.sort(df["logES"].unique())
-    nr = len(alphas)
-    nc = len(logess)
 
     rows, row_titles, columns, column_titles = get_rows_columns(
         args.mode, args.mode_is_trait
     )
 
-    nrows = len(rows)
-    ncols = len(columns)
-    measurements = create_measurements(nrows, ncols)
+    measurements = create_measurements(len(rows), len(columns))
     layout = {
-        "nrows": nrows,
-        "ncols": ncols,
+        "nrows": len(rows),
+        "ncols": len(columns),
     }
 
     if args.histogram:
-        layout["nr"] = nr
-        layout["nc"] = nc
+        layout["nr"] = len(alphas)
+        layout["nc"] = len(logess)
         fig, axs, divider = create_fig(measurements, layout)
         axs = prettify_plot_axes(
             axs, divider, alphas, logess, row_titles, column_titles
@@ -70,15 +65,15 @@ def main(args):
         axs = prettify_imshow_axes(
             axs, divider, alphas, logess, row_titles, column_titles
         )
-        artists = init_imshow_artists(axs, nr, nc)
+        artists = init_imshow_artists(axs, len(alphas), len(logess))
 
     prettify_fig(fig, measurements)
-    add_colorbar(fig, measurements, nc)
+    add_colorbar(fig, measurements, len(logess))
 
     # Add data and save
 
     if args.histogram:
-        script_name += "_args.histogram"
+        file_name += "_args.histogram"
 
     dict_update = {
         "mode": args.mode,
@@ -97,10 +92,9 @@ def main(args):
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
 
-    process_plt(fig, ts, dict_update, script_name)
+    process_plt(fig, df.Time.unique(), dict_update, file_name)
 
-    end_time = time.perf_counter()
-    print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
+    print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
 
 
 if __name__ == "__main__":
