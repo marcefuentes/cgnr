@@ -48,15 +48,21 @@ def main(mode, histogram=False, movie=False, mode_is_single_trait=False):
     nrows = len(rows)
     ncols = len(columns)
     measurements = create_measurements(nrows, ncols)
+    layout = {
+        "nrows": nrows,
+        "ncols": ncols,
+    }
 
     if histogram:
-        fig, axs, divider = create_fig(measurements, nrows, ncols, nc=nc, nr=nr)
+        layout["nr"] = nr
+        layout["nc"] = nc
+        fig, axs, divider = create_fig(measurements, layout)
         axs = prettify_plot_axes(
             axs, divider, alphas, logess, row_titles, column_titles
         )
         artists = init_plot_artists(axs)
     else:
-        fig, axs, divider = create_fig(measurements, nrows, ncols)
+        fig, axs, divider = create_fig(measurements, layout)
         axs = prettify_imshow_axes(
             axs, divider, alphas, logess, row_titles, column_titles
         )

@@ -5,8 +5,13 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 import modules.settings as ss
 
 
-def create_divider(fig, measurements, nrows, ncols, nr=1, nc=1):
+def create_divider(fig, measurements, layout):
     """Create divider."""
+
+    nrows = layout["nrows"]
+    ncols = layout["ncols"]
+    nr = layout.get("nr", 1)
+    nc = layout.get("nc", 1)
 
     spacing_fixed = Size.Fixed(ss.SPACING)
     plot_size_fixed = Size.Fixed(ss.PLOT_SIZE / nc)
