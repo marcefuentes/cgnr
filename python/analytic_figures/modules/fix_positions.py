@@ -8,8 +8,6 @@ import modules.settings as ss
 def create_divider(fig, measurements, layout):
     """Create divider."""
 
-    nrows = layout["nrows"]
-    ncols = layout["ncols"]
     nr = layout.get("nr", 1)
     nc = layout.get("nc", 1)
 
@@ -17,22 +15,17 @@ def create_divider(fig, measurements, layout):
     plot_size_fixed = Size.Fixed(ss.PLOT_SIZE / nc)
     column_fixed = [plot_size_fixed] * nc + (
         [spacing_fixed] + [plot_size_fixed] * nc
-    ) * (ncols - 1)
+    ) * (layout["ncols"] - 1)
     row_fixed = [plot_size_fixed] * nr + ([spacing_fixed] + [plot_size_fixed] * nr) * (
-        nrows - 1
+        layout["nrows"] - 1
     )
-    width = measurements["width"]
-    height = measurements["height"]
-    inner_width = measurements["inner_width"]
-    inner_height = measurements["inner_height"]
-
     divider = Divider(
         fig,
         (
-            ss.LEFT_MARGIN / width,
-            ss.BOTTOM_MARGIN / height,
-            inner_width / width,
-            inner_height / height,
+            ss.LEFT_MARGIN / measurements["width"],
+            ss.BOTTOM_MARGIN / measurements["height"],
+            measurements["inner_width"] / measurements["width"],
+            measurements["inner_height"] / measurements["height"],
         ),
         column_fixed,
         row_fixed,
