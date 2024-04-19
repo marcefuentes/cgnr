@@ -6,7 +6,6 @@ import os
 import time
 import numpy as np
 
-from modules.add_colorbar import add_colorbar
 from modules.argparse_utils import parse_args
 from modules.create_fig import create_fig
 from modules.get_data import (
@@ -16,7 +15,6 @@ from modules.get_data import (
 )
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
-from modules.prettify_fig import prettify_fig, create_measurements
 from modules.process_plt import process_plt
 
 
@@ -45,19 +43,17 @@ def main(args):
         args.mode, args.mode_is_trait
     )
 
-    measurements = create_measurements(len(rows), len(columns))
     layout = {
         "nrows": len(rows),
         "ncols": len(columns),
+        "color_bar_nc": len(logess),
     }
 
     if args.histogram:
         layout["nr"] = len(alphas)
         layout["nc"] = len(logess)
 
-    fig, axs, divider = create_fig(measurements, layout)
-    prettify_fig(fig, measurements)
-    add_colorbar(fig, measurements, len(logess))
+    fig, axs, divider = create_fig(layout)
 
     dict_update = {
         "mode": args.mode,
