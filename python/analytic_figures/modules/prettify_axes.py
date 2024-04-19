@@ -3,31 +3,63 @@
 import modules.settings as ss
 
 
-def prettify_imshow_axes(kwargs):
-    """Prettify (nrows x ncols) matrix of axes."""
+def add_imshow_ticks(kwargs):
+    """Set ticks for (nrows x ncols) matrix of axes."""
 
     axs = kwargs["axs"]
     nrows, ncols = axs.shape
-    x_values = kwargs["x_values"]
-    y_values = kwargs["y_values"]
-    nr = len(y_values)
-    nc = len(x_values)
+    nr = len(kwargs["y_values"])
+    nc = len(kwargs["x_values"])
 
     xticks = [0, 0.5 * (nc - 1), nc - 1]
     yticks = [0, 0.5 * (nr - 1), nr - 1]
-    xmin = min(x_values)
-    xmax = max(x_values)
-    ymin = min(y_values)
-    ymax = max(y_values)
+    xmin = min(kwargs["x_values"])
+    xmax = max(kwargs["x_values"])
+    ymin = min(kwargs["y_values"])
+    ymax = max(kwargs["y_values"])
     xticklabels = [f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"]
     yticklabels = [f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"]
 
     for r in range(nrows):
         for c in range(ncols):
-            axs[nrows - r - 1, c].set_axes_locator(
-                kwargs["divider"].new_locator(nx=2 * c, ny=2 * r)
+            ax = axs[r, c]
+            ax.set(xticks=xticks, yticks=yticks, xticklabels=[], yticklabels=[])
+            ax.tick_params(
+                axis="both",
+                labelsize=ss.TICK_LABEL_SIZE,
+                size=ss.TICK_SIZE,
+            )
+    for ax in axs[:, 0]:
+        ax.set_yticklabels(yticklabels)
+    for ax in axs[-1, :]:
+        ax.set_xticklabels(xticklabels)
+
+def add_imshow_titles(kwargs):
+    """Add titles to (nrows x ncols) matrix of axes."""
+
+    axs = kwargs["axs"]
+    for ax, title in zip(axs[0, :], kwargs["column_titles"]):
+        ax.set_title(
+            title, pad=ss.PLOT_SIZE * ss.TITLE_PADDING, fontsize=ss.LETTER_LABEL_SIZE
+        )
+    if kwargs["row_titles"]:
+        for ax, title in zip(axs[:, -1], kwargs["row_titles"]):
+            ax.annotate(
+                title,
+                xy=(1, 0.5),
+                xycoords="axes fraction",
+                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
+                textcoords="offset points",
+                va="center",
+                ha="left",
+                fontsize=ss.LETTER_LABEL_SIZE,
             )
 
+def add_imshow_letters(kwargs):
+    """Add letters to (nrows x ncols) matrix of axes."""
+
+    axs = kwargs["axs"]
+    nrows, ncols = axs.shape
     i = 0
     letter_position = 1.0 + ss.LETTER_POSITION
     for r in range(nrows):
@@ -45,34 +77,28 @@ def prettify_imshow_axes(kwargs):
                 fontsize=ss.LETTER_LABEL_SIZE,
                 weight="bold",
             )
-            for spine in ax.spines.values():
+
+
+def prettify_imshow_axes(kwargs):
+    """Prettify (nrows x ncols) matrix of axes."""
+
+    axs = kwargs["axs"]
+    nrows, ncols = axs.shape
+
+    add_imshow_ticks(kwargs)
+    add_imshow_titles(kwargs)
+    add_imshow_letters(kwargs)
+
+    for r in range(nrows):
+        for c in range(ncols):
+            axs[nrows - r - 1, c].set_axes_locator(
+                kwargs["divider"].new_locator(nx=2 * c, ny=2 * r)
+            )
+
+    for r in range(nrows):
+        for c in range(ncols):
+            for spine in axs[r, c].spines.values():
                 spine.set_linewidth(ss.LINE_WIDTH)
-            ax.set(xticks=xticks, yticks=yticks, xticklabels=[], yticklabels=[])
-            ax.tick_params(
-                axis="both",
-                labelsize=ss.TICK_LABEL_SIZE,
-                size=ss.TICK_SIZE,
-            )
-    for ax in axs[:, 0]:
-        ax.set_yticklabels(yticklabels)
-    for ax in axs[-1, :]:
-        ax.set_xticklabels(xticklabels)
-    for ax, title in zip(axs[0, :], kwargs["column_titles"]):
-        ax.set_title(
-            title, pad=ss.PLOT_SIZE * ss.TITLE_PADDING, fontsize=ss.LETTER_LABEL_SIZE
-        )
-    if kwargs["row_titles"]:
-        for ax, title in zip(axs[:, -1], kwargs["row_titles"]):
-            ax.annotate(
-                title,
-                xy=(1, 0.5),
-                xycoords="axes fraction",
-                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
-                textcoords="offset points",
-                va="center",
-                ha="left",
-                fontsize=ss.LETTER_LABEL_SIZE,
-            )
 
 
 def prettify_plot_axes(kwargs):
