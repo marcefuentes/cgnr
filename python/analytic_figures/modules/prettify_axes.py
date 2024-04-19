@@ -71,8 +71,6 @@ def prettify_imshow_axes(axs, divider, y_values, x_values, row_titles, column_ti
                 fontsize=ss.LETTER_LABEL_SIZE,
             )
 
-    return axs
-
 
 def prettify_plot_axes(axs, divider, y_values, x_values, row_titles, column_titles):
     """Prettify (nrows x ncols x nr x nc) matrix of axes."""
@@ -136,5 +134,3 @@ def prettify_plot_axes(axs, divider, y_values, x_values, row_titles, column_titl
             ha="left",
             fontsize=ss.LETTER_LABEL_SIZE,
         )
-
-    return axs

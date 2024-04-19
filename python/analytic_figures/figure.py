@@ -76,13 +76,13 @@ def main(args):
     if args.histogram:
         dict_update["alphas"] = alphas
         dict_update["logess"] = logess
-        axs = prettify_plot_axes(
+        prettify_plot_axes(
             axs, divider, alphas, logess, row_titles, column_titles
         )
         dict_update["artists"] = init_plot_artists(axs)
         file_name += "_histogram"
     else:
-        axs = prettify_imshow_axes(
+        prettify_imshow_axes(
             axs, divider, alphas, logess, row_titles, column_titles
         )
         dict_update["artists"] = init_imshow_artists(axs, len(alphas), len(logess))
