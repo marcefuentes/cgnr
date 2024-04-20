@@ -41,6 +41,7 @@ def get_job_min(work_path):
 
 
 def next_work_path(work_path):
+    """Get the next work path."""
 
     mechanism = os.path.dirname(work_path)
     givens = list_of_folders(mechanism)
