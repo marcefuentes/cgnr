@@ -26,13 +26,14 @@ def main(args):
 
     if args.partnerchoice:
         path += "p"
+    reciprocity = 0
     if args.directr:
         reciprocity = 1
         path += "d"
     if args.indirectr:
         reciprocity = 1
         path += "i"
-    if not args.partnerchoice and not args.indirectr:
+    if not args.partnerchoice and not reciprocity:
         path += "none"
 
     path += f"/given{str(int((args.given) * 100)).zfill(3)}"

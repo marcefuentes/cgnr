@@ -191,7 +191,7 @@ def process_mechanism(current_path, folder_dict):
     if "i" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 1
-    elif "r" in mechanism:
+    elif "d" in mechanism:
         folder_dict["Reciprocity"] = 1
         folder_dict["IndirectR"] = 0
     else:
