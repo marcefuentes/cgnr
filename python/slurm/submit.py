@@ -40,36 +40,6 @@ def get_job_min(current_path):
     return job_min
 
 
-def find_work(last_job_file, test):
-    """Look for the last job submitted or for empty folder."""
-
-    if os.path.isfile(last_job_file):
-        with open(last_job_file, "r", encoding="utf-8") as f:
-            current_path, last_job = f.read().strip().split(",")
-        last_job = int(last_job)
-    else:
-        if test:
-            print(
-                "Submission is about to start in a new variant. Cannot run with --test option."
-            )
-            sys.exit()
-        mechanisms = list_of_folders(os.getcwd())
-        givens = list_of_folders(mechanisms[0])
-        current_path = givens[0]
-        current_path_folders = current_path.split("/")
-        current_path_print = "/".join(current_path_folders[-3:])
-        print(
-            f"\n{color.BOLD}Submit jobs in {current_path_print}?{color.RESET} {color.YESNO} ",
-            end="",
-        )
-        user_input = input()
-        if user_input.lower() == "n":
-            sys.exit()
-        last_job = 0
-
-    return current_path, last_job
-
-
 def process_folder(constraint, free_slots, last_job, test):
     """Submit jobs in the current folder"""
 
@@ -100,24 +70,66 @@ def process_folder(constraint, free_slots, last_job, test):
     return free_slots, last_job
 
 
-def process_variant(current_path):
+def process_variant(constraint, free_slots, test, last_job_file):
     """Process the parent directory."""
 
-    mechanism = os.path.dirname(current_path)
-    givens = list_of_folders(mechanism)
-    given_index = givens.index(current_path) + 1
-    if given_index < len(givens):
-        current_path = givens[given_index]
+    if os.path.isfile(last_job_file):
+        with open(last_job_file, "r", encoding="utf-8") as f:
+            current_path, last_job = f.read().strip().split(",")
+        last_job = int(last_job)
     else:
-        mechanisms = list_of_folders(os.path.dirname(mechanism))
-        mechanism_index = mechanisms.index(mechanism) + 1
-        if mechanism_index < len(mechanisms):
-            mechanism = mechanisms[mechanism_index]
-            givens = list_of_folders(mechanism)
-            current_path = givens[0]
+        if test:
+            print(
+                "Submission is about to start in a new variant. Cannot run with --test option."
+            )
+            sys.exit()
+        mechanisms = list_of_folders(os.getcwd())
+        givens = list_of_folders(mechanisms[0])
+        current_path = givens[0]
+        current_path_folders = current_path.split("/")
+        current_path_print = "/".join(current_path_folders[-3:])
+        print(
+            f"\n{color.BOLD}Submit jobs in {current_path_print}?{color.RESET} {color.YESNO} ",
+            end="",
+        )
+        user_input = input()
+        if user_input.lower() == "n":
+            sys.exit()
+        last_job = 0
+    os.chdir(current_path)
+    free_slots, last_job = process_folder(constraint, free_slots, last_job, test)
+
+    if last_job == 0:
+        mechanism = os.path.dirname(current_path)
+        givens = list_of_folders(mechanism)
+        given_index = givens.index(current_path) + 1
+        if given_index < len(givens):
+            current_path = givens[given_index]
         else:
-            return True, current_path
-    return False, current_path
+            mechanisms = list_of_folders(os.path.dirname(mechanism))
+            mechanism_index = mechanisms.index(mechanism) + 1
+            if mechanism_index < len(mechanisms):
+                mechanism = mechanisms[mechanism_index]
+                givens = list_of_folders(mechanism)
+                current_path = givens[0]
+            else:
+                if test:
+                    print(f"Would remove {last_job_file}.{color.RESET}")
+                else:
+                    os.remove(last_job_file)
+                print(
+                    f"{color.BOLD}{color.GREEN}All jobs submitted{color.RESET}\n"
+                    + f"{color.BOLD}{color.CYAN}{free_slots}{color.RESET} "
+                    + f"free slots in {color.BOLD}{constraint}{color.RESET}\n"
+                )
+                sys.exit()
+    if test:
+        print(f"Would write {current_path},{last_job} to {last_job_file}.{color.RESET}")
+    else:
+        with open(last_job_file, "w", encoding="utf-8") as f:
+            f.write(f"{current_path},{last_job}")
+
+    return free_slots
 
 
 def main(test=False):
@@ -131,42 +143,13 @@ def main(test=False):
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
         print(
-            (
                 f"\n{color.BOLD}{constraint}:{color.RESET}"
                 + f"{color.CYAN}{free_slots}{color.RESET} free slots"
-            )
         )
         if test and not free_slots:
             free_slots = 100
         while free_slots:
-            current_path, last_job = find_work(last_job_file, test)
-            os.chdir(current_path)
-            free_slots, last_job = process_folder(
-                constraint, free_slots, last_job, test
-            )
-            finished = False
-            if last_job == 0:
-                finished, current_path = process_variant(current_path)
-                if finished:
-                    if test:
-                        print(f"Would remove {last_job_file}.{color.RESET}")
-                    else:
-                        os.remove(last_job_file)
-                    print(f"{color.BOLD}{color.GREEN}All jobs submitted{color.RESET}")
-                    msg = (
-                        f"{color.BOLD}{color.CYAN}{free_slots}{color.RESET} "
-                        f"free slots in {color.BOLD}{constraint}{color.RESET}\n"
-                    )
-                    print(msg)
-                    sys.exit()
-            else:
-                if test:
-                    print(
-                        f"Would write {current_path},{last_job} to {last_job_file}.{color.RESET}"
-                    )
-                else:
-                    with open(last_job_file, "w", encoding="utf-8") as f:
-                        f.write(f"{current_path},{last_job}")
+            free_slots = process_variant(constraint, free_slots, test, last_job_file)
     print()
 
 
