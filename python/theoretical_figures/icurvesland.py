@@ -31,7 +31,7 @@ plotsize = 6
 # Add data to figure
 
 def update(given, budgets, icurves):
-    qBprivate = tt.qBeq(given, AA, RR)
+    qBprivate = tt.qbeq(given, AA, RR)
     w = tt.fitness(qBprivate, qBprivate, given, AA, RR)
     qB_partner = qBprivate
     budget_own = budget0*(1.0 - given)
