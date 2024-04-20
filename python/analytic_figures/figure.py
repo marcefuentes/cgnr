@@ -14,8 +14,9 @@ from modules.get_data import (
     get_rows_columns,
 )
 from modules.init_artists import init_imshow_artists, init_plot_artists
+from modules.modes import all_traits
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
-from modules.process_plt import process_plt
+from modules.process_plt import process_plt, close_plt
 
 
 def main(args):
@@ -81,7 +82,15 @@ def main(args):
 
     # Add data and save
 
-    process_plt(fig, df.Time.unique(), update_data, file_name)
+    if args.mode == "all_traits":
+        for trait in all_traits:
+            update_data["mode"] = trait
+            new_file_name = f"{file_name}_{trait}"
+            process_plt(fig, df.Time.unique(), update_data, new_file_name)
+    else:
+        file_name += f"_{args.mode}"
+        process_plt(fig, df.Time.unique(), update_data, file_name)
+    close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
 
