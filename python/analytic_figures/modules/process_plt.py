@@ -23,6 +23,7 @@ def process_plt(fig, frames, update_data, name):
         update(frames[-1], update_data)
         plt.savefig(f"{name}.png", transparent=False)
 
+
 def close_plt(fig):
     """Close the figure"""
 

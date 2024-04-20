@@ -49,7 +49,7 @@ def main(args):
         "ncols": len(columns),
         "nr": len(axes_data["y_values"]),
         "nc": len(axes_data["x_values"]),
-        "histogram": args.histogram,
+        "nested": args.histogram,
     }
 
     fig, axes_data["axs"], axes_data["divider"] = create_fig(layout)
@@ -85,8 +85,7 @@ def main(args):
     if args.mode == "all_traits":
         for trait in all_traits:
             update_data["mode"] = trait
-            new_file_name = f"{file_name}_{trait}"
-            process_plt(fig, df.Time.unique(), update_data, new_file_name)
+            process_plt(fig, df.Time.unique(), update_data, f"{file_name}_{trait}")
     else:
         file_name += f"_{args.mode}"
         process_plt(fig, df.Time.unique(), update_data, file_name)

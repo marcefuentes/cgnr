@@ -8,7 +8,7 @@ import modules.settings as ss
 def create_divider(fig, measurements, layout):
     """Create divider."""
 
-    if layout["histogram"]:
+    if layout["nested"]:
         nr = layout["nr"]
         nc = layout["nc"]
     else:

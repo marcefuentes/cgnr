@@ -21,7 +21,7 @@ def create_fig(layout):
     width = measurements["width"]
     height = measurements["height"]
 
-    if layout["histogram"]:
+    if layout["nested"]:
         fig = plt.figure(figsize=(width, height))
         outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
         nr = layout["nr"]
