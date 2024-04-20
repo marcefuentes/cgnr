@@ -25,7 +25,7 @@ def init_plot_artists(axs):
 
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
-    x = np.arange(ss.BINS)
+    x = np.arange(ss.VALUES_PER_CURVE)
     dummy_y = np.zeros_like(x)
 
     for r in range(nrows):
