@@ -17,6 +17,7 @@ from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.modes import all_traits
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.process_plt import process_plt, close_plt
+from modules.settings import BINS
 
 
 def main(args):
@@ -72,7 +73,7 @@ def main(args):
         update_data["alphas"] = axes_data["y_values"]
         update_data["logess"] = axes_data["x_values"]
         prettify_plot_axes(axes_data)
-        update_data["artists"] = init_plot_artists(axes_data["axs"])
+        update_data["artists"] = init_plot_artists(axes_data["axs"], BINS)
         file_name += "_histogram"
     else:
         prettify_imshow_axes(axes_data)

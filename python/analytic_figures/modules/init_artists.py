@@ -20,12 +20,12 @@ def init_imshow_artists(axs, nr, nc):
     return artists
 
 
-def init_plot_artists(axs):
+def init_plot_artists(axs, x_max):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
-    x = np.arange(ss.BINS)
+    x = np.arange(x_max)
     dummy_y = np.zeros_like(x)
 
     for r in range(nrows):
