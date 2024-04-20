@@ -29,9 +29,6 @@ def get_zmatrix(t, df, trait):
 def update(t, kwargs):
     """Update the plot with the data at time t."""
 
-    if kwargs["movie"]:
-        kwargs["text"].set_text(t)
-
     for r, _ in enumerate(kwargs["rows"]):
         for c, _ in enumerate(kwargs["columns"]):
             zmatrix = update_zmatrix(t, kwargs, r, c)
@@ -40,7 +37,9 @@ def update(t, kwargs):
             else:
                 kwargs["artists"][r, c].set_array(zmatrix)
 
-    return kwargs["artists"].flatten()
+    if kwargs["movie"]:
+        kwargs["text"].set_text(t)
+        return kwargs["artists"].flatten()
 
 
 def update_histogram(t, kwargs, zmatrix, r, c):
