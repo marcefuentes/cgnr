@@ -29,13 +29,16 @@ def parse_args(description):
         help="enable partnerchoice",
     )
     parser.add_argument(
-        "--indirectr", action="store_const", const=1, default=0, help="enable indirectr"
+        "--directr", action="store_const", const=1, default=0, help="enable direct reciprocity"
+    )
+    parser.add_argument(
+        "--indirectr", action="store_const", const=1, default=0, help="enable indirect reciprocity"
     )
     parser.add_argument(
         "--language", action="store_const", const=1, default=0, help="enable language"
     )
     parser.add_argument(
-        "--shuffle", action="store_const", const=1, default=0, help="enable shuffle"
+        "--shuffle", action="store_const", const=1, default=0, help="enable shuffling"
     )
     parser.add_argument(
         "--given", type=float, default=default_given, help="given value"
