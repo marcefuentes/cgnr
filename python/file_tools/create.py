@@ -26,7 +26,9 @@ def main(args):
 
     if args.partnerchoice:
         path += "p"
-    reciprocity = 0
+    if args.directr:
+        reciprocity = 1
+        path += "d"
     if args.indirectr:
         reciprocity = 1
         path += "i"
