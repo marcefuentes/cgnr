@@ -23,8 +23,6 @@ def main(args):
 
     start_time = time.perf_counter()
 
-    # Get data
-
     if args.mode_is_trait:
         dfs, df_none, df_social, dffrqs = get_data_single_trait(
             args.mode, args.histogram, args.movie

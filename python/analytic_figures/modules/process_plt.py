@@ -7,13 +7,13 @@ from modules.modes import all_traits
 from modules.update import update
 
 
-def process_plt(fig, ts, dict_update, name):
+def process_plt(fig, frames, dict_update, name):
     """Process the plot"""
 
     if dict_update["movie"]:
         dict_movie = {
             "fig": fig,
-            "frames": ts,
+            "frames": frames,
             "func": update,
             "fargs": (dict_update,),
             "blit": True,
@@ -24,10 +24,10 @@ def process_plt(fig, ts, dict_update, name):
         if dict_update["mode"] == "all_traits":
             for trait in all_traits:
                 dict_update["mode"] = trait
-                update(ts[-1], dict_update)
+                update(frames[-1], dict_update)
                 plt.savefig(f"{name}_{trait}.png", transparent=False)
         else:
-            update(ts[-1], dict_update)
+            update(frames[-1], dict_update)
             name += f"_{dict_update['mode']}"
             plt.savefig(f"{name}.png", transparent=False)
 
