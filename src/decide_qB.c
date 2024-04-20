@@ -24,7 +24,7 @@ void decide_qB(struct itype *i, struct itype *i_last, int imimic)
 					grain = i->MimicGrain;
 				}
 			}
-			else
+			else if (imimic == 1)
 			{
 				if (i->Imimic_ltGrain < i->ImimicGrain)
 				{
