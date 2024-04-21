@@ -23,9 +23,6 @@ file_name = this_file.split(".")[0]
 
 # Options
 
-givens = np.linspace(0.0, 1.0, num=21)
-givens = [0.0]
-
 num = 3     # Number of subplot rows & columns
 numqB = 256 # Number of points along each curve
 n_ic = 5    # Number of indifference curves
