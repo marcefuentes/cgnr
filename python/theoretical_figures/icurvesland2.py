@@ -63,7 +63,6 @@ budget0 = 1.0 - qA
 icx = np.linspace(0.001,
                   0.999,
                   num=numqB)
-RR, AA = np.meshgrid(rhos, alphas)
 ws = np.linspace(1.0/(n_ic + 1), n_ic/(n_ic + 1), num=n_ic)
 ics = np.zeros((num, num, n_ic, numqB))
 for i, alpha in enumerate(alphas):
