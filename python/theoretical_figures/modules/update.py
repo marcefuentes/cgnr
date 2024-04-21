@@ -4,24 +4,24 @@ from matplotlib import cm
 import numpy as np
 
 def update(given, kwargs):
-    """ Update data in artists. """
 
-    budget_private = (1.0 - kwargs["x_data"])*(1.0 - given)
-    for i, alpha in enumerate(kwargs["alphas"]):
-        for j, rho in enumerate(kwargs["rhos"]):
-            qb_eq = get_qbeq(given, alpha, rho)
-            kwargs["artists"][0, 0, i, j].set_ydata(budget_private + qb_eq * given)
-            for w_isocline in kwargs["w_isoclines"]:
-                kwargs["artists"][0, 1, i, j].set_ydata(indifference(kwargs["x_data"], w_isocline, alpha, rho))
-                print(indifference(kwargs["x_data"], w_isocline, alpha, rho))
-                print(w_isocline)
-            w_max = fitness(qb_eq, qb_eq, given, alpha, rho)
-            kwargs["artists"][0, 0, i, j].set_ydata(indifference(w_max, given, alpha, rho))
-            color = cm.Reds(w_max)
-            kwargs["artists"][0, 0, i, j].set_color(color)
-            kwargs["artists"][0, 1, i, j].set_ydata(fitness(qb_eq, kwargs["x_data"], given, alpha, rho))
-    
-    return kwargs["artists"].flatten()
+    budget_own = kwargs["budget_0"]*(1.0 - given)
+
+    for a, alpha in enumerate(kwargs["alphas"]):
+        for r, rho in enumerate(kwargs["rhos"]):
+
+            qb_private = get_qbeq(given, alpha, rho)
+
+            kwargs["budgets"][0, a, r].set_ydata(budget_own + qb_private*given)
+
+            w = fitness(qb_private, qb_private, given, alpha, rho)
+            kwargs["icurves"][0, a, r].set_ydata(indifference(kwargs["icx"], w, alpha, rho))
+            kwargs["icurves"][0, a, r].set_color(cm.Reds(w))
+
+            kwargs["icurves"][1, a, r].set_ydata(fitness(qb_private, kwargs["icx"], given, alpha, rho))
+
+    return np.concatenate([kwargs["budgets"].flatten(), kwargs["icurves"].flatten()])
+
 
 def fitness(x, y, given, alpha, rho):
     """Compute fitness."""

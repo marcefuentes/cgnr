@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from common_modules.get_config import get_config
+from modules.update import update
 import modules.theory as tt
 
 start_time = time.perf_counter()
@@ -29,26 +30,6 @@ n_ic = 5    # Number of indifference curves
 plotsize = 6
 
 # Add data to figure
-
-def update(given, kwargs):
-
-    budget_own = kwargs["budget_0"]*(1.0 - given)
-
-    for a, alpha in enumerate(kwargs["alphas"]):
-        for r, rho in enumerate(kwargs["rhos"]):
-
-            qBprivate = tt.qbeq(given, alpha, rho)
-
-            kwargs["budgets"][0, a, r].set_ydata(budget_own + qBprivate*given)
-
-            w = tt.fitness(qBprivate, qBprivate, given, alpha, rho)
-            kwargs["icurves"][0, a, r].set_ydata(tt.indifference(kwargs["icx"], w, alpha, rho))
-            kwargs["icurves"][0, a, r].set_color(cm.Reds(w))
-
-            kwargs["icurves"][1, a, r].set_ydata(tt.fitness(qBprivate, kwargs["icx"], given, alpha, rho))
-
-    return np.concatenate([kwargs["budgets"].flatten(), kwargs["icurves"].flatten()])
-
 
 def main():
     # Data
