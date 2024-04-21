@@ -12,7 +12,7 @@ import numpy as np
 
 from common_modules.get_config import get_config
 from modules.update import update
-import modules.theory as tt
+from modules.get_data import get_data
 
 start_time = time.perf_counter()
 this_file = os.path.basename(__file__)
@@ -32,36 +32,15 @@ plotsize = 6
 # Add data to figure
 
 def main():
-    # Data
+    """Main function"""
 
-    ALPHA_MIN = get_config("alpha_min")
-    ALPHA_MAX = get_config("alpha_max")
-    LOGES_MIN = get_config("loges_min")
-    LOGES_MAX = get_config("loges_max")
-    alphas = np.linspace(ALPHA_MAX, ALPHA_MIN, num=num)
-    logess = np.linspace(LOGES_MIN, LOGES_MAX, num=num)
-    rhos = 1.0 - 1.0/pow(2, logess)
-    icx = np.linspace(0.001, 0.999, num=numqB)
-    budget_0 = 1.0 - icx
-
-    update_args = {
-        "alphas": alphas,
-        "rhos": rhos,
-        "icx": icx,
-        "budget_0": budget_0,
-    }
+    update_args = get_data()
 
     axs_args = {
-        "y_values": alphas,
-        "x_values": logess,
+        "y_values": update_args["alphas"],
+        "x_values": update_args["logess"],
     }
 
-    ws = np.linspace(1.0/(n_ic + 1), n_ic/(n_ic + 1), num=n_ic)
-    ics = np.zeros((num, num, n_ic, numqB))
-    for i, alpha in enumerate(update_args["alphas"]):
-        for j, rho in enumerate(update_args["rhos"]):
-            for k, w in enumerate(ws):
-                ics[i, j, k] = tt.indifference(update_args["icx"], w, alpha, rho)
     norm = Normalize(vmin=0, vmax=1)
 
     # Figure properties
@@ -150,7 +129,7 @@ def main():
             for r, rho in enumerate(update_args["rhos"]):
                 if g == 0:
                     for c in range(n_ic): 
-                        axs[0, a, r].plot(update_args["icx"], ics[a, r, c], c="0.850")
+                        axs[0, a, r].plot(update_args["icx"], update_args["isoclines"][a, r, c], c="0.850")
                 budgets[g, a, r], = axs[g, a, r].plot(update_args["icx"],
                     dummy_budgety,
                     c="0.300",

@@ -24,3 +24,4 @@ def update(given, kwargs):
             kwargs["icurves"][1, a, r].set_ydata(fitness(qb_private, kwargs["icx"], given, alpha, rho))
 
     return np.concatenate([kwargs["budgets"].flatten(), kwargs["icurves"].flatten()])
+

@@ -4,19 +4,33 @@ import numpy as np
 
 from common_modules.get_config import get_config
 import modules.settings as ss
+from modules.theory import indifference
 
 
 def get_data():
     """Data common to all subplots."""
 
+    alphas = np.linspace(get_config("alpha_max"), get_config("alpha_min"), num=ss.NC)
     logess = np.linspace(get_config("loges_min"), get_config("loges_max"), num=ss.NC)
     rhos = 1.0 - 1.0 / np.power(2.0, logess)
+    icx = np.linspace(0.001, 0.999, num=ss.VALUES_PER_CURVE)
+    budget_0 = 1.0 - icx
+
+    w_isoclines = np.linspace(1.0/(ss.N_IC+1), ss.N_IC/(ss.N_IC+1), num=ss.N_IC)
+
+    isoclines = np.zeros((ss.NC, ss.NC, ss.N_IC, ss.VALUES_PER_CURVE))
+    for i, alpha in enumerate(alphas):
+        for j, rho in enumerate(rhos):
+            for k, w in enumerate(w_isoclines):
+                isoclines[i, j, k] = indifference(icx, w, alpha, rho)
 
     data = {
-        "alphas": np.linspace(get_config("alpha_max"), get_config("alpha_min"), num=ss.NC),
+        "alphas": alphas,
         "logess": logess,
         "rhos": rhos,
-        "x_data": np.linspace(0.001, 0.999, num=ss.VALUES_PER_CURVE),
-        "w_isoclines": np.linspace(1.0/(ss.N_IC+1), 1.0 - 1.0/ss.N_IC, num=ss.N_IC),
+        "icx": icx,
+        "budget_0": budget_0,
+        "isoclines": isoclines,
     }
+
     return data
