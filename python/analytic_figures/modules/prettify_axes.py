@@ -107,16 +107,15 @@ def add_plot_ticks(kwargs):
     x_values = kwargs["x_values"]
     y_values = kwargs["y_values"]
     nrows, ncols, nr, nc = axs.shape
-
+    step = int(nr / 2)
     xlim = [-2, ss.N_X_VALUES + 1]
     ylim = [0, 0.25]
-    step = int(nr / 2)
 
     for i in range(nrows):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
-                    axs[i, j, k, m].set(xticks=[], yticks=[], xlim=xlim, ylim=ylim)
+                    axs[i, j, k, m].set(xticks=[], yticks=[])
                     axs[i, j, k, m].tick_params(
                         axis="both", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE
                     )
@@ -183,6 +182,7 @@ def prettify_plot_axes(kwargs):
     nrows, ncols, nr, nc = kwargs["axs"].shape
 
     add_plot_ticks(kwargs)
+    set_limits(kwargs)
     add_plot_titles(kwargs)
     add_plot_letters(kwargs)
 
@@ -201,3 +201,19 @@ def prettify_plot_axes(kwargs):
                 for m in range(nc):
                     for spine in kwargs["axs"][i, j, k, m].spines.values():
                         spine.set_linewidth(ss.LINE_WIDTH)
+
+
+def set_limits(kwargs):
+    """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
+
+    axs = kwargs["axs"]
+    nrows, ncols, nr, nc = axs.shape
+
+    xlim = [-2, ss.N_X_VALUES + 1]
+    ylim = [0, 0.25]
+
+    for i in range(nrows):
+        for j in range(ncols):
+            for k in range(nr):
+                for m in range(nc):
+                    kwargs["axs"][i, j, k, m].set(xlim=xlim, ylim=ylim)
