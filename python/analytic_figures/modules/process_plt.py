@@ -9,6 +9,9 @@ from modules.update import update_artists
 def process_plt(fig, frames, update_data, name):
     """Process the figure"""
 
+    plt.rcParams["pdf.fonttype"] = 42
+    plt.rcParams["ps.fonttype"] = 42
+
     if update_data["movie"]:
         movie = {
             "fig": fig,

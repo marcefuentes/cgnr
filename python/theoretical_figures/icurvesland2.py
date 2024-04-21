@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from modules.parse_args import parse_args
+from modules.init_fig import init_fig
 from common_modules.get_config import get_config
 from analytic_figures.modules.process_plt import process_plt, close_plt
 import modules.settings as ss
@@ -27,8 +28,6 @@ num = 3     # Number of subplot rows & columns
 numqB = 256 # Number of points along each curve
 n_ic = 5    # Number of indifference curves
 
-plotsize = 6
-
 # Add data to figure
 
 def main(args):
@@ -43,58 +42,23 @@ def main(args):
         "x_values": update_args["logess"],
     }
 
+    fig_args = {
+        "nrows": 1,
+        "ncols": 2,
+        "nr": len(update_args["alphas"]),
+        "nc": len(update_args["logess"]),
+        "nested": True,
+    }
+
+    fig, axes_args["axs"], axes_args["divider"] = create_fig(fig_args)
+
     norm = Normalize(vmin=0, vmax=1)
 
-    # Figure properties
+    fig, axs = init_fig(fig_args)
 
-    width = plotsize*2
-    height = plotsize
-    xlabel = "Substitutability of $\it{B}$"
-    ylabel = "Influence of $\it{B}$"
-    biglabel = plotsize*4
-    ticklabel = plotsize*3
     xlim=[0.0, 1.0]
     ylim=[0.0, 1.0]
     step = int(num/2)
-    plt.rcParams["pdf.fonttype"] = 42
-    plt.rcParams["ps.fonttype"] = 42
-
-    # Create figure
-
-    axs = np.empty((2,
-            len(axs_args["y_values"]),
-            len(axs_args["x_values"])),
-        dtype=object)
-
-    fig = plt.figure(figsize=(width, height))
-    outergrid = fig.add_gridspec(nrows=1,
-        ncols=2,
-        left=0.15,
-        right=0.85,
-        top=0.8,
-        bottom=0.2)
-    for g in range(2):
-        grid = outergrid[g].subgridspec(nrows=num,
-            ncols=num,
-            wspace=0,
-            hspace=0)
-        axs[g] = grid.subplots()
-
-    left_x = axs[0, 0, 0].get_position().x0
-    right_x = axs[-1, -1, -1].get_position().x1
-    center_x = (left_x + right_x) / 2
-    top_y = axs[0, 0, 0].get_position().y1
-    bottom_y = axs[-1, -1, -1].get_position().y0
-    center_y = (top_y + bottom_y) / 2
-    fig.supxlabel(xlabel,
-        x=center_x,
-        y=bottom_y*0.3,
-        fontsize=biglabel)
-    fig.supylabel(ylabel,
-        x=left_x*0.4,
-        y=center_y,
-        fontsize=biglabel)
-
     for ax in fig.get_axes():
         ax.set(xticks=[], yticks=[])
         ax.set(xlim=xlim, ylim=ylim)
