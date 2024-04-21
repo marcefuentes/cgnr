@@ -52,8 +52,8 @@ def main():
     }
 
     axs_args = {
-        "alphas": alphas,
-        "rhos": rhos,
+        "y_values": alphas,
+        "x_values": logess,
     }
 
     ws = np.linspace(1.0/(n_ic + 1), n_ic/(n_ic + 1), num=n_ic)
@@ -81,8 +81,8 @@ def main():
     # Create figure
 
     axs = np.empty((2,
-            len(axs_args["alphas"]),
-            len(axs_args["rhos"])),
+            len(axs_args["y_values"]),
+            len(axs_args["x_values"])),
         dtype=object)
 
     fig = plt.figure(figsize=(width, height))
@@ -128,13 +128,13 @@ def main():
             loc="left")
         if g == 0:
             for a in range(0, num, step):
-                axs[g, a, 0].set_ylabel(f"{axs_args['alphas'][a]:.1f}",
+                axs[g, a, 0].set_ylabel(f"{axs_args['y_values'][a]:.1f}",
                     rotation="horizontal",
                     horizontalalignment="right",
                     verticalalignment="center",
                     fontsize=ticklabel)
         for r in range(0, num, step):
-            axs[g, -1, r].set_xlabel(f"{logess[r]:.0f}",
+            axs[g, -1, r].set_xlabel(f"{axs_args['x_values'][r]:.0f}",
                 fontsize=ticklabel)
 
     # Assign axs objects to variables
