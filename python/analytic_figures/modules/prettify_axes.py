@@ -8,19 +8,19 @@ def add_imshow_letters(kwargs):
 
     nrows, ncols = kwargs["axs"].shape
 
-    i = 0
+    n = 0
     letter_position = 1.0 + ss.LETTER_POSITION
-    for r in range(nrows):
-        for c in range(ncols):
-            i = r * ncols + c
-            letter = chr(ord("a") + i % 26)
-            if i >= 26:
+    for i in range(nrows):
+        for j in range(ncols):
+            n = i * ncols + j
+            letter = chr(ord("a") + n % 26)
+            if n >= 26:
                 letter = letter + letter
-            kwargs["axs"][r, c].text(
+            kwargs["axs"][i, j].text(
                 0,
                 letter_position,
                 letter,
-                transform=kwargs["axs"][r, c].transAxes,
+                transform=kwargs["axs"][i, j].transAxes,
                 fontsize=ss.LETTER_LABEL_SIZE,
                 weight="bold",
             )
@@ -37,15 +37,15 @@ def add_imshow_ticks(kwargs):
     ymin = min(kwargs["y_values"])
     ymax = max(kwargs["y_values"])
 
-    for r in range(nrows):
-        for c in range(ncols):
-            kwargs["axs"][r, c].set(
+    for i in range(nrows):
+        for j in range(ncols):
+            kwargs["axs"][i, j].set(
                 xticks=[0, 0.5 * (nc - 1), nc - 1],
                 yticks=[0, 0.5 * (nr - 1), nr - 1],
                 xticklabels=[],
                 yticklabels=[],
             )
-            kwargs["axs"][r, c].tick_params(
+            kwargs["axs"][i, j].tick_params(
                 axis="both",
                 labelsize=ss.TICK_LABEL_SIZE,
                 size=ss.TICK_SIZE,
@@ -84,18 +84,18 @@ def add_plot_letters(kwargs):
 
     letter_position = 1.0 + ss.LETTER_POSITION * nr
 
-    for r in range(nrows):
-        for c in range(ncols):
-            i = r * ncols + c
-            letter = chr(ord("a") + i % 26)
-            if i >= 26:
+    for i in range(nrows):
+        for j in range(ncols):
+            n = i * ncols + j
+            letter = chr(ord("a") + n % 26)
+            if n >= 26:
                 letter = letter + letter
-            kwargs["axs"][r, c, 0, 0].text(
+            kwargs["axs"][i, j, 0, 0].text(
                 0,
                 letter_position,
                 letter,
                 fontsize=ss.LETTER_LABEL_SIZE,
-                transform=kwargs["axs"][r, c, 0, 0].transAxes,
+                transform=kwargs["axs"][i, j, 0, 0].transAxes,
                 weight="bold",
             )
 
@@ -137,15 +137,15 @@ def add_plot_titles(kwargs):
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
 
-    for c in range(ncols):
-        kwargs["axs"][0, c, 0, int(nc / 2)].set_title(
-            kwargs["column_titles"][c],
+    for j in range(ncols):
+        kwargs["axs"][0, j, 0, int(nc / 2)].set_title(
+            kwargs["column_titles"][j],
             pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
             fontsize=ss.LETTER_LABEL_SIZE,
         )
-    for r in range(nrows):
-        kwargs["axs"][r, -1, int(nr / 2), -1].annotate(
-            kwargs["row_titles"][r],
+    for i in range(nrows):
+        kwargs["axs"][i, -1, int(nr / 2), -1].annotate(
+            kwargs["row_titles"][i],
             xy=(1, 0.5),
             xycoords="axes fraction",
             xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
@@ -165,15 +165,15 @@ def prettify_imshow_axes(kwargs):
     add_imshow_titles(kwargs)
     add_imshow_letters(kwargs)
 
-    for r in range(nrows):
-        for c in range(ncols):
-            kwargs["axs"][nrows - r - 1, c].set_axes_locator(
-                kwargs["divider"].new_locator(nx=2 * c, ny=2 * r)
+    for i in range(nrows):
+        for j in range(ncols):
+            kwargs["axs"][nrows - i - 1, j].set_axes_locator(
+                kwargs["divider"].new_locator(nx=2 * j, ny=2 * i)
             )
 
-    for r in range(nrows):
+    for i in range(nrows):
         for c in range(ncols):
-            for spine in kwargs["axs"][r, c].spines.values():
+            for spine in kwargs["axs"][i, j].spines.values():
                 spine.set_linewidth(ss.LINE_WIDTH)
 
 
@@ -186,18 +186,18 @@ def prettify_plot_axes(kwargs):
     add_plot_titles(kwargs)
     add_plot_letters(kwargs)
 
-    for r in range(nrows):
-        for c in range(ncols):
-            for a in range(nr):
-                inner_y = (nrows - r - 1) * (nr + 1) + nr - a - int(a / nr) - 1
-                for e in range(nc):
-                    inner_x = c * (nc + 1) + e + int(e / nc)
+    for i in range(nrows):
+        for j in range(ncols):
+            for k in range(nr):
+                inner_y = (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
+                for m in range(nc):
+                    inner_x = j * (nc + 1) + m + int(m / nc)
                     new_locator = kwargs["divider"].new_locator(nx=inner_x, ny=inner_y)
-                    kwargs["axs"][r, c, a, e].set_axes_locator(new_locator)
+                    kwargs["axs"][i, j, k, m].set_axes_locator(new_locator)
 
-    for r in range(nrows):
-        for c in range(ncols):
-            for a in range(nr):
-                for e in range(nc):
-                    for spine in kwargs["axs"][r, c, a, e].spines.values():
+    for i in range(nrows):
+        for j in range(ncols):
+            for k in range(nr):
+                for m in range(nc):
+                    for spine in kwargs["axs"][i, j, k, m].spines.values():
                         spine.set_linewidth(ss.LINE_WIDTH)
