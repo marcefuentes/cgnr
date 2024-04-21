@@ -7,7 +7,7 @@ import time
 import numpy as np
 
 from modules.argparse_utils import parse_args
-from modules.create_fig import create_fig
+from modules.init_fig import init_fig
 from modules.get_data import (
     get_data_single_trait,
     get_data_multitrait,
@@ -52,7 +52,7 @@ def main(args):
         "nested": args.histogram,
     }
 
-    fig, axes_args["axs"], axes_args["divider"] = create_fig(fig_args)
+    fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
 
     update_args = {
         "mode": args.mode,

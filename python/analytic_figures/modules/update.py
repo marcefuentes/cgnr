@@ -26,7 +26,7 @@ def get_zmatrix(t, df, trait):
     return zmatrix
 
 
-def update(t, kwargs):
+def update_artists(t, kwargs):
     """Update the plot with the data at time t."""
 
     if kwargs["movie"]:
