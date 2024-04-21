@@ -26,7 +26,7 @@ def main():
         "x_values": update_args["logess"],
     }
 
-    layout = {
+    fig_args = {
         "nrows": 1,
         "ncols": 2,
         "nr": len(update_args["alphas"]),
@@ -34,7 +34,7 @@ def main():
         "nested": True,
     }
 
-    fig, axes_args["axs"], axes_args["divider"] = create_fig(layout)
+    fig, axes_args["axs"], axes_args["divider"] = create_fig(fig_args)
 
 
     file_name = os.path.basename(__file__).split(".")[0]
