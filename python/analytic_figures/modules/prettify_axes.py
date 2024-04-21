@@ -112,24 +112,24 @@ def add_plot_ticks(kwargs):
     ylim = [0, 0.25]
     step = int(nr / 2)
 
-    for r in range(nrows):
-        for c in range(ncols):
-            for a in range(nr):
-                for e in range(nc):
-                    axs[r, c, a, e].set(xticks=[], yticks=[], xlim=xlim, ylim=ylim)
-                    axs[r, c, a, e].tick_params(
+    for i in range(nrows):
+        for j in range(ncols):
+            for k in range(nr):
+                for m in range(nc):
+                    axs[i, j, k, m].set(xticks=[], yticks=[], xlim=xlim, ylim=ylim)
+                    axs[i, j, k, m].tick_params(
                         axis="both", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE
                     )
-            for a in range(0, nr, step):
-                axs[r, c, a, 0].set(yticks=[ylim[1] / 2], yticklabels=[])
-            for e in range(0, nc, step):
-                axs[r, c, -1, e].set(xticks=[xlim[1] / 2], xticklabels=[])
-        for a in range(0, nr, step):
-            axs[r, 0, a, 0].set_yticklabels([y_values[a]])
+            for k in range(0, nr, step):
+                axs[i, j, k, 0].set(yticks=[ylim[1] / 2], yticklabels=[])
+            for m in range(0, nc, step):
+                axs[i, j, -1, m].set(xticks=[xlim[1] / 2], xticklabels=[])
+        for k in range(0, nr, step):
+            axs[i, 0, k, 0].set_yticklabels([y_values[k]])
 
-    for c in range(ncols):
-        for e in range(0, nc, step):
-            axs[-1, c, -1, e].set_xticklabels([f"{x_values[e]:.0f}"])
+    for j in range(ncols):
+        for m in range(0, nc, step):
+            axs[-1, j, -1, m].set_xticklabels([f"{x_values[m]:.0f}"])
 
 
 def add_plot_titles(kwargs):

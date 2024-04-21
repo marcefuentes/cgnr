@@ -15,7 +15,7 @@ from modules.prettify_axes import prettify_plot_axes
 from modules.init_artists import init_plot_artists
 from modules.init_fig import init_fig
 from common_modules.get_config import get_config
-from analytic_figures.modules.process_plt import process_plt, close_plt
+from modules.process_plt import process_plt, close_plt
 import modules.settings as ss
 from modules.update import update_artists
 from modules.get_data import get_data
@@ -34,6 +34,8 @@ def main(args):
     axes_args = {
         "x_values": update_args["logess"],
         "y_values": update_args["alphas"],
+        "column_titles": ["", ""],
+        "row_titles": [""],
     }
 
     update_args["movie"] = args.movie

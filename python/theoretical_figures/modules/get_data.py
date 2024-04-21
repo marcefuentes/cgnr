@@ -15,12 +15,12 @@ def get_data():
     alphas = np.linspace(get_config("alpha_max"), get_config("alpha_min"), num=ss.NC)
     logess = np.linspace(get_config("loges_min"), get_config("loges_max"), num=ss.NC)
     rhos = 1.0 - 1.0 / np.power(2.0, logess)
-    icx = np.linspace(0.001, 0.999, num=ss.VALUES_PER_CURVE)
+    icx = np.linspace(0.001, 0.999, num=ss.N_X_VALUES)
     budget_0 = 1.0 - icx
 
     w_isoclines = np.linspace(1.0/(ss.N_IC+1), ss.N_IC/(ss.N_IC+1), num=ss.N_IC)
 
-    isoclines = np.zeros((ss.NC, ss.NC, ss.N_IC, ss.VALUES_PER_CURVE))
+    isoclines = np.zeros((ss.NC, ss.NC, ss.N_IC, ss.N_X_VALUES))
     for i, alpha in enumerate(alphas):
         for j, rho in enumerate(rhos):
             for k, w in enumerate(w_isoclines):

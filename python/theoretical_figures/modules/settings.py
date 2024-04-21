@@ -20,8 +20,6 @@ TICK_LABEL_SIZE = PLOT_SIZE * 3
 TICK_SIZE = PLOT_SIZE * 1.5
 PRINT_FOLDER = False
 
-
-
 NC = 3     # Number of subplot rows & columns
-VALUES_PER_CURVE = 256 # Number of points along each curve
+N_X_VALUES = 256 # Number of points along each curve
 N_IC = 5    # Number of indifference curves
