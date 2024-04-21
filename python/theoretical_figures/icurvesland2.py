@@ -37,10 +37,10 @@ def update(given, budgets, icurves):
         for r, rho in enumerate(rhos):
 
             qBprivate = tt.qbeq(given, alpha, rho)
-            w = tt.fitness(qBprivate, qBprivate, given, alpha, rho)
             budgety = budget_own + qBprivate*given
             budgets[0, a, r].set_ydata(budgety)
 
+            w = tt.fitness(qBprivate, qBprivate, given, alpha, rho)
             icy = tt.indifference(icx, w, alpha, rho)
             icurves[0, a, r].set_ydata(icy)
 
