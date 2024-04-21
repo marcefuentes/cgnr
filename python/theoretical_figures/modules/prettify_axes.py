@@ -61,6 +61,39 @@ def add_plot_ticks(kwargs):
 def prettify_plot_axes(kwargs):
     """Prettify (nrows x ncols x nr x nc) matrix of axes."""
 
+    ncols, nr, nc = kwargs["axs"].shape
+    xlim=[0.0, 1.0]
+    ylim=[0.0, 1.0]
+    step = int(ss.NC/2)
+
+    for i in range(ncols):
+        for j in range(nr):
+            for k in range(nc):
+                kwargs["axs"][i, j, k].set(xticks=[], yticks=[])
+                kwargs["axs"][i, j, k].set(xlim=xlim, ylim=ylim)
+                for axis in ["top","bottom","left","right"]:
+                    kwargs["axs"][i, j, k].spines[axis].set_linewidth(0.2)
+
+    for g in range(2):
+        letter = ord("a") + g
+        kwargs["axs"][g, 0, 0].set_title(chr(letter),
+            fontsize=ss.LETTER_LABEL_SIZE,
+            weight="bold",
+            loc="left")
+        if g == 0:
+            for a in range(0, ss.NC, step):
+                kwargs["axs"][g, a, 0].set_ylabel(f"{kwargs['y_values'][a]:.1f}",
+                    rotation="horizontal",
+                    horizontalalignment="right",
+                    verticalalignment="center",
+                    fontsize=ss.TICK_LABEL_SIZE)
+        for r in range(0, ss.NC, step):
+            kwargs["axs"][g, -1, r].set_xlabel(f"{kwargs['x_values'][r]:.0f}",
+                fontsize=ss.TICK_LABEL_SIZE)
+
+def old_prettify_plot_axes(kwargs):
+    """Prettify (nrows x ncols x nr x nc) matrix of axes."""
+
     nrows, ncols, nr, nc = kwargs["axs"].shape
 
     add_plot_ticks(kwargs)

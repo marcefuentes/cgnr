@@ -5,34 +5,28 @@ import numpy as np
 import modules.settings as ss
 
 
-def init_imshow_artists(axs, nr, nc):
-    """Initialize (nrows x ncols) matrix of AxesImage artists."""
-
-    nrows, ncols = axs.shape
-    artists = np.empty_like(axs)
-    dummy_zmatrix = np.zeros((nr, nc))
-
-    for r in range(nrows):
-        for c in range(ncols):
-            artists[r, c] = axs[r, c].imshow(
-                dummy_zmatrix, cmap=ss.COLOR_MAP, vmin=-1, vmax=1
-            )
-    return artists
-
-
-def init_plot_artists(axs):
+def init_plot_artists(axs, update_args):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
-    nrows, ncols, nr, nc = axs.shape
-    artists = np.empty_like(axs)
-    x = np.arange(ss.VALUES_PER_CURVE)
-    dummy_y = np.zeros_like(x)
+    budgets = np.empty_like(axs)
+    icurves = np.empty_like(axs)
+    dummy_budgety = np.full_like(update_args["icx"], -1.0)
+    dummy_icy = np.zeros_like(update_args["icx"])
 
-    for r in range(nrows):
-        for c in range(ncols):
-            for a in range(nr):
-                for e in range(nc):
-                    (artists[r, c, a, e],) = axs[r, c, a, e].plot(
-                        x, dummy_y, c="black", lw=ss.LINE_WIDTH * 2
-                    )
-    return artists
+    for g in range(2):
+        for a, alpha in enumerate(update_args["alphas"]):
+            for r, rho in enumerate(update_args["rhos"]):
+                if g == 0:
+                    for c in range(ss.N_IC): 
+                        axs[0, a, r].plot(update_args["icx"], update_args["isoclines"][a, r, c], c="0.850")
+                budgets[g, a, r], = axs[g, a, r].plot(update_args["icx"],
+                    dummy_budgety,
+                    c="0.300",
+                    linewidth=4,
+                    alpha=0.8)
+                icurves[g, a, r], = axs[g, a, r].plot(update_args["icx"],
+                    dummy_icy,
+                    linewidth=4,
+                    alpha=0.8)
+
+    return budgets, icurves
