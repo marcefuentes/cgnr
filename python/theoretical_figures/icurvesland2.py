@@ -49,7 +49,7 @@ def main(args):
     fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
     prettify_plot_axes(axes_args)
 
-    update_args["budgets"], update_args["icurves"] = init_plot_artists(axes_args["axs"], update_args)
+    update_args["budgets"], update_args["icurves"], update_args["landscapes"] = init_plot_artists(axes_args["axs"], update_args)
 
     process_plt(fig, givens, update_args, file_name)
 

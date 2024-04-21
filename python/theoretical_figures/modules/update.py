@@ -15,13 +15,13 @@ def update_artists(given, kwargs):
 
             qb_private = qbeq(given, alpha, rho)
 
-            kwargs["budgets"][0, a, r].set_ydata(budget_own + qb_private*given)
+            kwargs["budgets"][a, r].set_ydata(budget_own + qb_private*given)
 
             w = fitness(qb_private, qb_private, given, alpha, rho)
-            kwargs["icurves"][0, a, r].set_ydata(indifference(kwargs["icx"], w, alpha, rho))
-            kwargs["icurves"][0, a, r].set_color(cm.Reds(w))
+            kwargs["icurves"][a, r].set_ydata(indifference(kwargs["icx"], w, alpha, rho))
+            kwargs["icurves"][a, r].set_color(cm.Reds(w))
 
-            kwargs["icurves"][1, a, r].set_ydata(fitness(qb_private, kwargs["icx"], given, alpha, rho))
+            kwargs["landscapes"][a, r].set_ydata(fitness(qb_private, kwargs["icx"], given, alpha, rho))
 
-    return np.concatenate([kwargs["budgets"].flatten(), kwargs["icurves"].flatten()])
+    return np.concatenate([kwargs["budgets"].flatten(), kwargs["icurves"].flatten(), kwargs["landscapes"].flatten()])
 
