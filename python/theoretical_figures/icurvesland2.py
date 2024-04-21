@@ -33,18 +33,19 @@ plotsize = 6
 def update(given, budgets, icurves):
 
     budget_own = budget0*(1.0 - given)
+
     for a, alpha in enumerate(alphas):
         for r, rho in enumerate(rhos):
 
             qBprivate = tt.qbeq(given, alpha, rho)
+
             budgety = budget_own + qBprivate*given
             budgets[0, a, r].set_ydata(budgety)
 
             w = tt.fitness(qBprivate, qBprivate, given, alpha, rho)
+            color = cm.Reds(w)
             icy = tt.indifference(icx, w, alpha, rho)
             icurves[0, a, r].set_ydata(icy)
-
-            color = cm.Reds(w)
             icurves[0, a, r].set_color(color)
 
             landscape = tt.fitness(qBprivate, icx, given, alpha, rho)
