@@ -61,11 +61,10 @@ LOGES_MAX = get_config("loges_max")
 alphas = np.linspace(ALPHA_MAX, ALPHA_MIN, num=num)
 logess = np.linspace(LOGES_MIN, LOGES_MAX, num=num)
 rhos = 1.0 - 1.0/pow(2, logess)
-budgetx = np.array([0.0, 1.0])
-budget0 = 1.0 - budgetx
 icx = np.linspace(0.001,
                   0.999,
                   num=numqB)
+budget0 = 1.0 - icx
 ws = np.linspace(1.0/(n_ic + 1), n_ic/(n_ic + 1), num=n_ic)
 ics = np.zeros((num, num, n_ic, numqB))
 for i, alpha in enumerate(alphas):
@@ -152,7 +151,7 @@ for g in range(2):
 
 budgets = np.empty_like(axs)
 icurves = np.empty_like(axs)
-dummy_budgety = np.full_like(budgetx, -1.0)
+dummy_budgety = np.full_like(icx, -1.0)
 dummy_icy = np.zeros_like(icx)
 
 for g in range(2):
@@ -161,7 +160,7 @@ for g in range(2):
             if g == 0:
                 for c in range(n_ic): 
                     axs[0, a, r].plot(icx, ics[a, r, c], c="0.850")
-            budgets[g, a, r], = axs[g, a, r].plot(budgetx,
+            budgets[g, a, r], = axs[g, a, r].plot(icx,
                 dummy_budgety,
                 c="0.300",
                 linewidth=4,
