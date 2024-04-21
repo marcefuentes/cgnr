@@ -108,7 +108,7 @@ def add_plot_ticks(kwargs):
     y_values = kwargs["y_values"]
     nrows, ncols, nr, nc = axs.shape
 
-    xlim = [-2, ss.BINS + 1]
+    xlim = [-2, ss.N_X_VALUES + 1]
     ylim = [0, 0.25]
     step = int(nr / 2)
 
