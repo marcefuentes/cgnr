@@ -5,7 +5,7 @@ import numpy as np
 
 from modules.theory import indifference, fitness, qbeq
 
-def update(given, kwargs):
+def update_artists(given, kwargs):
     """ Update data in artists. """
 
     budget_own = kwargs["budget_0"]*(1.0 - given)

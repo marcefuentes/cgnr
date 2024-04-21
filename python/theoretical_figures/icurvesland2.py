@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from common_modules.get_config import get_config
-from modules.update import update
+from modules.update import update_artists
 from modules.get_data import get_data
 
 start_time = time.perf_counter()
@@ -159,13 +159,13 @@ def main():
 
     if len(givens) > 1:
         ani = FuncAnimation(fig,
-            update,
+            update_artists,
             frames=givens,
             fargs=(update_args),
             blit=True)
         ani.save(f"{file_name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(givens[0], update_args)
+        update_artists(givens[0], update_args)
         plt.savefig(f"{file_name}.png", transparent=False)
 
     plt.close()
