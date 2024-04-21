@@ -57,9 +57,8 @@ LOGES_MAX = get_config("loges_max")
 alphas = np.linspace(ALPHA_MAX, ALPHA_MIN, num=num)
 logess = np.linspace(LOGES_MIN, LOGES_MAX, num=num)
 rhos = 1.0 - 1.0/pow(2, logess)
-qA = np.array([0.0, 1.0])
-budgetx = qA
-budget0 = 1.0 - qA
+budgetx = np.array([0.0, 1.0])
+budget0 = 1.0 - budgetx
 icx = np.linspace(0.001,
                   0.999,
                   num=numqB)
