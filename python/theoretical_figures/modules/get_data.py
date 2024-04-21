@@ -10,6 +10,8 @@ from modules.theory import indifference
 def get_data():
     """Data common to all subplots."""
 
+    givens = np.linspace(0.0, 1.0, num=10)
+    givens = np.append(givens, 0.0)
     alphas = np.linspace(get_config("alpha_max"), get_config("alpha_min"), num=ss.NC)
     logess = np.linspace(get_config("loges_min"), get_config("loges_max"), num=ss.NC)
     rhos = 1.0 - 1.0 / np.power(2.0, logess)
@@ -33,4 +35,4 @@ def get_data():
         "isoclines": isoclines,
     }
 
-    return data
+    return givens, data

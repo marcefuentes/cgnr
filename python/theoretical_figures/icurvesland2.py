@@ -10,7 +10,10 @@ from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 import numpy as np
 
+from modules.parse_args import parse_args
 from common_modules.get_config import get_config
+from analytic_figures.modules.process_plt import process_plt, close_plt
+import modules.settings as ss
 from modules.update import update_artists
 from modules.get_data import get_data
 
@@ -31,10 +34,12 @@ plotsize = 6
 
 # Add data to figure
 
-def main():
+def main(args):
     """Main function"""
 
-    update_args = get_data()
+    givens, update_args = get_data()
+
+    update_args["movie"] = args.movie
 
     axs_args = {
         "y_values": update_args["alphas"],
@@ -157,21 +162,13 @@ def main():
 
     # Add data and save figure
 
-    if len(givens) > 1:
-        ani = FuncAnimation(fig,
-            update_artists,
-            frames=givens,
-            fargs=(update_args),
-            blit=True)
-        ani.save(f"{file_name}.mp4", writer="ffmpeg", fps=10)
-    else:
-        update_artists(givens[0], update_args)
-        plt.savefig(f"{file_name}.png", transparent=False)
+    process_plt(fig, givens, update_args, file_name)
 
-    plt.close()
+    close_plt(fig)
 
     end_time = time.perf_counter()
     print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 if __name__ == "__main__":
-    main()
+    parsed_args = parse_args()
+    main(parsed_args)

@@ -6,7 +6,7 @@ import os
 import time
 import numpy as np
 
-from modules.argparse_utils import parse_args
+from modules.parse_args import parse_args
 from modules.init_fig import init_fig
 from modules.get_data import (
     get_data_single_trait,
