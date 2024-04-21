@@ -30,28 +30,24 @@ plotsize = 6
 
 # Add data to figure
 
-def update(given, budgets, icurves, alphas, rhos, icx, budget_0):
+def update(given, kwargs):
 
-    budget_own = budget_0*(1.0 - given)
+    budget_own = kwargs["budget_0"]*(1.0 - given)
 
-    for a, alpha in enumerate(alphas):
-        for r, rho in enumerate(rhos):
+    for a, alpha in enumerate(kwargs["alphas"]):
+        for r, rho in enumerate(kwargs["rhos"]):
 
             qBprivate = tt.qbeq(given, alpha, rho)
 
-            budgety = budget_own + qBprivate*given
-            budgets[0, a, r].set_ydata(budgety)
+            kwargs["budgets"][0, a, r].set_ydata(budget_own + qBprivate*given)
 
             w = tt.fitness(qBprivate, qBprivate, given, alpha, rho)
-            color = cm.Reds(w)
-            icy = tt.indifference(icx, w, alpha, rho)
-            icurves[0, a, r].set_ydata(icy)
-            icurves[0, a, r].set_color(color)
+            kwargs["icurves"][0, a, r].set_ydata(tt.indifference(kwargs["icx"], w, alpha, rho))
+            kwargs["icurves"][0, a, r].set_color(cm.Reds(w))
 
-            landscape = tt.fitness(qBprivate, icx, given, alpha, rho)
-            icurves[1, a, r].set_ydata(landscape)
+            kwargs["icurves"][1, a, r].set_ydata(tt.fitness(qBprivate, kwargs["icx"], given, alpha, rho))
 
-    return np.concatenate([budgets.flatten(), icurves.flatten()])
+    return np.concatenate([kwargs["budgets"].flatten(), kwargs["icurves"].flatten()])
 
 
 def main():
@@ -64,16 +60,27 @@ def main():
     alphas = np.linspace(ALPHA_MAX, ALPHA_MIN, num=num)
     logess = np.linspace(LOGES_MIN, LOGES_MAX, num=num)
     rhos = 1.0 - 1.0/pow(2, logess)
-    icx = np.linspace(0.001,
-                      0.999,
-                      num=numqB)
+    icx = np.linspace(0.001, 0.999, num=numqB)
     budget_0 = 1.0 - icx
+
+    update_args = {
+        "alphas": alphas,
+        "rhos": rhos,
+        "icx": icx,
+        "budget_0": budget_0,
+    }
+
+    axs_args = {
+        "alphas": alphas,
+        "rhos": rhos,
+    }
+
     ws = np.linspace(1.0/(n_ic + 1), n_ic/(n_ic + 1), num=n_ic)
     ics = np.zeros((num, num, n_ic, numqB))
-    for i, alpha in enumerate(alphas):
-        for j, rho in enumerate(rhos):
+    for i, alpha in enumerate(update_args["alphas"]):
+        for j, rho in enumerate(update_args["rhos"]):
             for k, w in enumerate(ws):
-                ics[i, j, k] = tt.indifference(icx, w, alpha, rho)
+                ics[i, j, k] = tt.indifference(update_args["icx"], w, alpha, rho)
     norm = Normalize(vmin=0, vmax=1)
 
     # Figure properties
@@ -93,8 +100,8 @@ def main():
     # Create figure
 
     axs = np.empty((2,
-            len(alphas),
-            len(rhos)),
+            len(axs_args["alphas"]),
+            len(axs_args["rhos"])),
         dtype=object)
 
     fig = plt.figure(figsize=(width, height))
@@ -140,7 +147,7 @@ def main():
             loc="left")
         if g == 0:
             for a in range(0, num, step):
-                axs[g, a, 0].set_ylabel(f"{alphas[a]:.1f}",
+                axs[g, a, 0].set_ylabel(f"{axs_args['alphas'][a]:.1f}",
                     rotation="horizontal",
                     horizontalalignment="right",
                     verticalalignment="center",
@@ -154,24 +161,26 @@ def main():
 
     budgets = np.empty_like(axs)
     icurves = np.empty_like(axs)
-    dummy_budgety = np.full_like(icx, -1.0)
-    dummy_icy = np.zeros_like(icx)
+    dummy_budgety = np.full_like(update_args["icx"], -1.0)
+    dummy_icy = np.zeros_like(update_args["icx"])
 
     for g in range(2):
-        for a, alpha in enumerate(alphas):
-            for r, rho in enumerate(rhos):
+        for a, alpha in enumerate(update_args["alphas"]):
+            for r, rho in enumerate(update_args["rhos"]):
                 if g == 0:
                     for c in range(n_ic): 
-                        axs[0, a, r].plot(icx, ics[a, r, c], c="0.850")
-                budgets[g, a, r], = axs[g, a, r].plot(icx,
+                        axs[0, a, r].plot(update_args["icx"], ics[a, r, c], c="0.850")
+                budgets[g, a, r], = axs[g, a, r].plot(update_args["icx"],
                     dummy_budgety,
                     c="0.300",
                     linewidth=4,
                     alpha=0.8)
-                icurves[g, a, r], = axs[g, a, r].plot(icx,
+                icurves[g, a, r], = axs[g, a, r].plot(update_args["icx"],
                     dummy_icy,
                     linewidth=4,
                     alpha=0.8)
+    update_args["budgets"] = budgets
+    update_args["icurves"] = icurves
 
     # Add colorbar
     axins = inset_axes(axs[0, -1, -1],
@@ -192,11 +201,11 @@ def main():
         ani = FuncAnimation(fig,
             update,
             frames=givens,
-            fargs=(budgets, icurves, alphas, rhos, icx, budget_0),
+            fargs=(update_args),
             blit=True)
         ani.save(f"{file_name}.mp4", writer="ffmpeg", fps=10)
     else:
-        update(givens[0], budgets, icurves, alphas, rhos, icx, budget_0)
+        update(givens[0], update_args)
         plt.savefig(f"{file_name}.png", transparent=False)
 
     plt.close()
