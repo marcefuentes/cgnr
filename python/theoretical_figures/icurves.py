@@ -18,30 +18,30 @@ def main():
 
     start_time = time.perf_counter()
 
-    update_data = get_data()
-    update_data["movie"] = False
+    update_args = get_data()
+    update_args["movie"] = False
 
-    axes_data = {
-        "y_values": update_data["alphas"],
-        "x_values": update_data["logess"],
+    axes_args = {
+        "y_values": update_args["alphas"],
+        "x_values": update_args["logess"],
     }
 
     layout = {
         "nrows": 1,
         "ncols": 2,
-        "nr": len(update_data["alphas"]),
-        "nc": len(update_data["logess"]),
+        "nr": len(update_args["alphas"]),
+        "nc": len(update_args["logess"]),
         "nested": True,
     }
 
-    fig, axes_data["axs"], axes_data["divider"] = create_fig(layout)
+    fig, axes_args["axs"], axes_args["divider"] = create_fig(layout)
 
 
     file_name = os.path.basename(__file__).split(".")[0]
-    prettify_plot_axes(axes_data)
-    update_data["artists"] = init_plot_artists(axes_data["axs"])
+    prettify_plot_axes(axes_args)
+    update_args["artists"] = init_plot_artists(axes_args["axs"])
 
-    process_plt(fig, ss.GIVENS, update_data, file_name)
+    process_plt(fig, ss.GIVENS, update_args, file_name)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
 
