@@ -22,13 +22,13 @@ def create_measurements(nrows, ncols):
     return measurements
 
 
-def prettify_fig(fig, measurements):
+def prettify_fig(fig, kwargs):
     """Prettify the figure."""
 
-    width = measurements["width"]
-    height = measurements["height"]
-    inner_width = measurements["inner_width"]
-    inner_height = measurements["inner_height"]
+    width = kwargs["width"]
+    height = kwargs["height"]
+    inner_width = kwargs["inner_width"]
+    inner_height = kwargs["inner_height"]
 
     fig.supxlabel(
         t=ss.X_LABEL,

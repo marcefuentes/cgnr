@@ -8,24 +8,24 @@ from modules.fix_positions import create_divider
 from modules.prettify_fig import create_measurements, prettify_fig
 
 
-def create_fig(layout):
-    """Create figure with subplots based on the layout dictionary."""
+def create_fig(kwargs):
+    """Create figure with subplots based on the kwargs dictionary."""
 
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
 
-    nrows = layout["nrows"]
-    ncols = layout["ncols"]
+    nrows = kwargs["nrows"]
+    ncols = kwargs["ncols"]
 
     measurements = create_measurements(nrows, ncols)
     width = measurements["width"]
     height = measurements["height"]
 
-    if layout["nested"]:
+    if kwargs["nested"]:
         fig = plt.figure(figsize=(width, height))
         outergrid = fig.add_gridspec(nrows=nrows, ncols=ncols)
-        nr = layout["nr"]
-        nc = layout["nc"]
+        nr = kwargs["nr"]
+        nc = kwargs["nc"]
         axs = np.empty((nrows, ncols, nr, nc), dtype=object)
         for r in range(nrows):
             for c in range(ncols):
@@ -37,7 +37,7 @@ def create_fig(layout):
         fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(width, height))
 
     prettify_fig(fig, measurements)
-    add_colorbar(fig, measurements, layout["nc"])
-    divider = create_divider(fig, measurements, layout)
+    add_colorbar(fig, measurements, kwargs["nc"])
+    divider = create_divider(fig, measurements, kwargs)
 
     return fig, axs, divider
