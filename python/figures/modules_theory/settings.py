@@ -1,0 +1,8 @@
+"""Settings for icurves.py"""
+
+COLORBAR_WIDTH = 21
+COLORBAR_HEIGHT = 1
+COLORBAR_RIGHT_POSITION = 0.5
+N_X_VALUES = 64
+NC = 3
+N_IC = 5
