@@ -15,7 +15,7 @@ from modules.get_data import (
 )
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.modes import all_traits
-from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
+from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
 from modules.process_plt import process_plt, close_plt
 import modules.settings as ss
 
@@ -76,11 +76,11 @@ def main(args):
     if args.histogram:
         update_args["alphas"] = axes_args["y_values"]
         update_args["logess"] = axes_args["x_values"]
-        prettify_plot_axes(axes_args)
+        prettify_axes_plot(axes_args)
         update_args["artists"] = init_plot_artists(axes_args["axs"])
         file_name += "_histogram"
     else:
-        prettify_imshow_axes(axes_args)
+        prettify_axes_imshow(axes_args)
         update_args["artists"] = init_imshow_artists(
             axes_args["axs"], fig_args["nr"], fig_args["nc"]
         )

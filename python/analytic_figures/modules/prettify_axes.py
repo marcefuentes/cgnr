@@ -3,12 +3,11 @@
 import modules.settings as ss
 
 
-def add_imshow_letters(kwargs):
+def add_letters_imshow(kwargs):
     """Add letters to (nrows x ncols) matrix of axes."""
 
     nrows, ncols = kwargs["axs"].shape
 
-    n = 0
     letter_position = 1.0 + ss.LETTER_POSITION
     for i in range(nrows):
         for j in range(ncols):
@@ -20,13 +19,36 @@ def add_imshow_letters(kwargs):
                 0,
                 letter_position,
                 letter,
-                transform=kwargs["axs"][i, j].transAxes,
                 fontsize=ss.LETTER_LABEL_SIZE,
+                transform=kwargs["axs"][i, j].transAxes,
                 weight="bold",
             )
 
 
-def add_imshow_ticks(kwargs):
+def add_letters_plot(kwargs):
+    """Add letters to (nrows x ncols x nr x nc) matrix of axes."""
+
+    nrows, ncols, nr, _ = kwargs["axs"].shape
+
+    letter_position = 1.0 + ss.LETTER_POSITION * nr
+
+    for i in range(nrows):
+        for j in range(ncols):
+            n = i * ncols + j
+            letter = chr(ord("a") + n % 26)
+            if n >= 26:
+                letter = letter + letter
+            kwargs["axs"][i, j, 0, 0].text(
+                0,
+                letter_position,
+                letter,
+                fontsize=ss.LETTER_LABEL_SIZE,
+                transform=kwargs["axs"][i, j, 0, 0].transAxes,
+                weight="bold",
+            )
+
+
+def add_ticks_imshow(kwargs):
     """Set ticks for (nrows x ncols) matrix of axes."""
 
     nrows, ncols = kwargs["axs"].shape
@@ -56,51 +78,7 @@ def add_imshow_ticks(kwargs):
         ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
 
 
-def add_imshow_titles(kwargs):
-    """Add titles to (nrows x ncols) matrix of axes."""
-
-    for ax, title in zip(kwargs["axs"][0, :], kwargs["column_titles"]):
-        ax.set_title(
-            title, pad=ss.PLOT_SIZE * ss.TITLE_PADDING, fontsize=ss.LETTER_LABEL_SIZE
-        )
-    if kwargs["row_titles"]:
-        for ax, title in zip(kwargs["axs"][:, -1], kwargs["row_titles"]):
-            ax.annotate(
-                title,
-                xy=(1, 0.5),
-                xycoords="axes fraction",
-                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
-                textcoords="offset points",
-                va="center",
-                ha="left",
-                fontsize=ss.LETTER_LABEL_SIZE,
-            )
-
-
-def add_plot_letters(kwargs):
-    """Add letters to (nrows x ncols x nr x nc) matrix of axes."""
-
-    nrows, ncols, nr, _ = kwargs["axs"].shape
-
-    letter_position = 1.0 + ss.LETTER_POSITION * nr
-
-    for i in range(nrows):
-        for j in range(ncols):
-            n = i * ncols + j
-            letter = chr(ord("a") + n % 26)
-            if n >= 26:
-                letter = letter + letter
-            kwargs["axs"][i, j, 0, 0].text(
-                0,
-                letter_position,
-                letter,
-                fontsize=ss.LETTER_LABEL_SIZE,
-                transform=kwargs["axs"][i, j, 0, 0].transAxes,
-                weight="bold",
-            )
-
-
-def add_plot_ticks(kwargs):
+def add_ticks_plot(kwargs):
     """Set ticks for (nrows x ncols x nr x nc) matrix of axes."""
 
     axs = kwargs["axs"]
@@ -127,7 +105,28 @@ def add_plot_ticks(kwargs):
             axs[-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
 
 
-def add_plot_titles(kwargs):
+def add_titles_imshow(kwargs):
+    """Add titles to (nrows x ncols) matrix of axes."""
+
+    for ax, title in zip(kwargs["axs"][0, :], kwargs["column_titles"]):
+        ax.set_title(
+            title, pad=ss.PLOT_SIZE * ss.TITLE_PADDING, fontsize=ss.LETTER_LABEL_SIZE
+        )
+    if kwargs["row_titles"]:
+        for ax, title in zip(kwargs["axs"][:, -1], kwargs["row_titles"]):
+            ax.annotate(
+                title,
+                xy=(1, 0.5),
+                xycoords="axes fraction",
+                xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
+                textcoords="offset points",
+                va="center",
+                ha="left",
+                fontsize=ss.LETTER_LABEL_SIZE,
+            )
+
+
+def add_titles_plot(kwargs):
     """Add titles to (nrows x ncols x nr x nc) matrix of axes."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
@@ -151,14 +150,14 @@ def add_plot_titles(kwargs):
         )
 
 
-def prettify_imshow_axes(kwargs):
+def prettify_axes_imshow(kwargs):
     """Prettify (nrows x ncols) matrix of axes."""
 
     nrows, ncols = kwargs["axs"].shape
 
-    add_imshow_ticks(kwargs)
-    add_imshow_titles(kwargs)
-    add_imshow_letters(kwargs)
+    add_ticks_imshow(kwargs)
+    add_titles_imshow(kwargs)
+    add_letters_imshow(kwargs)
 
     for i in range(nrows):
         for j in range(ncols):
@@ -166,7 +165,7 @@ def prettify_imshow_axes(kwargs):
             set_locator(kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i)
 
 
-def prettify_plot_axes(kwargs):
+def prettify_axes_plot(kwargs):
     """Prettify (nrows x ncols x nr x nc) matrix of axes."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
@@ -176,18 +175,18 @@ def prettify_plot_axes(kwargs):
             for k in range(nr):
                 for m in range(nc):
                     set_spines(kwargs["axs"][i, j, k, m])
-                    remove_ticks(kwargs["axs"][i, j, k, m])
-                    set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
                     set_locator(
                         kwargs["axs"][i, j, k, m],
                         kwargs["divider"],
                         j * (nc + 1) + m + int(m / nc),
                         (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
                     )
+                    remove_ticks(kwargs["axs"][i, j, k, m])
+                    set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
 
-    add_plot_titles(kwargs)
-    add_plot_letters(kwargs)
-    add_plot_ticks(kwargs)
+    add_titles_plot(kwargs)
+    add_letters_plot(kwargs)
+    add_ticks_plot(kwargs)
 
 
 def remove_ticks(ax):
