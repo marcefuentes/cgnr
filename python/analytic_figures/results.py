@@ -9,7 +9,6 @@ import numpy as np
 from modules.init_fig import init_fig
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
-from modules.process_plt import process_plt, close_plt
 import modules.settings as ss
 
 from modules_results.get_data import (
@@ -17,6 +16,8 @@ from modules_results.get_data import (
     get_data_multitrait,
     get_rows_columns,
 )
+from modules_results.make_image import make_image, close_plt
+from modules_results.make_movie import make_movie
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
 
@@ -91,10 +92,13 @@ def main(args):
     if args.mode == "all_traits":
         for trait in all_traits:
             update_args["mode"] = trait
-            process_plt(fig, df.Time.unique(), update_args, f"{file_name}_{trait}")
+            make_image(fig, df.Time.unique(), update_args, f"{file_name}_{trait}")
     else:
         file_name += f"_{args.mode}"
-        process_plt(fig, df.Time.unique(), update_args, file_name)
+        if args.movie:
+            make_movie(fig, df.Time.unique(), update_args, file_name)
+        else:
+            make_image(fig, df.Time.unique(), update_args, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
