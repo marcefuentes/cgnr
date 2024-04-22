@@ -14,8 +14,8 @@ def init_plot_artists(axs, update_args):
     dummy_budgety = np.full_like(update_args["icx"], -1.0)
     dummy_icy = np.zeros_like(update_args["icx"])
 
-    for k, alpha in enumerate(update_args["alphas"]):
-        for m, rho in enumerate(update_args["rhos"]):
+    for k in range(ss.NC):
+        for m in range(ss.NC):
             for c in range(ss.N_IC):
                 axs[0, 0, k, m].plot(
                     update_args["icx"], update_args["isoclines"][k, m, c], c="0.850"

@@ -13,7 +13,6 @@ from modules_theory.init_artists import init_plot_artists
 from modules_theory.make_movie import make_movie
 from modules_theory.make_image import make_image, close_plt
 from modules_theory.parse_args import parse_args
-import modules_theory.settings as ss
 
 # Add data to figure
 
