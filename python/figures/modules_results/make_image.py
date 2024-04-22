@@ -1,7 +1,7 @@
 """ Module to process the plot """
 
 import matplotlib.pyplot as plt
-from modules_theory.update import update_artists
+from modules_results.update import update_artists
 
 
 def make_image(frames, update_data, name):

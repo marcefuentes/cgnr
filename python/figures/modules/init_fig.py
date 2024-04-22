@@ -33,7 +33,7 @@ def init_fig(kwargs):
         )
 
     prettify_fig(fig, new_args)
-    add_colorbar(fig, new_args, kwargs["nc"])
+    add_colorbar(fig, new_args, kwargs["bar_width"])
     divider = create_divider(fig, new_args, kwargs)
 
     return fig, axs, divider

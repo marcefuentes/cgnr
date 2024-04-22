@@ -57,6 +57,7 @@ def main(args):
         "nr": len(axes_args["y_values"]),
         "nc": len(axes_args["x_values"]),
         "nested": args.histogram,
+        "bar_width": len(axes_args["x_values"]),
     }
 
     fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
