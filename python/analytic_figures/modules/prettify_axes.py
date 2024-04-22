@@ -66,6 +66,7 @@ def add_ticks_imshow(kwargs):
                 axis="both",
                 labelsize=ss.TICK_LABEL_SIZE,
                 size=ss.TICK_SIZE,
+                color=ss.TICK_COLOR,
             )
 
 
@@ -83,10 +84,10 @@ def add_ticks_plot(kwargs):
         for j in range(ncols):
             for k in range(0, nr, nr // 2):
                 axs[i, j, k, 0].set(yticks=[y_middle], yticklabels=[])
-                axs[i, j, k, 0].tick_params(axis="y", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+                axs[i, j, k, 0].tick_params(axis="y", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR)
             for m in range(0, nc, nc // 2):
                 axs[i, j, -1, m].set(xticks=[x_middle], xticklabels=[])
-                axs[i, j, -1, m].tick_params(axis="x", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+                axs[i, j, -1, m].tick_params(axis="x", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR)
 
 
 def add_title_column(ax, title):

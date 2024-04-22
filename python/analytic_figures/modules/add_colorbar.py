@@ -16,8 +16,8 @@ def add_colorbar_icurves(axs):
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap="Reds"),
         cax=axins,
         ticks=[0, 0.5, 1])
-    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE)
-    cbar.outline.set_linewidth(0.2)
+    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR)
+    cbar.outline.set_linewidth(ss.LINE_WIDTH)
 
 def add_colorbar(fig, measurements, nc):
     """Add colorbar."""
@@ -37,5 +37,5 @@ def add_colorbar(fig, measurements, nc):
         ]
     )  # [left, bottom, width, height]
     cbar = fig.colorbar(sm, cax=cax, ticks=[-1, 0, 1])
-    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+    cbar.ax.tick_params(labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR)
     cbar.outline.set_linewidth(ss.LINE_WIDTH)
