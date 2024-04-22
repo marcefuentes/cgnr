@@ -54,7 +54,6 @@ def add_ticks_plot(kwargs):
 
     axs = kwargs["axs"]
     nrows, ncols, nr, nc = axs.shape
-    step = int(nr / 2)
     y_min, y_max = axs[0, 0, 0, 0].get_ylim()
     y_middle = (y_min + y_max) / 2
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()
@@ -62,18 +61,25 @@ def add_ticks_plot(kwargs):
 
     for i in range(nrows):
         for j in range(ncols):
-            for k in range(0, nr, step):
+            for k in range(0, nr, nr // 2):
                 axs[i, j, k, 0].set(yticks=[y_middle], yticklabels=[])
                 axs[i, j, k, 0].tick_params(axis="y", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
-            for m in range(0, nc, step):
+            for m in range(0, nc, nc // 2):
                 axs[i, j, -1, m].set(xticks=[x_middle], xticklabels=[])
                 axs[i, j, -1, m].tick_params(axis="x", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+
+
+def add_ticklabels_plot(kwargs):
+    """Add tick labels for (nrows x ncols x nr x nc)."""
+
+    nrows, ncols, nr, nc = kwargs["axs"].shape
+
     for i in range(nrows):
-        for k in range(0, nc, step):
-            axs[i, 0, k, 0].set_yticklabels([kwargs["y_values"][k]])
+        for k in range(0, nr, nr // 2):
+            kwargs["axs"][i, 0, k, 0].set_yticklabels([kwargs["y_values"][k]])
     for j in range(ncols):
-        for m in range(0, nr, step):
-            axs[-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
+        for m in range(0, nc, nc // 2):
+            kwargs["axs"][-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
 
 
 def add_title_column(ax, title):
@@ -145,6 +151,7 @@ def prettify_axes_plot(kwargs):
     for i, title in enumerate(kwargs["row_titles"]):
         add_title_row(kwargs["axs"][i, -1, int(nr / 2), -1], title)
     add_ticks_plot(kwargs)
+    add_ticklabels_plot(kwargs)
 
 
 def remove_ticks(ax):
