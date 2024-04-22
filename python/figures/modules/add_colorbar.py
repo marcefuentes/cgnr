@@ -1,31 +1,9 @@
 """ Add colorbar. """
 
-from matplotlib import cm
 from matplotlib.cm import ScalarMappable
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 
 import modules.settings as ss
-
-
-def add_colorbar_icurves(axs):
-    norm = Normalize(vmin=0, vmax=1)
-    axins = inset_axes(
-        axes_args["axs"][0, -1, -1],
-        width="5%",
-        height="100%",
-        loc="upper right",
-        bbox_to_anchor=(880, 200, 200, 200),
-        borderpad=0,
-    )
-    cbar = fig.colorbar(
-        cm.ScalarMappable(norm=norm, cmap="Reds"), cax=axins, ticks=[0, 0.5, 1]
-    )
-    cbar.ax.tick_params(
-        labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR
-    )
-    cbar.outline.set_linewidth(ss.LINE_WIDTH)
 
 
 def add_colorbar(fig, measurements, nc):
