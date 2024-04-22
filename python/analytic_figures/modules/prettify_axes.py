@@ -22,7 +22,6 @@ def add_letters(ax, letter_position, n):
 def add_ticklabels_imshow(kwargs):
     """Add tick labels for (nrows x ncols)."""
 
-    nrows, ncols = kwargs["axs"].shape
     xmin = min(kwargs["x_values"])
     xmax = max(kwargs["x_values"])
     ymin = min(kwargs["y_values"])
@@ -78,14 +77,12 @@ def add_ticks_plot(kwargs):
     axs = kwargs["axs"]
     nrows, ncols, nr, nc = axs.shape
     y_min, y_max = axs[0, 0, 0, 0].get_ylim()
-    y_middle = (y_min + y_max) / 2
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()
-    x_middle = (x_min + x_max) / 2
 
     for i in range(nrows):
         for j in range(ncols):
             for k in range(0, nr, nr // 2):
-                axs[i, j, k, 0].set(yticks=[y_middle], yticklabels=[])
+                axs[i, j, k, 0].set(yticks=[(y_min + y_max) / 2], yticklabels=[])
                 axs[i, j, k, 0].tick_params(
                     axis="y",
                     labelsize=ss.TICK_LABEL_SIZE,
@@ -93,7 +90,7 @@ def add_ticks_plot(kwargs):
                     color=ss.TICK_COLOR,
                 )
             for m in range(0, nc, nc // 2):
-                axs[i, j, -1, m].set(xticks=[x_middle], xticklabels=[])
+                axs[i, j, -1, m].set(xticks=[(x_min + x_max) / 2], xticklabels=[])
                 axs[i, j, -1, m].tick_params(
                     axis="x",
                     labelsize=ss.TICK_LABEL_SIZE,
