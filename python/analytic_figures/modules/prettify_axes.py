@@ -126,6 +126,7 @@ def add_plot_ticks(kwargs):
         for m in range(0, nr, step):
             axs[-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
 
+
 def add_plot_titles(kwargs):
     """Add titles to (nrows x ncols x nr x nc) matrix of axes."""
 
