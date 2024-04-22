@@ -1,6 +1,9 @@
 """ Add colorbar. """
 
+from matplotlib import cm
 from matplotlib.cm import ScalarMappable
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 
 import modules.settings as ss

@@ -16,20 +16,18 @@ def init_plot_artists(axs, update_args):
 
     for k, alpha in enumerate(update_args["alphas"]):
         for m, rho in enumerate(update_args["rhos"]):
-            for c in range(ss.N_IC): 
-                axs[0, 0, k, m].plot(update_args["icx"], update_args["isoclines"][k, m, c], c="0.850")
-            budgets[k, m], = axs[0, 0, k, m].plot(update_args["icx"],
-                dummy_budgety,
-                c="0.300",
-                linewidth=4,
-                alpha=0.8)
-            icurves[k, m], = axs[0, 0, k, m].plot(update_args["icx"],
-                dummy_icy,
-                linewidth=4,
-                alpha=0.8)
-            landscapes[k, m], = axs[0, 1, k, m].plot(update_args["icx"],
-                dummy_icy,
-                linewidth=4,
-                alpha=0.8)
+            for c in range(ss.N_IC):
+                axs[0, 0, k, m].plot(
+                    update_args["icx"], update_args["isoclines"][k, m, c], c="0.850"
+                )
+            (budgets[k, m],) = axs[0, 0, k, m].plot(
+                update_args["icx"], dummy_budgety, c="0.300", linewidth=4, alpha=0.8
+            )
+            (icurves[k, m],) = axs[0, 0, k, m].plot(
+                update_args["icx"], dummy_icy, linewidth=4, alpha=0.8
+            )
+            (landscapes[k, m],) = axs[0, 1, k, m].plot(
+                update_args["icx"], dummy_icy, linewidth=4, alpha=0.8
+            )
 
     return budgets, icurves, landscapes

@@ -4,7 +4,7 @@ import numpy as np
 
 from common_modules.get_config import get_config
 import modules.settings as ss
-from modules.theory import indifference
+from modules_theory.theory import indifference
 
 
 def get_data():
@@ -18,7 +18,7 @@ def get_data():
     icx = np.linspace(0.001, 0.999, num=ss.N_X_VALUES)
     budget_0 = 1.0 - icx
 
-    w_isoclines = np.linspace(1.0/(ss.N_IC+1), ss.N_IC/(ss.N_IC+1), num=ss.N_IC)
+    w_isoclines = np.linspace(1.0 / (ss.N_IC + 1), ss.N_IC / (ss.N_IC + 1), num=ss.N_IC)
 
     isoclines = np.zeros((ss.NC, ss.NC, ss.N_IC, ss.N_X_VALUES))
     for i, alpha in enumerate(alphas):

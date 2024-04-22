@@ -22,3 +22,5 @@ TICK_COLOR = "lightgrey"
 VALUES_PER_CURVE = 64
 PRINT_FOLDER = False
 N_X_VALUES = 64
+NC = 3
+N_IC = 5

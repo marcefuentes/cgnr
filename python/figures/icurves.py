@@ -36,7 +36,6 @@ def main():
 
     fig, axes_args["axs"], axes_args["divider"] = create_fig(fig_args)
 
-
     file_name = os.path.basename(__file__).split(".")[0]
     prettify_plot_axes(axes_args)
     update_args["artists"] = init_plot_artists(axes_args["axs"])

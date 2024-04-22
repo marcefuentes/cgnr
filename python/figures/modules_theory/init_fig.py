@@ -15,15 +15,18 @@ def init_fig(kwargs):
 
     fig = plt.figure(figsize=(new_args["width"], new_args["height"]))
     outergrid = fig.add_gridspec(nrows=kwargs["nrows"], ncols=kwargs["ncols"])
-    axs = np.empty((kwargs["nrows"], kwargs["ncols"], kwargs["nr"], kwargs["nc"]), dtype=object)
+    axs = np.empty(
+        (kwargs["nrows"], kwargs["ncols"], kwargs["nr"], kwargs["nc"]), dtype=object
+    )
 
     for j in range(2):
-        grid = outergrid[j].subgridspec(nrows=kwargs["nr"], ncols=kwargs["nc"], hspace=0.0, wspace=0.0)
+        grid = outergrid[j].subgridspec(
+            nrows=kwargs["nr"], ncols=kwargs["nc"], hspace=0.0, wspace=0.0
+        )
         axs[0, j] = grid.subplots()
 
     prettify_fig(fig, new_args)
-    #add_colorbar(fig, new_args, kwargs["nc"])
+    # add_colorbar(fig, new_args, kwargs["nc"])
     divider = create_divider(fig, new_args, kwargs)
 
     return fig, axs, divider
-

@@ -2,10 +2,13 @@
 
 import argparse
 
+
 def parse_args():
     """Parse command line arguments."""
 
-    description = "Plot indifference curves and budget constraints, and fitness landscapes."
+    description = (
+        "Plot indifference curves and budget constraints, and fitness landscapes."
+    )
 
     parser = argparse.ArgumentParser(
         description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
