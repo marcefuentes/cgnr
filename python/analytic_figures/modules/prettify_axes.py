@@ -183,7 +183,7 @@ def prettify_plot_axes(kwargs):
                 for m in range(nc):
                     set_plot_spines(kwargs["axs"][i, j, k, m])
                     remove_ticks(kwargs["axs"][i, j, k, m])
-                    set_plot_limits(kwargs["axs"][i, j, k, m])
+                    set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
                     set_plot_locator(
                         kwargs["axs"][i, j, k, m],
                         kwargs["divider"],
@@ -202,10 +202,10 @@ def remove_ticks(ax):
     ax.set(xticks=[], yticks=[])
 
 
-def set_plot_limits(ax):
+def set_plot_limits(ax, xlim, ylim):
     """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
 
-    ax.set(xlim=[-2, ss.N_X_VALUES + 1], ylim=[0, 0.25])
+    ax.set(xlim=xlim, ylim=ylim)
 
 
 def set_plot_locator(ax, divider, nx, ny):

@@ -17,6 +17,7 @@ from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.modes import all_traits
 from modules.prettify_axes import prettify_imshow_axes, prettify_plot_axes
 from modules.process_plt import process_plt, close_plt
+import modules.settings as ss
 
 
 def main(args):
@@ -39,6 +40,10 @@ def main(args):
         "y_values": np.sort(df["alpha"].unique())[::-1],
         "x_values": np.sort(df["logES"].unique()),
     }
+
+    if args.histogram:
+        axes_args["x_lim"] = [-2, ss.N_X_VALUES + 1]
+        axes_args["y_lim"] = [0, 0.25]
 
     rows, axes_args["row_titles"], columns, axes_args["column_titles"] = (
         get_rows_columns(args.mode, args.mode_is_trait)
