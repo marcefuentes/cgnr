@@ -162,14 +162,8 @@ def prettify_imshow_axes(kwargs):
 
     for i in range(nrows):
         for j in range(ncols):
-            kwargs["axs"][nrows - i - 1, j].set_axes_locator(
-                kwargs["divider"].new_locator(nx=2 * j, ny=2 * i)
-            )
-
-    for i in range(nrows):
-        for j in range(ncols):
-            for spine in kwargs["axs"][i, j].spines.values():
-                spine.set_linewidth(ss.LINE_WIDTH)
+            set_spines(kwargs["axs"][i, j])
+            set_locator(kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i)
 
 
 def prettify_plot_axes(kwargs):
@@ -181,10 +175,10 @@ def prettify_plot_axes(kwargs):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
-                    set_plot_spines(kwargs["axs"][i, j, k, m])
+                    set_spines(kwargs["axs"][i, j, k, m])
                     remove_ticks(kwargs["axs"][i, j, k, m])
                     set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
-                    set_plot_locator(
+                    set_locator(
                         kwargs["axs"][i, j, k, m],
                         kwargs["divider"],
                         j * (nc + 1) + m + int(m / nc),
@@ -202,19 +196,19 @@ def remove_ticks(ax):
     ax.set(xticks=[], yticks=[])
 
 
+def set_locator(ax, divider, nx, ny):
+    """Set locator for axes."""
+
+    ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
+
+
 def set_plot_limits(ax, xlim, ylim):
     """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
 
     ax.set(xlim=xlim, ylim=ylim)
 
 
-def set_plot_locator(ax, divider, nx, ny):
-    """Set locator for axes."""
-
-    ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
-
-
-def set_plot_spines(ax):
+def set_spines(ax):
     """Set spines for axes."""
 
     for spine in ax.spines.values():
