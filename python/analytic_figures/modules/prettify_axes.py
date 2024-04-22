@@ -104,32 +104,27 @@ def add_plot_ticks(kwargs):
     """Set ticks for (nrows x ncols x nr x nc) matrix of axes."""
 
     axs = kwargs["axs"]
-    x_values = kwargs["x_values"]
-    y_values = kwargs["y_values"]
     nrows, ncols, nr, nc = axs.shape
     step = int(nr / 2)
-    xlim = [-2, ss.N_X_VALUES + 1]
-    ylim = [0, 0.25]
+    y_min, y_max = axs[0, 0, 0, 0].get_ylim()
+    y_middle = (y_min + y_max) / 2
+    x_min, x_max = axs[0, 0, 0, 0].get_xlim()
+    x_middle = (x_min + x_max) / 2
 
     for i in range(nrows):
         for j in range(ncols):
-            for k in range(nr):
-                for m in range(nc):
-                    axs[i, j, k, m].set(xticks=[], yticks=[])
-                    axs[i, j, k, m].tick_params(
-                        axis="both", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE
-                    )
             for k in range(0, nr, step):
-                axs[i, j, k, 0].set(yticks=[ylim[1] / 2], yticklabels=[])
+                axs[i, j, k, 0].set(yticks=[y_middle], yticklabels=[])
+                axs[i, j, k, 0].tick_params(axis="y", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
             for m in range(0, nc, step):
-                axs[i, j, -1, m].set(xticks=[xlim[1] / 2], xticklabels=[])
-        for k in range(0, nr, step):
-            axs[i, 0, k, 0].set_yticklabels([y_values[k]])
-
+                axs[i, j, -1, m].set(xticks=[x_middle], xticklabels=[])
+                axs[i, j, -1, m].tick_params(axis="x", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
+    for i in range(nrows):
+        for k in range(0, nc, step):
+            axs[i, 0, k, 0].set_yticklabels([kwargs["y_values"][k]])
     for j in range(ncols):
-        for m in range(0, nc, step):
-            axs[-1, j, -1, m].set_xticklabels([f"{x_values[m]:.0f}"])
-
+        for m in range(0, nr, step):
+            axs[-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
 
 def add_plot_titles(kwargs):
     """Add titles to (nrows x ncols x nr x nc) matrix of axes."""
@@ -181,15 +176,12 @@ def prettify_plot_axes(kwargs):
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
 
-    add_plot_ticks(kwargs)
-    add_plot_titles(kwargs)
-    add_plot_letters(kwargs)
-    
     for i in range(nrows):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
                     set_plot_spines(kwargs["axs"][i, j, k, m])
+                    remove_ticks(kwargs["axs"][i, j, k, m])
                     set_plot_limits(kwargs["axs"][i, j, k, m])
                     set_plot_locator(
                         kwargs["axs"][i, j, k, m],
@@ -197,6 +189,16 @@ def prettify_plot_axes(kwargs):
                         j * (nc + 1) + m + int(m / nc),
                         (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
                     )
+
+    add_plot_titles(kwargs)
+    add_plot_letters(kwargs)
+    add_plot_ticks(kwargs)
+
+
+def remove_ticks(ax):
+    """Remove ticks for axes."""
+
+    ax.set(xticks=[], yticks=[])
 
 
 def set_plot_limits(ax):
