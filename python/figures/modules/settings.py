@@ -19,14 +19,4 @@ TITLE_PADDING = 11
 TICK_LABEL_SIZE = PLOT_SIZE * 6
 TICK_SIZE = PLOT_SIZE * 1.5
 TICK_COLOR = "lightgrey"
-
-# These is for results.py
 PRINT_FOLDER = False
-
-# N_X_VALUES must be 64 (BINS) for results.py
-# It is also required for icurves.py
-N_X_VALUES = 64
-
-# These are for icurves.py
-NC = 3
-N_IC = 5

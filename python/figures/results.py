@@ -9,7 +9,6 @@ import numpy as np
 from modules.init_fig import init_fig
 from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
-import modules.settings as ss
 
 from modules_results.get_data import (
     get_data_single_trait,
@@ -20,6 +19,7 @@ from modules_results.make_image import make_image, close_plt
 from modules_results.make_movie import make_movie
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
+import modules_results.settings as ss
 
 
 def main(args):
@@ -44,7 +44,7 @@ def main(args):
     }
 
     if args.histogram:
-        axes_args["x_lim"] = [-2, ss.N_X_VALUES + 1]
+        axes_args["x_lim"] = [-2, ss.BINS + 1]
         axes_args["y_lim"] = [0, 0.25]
 
     rows, axes_args["row_titles"], columns, axes_args["column_titles"] = (

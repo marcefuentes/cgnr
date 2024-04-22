@@ -2,7 +2,7 @@
 
 import numpy as np
 
-import modules.settings as ss
+import modules_theory.settings as ss
 
 
 def init_plot_artists(axs, update_args):

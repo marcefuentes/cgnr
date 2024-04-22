@@ -3,8 +3,8 @@
 import numpy as np
 
 from common_modules.get_config import get_config
-import modules.settings as ss
 from modules_theory.theory import indifference
+import modules_theory.settings as ss
 
 
 def get_data():
