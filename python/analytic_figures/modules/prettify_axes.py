@@ -171,7 +171,7 @@ def prettify_imshow_axes(kwargs):
             )
 
     for i in range(nrows):
-        for c in range(ncols):
+        for j in range(ncols):
             for spine in kwargs["axs"][i, j].spines.values():
                 spine.set_linewidth(ss.LINE_WIDTH)
 
@@ -182,9 +182,31 @@ def prettify_plot_axes(kwargs):
     nrows, ncols, nr, nc = kwargs["axs"].shape
 
     add_plot_ticks(kwargs)
-    set_limits(kwargs)
     add_plot_titles(kwargs)
     add_plot_letters(kwargs)
+    set_plot_locator(kwargs["axs"], kwargs["divider"])
+    
+    for i in range(nrows):
+        for j in range(ncols):
+            for k in range(nr):
+                for m in range(nc):
+                    set_plot_spines(kwargs["axs"][i, j, k, m])
+                    set_plot_limits(kwargs["axs"][i, j, k, m])
+
+
+def set_plot_limits(ax):
+    """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
+
+    xlim = [-2, ss.N_X_VALUES + 1]
+    ylim = [0, 0.25]
+
+    ax.set(xlim=xlim, ylim=ylim)
+
+
+def set_plot_locator(axs, divider):
+    """Set locator for axes."""
+
+    nrows, ncols, nr, nc = axs.shape
 
     for i in range(nrows):
         for j in range(ncols):
@@ -192,28 +214,12 @@ def prettify_plot_axes(kwargs):
                 inner_y = (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
                 for m in range(nc):
                     inner_x = j * (nc + 1) + m + int(m / nc)
-                    new_locator = kwargs["divider"].new_locator(nx=inner_x, ny=inner_y)
-                    kwargs["axs"][i, j, k, m].set_axes_locator(new_locator)
-
-    for i in range(nrows):
-        for j in range(ncols):
-            for k in range(nr):
-                for m in range(nc):
-                    for spine in kwargs["axs"][i, j, k, m].spines.values():
-                        spine.set_linewidth(ss.LINE_WIDTH)
+                    new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
+                    axs[i, j, k, m].set_axes_locator(new_locator)
 
 
-def set_limits(kwargs):
-    """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
+def set_plot_spines(ax):
+    """Set spines for axes."""
 
-    axs = kwargs["axs"]
-    nrows, ncols, nr, nc = axs.shape
-
-    xlim = [-2, ss.N_X_VALUES + 1]
-    ylim = [0, 0.25]
-
-    for i in range(nrows):
-        for j in range(ncols):
-            for k in range(nr):
-                for m in range(nc):
-                    kwargs["axs"][i, j, k, m].set(xlim=xlim, ylim=ylim)
+    for spine in ax.spines.values():
+        spine.set_linewidth(ss.LINE_WIDTH)
