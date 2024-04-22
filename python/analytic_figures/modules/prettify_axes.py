@@ -120,6 +120,15 @@ def add_titles_plot(kwargs):
             fontsize=ss.LETTER_LABEL_SIZE,
         )
 
+def add_column_title(ax, title):
+    """Add title to ax."""
+
+    ax.set_title(
+        title,
+        pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
+        fontsize=ss.LETTER_LABEL_SIZE,
+    )
+
 
 def prettify_axes_imshow(kwargs):
     """Prettify (nrows x ncols) matrix of axes."""
@@ -128,13 +137,14 @@ def prettify_axes_imshow(kwargs):
     letter_position = 1.0 + ss.LETTER_POSITION
 
     add_ticks_imshow(kwargs)
-    add_titles_imshow(kwargs)
 
     for i in range(nrows):
         for j in range(ncols):
             add_letters(kwargs["axs"][i, j], letter_position, i * ncols + j)
             set_spines(kwargs["axs"][i, j])
             set_locator(kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i)
+    for j, title in enumerate(kwargs["column_titles"]):
+        add_column_title(kwargs["axs"][0, j], title)
 
 
 def prettify_axes_plot(kwargs):
@@ -158,7 +168,8 @@ def prettify_axes_plot(kwargs):
                     remove_ticks(kwargs["axs"][i, j, k, m])
                     set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
 
-    add_titles_plot(kwargs)
+    for j, title in enumerate(kwargs["column_titles"]):
+        add_column_title(kwargs["axs"][0, j, 0, int(nc / 2)], title)
     add_ticks_plot(kwargs)
 
 
