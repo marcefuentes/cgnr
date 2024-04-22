@@ -3,49 +3,20 @@
 import modules.settings as ss
 
 
-def add_letters_imshow(kwargs):
+def add_letters(ax, letter_position, n):
     """Add letters to (nrows x ncols) matrix of axes."""
 
-    nrows, ncols = kwargs["axs"].shape
-
-    letter_position = 1.0 + ss.LETTER_POSITION
-    for i in range(nrows):
-        for j in range(ncols):
-            n = i * ncols + j
-            letter = chr(ord("a") + n % 26)
-            if n >= 26:
-                letter = letter + letter
-            kwargs["axs"][i, j].text(
-                0,
-                letter_position,
-                letter,
-                fontsize=ss.LETTER_LABEL_SIZE,
-                transform=kwargs["axs"][i, j].transAxes,
-                weight="bold",
-            )
-
-
-def add_letters_plot(kwargs):
-    """Add letters to (nrows x ncols x nr x nc) matrix of axes."""
-
-    nrows, ncols, nr, _ = kwargs["axs"].shape
-
-    letter_position = 1.0 + ss.LETTER_POSITION * nr
-
-    for i in range(nrows):
-        for j in range(ncols):
-            n = i * ncols + j
-            letter = chr(ord("a") + n % 26)
-            if n >= 26:
-                letter = letter + letter
-            kwargs["axs"][i, j, 0, 0].text(
-                0,
-                letter_position,
-                letter,
-                fontsize=ss.LETTER_LABEL_SIZE,
-                transform=kwargs["axs"][i, j, 0, 0].transAxes,
-                weight="bold",
-            )
+    letter = chr(ord("a") + n % 26)
+    if n >= 26:
+        letter = letter + letter
+    ax.text(
+        0,
+        letter_position,
+        letter,
+        fontsize=ss.LETTER_LABEL_SIZE,
+        transform=ax.transAxes,
+        weight="bold",
+    )
 
 
 def add_ticks_imshow(kwargs):
@@ -154,13 +125,14 @@ def prettify_axes_imshow(kwargs):
     """Prettify (nrows x ncols) matrix of axes."""
 
     nrows, ncols = kwargs["axs"].shape
+    letter_position = 1.0 + ss.LETTER_POSITION
 
     add_ticks_imshow(kwargs)
     add_titles_imshow(kwargs)
-    add_letters_imshow(kwargs)
 
     for i in range(nrows):
         for j in range(ncols):
+            add_letters(kwargs["axs"][i, j], letter_position, i * ncols + j)
             set_spines(kwargs["axs"][i, j])
             set_locator(kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i)
 
@@ -169,9 +141,11 @@ def prettify_axes_plot(kwargs):
     """Prettify (nrows x ncols x nr x nc) matrix of axes."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
+    letter_position = 1.0 + ss.LETTER_POSITION * nr
 
     for i in range(nrows):
         for j in range(ncols):
+            add_letters(kwargs["axs"][i, j, 0, 0], letter_position, i * ncols + j)
             for k in range(nr):
                 for m in range(nc):
                     set_spines(kwargs["axs"][i, j, k, m])
@@ -185,7 +159,6 @@ def prettify_axes_plot(kwargs):
                     set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
 
     add_titles_plot(kwargs)
-    add_letters_plot(kwargs)
     add_ticks_plot(kwargs)
 
 
