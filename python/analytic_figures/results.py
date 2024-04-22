@@ -6,18 +6,19 @@ import os
 import time
 import numpy as np
 
-from modules.parse_args import parse_args
 from modules.init_fig import init_fig
-from modules.get_data import (
+from modules.init_artists import init_imshow_artists, init_plot_artists
+from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
+from modules.process_plt import process_plt, close_plt
+import modules.settings as ss
+
+from modules_results.get_data import (
     get_data_single_trait,
     get_data_multitrait,
     get_rows_columns,
 )
-from modules.init_artists import init_imshow_artists, init_plot_artists
-from modules.modes import all_traits
-from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
-from modules.process_plt import process_plt, close_plt
-import modules.settings as ss
+from modules_results.modes import all_traits
+from modules_results.parse_args import parse_args
 
 
 def main(args):
