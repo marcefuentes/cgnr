@@ -44,7 +44,9 @@ def add_ticklabels_plot(kwargs):
             kwargs["axs"][i, 0, k, 0].set_yticklabels([f"{kwargs['y_values'][k]:.1f}"])
     for j in range(ncols):
         for m in range(0, nc, nc // 2):
-            kwargs["axs"][-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
+            kwargs["axs"][-1, j, -1, m].set_xticklabels(
+                [f"{kwargs['x_values'][m]:.0f}"]
+            )
 
 
 def add_ticks_imshow(kwargs):
@@ -84,10 +86,20 @@ def add_ticks_plot(kwargs):
         for j in range(ncols):
             for k in range(0, nr, nr // 2):
                 axs[i, j, k, 0].set(yticks=[y_middle], yticklabels=[])
-                axs[i, j, k, 0].tick_params(axis="y", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR)
+                axs[i, j, k, 0].tick_params(
+                    axis="y",
+                    labelsize=ss.TICK_LABEL_SIZE,
+                    size=ss.TICK_SIZE,
+                    color=ss.TICK_COLOR,
+                )
             for m in range(0, nc, nc // 2):
                 axs[i, j, -1, m].set(xticks=[x_middle], xticklabels=[])
-                axs[i, j, -1, m].tick_params(axis="x", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR)
+                axs[i, j, -1, m].tick_params(
+                    axis="x",
+                    labelsize=ss.TICK_LABEL_SIZE,
+                    size=ss.TICK_SIZE,
+                    color=ss.TICK_COLOR,
+                )
 
 
 def add_title_column(ax, title):
@@ -98,6 +110,7 @@ def add_title_column(ax, title):
         pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
         fontsize=ss.LETTER_LABEL_SIZE,
     )
+
 
 def add_title_row(ax, title):
     """Add title."""
@@ -127,7 +140,9 @@ def prettify_axes_imshow(kwargs):
         for j in range(ncols):
             add_letters(kwargs["axs"][i, j], letter_position, i * ncols + j)
             set_spines(kwargs["axs"][i, j])
-            set_locator(kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i)
+            set_locator(
+                kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i
+            )
     for j, title in enumerate(kwargs["column_titles"]):
         add_title_column(kwargs["axs"][0, j], title)
     for i, title in enumerate(kwargs["row_titles"]):
@@ -150,10 +165,12 @@ def prettify_axes_plot(kwargs):
                         kwargs["axs"][i, j, k, m],
                         kwargs["divider"],
                         j * (nc + 1) + m + int(m / nc),
-                        (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
+                        (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
                     )
                     remove_ticks(kwargs["axs"][i, j, k, m])
-                    set_plot_limits(kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"])
+                    set_plot_limits(
+                        kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"]
+                    )
 
     for j, title in enumerate(kwargs["column_titles"]):
         add_title_column(kwargs["axs"][0, j, 0, int(nc / 2)], title)
