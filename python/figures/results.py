@@ -7,7 +7,6 @@ import time
 import numpy as np
 
 from modules.init_fig import init_fig
-from modules.init_artists import init_imshow_artists, init_plot_artists
 from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
 
 from modules_results.get_data import (
@@ -15,6 +14,7 @@ from modules_results.get_data import (
     get_data_multitrait,
     get_rows_columns,
 )
+from modules_results.init_artists import init_imshow_artists, init_plot_artists
 from modules_results.make_image import make_image, close_plt
 from modules_results.make_movie import make_movie
 from modules_results.modes import all_traits
