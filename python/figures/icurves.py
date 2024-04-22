@@ -1,30 +1,39 @@
 #!/usr/bin/env python
 
-""" Creates plots. """
+""" Plot indifference curves and budget lines, and fitness landscapes"""
 
 import os
 import time
 
-from analytic_figures.modules.create_fig import create_fig
-from modules.init_artists import init_plot_artists
-from modules.prettify_axes import prettify_plot_axes
-from analytic_figures.modules.process_plt import process_plt
-from modules.get_data import get_data
-import modules.settings as ss
+from modules.prettify_axes import prettify_axes_plot
+from modules.init_fig import init_fig
+
+from modules_theory.parse_args import parse_args
+from modules_theory.init_artists import init_plot_artists
+from modules_theory.make_movie import make_movie
+from modules_theory.make_image import make_image, close_plt
+from modules_theory.get_data import get_data
+
+# Add data to figure
 
 
-def main():
-    """Create the figure."""
+def main(args):
+    """Main function"""
 
     start_time = time.perf_counter()
 
-    update_args = get_data()
-    update_args["movie"] = False
+    givens, update_args = get_data()
 
     axes_args = {
-        "y_values": update_args["alphas"],
         "x_values": update_args["logess"],
+        "y_values": update_args["alphas"],
+        "column_titles": ["", ""],
+        "row_titles": [""],
+        "x_lim": [0, 1],
+        "y_lim": [0, 1],
     }
+
+    update_args["movie"] = args.movie
 
     fig_args = {
         "nrows": 1,
@@ -32,18 +41,28 @@ def main():
         "nr": len(update_args["alphas"]),
         "nc": len(update_args["logess"]),
         "nested": True,
+        "bar_width": 21,
     }
 
-    fig, axes_args["axs"], axes_args["divider"] = create_fig(fig_args)
+    fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
+    prettify_axes_plot(axes_args)
+
+    update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
+        init_plot_artists(axes_args["axs"], update_args)
+    )
 
     file_name = os.path.basename(__file__).split(".")[0]
-    prettify_plot_axes(axes_args)
-    update_args["artists"] = init_plot_artists(axes_args["axs"])
+    if args.movie:
+        make_movie(fig, givens, update_args, file_name)
+    else:
+        make_image(givens, update_args, file_name)
 
-    process_plt(fig, ss.GIVENS, update_args, file_name)
+    close_plt(fig)
 
-    print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
+    end_time = time.perf_counter()
+    print(f"\nTime elapsed: {(end_time - start_time):.2f} seconds")
 
 
 if __name__ == "__main__":
-    main()
+    parsed_args = parse_args()
+    main(parsed_args)
