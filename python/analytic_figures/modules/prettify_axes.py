@@ -4,7 +4,7 @@ import modules.settings as ss
 
 
 def add_letters(ax, letter_position, n):
-    """Add letters to (nrows x ncols) matrix of axes."""
+    """Add letters."""
 
     letter = chr(ord("a") + n % 26)
     if n >= 26:
@@ -20,7 +20,7 @@ def add_letters(ax, letter_position, n):
 
 
 def add_ticks_imshow(kwargs):
-    """Set ticks for (nrows x ncols) matrix of axes."""
+    """Set ticks for (nrows x ncols) matrix."""
 
     nrows, ncols = kwargs["axs"].shape
     nr = len(kwargs["y_values"])
@@ -50,7 +50,7 @@ def add_ticks_imshow(kwargs):
 
 
 def add_ticks_plot(kwargs):
-    """Set ticks for (nrows x ncols x nr x nc) matrix of axes."""
+    """Set ticks for (nrows x ncols x nr x nc)."""
 
     axs = kwargs["axs"]
     nrows, ncols, nr, nc = axs.shape
@@ -77,7 +77,7 @@ def add_ticks_plot(kwargs):
 
 
 def add_title_column(ax, title):
-    """Add title to ax."""
+    """Add title."""
 
     ax.set_title(
         title,
@@ -86,7 +86,7 @@ def add_title_column(ax, title):
     )
 
 def add_title_row(ax, title):
-    """Add title to ax."""
+    """Add title."""
 
     ax.annotate(
         title,
@@ -101,7 +101,7 @@ def add_title_row(ax, title):
 
 
 def prettify_axes_imshow(kwargs):
-    """Prettify (nrows x ncols) matrix of axes."""
+    """Prettify (nrows x ncols) matrix."""
 
     nrows, ncols = kwargs["axs"].shape
     letter_position = 1.0 + ss.LETTER_POSITION
@@ -120,7 +120,7 @@ def prettify_axes_imshow(kwargs):
 
 
 def prettify_axes_plot(kwargs):
-    """Prettify (nrows x ncols x nr x nc) matrix of axes."""
+    """Prettify (nrows x ncols x nr x nc) matrix."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
     letter_position = 1.0 + ss.LETTER_POSITION * nr
@@ -148,25 +148,25 @@ def prettify_axes_plot(kwargs):
 
 
 def remove_ticks(ax):
-    """Remove ticks for axes."""
+    """Remove ticks."""
 
     ax.set(xticks=[], yticks=[])
 
 
 def set_locator(ax, divider, nx, ny):
-    """Set locator for axes."""
+    """Set locator."""
 
     ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
 
 
 def set_plot_limits(ax, xlim, ylim):
-    """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
+    """Set limits."""
 
     ax.set(xlim=xlim, ylim=ylim)
 
 
 def set_spines(ax):
-    """Set spines for axes."""
+    """Set spines."""
 
     for spine in ax.spines.values():
         spine.set_linewidth(ss.LINE_WIDTH)
