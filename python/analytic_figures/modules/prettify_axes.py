@@ -19,16 +19,40 @@ def add_letters(ax, letter_position, n):
     )
 
 
+def add_ticklabels_imshow(kwargs):
+    """Add tick labels for (nrows x ncols)."""
+
+    nrows, ncols = kwargs["axs"].shape
+    xmin = min(kwargs["x_values"])
+    xmax = max(kwargs["x_values"])
+    ymin = min(kwargs["y_values"])
+    ymax = max(kwargs["y_values"])
+
+    for ax in kwargs["axs"][:, 0]:
+        ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
+    for ax in kwargs["axs"][-1, :]:
+        ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
+
+
+def add_ticklabels_plot(kwargs):
+    """Add tick labels for (nrows x ncols x nr x nc)."""
+
+    nrows, ncols, nr, nc = kwargs["axs"].shape
+
+    for i in range(nrows):
+        for k in range(0, nr, nr // 2):
+            kwargs["axs"][i, 0, k, 0].set_yticklabels([f"{kwargs['y_values'][k]:.1f}"])
+    for j in range(ncols):
+        for m in range(0, nc, nc // 2):
+            kwargs["axs"][-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
+
+
 def add_ticks_imshow(kwargs):
     """Set ticks for (nrows x ncols) matrix."""
 
     nrows, ncols = kwargs["axs"].shape
     nr = len(kwargs["y_values"])
     nc = len(kwargs["x_values"])
-    xmin = min(kwargs["x_values"])
-    xmax = max(kwargs["x_values"])
-    ymin = min(kwargs["y_values"])
-    ymax = max(kwargs["y_values"])
 
     for i in range(nrows):
         for j in range(ncols):
@@ -43,10 +67,6 @@ def add_ticks_imshow(kwargs):
                 labelsize=ss.TICK_LABEL_SIZE,
                 size=ss.TICK_SIZE,
             )
-    for ax in kwargs["axs"][:, 0]:
-        ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
-    for ax in kwargs["axs"][-1, :]:
-        ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
 
 
 def add_ticks_plot(kwargs):
@@ -67,19 +87,6 @@ def add_ticks_plot(kwargs):
             for m in range(0, nc, nc // 2):
                 axs[i, j, -1, m].set(xticks=[x_middle], xticklabels=[])
                 axs[i, j, -1, m].tick_params(axis="x", labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE)
-
-
-def add_ticklabels_plot(kwargs):
-    """Add tick labels for (nrows x ncols x nr x nc)."""
-
-    nrows, ncols, nr, nc = kwargs["axs"].shape
-
-    for i in range(nrows):
-        for k in range(0, nr, nr // 2):
-            kwargs["axs"][i, 0, k, 0].set_yticklabels([kwargs["y_values"][k]])
-    for j in range(ncols):
-        for m in range(0, nc, nc // 2):
-            kwargs["axs"][-1, j, -1, m].set_xticklabels([f"{kwargs['x_values'][m]:.0f}"])
 
 
 def add_title_column(ax, title):
@@ -113,6 +120,7 @@ def prettify_axes_imshow(kwargs):
     letter_position = 1.0 + ss.LETTER_POSITION
 
     add_ticks_imshow(kwargs)
+    add_ticklabels_imshow(kwargs)
 
     for i in range(nrows):
         for j in range(ncols):
