@@ -92,13 +92,13 @@ def main(args):
     if args.mode == "all_traits":
         for trait in all_traits:
             update_args["mode"] = trait
-            make_image(fig, df.Time.unique(), update_args, f"{file_name}_{trait}")
+            make_image(df.Time.unique(), update_args, f"{file_name}_{trait}")
     else:
         file_name += f"_{args.mode}"
         if args.movie:
             make_movie(fig, df.Time.unique(), update_args, file_name)
         else:
-            make_image(fig, df.Time.unique(), update_args, file_name)
+            make_image(df.Time.unique(), update_args, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

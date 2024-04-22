@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from modules_results.update import update_artists
 
 
-def make_image(fig, frames, update_data, name):
+def make_image(frames, update_data, name):
     """Process the figure"""
 
     plt.rcParams["pdf.fonttype"] = 42
