@@ -184,7 +184,6 @@ def prettify_plot_axes(kwargs):
     add_plot_ticks(kwargs)
     add_plot_titles(kwargs)
     add_plot_letters(kwargs)
-    set_plot_locator(kwargs["axs"], kwargs["divider"])
     
     for i in range(nrows):
         for j in range(ncols):
@@ -192,30 +191,24 @@ def prettify_plot_axes(kwargs):
                 for m in range(nc):
                     set_plot_spines(kwargs["axs"][i, j, k, m])
                     set_plot_limits(kwargs["axs"][i, j, k, m])
+                    set_plot_locator(
+                        kwargs["axs"][i, j, k, m],
+                        kwargs["divider"],
+                        j * (nc + 1) + m + int(m / nc),
+                        (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
+                    )
 
 
 def set_plot_limits(ax):
     """Set limits for x and y axes for (nrows x ncols x nr x nc) matrix of axes."""
 
-    xlim = [-2, ss.N_X_VALUES + 1]
-    ylim = [0, 0.25]
-
-    ax.set(xlim=xlim, ylim=ylim)
+    ax.set(xlim=[-2, ss.N_X_VALUES + 1], ylim=[0, 0.25])
 
 
-def set_plot_locator(axs, divider):
+def set_plot_locator(ax, divider, nx, ny):
     """Set locator for axes."""
 
-    nrows, ncols, nr, nc = axs.shape
-
-    for i in range(nrows):
-        for j in range(ncols):
-            for k in range(nr):
-                inner_y = (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1
-                for m in range(nc):
-                    inner_x = j * (nc + 1) + m + int(m / nc)
-                    new_locator = divider.new_locator(nx=inner_x, ny=inner_y)
-                    axs[i, j, k, m].set_axes_locator(new_locator)
+    ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
 
 
 def set_plot_spines(ax):
