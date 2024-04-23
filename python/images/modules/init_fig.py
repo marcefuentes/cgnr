@@ -34,6 +34,7 @@ def init_fig(kwargs):
     divider = create_divider(fig, new_args, kwargs)
     new_args["sm"] = kwargs["sm"]
     new_args["colorbar_width"] = kwargs["colorbar_width"]
+    new_args["colorbar_padding"] = kwargs["colorbar_padding"]
     prettify_fig(fig, new_args)
 
     return fig, axs, divider

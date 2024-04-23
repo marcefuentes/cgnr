@@ -60,6 +60,7 @@ def main(args):
         "nested": args.histogram,
         "sm": get_sm(),
         "colorbar_width": len(axes_args["x_values"]),
+        "colorbar_padding": 2.5,
     }
 
     fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)

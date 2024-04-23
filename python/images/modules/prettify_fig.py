@@ -45,7 +45,7 @@ def prettify_fig(fig, kwargs):
 
     cax = fig.add_axes(
         [
-            (ss.LEFT_MARGIN + kwargs["inner_width"] + ss.SPACING * 2.5) / kwargs["width"],
+            (ss.LEFT_MARGIN + kwargs["inner_width"] + ss.SPACING * kwargs["colorbar_padding"]) / kwargs["width"],
             (ss.BOTTOM_MARGIN + kwargs["inner_height"] / 2 - ss.PLOT_SIZE / 2) / kwargs["height"],
             (ss.PLOT_SIZE / kwargs["colorbar_width"]) / kwargs["width"],
             ss.PLOT_SIZE / kwargs["height"],

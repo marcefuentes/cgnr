@@ -40,6 +40,7 @@ def main(args):
         "nested": True,
         "sm": get_sm(),
         "colorbar_width": 21,
+        "colorbar_padding": 1,
     }
 
     fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
