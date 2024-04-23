@@ -6,13 +6,13 @@ import os
 import time
 
 from modules.init_fig import init_fig
+from modules.make_image import make_image, close_plt
 from modules.make_movie import make_movie
 from modules.prettify_axes import prettify_axes_plot
 
 from modules_theory.get_data import get_data
 from modules_theory.get_sm import get_sm
 from modules_theory.init_artists import init_plot_artists
-from modules_theory.make_image import make_image, close_plt
 from modules_theory.parse_args import parse_args
 from modules_theory.update import update_artists
 
@@ -42,6 +42,8 @@ def main(args):
         "axs": None,
         "column_titles": ["", ""],
         "divider": None,
+        "init_function": init_plot_artists,
+        "prettify_function": prettify_axes_plot,
         "row_titles": [""],
         "x_lim": [0, 1],
         "x_values": update_args["logess"],
@@ -60,13 +62,8 @@ def main(args):
         "sm": get_sm(),
     }
 
-    fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
+    fig, update_args = init_fig(fig_args, axes_args, update_args)
 
-    update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
-        init_plot_artists(axes_args["axs"], update_args)
-    )
-
-    prettify_axes_plot(axes_args)
     file_name = os.path.basename(__file__).split(".")[0]
     if args.movie:
         make_movie(fig, givens, update_args, file_name)
