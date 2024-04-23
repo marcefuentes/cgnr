@@ -2,7 +2,7 @@
 
 import numpy as np
 
-import matplotlib.cm as cm
+from matplotlib import cm
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
