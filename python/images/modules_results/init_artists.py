@@ -5,6 +5,7 @@ import numpy as np
 import modules.settings as ss
 from modules_results.settings import BINS
 
+
 def init_imshow_artists(axs, nr, nc):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
