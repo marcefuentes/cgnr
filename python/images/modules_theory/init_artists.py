@@ -3,6 +3,7 @@
 import numpy as np
 
 import modules_theory.settings as ss
+from modules.settings import PLOT_SIZE as ps
 
 
 def init_plot_artists(axs, update_args):
@@ -21,13 +22,13 @@ def init_plot_artists(axs, update_args):
                     update_args["icx"], update_args["isoclines"][k, m, c], c="0.850"
                 )
             (budgets[k, m],) = axs[0, 0, k, m].plot(
-                update_args["icx"], dummy_budgety, c="0.300", linewidth=4, alpha=0.8
+                update_args["icx"], dummy_budgety, c="0.300", lw=ss.LINE_WIDTH * ps, alpha=0.8
             )
             (icurves[k, m],) = axs[0, 0, k, m].plot(
-                update_args["icx"], dummy_icy, linewidth=4, alpha=0.8
+                update_args["icx"], dummy_icy, lw=ss.LINE_WIDTH * ps, alpha=0.8
             )
             (landscapes[k, m],) = axs[0, 1, k, m].plot(
-                update_args["icx"], dummy_icy, linewidth=4, alpha=0.8
+                update_args["icx"], dummy_icy, lw=ss.LINE_WIDTH * ps, alpha=0.8
             )
 
     return budgets, icurves, landscapes

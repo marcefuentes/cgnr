@@ -1,7 +1,7 @@
 """ Figure settings. """
 
 COLOR_MAP = "RdBu_r"
-PLOT_SIZE = 1
+PLOT_SIZE = 4
 SPACING = PLOT_SIZE * 0.75 / 4
 LEFT_MARGIN = PLOT_SIZE * 2.5 / 4
 RIGHT_MARGIN = PLOT_SIZE * 4.0 / 4
