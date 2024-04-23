@@ -5,6 +5,7 @@
 import os
 import time
 
+from modules.get_sm import get_sm
 from modules.init_fig import init_fig
 from modules.prettify_axes import prettify_axes_plot
 
@@ -37,7 +38,8 @@ def main(args):
         "nr": len(update_args["alphas"]),
         "nc": len(update_args["logess"]),
         "nested": True,
-        "bar_width": 21,
+        "sm": get_sm(),
+        "colorbar_width": 21,
     }
 
     fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)

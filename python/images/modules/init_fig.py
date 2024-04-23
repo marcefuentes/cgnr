@@ -3,7 +3,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.add_colorbar import add_colorbar
 from modules.fix_positions import create_divider
 from modules.prettify_fig import create_measurements, prettify_fig
 
@@ -32,8 +31,9 @@ def init_fig(kwargs):
             figsize=(new_args["width"], new_args["height"]),
         )
 
-    prettify_fig(fig, new_args)
-    add_colorbar(fig, new_args, kwargs["bar_width"])
     divider = create_divider(fig, new_args, kwargs)
+    new_args["sm"] = kwargs["sm"]
+    new_args["colorbar_width"] = kwargs["colorbar_width"]
+    prettify_fig(fig, new_args)
 
     return fig, axs, divider

@@ -43,6 +43,22 @@ def prettify_fig(fig, kwargs):
         fontsize=ss.BIG_LABEL_SIZE,
     )
 
+    cax = fig.add_axes(
+        [
+            (ss.LEFT_MARGIN + kwargs["inner_width"] + ss.SPACING * 2.5) / kwargs["width"],
+            (ss.BOTTOM_MARGIN + kwargs["inner_height"] / 2 - ss.PLOT_SIZE / 2) / kwargs["height"],
+            (ss.PLOT_SIZE / kwargs["colorbar_width"]) / kwargs["width"],
+            ss.PLOT_SIZE / kwargs["height"],
+        ]
+    )  # [left, bottom, width, height]
+    ticks = [-1, 0, 1]
+    cbar = fig.colorbar(kwargs["sm"], cax=cax, ticks=ticks)
+    cbar.ax.tick_params(
+        labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR
+    )
+    cbar.outline.set_linewidth(ss.BORDER_WIDTH)
+    cbar.outline.set_edgecolor(ss.BORDER_COLOR)
+
     if ss.PRINT_FOLDER:
         bottom_text = os.path.basename(os.getcwd())
     else:
