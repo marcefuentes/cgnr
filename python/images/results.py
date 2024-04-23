@@ -23,7 +23,7 @@ import modules_results.settings as ss
 
 
 def main(args):
-    """Create the figure."""
+    """Main function"""
 
     start_time = time.perf_counter()
 
@@ -87,8 +87,6 @@ def main(args):
         update_args["artists"] = init_imshow_artists(
             axes_args["axs"], fig_args["nr"], fig_args["nc"]
         )
-
-    # Add data and save
 
     if args.mode == "all_traits":
         for trait in all_traits:
