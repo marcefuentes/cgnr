@@ -1,13 +1,13 @@
 """ Figure settings. """
 
 COLOR_MAP = "RdBu_r"
-PLOT_SIZE = 4
+PLOT_SIZE = 1
 SPACING = PLOT_SIZE * 0.75 / 4
 LEFT_MARGIN = PLOT_SIZE * 2.5 / 4
 RIGHT_MARGIN = PLOT_SIZE * 4.0 / 4
 TOP_MARGIN = PLOT_SIZE * 2.5 / 4
 BOTTOM_MARGIN = PLOT_SIZE * 2.5 / 4
-LINE_WIDTH = PLOT_SIZE * 0.1 / 4
+BORDER_WIDTH = PLOT_SIZE * 0.1 / 4
 X_LABEL = r"Substitutability of $\it{B}$"
 Y_LABEL = r"Influence of $\it{B}$"
 X_LABEL_SIZE = PLOT_SIZE * 1.8 / 4

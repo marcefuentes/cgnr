@@ -27,4 +27,4 @@ def add_colorbar(fig, measurements, nc):
     cbar.ax.tick_params(
         labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR
     )
-    cbar.outline.set_linewidth(ss.LINE_WIDTH)
+    cbar.outline.set_linewidth(ss.BORDER_WIDTH)

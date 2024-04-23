@@ -199,4 +199,4 @@ def set_spines(ax):
     """Set spines."""
 
     for spine in ax.spines.values():
-        spine.set_linewidth(ss.LINE_WIDTH)
+        spine.set_linewidth(ss.BORDER_WIDTH)
