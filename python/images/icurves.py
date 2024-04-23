@@ -5,7 +5,7 @@
 import os
 import time
 
-from modules.get_sm import get_sm
+from modules_theory.get_sm import get_sm
 from modules.init_fig import init_fig
 from modules.prettify_axes import prettify_axes_plot
 
