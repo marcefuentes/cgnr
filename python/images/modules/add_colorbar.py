@@ -18,7 +18,8 @@ def add_colorbar(fig, kwargs, nc):
             ss.PLOT_SIZE / kwargs["height"],
         ]
     )  # [left, bottom, width, height]
-    cbar = fig.colorbar(sm, cax=cax, ticks=[-1, 0, 1])
+    ticks = [-1, 0, 1]
+    cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
     cbar.ax.tick_params(
         labelsize=ss.TICK_LABEL_SIZE, size=ss.TICK_SIZE, color=ss.TICK_COLOR
     )
