@@ -10,7 +10,7 @@ def get_config(variable):
     """Reads the config file and returns the value of the variable passed as argument"""
 
     config_file_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "../../config.ini"
+        os.path.dirname(os.path.abspath(__file__)), "../config.ini"
     )
     if not config_file_path:
         return RuntimeError("config.ini does not exist in the root of the project")
