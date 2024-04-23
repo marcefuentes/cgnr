@@ -116,7 +116,7 @@ def add_title_row(ax, title):
         title,
         xy=(1, 0.5),
         xycoords="axes fraction",
-        xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING, 0),
+        xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING * 3.5, 0),
         textcoords="offset points",
         va="center",
         ha="left",

@@ -24,10 +24,10 @@ dict_row_titles = {
     "p": "P",
     "pi": "PR",
     "i": "R",
-    "given100": "1",
+    "given100": "",
     "given095": "0.95",
     "given050": "0.5",
-    "given000": "0",
+    "given000": "",
 }
 
 dict_traits = {
