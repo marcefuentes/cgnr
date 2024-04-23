@@ -3,7 +3,7 @@
 import numpy as np
 
 import modules_theory.settings as ss
-from modules.settings import PLOT_SIZE, BORDER_COLOR
+from modules.settings import PLOT_SIZE
 
 
 def init_plot_artists(axs, update_args):

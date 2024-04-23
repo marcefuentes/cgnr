@@ -3,6 +3,7 @@
 from matplotlib import cm
 import numpy as np
 
+from modules.settings import COLOR_MAP
 from modules_theory.theory import indifference, fitness, qbeq
 
 
@@ -22,7 +23,7 @@ def update_artists(given, kwargs):
             kwargs["icurves"][a, r].set_ydata(
                 indifference(kwargs["icx"], w, alpha, rho)
             )
-            kwargs["icurves"][a, r].set_color(cm.Reds(w))
+            kwargs["icurves"][a, r].set_color(cm.get_cmap(COLOR_MAP)(0.5 + 0.5 * w))
 
             kwargs["landscapes"][a, r].set_ydata(
                 fitness(qb_private, kwargs["icx"], given, alpha, rho)
