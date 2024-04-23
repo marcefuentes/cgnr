@@ -6,21 +6,16 @@ import matplotlib.pyplot as plt
 import modules.settings as ss
 
 
-def add_colorbar(fig, measurements, nc):
+def add_colorbar(fig, kwargs, nc):
     """Add colorbar."""
-
-    width = measurements["width"]
-    height = measurements["height"]
-    inner_width = measurements["inner_width"]
-    inner_height = measurements["inner_height"]
 
     sm = ScalarMappable(cmap=ss.COLOR_MAP, norm=plt.Normalize(-1, 1))
     cax = fig.add_axes(
         [
-            (ss.LEFT_MARGIN + inner_width + ss.SPACING * 2.5) / width,
-            (ss.BOTTOM_MARGIN + inner_height / 2 - ss.PLOT_SIZE / 2) / height,
-            (ss.PLOT_SIZE / nc) / width,
-            ss.PLOT_SIZE / height,
+            (ss.LEFT_MARGIN + kwargs["inner_width"] + ss.SPACING * 2.5) / kwargs["width"],
+            (ss.BOTTOM_MARGIN + kwargs["inner_height"] / 2 - ss.PLOT_SIZE / 2) / kwargs["height"],
+            (ss.PLOT_SIZE / nc) / kwargs["width"],
+            ss.PLOT_SIZE / kwargs["height"],
         ]
     )  # [left, bottom, width, height]
     cbar = fig.colorbar(sm, cax=cax, ticks=[-1, 0, 1])
