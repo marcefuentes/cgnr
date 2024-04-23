@@ -128,7 +128,7 @@ def prettify_axes_imshow(kwargs):
     """Prettify (nrows x ncols) matrix."""
 
     nrows, ncols = kwargs["axs"].shape
-    letter_position = 1.0 + ss.LETTER_POSITION
+    letter_position = 1.0 + ss.LETTER_PADDING
 
     add_ticks_imshow(kwargs)
     add_ticklabels_imshow(kwargs)
@@ -150,7 +150,7 @@ def prettify_axes_plot(kwargs):
     """Prettify (nrows x ncols x nr x nc) matrix."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
-    letter_position = 1.0 + ss.LETTER_POSITION * nr
+    letter_position = 1.0 + ss.LETTER_PADDING * nr
 
     for i in range(nrows):
         for j in range(ncols):

@@ -33,6 +33,6 @@ def init_plot_artists(axs):
             for a in range(nr):
                 for e in range(nc):
                     (artists[r, c, a, e],) = axs[r, c, a, e].plot(
-                        x, dummy_y, c="black", lw=ss.BORDER_WIDTH * 2
+                        x, dummy_y, c="black", lw=ss.LINE_WIDTH
                     )
     return artists
