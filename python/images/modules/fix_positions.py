@@ -2,7 +2,7 @@
 
 from mpl_toolkits.axes_grid1 import Divider, Size
 
-import modules.settings as ss
+from modules.get_setting import get_setting as get
 
 
 def create_divider(fig, measurements, layout):
@@ -15,8 +15,8 @@ def create_divider(fig, measurements, layout):
         nr = 1
         nc = 1
 
-    spacing_fixed = Size.Fixed(ss.SPACING)
-    plot_size_fixed = Size.Fixed(ss.PLOT_SIZE / nc)
+    spacing_fixed = Size.Fixed(get("COMMON", "spacing"))
+    plot_size_fixed = Size.Fixed(get("COMMON", "plot_size") / nc)
     column_fixed = [plot_size_fixed] * nc + (
         [spacing_fixed] + [plot_size_fixed] * nc
     ) * (layout["ncols"] - 1)
@@ -26,8 +26,8 @@ def create_divider(fig, measurements, layout):
     divider = Divider(
         fig,
         (
-            ss.LEFT_MARGIN / measurements["width"],
-            ss.BOTTOM_MARGIN / measurements["height"],
+            get("COMMON", "left_margin") / measurements["width"],
+            get("COMMON", "bottom_margin") / measurements["height"],
             measurements["inner_width"] / measurements["width"],
             measurements["inner_height"] / measurements["height"],
         ),
