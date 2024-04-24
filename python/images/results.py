@@ -20,13 +20,14 @@ from modules_results.make_image import make_image, close_plt
 from modules_results.make_movie import make_movie
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
-import modules_results.settings as ss
+from modules.setting import get_setting as get
 
 
 def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
+    file_name = os.path.basename(__file__).split(".")[0]
 
     if args.mode_is_trait:
         dfs, df_none, df_social, dffrqs = get_data_single_trait(
@@ -40,12 +41,15 @@ def main(args):
         df = df_none
 
     axes_args = {
+        "axs": None,
+        "divider": None,
+        "row_titles": None,
         "y_values": np.sort(df["alpha"].unique())[::-1],
         "x_values": np.sort(df["logES"].unique()),
     }
 
     if args.histogram:
-        axes_args["x_lim"] = [-2, ss.BINS + 1]
+        axes_args["x_lim"] = [-2, get("file_name", "bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
 
     rows, axes_args["row_titles"], columns, axes_args["column_titles"] = (

@@ -37,7 +37,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    givens, update_args = get_data(update_args)
+    givens, update_args = get_data(file_name, update_args)
 
     axes_args = {
         "axs": None,
