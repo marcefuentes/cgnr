@@ -36,7 +36,7 @@ def init_fig(kwargs, axes_args, update_args):
     new_args["file_name"] = kwargs["file_name"]
 
     prettify_fig(fig, new_args)
-    update_args = axes_args["init_function"](axes_args["axs"], update_args)
+    update_args = axes_args["init_function"](axes_args["axs"], axes_args["file_name"], update_args)
     axes_args["prettify_function"](axes_args)
 
     return fig, update_args
