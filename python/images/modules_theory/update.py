@@ -26,7 +26,7 @@ def update_artists(given, kwargs):
             kwargs["icurves"][a, r].set_color(cm.get_cmap(COLOR_MAP)(0.5 + 0.5 * w))
 
             kwargs["landscapes"][a, r].set_ydata(
-                fitness(qb_private, kwargs["icx"], given, alpha, rho)
+                fitness(kwargs["icx"], kwargs["icx"], 1.0, alpha, rho)
             )
 
     return np.concatenate(
