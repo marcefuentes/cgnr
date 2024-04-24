@@ -47,14 +47,20 @@ def main(args):
     }
 
     if args.mode_is_trait:
-        update_args["dfs"], update_args["df_none"], update_args["df_social"], update_args["dffrqs"] = get_data_single_trait(
-            args.mode, args.histogram, args.movie
-        )
+        (
+            update_args["dfs"],
+            update_args["df_none"],
+            update_args["df_social"],
+            update_args["dffrqs"],
+        ) = get_data_single_trait(args.mode, args.histogram, args.movie)
         df = update_args["df_none"][0][0]
     else:
-        update_args["dfs"], update_args["df_none"], update_args["df_social"], update_args["dffrqs"] = get_data_multitrait(
-            args.mode, args.histogram, args.movie
-        )
+        (
+            update_args["dfs"],
+            update_args["df_none"],
+            update_args["df_social"],
+            update_args["dffrqs"],
+        ) = get_data_multitrait(args.mode, args.histogram, args.movie)
         df = update_args["df_none"]
 
     file_name = os.path.basename(__file__).split(".")[0]
@@ -79,9 +85,12 @@ def main(args):
         axes_args["x_lim"] = [-2, get("file_name", "bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
 
-    update_args["rows"], axes_args["row_titles"], update_args["columns"], axes_args["column_titles"] = (
-        get_rows_columns(args.mode, args.mode_is_trait)
-    )
+    (
+        update_args["rows"],
+        axes_args["row_titles"],
+        update_args["columns"],
+        axes_args["column_titles"],
+    ) = get_rows_columns(args.mode, args.mode_is_trait)
 
     fig_args = {
         "file_name": file_name,
