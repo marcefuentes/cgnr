@@ -23,9 +23,20 @@ def get_data(file_name, data):
     data["icx"] = np.linspace(0.001, 0.999, num=get(file_name, "n_x_values"))
     data["budget_0"] = 1.0 - data["icx"]
 
-    w_isoclines = np.linspace(1.0 / (get(file_name, "n_ic") + 1), get(file_name, "n_ic")/ (get(file_name, "n_ic") + 1), num=get(file_name, "n_ic"))
+    w_isoclines = np.linspace(
+        1.0 / (get(file_name, "n_ic") + 1),
+        get(file_name, "n_ic") / (get(file_name, "n_ic") + 1),
+        num=get(file_name, "n_ic"),
+    )
 
-    data["isoclines"] = np.zeros((get(file_name, "nc"), get(file_name, "nc"), get(file_name, "n_ic"), get(file_name, "n_x_values")))
+    data["isoclines"] = np.zeros(
+        (
+            get(file_name, "nc"),
+            get(file_name, "nc"),
+            get(file_name, "n_ic"),
+            get(file_name, "n_x_values"),
+        )
+    )
     for i, alpha in enumerate(data["alphas"]):
         for j, rho in enumerate(data["rhos"]):
             for k, w in enumerate(w_isoclines):

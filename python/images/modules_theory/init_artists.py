@@ -8,7 +8,9 @@ from modules.get_setting import get_setting as get
 def init_plot_artists(axs, file_name, kwargs):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
-    kwargs["budgets"] = np.empty((get(file_name, "nc"), get(file_name, "nc")), dtype=object)
+    kwargs["budgets"] = np.empty(
+        (get(file_name, "nc"), get(file_name, "nc")), dtype=object
+    )
     kwargs["icurves"] = np.empty_like(kwargs["budgets"])
     kwargs["landscapes"] = np.empty_like(kwargs["budgets"])
     dummy_budgety = np.full_like(kwargs["icx"], -1.0)

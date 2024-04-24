@@ -2,6 +2,7 @@
 
 from modules.get_setting import get_setting as get
 
+
 def add_letters(ax, letter_position, n):
     """add letters."""
 

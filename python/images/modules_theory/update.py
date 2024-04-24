@@ -23,7 +23,9 @@ def update_artists(given, kwargs):
             kwargs["icurves"][a, r].set_ydata(
                 indifference(kwargs["icx"], w, alpha, rho)
             )
-            kwargs["icurves"][a, r].set_color(cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w))
+            kwargs["icurves"][a, r].set_color(
+                cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
+            )
 
             kwargs["landscapes"][a, r].set_ydata(
                 fitness(kwargs["icx"], kwargs["icx"], 1.0, alpha, rho)
