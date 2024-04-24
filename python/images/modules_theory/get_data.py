@@ -13,8 +13,12 @@ def get_data(data):
     givens = np.linspace(0.0, 1.0, num=10)
     givens = np.append(givens, 0.0)
 
-    data["alphas"] = np.linspace(get_config("alpha_max"), get_config("alpha_min"), num=ss.NC)
-    data["logess"] = np.linspace(get_config("loges_min"), get_config("loges_max"), num=ss.NC)
+    data["alphas"] = np.linspace(
+        get_config("alpha_max"), get_config("alpha_min"), num=ss.NC
+    )
+    data["logess"] = np.linspace(
+        get_config("loges_min"), get_config("loges_max"), num=ss.NC
+    )
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
     data["icx"] = np.linspace(0.001, 0.999, num=ss.N_X_VALUES)
     data["budget_0"] = 1.0 - data["icx"]

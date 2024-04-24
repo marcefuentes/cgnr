@@ -3,6 +3,7 @@
 import os
 
 import modules.settings as ss
+from modules.get_setting import get_setting
 
 
 def create_measurements(nrows, ncols):
@@ -48,12 +49,14 @@ def prettify_fig(fig, kwargs):
             (
                 ss.LEFT_MARGIN
                 + kwargs["inner_width"]
-                + ss.SPACING * kwargs["colorbar_padding"]
+                + ss.SPACING
+                * get_setting(kwargs["file_name"], "colorbar_right_position")
             )
             / kwargs["width"],
             (ss.BOTTOM_MARGIN + kwargs["inner_height"] / 2 - ss.PLOT_SIZE / 2)
             / kwargs["height"],
-            (ss.PLOT_SIZE / kwargs["colorbar_width"]) / kwargs["width"],
+            (ss.PLOT_SIZE / get_setting(kwargs["file_name"], "colorbar_width"))
+            / kwargs["width"],
             ss.PLOT_SIZE / kwargs["height"],
         ]
     )  # [left, bottom, width, height]

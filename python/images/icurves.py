@@ -21,6 +21,7 @@ def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
+    file_name = os.path.basename(__file__).split(".")[0]
 
     update_args = {
         "alphas": None,
@@ -52,8 +53,7 @@ def main(args):
     }
 
     fig_args = {
-        "colorbar_width": 21,
-        "colorbar_padding": 1,
+        "file_name": file_name,
         "nc": len(update_args["logess"]),
         "ncols": 2,
         "nested": True,
@@ -64,7 +64,6 @@ def main(args):
 
     fig, update_args = init_fig(fig_args, axes_args, update_args)
 
-    file_name = os.path.basename(__file__).split(".")[0]
     if args.movie:
         make_movie(fig, givens, update_args, file_name)
     else:

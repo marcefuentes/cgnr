@@ -33,8 +33,7 @@ def init_fig(kwargs, axes_args, update_args):
 
     axes_args["divider"] = create_divider(fig, new_args, kwargs)
     new_args["sm"] = kwargs["sm"]
-    new_args["colorbar_width"] = kwargs["colorbar_width"]
-    new_args["colorbar_padding"] = kwargs["colorbar_padding"]
+    new_args["file_name"] = kwargs["file_name"]
 
     prettify_fig(fig, new_args)
     update_args = axes_args["init_function"](axes_args["axs"], update_args)
