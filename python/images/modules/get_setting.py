@@ -7,9 +7,8 @@ import os
 def get_setting(header, variable):
     """Reads the config file and returns the value of the variable passed as argument"""
 
-    config_file_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "../images.ini"
-    )
+    project_python = os.environ.get("PROJECT_PYTHON")
+    config_file_path = os.path.join(project_python, "images", "images.ini")
     if not config_file_path:
         return RuntimeError("images.ini does not exist in the root of the project")
 
