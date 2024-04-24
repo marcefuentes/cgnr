@@ -4,7 +4,7 @@ import numpy as np
 
 from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
-from modules_theory.theory import indifference
+from modules_icurves.update import indifference
 
 
 def get_data(file_name, data):

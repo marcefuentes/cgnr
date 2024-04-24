@@ -10,11 +10,11 @@ from modules.make_image import make_image, close_plt
 from modules.make_movie import make_movie
 from modules.prettify_axes import prettify_axes_plot
 
-from modules_theory.get_data import get_data
-from modules_theory.get_sm import get_sm
-from modules_theory.init_artists import init_plot_artists
-from modules_theory.parse_args import parse_args
-from modules_theory.update import update_artists
+from modules_icurves.get_data import get_data
+from modules_icurves.get_sm import get_sm
+from modules_icurves.init_artists import init_plot_artists
+from modules_icurves.parse_args import parse_args
+from modules_icurves.update import update_artists
 
 
 def main(args):
