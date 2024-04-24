@@ -5,7 +5,7 @@ import numpy as np
 from modules.get_setting import get_setting as get
 
 
-def init_imshow_artists(axs, file_name, kwargs):
+def init_imshow_artists(axs, _, kwargs):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     nrows, ncols = axs.shape

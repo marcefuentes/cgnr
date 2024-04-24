@@ -1,10 +1,7 @@
 """ Reads the config file and returns the value of the variable passed as argument """
 
 import configparser
-
 import os
-
-from common_modules import color
 
 
 def get_setting(header, variable):
