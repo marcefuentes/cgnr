@@ -9,8 +9,7 @@ import pandas as pd
 from matplotlib import colormaps
 
 from common_modules.get_config import get_config
-import modules.settings as ss
-
+from modules.get_setting import get_setting as get
 import modules_results.modes as mm
 
 
@@ -60,7 +59,7 @@ def update_histogram(t, kwargs, zmatrix, r, c):
             freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
             y = d.loc[:, freq_a].values[0].flatten()
             kwargs["artists"][r, c, a, e].set_ydata(y)
-            bgcolor = colormaps[ss.COLOR_MAP]((zmatrix[a, e] + 1) / 2)
+            bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[a, e] + 1) / 2)
             kwargs["artists"][r, c, a, e].axes.set_facecolor(bgcolor)
 
     return kwargs["artists"][r, c]

@@ -28,12 +28,12 @@ def prettify_fig(fig, kwargs):
     fig.supxlabel(
         t=get("COMMON", "x_label"),
         x=(get("COMMON", "left_margin") + kwargs["inner_width"] / 2) / kwargs["width"],
-        y=(get("COMMON", "bottom_margin") - get("COMMON", "x_label_size")) / kwargs["height"],
+        y=get("COMMON", "bottom_margin") / 2.5 / kwargs["height"],
         fontsize=get("COMMON", "big_label_size"),
     )
     fig.supylabel(
         t=get("COMMON", "y_label"),
-        x=(get("COMMON", "left_margin") - get("COMMON", "y_label_size")) / kwargs["width"],
+        x=get("COMMON", "left_margin") / 2.8 / kwargs["width"],
         y=(get("COMMON", "bottom_margin") + kwargs["inner_height"] / 2) / kwargs["height"],
         fontsize=get("COMMON", "big_label_size"),
     )

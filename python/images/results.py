@@ -6,7 +6,10 @@ import os
 import time
 import numpy as np
 
+from modules.get_setting import get_setting as get
 from modules.init_fig import init_fig
+from modules.make_image import make_image, close_plt
+from modules.make_movie import make_movie
 from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
 
 from modules_results.get_data import (
@@ -16,11 +19,9 @@ from modules_results.get_data import (
 )
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_imshow_artists, init_plot_artists
-from modules_results.make_image import make_image, close_plt
-from modules_results.make_movie import make_movie
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
-from modules.setting import get_setting as get
+from modules_results.update import update_artists
 
 
 def main(args):
@@ -42,13 +43,21 @@ def main(args):
 
     axes_args = {
         "axs": None,
+        "column_titles": [""],
         "divider": None,
-        "row_titles": None,
+        "file_name": file_name,
+        "init_function": init_imshow_artists,
+        "prettify_function": prettify_axes_imshow,
+        "row_titles": [""],
+        "x_lim": "None",
         "y_values": np.sort(df["alpha"].unique())[::-1],
+        "y_lim": "None",
         "x_values": np.sort(df["logES"].unique()),
     }
 
     if args.histogram:
+        axes_args["init_function"] = init_plot_artists
+        axes_args["prettify_function"] = prettify_axes_plot
         axes_args["x_lim"] = [-2, get("file_name", "bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
 
@@ -57,19 +66,17 @@ def main(args):
     )
 
     fig_args = {
-        "nrows": len(rows),
-        "ncols": len(columns),
-        "nr": len(axes_args["y_values"]),
+        "file_name": file_name,
         "nc": len(axes_args["x_values"]),
+        "ncols": len(columns),
         "nested": args.histogram,
+        "nr": len(axes_args["y_values"]),
+        "nrows": len(rows),
         "sm": get_sm(),
-        "colorbar_width": len(axes_args["x_values"]),
-        "colorbar_padding": 1,
     }
 
-    fig, axes_args["axs"], axes_args["divider"] = init_fig(fig_args)
-
     update_args = {
+        "artists": None,
         "mode": args.mode,
         "mode_is_trait": args.mode_is_trait,
         "columns": columns,
@@ -79,21 +86,19 @@ def main(args):
         "df_social": df_social,
         "dffrqs": dffrqs,
         "movie": args.movie,
-        "text": fig.texts[2],
+        "nc": len(axes_args["x_values"]),
+        "nr": len(axes_args["y_values"]),
+        "text": "",
+        "update_function": update_artists,
     }
 
-    file_name = os.path.basename(__file__).split(".")[0]
     if args.histogram:
         update_args["alphas"] = axes_args["y_values"]
         update_args["logess"] = axes_args["x_values"]
-        prettify_axes_plot(axes_args)
-        update_args["artists"] = init_plot_artists(axes_args["axs"])
         file_name += "_histogram"
-    else:
-        prettify_axes_imshow(axes_args)
-        update_args["artists"] = init_imshow_artists(
-            axes_args["axs"], fig_args["nr"], fig_args["nc"]
-        )
+        update_args["text"] = fig.texts[2]
+
+    fig, update_args = init_fig(fig_args, axes_args, update_args)
 
     if args.mode == "all_traits":
         for trait in all_traits:

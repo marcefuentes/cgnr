@@ -41,7 +41,7 @@ def main(args):
 
     axes_args = {
         "axs": None,
-        "column_titles": ["", ""],
+        "column_titles": [""],
         "divider": None,
         "file_name": file_name,
         "init_function": init_plot_artists,
