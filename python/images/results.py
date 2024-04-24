@@ -8,8 +8,8 @@ import numpy as np
 
 from modules.get_setting import get_setting as get
 from modules.init_fig import init_fig
-from modules.make_image import make_image, close_plt
-from modules.make_movie import make_movie
+from modules.save_image import save_image, close_plt
+from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
 
 from modules_results.get_data import (
@@ -115,13 +115,13 @@ def main(args):
     if args.mode == "all_traits":
         for trait in all_traits:
             update_args["mode"] = trait
-            make_image(df.Time.unique(), update_args, f"{file_name}_{trait}")
+            save_image(df.Time.unique(), update_args, f"{file_name}_{trait}")
     else:
         file_name += f"_{args.mode}"
         if args.movie:
-            make_movie(fig, df.Time.unique(), update_args, file_name)
+            save_movie(fig, df.Time.unique(), update_args, file_name)
         else:
-            make_image(df.Time.unique(), update_args, file_name)
+            save_image(df.Time.unique(), update_args, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 
 
-def make_image(frames, kwargs, name):
+def save_image(frames, kwargs, name):
     """Process the figure"""
 
     plt.rcParams["pdf.fonttype"] = 42

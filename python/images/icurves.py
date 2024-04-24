@@ -6,8 +6,8 @@ import os
 import time
 
 from modules.init_fig import init_fig
-from modules.make_image import make_image, close_plt
-from modules.make_movie import make_movie
+from modules.save_image import save_image, close_plt
+from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes_plot
 
 from modules_icurves.get_data import get_data
@@ -66,9 +66,9 @@ def main(args):
     fig, update_args = init_fig(fig_args, axes_args, update_args)
 
     if args.movie:
-        make_movie(fig, givens, update_args, file_name)
+        save_movie(fig, givens, update_args, file_name)
     else:
-        make_image(givens, update_args, file_name)
+        save_image(givens, update_args, file_name)
 
     close_plt(fig)
 

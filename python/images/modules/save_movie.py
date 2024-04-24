@@ -3,7 +3,7 @@
 from matplotlib.animation import FuncAnimation
 
 
-def make_movie(fig, frames, kwargs, name):
+def save_movie(fig, frames, kwargs, name):
     """Function to create a movie from the frames"""
 
     movie = {
