@@ -28,18 +28,36 @@ def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
-    file_name = os.path.basename(__file__).split(".")[0]
+
+    update_args = {
+        "artists": None,
+        "mode": args.mode,
+        "mode_is_trait": args.mode_is_trait,
+        "columns": None,
+        "rows": None,
+        "dfs": None,
+        "df_none": None,
+        "df_social": None,
+        "dffrqs": None,
+        "movie": args.movie,
+        "nc": None,
+        "nr": None,
+        "text": "",
+        "update_function": update_artists,
+    }
 
     if args.mode_is_trait:
-        dfs, df_none, df_social, dffrqs = get_data_single_trait(
+        update_args["dfs"], update_args["df_none"], update_args["df_social"], update_args["dffrqs"] = get_data_single_trait(
             args.mode, args.histogram, args.movie
         )
-        df = dfs[0][0]
+        df = update_args["df_none"][0][0]
     else:
-        dfs, df_none, df_social, dffrqs = get_data_multitrait(
+        update_args["dfs"], update_args["df_none"], update_args["df_social"], update_args["dffrqs"] = get_data_multitrait(
             args.mode, args.histogram, args.movie
         )
-        df = df_none
+        df = update_args["df_none"]
+
+    file_name = os.path.basename(__file__).split(".")[0]
 
     axes_args = {
         "axs": None,
@@ -61,44 +79,29 @@ def main(args):
         axes_args["x_lim"] = [-2, get("file_name", "bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
 
-    rows, axes_args["row_titles"], columns, axes_args["column_titles"] = (
+    update_args["rows"], axes_args["row_titles"], update_args["columns"], axes_args["column_titles"] = (
         get_rows_columns(args.mode, args.mode_is_trait)
     )
 
     fig_args = {
         "file_name": file_name,
         "nc": len(axes_args["x_values"]),
-        "ncols": len(columns),
+        "ncols": len(update_args["columns"]),
         "nested": args.histogram,
         "nr": len(axes_args["y_values"]),
-        "nrows": len(rows),
+        "nrows": len(update_args["rows"]),
         "sm": get_sm(),
     }
 
-    update_args = {
-        "artists": None,
-        "mode": args.mode,
-        "mode_is_trait": args.mode_is_trait,
-        "columns": columns,
-        "rows": rows,
-        "dfs": dfs,
-        "df_none": df_none,
-        "df_social": df_social,
-        "dffrqs": dffrqs,
-        "movie": args.movie,
-        "nc": len(axes_args["x_values"]),
-        "nr": len(axes_args["y_values"]),
-        "text": "",
-        "update_function": update_artists,
-    }
+    update_args["nc"] = fig_args["nc"]
+    update_args["nr"] = fig_args["nr"]
+
+    fig, update_args = init_fig(fig_args, axes_args, update_args)
 
     if args.histogram:
         update_args["alphas"] = axes_args["y_values"]
         update_args["logess"] = axes_args["x_values"]
         file_name += "_histogram"
-        update_args["text"] = fig.texts[2]
-
-    fig, update_args = init_fig(fig_args, axes_args, update_args)
 
     if args.mode == "all_traits":
         for trait in all_traits:
