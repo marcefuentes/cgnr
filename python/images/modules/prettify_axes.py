@@ -1,10 +1,9 @@
-""" Prettify axes. """
+""" prettify axes. """
 
-import modules.settings as ss
-
+from modules.get_setting import get_setting as get
 
 def add_letters(ax, letter_position, n):
-    """Add letters."""
+    """add letters."""
 
     letter = chr(ord("a") + n % 26)
     if n >= 26:
@@ -13,14 +12,14 @@ def add_letters(ax, letter_position, n):
         0,
         letter_position,
         letter,
-        fontsize=ss.LETTER_LABEL_SIZE,
+        fontsize=get("COMMON", "letter_label_size"),
         transform=ax.transAxes,
         weight="bold",
     )
 
 
 def add_ticklabels_imshow(kwargs):
-    """Add tick labels for (nrows x ncols)."""
+    """add tick labels for (nrows x ncols)."""
 
     xmin = min(kwargs["x_values"])
     xmax = max(kwargs["x_values"])
@@ -34,7 +33,7 @@ def add_ticklabels_imshow(kwargs):
 
 
 def add_ticklabels_plot(kwargs):
-    """Add tick labels for (nrows x ncols x nr x nc)."""
+    """add tick labels for (nrows x ncols x nr x nc)."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
 
@@ -49,7 +48,7 @@ def add_ticklabels_plot(kwargs):
 
 
 def add_ticks_imshow(kwargs):
-    """Set ticks for (nrows x ncols) matrix."""
+    """set ticks for (nrows x ncols) matrix."""
 
     nrows, ncols = kwargs["axs"].shape
     nr = len(kwargs["y_values"])
@@ -65,14 +64,14 @@ def add_ticks_imshow(kwargs):
             )
             kwargs["axs"][i, j].tick_params(
                 axis="both",
-                labelsize=ss.TICK_LABEL_SIZE,
-                size=ss.TICK_SIZE,
-                color=ss.TICK_COLOR,
+                labelsize=get("COMMON", "tick_label_size"),
+                size=get("COMMON", "tick_size"),
+                color=get("COMMON", "tick_color"),
             )
 
 
 def add_ticks_plot(kwargs):
-    """Set ticks for (nrows x ncols x nr x nc)."""
+    """set ticks for (nrows x ncols x nr x nc)."""
 
     axs = kwargs["axs"]
     nrows, ncols, nr, nc = axs.shape
@@ -85,50 +84,50 @@ def add_ticks_plot(kwargs):
                 axs[i, j, k, 0].set(yticks=[(y_min + y_max) / 2], yticklabels=[])
                 axs[i, j, k, 0].tick_params(
                     axis="y",
-                    labelsize=ss.TICK_LABEL_SIZE,
-                    size=ss.TICK_SIZE,
-                    color=ss.TICK_COLOR,
+                    labelsize=get("COMMON", "tick_label_size"),
+                    size=get("COMMON", "tick_size"),
+                    color=get("COMMON", "tick_color"),
                 )
             for m in range(0, nc, nc // 2):
                 axs[i, j, -1, m].set(xticks=[(x_min + x_max) / 2], xticklabels=[])
                 axs[i, j, -1, m].tick_params(
                     axis="x",
-                    labelsize=ss.TICK_LABEL_SIZE,
-                    size=ss.TICK_SIZE,
-                    color=ss.TICK_COLOR,
+                    labelsize=get("COMMON", "tick_label_size"),
+                    size=get("COMMON", "tick_size"),
+                    color=get("COMMON", "tick_color"),
                 )
 
 
 def add_title_column(ax, title):
-    """Add title."""
+    """add title."""
 
     ax.set_title(
         title,
-        pad=ss.PLOT_SIZE * ss.TITLE_PADDING,
-        fontsize=ss.LETTER_LABEL_SIZE,
+        pad=get("COMMON", "plot_size") * get("COMMON", "title_padding"),
+        fontsize=get("COMMON", "letter_label_size"),
     )
 
 
 def add_title_row(ax, title):
-    """Add title."""
+    """add title."""
 
     ax.annotate(
         title,
         xy=(1, 0.5),
         xycoords="axes fraction",
-        xytext=(ss.PLOT_SIZE * ss.TITLE_PADDING * 3.5, 0),
+        xytext=(get("COMMON", "plot_size") * get("COMMON", "title_padding") * 3.5, 0),
         textcoords="offset points",
         va="center",
         ha="left",
-        fontsize=ss.LETTER_LABEL_SIZE,
+        fontsize=get("COMMON", "letter_label_size"),
     )
 
 
 def prettify_axes_imshow(kwargs):
-    """Prettify (nrows x ncols) matrix."""
+    """prettify (nrows x ncols) matrix."""
 
     nrows, ncols = kwargs["axs"].shape
-    letter_position = 1.0 + ss.LETTER_PADDING
+    letter_position = 1.0 + get("COMMON", "letter_padding")
 
     add_ticks_imshow(kwargs)
     add_ticklabels_imshow(kwargs)
@@ -147,10 +146,10 @@ def prettify_axes_imshow(kwargs):
 
 
 def prettify_axes_plot(kwargs):
-    """Prettify (nrows x ncols x nr x nc) matrix."""
+    """prettify (nrows x ncols x nr x nc) matrix."""
 
     nrows, ncols, nr, nc = kwargs["axs"].shape
-    letter_position = 1.0 + ss.LETTER_PADDING * nr
+    letter_position = 1.0 + get("COMMON", "letter_padding") * nr
 
     for i in range(nrows):
         for j in range(ncols):
@@ -178,26 +177,26 @@ def prettify_axes_plot(kwargs):
 
 
 def remove_ticks(ax):
-    """Remove ticks."""
+    """remove ticks."""
 
     ax.set(xticks=[], yticks=[])
 
 
 def set_locator(ax, divider, nx, ny):
-    """Set locator."""
+    """set locator."""
 
     ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
 
 
 def set_plot_limits(ax, xlim, ylim):
-    """Set limits."""
+    """set limits."""
 
     ax.set(xlim=xlim, ylim=ylim)
 
 
 def set_spines(ax):
-    """Set spines."""
+    """set spines."""
 
     for spine in ax.spines.values():
-        spine.set_linewidth(ss.BORDER_WIDTH)
-        spine.set_color(ss.BORDER_COLOR)
+        spine.set_linewidth(get("COMMON", "border_width"))
+        spine.set_color(get("COMMON", "border_color"))
