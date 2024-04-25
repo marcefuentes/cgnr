@@ -82,7 +82,7 @@ def update_zmatrix(t, kwargs, r, c):
     none = bool(kwargs["rows"][r] == "none" and kwargs["mode"] != "none")
 
     if "nothing" in trait_in:
-        zmatrix = np.zeros((1, 1))
+        zmatrix = np.zeros((kwargs["nr"], kwargs["nc"]))
         return zmatrix
 
     if trait_in not in mm.dict_traits:
