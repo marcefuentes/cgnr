@@ -10,7 +10,7 @@ from common_modules.get_config import get_config
 import modules_results.modes as mm
 
 
-def get_data_multitrait(mode, histogram, movie):
+def get_data_multitrait(mode, histogram, movie, clean):
     """Get the data for several traits in a variant."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -29,25 +29,25 @@ def get_data_multitrait(mode, histogram, movie):
             path = f"none/{row}"
         else:
             path = f"{row}/{mm.GIVEN_FOLDER}"
-        dfs.append(get_df(path, csv0, movie))
+        dfs.append(get_df(path, csv0, movie, clean))
         if histogram:
-            dffrqs.append(get_df(path, csv1, movie))
+            dffrqs.append(get_df(path, csv1, movie, clean))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
     else:
         path = f"none/{mm.GIVEN_FOLDER}"
-        df_none = get_df(path, csv0, movie)
+        df_none = get_df(path, csv0, movie, clean)
     if "social" in rows:
         df_social = dfs[rows.index("social")]
     else:
         path = "none/given000"
-        df_social = get_df(path, csv0, movie)
+        df_social = get_df(path, csv0, movie, clean)
     ts = df_social.Time.unique()
 
     return dfs, df_none, df_social, dffrqs, ts
 
 
-def get_data_single_trait(mode, histogram, movie):
+def get_data_single_trait(mode, histogram, movie, clean):
     """Get the data for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -68,19 +68,19 @@ def get_data_single_trait(mode, histogram, movie):
     for suffix, mechanism in zip(variant_suffixes, mechanisms):
         dfs.append(
             [
-                get_df(f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv0, movie)
+                get_df(f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv0, movie, clean)
                 for prefix in variant_prefixes
             ]
         )
         df_nones.append(
             [
-                get_df(f"{prefix}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie)
+                get_df(f"{prefix}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie, clean)
                 for prefix in variant_prefixes
             ]
         )
         df_socials.append(
             [
-                get_df(f"{prefix}_{suffix}/none/given000", csv0, movie)
+                get_df(f"{prefix}_{suffix}/none/given000", csv0, movie, clean)
                 for prefix in variant_prefixes
             ]
         )
@@ -88,7 +88,7 @@ def get_data_single_trait(mode, histogram, movie):
             dffrqs.append(
                 [
                     get_df(
-                        f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv1, movie
+                        f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv1, movie, clean
                     )
                     for prefix in variant_prefixes
                 ]
@@ -99,13 +99,17 @@ def get_data_single_trait(mode, histogram, movie):
     return dfs, df_nones, df_socials, dffrqs, ts
 
 
-def get_df(path, filetype, movie):
+def get_df(path, filetype, movie, clean):
     """Return a concatenated dataframe of the csv files in the given directory."""
 
     concatenated = os.path.join(path, "concatenated.csv")
+
     if not movie and os.path.exists(concatenated):
-        df = pd.read_csv(concatenated)
-        return df
+        if clean:
+            os.remove(concatenated)
+        else:
+            df = pd.read_csv(concatenated)
+            return df
 
     filelist = glob(os.path.join(path, f"*{filetype}"))
     if not filelist:

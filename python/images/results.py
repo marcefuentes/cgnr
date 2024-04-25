@@ -54,7 +54,7 @@ def main(args):
             update_args["df_social"],
             update_args["dffrqs"],
             ts,
-        ) = get_data_single_trait(args.mode, args.histogram, args.movie)
+        ) = get_data_single_trait(args.mode, args.histogram, args.movie, args.clean)
     else:
         (
             update_args["dfs"],
@@ -62,7 +62,7 @@ def main(args):
             update_args["df_social"],
             update_args["dffrqs"],
             ts,
-        ) = get_data_multitrait(args.mode, args.histogram, args.movie)
+        ) = get_data_multitrait(args.mode, args.histogram, args.movie, args.clean)
 
     file_name = os.path.basename(__file__).split(".")[0]
 
