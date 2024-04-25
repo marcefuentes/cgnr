@@ -6,7 +6,7 @@ from modules.get_setting import get_setting as get
 
 
 def get_distances(nrows, ncols):
-    """Create measurements for figure."""
+    """Calculate distances for figure."""
 
     inner_height = get("COMMON", "plot_size") * nrows + get("COMMON", "spacing") * (
         nrows - 1
@@ -16,14 +16,14 @@ def get_distances(nrows, ncols):
     )
     width = get("COMMON", "left_margin") + inner_width + get("COMMON", "right_margin")
     height = get("COMMON", "top_margin") + inner_height + get("COMMON", "bottom_margin")
-    measurements = {
+    distances = {
         "width": width,
         "height": height,
         "inner_width": inner_width,
         "inner_height": inner_height,
     }
 
-    return measurements
+    return distances
 
 
 def prettify_fig(fig, kwargs):
