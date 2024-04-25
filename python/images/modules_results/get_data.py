@@ -42,9 +42,8 @@ def get_data_multitrait(mode, histogram, movie, clean):
     else:
         path = "none/given000"
         df_social = get_df(path, csv0, movie, clean)
-    ts = df_social.Time.unique()
 
-    return dfs, df_none, df_social, dffrqs, ts
+    return dfs, df_none, df_social, dffrqs
 
 
 def get_data_single_trait(mode, histogram, movie, clean):
@@ -68,7 +67,12 @@ def get_data_single_trait(mode, histogram, movie, clean):
     for suffix, mechanism in zip(variant_suffixes, mechanisms):
         dfs.append(
             [
-                get_df(f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv0, movie, clean)
+                get_df(
+                    f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}",
+                    csv0,
+                    movie,
+                    clean,
+                )
                 for prefix in variant_prefixes
             ]
         )
@@ -88,21 +92,22 @@ def get_data_single_trait(mode, histogram, movie, clean):
             dffrqs.append(
                 [
                     get_df(
-                        f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}", csv1, movie, clean
+                        f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}",
+                        csv1,
+                        movie,
+                        clean,
                     )
                     for prefix in variant_prefixes
                 ]
             )
 
-    ts = df_socials[0][0].Time.unique()
-
-    return dfs, df_nones, df_socials, dffrqs, ts
+    return dfs, df_nones, df_socials, dffrqs
 
 
 def get_df(path, filetype, movie, clean):
-    """Return a concatenated dataframe of the csv files in the given directory."""
+    """Return a concatenated dataframe of the 'filetype' files in the given directory."""
 
-    concatenated = os.path.join(path, "concatenated.csv")
+    concatenated = os.path.join(path, f"concatenated{filetype}")
 
     if not movie and os.path.exists(concatenated):
         if clean:

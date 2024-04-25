@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument("--histogram", action="store_true", help="add histogram")
     parser.add_argument("--movie", action="store_true", help="enable movie")
     parser.add_argument("--clean", action="store_true", help="clean folders")
-    
+
     args = parser.parse_args()
     if args.mode not in choices:
         parser.error(f"Invalid mode: {args.mode}")
