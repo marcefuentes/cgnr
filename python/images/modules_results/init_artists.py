@@ -2,6 +2,7 @@
 
 import numpy as np
 
+from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
 
 
@@ -25,7 +26,7 @@ def init_plot_artists(axs, file_name, kwargs):
 
     nrows, ncols, _, _ = axs.shape
     kwargs["artists"] = np.empty_like(axs)
-    x = np.arange(get(file_name, "bins"))
+    x = np.arange(get_config("bins"))
     dummy_y = np.zeros_like(x)
 
     for r in range(nrows):

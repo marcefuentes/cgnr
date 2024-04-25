@@ -6,7 +6,7 @@ import os
 import time
 import numpy as np
 
-from modules.get_setting import get_setting as get
+from common_modules.get_config import get_config
 from modules.init_fig import init_fig
 from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
@@ -82,7 +82,7 @@ def main(args):
     if args.histogram:
         axes_args["init_function"] = init_plot_artists
         axes_args["prettify_function"] = prettify_axes_plot
-        axes_args["x_lim"] = [-2, get(file_name, "bins") + 1]
+        axes_args["x_lim"] = [-2, get_config("bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
 
     (

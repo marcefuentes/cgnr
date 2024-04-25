@@ -30,6 +30,7 @@ def get_config(variable):
         "GroupSize",
         "Cost",
         "grid",
+        "bins",
     ]
     float_variables = ["alpha_min", "alpha_max", "loges_min", "loges_max", "Given"]
     list_variables = ["output_file_extensions", "constraints"]
