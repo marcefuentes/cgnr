@@ -6,6 +6,7 @@ import os
 import time
 import numpy as np
 
+from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
 from modules.init_fig import init_fig
 from modules.save_image import save_image, close_plt
@@ -40,8 +41,8 @@ def main(args):
         "df_social": None,
         "dffrqs": None,
         "movie": args.movie,
-        "nc": None,
-        "nr": None,
+        "nc": get_config("grid"),
+        "nr": get_config("grid"),
         "text": "",
         "update_function": update_artists,
     }
@@ -52,16 +53,16 @@ def main(args):
             update_args["df_none"],
             update_args["df_social"],
             update_args["dffrqs"],
+            ts,
         ) = get_data_single_trait(args.mode, args.histogram, args.movie)
-        df = update_args["df_none"][0][0]
     else:
         (
             update_args["dfs"],
             update_args["df_none"],
             update_args["df_social"],
             update_args["dffrqs"],
+            ts,
         ) = get_data_multitrait(args.mode, args.histogram, args.movie)
-        df = update_args["df_none"]
 
     file_name = os.path.basename(__file__).split(".")[0]
 
@@ -74,9 +75,9 @@ def main(args):
         "prettify_function": prettify_axes_imshow,
         "row_titles": [""],
         "x_lim": "None",
-        "y_values": np.sort(df["alpha"].unique())[::-1],
+        "y_values": np.linspace(get_config("alpha_max"), get_config("alpha_min"), update_args["nr"]),
         "y_lim": "None",
-        "x_values": np.sort(df["logES"].unique()),
+        "x_values": np.linspace(get_config("loges_min"), get_config("loges_max"), update_args["nc"]),
     }
 
     if args.histogram:
@@ -94,16 +95,13 @@ def main(args):
 
     fig_args = {
         "file_name": file_name,
-        "nc": len(axes_args["x_values"]),
+        "nc": update_args["nc"],
         "ncols": len(update_args["columns"]),
         "nested": args.histogram,
-        "nr": len(axes_args["y_values"]),
+        "nr": update_args["nr"],
         "nrows": len(update_args["rows"]),
         "sm": get_sm(),
     }
-
-    update_args["nc"] = fig_args["nc"]
-    update_args["nr"] = fig_args["nr"]
 
     fig, update_args = init_fig(fig_args, axes_args, update_args)
 
@@ -115,13 +113,13 @@ def main(args):
     if args.mode == "all_traits":
         for trait in all_traits:
             update_args["mode"] = trait
-            save_image(df.Time.unique(), update_args, f"{file_name}_{trait}")
+            save_image(ts[-1], update_args, f"{file_name}_{trait}")
     else:
         file_name += f"_{args.mode}"
         if args.movie:
-            save_movie(fig, df.Time.unique(), update_args, file_name)
+            save_movie(fig, ts, update_args, file_name)
         else:
-            save_image(df.Time.unique(), update_args, file_name)
+            save_image(ts[-1], update_args, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

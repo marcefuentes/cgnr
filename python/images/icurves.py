@@ -68,7 +68,7 @@ def main(args):
     if args.movie:
         save_movie(fig, givens, update_args, file_name)
     else:
-        save_image(givens, update_args, file_name)
+        save_image(givens[-1], update_args, file_name)
 
     close_plt(fig)
 

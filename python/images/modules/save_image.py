@@ -3,13 +3,13 @@
 import matplotlib.pyplot as plt
 
 
-def save_image(frames, kwargs, name):
+def save_image(frame, kwargs, name):
     """Process the figure"""
 
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
 
-    kwargs["update_function"](frames[-1], kwargs)
+    kwargs["update_function"](frame, kwargs)
     plt.savefig(f"{name}.png", transparent=False)
 
 

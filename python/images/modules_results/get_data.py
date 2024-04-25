@@ -42,7 +42,9 @@ def get_data_multitrait(mode, histogram, movie):
     else:
         path = "none/given000"
         df_social = get_df(path, csv0, movie)
-    return dfs, df_none, df_social, dffrqs
+    ts = df_social.Time.unique()
+
+    return dfs, df_none, df_social, dffrqs, ts
 
 
 def get_data_single_trait(mode, histogram, movie):
@@ -92,7 +94,9 @@ def get_data_single_trait(mode, histogram, movie):
                 ]
             )
 
-    return dfs, df_nones, df_socials, dffrqs
+    ts = df_socials[0][0].Time.unique()
+
+    return dfs, df_nones, df_socials, dffrqs, ts
 
 
 def get_df(path, filetype, movie):
