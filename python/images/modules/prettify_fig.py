@@ -29,6 +29,7 @@ def get_distances(nrows, ncols):
 def prettify_fig(fig, kwargs):
     """prettify the figure."""
 
+    fig.set_size_inches(kwargs["width"], kwargs["height"])
     fig.supxlabel(
         t=get("COMMON", "x_label"),
         x=(get("COMMON", "left_margin") + kwargs["inner_width"] / 2) / kwargs["width"],

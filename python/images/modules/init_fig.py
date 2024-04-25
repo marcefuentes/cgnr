@@ -13,7 +13,7 @@ def init_fig(kwargs, axes_args, update_args):
     new_args = get_distances(kwargs["nrows"], kwargs["ncols"])
 
     if kwargs["nested"]:
-        fig = plt.figure(figsize=(new_args["width"], new_args["height"]))
+        fig = plt.figure()
         outergrid = fig.add_gridspec(nrows=kwargs["nrows"], ncols=kwargs["ncols"])
         axes_args["axs"] = np.empty(
             (kwargs["nrows"], kwargs["ncols"], kwargs["nr"], kwargs["nc"]), dtype=object
