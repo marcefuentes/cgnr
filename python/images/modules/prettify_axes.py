@@ -19,51 +19,51 @@ def add_letters(ax, letter_position, n):
     )
 
 
-def add_ticklabels_imshow(kwargs):
+def add_ticklabels_imshow(axes_args):
     """add tick labels for (nrows x ncols)."""
 
-    xmin = min(kwargs["x_values"])
-    xmax = max(kwargs["x_values"])
-    ymin = min(kwargs["y_values"])
-    ymax = max(kwargs["y_values"])
+    xmin = min(axes_args["x_values"])
+    xmax = max(axes_args["x_values"])
+    ymin = min(axes_args["y_values"])
+    ymax = max(axes_args["y_values"])
 
-    for ax in kwargs["axs"][:, 0]:
+    for ax in axes_args["axs"][:, 0]:
         ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
-    for ax in kwargs["axs"][-1, :]:
+    for ax in axes_args["axs"][-1, :]:
         ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
 
 
-def add_ticklabels_plot(kwargs):
+def add_ticklabels_plot(axes_args):
     """add tick labels for (nrows x ncols x nr x nc)."""
 
-    nrows, ncols, nr, nc = kwargs["axs"].shape
+    nrows, ncols, nr, nc = axes_args["axs"].shape
 
     for i in range(nrows):
         for k in range(0, nr, nr // 2):
-            kwargs["axs"][i, 0, k, 0].set_yticklabels([f"{kwargs['y_values'][k]:.1f}"])
+            axes_args["axs"][i, 0, k, 0].set_yticklabels([f"{axes_args['y_values'][k]:.1f}"])
     for j in range(ncols):
         for m in range(0, nc, nc // 2):
-            kwargs["axs"][-1, j, -1, m].set_xticklabels(
-                [f"{kwargs['x_values'][m]:.0f}"]
+            axes_args["axs"][-1, j, -1, m].set_xticklabels(
+                [f"{axes_args['x_values'][m]:.0f}"]
             )
 
 
-def add_ticks_imshow(kwargs):
+def add_ticks_imshow(axes_args):
     """set ticks for (nrows x ncols) matrix."""
 
-    nrows, ncols = kwargs["axs"].shape
-    nr = len(kwargs["y_values"])
-    nc = len(kwargs["x_values"])
+    nrows, ncols = axes_args["axs"].shape
+    nr = len(axes_args["y_values"])
+    nc = len(axes_args["x_values"])
 
     for i in range(nrows):
         for j in range(ncols):
-            kwargs["axs"][i, j].set(
+            axes_args["axs"][i, j].set(
                 xticks=[0, 0.5 * (nc - 1), nc - 1],
                 yticks=[0, 0.5 * (nr - 1), nr - 1],
                 xticklabels=[],
                 yticklabels=[],
             )
-            kwargs["axs"][i, j].tick_params(
+            axes_args["axs"][i, j].tick_params(
                 axis="both",
                 labelsize=get("COMMON", "tick_label_size"),
                 size=get("COMMON", "tick_size"),
@@ -71,10 +71,10 @@ def add_ticks_imshow(kwargs):
             )
 
 
-def add_ticks_plot(kwargs):
+def add_ticks_plot(axes_args):
     """set ticks for (nrows x ncols x nr x nc)."""
 
-    axs = kwargs["axs"]
+    axs = axes_args["axs"]
     nrows, ncols, nr, nc = axs.shape
     y_min, y_max = axs[0, 0, 0, 0].get_ylim()
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()
@@ -124,57 +124,57 @@ def add_title_row(ax, title):
     )
 
 
-def prettify_axes_imshow(kwargs):
+def prettify_axes_imshow(axes_args):
     """prettify (nrows x ncols) matrix."""
 
-    nrows, ncols = kwargs["axs"].shape
+    nrows, ncols = axes_args["axs"].shape
     letter_position = 1.0 + get("COMMON", "letter_padding")
 
-    add_ticks_imshow(kwargs)
-    add_ticklabels_imshow(kwargs)
+    add_ticks_imshow(axes_args)
+    add_ticklabels_imshow(axes_args)
 
     for i in range(nrows):
         for j in range(ncols):
-            add_letters(kwargs["axs"][i, j], letter_position, i * ncols + j)
-            set_spines(kwargs["axs"][i, j])
+            add_letters(axes_args["axs"][i, j], letter_position, i * ncols + j)
+            set_spines(axes_args["axs"][i, j])
             set_locator(
-                kwargs["axs"][nrows - i - 1, j], kwargs["divider"], 2 * j, 2 * i
+                axes_args["axs"][nrows - i - 1, j], axes_args["divider"], 2 * j, 2 * i
             )
-    for j, title in enumerate(kwargs["column_titles"]):
-        add_title_column(kwargs["axs"][0, j], title)
-    for i, title in enumerate(kwargs["row_titles"]):
-        add_title_row(kwargs["axs"][i, -1], title)
+    for j, title in enumerate(axes_args["column_titles"]):
+        add_title_column(axes_args["axs"][0, j], title)
+    for i, title in enumerate(axes_args["row_titles"]):
+        add_title_row(axes_args["axs"][i, -1], title)
 
 
-def prettify_axes_plot(kwargs):
+def prettify_axes_plot(axes_args):
     """prettify (nrows x ncols x nr x nc) matrix."""
 
-    nrows, ncols, nr, nc = kwargs["axs"].shape
+    nrows, ncols, nr, nc = axes_args["axs"].shape
     letter_position = 1.0 + get("COMMON", "letter_padding") * nr
 
     for i in range(nrows):
         for j in range(ncols):
-            add_letters(kwargs["axs"][i, j, 0, 0], letter_position, i * ncols + j)
+            add_letters(axes_args["axs"][i, j, 0, 0], letter_position, i * ncols + j)
             for k in range(nr):
                 for m in range(nc):
-                    set_spines(kwargs["axs"][i, j, k, m])
+                    set_spines(axes_args["axs"][i, j, k, m])
                     set_locator(
-                        kwargs["axs"][i, j, k, m],
-                        kwargs["divider"],
+                        axes_args["axs"][i, j, k, m],
+                        axes_args["divider"],
                         j * (nc + 1) + m + int(m / nc),
                         (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
                     )
-                    remove_ticks(kwargs["axs"][i, j, k, m])
+                    remove_ticks(axes_args["axs"][i, j, k, m])
                     set_plot_limits(
-                        kwargs["axs"][i, j, k, m], kwargs["x_lim"], kwargs["y_lim"]
+                        axes_args["axs"][i, j, k, m], axes_args["x_lim"], axes_args["y_lim"]
                     )
 
-    for j, title in enumerate(kwargs["column_titles"]):
-        add_title_column(kwargs["axs"][0, j, 0, int(nc / 2)], title)
-    for i, title in enumerate(kwargs["row_titles"]):
-        add_title_row(kwargs["axs"][i, -1, int(nr / 2), -1], title)
-    add_ticks_plot(kwargs)
-    add_ticklabels_plot(kwargs)
+    for j, title in enumerate(axes_args["column_titles"]):
+        add_title_column(axes_args["axs"][0, j, 0, int(nc / 2)], title)
+    for i, title in enumerate(axes_args["row_titles"]):
+        add_title_row(axes_args["axs"][i, -1, int(nr / 2), -1], title)
+    add_ticks_plot(axes_args)
+    add_ticklabels_plot(axes_args)
 
 
 def remove_ticks(ax):
