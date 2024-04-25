@@ -53,7 +53,7 @@ def main(args):
             update_args["df_social"],
             update_args["dffrqs"],
         ) = get_data_single_trait(args.mode, args.histogram, args.movie, args.clean)
-        df = update_args["dfsocial"][0][0]
+        df = update_args["df_social"][0][0]
     else:
         (
             update_args["dfs"],
