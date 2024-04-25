@@ -40,7 +40,9 @@ def add_ticklabels_plot(axes_args):
 
     for i in range(nrows):
         for k in range(0, nr, nr // 2):
-            axes_args["axs"][i, 0, k, 0].set_yticklabels([f"{axes_args['y_values'][k]:.1f}"])
+            axes_args["axs"][i, 0, k, 0].set_yticklabels(
+                [f"{axes_args['y_values'][k]:.1f}"]
+            )
     for j in range(ncols):
         for m in range(0, nc, nc // 2):
             axes_args["axs"][-1, j, -1, m].set_xticklabels(
@@ -166,7 +168,9 @@ def prettify_axes_plot(axes_args):
                     )
                     remove_ticks(axes_args["axs"][i, j, k, m])
                     set_plot_limits(
-                        axes_args["axs"][i, j, k, m], axes_args["x_lim"], axes_args["y_lim"]
+                        axes_args["axs"][i, j, k, m],
+                        axes_args["x_lim"],
+                        axes_args["y_lim"],
                     )
 
     for j, title in enumerate(axes_args["column_titles"]):

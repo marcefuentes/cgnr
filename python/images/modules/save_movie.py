@@ -3,14 +3,14 @@
 from matplotlib.animation import FuncAnimation
 
 
-def save_movie(fig, frames, kwargs, name):
+def save_movie(fig, frames, update_args, name):
     """Function to create a movie from the frames"""
 
     movie = {
         "fig": fig,
         "frames": frames,
-        "func": kwargs["update_function"],
-        "fargs": (kwargs,),
+        "func": update_args["update_function"],
+        "fargs": (update_args,),
         "blit": True,
     }
     ani = FuncAnimation(**movie)
