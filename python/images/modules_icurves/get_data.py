@@ -10,7 +10,7 @@ from modules_icurves.update import indifference
 def get_data(file_name, data):
     """Data common to all subplots."""
 
-    givens = np.linspace(0.0, 1.0, num=10)
+    givens = np.linspace(0.0, 1.0, num=11)
     givens = np.append(givens, 0.0)
 
     data["alphas"] = np.linspace(

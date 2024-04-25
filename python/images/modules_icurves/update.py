@@ -7,35 +7,38 @@ from modules.get_setting import get_setting as get
 from modules.theory import fitness, qbeq
 
 
-def update_artists(given, kwargs):
+def update_artists(given, update_args):
     """Update data in artists."""
 
-    budget_own = kwargs["budget_0"] * (1.0 - given)
+    if update_args["movie"]:
+        update_args["text"].set_text(f"{given:.2f}")
 
-    for a, alpha in enumerate(kwargs["alphas"]):
-        for r, rho in enumerate(kwargs["rhos"]):
+    budget_own = update_args["budget_0"] * (1.0 - given)
+
+    for a, alpha in enumerate(update_args["alphas"]):
+        for r, rho in enumerate(update_args["rhos"]):
 
             qb_private = qbeq(given, alpha, rho)
 
-            kwargs["budgets"][a, r].set_ydata(budget_own + qb_private * given)
+            update_args["budgets"][a, r].set_ydata(budget_own + qb_private * given)
 
             w = fitness(qb_private, qb_private, given, alpha, rho)
-            kwargs["icurves"][a, r].set_ydata(
-                indifference(kwargs["icx"], w, alpha, rho)
+            update_args["icurves"][a, r].set_ydata(
+                indifference(update_args["icx"], w, alpha, rho)
             )
-            kwargs["icurves"][a, r].set_color(
+            update_args["icurves"][a, r].set_color(
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
 
-            kwargs["landscapes"][a, r].set_ydata(
-                fitness(kwargs["icx"], kwargs["icx"], 1.0, alpha, rho)
+            update_args["landscapes"][a, r].set_ydata(
+                fitness(update_args["icx"], update_args["icx"], 1.0, alpha, rho)
             )
 
     return np.concatenate(
         [
-            kwargs["budgets"].flatten(),
-            kwargs["icurves"].flatten(),
-            kwargs["landscapes"].flatten(),
+            update_args["budgets"].flatten(),
+            update_args["icurves"].flatten(),
+            update_args["landscapes"].flatten(),
         ]
     )
 
