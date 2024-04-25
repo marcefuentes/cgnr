@@ -75,9 +75,13 @@ def main(args):
         "prettify_function": prettify_axes_imshow,
         "row_titles": [""],
         "x_lim": "None",
-        "y_values": np.linspace(get_config("alpha_max"), get_config("alpha_min"), update_args["nr"]),
+        "y_values": np.linspace(
+            get_config("alpha_max"), get_config("alpha_min"), update_args["nr"]
+        ),
         "y_lim": "None",
-        "x_values": np.linspace(get_config("loges_min"), get_config("loges_max"), update_args["nc"]),
+        "x_values": np.linspace(
+            get_config("loges_min"), get_config("loges_max"), update_args["nc"]
+        ),
     }
 
     if args.histogram:
