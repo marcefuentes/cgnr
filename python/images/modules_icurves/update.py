@@ -1,6 +1,8 @@
 """ Update data in artists. """
 
 from matplotlib import cm
+from matplotlib.collections import LineCollection
+import matplotlib.pyplot as plt
 import numpy as np
 
 from modules.get_setting import get_setting as get
@@ -30,9 +32,15 @@ def update_artists(given, update_args):
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
 
-            update_args["landscapes"][a, r].set_ydata(
-                fitness(update_args["icx"], update_args["icx"], 1.0, alpha, rho)
+            y = fitness(update_args["icx"], update_args["icx"], given, alpha, rho)
+            points = np.array([update_args["icx"], y]).T.reshape(-1, 1, 2)
+            segments = np.concatenate([points[:-1], points[1:]], axis=1)
+            lc = LineCollection(
+                segments, cmap=cm.get_cmap(get("COMMON", "color_map")), norm=plt.Normalize(-1, 1)
             )
+            lc.set_array(y)
+            lc.set_linewidth(get("COMMON", "line_width") * 20)
+            update_args["landscapes"][a, r].add_collection(lc)
 
     return np.concatenate(
         [
