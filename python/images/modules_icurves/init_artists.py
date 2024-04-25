@@ -33,10 +33,16 @@ def init_plot_artists(axs, file_name, update_args):
                 alpha=0.8,
             )
             (update_args["icurves"][k, m],) = axs[0, 0, k, m].plot(
-                update_args["icx"], dummy_icy, lw=get("COMMON", "line_width") * 20, alpha=0.8
+                update_args["icx"],
+                dummy_icy,
+                lw=get("COMMON", "line_width") * 20,
+                alpha=0.8,
             )
             (update_args["landscapes"][k, m],) = axs[0, 1, k, m].plot(
-                update_args["icx"], dummy_icy, lw=get("COMMON", "line_width") * 20, alpha=0.8
+                update_args["icx"],
+                dummy_icy,
+                lw=get("COMMON", "line_width") * 20,
+                alpha=0.8,
             )
 
     return update_args

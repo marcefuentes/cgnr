@@ -9,14 +9,25 @@ def init_fig(fig_layout):
 
     if fig_layout["nested"]:
         fig = plt.figure()
-        outergrid = fig.add_gridspec(nrows=fig_layout["nrows"], ncols=fig_layout["ncols"])
+        outergrid = fig.add_gridspec(
+            nrows=fig_layout["nrows"], ncols=fig_layout["ncols"]
+        )
         axs = np.empty(
-            (fig_layout["nrows"], fig_layout["ncols"], fig_layout["nr"], fig_layout["nc"]), dtype=object
+            (
+                fig_layout["nrows"],
+                fig_layout["ncols"],
+                fig_layout["nr"],
+                fig_layout["nc"],
+            ),
+            dtype=object,
         )
         for r in range(fig_layout["nrows"]):
             for c in range(fig_layout["ncols"]):
                 grid = outergrid[r, c].subgridspec(
-                    nrows=fig_layout["nr"], ncols=fig_layout["nc"], hspace=0.0, wspace=0.0
+                    nrows=fig_layout["nr"],
+                    ncols=fig_layout["nc"],
+                    hspace=0.0,
+                    wspace=0.0,
                 )
                 axs[r, c] = grid.subplots()
     else:

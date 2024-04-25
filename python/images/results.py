@@ -108,7 +108,9 @@ def main(args):
         update_args["artists"] = init_plot_artists(axs)
         prettify_axes_plot(axes_args)
     else:
-        update_args["artists"] = init_imshow_artists(axs, fig_layout["nr"], fig_layout["nc"])
+        update_args["artists"] = init_imshow_artists(
+            axs, fig_layout["nr"], fig_layout["nc"]
+        )
         prettify_axes_imshow(axes_args)
 
     if args.histogram:

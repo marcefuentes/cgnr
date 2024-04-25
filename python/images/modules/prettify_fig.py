@@ -32,7 +32,8 @@ def prettify_fig(fig, distances, file_name, sm):
     fig.set_size_inches(distances["width"], distances["height"])
     fig.supxlabel(
         t=get("COMMON", "x_label"),
-        x=(get("COMMON", "left_margin") + distances["inner_width"] / 2) / distances["width"],
+        x=(get("COMMON", "left_margin") + distances["inner_width"] / 2)
+        / distances["width"],
         y=get("COMMON", "bottom_margin") / 2.5 / distances["height"],
         fontsize=get("COMMON", "big_label_size"),
     )
@@ -49,8 +50,7 @@ def prettify_fig(fig, distances, file_name, sm):
             (
                 get("COMMON", "left_margin")
                 + distances["inner_width"]
-                + get("COMMON", "spacing")
-                * get(file_name, "colorbar_right_position")
+                + get("COMMON", "spacing") * get(file_name, "colorbar_right_position")
             )
             / distances["width"],
             (
@@ -79,7 +79,8 @@ def prettify_fig(fig, distances, file_name, sm):
     else:
         bottom_text = ""
     fig.text(
-        x=(get("COMMON", "left_margin") + distances["inner_width"]) / distances["width"],
+        x=(get("COMMON", "left_margin") + distances["inner_width"])
+        / distances["width"],
         y=(get("COMMON", "bottom_margin") - get("COMMON", "x_label_size"))
         / distances["height"],
         s=bottom_text,
