@@ -6,34 +6,34 @@ from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
 
 
-def init_imshow_artists(axs, _, kwargs):
+def init_imshow_artists(axs, nr, nc):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     nrows, ncols = axs.shape
-    kwargs["artists"] = np.empty_like(axs)
-    dummy_zmatrix = np.zeros((kwargs["nr"], kwargs["nc"]))
+    artists = np.empty_like(axs)
+    dummy_zmatrix = np.zeros((nr, nc))
 
     for r in range(nrows):
         for c in range(ncols):
-            kwargs["artists"][r, c] = axs[r, c].imshow(
+            artists[r, c] = axs[r, c].imshow(
                 dummy_zmatrix, cmap=get("COMMON", "color_map"), vmin=-1, vmax=1
             )
-    return kwargs
+    return artists
 
 
-def init_plot_artists(axs, file_name, kwargs):
+def init_plot_artists(axs):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
-    nrows, ncols, _, _ = axs.shape
-    kwargs["artists"] = np.empty_like(axs)
+    nrows, ncols, nr, nc = axs.shape
+    artists = np.empty_like(axs)
     x = np.arange(get_config("bins"))
     dummy_y = np.zeros_like(x)
 
     for r in range(nrows):
         for c in range(ncols):
-            for a in range(kwargs["nr"]):
-                for e in range(kwargs["nc"]):
-                    (kwargs["artists"][r, c, a, e],) = axs[r, c, a, e].plot(
+            for a in range(nr):
+                for e in range(nc):
+                    (artists[r, c, a, e],) = axs[r, c, a, e].plot(
                         x, dummy_y, c="black", lw=get("COMMON", "line_width")
                     )
-    return kwargs
+    return artists

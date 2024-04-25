@@ -26,63 +26,63 @@ def get_zmatrix(t, df, trait):
     return zmatrix
 
 
-def update_artists(t, kwargs):
+def update_artists(t, update_args):
     """Update the plot with the data at time t."""
 
-    if kwargs["movie"]:
-        kwargs["text"].set_text(t)
+    if update_args["movie"]:
+        update_args["text"].set_text(t)
 
-    for r, _ in enumerate(kwargs["rows"]):
-        for c, _ in enumerate(kwargs["columns"]):
-            zmatrix = update_zmatrix(t, kwargs, r, c)
-            if kwargs["dffrqs"]:
-                kwargs["artists"][r, c] = update_histogram(t, kwargs, zmatrix, r, c)
+    for r, _ in enumerate(update_args["rows"]):
+        for c, _ in enumerate(update_args["columns"]):
+            zmatrix = update_zmatrix(t, update_args, r, c)
+            if update_args["dffrqs"]:
+                update_args["artists"][r, c] = update_histogram(t, update_args, zmatrix, r, c)
             else:
-                kwargs["artists"][r, c].set_array(zmatrix)
+                update_args["artists"][r, c].set_array(zmatrix)
 
-    return kwargs["artists"].flatten()
+    return update_args["artists"].flatten()
 
 
-def update_histogram(t, kwargs, zmatrix, r, c):
+def update_histogram(t, update_args, zmatrix, r, c):
     """Update the histogram with the data at time t."""
 
-    if kwargs["mode_is_trait"]:
-        df = kwargs["dffrqs"][r][c]
-        trait = mm.dict_traits[kwargs["mode"]]["frq"]
+    if update_args["mode_is_trait"]:
+        df = update_args["dffrqs"][r][c]
+        trait = mm.dict_traits[update_args["mode"]]["frq"]
     else:
-        df = kwargs["dffrqs"][r]
-        trait = mm.dict_traits[kwargs["columns"][0]]["frq"]
+        df = update_args["dffrqs"][r]
+        trait = mm.dict_traits[update_args["columns"][0]]["frq"]
 
-    for a, alpha in enumerate(kwargs["alphas"]):
-        for e, loges in enumerate(kwargs["logess"]):
+    for a, alpha in enumerate(update_args["alphas"]):
+        for e, loges in enumerate(update_args["logess"]):
             d = df[(df["Time"] == t) & (df["alpha"] == alpha) & (df["logES"] == loges)]
             freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
             y = d.loc[:, freq_a].values[0].flatten()
-            kwargs["artists"][r, c, a, e].set_ydata(y)
+            update_args["artists"][r, c, a, e].set_ydata(y)
             bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[a, e] + 1) / 2)
-            kwargs["artists"][r, c, a, e].axes.set_facecolor(bgcolor)
+            update_args["artists"][r, c, a, e].axes.set_facecolor(bgcolor)
 
-    return kwargs["artists"][r, c]
+    return update_args["artists"][r, c]
 
 
-def update_zmatrix(t, kwargs, r, c):
+def update_zmatrix(t, update_args, r, c):
     """Return the updated zmatrix for a given time and trait."""
 
-    if kwargs["mode_is_trait"]:
-        trait_in = kwargs["mode"]
-        df = kwargs["dfs"][r][c]
-        df_none = kwargs["df_none"][r][c]
-        df_social = kwargs["df_social"][r][c]
+    if update_args["mode_is_trait"]:
+        trait_in = update_args["mode"]
+        df = update_args["dfs"][r][c]
+        df_none = update_args["df_none"][r][c]
+        df_social = update_args["df_social"][r][c]
     else:
-        trait_in = kwargs["columns"][c]
-        df_none = kwargs["df_none"]
-        df_social = kwargs["df_social"]
-        df = kwargs["dfs"][r]
+        trait_in = update_args["columns"][c]
+        df_none = update_args["df_none"]
+        df_social = update_args["df_social"]
+        df = update_args["dfs"][r]
 
-    none = bool(kwargs["rows"][r] == "none" and kwargs["mode"] != "none")
+    none = bool(update_args["rows"][r] == "none" and update_args["mode"] != "none")
 
     if "nothing" in trait_in:
-        zmatrix = np.zeros((kwargs["nr"], kwargs["nc"]))
+        zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
         return zmatrix
 
     if trait_in not in mm.dict_traits:

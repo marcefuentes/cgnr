@@ -50,7 +50,10 @@ def main(args):
     }
 
     fig, axs = init_fig(fig_layout)
+
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
+    prettify_fig(fig, fig_distances, file_name, get_sm())
+    update_args["text"] = fig.texts[2]
 
     axes_args = {
         "axs": axs,
@@ -63,8 +66,6 @@ def main(args):
         "y_values": update_args["alphas"],
     }
 
-    prettify_fig(fig, fig_distances, file_name, get_sm())
-    update_args["text"] = fig.texts[2]
     update_args = init_plot_artists(
         axs, file_name, update_args
     )
