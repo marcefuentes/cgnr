@@ -102,11 +102,19 @@ def get_data_single_trait(mode, histogram, movie):
 def get_df(path, filetype, movie):
     """Return a concatenated dataframe of the csv files in the given directory."""
 
+    concatenated = os.path.join(path, "concatenated.csv")
+    if not movie and os.path.exists(concatenated):
+        df = pd.read_csv(concatenated)
+        return df
+
     filelist = glob(os.path.join(path, f"*{filetype}"))
     if not filelist:
         print(f"No {path}/*{filetype} files found.")
         sys.exit()
     df = read_files(filelist, movie)
+
+    df.to_csv(concatenated, index=False)
+
     return df
 
 
