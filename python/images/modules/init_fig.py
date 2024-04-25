@@ -4,13 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from modules.fix_positions import create_divider
-from modules.prettify_fig import create_measurements, prettify_fig
+from modules.prettify_fig import get_distances, prettify_fig
 
 
 def init_fig(kwargs, axes_args, update_args):
     """Create figure with subplots based on the kwargs dictionary."""
 
-    new_args = create_measurements(kwargs["nrows"], kwargs["ncols"])
+    new_args = get_distances(kwargs["nrows"], kwargs["ncols"])
 
     if kwargs["nested"]:
         fig = plt.figure(figsize=(new_args["width"], new_args["height"]))

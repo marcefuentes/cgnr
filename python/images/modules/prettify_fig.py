@@ -5,7 +5,7 @@ import os
 from modules.get_setting import get_setting as get
 
 
-def create_measurements(nrows, ncols):
+def get_distances(nrows, ncols):
     """Create measurements for figure."""
 
     inner_height = get("COMMON", "plot_size") * nrows + get("COMMON", "spacing") * (
