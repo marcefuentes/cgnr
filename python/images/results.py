@@ -96,20 +96,19 @@ def main(args):
         "nrows": len(update_args["rows"]),
     }
 
-    fig, axs = init_fig(fig_layout)
+    fig, axes_args["axs"] = init_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, file_name, get_sm())
-    update_args["text"] = fig.texts[2]
-    axes_args["axs"] = axs
     axes_args["divider"] = create_divider(fig, fig_layout, fig_distances)
+    update_args["text"] = fig.texts[2]
 
     if args.histogram:
-        update_args["artists"] = init_plot_artists(axs)
+        update_args["artists"] = init_plot_artists(axes_args["axs"])
         prettify_axes_plot(axes_args)
     else:
         update_args["artists"] = init_imshow_artists(
-            axs, fig_layout["nr"], fig_layout["nc"]
+            axes_args["axs"], fig_layout["nr"], fig_layout["nc"]
         )
         prettify_axes_imshow(axes_args)
 
