@@ -5,6 +5,7 @@ obj/
 results/
 store
 t.glo
-*.ics
 *.frq
+*.ics
+*.mp4
 *.png
