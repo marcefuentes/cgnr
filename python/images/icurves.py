@@ -5,10 +5,12 @@
 import os
 import time
 
+from modules.fix_positions import create_divider
 from modules.init_fig import init_fig
 from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes_plot
+from modules.prettify_fig import get_distances, prettify_fig
 
 from modules_icurves.get_data import get_data
 from modules_icurves.get_sm import get_sm
@@ -39,13 +41,21 @@ def main(args):
 
     givens, update_args = get_data(file_name, update_args)
 
+    fig_layout = {
+        "nc": len(update_args["logess"]),
+        "ncols": 2,
+        "nested": True,
+        "nr": len(update_args["alphas"]),
+        "nrows": 1,
+    }
+
+    fig, axs = init_fig(fig_layout)
+    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
+
     axes_args = {
-        "axs": None,
+        "axs": axs,
         "column_titles": [""],
-        "divider": None,
-        "file_name": file_name,
-        "init_function": init_plot_artists,
-        "prettify_function": prettify_axes_plot,
+        "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": [""],
         "x_lim": [0, 1],
         "x_values": update_args["logess"],
@@ -53,17 +63,12 @@ def main(args):
         "y_values": update_args["alphas"],
     }
 
-    fig_args = {
-        "file_name": file_name,
-        "nc": len(update_args["logess"]),
-        "ncols": 2,
-        "nested": True,
-        "nr": len(update_args["alphas"]),
-        "nrows": 1,
-        "sm": get_sm(),
-    }
-
-    fig, update_args = init_fig(fig_args, axes_args, update_args)
+    prettify_fig(fig, fig_distances, file_name, get_sm())
+    update_args["text"] = fig.texts[2]
+    update_args = init_plot_artists(
+        axs, file_name, update_args
+    )
+    prettify_axes_plot(axes_args)
 
     if args.movie:
         save_movie(fig, givens, update_args, file_name)

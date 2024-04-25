@@ -3,43 +3,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.fix_positions import create_divider
-from modules.prettify_fig import get_distances, prettify_fig
 
+def init_fig(fig_layout):
+    """Create figure with subplots based on the fig_layout dictionary."""
 
-def init_fig(kwargs, axes_args, update_args):
-    """Create figure with subplots based on the kwargs dictionary."""
-
-    new_args = get_distances(kwargs["nrows"], kwargs["ncols"])
-
-    if kwargs["nested"]:
+    if fig_layout["nested"]:
         fig = plt.figure()
-        outergrid = fig.add_gridspec(nrows=kwargs["nrows"], ncols=kwargs["ncols"])
-        axes_args["axs"] = np.empty(
-            (kwargs["nrows"], kwargs["ncols"], kwargs["nr"], kwargs["nc"]), dtype=object
+        outergrid = fig.add_gridspec(nrows=fig_layout["nrows"], ncols=fig_layout["ncols"])
+        axs = np.empty(
+            (fig_layout["nrows"], fig_layout["ncols"], fig_layout["nr"], fig_layout["nc"]), dtype=object
         )
-        for r in range(kwargs["nrows"]):
-            for c in range(kwargs["ncols"]):
+        for r in range(fig_layout["nrows"]):
+            for c in range(fig_layout["ncols"]):
                 grid = outergrid[r, c].subgridspec(
-                    nrows=kwargs["nr"], ncols=kwargs["nc"], hspace=0.0, wspace=0.0
+                    nrows=fig_layout["nr"], ncols=fig_layout["nc"], hspace=0.0, wspace=0.0
                 )
-                axes_args["axs"][r, c] = grid.subplots()
+                axs[r, c] = grid.subplots()
     else:
-        fig, axes_args["axs"] = plt.subplots(
-            nrows=kwargs["nrows"],
-            ncols=kwargs["ncols"],
-            figsize=(new_args["width"], new_args["height"]),
+        fig, axs = plt.subplots(
+            nrows=fig_layout["nrows"],
+            ncols=fig_layout["ncols"],
         )
 
-    axes_args["divider"] = create_divider(fig, new_args, kwargs)
-    new_args["sm"] = kwargs["sm"]
-    new_args["file_name"] = kwargs["file_name"]
-
-    prettify_fig(fig, new_args)
-    update_args["text"] = fig.texts[2]
-    update_args = axes_args["init_function"](
-        axes_args["axs"], axes_args["file_name"], update_args
-    )
-    axes_args["prettify_function"](axes_args)
-
-    return fig, update_args
+    return fig, axs

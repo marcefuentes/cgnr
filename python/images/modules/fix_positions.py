@@ -5,7 +5,7 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 from modules.get_setting import get_setting as get
 
 
-def create_divider(fig, measurements, layout):
+def create_divider(fig, layout, distances):
     """Create divider."""
 
     if layout["nested"]:
@@ -26,10 +26,10 @@ def create_divider(fig, measurements, layout):
     divider = Divider(
         fig,
         (
-            get("COMMON", "left_margin") / measurements["width"],
-            get("COMMON", "bottom_margin") / measurements["height"],
-            measurements["inner_width"] / measurements["width"],
-            measurements["inner_height"] / measurements["height"],
+            get("COMMON", "left_margin") / distances["width"],
+            get("COMMON", "bottom_margin") / distances["height"],
+            distances["inner_width"] / distances["width"],
+            distances["inner_height"] / distances["height"],
         ),
         column_fixed,
         row_fixed,

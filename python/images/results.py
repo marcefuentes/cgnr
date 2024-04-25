@@ -12,6 +12,22 @@ from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
 
+from modules.fix_positions import create_divider
+from modules.prettify_fig import get_distances, prettify_fig
+
+    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
+
+    axes_args["divider"] = create_divider(fig, fig_layout, fig_distances)
+    new_args["sm"] = fig_layout["sm"]
+    new_args["file_name"] = fig_layout["file_name"]
+
+    prettify_fig(fig, fig_distances, file_name, sm)
+    update_args["text"] = fig.texts[2]
+    update_args = axes_args["init_function"](
+        axs, axes_args["file_name"], update_args
+    )
+    axes_args["prettify_function"](axes_args)
+
 from modules_results.get_data import (
     get_data_single_trait,
     get_data_multitrait,

@@ -26,21 +26,21 @@ def get_distances(nrows, ncols):
     return distances
 
 
-def prettify_fig(fig, kwargs):
+def prettify_fig(fig, distances, file_name, sm):
     """prettify the figure."""
 
-    fig.set_size_inches(kwargs["width"], kwargs["height"])
+    fig.set_size_inches(distances["width"], distances["height"])
     fig.supxlabel(
         t=get("COMMON", "x_label"),
-        x=(get("COMMON", "left_margin") + kwargs["inner_width"] / 2) / kwargs["width"],
-        y=get("COMMON", "bottom_margin") / 2.5 / kwargs["height"],
+        x=(get("COMMON", "left_margin") + distances["inner_width"] / 2) / distances["width"],
+        y=get("COMMON", "bottom_margin") / 2.5 / distances["height"],
         fontsize=get("COMMON", "big_label_size"),
     )
     fig.supylabel(
         t=get("COMMON", "y_label"),
-        x=get("COMMON", "left_margin") / 2.8 / kwargs["width"],
-        y=(get("COMMON", "bottom_margin") + kwargs["inner_height"] / 2)
-        / kwargs["height"],
+        x=get("COMMON", "left_margin") / 2.8 / distances["width"],
+        y=(get("COMMON", "bottom_margin") + distances["inner_height"] / 2)
+        / distances["height"],
         fontsize=get("COMMON", "big_label_size"),
     )
 
@@ -48,24 +48,24 @@ def prettify_fig(fig, kwargs):
         [
             (
                 get("COMMON", "left_margin")
-                + kwargs["inner_width"]
+                + distances["inner_width"]
                 + get("COMMON", "spacing")
-                * get(kwargs["file_name"], "colorbar_right_position")
+                * get(file_name, "colorbar_right_position")
             )
-            / kwargs["width"],
+            / distances["width"],
             (
                 get("COMMON", "bottom_margin")
-                + kwargs["inner_height"] / 2
+                + distances["inner_height"] / 2
                 - get("COMMON", "plot_size") / 2
             )
-            / kwargs["height"],
-            (get("COMMON", "plot_size") / get(kwargs["file_name"], "colorbar_width"))
-            / kwargs["width"],
-            get("COMMON", "plot_size") / kwargs["height"],
+            / distances["height"],
+            (get("COMMON", "plot_size") / get(file_name, "colorbar_width"))
+            / distances["width"],
+            get("COMMON", "plot_size") / distances["height"],
         ]
     )  # [left, bottom, width, height]
     ticks = [-1, 0, 1]
-    cbar = fig.colorbar(kwargs["sm"], cax=cax, ticks=ticks)
+    cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
     cbar.ax.tick_params(
         labelsize=get("COMMON", "tick_label_size"),
         size=get("COMMON", "tick_size"),
@@ -74,14 +74,14 @@ def prettify_fig(fig, kwargs):
     cbar.outline.set_linewidth(get("COMMON", "border_width"))
     cbar.outline.set_edgecolor(get("COMMON", "border_color"))
 
-    if get(kwargs["file_name"], "print_folder"):
+    if get(file_name, "print_folder"):
         bottom_text = os.path.basename(os.getcwd())
     else:
         bottom_text = ""
     fig.text(
-        x=(get("COMMON", "left_margin") + kwargs["inner_width"]) / kwargs["width"],
+        x=(get("COMMON", "left_margin") + distances["inner_width"]) / distances["width"],
         y=(get("COMMON", "bottom_margin") - get("COMMON", "x_label_size"))
-        / kwargs["height"],
+        / distances["height"],
         s=bottom_text,
         fontsize=get("COMMON", "tick_label_size"),
         color="grey",
