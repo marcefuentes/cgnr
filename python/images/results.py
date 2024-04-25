@@ -55,16 +55,16 @@ def main(args):
             update_args["df_none"],
             update_args["df_social"],
             update_args["dffrqs"],
+            df,
         ) = get_data_single_trait(args.mode, args.histogram, args.movie, args.clean)
-        df = update_args["df_social"][0][0]
     else:
         (
             update_args["dfs"],
             update_args["df_none"],
             update_args["df_social"],
             update_args["dffrqs"],
+            df,
         ) = get_data_multitrait(args.mode, args.histogram, args.movie, args.clean)
-        df = update_args["df_social"]
 
     axes_args = {
         "axs": None,
