@@ -102,8 +102,8 @@ def main(args):
         "sm": get_sm(),
     }
 
-    update_args["nc"] = fig_args["nc"]
-    update_args["nr"] = fig_args["nr"]
+    update_args["nc"] = fig_args["nc"] # Se puede quitar cambiando update.py
+    update_args["nr"] = fig_args["nr"] # Se puede quitar cambiando update.py
 
     fig, update_args = init_fig(fig_args, axes_args, update_args)
 
