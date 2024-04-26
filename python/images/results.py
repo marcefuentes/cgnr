@@ -15,11 +15,7 @@ from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
 
-from modules_results.get_data import (
-    get_data_single_trait,
-    get_data_multitrait,
-    get_rows_columns,
-)
+from modules_results.get_data import get_data, get_rows_columns
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
 from modules_results.modes import all_traits
@@ -50,27 +46,18 @@ def main(args):
         "update_function": update_artists,
     }
 
-    if args.mode_is_trait:
-        (
-            update_args["dfs"],
-            update_args["df_none"],
-            update_args["df_social"],
-            update_args["dffrqs"],
-            df,
-        ) = get_data_single_trait(args.mode, args.histogram, args.movie, args.clean)
-    else:
-        (
-            update_args["dfs"],
-            update_args["df_none"],
-            update_args["df_social"],
-            update_args["dffrqs"],
-            df,
-        ) = get_data_multitrait(args.mode, args.histogram, args.movie, args.clean)
+    (
+        update_args["dfs"],
+        update_args["df_none"],
+        update_args["df_social"],
+        update_args["dffrqs"],
+        df,
+    ) = get_data(args.mode_is_trait, args.mode, args.histogram, args.movie, args.clean)
 
     (
         update_args["rows"],
         update_args["columns"],
-    ) = get_rows_columns(args.mode, args.mode_is_trait)
+    ) = get_rows_columns(args.mode_is_trait, args.mode)
 
     fig_layout = {
         "nc": 1,

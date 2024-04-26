@@ -10,6 +10,15 @@ from common_modules.get_config import get_config
 import modules_results.modes as mm
 
 
+def get_data(mode_is_trait, mode, histogram, movie, clean):
+    """Get the data for the given mode."""
+
+    if mode_is_trait:
+        return get_data_single_trait(mode, histogram, movie, clean)
+    else:
+        return get_data_multitrait(mode, histogram, movie, clean)
+
+
 def get_data_multitrait(mode, histogram, movie, clean):
     """Get the data for several traits in a variant."""
 
@@ -127,7 +136,7 @@ def get_df(path, filetype, movie, clean):
     return df
 
 
-def get_rows_columns(mode, mode_is_trait):
+def get_rows_columns(mode_is_trait, mode):
     """Get the rows and columns for the given mode."""
 
     if mode_is_trait:
