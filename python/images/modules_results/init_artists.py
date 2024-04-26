@@ -6,22 +6,24 @@ from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
 
 
-def init_imshow_artists(axs, nr, nc):
+def init_artists_imshow(axs, mr, mc):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
-    nrows, ncols = axs.shape
+    nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
-    dummy_zmatrix = np.zeros((nr, nc))
+    dummy_zmatrix = np.zeros((mr, mc))
 
     for i in range(nrows):
         for j in range(ncols):
-            artists[i, j] = axs[i, j].imshow(
-                dummy_zmatrix, cmap=get("COMMON", "color_map"), vmin=-1, vmax=1
-            )
+            for k in range(nr):
+                for m in range(nc):
+                    artists[i, j, k, m] = axs[i, j, k, m].imshow(
+                        dummy_zmatrix, cmap=get("COMMON", "color_map"), vmin=-1, vmax=1
+                    )
     return artists
 
 
-def init_plot_artists(axs):
+def init_artists_plot(axs):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape

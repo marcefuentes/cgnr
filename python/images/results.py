@@ -20,7 +20,7 @@ from modules_results.get_data import (
     get_rows_columns,
 )
 from modules_results.get_sm import get_sm
-from modules_results.init_artists import init_imshow_artists, init_plot_artists
+from modules_results.init_artists import init_artists_imshow, init_artists_plot
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
 from modules_results.update import update_artists
@@ -87,14 +87,22 @@ def main(args):
     if args.histogram:
         axes_args["x_lim"] = [-2, get_config("bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
+        fig_layout = {
+            "nc": len(axes_args["x_values"]),
+            "ncols": len(update_args["columns"]),
+            "nr": len(axes_args["y_values"]),
+            "nrows": len(update_args["rows"]),
+        }
 
-    fig_layout = {
-        "nc": len(axes_args["x_values"]),
-        "ncols": len(update_args["columns"]),
-        "nested": args.histogram,
-        "nr": len(axes_args["y_values"]),
-        "nrows": len(update_args["rows"]),
-    }
+    else:
+        axes_args["x_lim"] = [-1, 20]
+        axes_args["y_lim"] = [-1, 20]
+        fig_layout = {
+            "nc": 1,
+            "ncols": len(update_args["columns"]),
+            "nr": 1,
+            "nrows": len(update_args["rows"]),
+        }
 
     fig, axes_args["axs"] = init_fig(fig_layout)
 
@@ -104,12 +112,12 @@ def main(args):
     update_args["text"] = fig.texts[2]
 
     if args.histogram:
-        update_args["artists"] = init_plot_artists(axes_args["axs"])
+        update_args["artists"] = init_artists_plot(axes_args["axs"])
         prettify_axes_plot(axes_args)
     else:
-        update_args["artists"] = init_imshow_artists(
-            axes_args["axs"], fig_layout["nr"], fig_layout["nc"]
-        )
+        update_args["artists"] = init_artists_imshow(
+            axes_args["axs"], len(axes_args["y_values"]), len(axes_args["x_values"])
+        ) 
         prettify_axes_imshow(axes_args)
 
     if args.histogram:

@@ -8,12 +8,8 @@ from modules.get_setting import get_setting as get
 def create_divider(fig, layout, distances):
     """Create divider."""
 
-    if layout["nested"]:
-        nr = layout["nr"]
-        nc = layout["nc"]
-    else:
-        nr = 1
-        nc = 1
+    nr = layout["nr"]
+    nc = layout["nc"]
 
     spacing_fixed = Size.Fixed(get("COMMON", "spacing"))
     plot_size_fixed = Size.Fixed(get("COMMON", "plot_size") / nc)
