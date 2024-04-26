@@ -25,19 +25,19 @@ def init_plot_artists(axs, file_name, update_args):
                     update_args["icx"],
                     update_args["isoclines"][k, m, c],
                     c="0.850",
-                    lw=get("COMMON", "line_width") * 8,
+                    lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 2,
                 )
             (update_args["budgets"][k, m],) = axs[0, 0, k, m].plot(
                 update_args["icx"],
                 dummy_budgety,
                 c="0.300",
-                lw=get("COMMON", "line_width") * 20,
+                lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 4,
                 alpha=0.8,
             )
             (update_args["icurves"][k, m],) = axs[0, 0, k, m].plot(
                 update_args["icx"],
                 dummy_icy,
-                lw=get("COMMON", "line_width") * 20,
+                lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 5,
                 alpha=0.8,
             )
             update_args["landscapes"][k, m] = axs[0, 1, k, m]

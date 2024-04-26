@@ -39,7 +39,7 @@ def update_artists(given, update_args):
                 segments, cmap=cm.get_cmap(get("COMMON", "color_map")), norm=plt.Normalize(-1, 1)
             )
             lc.set_array(y)
-            lc.set_linewidth(get("COMMON", "line_width") * 20)
+            lc.set_linewidth(get("COMMON", "line_width") * get("COMMON", "plot_size") * 6)
             update_args["landscapes"][a, r].add_collection(lc)
 
     return np.concatenate(
