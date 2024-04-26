@@ -93,9 +93,7 @@ def main(args):
         axes_args["y_lim"] = [0, 0.25]
         file_name += "_histogram"
     else:
-        update_args["artists"] = init_artists_imshow(
-            axs, len(axes_args["y_values"]), len(axes_args["x_values"])
-        )
+        update_args["artists"] = init_artists_imshow(axs, len(alphas), len(logess))
 
     prettify_axes(axes_args)
 
