@@ -10,17 +10,17 @@ from common_modules.get_config import get_config
 from modules.fix_positions import create_divider
 from modules.get_setting import get_titles
 from modules.init_fig import init_fig
-from modules.save_image import save_image, close_plt
-from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
+from modules.save_image import save_image, close_plt
+from modules.save_movie import save_movie
 
 from modules_results.get_data import get_data, get_rows, get_columns
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
-from modules_results.update import update_artists
+from modules_results.update import update_artists, update_histogram
 
 
 def main(args):
@@ -43,6 +43,7 @@ def main(args):
         "movie": args.movie,
         "rows": get_rows(args.mode_is_trait, args.mode),
         "text": "",
+        "update_curve_function": update_histogram,
         "update_function": update_artists,
     }
 
