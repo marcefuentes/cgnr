@@ -33,7 +33,7 @@ def update_artists(given, update_args):
             )
 
             y = fitness(update_args["icx"], update_args["icx"], given, alpha, rho)
-            points = np.array([update_args["icx"], y]).T.reshape(-1, 1, 2)
+            points = np.array([update_args["icx"], y]).T.reshape((-1, 1, 2))
             segments = np.concatenate([points[:-1], points[1:]], axis=1)
             lc = LineCollection(
                 segments,
