@@ -22,10 +22,10 @@ def add_letters(ax, letter_position, n):
 def add_ticklabels_imshow(axes_args):
     """add tick labels for (nrows x ncols)."""
 
-    xmin = min(axes_args["x_values"])
-    xmax = max(axes_args["x_values"])
-    ymin = min(axes_args["y_values"])
-    ymax = max(axes_args["y_values"])
+    xmin = axes_args["x_values"][0]
+    xmax = axes_args["x_values"][-1]
+    ymin = axes_args["y_values"][-1]
+    ymax = axes_args["y_values"][0]
 
     for ax in axes_args["axs"][:, 0, 0, 0]:
         ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
