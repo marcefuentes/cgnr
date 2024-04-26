@@ -15,8 +15,7 @@ def get_data(mode_is_trait, mode, histogram, movie, clean):
 
     if mode_is_trait:
         return get_data_single_trait(mode, histogram, movie, clean)
-    else:
-        return get_data_multitrait(mode, histogram, movie, clean)
+    return get_data_multitrait(mode, histogram, movie, clean)
 
 
 def get_data_multitrait(mode, histogram, movie, clean):

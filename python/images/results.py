@@ -59,6 +59,9 @@ def main(args):
         update_args["columns"],
     ) = get_rows_columns(args.mode_is_trait, args.mode)
 
+    alphas = np.sort(df["alpha"].unique())[::-1]
+    logess = np.sort(df["logES"].unique())
+
     fig_layout = {
         "nc": 1,
         "ncols": len(update_args["columns"]),
@@ -67,8 +70,8 @@ def main(args):
     }
 
     if args.histogram:
-        fig_layout["nc"] = len(axes_args["x_values"])
-        fig_layout["nr"] = len(axes_args["y_values"])
+        fig_layout["nc"] = len(alphas)
+        fig_layout["nr"] = len(logess)
 
     fig, axs = init_fig(fig_layout)
 
@@ -82,9 +85,9 @@ def main(args):
         "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": get_titles(update_args["rows"]),
         "x_lim": [None, None],
-        "x_values": np.sort(df["logES"].unique()),
+        "x_values": logess,
         "y_lim": [None, None],
-        "y_values": np.sort(df["alpha"].unique())[::-1],
+        "y_values": alphas,
     }
 
     if args.histogram:
