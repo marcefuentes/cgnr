@@ -19,21 +19,7 @@ def add_letters(ax, letter_position, n):
     )
 
 
-def add_ticklabels_imshow(axes_args):
-    """add tick labels for (nrows x ncols)."""
-
-    xmin = axes_args["x_values"][0]
-    xmax = axes_args["x_values"][-1]
-    ymin = axes_args["y_values"][-1]
-    ymax = axes_args["y_values"][0]
-
-    for ax in axes_args["axs"][:, 0, 0, 0]:
-        ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
-    for ax in axes_args["axs"][-1, :, 0, 0]:
-        ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
-
-
-def add_ticklabels_plot(axes_args):
+def add_ticklabels(axes_args):
     """add tick labels for (nrows x ncols x nr x nc)."""
 
     nrows, ncols, nr, nc = axes_args["axs"].shape
@@ -54,30 +40,21 @@ def add_ticklabels_plot(axes_args):
             )
 
 
-def add_ticks_imshow(axes_args):
-    """set ticks for (nrows x ncols) matrix."""
+def add_ticklabels_imshow(axes_args):
+    """add tick labels for (nrows x ncols)."""
 
-    nrows, ncols, _, _ = axes_args["axs"].shape
-    x_min, x_max = 0, len(axes_args["y_values"]) - 1
-    y_min, y_max = 0, len(axes_args["x_values"]) - 1
+    xmin = axes_args["x_values"][0]
+    xmax = axes_args["x_values"][-1]
+    ymin = axes_args["y_values"][-1]
+    ymax = axes_args["y_values"][0]
 
-    for i in range(nrows):
-        for j in range(ncols):
-            axes_args["axs"][i, j, 0, 0].set(
-                xticks=[x_min, x_max / 2, x_max],
-                yticks=[y_min, y_max / 2, y_max],
-                xticklabels=[],
-                yticklabels=[],
-            )
-            axes_args["axs"][i, j, 0, 0].tick_params(
-                axis="both",
-                labelsize=get("COMMON", "tick_label_size"),
-                size=get("COMMON", "tick_size"),
-                color=get("COMMON", "tick_color"),
-            )
+    for ax in axes_args["axs"][:, 0, 0, 0]:
+        ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
+    for ax in axes_args["axs"][-1, :, 0, 0]:
+        ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
 
 
-def add_ticks_plot(axes_args):
+def add_ticks(axes_args):
     """set ticks for (nrows x ncols x nr x nc)."""
 
     axs = axes_args["axs"]
@@ -108,6 +85,29 @@ def add_ticks_plot(axes_args):
                     size=get("COMMON", "tick_size"),
                     color=get("COMMON", "tick_color"),
                 )
+
+
+def add_ticks_imshow(axes_args):
+    """set ticks for (nrows x ncols) matrix."""
+
+    nrows, ncols, _, _ = axes_args["axs"].shape
+    x_min, x_max = 0, len(axes_args["y_values"]) - 1
+    y_min, y_max = 0, len(axes_args["x_values"]) - 1
+
+    for i in range(nrows):
+        for j in range(ncols):
+            axes_args["axs"][i, j, 0, 0].set(
+                xticks=[x_min, x_max / 2, x_max],
+                yticks=[y_min, y_max / 2, y_max],
+                xticklabels=[],
+                yticklabels=[],
+            )
+            axes_args["axs"][i, j, 0, 0].tick_params(
+                axis="both",
+                labelsize=get("COMMON", "tick_label_size"),
+                size=get("COMMON", "tick_size"),
+                color=get("COMMON", "tick_color"),
+            )
 
 
 def add_title_column(ax, title):
@@ -154,7 +154,7 @@ def prettify_axes(axes_args):
                         (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
                     )
                     remove_ticks(axes_args["axs"][i, j, k, m])
-                    set_plot_limits(
+                    set_limits(
                         axes_args["axs"][i, j, k, m],
                         axes_args["x_lim"],
                         axes_args["y_lim"],
@@ -164,8 +164,8 @@ def prettify_axes(axes_args):
         add_title_column(axes_args["axs"][0, j, 0, int(nc / 2)], title)
     for i, title in enumerate(axes_args["row_titles"]):
         add_title_row(axes_args["axs"][i, -1, int(nr / 2), -1], title)
-    add_ticks_plot(axes_args)
-    add_ticklabels_plot(axes_args)
+    add_ticks(axes_args)
+    add_ticklabels(axes_args)
 
 
 def remove_ticks(ax):
@@ -174,16 +174,16 @@ def remove_ticks(ax):
     ax.set(xticks=[], yticks=[])
 
 
+def set_limits(ax, xlim, ylim):
+    """set limits."""
+
+    ax.set(xlim=xlim, ylim=ylim)
+
+
 def set_locator(ax, divider, nx, ny):
     """set locator."""
 
     ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
-
-
-def set_plot_limits(ax, xlim, ylim):
-    """set limits."""
-
-    ax.set(xlim=xlim, ylim=ylim)
 
 
 def set_spines(ax):
