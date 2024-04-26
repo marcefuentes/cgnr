@@ -95,8 +95,8 @@ def main(args):
         }
 
     else:
-        axes_args["x_lim"] = [-1, 20]
-        axes_args["y_lim"] = [-1, 20]
+        axes_args["x_lim"] = [0, len(axes_args["x_values"]) - 1]
+        axes_args["y_lim"] = [0, len(axes_args["y_values"]) - 1]
         fig_layout = {
             "nc": 1,
             "ncols": len(update_args["columns"]),
@@ -118,7 +118,7 @@ def main(args):
         update_args["artists"] = init_artists_imshow(
             axes_args["axs"], len(axes_args["y_values"]), len(axes_args["x_values"])
         ) 
-        prettify_axes_imshow(axes_args)
+        prettify_axes_plot(axes_args)
 
     if args.histogram:
         update_args["alphas"] = axes_args["y_values"]
