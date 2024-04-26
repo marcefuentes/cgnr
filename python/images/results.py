@@ -67,8 +67,8 @@ def main(args):
     }
 
     if args.histogram:
-        fig_layout ["nc"] = len(axes_args["x_values"])
-        fig_layout ["nr"] = len(axes_args["y_values"])
+        fig_layout["nc"] = len(axes_args["x_values"])
+        fig_layout["nr"] = len(axes_args["y_values"])
 
     fig, axs = init_fig(fig_layout)
 
