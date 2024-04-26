@@ -114,7 +114,7 @@ def main(args):
     else:
         update_args["artists"] = init_artists_imshow(
             axes_args["axs"], len(axes_args["y_values"]), len(axes_args["x_values"])
-        ) 
+        )
     prettify_axes(axes_args)
 
     if args.histogram:

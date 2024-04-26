@@ -36,10 +36,14 @@ def update_artists(given, update_args):
             points = np.array([update_args["icx"], y]).T.reshape(-1, 1, 2)
             segments = np.concatenate([points[:-1], points[1:]], axis=1)
             lc = LineCollection(
-                segments, cmap=cm.get_cmap(get("COMMON", "color_map")), norm=plt.Normalize(-1, 1)
+                segments,
+                cmap=cm.get_cmap(get("COMMON", "color_map")),
+                norm=plt.Normalize(-1, 1),
             )
             lc.set_array(y)
-            lc.set_linewidth(get("COMMON", "line_width") * get("COMMON", "plot_size") * 6)
+            lc.set_linewidth(
+                get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
+            )
             update_args["landscapes"][i, j].add_collection(lc)
 
     return np.concatenate(

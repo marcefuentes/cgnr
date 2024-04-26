@@ -1,6 +1,5 @@
 """ Initialize artists for plotting. """
 
-from matplotlib.collections import LineCollection
 import numpy as np
 
 from modules.get_setting import get_setting as get

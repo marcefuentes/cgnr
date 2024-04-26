@@ -8,9 +8,7 @@ def init_fig(fig_layout):
     """Create figure with subplots based on the fig_layout dictionary."""
 
     fig = plt.figure()
-    outergrid = fig.add_gridspec(
-        nrows=fig_layout["nrows"], ncols=fig_layout["ncols"]
-    )
+    outergrid = fig.add_gridspec(nrows=fig_layout["nrows"], ncols=fig_layout["ncols"])
     axs = np.empty(
         (
             fig_layout["nrows"],
