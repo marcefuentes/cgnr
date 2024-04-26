@@ -10,6 +10,16 @@ from common_modules.get_config import get_config
 import modules_results.modes as mm
 
 
+def get_columns(mode_is_trait, mode):
+    """Get the columns for the given mode."""
+
+    if mode_is_trait:
+        columns = mm.dict_traits[mode]["variants"]
+        return columns
+    columns = mm.dict_multitrait_columns[mode]
+    return columns
+
+
 def get_data(mode_is_trait, mode, histogram, movie, clean):
     """Get the data for the given mode."""
 
@@ -135,19 +145,16 @@ def get_df(path, filetype, movie, clean):
     return df
 
 
-def get_rows_columns(mode_is_trait, mode):
-    """Get the rows and columns for the given mode."""
+def get_rows(mode_is_trait, mode):
+    """Get the rows for the given mode."""
 
     if mode_is_trait:
         rows = mm.dict_single_trait_mechanisms.get(
             mode, mm.dict_single_trait_mechanisms["default"]
         )
-        columns = mm.dict_traits[mode]["variants"]
-    else:
-        rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
-        columns = mm.dict_multitrait_columns[mode]
-
-    return rows, columns
+        return rows
+    rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
+    return rows
 
 
 def read_files(filelist, movie):

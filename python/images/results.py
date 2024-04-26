@@ -15,7 +15,7 @@ from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
 
-from modules_results.get_data import get_data, get_rows_columns
+from modules_results.get_data import get_data, get_rows, get_columns
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
 from modules_results.modes import all_traits
@@ -32,7 +32,7 @@ def main(args):
     update_args = {
         "alphas": None,
         "artists": None,
-        "columns": None,
+        "columns": get_columns(args.mode_is_trait, args.mode),
         "df_none": None,
         "df_social": None,
         "dffrqs": None,
@@ -41,7 +41,7 @@ def main(args):
         "mode": args.mode,
         "mode_is_trait": args.mode_is_trait,
         "movie": args.movie,
-        "rows": None,
+        "rows": get_rows(args.mode_is_trait, args.mode),
         "text": "",
         "update_function": update_artists,
     }
@@ -53,11 +53,6 @@ def main(args):
         update_args["dffrqs"],
         df,
     ) = get_data(args.mode_is_trait, args.mode, args.histogram, args.movie, args.clean)
-
-    (
-        update_args["rows"],
-        update_args["columns"],
-    ) = get_rows_columns(args.mode_is_trait, args.mode)
 
     alphas = np.sort(df["alpha"].unique())[::-1]
     logess = np.sort(df["logES"].unique())
