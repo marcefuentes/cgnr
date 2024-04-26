@@ -18,28 +18,28 @@ def init_plot_artists(axs, file_name, update_args):
     dummy_icy = np.zeros_like(update_args["icx"])
     dummy_segments = [[[x, y] for x, y in zip(update_args["icx"], dummy_icy)]]
 
-    for k in range(get(file_name, "nc")):
-        for m in range(get(file_name, "nc")):
-            for c in range(get(file_name, "n_ic")):
-                axs[0, 0, k, m].plot(
+    for i in range(get(file_name, "nc")):
+        for j in range(get(file_name, "nc")):
+            for m in range(get(file_name, "n_ic")):
+                axs[0, 0, i, j].plot(
                     update_args["icx"],
-                    update_args["isoclines"][k, m, c],
+                    update_args["isoclines"][i, j, m],
                     c="0.850",
                     lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 2,
                 )
-            (update_args["budgets"][k, m],) = axs[0, 0, k, m].plot(
+            (update_args["budgets"][i, j],) = axs[0, 0, i, j].plot(
                 update_args["icx"],
                 dummy_budgety,
                 c="0.300",
                 lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 4,
                 alpha=0.8,
             )
-            (update_args["icurves"][k, m],) = axs[0, 0, k, m].plot(
+            (update_args["icurves"][i, j],) = axs[0, 0, i, j].plot(
                 update_args["icx"],
                 dummy_icy,
                 lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 5,
                 alpha=0.8,
             )
-            update_args["landscapes"][k, m] = axs[0, 1, k, m]
+            update_args["landscapes"][i, j] = axs[0, 1, i, j]
 
     return update_args
