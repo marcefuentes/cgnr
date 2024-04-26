@@ -71,9 +71,9 @@ def main(args):
         "column_titles": [""],
         "divider": None,
         "row_titles": [""],
-        "x_lim": "None",
+        "x_lim": [None, None],
         "x_values": np.sort(df["logES"].unique()),
-        "y_lim": "None",
+        "y_lim": [None, None],
         "y_values": np.sort(df["alpha"].unique())[::-1],
     }
 
@@ -95,8 +95,6 @@ def main(args):
         }
 
     else:
-        axes_args["x_lim"] = [0, len(axes_args["x_values"]) - 1]
-        axes_args["y_lim"] = [0, len(axes_args["y_values"]) - 1]
         fig_layout = {
             "nc": 1,
             "ncols": len(update_args["columns"]),
