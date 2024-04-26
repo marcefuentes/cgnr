@@ -58,14 +58,14 @@ def add_ticks_imshow(axes_args):
     """set ticks for (nrows x ncols) matrix."""
 
     nrows, ncols, _, _ = axes_args["axs"].shape
-    x_max = len(axes_args["y_values"]) - 1
-    y_max = len(axes_args["x_values"]) - 1
+    x_min, x_max = 0, len(axes_args["y_values"]) - 1
+    y_min, y_max = 0, len(axes_args["x_values"]) - 1
 
     for i in range(nrows):
         for j in range(ncols):
             axes_args["axs"][i, j, 0, 0].set(
-                xticks=[0, x_max / 2, x_max],
-                yticks=[0, y_max / 2, y_max],
+                xticks=[x_min, x_max / 2, x_max],
+                yticks=[y_min, y_max / 2, y_max],
                 xticklabels=[],
                 yticklabels=[],
             )
