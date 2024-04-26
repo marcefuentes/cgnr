@@ -21,15 +21,15 @@ def init_fig(fig_layout):
             ),
             dtype=object,
         )
-        for r in range(fig_layout["nrows"]):
-            for c in range(fig_layout["ncols"]):
-                grid = outergrid[r, c].subgridspec(
+        for i in range(fig_layout["nrows"]):
+            for j in range(fig_layout["ncols"]):
+                grid = outergrid[i, j].subgridspec(
                     nrows=fig_layout["nr"],
                     ncols=fig_layout["nc"],
                     hspace=0.0,
                     wspace=0.0,
                 )
-                axs[r, c] = grid.subplots()
+                axs[i, j] = grid.subplots()
     else:
         fig, axs = plt.subplots(
             nrows=fig_layout["nrows"],
