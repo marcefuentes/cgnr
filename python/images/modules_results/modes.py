@@ -1,12 +1,5 @@
 """ Store the columns and rows for the different modes of the figure """
 
-dict_variant_titles = {
-    "nolang_noshuffle": "No shuffling\nShort memory",
-    "lang_noshuffle": "No shuffling\nLong memory",
-    "nolang_shuffle": "Shuffling\nShort memory",
-    "lang_shuffle": "Shuffling\nLong memory",
-}
-
 all_variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
 
 all_traits = [
@@ -19,99 +12,76 @@ all_traits = [
     "qBSeen_excess",
 ]
 
-dict_row_titles = {
-    "none": "",
-    "p": "P",
-    "pi": "PR",
-    "i": "R",
-    "given100": "",
-    "given095": "0.95",
-    "given050": "0.5",
-    "given000": "",
-}
-
 dict_traits = {
     "ChooseGrain": {
         "mean": "ChooseGrainmean",
         "frq": "ChooseGrain",
-        "title": "Partner choice\n(short memory)",
         "relative": "none-",
         "variants": all_variants,
     },
     "Choose_ltGrain": {
         "mean": "Choose_ltGrainmean",
         "frq": "Choose_ltGrain",
-        "title": "Partner choice\n(long memory)",
         "relative": "none-",
         "variants": all_variants,
     },
     "MimicGrain": {
         "mean": "MimicGrainmean",
         "frq": "MimicGrain",
-        "title": "Direct\nreciprocity",
         "relative": "none-",
         "variants": all_variants,
     },
     "ImimicGrain": {
         "mean": "ImimicGrainmean",
         "frq": "ImimicGrain",
-        "title": "Indirect\nreciprocity\n(short memory)",
         "relative": "none-",
         "variants": all_variants,
     },
     "Imimic_ltGrain": {
         "mean": "Imimic_ltGrainmean",
         "frq": "Imimic_ltGrain",
-        "title": "Indirect\nreciprocity\n(long memory)",
         "relative": "none-",
         "variants": all_variants,
     },
     "qBSeen": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
-        "title": r"Production of $\it{B}$",
         "relative": "no",
         "variants": all_variants,
     },
     "qBSeen_byproduct": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
-        "title": "Byproduct help",
         "relative": "given",
         "variants": all_variants,
     },
     "qBSeen_excess": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
-        "title": r"Production of $\it{B}$",
         "relative": "-social",
         "variants": all_variants,
     },
     "qBSeen_excess_none": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
-        "title": r"Production of $\it{B}$" + "\n(relative)",
         "relative": "-social",
         "variants": all_variants,
     },
     "w": {
         "mean": "wmean",
         "frq": "w",
-        "title": "Fitness",
         "relative": "no",
         "variants": all_variants,
     },
     "w_excess": {
         "mean": "wmean",
         "frq": "w",
-        "title": "Fitness",
         "relative": "-social",
         "variants": all_variants,
     },
     "w_excess_none": {
         "mean": "wmean",
         "frq": "w",
-        "title": "Fitness\n(relative)",
         "relative": "-social",
         "variants": all_variants,
     },

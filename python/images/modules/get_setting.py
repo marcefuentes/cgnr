@@ -50,5 +50,6 @@ def get_titles(keys):
 
     titles = []
     for key in keys:
-        titles.append(config.get("DEFAULT", key))
+        title = config.get("DEFAULT", key).replace("\\n", "\n")
+        titles.append(title)
     return titles
