@@ -17,18 +17,18 @@ def update_artists(given, update_args):
 
     budget_own = update_args["budget_0"] * (1.0 - given)
 
-    for a, alpha in enumerate(update_args["alphas"]):
-        for r, rho in enumerate(update_args["rhos"]):
+    for i, alpha in enumerate(update_args["alphas"]):
+        for j, rho in enumerate(update_args["rhos"]):
 
             qb_private = qbeq(given, alpha, rho)
 
-            update_args["budgets"][a, r].set_ydata(budget_own + qb_private * given)
+            update_args["budgets"][i, j].set_ydata(budget_own + qb_private * given)
 
             w = fitness(qb_private, qb_private, given, alpha, rho)
-            update_args["icurves"][a, r].set_ydata(
+            update_args["icurves"][i, j].set_ydata(
                 indifference(update_args["icx"], w, alpha, rho)
             )
-            update_args["icurves"][a, r].set_color(
+            update_args["icurves"][i, j].set_color(
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
 
@@ -40,7 +40,7 @@ def update_artists(given, update_args):
             )
             lc.set_array(y)
             lc.set_linewidth(get("COMMON", "line_width") * get("COMMON", "plot_size") * 6)
-            update_args["landscapes"][a, r].add_collection(lc)
+            update_args["landscapes"][i, j].add_collection(lc)
 
     return np.concatenate(
         [
