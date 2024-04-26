@@ -34,6 +34,6 @@ def init_plot_artists(axs):
             for a in range(nr):
                 for e in range(nc):
                     (artists[r, c, a, e],) = axs[r, c, a, e].plot(
-                        x, dummy_y, c="black", lw=get("COMMON", "line_width")
+                        x, dummy_y, c="black", lw=get("COMMON", "line_width") * get("COMMON", "plot_size")
                     )
     return artists
