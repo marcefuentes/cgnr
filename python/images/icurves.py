@@ -9,7 +9,7 @@ from modules.fix_positions import create_divider
 from modules.init_fig import init_fig
 from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
-from modules.prettify_axes import prettify_axest
+from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
 
 from modules_icurves.get_data import get_data
