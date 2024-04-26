@@ -11,7 +11,7 @@ from modules.fix_positions import create_divider
 from modules.init_fig import init_fig
 from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
-from modules.prettify_axes import prettify_axes_imshow, prettify_axes_plot
+from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
 
 from modules_results.get_data import (
@@ -111,12 +111,11 @@ def main(args):
 
     if args.histogram:
         update_args["artists"] = init_artists_plot(axes_args["axs"])
-        prettify_axes_plot(axes_args)
     else:
         update_args["artists"] = init_artists_imshow(
             axes_args["axs"], len(axes_args["y_values"]), len(axes_args["x_values"])
         ) 
-        prettify_axes_plot(axes_args)
+    prettify_axes(axes_args)
 
     if args.histogram:
         update_args["alphas"] = axes_args["y_values"]

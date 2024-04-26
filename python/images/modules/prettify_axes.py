@@ -135,29 +135,7 @@ def add_title_row(ax, title):
     )
 
 
-def prettify_axes_imshow(axes_args):
-    """prettify (nrows x ncols) matrix."""
-
-    nrows, ncols, _, _ = axes_args["axs"].shape
-    letter_position = 1.0 + get("COMMON", "letter_padding")
-
-    add_ticks_imshow(axes_args)
-    add_ticklabels_imshow(axes_args)
-
-    for i in range(nrows):
-        for j in range(ncols):
-            add_letters(axes_args["axs"][i, j, 0, 0], letter_position, i * ncols + j)
-            set_spines(axes_args["axs"][i, j, 0, 0])
-            set_locator(
-                axes_args["axs"][nrows - i - 1, j, 0, 0], axes_args["divider"], 2 * j, 2 * i
-            )
-    for j, title in enumerate(axes_args["column_titles"]):
-        add_title_column(axes_args["axs"][0, j, 0, 0], title)
-    for i, title in enumerate(axes_args["row_titles"]):
-        add_title_row(axes_args["axs"][i, -1, 0, 0], title)
-
-
-def prettify_axes_plot(axes_args):
+def prettify_axes(axes_args):
     """prettify (nrows x ncols x nr x nc) matrix."""
 
     nrows, ncols, nr, nc = axes_args["axs"].shape
