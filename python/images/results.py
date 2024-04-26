@@ -8,6 +8,7 @@ import numpy as np
 
 from common_modules.get_config import get_config
 from modules.fix_positions import create_divider
+from modules.get_setting import get_titles
 from modules.init_fig import init_fig
 from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
@@ -66,61 +67,52 @@ def main(args):
             df,
         ) = get_data_multitrait(args.mode, args.histogram, args.movie, args.clean)
 
+    (
+        update_args["rows"],
+        update_args["columns"],
+    ) = get_rows_columns(args.mode, args.mode_is_trait)
+
+    fig_layout = {
+        "nc": 1,
+        "ncols": len(update_args["columns"]),
+        "nr": 1,
+        "nrows": len(update_args["rows"]),
+    }
+
+    if args.histogram:
+        fig_layout ["nc"] = len(axes_args["x_values"])
+        fig_layout ["nr"] = len(axes_args["y_values"])
+
+    fig, axs = init_fig(fig_layout)
+
+    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
+    prettify_fig(fig, fig_distances, file_name, get_sm())
+    update_args["text"] = fig.texts[2]
+
     axes_args = {
-        "axs": None,
-        "column_titles": [""],
-        "divider": None,
-        "row_titles": [""],
+        "axs": axs,
+        "column_titles": get_titles(update_args["columns"]),
+        "divider": create_divider(fig, fig_layout, fig_distances),
+        "row_titles": get_titles(update_args["rows"]),
         "x_lim": [None, None],
         "x_values": np.sort(df["logES"].unique()),
         "y_lim": [None, None],
         "y_values": np.sort(df["alpha"].unique())[::-1],
     }
 
-    (
-        update_args["rows"],
-        axes_args["row_titles"],
-        update_args["columns"],
-        axes_args["column_titles"],
-    ) = get_rows_columns(args.mode, args.mode_is_trait)
-
     if args.histogram:
-        axes_args["x_lim"] = [-2, get_config("bins") + 1]
-        axes_args["y_lim"] = [0, 0.25]
-        fig_layout = {
-            "nc": len(axes_args["x_values"]),
-            "ncols": len(update_args["columns"]),
-            "nr": len(axes_args["y_values"]),
-            "nrows": len(update_args["rows"]),
-        }
-
-    else:
-        fig_layout = {
-            "nc": 1,
-            "ncols": len(update_args["columns"]),
-            "nr": 1,
-            "nrows": len(update_args["rows"]),
-        }
-
-    fig, axes_args["axs"] = init_fig(fig_layout)
-
-    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    prettify_fig(fig, fig_distances, file_name, get_sm())
-    axes_args["divider"] = create_divider(fig, fig_layout, fig_distances)
-    update_args["text"] = fig.texts[2]
-
-    if args.histogram:
-        update_args["artists"] = init_artists_plot(axes_args["axs"])
-    else:
-        update_args["artists"] = init_artists_imshow(
-            axes_args["axs"], len(axes_args["y_values"]), len(axes_args["x_values"])
-        )
-    prettify_axes(axes_args)
-
-    if args.histogram:
+        update_args["artists"] = init_artists_plot(axs)
         update_args["alphas"] = axes_args["y_values"]
         update_args["logess"] = axes_args["x_values"]
+        axes_args["x_lim"] = [-2, get_config("bins") + 1]
+        axes_args["y_lim"] = [0, 0.25]
         file_name += "_histogram"
+    else:
+        update_args["artists"] = init_artists_imshow(
+            axs, len(axes_args["y_values"]), len(axes_args["x_values"])
+        )
+
+    prettify_axes(axes_args)
 
     if args.mode == "all_traits":
         for trait in all_traits:

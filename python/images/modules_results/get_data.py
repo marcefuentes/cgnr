@@ -130,25 +130,16 @@ def get_df(path, filetype, movie, clean):
 def get_rows_columns(mode, mode_is_trait):
     """Get the rows and columns for the given mode."""
 
-    column_titles = []
-    row_titles = []
-
     if mode_is_trait:
         rows = mm.dict_single_trait_mechanisms.get(
             mode, mm.dict_single_trait_mechanisms["default"]
         )
         columns = mm.dict_traits[mode]["variants"]
-        for column in columns:
-            column_titles.append(mm.dict_variant_titles[column])
     else:
         rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
         columns = mm.dict_multitrait_columns[mode]
-        for column in columns:
-            column_titles.append(mm.dict_traits[column]["title"])
-    for row in rows:
-        row_titles.append(mm.dict_row_titles[row])
 
-    return rows, row_titles, columns, column_titles
+    return rows, columns
 
 
 def read_files(filelist, movie):
