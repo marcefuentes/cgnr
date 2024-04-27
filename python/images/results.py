@@ -46,7 +46,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args, ts = get_update_args(update_args, args.histogram, args.clean)
+    update_args, frames = get_update_args(update_args, args.histogram, args.clean)
 
     fig_layout = {
         "nc": len(update_args["logess"]) if args.histogram else 1,
@@ -85,14 +85,18 @@ def main(args):
 
     if args.mode == "all_traits":
         for trait in all_traits:
+            file_name += f"_{trait}"
             update_args["mode"] = trait
-            save_image(ts[-1], update_args, f"{file_name}_{trait}")
+            if args.movie:
+                save_movie(fig, frames, update_args, file_name)
+            else:
+                save_image(frames[-1], update_args, file_name)
     else:
         file_name += f"_{args.mode}"
         if args.movie:
-            save_movie(fig, ts, update_args, file_name)
+            save_movie(fig, frames, update_args, file_name)
         else:
-            save_image(ts[-1], update_args, file_name)
+            save_image(frames[-1], update_args, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
