@@ -12,7 +12,7 @@ from modules.save_movie import save_movie
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
 
-from modules_icurves.get_data import get_data
+from modules_icurves.get_update_args import get_update_args
 from modules_icurves.get_sm import get_sm
 from modules_icurves.init_artists import init_plot_artists
 from modules_icurves.parse_args import parse_args
@@ -39,7 +39,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    givens, update_args = get_data(file_name, update_args)
+    update_args, givens = get_update_args(file_name, update_args)
 
     fig_layout = {
         "nc": len(update_args["logess"]),
