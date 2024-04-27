@@ -39,9 +39,8 @@ def init_plot_artists(axs, update_args):
                 alpha=0.8,
             )
             update_args["landscapes"][i, j] = LineCollection(
-                    [],
-                    lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
-                )
+                [], lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
+            )
             axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
 
     return update_args

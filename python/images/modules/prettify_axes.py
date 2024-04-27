@@ -49,9 +49,13 @@ def add_ticklabels_imshow(axes_args):
     r_max = axes_args["r_values"][0]
 
     for ax in axes_args["axs"][:, 0, 0, 0]:
-        ax.set_yticklabels([f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"])
+        ax.set_yticklabels(
+            [f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"]
+        )
     for ax in axes_args["axs"][-1, :, 0, 0]:
-        ax.set_xticklabels([f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"])
+        ax.set_xticklabels(
+            [f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"]
+        )
 
 
 def add_ticks(axes_args):
