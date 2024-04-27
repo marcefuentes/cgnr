@@ -81,7 +81,7 @@ def main(args):
     prettify_axes(axes_args)
 
     if args.curve:
-        file_name += "_{args.curve}"
+        file_name += f"_{args.curve}"
 
     if args.mode == "all_traits":
         for trait in all_traits:
