@@ -10,16 +10,14 @@ def init_plot_artists(axs, update_args):
 
     _, _, nr, nc = axs.shape
     _, _, n_ic, _ = update_args["isoclines"].shape
-    update_args["budgets"] = np.empty(
-        (nr, nc), dtype=object
-    )
+    update_args["budgets"] = np.empty((nr, nc), dtype=object)
     update_args["icurves"] = np.empty_like(update_args["budgets"])
     update_args["landscapes"] = np.empty_like(update_args["budgets"])
     dummy_budgety = np.full_like(update_args["icx"], -1.0)
     dummy_icy = np.zeros_like(update_args["icx"])
     dummy_segments = [[[x, y] for x, y in zip(update_args["icx"], dummy_icy)]]
 
-    for i in range(nr):   
+    for i in range(nr):
         for j in range(nc):
             for k in range(n_ic):
                 axs[0, 0, i, j].plot(
