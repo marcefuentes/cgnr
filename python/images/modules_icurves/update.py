@@ -34,8 +34,9 @@ def update_artists(given, update_args):
 
             y = fitness(qb_private, update_args["icx"], given, alpha, rho)
             points = np.array([update_args["icx"], y]).T.reshape((-1, 1, 2))
-            segments = np.concatenate([points[:-1], points[1:]], axis=1)
-            update_args["landscapes"][i, j].set_segments(segments)
+            update_args["landscapes"][i, j].set_segments(np.concatenate(
+                [points[:-1], points[1:]], axis=1)
+            )
             update_args["landscapes"][i, j].set_array(y)
             update_args["landscapes"][i, j].set_cmap(cm.get_cmap(get("COMMON", "color_map")))
             update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
