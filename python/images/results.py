@@ -46,12 +46,12 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args, frames = get_update_args(update_args, args.histogram, args.clean)
+    update_args, frames = get_update_args(update_args, args.curve, args.clean)
 
     fig_layout = {
-        "nc": len(update_args["logess"]) if args.histogram else 1,
+        "nc": len(update_args["logess"]) if args.curve else 1,
         "ncols": len(update_args["columns"]),
-        "nr": len(update_args["alphas"]) if args.histogram else 1,
+        "nr": len(update_args["alphas"]) if args.curve else 1,
         "nrows": len(update_args["rows"]),
     }
 
@@ -62,7 +62,7 @@ def main(args):
     update_args["text"] = fig.texts[2]
     update_args["artists"] = (
         init_artists_plot(axs)
-        if args.histogram
+        if args.curve
         else init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])
         )
@@ -73,15 +73,15 @@ def main(args):
         "column_titles": get_titles(update_args["columns"]),
         "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": get_titles(update_args["rows"]),
-        "x_lim": [-2, get_config("bins") + 1] if args.histogram else [None, None],
+        "x_lim": [-2, get_config("bins") + 1] if args.curve=="histogram" else [None, None],
         "x_values": update_args["logess"],
-        "y_lim": [0, 0.25] if args.histogram else [None, None],
+        "y_lim": [0, 0.25] if args.curve=="histogram" else [None, None],
         "y_values": update_args["alphas"],
     }
     prettify_axes(axes_args)
 
-    if args.histogram:
-        file_name += "_histogram"
+    if args.curve:
+        file_name += "_{args.curve}"
 
     if args.mode == "all_traits":
         for trait in all_traits:

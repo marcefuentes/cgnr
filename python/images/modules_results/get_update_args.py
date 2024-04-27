@@ -44,7 +44,7 @@ def get_df(path, filetype, movie, clean):
     return df
 
 
-def get_df_multitrait(mode, histogram, movie, clean):
+def get_df_multitrait(mode, curve, movie, clean):
     """Get the df for several traits in a variant."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -64,7 +64,7 @@ def get_df_multitrait(mode, histogram, movie, clean):
         else:
             path = f"{row}/{mm.GIVEN_FOLDER}"
         dfs.append(get_df(path, csv0, movie, clean))
-        if histogram:
+        if curve=="histogram":
             dffrqs.append(get_df(path, csv1, movie, clean))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
@@ -80,7 +80,7 @@ def get_df_multitrait(mode, histogram, movie, clean):
     return dfs, df_none, df_social, dffrqs, df_social
 
 
-def get_df_single_trait(mode, histogram, movie, clean):
+def get_df_single_trait(mode, curve, movie, clean):
     """Get the df for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -110,7 +110,7 @@ def get_df_single_trait(mode, histogram, movie, clean):
                 for prefix in variant_prefixes
             ]
         )
-        if histogram:
+        if curve=="histogram":
             dffrqs.append(
                 [
                     get_df(
@@ -150,7 +150,7 @@ def get_rows(mode_is_trait, mode):
     return rows
 
 
-def get_update_args(update_args, histogram, clean):
+def get_update_args(update_args, curve, clean):
     """Get the df args for the given mode."""
 
     if update_args["mode_is_trait"]:
@@ -164,7 +164,7 @@ def get_update_args(update_args, histogram, clean):
         update_args["df_social"],
         update_args["dffrqs"],
         df,
-    ) = function(update_args["mode"], histogram, update_args["movie"], clean)
+    ) = function(update_args["mode"], curve, update_args["movie"], clean)
 
     ts = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
