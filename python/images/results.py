@@ -60,8 +60,12 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, file_name, get_sm())
     update_args["text"] = fig.texts[2]
-    update_args["artists"] = init_artists_plot(axs) if args.histogram else init_artists_imshow(
-        axs, len(update_args["alphas"]), len(update_args["logess"])
+    update_args["artists"] = (
+        init_artists_plot(axs)
+        if args.histogram
+        else init_artists_imshow(
+            axs, len(update_args["alphas"]), len(update_args["logess"])
+        )
     )
 
     axes_args = {
