@@ -78,9 +78,9 @@ def get_data_single_trait(mode, histogram, movie, clean):
     )
 
     dfs = []
+    dffrqs = []
     df_nones = []
     df_socials = []
-    dffrqs = []
 
     for suffix, mechanism in zip(variant_suffixes, mechanisms):
         dfs.append(
@@ -91,18 +91,6 @@ def get_data_single_trait(mode, histogram, movie, clean):
                     movie,
                     clean,
                 )
-                for prefix in variant_prefixes
-            ]
-        )
-        df_nones.append(
-            [
-                get_df(f"{prefix}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie, clean)
-                for prefix in variant_prefixes
-            ]
-        )
-        df_socials.append(
-            [
-                get_df(f"{prefix}_{suffix}/none/given000", csv0, movie, clean)
                 for prefix in variant_prefixes
             ]
         )
@@ -118,6 +106,18 @@ def get_data_single_trait(mode, histogram, movie, clean):
                     for prefix in variant_prefixes
                 ]
             )
+        df_nones.append(
+            [
+                get_df(f"{prefix}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie, clean)
+                for prefix in variant_prefixes
+            ]
+        )
+        df_socials.append(
+            [
+                get_df(f"{prefix}_{suffix}/none/given000", csv0, movie, clean)
+                for prefix in variant_prefixes
+            ]
+        )
 
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
