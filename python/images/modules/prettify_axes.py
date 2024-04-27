@@ -31,27 +31,27 @@ def add_ticklabels(axes_args):
     for i in range(nrows):
         for k in range(0, nr, nr // 2):
             axes_args["axs"][i, 0, k, 0].set_yticklabels(
-                [f"{axes_args['y_values'][k]:.1f}"]
+                [f"{axes_args['r_values'][k]:.1f}"]
             )
     for j in range(ncols):
         for m in range(0, nc, nc // 2):
             axes_args["axs"][-1, j, -1, m].set_xticklabels(
-                [f"{axes_args['x_values'][m]:.0f}"]
+                [f"{axes_args['c_values'][m]:.0f}"]
             )
 
 
 def add_ticklabels_imshow(axes_args):
     """add tick labels for (nrows x ncols)."""
 
-    xmin = axes_args["x_values"][0]
-    xmax = axes_args["x_values"][-1]
-    ymin = axes_args["y_values"][-1]
-    ymax = axes_args["y_values"][0]
+    c_min = axes_args["c_values"][0]
+    c_max = axes_args["c_values"][-1]
+    r_min = axes_args["r_values"][-1]
+    r_max = axes_args["r_values"][0]
 
     for ax in axes_args["axs"][:, 0, 0, 0]:
-        ax.set_yticklabels([f"{ymax:.1f}", f"{(ymin + ymax)/2.:.1f}", f"{ymin:.1f}"])
+        ax.set_yticklabels([f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"])
     for ax in axes_args["axs"][-1, :, 0, 0]:
-        ax.set_xticklabels([f"{xmin:.0f}", f"{(xmin + xmax)/2.:.0f}", f"{xmax:.0f}"])
+        ax.set_xticklabels([f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"])
 
 
 def add_ticks(axes_args):
@@ -91,14 +91,14 @@ def add_ticks_imshow(axes_args):
     """set ticks for (nrows x ncols) matrix."""
 
     nrows, ncols, _, _ = axes_args["axs"].shape
-    x_min, x_max = 0, len(axes_args["y_values"]) - 1
-    y_min, y_max = 0, len(axes_args["x_values"]) - 1
+    c_min, c_max = 0, len(axes_args["c_values"]) - 1
+    r_min, r_max = 0, len(axes_args["r_values"]) - 1
 
     for i in range(nrows):
         for j in range(ncols):
             axes_args["axs"][i, j, 0, 0].set(
-                xticks=[x_min, x_max / 2, x_max],
-                yticks=[y_min, y_max / 2, y_max],
+                xticks=[c_min, c_max / 2, c_max],
+                yticks=[r_min, r_max / 2, r_max],
                 xticklabels=[],
                 yticklabels=[],
             )

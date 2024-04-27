@@ -62,9 +62,9 @@ def main(args):
         "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": [""],
         "x_lim": [0, 1],
-        "x_values": update_args["logess"],
+        "c_values": update_args["logess"],
         "y_lim": [0, 1],
-        "y_values": update_args["alphas"],
+        "r_values": update_args["alphas"],
     }
     prettify_axes(axes_args)
 

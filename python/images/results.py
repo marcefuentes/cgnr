@@ -77,9 +77,9 @@ def main(args):
         "x_lim": (
             [-2, get_config("bins") + 1] if args.curve == "histogram" else [None, None]
         ),
-        "x_values": update_args["logess"],
+        "c_values": update_args["logess"],
         "y_lim": [0, 0.25] if args.curve == "histogram" else [None, None],
-        "y_values": update_args["alphas"],
+        "r_values": update_args["alphas"],
     }
     prettify_axes(axes_args)
 
