@@ -49,44 +49,35 @@ def main(args):
     update_args, ts = get_data(update_args, args.histogram, args.clean)
 
     fig_layout = {
-        "nc": 1,
+        "nc": len(update_args["logess"]) if args.histogram else 1,
         "ncols": len(update_args["columns"]),
-        "nr": 1,
+        "nr": len(update_args["alphas"]) if args.histogram else 1,
         "nrows": len(update_args["rows"]),
     }
-
-    if args.histogram:
-        fig_layout["nc"] = len(update_args["alphas"])
-        fig_layout["nr"] = len(update_args["logess"])
 
     fig, axs = init_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, file_name, get_sm())
     update_args["text"] = fig.texts[2]
+    update_args["artists"] = init_artists_plot(axs) if args.histogram else init_artists_imshow(
+        axs, len(update_args["alphas"]), len(update_args["logess"])
+    )
 
     axes_args = {
         "axs": axs,
         "column_titles": get_titles(update_args["columns"]),
         "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": get_titles(update_args["rows"]),
-        "x_lim": [None, None],
+        "x_lim": [-2, get_config("bins") + 1] if args.histogram else [None, None],
         "x_values": update_args["logess"],
-        "y_lim": [None, None],
+        "y_lim": [0, 0.25] if args.histogram else [None, None],
         "y_values": update_args["alphas"],
     }
+    prettify_axes(axes_args)
 
     if args.histogram:
-        update_args["artists"] = init_artists_plot(axs)
-        axes_args["x_lim"] = [-2, get_config("bins") + 1]
-        axes_args["y_lim"] = [0, 0.25]
         file_name += "_histogram"
-    else:
-        update_args["artists"] = init_artists_imshow(
-            axs, len(update_args["alphas"]), len(update_args["logess"])
-        )
-
-    prettify_axes(axes_args)
 
     if args.mode == "all_traits":
         for trait in all_traits:
