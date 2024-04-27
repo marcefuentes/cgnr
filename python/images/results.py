@@ -43,8 +43,8 @@ def main(args):
         "movie": args.movie,
         "rows": get_rows(args.mode_is_trait, args.mode),
         "text": "",
-        "update_curve_function": update_histogram,
         "update_function": update_artists,
+        "n_x_values": None,
     }
 
     update_args = get_update_args(update_args, args.curve, args.clean)
@@ -62,7 +62,7 @@ def main(args):
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
     update_args["artists"] = (
-        init_artists_plot(axs)
+        init_artists_plot(axs, update_args["n_x_values"])
         if args.curve
         else init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])

@@ -2,7 +2,6 @@
 
 import numpy as np
 
-from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
 
 
@@ -23,12 +22,12 @@ def init_artists_imshow(axs, mr, mc):
     return artists
 
 
-def init_artists_plot(axs):
+def init_artists_plot(axs, n_x_values):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
-    x = np.arange(get_config("bins"))
+    x = np.arange(n_x_values)
     dummy_y = np.zeros_like(x)
 
     for i in range(nrows):

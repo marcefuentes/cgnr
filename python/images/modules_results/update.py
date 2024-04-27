@@ -36,7 +36,7 @@ def update_artists(t, update_args):
         for j, _ in enumerate(update_args["columns"]):
             zmatrix = update_zmatrix(t, update_args, i, j)
             if update_args["dffrqs"]:
-                update_args["artists"][i, j] = update_args["update_curve_function"](
+                update_args["artists"][i, j] = update_histogram(
                     t, update_args, zmatrix, i, j
                 )
             else:

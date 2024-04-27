@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from common_modules.get_config import get_config
+from modules.get_setting import get_setting
 import modules_results.modes as mm
 
 
@@ -172,6 +173,11 @@ def get_update_args(update_args, curve, clean):
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
     update_args["logess"] = np.sort(df["logES"].unique())
+
+    if curve == "landscape":
+        update_args["n_x_values"] = get_setting(update_args["file_name"], "n_x_values")
+    elif curve == "histogram":
+        update_args["n_x_values"] = get_config("bins")
 
     return update_args
 
