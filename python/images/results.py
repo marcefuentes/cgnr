@@ -4,7 +4,6 @@
 
 import os
 import time
-import numpy as np
 
 from common_modules.get_config import get_config
 from modules.fix_positions import create_divider
@@ -47,16 +46,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    (
-        update_args["dfs"],
-        update_args["df_none"],
-        update_args["df_social"],
-        update_args["dffrqs"],
-        df,
-    ) = get_data(args.mode_is_trait, args.mode, args.histogram, args.movie, args.clean)
-
-    alphas = np.sort(df["alpha"].unique())[::-1]
-    logess = np.sort(df["logES"].unique())
+    update_args, ts = get_data(update_args, args.histogram, args.clean)
 
     fig_layout = {
         "nc": 1,
@@ -66,8 +56,8 @@ def main(args):
     }
 
     if args.histogram:
-        fig_layout["nc"] = len(alphas)
-        fig_layout["nr"] = len(logess)
+        fig_layout["nc"] = len(update_args["alphas"])
+        fig_layout["nr"] = len(update_args["logess"])
 
     fig, axs = init_fig(fig_layout)
 
@@ -81,33 +71,33 @@ def main(args):
         "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": get_titles(update_args["rows"]),
         "x_lim": [None, None],
-        "x_values": logess,
+        "x_values": update_args["logess"],
         "y_lim": [None, None],
-        "y_values": alphas,
+        "y_values": update_args["alphas"],
     }
 
     if args.histogram:
         update_args["artists"] = init_artists_plot(axs)
-        update_args["alphas"] = axes_args["y_values"]
-        update_args["logess"] = axes_args["x_values"]
         axes_args["x_lim"] = [-2, get_config("bins") + 1]
         axes_args["y_lim"] = [0, 0.25]
         file_name += "_histogram"
     else:
-        update_args["artists"] = init_artists_imshow(axs, len(alphas), len(logess))
+        update_args["artists"] = init_artists_imshow(
+            axs, len(update_args["alphas"]), len(update_args["logess"])
+        )
 
     prettify_axes(axes_args)
 
     if args.mode == "all_traits":
         for trait in all_traits:
             update_args["mode"] = trait
-            save_image(df.Time.unique()[-1], update_args, f"{file_name}_{trait}")
+            save_image(ts[-1], update_args, f"{file_name}_{trait}")
     else:
         file_name += f"_{args.mode}"
         if args.movie:
-            save_movie(fig, df.Time.unique(), update_args, file_name)
+            save_movie(fig, ts, update_args, file_name)
         else:
-            save_image(df.Time.unique()[-1], update_args, file_name)
+            save_image(ts[-1], update_args, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

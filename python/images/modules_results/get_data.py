@@ -4,6 +4,7 @@ import os
 from glob import glob
 import sys
 
+import numpy as np
 import pandas as pd
 
 from common_modules.get_config import get_config
@@ -20,12 +21,27 @@ def get_columns(mode_is_trait, mode):
     return columns
 
 
-def get_data(mode_is_trait, mode, histogram, movie, clean):
+def get_data(update_args, histogram, clean):
     """Get the data for the given mode."""
 
-    if mode_is_trait:
-        return get_data_single_trait(mode, histogram, movie, clean)
-    return get_data_multitrait(mode, histogram, movie, clean)
+    if update_args["mode_is_trait"]:
+        function = get_data_single_trait
+    else:
+        function = get_data_multitrait
+
+    (
+        update_args["dfs"],
+        update_args["df_none"],
+        update_args["df_social"],
+        update_args["dffrqs"],
+        df,
+    ) = function(update_args["mode"], histogram, update_args["movie"], clean)
+
+    ts = df.Time.unique()
+    update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
+    update_args["logess"] = np.sort(df["logES"].unique())
+
+    return update_args, ts
 
 
 def get_data_multitrait(mode, histogram, movie, clean):
