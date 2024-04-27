@@ -5,10 +5,11 @@ import numpy as np
 from modules.get_setting import get_setting as get
 
 
-def init_plot_artists(axs, file_name, update_args):
+def init_plot_artists(axs, update_args):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     _, _, nr, nc = axs.shape
+    _, _, n_ic, _ = update_args["isoclines"].shape
     update_args["budgets"] = np.empty(
         (nr, nc), dtype=object
     )
@@ -20,7 +21,7 @@ def init_plot_artists(axs, file_name, update_args):
 
     for i in range(nr):   
         for j in range(nc):
-            for k in range(get(file_name, "n_ic")):
+            for k in range(n_ic):
                 axs[0, 0, i, j].plot(
                     update_args["icx"],
                     update_args["isoclines"][i, j, k],
