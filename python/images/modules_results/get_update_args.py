@@ -67,7 +67,7 @@ def get_df_multitrait(mode, curve, movie, clean):
         else:
             path = f"{row}/{mm.GIVEN_FOLDER}"
         dfs.append(get_df(path, csv0, movie, clean))
-        if curve=="histogram":
+        if curve == "histogram":
             dffrqs.append(get_df(path, csv1, movie, clean))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
@@ -113,7 +113,7 @@ def get_df_single_trait(mode, curve, movie, clean):
                 for prefix in variant_prefixes
             ]
         )
-        if curve=="histogram":
+        if curve == "histogram":
             dffrqs.append(
                 [
                     get_df(
