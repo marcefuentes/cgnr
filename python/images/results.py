@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Creates plots. """
+""" Creates plots of results. """
 
 import os
 import time
