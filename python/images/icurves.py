@@ -39,7 +39,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args, givens = get_update_args(file_name, update_args)
+    update_args, givens = get_update_args(update_args, file_name)
 
     fig_layout = {
         "nc": len(update_args["logess"]),
