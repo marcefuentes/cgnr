@@ -40,7 +40,6 @@ def init_plot_artists(axs, update_args):
             )
             update_args["landscapes"][i, j] = LineCollection(
                     [],
-                    cmap=get("COMMON", "color_map"),
                     lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
                 )
             axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
