@@ -8,8 +8,9 @@ from modules.get_setting import get_setting as get
 def init_plot_artists(axs, file_name, update_args):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
+    _, _, nr, nc = axs.shape
     update_args["budgets"] = np.empty(
-        (get(file_name, "nc"), get(file_name, "nc")), dtype=object
+        (nr, nc), dtype=object
     )
     update_args["icurves"] = np.empty_like(update_args["budgets"])
     update_args["landscapes"] = np.empty_like(update_args["budgets"])
@@ -17,12 +18,12 @@ def init_plot_artists(axs, file_name, update_args):
     dummy_icy = np.zeros_like(update_args["icx"])
     dummy_segments = [[[x, y] for x, y in zip(update_args["icx"], dummy_icy)]]
 
-    for i in range(get(file_name, "nc")):
-        for j in range(get(file_name, "nc")):
-            for m in range(get(file_name, "n_ic")):
+    for i in range(nr):   
+        for j in range(nc):
+            for k in range(get(file_name, "n_ic")):
                 axs[0, 0, i, j].plot(
                     update_args["icx"],
-                    update_args["isoclines"][i, j, m],
+                    update_args["isoclines"][i, j, k],
                     c="0.850",
                     lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 2,
                 )
