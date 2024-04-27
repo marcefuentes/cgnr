@@ -26,7 +26,6 @@ def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
-    file_name = os.path.basename(__file__).split(".")[0]
 
     update_args = {
         "alphas": None,
@@ -36,6 +35,8 @@ def main(args):
         "df_social": None,
         "dffrqs": None,
         "dfs": None,
+        "file_name": os.path.basename(__file__).split(".")[0],
+        "frames": None,
         "logess": None,
         "mode": args.mode,
         "mode_is_trait": args.mode_is_trait,
@@ -46,7 +47,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args, frames = get_update_args(update_args, args.curve, args.clean)
+    update_args = get_update_args(update_args, args.curve, args.clean)
 
     fig_layout = {
         "nc": len(update_args["logess"]) if args.curve else 1,
@@ -58,7 +59,7 @@ def main(args):
     fig, axs = init_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    prettify_fig(fig, fig_distances, file_name, get_sm())
+    prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
     update_args["artists"] = (
         init_artists_plot(axs)
@@ -81,22 +82,22 @@ def main(args):
     prettify_axes(axes_args)
 
     if args.curve:
-        file_name += f"_{args.curve}"
+        update_args["file_name"] += f"_{args.curve}"
 
     if args.mode == "all_traits":
         for trait in all_traits:
-            file_name += f"_{trait}"
+            update_args["file_name"] += f"_{trait}"
             update_args["mode"] = trait
             if args.movie:
-                save_movie(fig, frames, update_args, file_name)
+                save_movie(fig, update_args)
             else:
-                save_image(frames[-1], update_args, file_name)
+                save_image(update_args)
     else:
-        file_name += f"_{args.mode}"
+        update_args["file_name"] += f"_{args.mode}"
         if args.movie:
-            save_movie(fig, frames, update_args, file_name)
+            save_movie(fig, update_args)
         else:
-            save_image(frames[-1], update_args, file_name)
+            save_image(update_args)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

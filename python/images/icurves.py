@@ -23,12 +23,13 @@ def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
-    file_name = os.path.basename(__file__).split(".")[0]
 
     update_args = {
         "alphas": None,
         "buget_0": None,
         "budgets": None,
+        "file_name": os.path.basename(__file__).split(".")[0],
+        "frames": None,
         "icurves": None,
         "icx": None,
         "isoclines": None,
@@ -39,7 +40,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args, givens = get_update_args(update_args, file_name)
+    update_args = get_update_args(update_args)
 
     fig_layout = {
         "nc": len(update_args["logess"]),
@@ -51,7 +52,7 @@ def main(args):
     fig, axs = init_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    prettify_fig(fig, fig_distances, file_name, get_sm())
+    prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
     update_args = init_plot_artists(axs, update_args)
 
@@ -68,9 +69,9 @@ def main(args):
     prettify_axes(axes_args)
 
     if args.movie:
-        save_movie(fig, givens, update_args, file_name)
+        save_movie(fig, update_args)
     else:
-        save_image(givens[-1], update_args, file_name)
+        save_image(update_args)
 
     close_plt(fig)
 

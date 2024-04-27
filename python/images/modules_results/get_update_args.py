@@ -24,9 +24,12 @@ def get_columns(mode_is_trait, mode):
 def get_df(path, filetype, movie, clean):
     """Return a concatenated dataframe of the 'filetype' files in the given directory."""
 
-    concatenated = os.path.join(path, f"concatenated{filetype}")
+    if movie:
+        concatenated = os.path.join(path, f"{filetype[:3]}_for_movie.con")
+    else:
+        concatenated = os.path.join(path, f"{filetype[:3]}_for_image.con")
 
-    if not movie and os.path.exists(concatenated):
+    if os.path.exists(concatenated):
         if clean:
             os.remove(concatenated)
         else:
@@ -166,11 +169,11 @@ def get_update_args(update_args, curve, clean):
         df,
     ) = function(update_args["mode"], curve, update_args["movie"], clean)
 
-    ts = df.Time.unique()
+    update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
     update_args["logess"] = np.sort(df["logES"].unique())
 
-    return update_args, ts
+    return update_args
 
 
 def read_files(filelist, movie):
