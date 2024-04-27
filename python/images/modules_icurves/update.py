@@ -1,8 +1,8 @@
 """ Update data in artists. """
 
 from matplotlib import cm
-from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
 import numpy as np
 
 from modules.get_setting import get_setting as get
@@ -15,7 +15,7 @@ def update_artists(given, update_args):
     if update_args["movie"]:
         update_args["text"].set_text(f"{given:.2f}")
 
-    budget_own = update_args["budget_0"] * (1.0 - given)
+    budget_own = (1.0 - update_args["icx"]) * (1.0 - given)
 
     for i, alpha in enumerate(update_args["alphas"]):
         for j, rho in enumerate(update_args["rhos"]):
@@ -32,19 +32,13 @@ def update_artists(given, update_args):
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
 
-            y = fitness(update_args["icx"], update_args["icx"], given, alpha, rho)
+            y = fitness(qb_private, update_args["icx"], given, alpha, rho)
             points = np.array([update_args["icx"], y]).T.reshape((-1, 1, 2))
             segments = np.concatenate([points[:-1], points[1:]], axis=1)
-            lc = LineCollection(
-                segments,
-                cmap=cm.get_cmap(get("COMMON", "color_map")),
-                norm=plt.Normalize(-1, 1),
-            )
-            lc.set_array(y)
-            lc.set_linewidth(
-                get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
-            )
-            update_args["landscapes"][i, j].add_collection(lc)
+            update_args["landscapes"][i, j].set_segments(segments)
+            update_args["landscapes"][i, j].set_array(y)
+            update_args["landscapes"][i, j].set_cmap(cm.get_cmap(get("COMMON", "color_map")))
+            update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(
         [

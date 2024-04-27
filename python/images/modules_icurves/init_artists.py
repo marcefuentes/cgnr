@@ -3,6 +3,7 @@
 import numpy as np
 
 from modules.get_setting import get_setting as get
+from matplotlib.collections import LineCollection
 
 
 def init_plot_artists(axs, update_args):
@@ -39,6 +40,11 @@ def init_plot_artists(axs, update_args):
                 lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 5,
                 alpha=0.8,
             )
-            update_args["landscapes"][i, j] = axs[0, 1, i, j]
+            update_args["landscapes"][i, j] = LineCollection(
+                    dummy_segments,
+                    cmap=get("COMMON", "color_map"),
+                    lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
+                )
+            axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
 
     return update_args

@@ -27,7 +27,6 @@ def get_update_args(update_args):
     update_args["icx"] = np.linspace(
         0.001, 0.999, num=get(update_args["file_name"], "n_x_values")
     )
-    update_args["budget_0"] = 1.0 - update_args["icx"]
 
     w_isoclines = np.linspace(
         1.0 / (get(update_args["file_name"], "n_ic") + 1),

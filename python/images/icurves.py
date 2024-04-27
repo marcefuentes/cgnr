@@ -26,7 +26,6 @@ def main(args):
 
     update_args = {
         "alphas": None,
-        "buget_0": None,
         "budgets": None,
         "file_name": os.path.basename(__file__).split(".")[0],
         "frames": None,
