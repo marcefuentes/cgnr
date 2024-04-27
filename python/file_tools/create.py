@@ -6,7 +6,7 @@ import os
 import numpy as np
 
 from common_modules.get_config import get_config
-from modules.argparse_utils import parse_args
+from modules_create.parse_args import parse_args
 
 
 def main(args):
