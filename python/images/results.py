@@ -14,7 +14,7 @@ from modules.prettify_fig import get_distances, prettify_fig
 from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
 
-from modules_results.get_data import get_data, get_rows, get_columns
+from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
 from modules_results.modes import all_traits
@@ -46,7 +46,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args, ts = get_data(update_args, args.histogram, args.clean)
+    update_args, ts = get_update_args(update_args, args.histogram, args.clean)
 
     fig_layout = {
         "nc": len(update_args["logess"]) if args.histogram else 1,
