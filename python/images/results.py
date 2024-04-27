@@ -19,7 +19,7 @@ from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
 from modules_results.modes import all_traits
 from modules_results.parse_args import parse_args
-from modules_results.update import update_artists, update_histogram
+from modules_results.update import update_artists
 
 
 def main(args):

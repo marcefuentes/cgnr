@@ -24,7 +24,7 @@ def get_update_args(update_args):
         num=get(update_args["file_name"], "nc"),
     )
     update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
-    update_args["icx"] = np.linspace(
+    update_args["x_values"] = np.linspace(
         0.001, 0.999, num=get(update_args["file_name"], "n_x_values")
     )
 
@@ -47,7 +47,7 @@ def get_update_args(update_args):
         for j, rho in enumerate(update_args["rhos"]):
             for k, w in enumerate(w_isoclines):
                 update_args["isoclines"][i, j, k] = indifference(
-                    update_args["icx"], w, alpha, rho
+                    update_args["x_values"], w, alpha, rho
                 )
 
     return update_args

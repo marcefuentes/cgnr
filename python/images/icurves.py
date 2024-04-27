@@ -30,7 +30,7 @@ def main(args):
         "file_name": os.path.basename(__file__).split(".")[0],
         "frames": None,
         "icurves": None,
-        "icx": None,
+        "x_values": None,
         "isoclines": None,
         "landscapes": None,
         "logess": None,
