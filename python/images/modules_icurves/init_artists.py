@@ -16,7 +16,6 @@ def init_plot_artists(axs, update_args):
     update_args["landscapes"] = np.empty_like(update_args["budgets"])
     dummy_budgety = np.full_like(update_args["icx"], -1.0)
     dummy_icy = np.zeros_like(update_args["icx"])
-    dummy_segments = [[[x, y] for x, y in zip(update_args["icx"], dummy_icy)]]
 
     for i in range(nr):
         for j in range(nc):
@@ -41,7 +40,7 @@ def init_plot_artists(axs, update_args):
                 alpha=0.8,
             )
             update_args["landscapes"][i, j] = LineCollection(
-                    dummy_segments,
+                    [],
                     cmap=get("COMMON", "color_map"),
                     lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
                 )
