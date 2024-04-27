@@ -66,7 +66,6 @@ def main(args):
         "y_lim": [0, 1],
         "y_values": update_args["alphas"],
     }
-
     prettify_axes(axes_args)
 
     if args.movie:
