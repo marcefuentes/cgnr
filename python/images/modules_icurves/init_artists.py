@@ -29,8 +29,8 @@ def init_plot_artists(axs, update_args):
                 update_args["x_values"],
                 dummy_icy,
                 c="0.300",
-                lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 4,
-                alpha=0.8,
+                lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 5,
+                alpha=0.6,
             )
             (update_args["icurves"][i, j],) = axs[0, 0, i, j].plot(
                 update_args["x_values"],
