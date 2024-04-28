@@ -13,7 +13,8 @@ def init_plot_artists(axs, update_args, static_y_data):
     _, _, n_ic, _ = static_y_data.shape
     update_args["budgets"] = np.empty((nr, nc), dtype=object)
     update_args["icurves"] = np.empty((nr, nc), dtype=object)
-    update_args["landscapes"] = np.empty((nr, nc), dtype=object)
+    update_args["social_landscapes"] = np.empty((nr, nc), dtype=object)
+    update_args["private_landscapes"] = np.empty((nr, nc), dtype=object)
     dummy_y = np.zeros_like(update_args["x_values"])
 
     for i in range(nr):
@@ -32,15 +33,22 @@ def init_plot_artists(axs, update_args, static_y_data):
                 lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 5,
                 alpha=0.6,
             )
+
             (update_args["icurves"][i, j],) = axs[0, 0, i, j].plot(
                 update_args["x_values"],
                 dummy_y,
                 lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 5,
                 alpha=0.8,
             )
-            update_args["landscapes"][i, j] = LineCollection(
+
+            update_args["social_landscapes"][i, j] = LineCollection(
                 [], lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
             )
-            axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
+            axs[0, 1, i, j].add_collection(update_args["social_landscapes"][i, j])
+
+            update_args["private_landscapes"][i, j] = LineCollection(
+                [], lw=get("COMMON", "line_width") * get("COMMON", "plot_size") * 6
+            )
+            axs[0, 1, i, j].add_collection(update_args["private_landscapes"][i, j])
 
     return update_args

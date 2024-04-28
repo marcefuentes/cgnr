@@ -15,7 +15,7 @@ def get_setting(header, variable):
     config = configparser.ConfigParser()
     config.read(config_file_path)
 
-    int_variables = ["n_ic", "n_x_values", "nc"]
+    int_variables = ["n_ic", "n_x_values", "nc", "nr"]
     str_variables = ["color_map", "border_color", "tick_color", "x_label", "y_label"]
     bool_variables = ["print_folder"]
     abs_variables = [

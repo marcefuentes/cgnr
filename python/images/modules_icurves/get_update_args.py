@@ -15,7 +15,7 @@ def get_update_args(update_args):
     update_args["alphas"] = np.linspace(
         get_config("alpha_max"),
         get_config("alpha_min"),
-        num=get(update_args["file_name"], "nc"),
+        num=get(update_args["file_name"], "nr"),
     )
     update_args["logess"] = np.linspace(
         get_config("loges_min"),

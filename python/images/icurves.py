@@ -26,21 +26,24 @@ def main(args):
     start_time = time.perf_counter()
 
     update_args = {
-        "alphas": None,
-        "budgets": None,  # List of Line2D objects
         "file_name": os.path.basename(__file__).split(".")[0],
-        "frames": None,
-        "icurves": None,  # List of Line2D objects
-        "x_values": None,
-        "landscapes": None,  # List of Line2D objects
-        "logess": None,
         "movie": args.movie,
-        "rhos": None,
         "update_function": update_artists,
+
+        "frames": None,
+        "alphas": None,
+        "rhos": None,
+        "logess": None,
+
+        "x_values": None,
+
+        "budgets": None,
+        "icurves": None,
+        "social_landscapes": None,
+        "private_landscapes": None,
     }
 
     update_args = get_update_args(update_args)
-    static_y_data = get_static_y_data(update_args)
 
     fig_layout = {
         "nc": len(update_args["logess"]),
@@ -54,7 +57,7 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    update_args = init_plot_artists(axs, update_args, static_y_data)
+    update_args = init_plot_artists(axs, update_args, get_static_y_data(update_args))
 
     axes_args = {
         "axs": axs,
