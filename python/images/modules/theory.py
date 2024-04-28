@@ -13,10 +13,19 @@ def calculate_fitness(x, y, given, alpha, rho):
         return 0.0
 
     if rho == 0.0:
+        if q_a == 0.0 or q_b == 0.0:
+            return 0.0
         w = pow(q_a, 1.0 - alpha) * pow(q_b, alpha)
         return w
 
-    w = pow((1.0 - alpha) * pow(q_a, rho) + alpha * pow(q_b, rho), 1.0 / rho)
+    if q_a == 0.0:
+        denominator = alpha * pow(q_b, rho)
+    elif q_b == 0.0:
+        denominator = (1.0 - alpha) * pow(q_a, rho)
+    else:
+        denominator = (1.0 - alpha) * pow(q_a, rho) + alpha * pow(q_b, rho)
+
+    w = pow(denominator, 1.0 / rho)
     return w
 
 
