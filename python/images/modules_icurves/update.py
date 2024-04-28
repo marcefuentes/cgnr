@@ -19,9 +19,6 @@ def update_artists(given, update_args):
     for i, alpha in enumerate(update_args["alphas"]):
         for j, rho in enumerate(update_args["rhos"]):
 
-            if not update_args["movie"]:
-                given = 0.0
-
             qb_private = qbeq(given, alpha, rho)
             update_args["budgets"][i, j].set_ydata(budget_own + qb_private * given)
 
@@ -33,13 +30,7 @@ def update_artists(given, update_args):
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
 
-            if not update_args["movie"]:
-                given = 1.0
-
-            qb_private = qbeq(given, alpha, rho)
-            qb_social = qbeq(0.0, alpha, rho)
-
-            y = fitness(update_args["x_values"], qb_social, given, alpha, rho)
+            y = fitness(update_args["x_values"], update_args["x_values"], given, alpha, rho)
             points = np.array([update_args["x_values"], y]).T.reshape((-1, 1, 2))
             update_args["landscapes"][i, j].set_segments(
                 np.concatenate([points[:-1], points[1:]], axis=1)

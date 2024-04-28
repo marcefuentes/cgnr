@@ -30,19 +30,19 @@ def init_plot_artists(axs, update_args, static_y_data):
                 update_args["x_values"],
                 dummy_y,
                 c="0.300",
-                lw=get("COMMON", "line_width") * plot_size * 9 / nc,
+                lw=get("COMMON", "line_width") * plot_size * 12 / nc,
                 alpha=0.6,
             )
 
             (update_args["icurves"][i, j],) = axs[0, 0, i, j].plot(
                 update_args["x_values"],
                 dummy_y,
-                lw=get("COMMON", "line_width") * plot_size * 9 / nc,
+                lw=get("COMMON", "line_width") * plot_size * 12 / nc,
                 alpha=0.8,
             )
 
             update_args["landscapes"][i, j] = LineCollection(
-                [], lw=get("COMMON", "line_width") * plot_size * 9 / nc,
+                [], lw=get("COMMON", "line_width") * plot_size * 12 / nc,
             )
             axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
 
