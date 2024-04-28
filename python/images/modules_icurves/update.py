@@ -8,7 +8,7 @@ from modules.get_setting import get_setting as get
 from modules.theory import fitness, indifference, qbeq
 
 
-def update_artists(given, update_args):
+def update_artists(update_args, given=0.0):
     """Update data in artists."""
 
     if update_args["movie"]:
@@ -20,8 +20,6 @@ def update_artists(given, update_args):
         for j, rho in enumerate(update_args["rhos"]):
 
             qb_private = qbeq(given, alpha, rho)
-            qb_social = qbeq(0.0, alpha, rho)
-
             update_args["budgets"][i, j].set_ydata(budget_own + qb_private * given)
 
             w = fitness(qb_private, qb_private, given, alpha, rho)
@@ -31,6 +29,12 @@ def update_artists(given, update_args):
             update_args["icurves"][i, j].set_color(
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
+
+            if not update_args["movie"]:
+                given = 1.0
+
+            qb_private = qbeq(given, alpha, rho)
+            qb_social = qbeq(0.0, alpha, rho)
 
             y = fitness(update_args["x_values"], qb_social, given, alpha, rho)
             points = np.array([update_args["x_values"], y]).T.reshape((-1, 1, 2))
