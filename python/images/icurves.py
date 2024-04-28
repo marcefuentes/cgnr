@@ -29,14 +29,11 @@ def main(args):
         "file_name": os.path.basename(__file__).split(".")[0],
         "movie": args.movie,
         "update_function": update_artists,
-
         "frames": None,
         "alphas": None,
         "rhos": None,
         "logess": None,
-
         "x_values": None,
-
         "budgets": None,
         "icurves": None,
         "social_landscapes": None,
