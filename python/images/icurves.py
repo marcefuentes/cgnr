@@ -13,6 +13,7 @@ from modules.save_image import save_image, close_plt
 from modules.save_movie import save_movie
 
 from modules_icurves.get_sm import get_sm
+from modules_icurves.get_static_y_data import get_static_y_data
 from modules_icurves.get_update_args import get_update_args
 from modules_icurves.init_artists import init_plot_artists
 from modules_icurves.parse_args import parse_args
@@ -40,6 +41,7 @@ def main(args):
     }
 
     update_args = get_update_args(update_args)
+    static_y_data = get_static_y_data(update_args)
 
     fig_layout = {
         "nc": len(update_args["logess"]),
@@ -53,7 +55,7 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    update_args = init_plot_artists(axs, update_args)
+    update_args = init_plot_artists(axs, update_args, static_y_data)
 
     axes_args = {
         "axs": axs,
