@@ -9,8 +9,8 @@ from modules.fix_positions import create_divider
 from modules.init_fig import init_fig
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
-from modules.save_image import save_image, close_plt
-from modules.save_movie import save_movie
+from modules.save_file import save_file
+from modules.save_image import close_plt
 
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_y_data import get_static_y_data
@@ -67,10 +67,7 @@ def main(args):
     }
     prettify_axes(axes_args)
 
-    if args.movie:
-        save_movie(fig, update_args)
-    else:
-        save_image(update_args)
+    save_file(fig, update_args)
 
     close_plt(fig)
 

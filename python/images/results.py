@@ -11,8 +11,8 @@ from modules.get_setting import get_titles
 from modules.init_fig import init_fig
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
-from modules.save_image import save_image, close_plt
-from modules.save_movie import save_movie
+from modules.save_image import close_plt
+from modules.save_file import save_file
 
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.get_sm import get_sm
@@ -26,6 +26,7 @@ def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
+    file_name = os.path.basename(__file__).split(".")[0]
 
     update_args = {
         "alphas": None,
@@ -35,7 +36,7 @@ def main(args):
         "df_social": None,
         "dffrqs": None,
         "dfs": None,
-        "file_name": os.path.basename(__file__).split(".")[0],
+        "file_name": file_name,
         "frames": None,
         "logess": None,
         "mode": args.mode,
@@ -84,22 +85,16 @@ def main(args):
     prettify_axes(axes_args)
 
     if args.curve:
-        update_args["file_name"] += f"_{args.curve}"
+        file_name += f"_{args.curve}"
 
     if args.mode == "all_traits":
         for trait in all_traits:
-            update_args["file_name"] += f"_{trait}"
             update_args["mode"] = trait
-            if args.movie:
-                save_movie(fig, update_args)
-            else:
-                save_image(update_args)
+            update_args["file_name"] = f"{file_name}_{trait}"
+            save_file(fig, update_args)
     else:
-        update_args["file_name"] += f"_{args.mode}"
-        if args.movie:
-            save_movie(fig, update_args)
-        else:
-            save_image(update_args)
+        update_args["file_name"] = f"{file_name}_{args.mode}"
+        save_file(fig, update_args)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
