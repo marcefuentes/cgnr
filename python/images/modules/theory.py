@@ -4,21 +4,20 @@ import numpy as np
 
 
 def calculate_fitness(x, y, given, alpha, rho):
-    """ Calculate fitness for a single pair of x and y. """
-    
+    """Calculate fitness for a single pair of x and y."""
+
     q_a = 1.0 - y
     q_b = y * (1.0 - given) + x * given
-    w = q_a * q_b
 
-    if w > 0.0 and rho == 0.0:
+    if q_a == 0.0 and q_b == 0.0:
+        return 0.0
+
+    if rho == 0.0:
         w = pow(q_a, 1.0 - alpha) * pow(q_b, alpha)
         return w
 
-    if (w > 0.0 and rho < 0.0) or rho > 0.0:
-        w = pow((1.0 - alpha) * pow(q_a, rho) + alpha * pow(q_b, rho), 1.0 / rho)
-        return w
-
-    return 0.0
+    w = pow((1.0 - alpha) * pow(q_a, rho) + alpha * pow(q_b, rho), 1.0 / rho)
+    return w
 
 
 def fitness(x, y, given, alpha, rho):
