@@ -8,7 +8,7 @@ from modules.get_setting import get_setting as get
 from modules.theory import fitness, indifference, qbeq
 
 
-def update_artists(update_args, given=0.0):
+def update_artists(given, update_args):
     """Update data in artists."""
 
     if update_args["movie"]:
@@ -18,6 +18,9 @@ def update_artists(update_args, given=0.0):
 
     for i, alpha in enumerate(update_args["alphas"]):
         for j, rho in enumerate(update_args["rhos"]):
+
+            if not update_args["movie"]:
+                given = 0.0
 
             qb_private = qbeq(given, alpha, rho)
             update_args["budgets"][i, j].set_ydata(budget_own + qb_private * given)
