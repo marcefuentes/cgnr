@@ -41,31 +41,19 @@ def update_artists(given, update_args):
 
             y = fitness(update_args["x_values"], qb_social, given, alpha, rho)
             points = np.array([update_args["x_values"], y]).T.reshape((-1, 1, 2))
-            update_args["social_landscapes"][i, j].set_segments(
+            update_args["landscapes"][i, j].set_segments(
                 np.concatenate([points[:-1], points[1:]], axis=1)
             )
-            update_args["social_landscapes"][i, j].set_array(y)
-            update_args["social_landscapes"][i, j].set_cmap(
+            update_args["landscapes"][i, j].set_array(y)
+            update_args["landscapes"][i, j].set_cmap(
                 cm.get_cmap(get("COMMON", "color_map"))
             )
-            update_args["social_landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
-
-            y = fitness(update_args["x_values"], qb_private, given, alpha, rho)
-            points = np.array([update_args["x_values"], y]).T.reshape((-1, 1, 2))
-            update_args["private_landscapes"][i, j].set_segments(
-                np.concatenate([points[:-1], points[1:]], axis=1)
-            )
-            update_args["private_landscapes"][i, j].set_array(y)
-            update_args["private_landscapes"][i, j].set_cmap(
-                cm.get_cmap(get("COMMON", "color_map"))
-            )
-            update_args["private_landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
+            update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(
         [
             update_args["budgets"].flatten(),
             update_args["icurves"].flatten(),
-            update_args["social_landscapes"].flatten(),
-            update_args["private_landscapes"].flatten(),
+            update_args["landscapes"].flatten(),
         ]
     )

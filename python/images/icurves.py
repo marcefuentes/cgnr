@@ -36,8 +36,7 @@ def main(args):
         "x_values": None,
         "budgets": None,
         "icurves": None,
-        "social_landscapes": None,
-        "private_landscapes": None,
+        "landscapes": None,
     }
 
     update_args = get_update_args(update_args)
