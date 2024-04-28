@@ -36,22 +36,22 @@ def fitness(x, y, given, alpha, rho):
         if len(x) != len(y):
             raise ValueError("x and y must have the same length.")
 
-        w = np.zeros(len(x))
-        for i in range(len(x)):
-            w[i] = calculate_fitness(x[i], y[i], given, alpha, rho)
-        return w
-
-    if not isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
-        w = np.zeros(len(y))
-        for i in range(len(y)):
-            w[i] = calculate_fitness(x, y[i], given, alpha, rho)
-        return w
+        ws = np.zeros(len(x))
+        for i, _ in enumerate(ws):
+            ws[i] = calculate_fitness(x[i], y[i], given, alpha, rho)
+        return ws
 
     if isinstance(x, np.ndarray) and not isinstance(y, np.ndarray):
-        w = np.zeros(len(x))
-        for i in range(len(x)):
-            w[i] = calculate_fitness(x[i], y, given, alpha, rho)
-        return w
+        ws = np.zeros(len(x))
+        for i, _ in enumerate(ws):
+            ws[i] = calculate_fitness(x[i], y, given, alpha, rho)
+        return ws
+
+    if not isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
+        ws = np.zeros(len(y))
+        for i, _ in enumerate(ws):
+            ws[i] = calculate_fitness(x, y[i], given, alpha, rho)
+        return ws
 
     w = calculate_fitness(x, y, given, alpha, rho)
     return w
