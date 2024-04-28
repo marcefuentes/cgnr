@@ -27,13 +27,12 @@ def main(args):
 
     update_args = {
         "alphas": None,
-        "budgets": None,
+        "budgets": None, # List of Line2D objects
         "file_name": os.path.basename(__file__).split(".")[0],
         "frames": None,
-        "icurves": None,
+        "icurves": None, # List of Line2D objects
         "x_values": None,
-        "isoclines": None,
-        "landscapes": None,
+        "landscapes": None, # List of Line2D objects
         "logess": None,
         "movie": args.movie,
         "rhos": None,
