@@ -3,30 +3,69 @@
 import numpy as np
 
 
-def fitness(x, y, given, alpha, rho):
-    """Compute fitness."""
-
+def calculate_fitness(x, y, given, alpha, rho):
+    """ Calculate fitness for a single pair of x and y. """
+    
     q_a = 1.0 - y
     q_b = y * (1.0 - given) + x * given
     w = q_a * q_b
-    if not isinstance(q_a, np.ndarray):
-        q_a = np.array([q_a])
-    if not isinstance(q_b, np.ndarray):
-        q_b = np.array([q_b])
-    if not isinstance(w, np.ndarray):
-        w = np.array([w])
-    if not isinstance(alpha, np.ndarray):
-        alpha = np.full(w.shape, alpha)
-    if not isinstance(rho, np.ndarray):
-        rho = np.full(w.shape, rho)
-    m = (w > 0.0) & (rho == 0.0)
-    w[m] = pow(q_a[m], 1.0 - alpha[m]) * pow(q_b[m], alpha[m])
-    m = ((w > 0.0) & (rho < 0.0)) | (rho > 0.0)
-    w[m] = pow(
-        (1.0 - alpha[m]) * pow(q_a[m], rho[m]) + alpha[m] * pow(q_b[m], rho[m]),
-        1.0 / rho[m],
-    )
+
+    if w > 0.0 and rho == 0.0:
+        w = pow(q_a, 1.0 - alpha) * pow(q_b, alpha)
+        return w
+
+    if (w > 0.0 and rho < 0.0) or rho > 0.0:
+        w = pow((1.0 - alpha) * pow(q_a, rho) + alpha * pow(q_b, rho), 1.0 / rho)
+        return w
+
+    return 0.0
+
+
+def fitness(x, y, given, alpha, rho):
+    """Compute fitness."""
+
+    if isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
+        if len(x) != len(y):
+            raise ValueError("x and y must have the same length.")
+
+        w = np.zeros(len(x))
+        for i in range(len(x)):
+            w[i] = calculate_fitness(x[i], y[i], given, alpha, rho)
+        return w
+
+    if not isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
+        w = np.zeros(len(y))
+        for i in range(len(y)):
+            w[i] = calculate_fitness(x, y[i], given, alpha, rho)
+        return w
+
+    if isinstance(x, np.ndarray) and not isinstance(y, np.ndarray):
+        w = np.zeros(len(x))
+        for i in range(len(x)):
+            w[i] = calculate_fitness(x[i], y, given, alpha, rho)
+        return w
+
+    w = calculate_fitness(x, y, given, alpha, rho)
     return w
+
+
+def indifference(qs, w, alpha, rho):
+    """Compute indifference curves."""
+
+    q_b = np.full(qs.shape, 1000.0)
+    for i, q in enumerate(qs):
+        if rho == 0.0:
+            q_b[i] = pow(w / pow(q, 1.0 - alpha), 1.0 / alpha)
+        else:
+            numerator = pow(w, rho) - (1.0 - alpha) * pow(q, rho)
+            if numerator <= 0.0:
+                if rho < 0.0:
+                    q_b[i] = 1000.0
+                else:
+                    q_b[i] = -0.1
+            else:
+                q_b[i] = pow(numerator / alpha, 1.0 / rho)
+    return q_b
 
 
 def qbeq(given, alpha, rho):

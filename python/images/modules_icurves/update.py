@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from modules.get_setting import get_setting as get
-from modules.theory import fitness, qbeq
+from modules.theory import fitness, indifference, qbeq
 
 
 def update_artists(given, update_args):
@@ -31,7 +31,7 @@ def update_artists(given, update_args):
                 cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
             )
 
-            y = fitness(qb_private, update_args["x_values"], given, alpha, rho)
+            y = fitness(update_args["x_values"], qb_private, given, alpha, rho)
             points = np.array([update_args["x_values"], y]).T.reshape((-1, 1, 2))
             update_args["landscapes"][i, j].set_segments(
                 np.concatenate([points[:-1], points[1:]], axis=1)
@@ -49,22 +49,3 @@ def update_artists(given, update_args):
             update_args["landscapes"].flatten(),
         ]
     )
-
-
-def indifference(qs, w, alpha, rho):
-    """Compute indifference curves."""
-
-    q_b = np.full(qs.shape, 1000.0)
-    for i, q in enumerate(qs):
-        if rho == 0.0:
-            q_b[i] = pow(w / pow(q, 1.0 - alpha), 1.0 / alpha)
-        else:
-            numerator = pow(w, rho) - (1.0 - alpha) * pow(q, rho)
-            if numerator <= 0.0:
-                if rho < 0.0:
-                    q_b[i] = 1000.0
-                else:
-                    q_b[i] = -0.1
-            else:
-                q_b[i] = pow(numerator / alpha, 1.0 / rho)
-    return q_b
