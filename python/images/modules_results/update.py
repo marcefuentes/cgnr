@@ -48,7 +48,7 @@ def update_artists(t, update_args):
 def update_histogram(t, update_args, zmatrix, i, j):
     """Update the histogram with the data at time t."""
 
-    if update_args["mode_is_trait"]:
+    if update_args["single_trait"]:
         df = update_args["dffrqs"][i][j]
         trait = mm.dict_traits[update_args["mode"]]["frq"]
     else:
@@ -70,7 +70,7 @@ def update_histogram(t, update_args, zmatrix, i, j):
 def update_zmatrix(t, update_args, i, j):
     """Return the updated zmatrix for a given time and trait."""
 
-    if update_args["mode_is_trait"]:
+    if update_args["single_trait"]:
         trait_in = update_args["mode"]
         df = update_args["dfs"][i][j]
         df_none = update_args["df_none"][i][j]
@@ -83,7 +83,7 @@ def update_zmatrix(t, update_args, i, j):
 
     none = bool(update_args["rows"][i] == "none" and update_args["mode"] != "none")
 
-    if "nothing" in trait_in or df is None:
+    if "nothing" in trait_in or df.empty:
         zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
         return zmatrix
 

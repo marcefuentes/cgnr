@@ -12,10 +12,10 @@ from modules.get_setting import get_setting
 import modules_results.modes as mm
 
 
-def get_columns(mode_is_trait, mode):
+def get_columns(single_trait, mode):
     """Get the columns for the given mode."""
 
-    if mode_is_trait:
+    if single_trait:
         columns = mm.dict_traits[mode]["variants"]
         return columns
     columns = mm.dict_multitrait_columns[mode]
@@ -26,7 +26,7 @@ def get_df(path, filetype, movie, clean):
     """Return a concatenated dataframe of the 'filetype' files in the given directory."""
 
     if not os.path.exists(path):
-        return None
+        return pd.DataFrame()
 
     if movie:
         concatenated = os.path.join(path, f"{filetype[1:]}_for_movie.con")
@@ -145,10 +145,10 @@ def get_df_single_trait(mode, curve, movie, clean):
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 
-def get_rows(mode_is_trait, mode):
+def get_rows(single_trait, mode):
     """Get the rows for the given mode."""
 
-    if mode_is_trait:
+    if single_trait:
         rows = mm.dict_single_trait_mechanisms.get(
             mode, mm.dict_single_trait_mechanisms["default"]
         )
@@ -160,7 +160,7 @@ def get_rows(mode_is_trait, mode):
 def get_update_args(update_args, curve, clean):
     """Get the df args for the given mode."""
 
-    if update_args["mode_is_trait"]:
+    if update_args["single_trait"]:
         function = get_df_single_trait
     else:
         function = get_df_multitrait

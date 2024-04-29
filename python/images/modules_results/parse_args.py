@@ -9,13 +9,15 @@ import modules_results.modes as mm
 def parse_args():
     """Parse command line arguments."""
 
-    if os.path.basename(os.getcwd()) == "results":
-        mode_is_trait = True
+    folder = os.path.basename(os.getcwd())
+
+    if folder == "results" or folder.startswith("given"):
+        single_trait = True
         description = "description: Plot results for a trait"
         choices_mode = list(mm.dict_traits.keys())
         arg_help = "trait (required)"
     else:
-        mode_is_trait = False
+        single_trait = False
         description = "description: Plot results in this folder"
         choices_mode = list(mm.dict_multitrait_columns.keys())
         arg_help = "mode (required)"
@@ -39,6 +41,6 @@ def parse_args():
     if args.curve not in choices_curve:
         parser.error(f"Invalid curve: {args.curve}")
 
-    args.mode_is_trait = mode_is_trait
+    args.single_trait = single_trait
 
     return args
