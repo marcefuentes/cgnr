@@ -148,7 +148,7 @@ dict_single_trait_variant_suffixes = {
 }
 
 dict_single_trait_mechanisms = {
-    "default": ["p", "pi", "i", "p", "pi", "i"],
+    "default": ["p", "pd", "d", "pi", "i", "p", "pd", "d", "pi", "i"],
 }
 
 GIVEN_FOLDER = "given100"

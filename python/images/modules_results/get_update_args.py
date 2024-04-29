@@ -25,6 +25,9 @@ def get_columns(mode_is_trait, mode):
 def get_df(path, filetype, movie, clean):
     """Return a concatenated dataframe of the 'filetype' files in the given directory."""
 
+    if not os.path.exists(path):
+        return None
+
     if movie:
         concatenated = os.path.join(path, f"{filetype[1:]}_for_movie.con")
     else:

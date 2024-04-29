@@ -83,7 +83,7 @@ def update_zmatrix(t, update_args, i, j):
 
     none = bool(update_args["rows"][i] == "none" and update_args["mode"] != "none")
 
-    if "nothing" in trait_in:
+    if "nothing" in trait_in or df is None:
         zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
         return zmatrix
 
