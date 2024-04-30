@@ -12,9 +12,12 @@ from modules.get_setting import get_setting
 import modules_results.trait_sets_config as mm
 
 
-def get_columns(single_trait, trait_set):
+def get_columns(single_trait, trait_set, single_folder):
     """Get the columns for the given trait_set."""
 
+    if single_trait and single_folder:
+        columns = [""]
+        return columns
     if single_trait:
         columns = mm.dict_traits[trait_set]["variants"]
         return columns
@@ -58,8 +61,7 @@ def get_df_multitrait(trait_set, curve, movie, clean):
 
     rows = mm.dict_multitrait_rows.get(trait_set, mm.dict_multitrait_rows["default"])
 
-    dfs = []
-    dffrqs = []
+    dfs, dffrqs = [], []
 
     for row in rows:
         if row == "social":
@@ -100,10 +102,7 @@ def get_df_single_trait(trait_set, curve, movie, clean):
         trait_set, mm.dict_single_trait_mechanisms["default"]
     )
 
-    dfs = []
-    dffrqs = []
-    df_nones = []
-    df_socials = []
+    dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
     for suffix, mechanism in zip(variant_suffixes, mechanisms):
         dfs.append(
@@ -145,9 +144,29 @@ def get_df_single_trait(trait_set, curve, movie, clean):
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 
-def get_rows(single_trait, trait_set):
+def get_df_single_trait_single_folder(trait_set, curve, movie, clean):
+    """Get the df for a trait across several variants."""
+
+    csv0, csv1 = get_config("output_file_extensions")
+    given_folder = os.path.basename(os.getcwd())
+
+    dffrq = pd.DataFrame()
+
+    df = get_df(".", csv0, movie, clean)
+    if curve == "histogram":
+        dffrq = get_df(".", csv1, movie, clean)
+    df_none = get_df(f"../../none/{given_folder}", csv0, movie, clean)
+    df_social = get_df("../../none/given000", csv0, movie, clean)
+
+    return df, df_none, df_social, dffrq, df_social
+
+
+def get_rows(single_trait, trait_set, single_folder):
     """Get the rows for the given trait_set."""
 
+    if single_trait and single_folder:
+        rows = [""]
+        return rows
     if single_trait:
         rows = mm.dict_single_trait_mechanisms.get(
             trait_set, mm.dict_single_trait_mechanisms["default"]
@@ -160,7 +179,9 @@ def get_rows(single_trait, trait_set):
 def get_update_args(update_args, curve, clean):
     """Get the df args for the given trait_set."""
 
-    if update_args["single_trait"]:
+    if update_args["single_trait"] and update_args["single_folder"]:
+        function = get_df_single_trait_single_folder
+    elif update_args["single_trait"]:
         function = get_df_single_trait
     else:
         function = get_df_multitrait
