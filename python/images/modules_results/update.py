@@ -35,18 +35,16 @@ def update_artists(t, update_args):
     for i, _ in enumerate(update_args["rows"]):
         for j, _ in enumerate(update_args["columns"]):
             zmatrix = update_zmatrix(t, update_args, i, j)
-            if update_args["curve"]:
-                if update_args["curve"] == "histogram":
-                    if update_args["single_trait"]:
-                        df = update_args["dffrqs"][i][j]
-                        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
-                    else:
-                        df = update_args["dffrqs"][i]
-                        trait = mm.dict_traits[update_args["columns"][j]]["frq"]
+            if update_args["curve"] == "histogram":
+                if update_args["single_trait"]:
+                    df = update_args["dffrqs"][i][j]
+                    trait = mm.dict_traits[update_args["trait_set"]]["frq"]
+                else:
+                    df = update_args["dffrqs"][i]
+                    trait = mm.dict_traits[update_args["columns"][j]]["frq"]
                 for k, alpha in enumerate(update_args["alphas"]):
                     for m, loges in enumerate(update_args["logess"]):
-                        if update_args["curve"] == "histogram":
-                            y = update_histogram(df, trait, update_args["n_x_values"], t, alpha, loges)
+                        y = update_histogram(df, trait, update_args["n_x_values"], t, alpha, loges)
                         update_args["artists"][i, j, k, m].set_ydata(y)
                         bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[k, m] + 1) / 2)
                         update_args["artists"][i, j, k, m].axes.set_facecolor(bgcolor)
