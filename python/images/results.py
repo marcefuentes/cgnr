@@ -17,8 +17,8 @@ from modules.save_file import save_file
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
-from modules_results.trait_sets_config import all_traits
 from modules_results.parse_args import parse_args
+from modules_results.trait_sets_config import all_traits
 from modules_results.update import update_artists
 
 
