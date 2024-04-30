@@ -32,6 +32,7 @@ def main(args):
         "alphas": None,
         "artists": None,
         "columns": get_columns(args.single_trait, args.trait_set, args.single_folder),
+        "curve": args.curve,
         "df_none": None,
         "df_social": None,
         "dffrqs": None,
@@ -49,7 +50,7 @@ def main(args):
         "n_x_values": None,
     }
 
-    update_args = get_update_args(update_args, args.curve, args.clean)
+    update_args = get_update_args(update_args, args.clean)
 
     fig_layout = {
         "nc": len(update_args["logess"]) if args.curve else 1,

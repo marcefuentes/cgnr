@@ -9,6 +9,7 @@ import pandas as pd
 
 from common_modules.get_config import get_config
 from modules.get_setting import get_setting
+from modules.theory import fitness
 import modules_results.trait_sets_config as mm
 
 
@@ -176,8 +177,13 @@ def get_rows(single_trait, trait_set, single_folder):
     return rows
 
 
-def get_update_args(update_args, curve, clean):
+def get_update_args(update_args, clean):
     """Get the df args for the given trait_set."""
+
+    if update_args["curve"] == "landscape":
+        update_args["n_x_values"] = get_setting(update_args["file_name"], "n_x_values")
+    elif update_args["curve"] == "histogram":
+        update_args["n_x_values"] = get_config("bins")
 
     if update_args["single_trait"] and update_args["single_folder"]:
         function = get_df_single_trait_single_folder
@@ -192,16 +198,11 @@ def get_update_args(update_args, curve, clean):
         update_args["df_social"],
         update_args["dffrqs"],
         df,
-    ) = function(update_args["trait_set"], curve, update_args["movie"], clean)
+    ) = function(update_args["trait_set"], update_args["curve"], update_args["movie"], clean)
 
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
     update_args["logess"] = np.sort(df["logES"].unique())
-
-    if curve == "landscape":
-        update_args["n_x_values"] = get_setting(update_args["file_name"], "n_x_values")
-    elif curve == "histogram":
-        update_args["n_x_values"] = get_config("bins")
 
     return update_args
 

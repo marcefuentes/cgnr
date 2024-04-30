@@ -35,39 +35,41 @@ def update_artists(t, update_args):
     for i, _ in enumerate(update_args["rows"]):
         for j, _ in enumerate(update_args["columns"]):
             zmatrix = update_zmatrix(t, update_args, i, j)
-            if update_args["single_folder"] or update_args["dffrqs"]:
-                update_args["artists"][i, j] = update_histogram(
-                    t, update_args, zmatrix, i, j
-                )
+            if update_args["curve"]:
+                if update_args["curve"] == "histogram":
+                    if update_args["single_trait"] and update_args["single_folder"]:
+                        df = update_args["dffrqs"]
+                        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
+                    elif update_args["single_trait"]:
+                        df = update_args["dffrqs"][i][j]
+                        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
+                    else:
+                        df = update_args["dffrqs"][i]
+                        trait = mm.dict_traits[update_args["columns"][0]]["frq"]
+                for k, alpha in enumerate(update_args["alphas"]):
+                    for m, loges in enumerate(update_args["logess"]):
+                        if update_args["curve"] == "histogram":
+                            y = update_histogram(df, trait, update_args["n_x_values"], t, alpha, loges)
+                        update_args["artists"][i, j, k, m].set_ydata(y)
+                        bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[k, m] + 1) / 2)
+                        update_args["artists"][i, j, k, m].axes.set_facecolor(bgcolor)
             else:
                 update_args["artists"][i, j, 0, 0].set_array(zmatrix)
 
     return update_args["artists"].flatten()
 
 
-def update_histogram(t, update_args, zmatrix, i, j):
+def update_histogram(df, trait, n_x_values, t, alpha, loges):
     """Update the histogram with the data at time t."""
 
-    if update_args["single_trait"] and update_args["single_folder"]:
-        df = update_args["dffrqs"]
-        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
-    elif update_args["single_trait"]:
-        df = update_args["dffrqs"][i][j]
-        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
-    else:
-        df = update_args["dffrqs"][i]
-        trait = mm.dict_traits[update_args["columns"][0]]["frq"]
+    if df.empty:
+        return np.zeros(n_x_values)
 
-    for k, alpha in enumerate(update_args["alphas"]):
-        for m, loges in enumerate(update_args["logess"]):
-            d = df[(df["Time"] == t) & (df["alpha"] == alpha) & (df["logES"] == loges)]
-            freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
-            y = d.loc[:, freq_a].values[0].flatten()
-            update_args["artists"][i, j, k, m].set_ydata(y)
-            bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[k, m] + 1) / 2)
-            update_args["artists"][i, j, k, m].axes.set_facecolor(bgcolor)
+    d = df[(df["Time"] == t) & (df["alpha"] == alpha) & (df["logES"] == loges)]
+    freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
+    y = d.loc[:, freq_a].values[0].flatten()
 
-    return update_args["artists"][i, j]
+    return y
 
 
 def update_zmatrix(t, update_args, i, j):
