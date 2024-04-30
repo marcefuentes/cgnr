@@ -37,15 +37,12 @@ def update_artists(t, update_args):
             zmatrix = update_zmatrix(t, update_args, i, j)
             if update_args["curve"]:
                 if update_args["curve"] == "histogram":
-                    if update_args["single_trait"] and update_args["single_folder"]:
-                        df = update_args["dffrqs"]
-                        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
-                    elif update_args["single_trait"]:
+                    if update_args["single_trait"]:
                         df = update_args["dffrqs"][i][j]
                         trait = mm.dict_traits[update_args["trait_set"]]["frq"]
                     else:
                         df = update_args["dffrqs"][i]
-                        trait = mm.dict_traits[update_args["columns"][0]]["frq"]
+                        trait = mm.dict_traits[update_args["columns"][j]]["frq"]
                 for k, alpha in enumerate(update_args["alphas"]):
                     for m, loges in enumerate(update_args["logess"]):
                         if update_args["curve"] == "histogram":
@@ -75,12 +72,7 @@ def update_histogram(df, trait, n_x_values, t, alpha, loges):
 def update_zmatrix(t, update_args, i, j):
     """Return the updated zmatrix for a given time and trait."""
 
-    if update_args["single_trait"] and update_args["single_folder"]:
-        trait_in = update_args["trait_set"]
-        df = update_args["dfs"]
-        df_none = update_args["df_none"]
-        df_social = update_args["df_social"]
-    elif update_args["single_trait"]:
+    if update_args["single_trait"]:
         trait_in = update_args["trait_set"]
         df = update_args["dfs"][i][j]
         df_none = update_args["df_none"][i][j]

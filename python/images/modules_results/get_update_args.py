@@ -95,6 +95,8 @@ def get_df_single_trait(trait_set, curve, movie, clean):
 
     csv0, csv1 = get_config("output_file_extensions")
 
+    dfs, dffrqs, df_nones, df_socials = [], [], [], []
+
     variant_prefixes = mm.dict_traits[trait_set]["variants"]
     variant_suffixes = mm.dict_single_trait_variant_suffixes.get(
         trait_set, mm.dict_single_trait_variant_suffixes["default"]
@@ -102,8 +104,6 @@ def get_df_single_trait(trait_set, curve, movie, clean):
     mechanisms = mm.dict_single_trait_mechanisms.get(
         trait_set, mm.dict_single_trait_mechanisms["default"]
     )
-
-    dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
     for suffix, mechanism in zip(variant_suffixes, mechanisms):
         dfs.append(
@@ -151,15 +151,14 @@ def get_df_single_trait_single_folder(trait_set, curve, movie, clean):
     csv0, csv1 = get_config("output_file_extensions")
     given_folder = os.path.basename(os.getcwd())
 
-    dffrq = pd.DataFrame()
-
-    df = get_df(".", csv0, movie, clean)
+    df, dffrq, df_none, df_social = [[]], [[]], [[]], [[]]
+    df[0].append(get_df(".", csv0, movie, clean))
     if curve == "histogram":
-        dffrq = get_df(".", csv1, movie, clean)
-    df_none = get_df(f"../../none/{given_folder}", csv0, movie, clean)
-    df_social = get_df("../../none/given000", csv0, movie, clean)
+        dffrq[0].append(get_df(".", csv1, movie, clean))
+    df_none[0].append(get_df(f"../../none/{given_folder}", csv0, movie, clean))
+    df_social[0].append(get_df("../../none/given000", csv0, movie, clean))
 
-    return df, df_none, df_social, dffrq, df_social
+    return df, df_none, df_social, dffrq, df_social[0][0]
 
 
 def get_rows(single_trait, trait_set, single_folder):
