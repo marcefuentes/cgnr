@@ -79,9 +79,9 @@ def update_zmatrix(t, update_args, i, j):
         df_social = update_args["df_social"][i][j]
     else:
         trait_in = update_args["columns"][j]
+        df = update_args["dfs"][i]
         df_none = update_args["df_none"]
         df_social = update_args["df_social"]
-        df = update_args["dfs"][i]
 
     none = bool(update_args["rows"][i] == "none" and update_args["trait_set"] != "none")
 
