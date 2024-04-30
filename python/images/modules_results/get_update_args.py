@@ -9,16 +9,16 @@ import pandas as pd
 
 from common_modules.get_config import get_config
 from modules.get_setting import get_setting
-import modules_results.modes as mm
+import modules_results.trait_sets_config as mm
 
 
-def get_columns(single_trait, mode):
-    """Get the columns for the given mode."""
+def get_columns(single_trait, trait_set):
+    """Get the columns for the given trait_set."""
 
     if single_trait:
-        columns = mm.dict_traits[mode]["variants"]
+        columns = mm.dict_traits[trait_set]["variants"]
         return columns
-    columns = mm.dict_multitrait_columns[mode]
+    columns = mm.dict_multitrait_columns[trait_set]
     return columns
 
 
@@ -51,12 +51,12 @@ def get_df(path, filetype, movie, clean):
     return df
 
 
-def get_df_multitrait(mode, curve, movie, clean):
+def get_df_multitrait(trait_set, curve, movie, clean):
     """Get the df for several traits in a variant."""
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
+    rows = mm.dict_multitrait_rows.get(trait_set, mm.dict_multitrait_rows["default"])
 
     dfs = []
     dffrqs = []
@@ -66,7 +66,7 @@ def get_df_multitrait(mode, curve, movie, clean):
             path = "none/given000"
         elif "none" in row:
             path = f"none/{mm.GIVEN_FOLDER}"
-        elif "none" in mode:
+        elif "none" in trait_set:
             path = f"none/{row}"
         else:
             path = f"{row}/{mm.GIVEN_FOLDER}"
@@ -87,17 +87,17 @@ def get_df_multitrait(mode, curve, movie, clean):
     return dfs, df_none, df_social, dffrqs, df_social
 
 
-def get_df_single_trait(mode, curve, movie, clean):
+def get_df_single_trait(trait_set, curve, movie, clean):
     """Get the df for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    variant_prefixes = mm.dict_traits[mode]["variants"]
+    variant_prefixes = mm.dict_traits[trait_set]["variants"]
     variant_suffixes = mm.dict_single_trait_variant_suffixes.get(
-        mode, mm.dict_single_trait_variant_suffixes["default"]
+        trait_set, mm.dict_single_trait_variant_suffixes["default"]
     )
     mechanisms = mm.dict_single_trait_mechanisms.get(
-        mode, mm.dict_single_trait_mechanisms["default"]
+        trait_set, mm.dict_single_trait_mechanisms["default"]
     )
 
     dfs = []
@@ -145,20 +145,20 @@ def get_df_single_trait(mode, curve, movie, clean):
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 
-def get_rows(single_trait, mode):
-    """Get the rows for the given mode."""
+def get_rows(single_trait, trait_set):
+    """Get the rows for the given trait_set."""
 
     if single_trait:
         rows = mm.dict_single_trait_mechanisms.get(
-            mode, mm.dict_single_trait_mechanisms["default"]
+            trait_set, mm.dict_single_trait_mechanisms["default"]
         )
         return rows
-    rows = mm.dict_multitrait_rows.get(mode, mm.dict_multitrait_rows["default"])
+    rows = mm.dict_multitrait_rows.get(trait_set, mm.dict_multitrait_rows["default"])
     return rows
 
 
 def get_update_args(update_args, curve, clean):
-    """Get the df args for the given mode."""
+    """Get the df args for the given trait_set."""
 
     if update_args["single_trait"]:
         function = get_df_single_trait
@@ -171,7 +171,7 @@ def get_update_args(update_args, curve, clean):
         update_args["df_social"],
         update_args["dffrqs"],
         df,
-    ) = function(update_args["mode"], curve, update_args["movie"], clean)
+    ) = function(update_args["trait_set"], curve, update_args["movie"], clean)
 
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]

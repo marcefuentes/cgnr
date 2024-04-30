@@ -10,7 +10,7 @@ from matplotlib import colormaps
 
 from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
-import modules_results.modes as mm
+import modules_results.trait_sets_config as mm
 
 
 def get_zmatrix(t, df, trait):
@@ -50,7 +50,7 @@ def update_histogram(t, update_args, zmatrix, i, j):
 
     if update_args["single_trait"]:
         df = update_args["dffrqs"][i][j]
-        trait = mm.dict_traits[update_args["mode"]]["frq"]
+        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
     else:
         df = update_args["dffrqs"][i]
         trait = mm.dict_traits[update_args["columns"][0]]["frq"]
@@ -71,7 +71,7 @@ def update_zmatrix(t, update_args, i, j):
     """Return the updated zmatrix for a given time and trait."""
 
     if update_args["single_trait"]:
-        trait_in = update_args["mode"]
+        trait_in = update_args["trait_set"]
         df = update_args["dfs"][i][j]
         df_none = update_args["df_none"][i][j]
         df_social = update_args["df_social"][i][j]
@@ -81,14 +81,14 @@ def update_zmatrix(t, update_args, i, j):
         df_social = update_args["df_social"]
         df = update_args["dfs"][i]
 
-    none = bool(update_args["rows"][i] == "none" and update_args["mode"] != "none")
+    none = bool(update_args["rows"][i] == "none" and update_args["trait_set"] != "none")
 
     if "nothing" in trait_in or df.empty:
         zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
         return zmatrix
 
     if trait_in not in mm.dict_traits:
-        print(f"Trait {trait_in} not in dictionary modes.py/dict_traits.")
+        print(f"Trait {trait_in} not in dictionary trait_sets.py/dict_traits.")
         sys.exit()
     trait = mm.dict_traits[trait_in]["mean"]
     relative = mm.dict_traits[trait_in]["relative"]

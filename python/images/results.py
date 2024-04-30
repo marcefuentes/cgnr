@@ -17,7 +17,7 @@ from modules.save_file import save_file
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_artists_imshow, init_artists_plot
-from modules_results.modes import all_traits
+from modules_results.trait_sets_config import all_traits
 from modules_results.parse_args import parse_args
 from modules_results.update import update_artists
 
@@ -31,7 +31,7 @@ def main(args):
     update_args = {
         "alphas": None,
         "artists": None,
-        "columns": get_columns(args.single_trait, args.mode),
+        "columns": get_columns(args.single_trait, args.trait_set),
         "df_none": None,
         "df_social": None,
         "dffrqs": None,
@@ -39,10 +39,10 @@ def main(args):
         "file_name": file_name,
         "frames": None,
         "logess": None,
-        "mode": args.mode,
+        "trait_set": args.trait_set,
         "single_trait": args.single_trait,
         "movie": args.movie,
-        "rows": get_rows(args.single_trait, args.mode),
+        "rows": get_rows(args.single_trait, args.trait_set),
         "text": "",
         "update_function": update_artists,
         "n_x_values": None,
@@ -87,13 +87,13 @@ def main(args):
     if args.curve:
         file_name += f"_{args.curve}"
 
-    if args.mode == "all_traits":
+    if args.trait_set == "all_traits":
         for trait in all_traits:
-            update_args["mode"] = trait
+            update_args["trait_set"] = trait
             update_args["file_name"] = f"{file_name}_{trait}"
             save_file(fig, update_args)
     else:
-        update_args["file_name"] = f"{file_name}_{args.mode}"
+        update_args["file_name"] = f"{file_name}_{args.trait_set}"
         save_file(fig, update_args)
     close_plt(fig)
 
