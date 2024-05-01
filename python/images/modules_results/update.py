@@ -42,11 +42,15 @@ def update_artists(t, update_args):
                 else:
                     df = update_args["dffrqs"][i]
                     trait = mm.dict_traits[update_args["columns"][j]]["frq"]
+                if df.empty:
+                    continue
                 for k, alpha in enumerate(update_args["alphas"]):
                     for m, loges in enumerate(update_args["logess"]):
-                        y = update_histogram(df, trait, update_args["n_x_values"], t, alpha, loges)
+                        y = update_histogram(df, trait, t, alpha, loges)
                         update_args["artists"][i, j, k, m].set_ydata(y)
-                        bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[k, m] + 1) / 2)
+                        bgcolor = colormaps[get("COMMON", "color_map")](
+                            (zmatrix[k, m] + 1) / 2
+                        )
                         update_args["artists"][i, j, k, m].axes.set_facecolor(bgcolor)
             else:
                 update_args["artists"][i, j, 0, 0].set_array(zmatrix)
@@ -54,11 +58,8 @@ def update_artists(t, update_args):
     return update_args["artists"].flatten()
 
 
-def update_histogram(df, trait, n_x_values, t, alpha, loges):
+def update_histogram(df, trait, t, alpha, loges):
     """Update the histogram with the data at time t."""
-
-    if df.empty:
-        return np.zeros(n_x_values)
 
     d = df[(df["Time"] == t) & (df["alpha"] == alpha) & (df["logES"] == loges)]
     freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]

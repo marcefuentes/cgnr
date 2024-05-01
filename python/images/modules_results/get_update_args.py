@@ -9,7 +9,6 @@ import pandas as pd
 
 from common_modules.get_config import get_config
 from modules.get_setting import get_setting
-from modules.theory import fitness
 import modules_results.trait_sets_config as mm
 
 
@@ -22,7 +21,7 @@ def get_columns(single_trait, trait_set, single_folder):
     if single_trait:
         columns = mm.dict_traits[trait_set]["variants"]
         return columns
-    columns = mm.dict_multitrait_columns[trait_set]
+    columns = mm.dict_single_folder_columns[trait_set]
     return columns
 
 
@@ -55,12 +54,14 @@ def get_df(path, filetype, movie, clean):
     return df
 
 
-def get_df_multitrait(trait_set, curve, movie, clean):
+def get_df_single_folder(trait_set, curve, movie, clean):
     """Get the df for several traits in a variant."""
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    rows = mm.dict_multitrait_rows.get(trait_set, mm.dict_multitrait_rows["default"])
+    rows = mm.dict_single_folder_rows.get(
+        trait_set, mm.dict_single_folder_rows["default"]
+    )
 
     dfs, dffrqs = [], []
 
@@ -145,7 +146,7 @@ def get_df_single_trait(trait_set, curve, movie, clean):
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 
-def get_df_single_trait_single_folder(trait_set, curve, movie, clean):
+def get_df_single_trait_single_folder(curve, movie, clean):
     """Get the df for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -172,7 +173,9 @@ def get_rows(single_trait, trait_set, single_folder):
             trait_set, mm.dict_single_trait_mechanisms["default"]
         )
         return rows
-    rows = mm.dict_multitrait_rows.get(trait_set, mm.dict_multitrait_rows["default"])
+    rows = mm.dict_single_folder_rows.get(
+        trait_set, mm.dict_single_folder_rows["default"]
+    )
     return rows
 
 
@@ -185,19 +188,36 @@ def get_update_args(update_args, clean):
         update_args["n_x_values"] = get_config("bins")
 
     if update_args["single_trait"] and update_args["single_folder"]:
-        function = get_df_single_trait_single_folder
-    elif update_args["single_trait"]:
-        function = get_df_single_trait
-    else:
-        function = get_df_multitrait
+        (
+            update_args["dfs"],
+            update_args["df_none"],
+            update_args["df_social"],
+            update_args["dffrqs"],
+            df,
+        ) = get_df_single_trait_single_folder(
+            update_args["curve"], update_args["movie"], clean
+        )
 
-    (
-        update_args["dfs"],
-        update_args["df_none"],
-        update_args["df_social"],
-        update_args["dffrqs"],
-        df,
-    ) = function(update_args["trait_set"], update_args["curve"], update_args["movie"], clean)
+    elif update_args["single_trait"]:
+        (
+            update_args["dfs"],
+            update_args["df_none"],
+            update_args["df_social"],
+            update_args["dffrqs"],
+            df,
+        ) = get_df_single_trait(
+            update_args["trait_set"], update_args["curve"], update_args["movie"], clean
+        )
+    else:
+        (
+            update_args["dfs"],
+            update_args["df_none"],
+            update_args["df_social"],
+            update_args["dffrqs"],
+            df,
+        ) = get_df_single_folder(
+            update_args["trait_set"], update_args["curve"], update_args["movie"], clean
+        )
 
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]

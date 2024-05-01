@@ -2,6 +2,27 @@
 
 all_variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
 
+dict_single_trait_variant_suffixes = {
+    "default": [
+        "cost15_128",
+        "cost15_128",
+        "cost15_128",
+        "cost15_128",
+        "cost15_128",
+        "cost15_4",
+        "cost15_4",
+        "cost15_4",
+        "cost15_4",
+        "cost15_4",
+    ]
+}
+
+dict_single_trait_mechanisms = {
+    "default": ["p", "pd", "d", "pi", "i", "p", "pd", "d", "pi", "i"],
+}
+
+GIVEN_FOLDER = "given100"
+
 all_traits = [
     "ChooseGrain",
     "Choose_ltGrain",
@@ -88,13 +109,13 @@ dict_traits = {
     "all_traits": {"variants": all_variants},
 }
 
-dict_multitrait_rows = {
+dict_single_folder_rows = {
     "default": ["p", "pi", "i", "none"],
     "none": ["given100", "given000"],
     "test": ["p", "i", "none"],
 }
 
-dict_multitrait_columns = {
+dict_single_folder_columns = {
     "cooperation": [
         "ChooseGrain",
         "MimicGrain",
@@ -135,24 +156,3 @@ dict_multitrait_columns = {
     "none": ["qBSeen", "qBSeen_excess_none", "qBSeen_byproduct", "w", "w_excess_none"],
     "test": ["qBSeen", "w"],
 }
-
-dict_single_trait_variant_suffixes = {
-    "default": [
-        "cost15_128",
-        "cost15_128",
-        "cost15_128",
-        "cost15_128",
-        "cost15_128",
-        "cost15_4",
-        "cost15_4",
-        "cost15_4",
-        "cost15_4",
-        "cost15_4",
-    ]
-}
-
-dict_single_trait_mechanisms = {
-    "default": ["p", "pd", "d", "pi", "i", "p", "pd", "d", "pi", "i"],
-}
-
-GIVEN_FOLDER = "given100"

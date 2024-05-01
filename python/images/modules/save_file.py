@@ -5,7 +5,7 @@ from modules.save_movie import save_movie
 
 
 def save_file(fig, update_args):
-    """ Save the figure to a file. """
+    """Save the figure to a file."""
 
     if update_args["movie"]:
         save_movie(fig, update_args)

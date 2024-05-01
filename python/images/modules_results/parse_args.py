@@ -27,14 +27,16 @@ def parse_args():
         single_trait = False
         single_folder = False
         description = "description: Plot results for several traits in this variant"
-        choices_trait_set = list(mm.dict_multitrait_columns.keys())
+        choices_trait_set = list(mm.dict_single_folder_columns.keys())
         arg_help = "trait set (required)"
 
     parser = argparse.ArgumentParser(
         description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
-    parser.add_argument("--trait_set", type=str, choices=choices_trait_set, help=arg_help)
+    parser.add_argument(
+        "--trait_set", type=str, choices=choices_trait_set, help=arg_help
+    )
 
     choices_curve = ["histogram", None]
     parser.add_argument("--curve", type=str, choices=choices_curve, help="add curve")

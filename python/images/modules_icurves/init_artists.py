@@ -42,7 +42,8 @@ def init_plot_artists(axs, update_args, static_y_data):
             )
 
             update_args["landscapes"][i, j] = LineCollection(
-                [], lw=get("COMMON", "line_width") * plot_size * 12 / nc,
+                [],
+                lw=get("COMMON", "line_width") * plot_size * 12 / nc,
             )
             axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
 
