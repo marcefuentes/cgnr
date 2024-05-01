@@ -55,7 +55,7 @@ def init_artists_fitness(axs, x_values, y_values):
                 for m in range(nc):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x_values,
-                        y_values[k, m] + 0.5,
+                        y_values[k, m],
                         c="black",
                         lw=get("COMMON", "line_width") * get("COMMON", "plot_size"),
                     )
