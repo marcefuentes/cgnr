@@ -22,7 +22,7 @@ def init_artists_imshow(axs, mr, mc):
     return artists
 
 
-def init_artists_plot(axs, n_x_values):
+def init_artists_histogram(axs, n_x_values):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
@@ -37,6 +37,25 @@ def init_artists_plot(axs, n_x_values):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x,
                         dummy_y,
+                        c="black",
+                        lw=get("COMMON", "line_width") * get("COMMON", "plot_size"),
+                    )
+    return artists
+
+
+def init_artists_fitness(axs, x_values, y_values):
+    """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
+
+    nrows, ncols, nr, nc = axs.shape
+    artists = np.empty_like(axs)
+
+    for i in range(nrows):
+        for j in range(ncols):
+            for k in range(nr):
+                for m in range(nc):
+                    (artists[i, j, k, m],) = axs[i, j, k, m].plot(
+                        x_values,
+                        y_values[k, m] + 0.5,
                         c="black",
                         lw=get("COMMON", "line_width") * get("COMMON", "plot_size"),
                     )

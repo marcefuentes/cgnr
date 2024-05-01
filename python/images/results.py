@@ -15,8 +15,13 @@ from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from modules_results.get_sm import get_sm
+from modules_results.get_static_y_data import get_static_y_data
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
-from modules_results.init_artists import init_artists_imshow, init_artists_plot
+from modules_results.init_artists import (
+    init_artists_imshow,
+    init_artists_histogram,
+    init_artists_fitness,
+)
 from modules_results.parse_args import parse_args
 from modules_results.trait_sets_config import all_traits
 from modules_results.update import update_artists
@@ -35,7 +40,6 @@ def main(args):
         "curve": args.curve,
         "df_none": None,
         "df_social": None,
-        "dffrqs": None,
         "dfs": None,
         "file_name": file_name,
         "frames": None,
@@ -64,13 +68,16 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    update_args["artists"] = (
-        init_artists_plot(axs, update_args["n_x_values"])
-        if args.curve
-        else init_artists_imshow(
+    if args.curve == "histogram":
+        update_args["artists"] = init_artists_histogram(axs, update_args["n_x_values"])
+    elif args.curve == "fitness":
+        update_args["artists"] = init_artists_fitness(
+            axs, update_args["x_values"], get_static_y_data(update_args)
+        )
+    else:
+        update_args["artists"] = init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])
         )
-    )
 
     axes_args = {
         "axs": axs,

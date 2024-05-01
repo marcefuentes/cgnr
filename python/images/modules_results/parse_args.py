@@ -38,7 +38,7 @@ def parse_args():
         "--trait_set", type=str, choices=choices_trait_set, help=arg_help
     )
 
-    choices_curve = ["histogram", None]
+    choices_curve = ["histogram", "fitness", None]
     parser.add_argument("--curve", type=str, choices=choices_curve, help="add curve")
 
     parser.add_argument("--movie", action="store_true", help="enable movie")

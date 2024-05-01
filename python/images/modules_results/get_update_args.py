@@ -182,8 +182,11 @@ def get_rows(single_trait, trait_set, single_folder):
 def get_update_args(update_args, clean):
     """Get the df args for the given trait_set."""
 
-    if update_args["curve"] == "landscape":
+    if update_args["curve"] == "fitness":
         update_args["n_x_values"] = get_setting(update_args["file_name"], "n_x_values")
+        update_args["x_values"] = np.linspace(
+            0.001, 0.999, num=update_args["n_x_values"]
+        )
     elif update_args["curve"] == "histogram":
         update_args["n_x_values"] = get_config("bins")
 
@@ -222,6 +225,8 @@ def get_update_args(update_args, clean):
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
     update_args["logess"] = np.sort(df["logES"].unique())
+    if update_args["curve"] == "fitness":
+        update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
 
     return update_args
 
