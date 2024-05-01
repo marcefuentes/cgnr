@@ -34,6 +34,9 @@ def get_static_y_data(update_args):
             qb_private = qbeq(given, alpha, rho)
             reciprocator[i, j] = fitness(x_values, x_values, given, alpha, rho)
             non_reciprocator[i, j] = fitness(x_values, qb_social, given, alpha, rho)
+            #mask = x_values > qb_social
+            #reciprocator[i, j][mask] = -1
 
-    y = reciprocator - non_reciprocator
+    y = (reciprocator - non_reciprocator) * 2 
+  
     return y
