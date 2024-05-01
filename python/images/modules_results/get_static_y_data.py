@@ -31,7 +31,9 @@ def get_static_y_data(update_args):
     for i, alpha in enumerate(update_args["alphas"]):
         for j, rho in enumerate(update_args["rhos"]):
             qb_social = qbeq(0.0, alpha, rho)
+            qb_private = qbeq(given, alpha, rho)
             reciprocator[i, j] = fitness(x_values, x_values, given, alpha, rho)
             non_reciprocator[i, j] = fitness(x_values, qb_social, given, alpha, rho)
 
-    return reciprocator
+    y = reciprocator - non_reciprocator
+    return y

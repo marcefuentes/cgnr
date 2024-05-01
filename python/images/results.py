@@ -84,13 +84,18 @@ def main(args):
         "column_titles": get_titles(update_args["columns"]),
         "divider": create_divider(fig, fig_layout, fig_distances),
         "row_titles": get_titles(update_args["rows"]),
-        "x_lim": (
-            [-2, get_config("bins") + 1] if args.curve == "histogram" else [None, None]
-        ),
+        "x_lim": [None, None],
         "c_values": update_args["logess"],
-        "y_lim": [0, 0.25] if args.curve == "histogram" else [None, None],
+        "y_lim": [None, None],
         "r_values": update_args["alphas"],
     }
+    if args.curve == "fitness":
+        axes_args["x_lim"] = [0, 1]
+        axes_args["y_lim"] = [0, 1]
+    if args.curve == "histogram":
+        axes_args["x_lim"] = [-2, get_config("bins") + 1]
+        axes_args["y_lim"] = [0, 0.25]
+
     prettify_axes(axes_args)
 
     if args.curve:
