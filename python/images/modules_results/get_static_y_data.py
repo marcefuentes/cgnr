@@ -28,15 +28,16 @@ def get_static_y_data(update_args):
     )
     non_reciprocator = np.zeros_like(reciprocator)
 
+    increment = 0.1/100.0
     for i, alpha in enumerate(update_args["alphas"]):
         for j, rho in enumerate(update_args["rhos"]):
             qb_social = qbeq(0.0, alpha, rho)
             qb_private = qbeq(given, alpha, rho)
             reciprocator[i, j] = fitness(x_values, x_values, given, alpha, rho)
-            non_reciprocator[i, j] = fitness(x_values, qb_social, given, alpha, rho)
-            #mask = x_values > qb_social
-            #reciprocator[i, j][mask] = -1
+            non_reciprocator[i, j] = fitness(x_values, x_values + increment, given, alpha, rho)
+            mask = x_values + increment > qb_social
+            reciprocator[i, j][mask] = None
 
-    y = (reciprocator - non_reciprocator) * 2 
+    y = (reciprocator - non_reciprocator) * 1000
   
     return y
