@@ -28,7 +28,7 @@ def get_static_y_data(update_args):
     )
     non_reciprocator = np.zeros_like(reciprocator)
 
-    increment = 0.1/100.0
+    increment = 0.001
     for i, alpha in enumerate(update_args["alphas"]):
         for j, rho in enumerate(update_args["rhos"]):
             qb_social = qbeq(0.0, alpha, rho)
@@ -39,5 +39,7 @@ def get_static_y_data(update_args):
             reciprocator[i, j][mask] = None
 
     y = (reciprocator - non_reciprocator) * 1000
+    mask = y <= 0
+    y[mask] = None
   
     return y
