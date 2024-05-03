@@ -17,7 +17,7 @@ from modules_icurves.get_static_y_data import get_static_y_data
 from modules_icurves.get_update_args import get_update_args
 from modules_icurves.init_artists import init_plot_artists
 from modules_icurves.parse_args import parse_args
-from modules_icurves.update import update_artists
+from modules_icurves.update_artists import update_artists
 
 
 def main(args):
