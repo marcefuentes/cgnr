@@ -55,25 +55,12 @@ def update_artists(t, update_args):
                     if df.empty:
                         continue
                     df = df[df["Time"] == t]
-                    artists = update_artists_histogram(artists, df, update_args["alphas"], update_args["logess"], trait)
+                    artists = update_artists_histogram(
+                        artists, df, update_args["alphas"], update_args["logess"], trait
+                    )
             else:
                 artists[0, 0].set_array(zmatrix)
     return update_args["artists"].flatten()
-
-
-def update_artists_plot(artists, zmatrix):
-    """Update background colors of plots."""
-
-    nr, nc = zmatrix.shape
-
-    for i in range(nr):
-        for j in range(nc):
-            bgcolor = colormaps[get("COMMON", "color_map")](
-                (zmatrix[i, j] + 1) / 2
-            )
-            artists[i, j].axes.set_facecolor(bgcolor)
-
-    return artists
 
 
 def update_artists_histogram(artists, df, alphas, logess, trait):
@@ -85,6 +72,19 @@ def update_artists_histogram(artists, df, alphas, logess, trait):
             freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
             y = d.loc[:, freq_a].values[0].flatten()
             artists[i, j].set_ydata(y)
+    return artists
+
+
+def update_artists_plot(artists, zmatrix):
+    """Update background colors of plots."""
+
+    nr, nc = zmatrix.shape
+
+    for i in range(nr):
+        for j in range(nc):
+            bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[i, j] + 1) / 2)
+            artists[i, j].axes.set_facecolor(bgcolor)
+
     return artists
 
 

@@ -17,7 +17,7 @@ def get_static_y_data(update_args):
         given_folder = os.path.basename(os.getcwd())
     else:
         given_folder = GIVEN_FOLDER
-    given = float(given_folder[-3:])/100
+    given = float(given_folder[-3:]) / 100
 
     reciprocator = np.zeros(
         (
@@ -34,12 +34,14 @@ def get_static_y_data(update_args):
             qb_social = qbeq(0.0, alpha, rho)
             qb_private = qbeq(given, alpha, rho)
             reciprocator[i, j] = fitness(x_values, x_values, given, alpha, rho)
-            non_reciprocator[i, j] = fitness(x_values, x_values + increment, given, alpha, rho)
+            non_reciprocator[i, j] = fitness(
+                x_values, x_values + increment, given, alpha, rho
+            )
             mask = x_values + increment > qb_social
             reciprocator[i, j][mask] = None
 
     y = (reciprocator - non_reciprocator) * 1000
     mask = y <= 0
     y[mask] = None
-  
+
     return y
