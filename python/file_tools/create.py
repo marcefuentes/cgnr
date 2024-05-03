@@ -36,7 +36,7 @@ def main(args):
     if not args.partnerchoice and not reciprocity:
         path += "none"
 
-    path += f"/given{str(int((args.given) * 100)).zfill(3)}"
+    path += f"/{str(args.given)}"
     os.makedirs(path, exist_ok=True)
 
     grid = get_config("grid")
