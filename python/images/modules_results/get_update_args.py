@@ -67,7 +67,7 @@ def get_df_single_folder(trait_set, curve, movie, clean):
 
     for row in rows:
         if row == "social":
-            path = "none/given000"
+            path = "none/0"
         elif "none" in row:
             path = f"none/{mm.GIVEN_FOLDER}"
         elif "none" in trait_set:
@@ -85,7 +85,7 @@ def get_df_single_folder(trait_set, curve, movie, clean):
     if "social" in rows:
         df_social = dfs[rows.index("social")]
     else:
-        path = "none/given000"
+        path = "none/0"
         df_social = get_df(path, csv0, movie, clean)
 
     return dfs, df_none, df_social, dffrqs, df_social
@@ -138,7 +138,7 @@ def get_df_single_trait(trait_set, curve, movie, clean):
         )
         df_socials.append(
             [
-                get_df(f"{prefix}_{suffix}/none/given000", csv0, movie, clean)
+                get_df(f"{prefix}_{suffix}/none/0", csv0, movie, clean)
                 for prefix in variant_prefixes
             ]
         )
@@ -157,7 +157,7 @@ def get_df_single_trait_single_folder(curve, movie, clean):
     if curve == "histogram":
         dffrq[0].append(get_df(".", csv1, movie, clean))
     df_none[0].append(get_df(f"../../none/{given_folder}", csv0, movie, clean))
-    df_social[0].append(get_df("../../none/given000", csv0, movie, clean))
+    df_social[0].append(get_df("../../none/0", csv0, movie, clean))
 
     return df, df_none, df_social, dffrq, df_social[0][0]
 

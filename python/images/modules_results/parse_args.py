@@ -11,7 +11,7 @@ def parse_args():
 
     folder = os.path.basename(os.getcwd())
 
-    if folder.startswith("given"):
+    if folder.startswith("0") or folder.startswith("1"):
         single_trait = True
         single_folder = True
         description = "description: Plot results for a trait in this folder"

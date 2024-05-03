@@ -17,7 +17,7 @@ def get_static_y_data(update_args):
         given_folder = os.path.basename(os.getcwd())
     else:
         given_folder = GIVEN_FOLDER
-    given = float(given_folder[-3:]) / 100
+    given = float(given_folder)
 
     reciprocator = np.zeros(
         (

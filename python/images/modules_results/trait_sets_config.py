@@ -21,7 +21,7 @@ dict_single_trait_mechanisms = {
     "default": ["p", "pd", "d", "pi", "i", "p", "pd", "d", "pi", "i"],
 }
 
-GIVEN_FOLDER = "given100"
+GIVEN_FOLDER = "1"
 
 all_traits = [
     "ChooseGrain",
@@ -111,7 +111,7 @@ dict_traits = {
 
 dict_single_folder_rows = {
     "default": ["p", "pi", "i", "none"],
-    "none": ["given100", "given000"],
+    "none": ["1", "0"],
     "test": ["p", "i", "none"],
 }
 
