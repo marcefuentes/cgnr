@@ -19,7 +19,7 @@ def find_errors(current_path, input_file, folder_dict):
 
     current_path_folders = current_path.split("/")
     given = current_path_folders[-1]
-    folder_dict["Given"] = float(given[-3:]) / 100
+    folder_dict["Given"] = float(given)
 
     with open(os.path.join(current_path, input_file), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
@@ -98,7 +98,7 @@ def job_status(current_path, total_jobs):
 
     print(
         (
-            f"{color.BOLD}{color.GREEN}{finished_jobs:>4}{color.RESET}"
+            f"{color.BOLD}{color.GREEN}\t{finished_jobs:>4}{color.RESET}"
             if finished_jobs
             else ""
         ),
