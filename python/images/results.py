@@ -24,7 +24,7 @@ from modules_results.init_artists import (
 )
 from modules_results.parse_args import parse_args
 from modules_results.trait_sets_config import all_traits
-from modules_results.update import update_artists
+from modules_results.update_artists import update_artists
 
 
 def main(args):
