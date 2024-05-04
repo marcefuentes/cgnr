@@ -38,7 +38,7 @@ int gShuffle; // Shuffle partners in markets every time step
 double gGiven;
 double galpha;
 double glogES, grho; // Elasticity of substitution. ES = 1/(1 - rho)
-	// CES fitness function: w = (alpha*q1^rho + (1 - alpha)*q2^rho)^(1/rho)
+	// CES fitness function: w = (alpha*qA^rho + (1 - alpha)*qB^rho)^(1/rho)
 
 // Functions
 
@@ -47,7 +47,7 @@ void write_globals(char *filename);
 void caso(struct ptype *p_first, char *filename);
 void start_population(struct itype *i, struct itype *i_last);
 double fitness(struct itype *i, struct itype *i_last);
-double ces(double q1, double q2); // glogES, galpha
+double ces(double qA, double qB); // glogES, galpha
 void update_scores(struct itype *i, struct itype *i_last);
 
 int main(int argc, char *argv[])
@@ -323,14 +323,14 @@ double fitness(struct itype *i, struct itype *i_last)
 	return wC;
 }
 
-double ces(double q1, double q2)
+double ces(double qA, double qB)
 {
 	double w;
 
 	if (grho > -0.001 && grho < 0.001) {
-		w = pow(q1, 1.0 - galpha) * pow(q2, galpha); // Cobb-Douglas
+		w = pow(qA, 1.0 - galpha) * pow(qB, galpha); // Cobb-Douglas
 	} else {
-		w = pow((1.0 - galpha) * pow(q1, grho) + galpha * pow(q2, grho),
+		w = pow((1.0 - galpha) * pow(qA, grho) + galpha * pow(qB, grho),
 			1.0 / grho);
 	}
 
