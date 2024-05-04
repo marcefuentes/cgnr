@@ -43,7 +43,6 @@ double glogES, grho; // Elasticity of substitution. ES = 1/(1 - rho)
 // Functions
 
 void read_globals(char *filename);
-void write_globals(char *filename);
 void caso(struct ptype *p_first, char *filename);
 void start_population(struct itype *i, struct itype *i_last);
 double fitness(struct itype *i, struct itype *i_last);
