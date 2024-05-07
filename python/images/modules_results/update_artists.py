@@ -4,13 +4,13 @@ import re
 import sys
 
 import numpy as np
-import pandas as pd
 
 from matplotlib import colormaps
 
 from common_modules.get_config import get_config
 from modules.get_setting import get_setting as get
 import modules_results.trait_sets_config as mm
+from modules_results.get_zmatrix import get_zmatrix
 
 
 def get_frq(update_args, i, j):
@@ -23,19 +23,6 @@ def get_frq(update_args, i, j):
         df = update_args["dffrqs"][i]
         trait = mm.dict_traits[update_args["columns"][j]]["frq"]
     return df, trait
-
-
-def get_zmatrix(t, df, trait):
-    """Returns the zmatrix for a given time, dataframe, and trait."""
-
-    if trait not in df.columns:
-        print(f"Trait {trait} not in the dataframe.")
-        return None
-    m = df.Time == t
-    zmatrix = pd.pivot(df.loc[m], values=trait, index="alpha", columns="logES")
-    zmatrix = zmatrix.sort_index(axis=0, ascending=False)
-    zmatrix = zmatrix.to_numpy()
-    return zmatrix
 
 
 def update_artists(t, update_args):
