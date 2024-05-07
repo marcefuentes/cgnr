@@ -98,7 +98,7 @@ def job_status(current_path, total_jobs):
 
     print(
         (
-            f"{color.BOLD}{color.GREEN}\t{finished_jobs:>4}{color.RESET}"
+            f"{color.BOLD}{color.GREEN}{finished_jobs:>4}{color.RESET}"
             if finished_jobs
             else ""
         ),
@@ -154,9 +154,9 @@ def process_given(current_path, folder_dict):
     given = current_path_folders[-1]
 
     if os.path.islink(current_path):
-        print(f"{color.CYAN}\t{given}{color.RESET}", end="  ")
+        print(f"{color.CYAN}\t{given:<5}{color.RESET}", end="")
     else:
-        print(f"{color.WHITE}\t{given}{color.RESET}", end="  ")
+        print(f"{color.WHITE}\t{given:<5}{color.RESET}", end="")
 
     input_file_extension = get_config("input_file_extension")
     input_files = [
