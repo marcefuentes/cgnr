@@ -6,7 +6,7 @@ from matplotlib.collections import LineCollection
 from modules.get_setting import get_setting as get
 
 
-def init_plot_artists(axs, update_args, static_y_data):
+def init_artists_2dline(axs, update_args, static_y_data):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     _, _, nr, nc = axs.shape
