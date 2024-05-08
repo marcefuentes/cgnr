@@ -43,12 +43,12 @@ def main(args):
         "frames": None,
         "histogram": args.histogram,
         "logess": None,
-        "trait_set": args.trait_set,
-        "single_folder": args.single_folder,
-        "single_trait": args.single_trait,
         "movie": args.movie,
         "rows": get_rows(args.single_trait, args.trait_set, args.single_folder),
+        "single_folder": args.single_folder,
+        "single_trait": args.single_trait,
         "text": "",
+        "trait_set": args.trait_set,
         "update_function": update_artists,
     }
 
