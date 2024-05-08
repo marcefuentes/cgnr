@@ -89,7 +89,7 @@ def main(args):
     }
 
     if args.curve or args.histogram:
-        axes_args["x_lim"], axes_args["y_lim"] = get_lims(args.curve, args.histogram)
+        axes_args["x_lim"], axes_args["y_lim"] = get_lims(args.curve)
 
     prettify_axes(axes_args)
 

@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 
 from common_modules.get_config import get_config
-from modules.get_setting import get_setting
 import modules_results.trait_sets_config as mm
 
 
