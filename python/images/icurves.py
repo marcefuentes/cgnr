@@ -26,17 +26,17 @@ def main(args):
     start_time = time.perf_counter()
 
     update_args = {
-        "file_name": os.path.basename(__file__).split(".")[0],
-        "movie": args.movie,
-        "update_function": update_artists,
-        "frames": None,
         "alphas": None,
-        "rhos": None,
-        "logess": None,
-        "x_values": None,
         "budgets": None,
+        "file_name": os.path.basename(__file__).split(".")[0],
+        "frames": None,
         "icurves": None,
         "landscapes": None,
+        "logess": None,
+        "movie": args.movie,
+        "rhos": None,
+        "update_function": update_artists,
+        "x_values": None,
     }
 
     update_args = get_update_args(update_args)
