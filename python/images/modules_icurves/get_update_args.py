@@ -23,8 +23,5 @@ def get_update_args(update_args):
         num=get(update_args["file_name"], "nc"),
     )
     update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
-    update_args["x_values"] = np.linspace(
-        0.001, 0.999, num=get(update_args["file_name"], "n_x_values")
-    )
 
     return update_args
