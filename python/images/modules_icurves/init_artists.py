@@ -2,6 +2,7 @@
 
 import numpy as np
 from matplotlib.collections import LineCollection
+from matplotlib.lines import Line2D
 
 from modules.get_setting import get_setting as get
 
@@ -26,20 +27,22 @@ def init_artists_line2d(axs, update_args, static_y_data):
                     c="0.850",
                     lw=get("COMMON", "line_width") * plot_size * 6 / nc,
                 )
-            (update_args["budgets"][i, j],) = axs[0, 0, i, j].plot(
+            update_args["budgets"][i, j] = Line2D(
                 update_args["x_values"],
                 dummy_y,
                 c="0.300",
                 lw=get("COMMON", "line_width") * plot_size * 12 / nc,
                 alpha=0.6,
             )
+            axs[0, 0, i, j].add_line(update_args["budgets"][i, j])
 
-            (update_args["icurves"][i, j],) = axs[0, 0, i, j].plot(
+            update_args["icurves"][i, j] = Line2D(
                 update_args["x_values"],
                 dummy_y,
                 lw=get("COMMON", "line_width") * plot_size * 12 / nc,
                 alpha=0.8,
             )
+            axs[0, 0, i, j].add_line(update_args["icurves"][i, j])
 
             update_args["landscapes"][i, j] = LineCollection(
                 [],
