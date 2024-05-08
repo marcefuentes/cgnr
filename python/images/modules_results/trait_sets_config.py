@@ -153,6 +153,6 @@ dict_single_folder_columns = {
         "r_Mimic_Imimic_lt",
         "r_Imimic_Imimic_lt",
     ],
-    "none": ["qBSeen", "qBSeen_excess_none", "qBSeen_byproduct", "w", "w_excess_none"],
+    "none": ["qBSeen", "qBSeen_excess_none", "w", "w_excess_none"],
     "test": ["qBSeen", "w"],
 }
