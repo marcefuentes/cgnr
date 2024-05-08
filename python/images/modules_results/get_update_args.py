@@ -201,7 +201,10 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_trait(
-            update_args["trait_set"], update_args["histogram"], update_args["movie"], clean
+            update_args["trait_set"],
+            update_args["histogram"],
+            update_args["movie"],
+            clean,
         )
     else:
         (
@@ -211,7 +214,10 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_folder(
-            update_args["trait_set"], update_args["histogram"], update_args["movie"], clean
+            update_args["trait_set"],
+            update_args["histogram"],
+            update_args["movie"],
+            clean,
         )
 
     update_args["frames"] = df.Time.unique()
