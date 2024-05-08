@@ -18,7 +18,7 @@ from modules_results.get_static_data import get_lims, get_static_data
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.init_artists import (
     init_artists_imshow,
-    init_artists_2dline,
+    init_artists_line2d,
 )
 from modules_results.parse_args import parse_args
 from modules_results.trait_sets_config import all_traits
@@ -71,7 +71,7 @@ def main(args):
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
     if args.curve or args.histogram:
-        update_args["artists"] = init_artists_2dline(axs, *get_static_data(update_args))
+        update_args["artists"] = init_artists_line2d(axs, *get_static_data(update_args))
     else:
         update_args["artists"] = init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])

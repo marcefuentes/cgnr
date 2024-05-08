@@ -15,7 +15,7 @@ from modules.save_image import close_plt
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_y_data import get_static_y_data
 from modules_icurves.get_update_args import get_update_args
-from modules_icurves.init_artists import init_artists_2dline
+from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
 
@@ -53,7 +53,7 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    update_args = init_artists_2dline(axs, update_args, get_static_y_data(update_args))
+    update_args = init_artists_line2d(axs, update_args, get_static_y_data(update_args))
 
     axes_args = {
         "axs": axs,

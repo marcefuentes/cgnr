@@ -22,7 +22,7 @@ def init_artists_imshow(axs, mr, mc):
     return artists
 
 
-def init_artists_2dline(axs, x, y):
+def init_artists_line2d(axs, x, y):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
