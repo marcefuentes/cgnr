@@ -3,6 +3,7 @@
 import numpy as np
 
 from modules.get_setting import get_setting as get
+from modules_results.get_static_data import get_static_data
 
 
 def init_artists_imshow(axs, mr, mc):
@@ -22,13 +23,12 @@ def init_artists_imshow(axs, mr, mc):
     return artists
 
 
-def init_artists_histogram(axs, n_x_values):
+def init_artists_2dline(axs, update_args):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
-    x = np.arange(n_x_values)
-    dummy_y = np.zeros_like(x)
+    x, y = get_static_data(update_args)
 
     for i in range(nrows):
         for j in range(ncols):
@@ -36,26 +36,7 @@ def init_artists_histogram(axs, n_x_values):
                 for m in range(nc):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x,
-                        dummy_y,
-                        c="black",
-                        lw=get("COMMON", "line_width") * get("COMMON", "plot_size"),
-                    )
-    return artists
-
-
-def init_artists_fitness(axs, x_values, y_values):
-    """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
-
-    nrows, ncols, nr, nc = axs.shape
-    artists = np.empty_like(axs)
-
-    for i in range(nrows):
-        for j in range(ncols):
-            for k in range(nr):
-                for m in range(nc):
-                    (artists[i, j, k, m],) = axs[i, j, k, m].plot(
-                        x_values,
-                        y_values[k, m],
+                        y[k, m],
                         c="black",
                         lw=get("COMMON", "line_width") * get("COMMON", "plot_size"),
                     )

@@ -54,7 +54,7 @@ def get_df(path, filetype, movie, clean):
     return df
 
 
-def get_df_single_folder(trait_set, curve, movie, clean):
+def get_df_single_folder(trait_set, histogram, movie, clean):
     """Get the df for several traits in a variant."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -75,7 +75,7 @@ def get_df_single_folder(trait_set, curve, movie, clean):
         else:
             path = f"{row}/{mm.GIVEN_FOLDER}"
         dfs.append(get_df(path, csv0, movie, clean))
-        if curve == "histogram":
+        if histogram:
             dffrqs.append(get_df(path, csv1, movie, clean))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
@@ -91,7 +91,7 @@ def get_df_single_folder(trait_set, curve, movie, clean):
     return dfs, df_none, df_social, dffrqs, df_social
 
 
-def get_df_single_trait(trait_set, curve, movie, clean):
+def get_df_single_trait(trait_set, histogram, movie, clean):
     """Get the df for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -118,7 +118,7 @@ def get_df_single_trait(trait_set, curve, movie, clean):
                 for prefix in variant_prefixes
             ]
         )
-        if curve == "histogram":
+        if histogram:
             dffrqs.append(
                 [
                     get_df(
@@ -146,7 +146,7 @@ def get_df_single_trait(trait_set, curve, movie, clean):
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 
-def get_df_single_trait_single_folder(curve, movie, clean):
+def get_df_single_trait_single_folder(histogram, movie, clean):
     """Get the df for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -154,7 +154,7 @@ def get_df_single_trait_single_folder(curve, movie, clean):
 
     df, dffrq, df_none, df_social = [[]], [[]], [[]], [[]]
     df[0].append(get_df(".", csv0, movie, clean))
-    if curve == "histogram":
+    if histogram:
         dffrq[0].append(get_df(".", csv1, movie, clean))
     df_none[0].append(get_df(f"../../none/{given_folder}", csv0, movie, clean))
     df_social[0].append(get_df("../../none/0", csv0, movie, clean))
@@ -182,14 +182,6 @@ def get_rows(single_trait, trait_set, single_folder):
 def get_update_args(update_args, clean):
     """Get the df args for the given trait_set."""
 
-    if update_args["curve"] == "fitness":
-        update_args["n_x_values"] = get_setting(update_args["file_name"], "n_x_values")
-        update_args["x_values"] = np.linspace(
-            0.001, 0.999, num=update_args["n_x_values"]
-        )
-    elif update_args["curve"] == "histogram":
-        update_args["n_x_values"] = get_config("bins")
-
     if update_args["single_trait"] and update_args["single_folder"]:
         (
             update_args["dfs"],
@@ -198,7 +190,7 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_trait_single_folder(
-            update_args["curve"], update_args["movie"], clean
+            update_args["histogram"], update_args["movie"], clean
         )
 
     elif update_args["single_trait"]:
@@ -209,7 +201,7 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_trait(
-            update_args["trait_set"], update_args["curve"], update_args["movie"], clean
+            update_args["trait_set"], update_args["histogram"], update_args["movie"], clean
         )
     else:
         (
@@ -219,13 +211,13 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_folder(
-            update_args["trait_set"], update_args["curve"], update_args["movie"], clean
+            update_args["trait_set"], update_args["histogram"], update_args["movie"], clean
         )
 
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
     update_args["logess"] = np.sort(df["logES"].unique())
-    if update_args["curve"] == "fitness":
+    if update_args["curve"]:
         update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
 
     return update_args

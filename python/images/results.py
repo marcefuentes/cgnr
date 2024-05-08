@@ -5,7 +5,6 @@
 import os
 import time
 
-from common_modules.get_config import get_config
 from modules.fix_positions import create_divider
 from modules.get_setting import get_titles
 from modules.init_fig import init_fig
@@ -15,12 +14,11 @@ from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from modules_results.get_sm import get_sm
-from modules_results.get_static_y_data import get_static_y_data
+from modules_results.get_static_data import get_lims
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.init_artists import (
     init_artists_imshow,
-    init_artists_histogram,
-    init_artists_fitness,
+    init_artists_2dline,
 )
 from modules_results.parse_args import parse_args
 from modules_results.trait_sets_config import all_traits
@@ -43,6 +41,7 @@ def main(args):
         "dfs": None,
         "file_name": file_name,
         "frames": None,
+        "histogram": args.histogram,
         "logess": None,
         "trait_set": args.trait_set,
         "single_folder": args.single_folder,
@@ -51,29 +50,28 @@ def main(args):
         "rows": get_rows(args.single_trait, args.trait_set, args.single_folder),
         "text": "",
         "update_function": update_artists,
-        "n_x_values": None,
     }
 
     update_args = get_update_args(update_args, args.clean)
 
     fig_layout = {
-        "nc": len(update_args["logess"]) if args.curve else 1,
+        "nc": 1,
         "ncols": len(update_args["columns"]),
-        "nr": len(update_args["alphas"]) if args.curve else 1,
+        "nr": 1,
         "nrows": len(update_args["rows"]),
     }
+
+    if args.curve or args.histogram:
+        fig_layout["nc"] = len(update_args["logess"])
+        fig_layout["nr"] = len(update_args["alphas"])
 
     fig, axs = init_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    if args.curve == "histogram":
-        update_args["artists"] = init_artists_histogram(axs, update_args["n_x_values"])
-    elif args.curve == "fitness":
-        update_args["artists"] = init_artists_fitness(
-            axs, update_args["x_values"], get_static_y_data(update_args)
-        )
+    if args.curve or args.histogram:
+        update_args["artists"] = init_artists_2dline(axs, update_args)
     else:
         update_args["artists"] = init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])
@@ -89,17 +87,16 @@ def main(args):
         "y_lim": [None, None],
         "r_values": update_args["alphas"],
     }
-    if args.curve == "fitness":
-        axes_args["x_lim"] = [0, 1]
-        axes_args["y_lim"] = [0, 1]
-    if args.curve == "histogram":
-        axes_args["x_lim"] = [-2, get_config("bins") + 1]
-        axes_args["y_lim"] = [0, 0.25]
+
+    if args.curve or args.histogram:
+        axes_args["x_lim"], axes_args["y_lim"] = get_lims(args.curve, args.histogram)
 
     prettify_axes(axes_args)
 
     if args.curve:
-        file_name += f"_{args.curve}"
+        file_name += "_curve"
+    if args.histogram:
+        file_name += "_histogram"
 
     if args.trait_set == "all_traits":
         for trait in all_traits:

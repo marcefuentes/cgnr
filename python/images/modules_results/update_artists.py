@@ -35,9 +35,9 @@ def update_artists(t, update_args):
         for j, _ in enumerate(update_args["columns"]):
             zmatrix = update_zmatrix(t, update_args, i, j)
             artists = update_args["artists"][i, j]
-            if update_args["curve"]:
-                artists = update_artists_plot(artists, zmatrix)
-                if update_args["curve"] == "histogram":
+            if update_args["curve"] or update_args["histogram"]:
+                artists = update_artists_2dline(artists, zmatrix)
+                if update_args["histogram"]:
                     df, trait = get_frq(update_args, i, j)
                     if df.empty:
                         continue
@@ -62,7 +62,7 @@ def update_artists_histogram(artists, df, alphas, logess, trait):
     return artists
 
 
-def update_artists_plot(artists, zmatrix):
+def update_artists_2dline(artists, zmatrix):
     """Update background colors of plots."""
 
     nr, nc = zmatrix.shape

@@ -38,9 +38,8 @@ def parse_args():
         "--trait_set", type=str, choices=choices_trait_set, help=arg_help
     )
 
-    choices_curve = ["histogram", "fitness", None]
-    parser.add_argument("--curve", type=str, choices=choices_curve, help="add curve")
-
+    parser.add_argument("--curve", action="store_true", help="add curve")
+    parser.add_argument("--histogram", action="store_true", help="add histogram")
     parser.add_argument("--movie", action="store_true", help="enable movie")
     parser.add_argument("--clean", action="store_true", help="clean folders")
 
@@ -48,8 +47,6 @@ def parse_args():
 
     if args.trait_set not in choices_trait_set:
         parser.error(f"Invalid trait_set: {args.trait_set}")
-    if args.curve not in choices_curve:
-        parser.error(f"Invalid curve: {args.curve}")
 
     args.single_trait = single_trait
     args.single_folder = single_folder
