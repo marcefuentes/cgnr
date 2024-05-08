@@ -9,8 +9,8 @@ from modules.get_setting import get_setting as get
 def init_artists_2dline(axs, update_args, static_y_data):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
-    _, _, nr, nc = axs.shape
-    _, _, n_ic, _ = static_y_data.shape
+    nr, nc = axs.shape[2:4]
+    n_ic = static_y_data.shape[2]
     update_args["budgets"] = np.empty((nr, nc), dtype=object)
     update_args["icurves"] = np.empty((nr, nc), dtype=object)
     update_args["landscapes"] = np.empty((nr, nc), dtype=object)
