@@ -26,7 +26,7 @@ def get_distances(nrows, ncols):
     return distances
 
 
-def prettify_fig(fig, distances, file_name, sm):
+def prettify_fig(fig, distances, section, sm):
     """prettify the figure."""
 
     fig.set_size_inches(distances["width"], distances["height"])
@@ -50,7 +50,7 @@ def prettify_fig(fig, distances, file_name, sm):
             (
                 get("COMMON", "left_margin")
                 + distances["inner_width"]
-                + get("COMMON", "spacing") * get(file_name, "colorbar_right_position")
+                + get("COMMON", "spacing") * get(section, "colorbar_right_position")
             )
             / distances["width"],
             (
@@ -59,7 +59,7 @@ def prettify_fig(fig, distances, file_name, sm):
                 - get("COMMON", "plot_size") / 2
             )
             / distances["height"],
-            (get("COMMON", "plot_size") / get(file_name, "colorbar_width"))
+            (get("COMMON", "plot_size") / get(section, "colorbar_width"))
             / distances["width"],
             get("COMMON", "plot_size") / distances["height"],
         ]
@@ -74,7 +74,7 @@ def prettify_fig(fig, distances, file_name, sm):
     cbar.outline.set_linewidth(get("COMMON", "border_width"))
     cbar.outline.set_edgecolor(get("COMMON", "border_color"))
 
-    if get(file_name, "print_folder"):
+    if get(section, "print_folder"):
         bottom_text = os.path.basename(os.getcwd())
     else:
         bottom_text = ""
