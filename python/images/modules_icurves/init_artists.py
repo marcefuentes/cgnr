@@ -17,6 +17,7 @@ def init_artists_line2d(axs, update_args, static_y_data):
     update_args["landscapes"] = np.empty((nr, nc), dtype=object)
     dummy_y = np.zeros_like(update_args["x_values"])
     plot_size = get("COMMON", "plot_size")
+    lw = get("COMMON", "line_width") * plot_size * 12 / nc
 
     for i in range(nr):
         for j in range(nc):
@@ -25,13 +26,13 @@ def init_artists_line2d(axs, update_args, static_y_data):
                     update_args["x_values"],
                     static_y_data[i, j, k],
                     c="0.850",
-                    lw=get("COMMON", "line_width") * plot_size * 6 / nc,
+                    lw=lw / 2,
                 )
             update_args["budgets"][i, j] = Line2D(
                 update_args["x_values"],
                 dummy_y,
                 c="0.300",
-                lw=get("COMMON", "line_width") * plot_size * 12 / nc,
+                lw=lw,
                 alpha=0.6,
             )
             axs[0, 0, i, j].add_line(update_args["budgets"][i, j])
@@ -39,14 +40,14 @@ def init_artists_line2d(axs, update_args, static_y_data):
             update_args["icurves"][i, j] = Line2D(
                 update_args["x_values"],
                 dummy_y,
-                lw=get("COMMON", "line_width") * plot_size * 12 / nc,
+                lw=lw,
                 alpha=0.8,
             )
             axs[0, 0, i, j].add_line(update_args["icurves"][i, j])
 
             update_args["landscapes"][i, j] = LineCollection(
                 [],
-                lw=get("COMMON", "line_width") * plot_size * 12 / nc,
+                lw=lw,
             )
             axs[0, 1, i, j].add_collection(update_args["landscapes"][i, j])
 
