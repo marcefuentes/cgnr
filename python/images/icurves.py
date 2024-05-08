@@ -70,6 +70,7 @@ def main(args):
         "y_lim": [0, 1],
         "r_values": update_args["alphas"],
     }
+
     prettify_axes(axes_args)
 
     save_file(fig, update_args)
