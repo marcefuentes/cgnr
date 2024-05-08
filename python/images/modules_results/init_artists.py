@@ -3,7 +3,6 @@
 import numpy as np
 
 from modules.get_setting import get_setting as get
-from modules_results.get_static_data import get_static_data
 
 
 def init_artists_imshow(axs, mr, mc):
@@ -23,12 +22,11 @@ def init_artists_imshow(axs, mr, mc):
     return artists
 
 
-def init_artists_2dline(axs, update_args):
+def init_artists_2dline(axs, x, y):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty_like(axs)
-    x, y = get_static_data(update_args)
 
     for i in range(nrows):
         for j in range(ncols):

@@ -14,7 +14,7 @@ from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from modules_results.get_sm import get_sm
-from modules_results.get_static_data import get_lims
+from modules_results.get_static_data import get_lims, get_static_data
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.init_artists import (
     init_artists_imshow,
@@ -71,7 +71,7 @@ def main(args):
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
     if args.curve or args.histogram:
-        update_args["artists"] = init_artists_2dline(axs, update_args)
+        update_args["artists"] = init_artists_2dline(axs, *get_static_data(update_args))
     else:
         update_args["artists"] = init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])
