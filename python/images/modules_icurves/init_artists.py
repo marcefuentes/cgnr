@@ -15,6 +15,7 @@ def init_artists_line2d(axs, x, y, ic):
     budgets = np.empty((nr, nc), dtype=object)
     icurves = np.empty((nr, nc), dtype=object)
     landscapes = np.empty((nr, nc), dtype=object)
+
     plot_size = get("COMMON", "plot_size")
     lw = get("COMMON", "line_width") * plot_size * 12 / nc
 
