@@ -188,7 +188,7 @@ def slots():
         free_slots = max_submit - running - pending
         total_free_slots += free_slots
 
-        print(f"{qos_name:<12}", end="")
+        print(f"{qos_name: <12}", end="")
         if max_running > running:
             print(f"({max_running:>3})", end="")
         else:
