@@ -9,16 +9,21 @@ def init_artists_imshow(axs, mr, mc):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     nrows, ncols, nr, nc = axs.shape
-    artists = np.empty_like(axs)
+    artists = np.empty((nrows, ncols, nr, nc), dtype=object)
+
     dummy_zmatrix = np.zeros((mr, mc))
+    cmap = get("COMMON", "color_map")
+    vmin, vmax = -1, 1
 
     for i in range(nrows):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
-                    artists[i, j, k, m] = axs[i, j, k, m].imshow(
-                        dummy_zmatrix, cmap=get("COMMON", "color_map"), vmin=-1, vmax=1
+                    ax = axs[i, j, k, m]
+                    artist = ax.imshow(
+                        dummy_zmatrix, cmap=cmap, vmin=vmin, vmax=vmax
                     )
+                    artists[i, j, k, m] = artist
     return artists
 
 
