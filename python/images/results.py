@@ -32,7 +32,7 @@ def main(args):
     file_name = os.path.basename(__file__).split(".")[0]
 
     update_args = {
-        "alphas": None,
+        "alphas": [],
         "artists": None,
         "columns": get_columns(args.single_trait, args.trait_set, args.single_folder),
         "curve": args.curve,
@@ -40,9 +40,9 @@ def main(args):
         "df_social": None,
         "dfs": None,
         "file_name": file_name,
-        "frames": None,
+        "frames": [],
         "histogram": args.histogram,
-        "logess": None,
+        "logess": [],
         "movie": args.movie,
         "rows": get_rows(args.single_trait, args.trait_set, args.single_folder),
         "single_folder": args.single_folder,
