@@ -33,12 +33,12 @@ def main(args):
 
     update_args = {
         "alphas": [],
-        "artists": None,
+        "artists": [],
         "columns": get_columns(args.single_trait, args.trait_set, args.single_folder),
         "curve": args.curve,
-        "df_none": None,
-        "df_social": None,
-        "dfs": None,
+        "df_none": [],
+        "df_social": [],
+        "dfs": [],
         "file_name": file_name,
         "frames": [],
         "histogram": args.histogram,
