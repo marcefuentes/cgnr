@@ -207,7 +207,7 @@ def slots():
 def submit_job(current_path_folders, job_array_string, constraint):
     """Submits a job to the SLURM scheduler."""
 
-    exe = get_config("exe")
+    exe = os.environ["PROJECT"]
     hours = get_config("hours")
     memory = get_config("memory")
     mail_user = get_config("mail_user")

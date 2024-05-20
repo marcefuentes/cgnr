@@ -42,7 +42,7 @@ def find_errors(current_path, input_file, folder_dict):
 def get_results_path(store=False):
     """Get the path to the results folder."""
 
-    exe = get_config("exe")
+    exe = os.environ["PROJECT"]
     if store:
         store_path = os.environ.get("STORE")
         if store_path is None:
@@ -250,7 +250,7 @@ def main(store=False):
         print(f"\n{color.WHITE}{'-' * 30}{color.RESET}")
         free_slots = slots()
         if free_slots:
-            exe = get_config("exe")
+            exe = os.environ["PROJECT"]
             last_job_file = (
                 f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
             )

@@ -143,7 +143,7 @@ def main(test=False):
 
     if test:
         print("\nThis is a test.")
-    exe = get_config("exe")
+    exe = os.environ["PROJECT"]
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
     constraints = get_config("constraints")
     for constraint in constraints:

@@ -18,7 +18,7 @@ import modules.slurm_tools as st
 def process_folder(test):
     """Prepare jobs in the current folder"""
 
-    exe = get_config("exe")
+    exe = os.environ["PROJECT"]
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
 
     current_path = os.getcwd()
