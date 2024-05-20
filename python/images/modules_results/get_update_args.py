@@ -222,7 +222,7 @@ def get_update_args(update_args, clean):
     update_args["frames"] = df.Time.unique()
     update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
     update_args["logess"] = np.sort(df["logES"].unique())
-    if update_args["curve"]:
+    if update_args["fitness"]:
         update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
 
     return update_args

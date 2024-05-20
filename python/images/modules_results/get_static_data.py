@@ -23,10 +23,10 @@ def dummy_y(update_args, x):
     return y
 
 
-def get_lims(curve):
+def get_lims(fitness_limits):
     """Sets the limits of the axes."""
 
-    if curve:
+    if fitness_limits:
         x_lim = [0, 1]
         y_lim = [0, 1]
         return x_lim, y_lim
@@ -39,9 +39,9 @@ def get_lims(curve):
 def get_static_data(update_args):
     """Calculates static fitness isoclines."""
 
-    if update_args["curve"]:
+    if update_args["fitness"]:
         x = np.linspace(0.001, 0.999, num=get_setting("results", "n_x_values"))
-        y = curve_fitness(update_args, x)
+        y = fitness_curve(update_args, x)
         return x, y
 
     x = np.arange(get_config("bins"))
@@ -49,7 +49,7 @@ def get_static_data(update_args):
     return x, y
 
 
-def curve_fitness(update_args, x):
+def fitness_curve(update_args, x):
     """Calculates static fitness curves."""
 
     if update_args["single_folder"] and update_args["single_trait"]:

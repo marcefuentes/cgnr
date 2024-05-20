@@ -35,7 +35,7 @@ def main(args):
         "alphas": [],
         "artists": [],
         "columns": get_columns(args.single_trait, args.trait_set, args.single_folder),
-        "curve": args.curve,
+        "fitness": args.fitness,
         "df_none": [],
         "df_social": [],
         "dfs": [],
@@ -61,7 +61,7 @@ def main(args):
         "nrows": len(update_args["rows"]),
     }
 
-    if args.curve or args.histogram:
+    if args.fitness or args.histogram:
         fig_layout["nc"] = len(update_args["logess"])
         fig_layout["nr"] = len(update_args["alphas"])
 
@@ -70,7 +70,7 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    if args.curve or args.histogram:
+    if args.fitness or args.histogram:
         update_args["artists"] = init_artists_line2d(axs, *get_static_data(update_args))
     else:
         update_args["artists"] = init_artists_imshow(
@@ -88,13 +88,13 @@ def main(args):
         "r_values": update_args["alphas"],
     }
 
-    if args.curve or args.histogram:
-        axes_args["x_lim"], axes_args["y_lim"] = get_lims(args.curve)
+    if args.fitness or args.histogram:
+        axes_args["x_lim"], axes_args["y_lim"] = get_lims(args.fitness)
 
     prettify_axes(axes_args)
 
-    if args.curve:
-        file_name += "_curve"
+    if args.fitness:
+        file_name += "_fitness"
     if args.histogram:
         file_name += "_histogram"
 

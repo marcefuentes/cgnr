@@ -35,7 +35,7 @@ def update_artists(t, update_args):
         for j, _ in enumerate(update_args["columns"]):
             zmatrix = update_zmatrix(t, update_args, i, j)
             artists = update_args["artists"][i, j]
-            if update_args["curve"] or update_args["histogram"]:
+            if update_args["fitness"] or update_args["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix)
                 if update_args["histogram"]:
                     df, trait = get_frq(update_args, i, j)

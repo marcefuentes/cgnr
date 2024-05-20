@@ -38,7 +38,7 @@ def parse_args():
         "--trait_set", type=str, choices=choices_trait_set, help=arg_help
     )
 
-    parser.add_argument("--curve", action="store_true", help="add curve")
+    parser.add_argument("--fitness", action="store_true", help="add fitness curve")
     parser.add_argument("--histogram", action="store_true", help="add histogram")
     parser.add_argument("--movie", action="store_true", help="enable movie")
     parser.add_argument("--clean", action="store_true", help="clean folders")
