@@ -2,9 +2,8 @@
 
 """ Synchronize results from remote server to local machine """
 
+import os
 import subprocess
-
-from common_modules.get_config import get_config
 
 
 def main():
@@ -12,7 +11,7 @@ def main():
 
     remote = "cesga"
 
-    exe = get_config("exe")
+    exe = os.environ["PROJECT"]
 
     if remote == "cesga":
         source_folder = f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{exe}/results/"

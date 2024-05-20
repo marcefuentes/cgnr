@@ -5,13 +5,11 @@
 import os
 import subprocess
 
-from common_modules.get_config import get_config
-
 
 def main():
     """Syncronize the results folder to the store folder"""
 
-    exe = get_config("exe")
+    exe = os.environ["PROJECT"]
 
     source_folder = f"{os.environ['HOME']}/code/{exe}/results/"
     destination_folder = f"{os.environ['STORE']}/code/{exe}/results/"
