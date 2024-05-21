@@ -3,6 +3,30 @@
 import numpy as np
 
 
+game_map = {
+    "allgames": lambda tt, rr, pp, ss: True,
+    "harmony": lambda tt, rr, pp, ss: (tt < rr) & (rr > pp) & (pp < ss),
+    "deadlock": lambda tt, rr, pp, ss: (tt > rr) & (rr < pp) & (pp > ss),
+    "deadlock_ts": lambda tt, rr, pp, ss: (tt > rr)
+    & (rr < pp)
+    & (pp > ss)
+    & (2.0 * pp < tt + ss),
+    "prisoner": lambda tt, rr, pp, ss: (tt > rr) & (rr > pp) & (pp > ss),
+    "prisoner_ts": lambda tt, rr, pp, ss: (tt > rr)
+    & (rr > pp)
+    & (pp > ss)
+    & (2.0 * rr < tt + ss),
+    "snowdrift": lambda tt, rr, pp, ss: (tt > rr) & (rr > pp) & (pp < ss),
+    "snowdrift_ts": lambda tt, rr, pp, ss: (tt > rr)
+    & (rr > pp)
+    & (pp < ss)
+    & (2.0 * rr < tt + ss),
+    "drift": lambda tt, rr, pp, ss: pp == ss,
+    "drift_ts": lambda tt, rr, pp, ss: (pp == ss) & (2.0 * rr < tt + ss),
+    "diagonal": lambda tt, rr, pp, ss: rr == pp,
+}
+
+
 def calculate_fitness(x, y, given, alpha, rho):
     """Calculate fitness for a single pair of x and y."""
 
@@ -60,23 +84,9 @@ def fitness(x, y, given, alpha, rho):
 def game_condition(game, tt, rr, pp, ss):
     """Compute the condition of the game."""
 
-    games = {
-        "allgames": True,
-        "harmony": (tt < rr) & (rr > pp) & (pp < ss),
-        "deadlock": (tt > rr) & (rr < pp) & (pp > ss),
-        "deadlock_ts": (tt > rr) & (rr < pp) & (pp > ss) & (2.0 * pp < tt + ss),
-        "prisoner": (tt > rr) & (rr > pp) & (pp > ss),
-        "prisoner_ts": (tt > rr) & (rr > pp) & (pp > ss) & (2.0 * rr < tt + ss),
-        "snowdrift": (tt > rr) & (rr > pp) & (pp < ss),
-        "snowdrift_ts": (tt > rr) & (rr > pp) & (pp < ss) & (2.0 * rr < tt + ss),
-        "drift": pp == ss,
-        "drift_ts": (pp == ss) & (2.0 * rr < tt + ss),
-        "diagonal": rr == pp,
-    }
-
-    if game not in games:
+    if game not in game_map:
         raise ValueError("Invalid game name.")
-    return games[game]
+    return game_map[game](tt, rr, pp, ss)
 
 
 def indifference(qs, w, alpha, rho):
