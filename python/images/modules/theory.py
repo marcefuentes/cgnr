@@ -57,6 +57,28 @@ def fitness(x, y, given, alpha, rho):
     return w
 
 
+def game_condition(game, tt, rr, pp, ss):
+    """Compute the condition of the game."""
+
+    games = {
+        "allgames":    True,
+        "harmony":     (tt < rr) & (rr > pp) & (pp < ss),
+        "deadlock":    (tt > rr) & (rr < pp) & (pp > ss),
+        "deadlock_ts":  (tt > rr) & (rr < pp) & (pp > ss) & (2.0 * pp < tt + ss),
+        "prisoner":    (tt > rr) & (rr > pp) & (pp > ss),
+        "prisoner_ts":  (tt > rr) & (rr > pp) & (pp > ss) & (2.0 * rr < tt + ss),
+        "snowdrift":   (tt > rr) & (rr > pp) & (pp < ss),
+        "snowdrift_ts": (tt > rr) & (rr > pp) & (pp < ss) & (2.0 * rr < tt + ss),
+        "drift":       pp == ss,
+        "drift_ts":     (pp == ss) & (2.0 * rr < tt + ss),
+        "diagonal":    rr == pp,
+    }
+    
+    if game not in games:
+        raise ValueError("Invalid game name.")
+    return games[game]
+
+
 def indifference(qs, w, alpha, rho):
     """Compute indifference curves."""
 
