@@ -1,4 +1,5 @@
 """ Store the columns and rows for the different trait_sets of the figure """
+
 GIVEN_FOLDER = "1"
 
 all_traits = [

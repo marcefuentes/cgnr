@@ -60,9 +60,7 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    rows = s_folder.rows.get(
-        trait_set, s_folder.rows["default"]
-    )
+    rows = s_folder.rows.get(trait_set, s_folder.rows["default"])
 
     dfs, dffrqs = [], []
 
@@ -162,9 +160,7 @@ def get_rows(single_trait, trait_set, single_folder):
         return [""]
     if single_trait:
         return s_trait.rows
-    return s_folder.rows.get(
-        trait_set, s_folder.rows["default"]
-    )
+    return s_folder.rows.get(trait_set, s_folder.rows["default"])
 
 
 def get_update_args(update_args, clean):
