@@ -45,10 +45,6 @@ def parse_args():
     parser.add_argument("--clean", action="store_true", help="clean folders")
 
     args = parser.parse_args()
-
-    if args.trait_set not in choices_trait_set:
-        parser.error(f"Invalid trait_set: {args.trait_set}")
-
     args.single_trait = single_trait
     args.single_folder = single_folder
 

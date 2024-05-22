@@ -26,10 +26,9 @@ def fitness_curve(update_args, x):
     """Calculates static fitness curves."""
 
     if update_args["single_folder"] and update_args["single_trait"]:
-        given_folder = os.path.basename(os.getcwd())
+        given = float(os.path.basename(os.getcwd()))
     else:
-        given_folder = get_setting("results", "given_folder")
-    given = float(given_folder)
+        given = float(get_setting("results", "given_folder"))
 
     reciprocator = np.zeros(
         (
