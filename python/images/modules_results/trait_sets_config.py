@@ -1,26 +1,4 @@
 """ Store the columns and rows for the different trait_sets of the figure """
-
-variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
-
-dict_single_trait_variant_suffixes = {
-    "default": [
-        "cost15_128",
-        "cost15_128",
-        "cost15_128",
-        "cost15_128",
-        "cost15_128",
-        "cost15_4",
-        "cost15_4",
-        "cost15_4",
-        "cost15_4",
-        "cost15_4",
-    ]
-}
-
-dict_single_trait_mechanisms = {
-    "default": ["p", "pd", "d", "pi", "i", "p", "pd", "d", "pi", "i"],
-}
-
 GIVEN_FOLDER = "1"
 
 all_traits = [

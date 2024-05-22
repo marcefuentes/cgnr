@@ -3,7 +3,7 @@
 import argparse
 import os
 
-import modules_results.single_folder_layouts as s_folder
+import modules_results.layouts_single_folder as s_folder
 import modules_results.trait_sets_config as mm
 
 

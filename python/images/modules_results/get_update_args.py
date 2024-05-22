@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from common_modules.get_config import get_config
-import modules_results.single_folder_layouts as s_folder
+import modules_results.layouts_single_folder as s_folder
 import modules_results.trait_sets_config as mm
 
 
