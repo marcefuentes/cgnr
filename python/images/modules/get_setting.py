@@ -36,16 +36,19 @@ def get_setting(header, variable):
     ]
 
     if variable in abs_variables:
-        return config.getfloat(header, variable)
-    if variable in bool_variables:
-        return config.getboolean(header, variable)
-    if variable in int_variables:
-        return config.getint(header, variable)
-    if variable in list_variables:
-        return config.get(header, variable).split(",")
-    if variable in str_variables:
-        return config.get(header, variable)
-    return config.getfloat(header, variable) * config.getfloat("COMMON", "plot_size")
+        value = config.getfloat(header, variable)
+    elif variable in bool_variables:
+        value = config.getboolean(header, variable)
+    elif variable in int_variables:
+        value = config.getint(header, variable)
+    elif variable in list_variables:
+        value = config.get(header, variable).split(",")
+    elif variable in str_variables:
+        value = config.get(header, variable)
+    else:
+        value = config.getfloat(header, variable) * config.getfloat("COMMON", "plot_size")
+
+    return value
 
 
 def get_titles(keys):
