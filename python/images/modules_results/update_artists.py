@@ -18,10 +18,10 @@ def get_frq(update_args, i, j):
 
     if update_args["single_trait"]:
         df = update_args["dffrqs"][i][j]
-        trait = mm.dict_traits[update_args["trait_set"]]["frq"]
+        trait = mm.trait_map[update_args["trait_set"]]["frq"]
     else:
         df = update_args["dffrqs"][i]
-        trait = mm.dict_traits[update_args["columns"][j]]["frq"]
+        trait = mm.trait_map[update_args["columns"][j]]["frq"]
     return df, trait
 
 
@@ -95,11 +95,11 @@ def update_zmatrix(t, update_args, i, j):
         zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
         return zmatrix
 
-    if trait_in not in mm.dict_traits:
-        print(f"Trait {trait_in} not in dictionary trait_sets.py/dict_traits.")
+    if trait_in not in mm.trait_map:
+        print(f"Trait {trait_in} not in dictionary trait_sets.py/trait_map.")
         sys.exit()
-    trait = mm.dict_traits[trait_in]["mean"]
-    relative = mm.dict_traits[trait_in]["relative"]
+    trait = mm.trait_map[trait_in]["mean"]
+    relative = mm.trait_map[trait_in]["relative"]
     zmatrix = get_zmatrix(t, df, trait)
 
     if relative == "-none":

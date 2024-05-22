@@ -12,7 +12,7 @@ all_traits = [
     "qBSeen_excess",
 ]
 
-dict_traits = {
+trait_map = {
     "ChooseGrain": {
         "mean": "ChooseGrainmean",
         "frq": "ChooseGrain",

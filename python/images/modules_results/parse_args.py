@@ -16,13 +16,13 @@ def parse_args():
         single_trait = True
         single_folder = True
         description = "description: Plot results for a trait in this folder"
-        choices_trait_set = list(mm.dict_traits.keys())
+        choices_trait_set = list(mm.trait_map.keys())
         arg_help = "trait (required)"
     elif folder == "results":
         single_trait = True
         single_folder = False
         description = "description: Plot results for a trait across several variants"
-        choices_trait_set = list(mm.dict_traits.keys())
+        choices_trait_set = list(mm.trait_map.keys())
         arg_help = "trait (required)"
     else:
         single_trait = False
