@@ -3,6 +3,7 @@
 import argparse
 import os
 
+import modules_results.single_folder_layouts as s_folder
 import modules_results.trait_sets_config as mm
 
 
@@ -27,7 +28,7 @@ def parse_args():
         single_trait = False
         single_folder = False
         description = "description: Plot results for several traits in this variant"
-        choices_trait_set = list(mm.dict_single_folder_columns.keys())
+        choices_trait_set = list(s_folder.columns.keys())
         arg_help = "trait set (required)"
 
     parser = argparse.ArgumentParser(

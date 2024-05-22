@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from common_modules.get_config import get_config
+import modules_results.single_folder_layouts as s_folder
 import modules_results.trait_sets_config as mm
 
 
@@ -20,7 +21,7 @@ def get_columns(single_trait, trait_set, single_folder):
     if single_trait:
         columns = mm.variants
         return columns
-    columns = mm.dict_single_folder_columns[trait_set]
+    columns = s_folder.columns[trait_set]
     return columns
 
 
@@ -58,8 +59,8 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
 
     csv0, csv1 = get_config("output_file_extensions")
 
-    rows = mm.dict_single_folder_rows.get(
-        trait_set, mm.dict_single_folder_rows["default"]
+    rows = s_folder.rows.get(
+        trait_set, s_folder.rows["default"]
     )
 
     dfs, dffrqs = [], []
@@ -172,8 +173,8 @@ def get_rows(single_trait, trait_set, single_folder):
             trait_set, mm.dict_single_trait_mechanisms["default"]
         )
         return rows
-    rows = mm.dict_single_folder_rows.get(
-        trait_set, mm.dict_single_folder_rows["default"]
+    rows = s_folder.rows.get(
+        trait_set, s_folder.rows["default"]
     )
     return rows
 
