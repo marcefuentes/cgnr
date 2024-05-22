@@ -18,7 +18,7 @@ def get_columns(single_trait, trait_set, single_folder):
         columns = [""]
         return columns
     if single_trait:
-        columns = mm.dict_traits[trait_set]["variants"]
+        columns = mm.variants
         return columns
     columns = mm.dict_single_folder_columns[trait_set]
     return columns
@@ -97,7 +97,7 @@ def get_df_single_trait(trait_set, histogram, movie, clean):
 
     dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
-    variant_prefixes = mm.dict_traits[trait_set]["variants"]
+    variant_prefixes = mm.variants
     variant_suffixes = mm.dict_single_trait_variant_suffixes.get(
         trait_set, mm.dict_single_trait_variant_suffixes["default"]
     )

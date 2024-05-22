@@ -1,6 +1,6 @@
 """ Store the columns and rows for the different trait_sets of the figure """
 
-all_variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
+variants = ["nolang_noshuffle", "lang_noshuffle", "nolang_shuffle", "lang_shuffle"]
 
 dict_single_trait_variant_suffixes = {
     "default": [
@@ -38,75 +38,63 @@ dict_traits = {
         "mean": "ChooseGrainmean",
         "frq": "ChooseGrain",
         "relative": "none-",
-        "variants": all_variants,
     },
     "Choose_ltGrain": {
         "mean": "Choose_ltGrainmean",
         "frq": "Choose_ltGrain",
         "relative": "none-",
-        "variants": all_variants,
     },
     "MimicGrain": {
         "mean": "MimicGrainmean",
         "frq": "MimicGrain",
         "relative": "none-",
-        "variants": all_variants,
     },
     "ImimicGrain": {
         "mean": "ImimicGrainmean",
         "frq": "ImimicGrain",
         "relative": "none-",
-        "variants": all_variants,
     },
     "Imimic_ltGrain": {
         "mean": "Imimic_ltGrainmean",
         "frq": "Imimic_ltGrain",
         "relative": "none-",
-        "variants": all_variants,
     },
     "qBSeen": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
         "relative": "no",
-        "variants": all_variants,
     },
     "qBSeen_byproduct": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
         "relative": "given",
-        "variants": all_variants,
     },
     "qBSeen_excess": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
         "relative": "-social",
-        "variants": all_variants,
     },
     "qBSeen_excess_none": {
         "mean": "qBSeenmean",
         "frq": "qBSeen",
         "relative": "-social",
-        "variants": all_variants,
     },
     "w": {
         "mean": "wmean",
         "frq": "w",
         "relative": "no",
-        "variants": all_variants,
     },
     "w_excess": {
         "mean": "wmean",
         "frq": "w",
         "relative": "-social",
-        "variants": all_variants,
     },
     "w_excess_none": {
         "mean": "wmean",
         "frq": "w",
         "relative": "-social",
-        "variants": all_variants,
     },
-    "all_traits": {"variants": all_variants},
+    "all_traits": {},
 }
 
 dict_single_folder_rows = {
