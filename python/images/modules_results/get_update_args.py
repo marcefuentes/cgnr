@@ -8,9 +8,9 @@ import numpy as np
 import pandas as pd
 
 from common_modules.get_config import get_config
+from modules.get_setting import get_setting
 import modules_results.layouts_single_folder as s_folder
 import modules_results.layouts_single_trait as s_trait
-import modules_results.trait_sets_config as mm
 
 
 def get_columns(single_trait, trait_set, single_folder):
@@ -64,22 +64,24 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
 
     dfs, dffrqs = [], []
 
+    given_folder = get_setting("results", "given_folder")
+
     for row in rows:
         if row == "social":
             path = "none/0"
         elif "none" in row:
-            path = f"none/{mm.GIVEN_FOLDER}"
+            path = f"none/{given_folder}"
         elif "none" in trait_set:
             path = f"none/{row}"
         else:
-            path = f"{row}/{mm.GIVEN_FOLDER}"
+            path = f"{row}/{given_folder}"
         dfs.append(get_df(path, csv0, movie, clean))
         if histogram:
             dffrqs.append(get_df(path, csv1, movie, clean))
     if "none" in rows:
         df_none = dfs[rows.index("none")]
     else:
-        path = f"none/{mm.GIVEN_FOLDER}"
+        path = f"none/{given_folder}"
         df_none = get_df(path, csv0, movie, clean)
     if "social" in rows:
         df_social = dfs[rows.index("social")]
@@ -97,11 +99,12 @@ def get_df_single_trait(histogram, movie, clean):
 
     dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
+    given_folder = get_setting("results", "given_folder")
     for suffix, row in zip(s_trait.variant_suffixes, s_trait.rows):
         dfs.append(
             [
                 get_df(
-                    f"{column}_{suffix}/{row}/{mm.GIVEN_FOLDER}",
+                    f"{column}_{suffix}/{row}/{given_folder}",
                     csv0,
                     movie,
                     clean,
@@ -113,7 +116,7 @@ def get_df_single_trait(histogram, movie, clean):
             dffrqs.append(
                 [
                     get_df(
-                        f"{column}_{suffix}/{row}/{mm.GIVEN_FOLDER}",
+                        f"{column}_{suffix}/{row}/{given_folder}",
                         csv1,
                         movie,
                         clean,
@@ -123,7 +126,7 @@ def get_df_single_trait(histogram, movie, clean):
             )
         df_nones.append(
             [
-                get_df(f"{column}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie, clean)
+                get_df(f"{column}_{suffix}/none/{given_folder}", csv0, movie, clean)
                 for column in s_trait.columns
             ]
         )
@@ -134,6 +137,7 @@ def get_df_single_trait(histogram, movie, clean):
             ]
         )
 
+    print(df_socials[0][0])
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 

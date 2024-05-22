@@ -7,9 +7,8 @@ import numpy as np
 
 from matplotlib import colormaps
 
-from common_modules.get_config import get_config
-from modules.get_setting import get_setting as get
-import modules_results.trait_sets_config as mm
+from modules.get_setting import get_setting
+from modules_results.trait_map import trait_map
 from modules_results.get_zmatrix import get_zmatrix
 
 
@@ -18,10 +17,10 @@ def get_frq(update_args, i, j):
 
     if update_args["single_trait"]:
         df = update_args["dffrqs"][i][j]
-        trait = mm.trait_map[update_args["trait_set"]]["frq"]
+        trait = trait_map[update_args["trait_set"]]["frq"]
     else:
         df = update_args["dffrqs"][i]
-        trait = mm.trait_map[update_args["columns"][j]]["frq"]
+        trait = trait_map[update_args["columns"][j]]["frq"]
     return df, trait
 
 
@@ -69,7 +68,7 @@ def update_artists_line2d(artists, zmatrix):
 
     for i in range(nr):
         for j in range(nc):
-            bgcolor = colormaps[get("COMMON", "color_map")]((zmatrix[i, j] + 1) / 2)
+            bgcolor = colormaps[get_setting("COMMON", "color_map")]((zmatrix[i, j] + 1) / 2)
             artists[i, j].axes.set_facecolor(bgcolor)
 
     return artists
@@ -95,11 +94,11 @@ def update_zmatrix(t, update_args, i, j):
         zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
         return zmatrix
 
-    if trait_in not in mm.trait_map:
-        print(f"Trait {trait_in} not in dictionary trait_sets.py/trait_map.")
+    if trait_in not in trait_map:
+        print(f"Trait {trait_in} not in dictionary trait_map.py->trait_map.")
         sys.exit()
-    trait = mm.trait_map[trait_in]["mean"]
-    relative = mm.trait_map[trait_in]["relative"]
+    trait = trait_map[trait_in]["mean"]
+    relative = trait_map[trait_in]["relative"]
     zmatrix = get_zmatrix(t, df, trait)
 
     if relative == "-none":
@@ -115,8 +114,5 @@ def update_zmatrix(t, update_args, i, j):
         zmatrix = zmatrix * df.iloc[0]["Given"]
     elif relative == "neutral":
         zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
-    elif relative == "N":
-        n = float(pow(2, get_config("N")))
-        zmatrix = zmatrix / n
 
     return zmatrix

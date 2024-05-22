@@ -4,7 +4,7 @@ import argparse
 import os
 
 import modules_results.layouts_single_folder as s_folder
-import modules_results.trait_sets_config as mm
+from modules_results.trait_map import trait_map
 
 
 def parse_args():
@@ -16,13 +16,13 @@ def parse_args():
         single_trait = True
         single_folder = True
         description = "description: Plot results for a trait in this folder"
-        choices_trait_set = list(mm.trait_map.keys())
+        choices_trait_set = list(trait_map.keys())
         arg_help = "trait (required)"
     elif folder == "results":
         single_trait = True
         single_folder = False
         description = "description: Plot results for a trait across several variants"
-        choices_trait_set = list(mm.trait_map.keys())
+        choices_trait_set = list(trait_map.keys())
         arg_help = "trait (required)"
     else:
         single_trait = False

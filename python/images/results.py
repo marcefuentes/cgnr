@@ -6,7 +6,7 @@ import os
 import time
 
 from modules.fix_positions import create_divider
-from modules.get_setting import get_titles
+from modules.get_setting import get_setting, get_titles
 from modules.init_fig import init_fig
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
@@ -21,7 +21,6 @@ from modules_results.init_artists import (
     init_artists_line2d,
 )
 from modules_results.parse_args import parse_args
-from modules_results.trait_sets_config import all_traits
 from modules_results.update_artists import update_artists
 
 
@@ -99,7 +98,7 @@ def main(args):
         file_name += "_histogram"
 
     if args.trait_set == "all_traits":
-        for trait in all_traits:
+        for trait in get_setting("results", "all_traits"):
             update_args["trait_set"] = trait
             update_args["file_name"] = f"{file_name}_{trait}"
             save_file(fig, update_args)
