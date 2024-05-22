@@ -9,6 +9,7 @@ import pandas as pd
 
 from common_modules.get_config import get_config
 import modules_results.layouts_single_folder as s_folder
+import modules_results.layouts_single_trait as s_trait
 import modules_results.trait_sets_config as mm
 
 
@@ -19,7 +20,7 @@ def get_columns(single_trait, trait_set, single_folder):
         columns = [""]
         return columns
     if single_trait:
-        columns = mm.variants
+        columns = s_trait.columns
         return columns
     columns = s_folder.columns[trait_set]
     return columns
@@ -98,48 +99,40 @@ def get_df_single_trait(trait_set, histogram, movie, clean):
 
     dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
-    variant_prefixes = mm.variants
-    variant_suffixes = mm.dict_single_trait_variant_suffixes.get(
-        trait_set, mm.dict_single_trait_variant_suffixes["default"]
-    )
-    mechanisms = mm.dict_single_trait_mechanisms.get(
-        trait_set, mm.dict_single_trait_mechanisms["default"]
-    )
-
-    for suffix, mechanism in zip(variant_suffixes, mechanisms):
+    for suffix, row in zip(s_trait.variant_suffixes, s_trait.rows):
         dfs.append(
             [
                 get_df(
-                    f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}",
+                    f"{column}_{suffix}/{row}/{mm.GIVEN_FOLDER}",
                     csv0,
                     movie,
                     clean,
                 )
-                for prefix in variant_prefixes
+                for column in s_trait.columns
             ]
         )
         if histogram:
             dffrqs.append(
                 [
                     get_df(
-                        f"{prefix}_{suffix}/{mechanism}/{mm.GIVEN_FOLDER}",
+                        f"{column}_{suffix}/{row}/{mm.GIVEN_FOLDER}",
                         csv1,
                         movie,
                         clean,
                     )
-                    for prefix in variant_prefixes
+                    for column in s_trait.columns
                 ]
             )
         df_nones.append(
             [
-                get_df(f"{prefix}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie, clean)
-                for prefix in variant_prefixes
+                get_df(f"{column}_{suffix}/none/{mm.GIVEN_FOLDER}", csv0, movie, clean)
+                for column in s_trait.columns
             ]
         )
         df_socials.append(
             [
-                get_df(f"{prefix}_{suffix}/none/0", csv0, movie, clean)
-                for prefix in variant_prefixes
+                get_df(f"{column}_{suffix}/none/0", csv0, movie, clean)
+                for column in s_trait.columns
             ]
         )
 
@@ -166,17 +159,12 @@ def get_rows(single_trait, trait_set, single_folder):
     """Get the rows for the given trait_set."""
 
     if single_trait and single_folder:
-        rows = [""]
-        return rows
+        return [""]
     if single_trait:
-        rows = mm.dict_single_trait_mechanisms.get(
-            trait_set, mm.dict_single_trait_mechanisms["default"]
-        )
-        return rows
-    rows = s_folder.rows.get(
+        return s_trait.rows
+    return s_folder.rows.get(
         trait_set, s_folder.rows["default"]
     )
-    return rows
 
 
 def get_update_args(update_args, clean):
