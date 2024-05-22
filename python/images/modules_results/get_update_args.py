@@ -90,7 +90,7 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
     return dfs, df_none, df_social, dffrqs, df_social
 
 
-def get_df_single_trait(trait_set, histogram, movie, clean):
+def get_df_single_trait(histogram, movie, clean):
     """Get the df for a trait across several variants."""
 
     csv0, csv1 = get_config("output_file_extensions")
@@ -174,7 +174,9 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_trait_single_folder(
-            update_args["histogram"], update_args["movie"], clean
+            update_args["histogram"],
+            update_args["movie"],
+            clean,
         )
 
     elif update_args["single_trait"]:
@@ -185,7 +187,6 @@ def get_update_args(update_args, clean):
             update_args["dffrqs"],
             df,
         ) = get_df_single_trait(
-            update_args["trait_set"],
             update_args["histogram"],
             update_args["movie"],
             clean,
