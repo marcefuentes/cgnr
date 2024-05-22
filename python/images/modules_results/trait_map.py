@@ -1,6 +1,5 @@
 """ Trait map """
 
-
 trait_map = {
     "ChooseGrain": {
         "mean": "ChooseGrainmean",

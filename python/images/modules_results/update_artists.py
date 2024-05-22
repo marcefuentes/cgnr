@@ -68,7 +68,9 @@ def update_artists_line2d(artists, zmatrix):
 
     for i in range(nr):
         for j in range(nc):
-            bgcolor = colormaps[get_setting("COMMON", "color_map")]((zmatrix[i, j] + 1) / 2)
+            bgcolor = colormaps[get_setting("COMMON", "color_map")](
+                (zmatrix[i, j] + 1) / 2
+            )
             artists[i, j].axes.set_facecolor(bgcolor)
 
     return artists
