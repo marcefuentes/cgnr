@@ -46,7 +46,9 @@ def get_setting(header, variable):
     elif variable in str_variables:
         value = config.get(header, variable)
     else:
-        value = config.getfloat(header, variable) * config.getfloat("COMMON", "plot_size")
+        value = config.getfloat(header, variable) * config.getfloat(
+            "COMMON", "plot_size"
+        )
 
     return value
 
