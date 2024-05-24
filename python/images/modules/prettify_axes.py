@@ -59,13 +59,13 @@ def add_ticklabels_imshow(axes_args):
         ax.set_xticklabels(x_params)
 
 
-def add_ticks(axes_args):
+def add_ticks(axes_args, format_params):
     """set ticks for (nrows x ncols x nr x nc)."""
 
     axs = axes_args["axs"]
 
     if axs.shape[2] == 1:
-        add_ticks_imshow(axes_args)
+        add_ticks_imshow(axes_args, format_params)
         return
 
     y_range = range(0, axs.shape[2], axs.shape[2] // 2)
@@ -80,11 +80,6 @@ def add_ticks(axes_args):
         "yticks": [(y_min + y_max) / 2],
         "yticklabels": [],
     }
-    format_params = {
-        "labelsize": get("COMMON", "tick_label_size"),
-        "size": get("COMMON", "tick_size"),
-        "color": get("COMMON", "tick_color"),
-    }
 
     for i in range(axs.shape[0]):
         for j in range(axs.shape[1]):
@@ -96,7 +91,7 @@ def add_ticks(axes_args):
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
 
-def add_ticks_imshow(axes_args):
+def add_ticks_imshow(axes_args, format_params):
     """set ticks for (nrows x ncols) matrix."""
 
     c_min, c_max = 0, len(axes_args["c_values"]) - 1
@@ -107,43 +102,12 @@ def add_ticks_imshow(axes_args):
         "xticklabels": [],
         "yticklabels": [],
     }
-    format_params = {
-        "axis": "both",
-        "labelsize": get("COMMON", "tick_label_size"),
-        "size": get("COMMON", "tick_size"),
-        "color": get("COMMON", "tick_color"),
-    }
 
     axs = axes_args["axs"]
     for i in range(axs.shape[0]):
         for j in range(axs.shape[1]):
             axs[i, j, 0, 0].set(**position_params)
-            axs[i, j, 0, 0].tick_params(**format_params)
-
-
-def add_title_column(ax, title):
-    """add title."""
-
-    ax.set_title(
-        title,
-        pad=get("COMMON", "plot_size") * get("COMMON", "title_padding"),
-        fontsize=get("COMMON", "letter_label_size"),
-    )
-
-
-def add_title_row(ax, title):
-    """add title."""
-
-    ax.annotate(
-        title,
-        xy=(1, 0.5),
-        xycoords="axes fraction",
-        xytext=(get("COMMON", "plot_size") * get("COMMON", "title_padding") * 3.5, 0),
-        textcoords="offset points",
-        va="center",
-        ha="left",
-        fontsize=get("COMMON", "letter_label_size"),
-    )
+            axs[i, j, 0, 0].tick_params(axis="both", **format_params)
 
 
 def prettify_axes(axes_args):
@@ -153,54 +117,52 @@ def prettify_axes(axes_args):
     letter_position = 1.0 + get("COMMON", "letter_padding") * nr
     letter_size = get("COMMON", "letter_label_size")
 
+    spine_linewidth = get("COMMON", "border_width")
+    spine_color = get("COMMON", "border_color")
+
     for i in range(nrows):
         for j in range(ncols):
             add_letters(axes_args["axs"][i, j, 0, 0], letter_position, letter_size, i * ncols + j)
             for k in range(nr):
                 for m in range(nc):
-                    set_spines(axes_args["axs"][i, j, k, m])
-                    set_locator(
-                        axes_args["axs"][i, j, k, m],
-                        axes_args["divider"],
-                        j * (nc + 1) + m + int(m / nc),
-                        (nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
-                    )
-                    remove_ticks(axes_args["axs"][i, j, k, m])
-                    set_limits(
-                        axes_args["axs"][i, j, k, m],
-                        axes_args["x_lim"],
-                        axes_args["y_lim"],
-                    )
+                    ax = axes_args["axs"][i, j, k, m]
+                    for spine in ax.spines.values():
+                        spine.set_linewidth(spine_linewidth)
+                        spine.set_color(spine_color)
+                    ax.set(xticks=[], yticks=[])
+                    ax.set(xlim=axes_args["x_lim"], ylim=axes_args["y_lim"])
+                    ax.set_axes_locator(axes_args["divider"].new_locator(
+                        nx=j * (nc + 1) + m + int(m / nc),
+                        ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
+                    ))
 
+    params = {
+        "pad": get("COMMON", "plot_size") * get("COMMON", "title_padding"),
+        "fontsize": get("COMMON", "letter_label_size"),
+    }
     for j, title in enumerate(axes_args["column_titles"]):
-        add_title_column(axes_args["axs"][0, j, 0, int(nc / 2)], title)
+        axes_args["axs"][0, j, 0, int(nc / 2)].set_title(
+            title,
+            **params,
+        )
+
+    params = {
+        "xy": (1, 0.5),
+        "xycoords": "axes fraction",
+        "xytext": (get("COMMON", "plot_size") * get("COMMON", "title_padding") * 3.5, 0),
+        "textcoords": "offset points",
+        "va": "center",
+        "ha": "left",
+        "fontsize": get("COMMON", "letter_label_size"),
+    }
     for i, title in enumerate(axes_args["row_titles"]):
-        add_title_row(axes_args["axs"][i, -1, int(nr / 2), -1], title)
-    add_ticks(axes_args)
+        axes_args["axs"][i, -1, int(nr / 2), -1].annotate(title, **params)
+
+    params = {
+        "labelsize": get("COMMON", "tick_label_size"),
+        "size": get("COMMON", "tick_size"),
+        "color": get("COMMON", "tick_color"),
+    }
+    add_ticks(axes_args, params)
+
     add_ticklabels(axes_args)
-
-
-def remove_ticks(ax):
-    """remove ticks."""
-
-    ax.set(xticks=[], yticks=[])
-
-
-def set_limits(ax, xlim, ylim):
-    """set limits."""
-
-    ax.set(xlim=xlim, ylim=ylim)
-
-
-def set_locator(ax, divider, nx, ny):
-    """set locator."""
-
-    ax.set_axes_locator(divider.new_locator(nx=nx, ny=ny))
-
-
-def set_spines(ax):
-    """set spines."""
-
-    for spine in ax.spines.values():
-        spine.set_linewidth(get("COMMON", "border_width"))
-        spine.set_color(get("COMMON", "border_color"))
