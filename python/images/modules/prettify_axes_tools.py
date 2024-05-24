@@ -86,7 +86,7 @@ def add_ticks_line2d(axs, format_params):
 
 
 def set_spines(ax, linewidth, color):
-    """ Prettiyf ax spines."""
+    """Prettify ax spines."""
 
     for spine in ax.spines.values():
         spine.set_linewidth(linewidth)
