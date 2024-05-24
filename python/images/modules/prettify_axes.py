@@ -22,19 +22,21 @@ def add_letters(ax, letter_position, n):
 def add_ticklabels(axes_args):
     """add tick labels for (nrows x ncols x nr x nc)."""
 
-    nrows, ncols, nr, nc = axes_args["axs"].shape
+    axs = axes_args["axs"]
+    y_range = range(0, axs.shape[2], axs.shape[2] // 2)
+    x_range = range(0, axs.shape[3], axs.shape[3] // 2)
 
-    if nr == 1:
+    if axs.shape[2] == 1:
         add_ticklabels_imshow(axes_args)
         return
 
-    for i in range(nrows):
-        for k in range(0, nr, nr // 2):
+    for i in range(axs.shape[0]):
+        for k in y_range:
             axes_args["axs"][i, 0, k, 0].set_yticklabels(
                 [f"{axes_args['r_values'][k]:.1f}"]
             )
-    for j in range(ncols):
-        for m in range(0, nc, nc // 2):
+    for j in range(axs.shape[1]):
+        for m in x_range:
             axes_args["axs"][-1, j, -1, m].set_xticklabels(
                 [f"{axes_args['c_values'][m]:.0f}"]
             )
@@ -47,29 +49,26 @@ def add_ticklabels_imshow(axes_args):
     c_max = axes_args["c_values"][-1]
     r_min = axes_args["r_values"][-1]
     r_max = axes_args["r_values"][0]
+    y_params = [f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"]
+    x_params = [f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"]
 
     for ax in axes_args["axs"][:, 0, 0, 0]:
-        ax.set_yticklabels(
-            [f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"]
-        )
+        ax.set_yticklabels(y_params)
     for ax in axes_args["axs"][-1, :, 0, 0]:
-        ax.set_xticklabels(
-            [f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"]
-        )
+        ax.set_xticklabels(x_params)
 
 
 def add_ticks(axes_args):
     """set ticks for (nrows x ncols x nr x nc)."""
 
     axs = axes_args["axs"]
-    nrows, ncols, nr, nc = axs.shape
 
-    if nr == 1:
+    if axs.shape[2] == 1:
         add_ticks_imshow(axes_args)
         return
 
-    x_range = range(0, nr, nr // 2)
-    y_range = range(0, nc, nc // 2)
+    y_range = range(0, axs.shape[2], axs.shape[2] // 2)
+    x_range = range(0, axs.shape[3], axs.shape[3] // 2)
     y_min, y_max = axs[0, 0, 0, 0].get_ylim()
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()
     x_position_params = {
@@ -86,12 +85,12 @@ def add_ticks(axes_args):
         "color": get("COMMON", "tick_color"),
     }
 
-    for i in range(nrows):
-        for j in range(ncols):
-            for k in x_range:
+    for i in range(axs.shape[0]):
+        for j in range(axs.shape[1]):
+            for k in y_range:
                 axs[i, j, k, 0].set(**y_position_params)
                 axs[i, j, k, 0].tick_params(axis="y", **format_params)
-            for m in y_range:
+            for m in x_range:
                 axs[i, j, -1, m].set(**x_position_params)
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
