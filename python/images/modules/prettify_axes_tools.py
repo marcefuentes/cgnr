@@ -15,6 +15,18 @@ def add_letters(ax, position, params, n):
     )
 
 
+def add_ticklabels_imshow(axs, c_min, c_max, r_min, r_max):
+    """add tick labels for (nrows x ncols)."""
+
+    y_params = [f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"]
+    x_params = [f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"]
+
+    for ax in axs[:, 0, 0, 0]:
+        ax.set_yticklabels(y_params)
+    for ax in axs[-1, :, 0, 0]:
+        ax.set_xticklabels(x_params)
+
+
 def add_ticklabels_line2d(axs, r_values, c_values):
     """add tick labels for (nrows x ncols x nr x nc)."""
 
@@ -29,16 +41,22 @@ def add_ticklabels_line2d(axs, r_values, c_values):
             axs[-1, j, -1, m].set_xticklabels([f"{c_values[m]:.0f}"])
 
 
-def add_ticklabels_imshow(axs, c_min, c_max, r_min, r_max):
-    """add tick labels for (nrows x ncols)."""
+def add_ticks_imshow(axs, mc, mr, format_params):
+    """set ticks for (nrows x ncols) matrix."""
 
-    y_params = [f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"]
-    x_params = [f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"]
+    c_min, c_max = 0, mc - 1
+    r_min, r_max = 0, mr - 1
+    position_params = {
+        "xticks": [c_min, c_max / 2, c_max],
+        "yticks": [r_min, r_max / 2, r_max],
+        "xticklabels": [],
+        "yticklabels": [],
+    }
 
-    for ax in axs[:, 0, 0, 0]:
-        ax.set_yticklabels(y_params)
-    for ax in axs[-1, :, 0, 0]:
-        ax.set_xticklabels(x_params)
+    for i in range(axs.shape[0]):
+        for j in range(axs.shape[1]):
+            axs[i, j, 0, 0].set(**position_params)
+            axs[i, j, 0, 0].tick_params(axis="both", **format_params)
 
 
 def add_ticks_line2d(axs, format_params):
@@ -67,19 +85,9 @@ def add_ticks_line2d(axs, format_params):
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
 
-def add_ticks_imshow(axs, mc, mr, format_params):
-    """set ticks for (nrows x ncols) matrix."""
+def set_spines(ax, linewidth, color):
+    """ Prettiyf ax spines."""
 
-    c_min, c_max = 0, mc - 1
-    r_min, r_max = 0, mr - 1
-    position_params = {
-        "xticks": [c_min, c_max / 2, c_max],
-        "yticks": [r_min, r_max / 2, r_max],
-        "xticklabels": [],
-        "yticklabels": [],
-    }
-
-    for i in range(axs.shape[0]):
-        for j in range(axs.shape[1]):
-            axs[i, j, 0, 0].set(**position_params)
-            axs[i, j, 0, 0].tick_params(axis="both", **format_params)
+    for spine in ax.spines.values():
+        spine.set_linewidth(linewidth)
+        spine.set_color(color)

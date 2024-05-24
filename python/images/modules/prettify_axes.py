@@ -15,8 +15,10 @@ def prettify_axes(axes_args):
         "weight": "bold",
     }
 
-    spine_linewidth = get("COMMON", "border_width")
-    spine_color = get("COMMON", "border_color")
+    params = {
+        "linewidth": get("COMMON", "border_width"),
+        "color": get("COMMON", "border_color"),
+    }
 
     for i in range(nrows):
         for j in range(ncols):
@@ -26,8 +28,7 @@ def prettify_axes(axes_args):
             for k in range(nr):
                 for m in range(nc):
                     ax = axs[i, j, k, m]
-                    for spine in ax.spines.values():
-                        spine.Spine(linewidth=spine_linewidth, color=spine_color)
+                    tools.set_spines(ax, **params)
                     ax.set(xticks=[], yticks=[])
                     ax.set(xlim=axes_args["x_lim"], ylim=axes_args["y_lim"])
                     ax.set_axes_locator(
