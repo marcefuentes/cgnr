@@ -9,11 +9,8 @@ def prettify_axes(axes_args):
 
     axs = axes_args["axs"]
     nrows, ncols, nr, nc = axs.shape
-    letter_position = (0, 1.0 + get("COMMON", "letter_padding") * nr)
-    letter_params = {
-        "fontsize": get("COMMON", "letter_label_size"),
-        "weight": "bold",
-    }
+
+    # Prettify spines, reset ticks, set limits and position axes
 
     params = {
         "linewidth": get("COMMON", "border_width"),
@@ -22,14 +19,10 @@ def prettify_axes(axes_args):
 
     for i in range(nrows):
         for j in range(ncols):
-            tools.add_letters(
-                axs[i, j, 0, 0], letter_position, letter_params, i * ncols + j
-            )
             for k in range(nr):
                 for m in range(nc):
-                    ax = axs[i, j, k, m]
-                    tools.set_spines(ax, **params)
-                    ax.set(
+                    tools.set_spines(axs[i, j, k, m], **params)
+                    axs[i, j, k, m].set(
                         xticks=[],
                         yticks=[],
                         xlim=axes_args["x_lim"],
@@ -40,12 +33,29 @@ def prettify_axes(axes_args):
                         )
                     )
 
+    # Add letters
+
+    position = (0, 1.0 + get("COMMON", "letter_padding") * nr)
+    params = {
+        "fontsize": get("COMMON", "letter_label_size"),
+        "weight": "bold",
+    }
+    for i in range(nrows):
+        for j in range(ncols):
+            tools.add_letters(
+                axs[i, j, 0, 0], position, params, i * ncols + j
+            )
+
+    # Add column titles
+
     params = {
         "pad": get("COMMON", "plot_size") * get("COMMON", "title_padding"),
         "fontsize": get("COMMON", "letter_label_size"),
     }
     for j, title in enumerate(axes_args["column_titles"]):
         axs[0, j, 0, int(nc / 2)].set_title(title, **params)
+
+    # Add row titles
 
     params = {
         "xy": (1, 0.5),
@@ -61,6 +71,8 @@ def prettify_axes(axes_args):
     }
     for i, title in enumerate(axes_args["row_titles"]):
         axs[i, -1, int(nr / 2), -1].annotate(title, **params)
+
+    # Add ticks and tick labels
 
     params = {
         "labelsize": get("COMMON", "tick_label_size"),
