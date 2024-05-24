@@ -29,10 +29,12 @@ def prettify_axes(axes_args):
                 for m in range(nc):
                     ax = axs[i, j, k, m]
                     tools.set_spines(ax, **params)
-                    ax.set(xticks=[], yticks=[])
-                    ax.set(xlim=axes_args["x_lim"], ylim=axes_args["y_lim"])
-                    ax.set_axes_locator(
-                        axes_args["divider"].new_locator(
+                    ax.set(
+                        xticks=[],
+                        yticks=[],
+                        xlim=axes_args["x_lim"],
+                        ylim=axes_args["y_lim"],
+                        axes_locator=axes_args["divider"].new_locator(
                             nx=j * (nc + 1) + m + int(m / nc),
                             ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
                         )
