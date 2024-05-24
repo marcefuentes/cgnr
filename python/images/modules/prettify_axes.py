@@ -23,12 +23,13 @@ def add_ticklabels(axes_args):
     """add tick labels for (nrows x ncols x nr x nc)."""
 
     axs = axes_args["axs"]
-    y_range = range(0, axs.shape[2], axs.shape[2] // 2)
-    x_range = range(0, axs.shape[3], axs.shape[3] // 2)
 
     if axs.shape[2] == 1:
         add_ticklabels_imshow(axes_args)
         return
+
+    y_range = range(0, axs.shape[2], axs.shape[2] // 2)
+    x_range = range(0, axs.shape[3], axs.shape[3] // 2)
 
     for i in range(axs.shape[0]):
         for k in y_range:

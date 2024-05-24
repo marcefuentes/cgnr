@@ -137,7 +137,6 @@ def get_df_single_trait(histogram, movie, clean):
             ]
         )
 
-    print(df_socials[0][0])
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
 
