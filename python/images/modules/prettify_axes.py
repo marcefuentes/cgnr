@@ -3,7 +3,7 @@
 from modules.get_setting import get_setting as get
 
 
-def add_letters(ax, letter_position, n):
+def add_letters(ax, position, fontsize, n):
     """add letters."""
 
     letter = chr(ord("a") + n % 26)
@@ -11,9 +11,9 @@ def add_letters(ax, letter_position, n):
         letter = letter + letter
     ax.text(
         0,
-        letter_position,
+        position,
         letter,
-        fontsize=get("COMMON", "letter_label_size"),
+        fontsize=fontsize,
         transform=ax.transAxes,
         weight="bold",
     )
@@ -151,10 +151,11 @@ def prettify_axes(axes_args):
 
     nrows, ncols, nr, nc = axes_args["axs"].shape
     letter_position = 1.0 + get("COMMON", "letter_padding") * nr
+    letter_size = get("COMMON", "letter_label_size")
 
     for i in range(nrows):
         for j in range(ncols):
-            add_letters(axes_args["axs"][i, j, 0, 0], letter_position, i * ncols + j)
+            add_letters(axes_args["axs"][i, j, 0, 0], letter_position, letter_size, i * ncols + j)
             for k in range(nr):
                 for m in range(nc):
                     set_spines(axes_args["axs"][i, j, k, m])
