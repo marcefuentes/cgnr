@@ -64,14 +64,13 @@ def update_artists_histogram(artists, df, alphas, logess, trait):
 def update_artists_line2d(artists, zmatrix):
     """Update background colors of plots."""
 
-    nr, nc = zmatrix.shape
+    cmap = colormaps.get_cmap(get_setting("COMMON", "color_map"))
 
-    for i in range(nr):
-        for j in range(nc):
-            bgcolor = colormaps[get_setting("COMMON", "color_map")](
-                (zmatrix[i, j] + 1) / 2
+    for i in range(zmatrix.shape[0]):
+        for j in range(zmatrix.shape[1]):
+            artists[i, j].axes.set_facecolor(
+                cmap((zmatrix[i, j] + 1) / 2)
             )
-            artists[i, j].axes.set_facecolor(bgcolor)
 
     return artists
 

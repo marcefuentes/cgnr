@@ -11,7 +11,6 @@ def init_artists_line2d(axs, x, y, ic):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nr, nc = axs.shape[2:4]
-    n_ic = ic.shape[2]
     budgets = np.empty((nr, nc), dtype=object)
     icurves = np.empty((nr, nc), dtype=object)
     landscapes = np.empty((nr, nc), dtype=object)
@@ -20,7 +19,7 @@ def init_artists_line2d(axs, x, y, ic):
 
     for i in range(nr):
         for j in range(nc):
-            for k in range(n_ic):
+            for k in range(ic.shape[2]):
                 axs[0, 0, i, j].plot(
                     x,
                     ic[i, j, k],
