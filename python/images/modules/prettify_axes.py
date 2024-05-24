@@ -70,48 +70,53 @@ def add_ticks(axes_args):
 
     y_min, y_max = axs[0, 0, 0, 0].get_ylim()
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()
+    x_position_params = {
+        "xticks": [(x_min + x_max) / 2],
+        "xticklabels": [],
+    }
+    y_position_params = {
+        "yticks": [(y_min + y_max) / 2],
+        "yticklabels": [],
+    }
+    format_params = {
+        "labelsize": get("COMMON", "tick_label_size"),
+        "size": get("COMMON", "tick_size"),
+        "color": get("COMMON", "tick_color"),
+    }
 
     for i in range(nrows):
         for j in range(ncols):
             for k in range(0, nr, nr // 2):
-                axs[i, j, k, 0].set(yticks=[(y_min + y_max) / 2], yticklabels=[])
-                axs[i, j, k, 0].tick_params(
-                    axis="y",
-                    labelsize=get("COMMON", "tick_label_size"),
-                    size=get("COMMON", "tick_size"),
-                    color=get("COMMON", "tick_color"),
-                )
+                axs[i, j, k, 0].set(**y_position_params)
+                axs[i, j, k, 0].tick_params(axis="y", **format_params)
             for m in range(0, nc, nc // 2):
-                axs[i, j, -1, m].set(xticks=[(x_min + x_max) / 2], xticklabels=[])
-                axs[i, j, -1, m].tick_params(
-                    axis="x",
-                    labelsize=get("COMMON", "tick_label_size"),
-                    size=get("COMMON", "tick_size"),
-                    color=get("COMMON", "tick_color"),
-                )
+                axs[i, j, -1, m].set(**x_position_params)
+                axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
 
 def add_ticks_imshow(axes_args):
     """set ticks for (nrows x ncols) matrix."""
 
-    nrows, ncols, _, _ = axes_args["axs"].shape
     c_min, c_max = 0, len(axes_args["c_values"]) - 1
     r_min, r_max = 0, len(axes_args["r_values"]) - 1
+    position_params = {
+        "xticks": [c_min, c_max / 2, c_max],
+        "yticks": [r_min, r_max / 2, r_max],
+        "xticklabels": [],
+        "yticklabels": [],
+    }
+    format_params = {
+        "axis": "both",
+        "labelsize": get("COMMON", "tick_label_size"),
+        "size": get("COMMON", "tick_size"),
+        "color": get("COMMON", "tick_color"),
+    }
 
-    for i in range(nrows):
-        for j in range(ncols):
-            axes_args["axs"][i, j, 0, 0].set(
-                xticks=[c_min, c_max / 2, c_max],
-                yticks=[r_min, r_max / 2, r_max],
-                xticklabels=[],
-                yticklabels=[],
-            )
-            axes_args["axs"][i, j, 0, 0].tick_params(
-                axis="both",
-                labelsize=get("COMMON", "tick_label_size"),
-                size=get("COMMON", "tick_size"),
-                color=get("COMMON", "tick_color"),
-            )
+    axs = axes_args["axs"]
+    for i in range(axs.shape[0]):
+        for j in range(axs.shape[1]):
+            axs[i, j, 0, 0].set(**position_params)
+            axs[i, j, 0, 0].tick_params(**format_params)
 
 
 def add_title_column(ax, title):
