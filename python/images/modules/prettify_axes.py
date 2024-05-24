@@ -30,7 +30,7 @@ def prettify_axes(axes_args):
                         axes_locator=axes_args["divider"].new_locator(
                             nx=j * (nc + 1) + m + int(m / nc),
                             ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
-                        )
+                        ),
                     )
 
     # Add letters
@@ -42,9 +42,7 @@ def prettify_axes(axes_args):
     }
     for i in range(nrows):
         for j in range(ncols):
-            tools.add_letters(
-                axs[i, j, 0, 0], position, params, i * ncols + j
-            )
+            tools.add_letters(axs[i, j, 0, 0], position, params, i * ncols + j)
 
     # Add column titles
 
