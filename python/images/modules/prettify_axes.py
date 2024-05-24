@@ -19,54 +19,38 @@ def add_letters(ax, position, fontsize, n):
     )
 
 
-def add_ticklabels(axes_args):
+def add_ticklabels_line2d(axs, r_values, c_values):
     """add tick labels for (nrows x ncols x nr x nc)."""
-
-    axs = axes_args["axs"]
-
-    if axs.shape[2] == 1:
-        add_ticklabels_imshow(axes_args)
-        return
 
     y_range = range(0, axs.shape[2], axs.shape[2] // 2)
     x_range = range(0, axs.shape[3], axs.shape[3] // 2)
 
     for i in range(axs.shape[0]):
         for k in y_range:
-            axes_args["axs"][i, 0, k, 0].set_yticklabels(
-                [f"{axes_args['r_values'][k]:.1f}"]
+            axs[i, 0, k, 0].set_yticklabels(
+                [f"{r_values[k]:.1f}"]
             )
     for j in range(axs.shape[1]):
         for m in x_range:
-            axes_args["axs"][-1, j, -1, m].set_xticklabels(
-                [f"{axes_args['c_values'][m]:.0f}"]
+            axs[-1, j, -1, m].set_xticklabels(
+                [f"{c_values[m]:.0f}"]
             )
 
 
-def add_ticklabels_imshow(axes_args):
+def add_ticklabels_imshow(axs, c_min, c_max, r_min, r_max):
     """add tick labels for (nrows x ncols)."""
 
-    c_min = axes_args["c_values"][0]
-    c_max = axes_args["c_values"][-1]
-    r_min = axes_args["r_values"][-1]
-    r_max = axes_args["r_values"][0]
     y_params = [f"{r_max:.1f}", f"{(r_min + r_max)/2.:.1f}", f"{r_min:.1f}"]
     x_params = [f"{c_min:.0f}", f"{(c_min + c_max)/2.:.0f}", f"{c_max:.0f}"]
 
-    for ax in axes_args["axs"][:, 0, 0, 0]:
+    for ax in axs[:, 0, 0, 0]:
         ax.set_yticklabels(y_params)
-    for ax in axes_args["axs"][-1, :, 0, 0]:
+    for ax in axs[-1, :, 0, 0]:
         ax.set_xticklabels(x_params)
 
 
-def add_ticks(axes_args, format_params):
+def add_ticks_line2d(axs, format_params):
     """set ticks for (nrows x ncols x nr x nc)."""
-
-    axs = axes_args["axs"]
-
-    if axs.shape[2] == 1:
-        add_ticks_imshow(axes_args, format_params)
-        return
 
     y_range = range(0, axs.shape[2], axs.shape[2] // 2)
     x_range = range(0, axs.shape[3], axs.shape[3] // 2)
@@ -91,11 +75,11 @@ def add_ticks(axes_args, format_params):
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
 
-def add_ticks_imshow(axes_args, format_params):
+def add_ticks_imshow(axs, mc, mr, format_params):
     """set ticks for (nrows x ncols) matrix."""
 
-    c_min, c_max = 0, len(axes_args["c_values"]) - 1
-    r_min, r_max = 0, len(axes_args["r_values"]) - 1
+    c_min, c_max = 0, mc - 1
+    r_min, r_max = 0, mr - 1
     position_params = {
         "xticks": [c_min, c_max / 2, c_max],
         "yticks": [r_min, r_max / 2, r_max],
@@ -103,7 +87,6 @@ def add_ticks_imshow(axes_args, format_params):
         "yticklabels": [],
     }
 
-    axs = axes_args["axs"]
     for i in range(axs.shape[0]):
         for j in range(axs.shape[1]):
             axs[i, j, 0, 0].set(**position_params)
@@ -113,7 +96,8 @@ def add_ticks_imshow(axes_args, format_params):
 def prettify_axes(axes_args):
     """prettify (nrows x ncols x nr x nc) matrix."""
 
-    nrows, ncols, nr, nc = axes_args["axs"].shape
+    axs = axes_args["axs"]
+    nrows, ncols, nr, nc = axs.shape
     letter_position = 1.0 + get("COMMON", "letter_padding") * nr
     letter_size = get("COMMON", "letter_label_size")
 
@@ -122,10 +106,10 @@ def prettify_axes(axes_args):
 
     for i in range(nrows):
         for j in range(ncols):
-            add_letters(axes_args["axs"][i, j, 0, 0], letter_position, letter_size, i * ncols + j)
+            add_letters(axs[i, j, 0, 0], letter_position, letter_size, i * ncols + j)
             for k in range(nr):
                 for m in range(nc):
-                    ax = axes_args["axs"][i, j, k, m]
+                    ax = axs[i, j, k, m]
                     for spine in ax.spines.values():
                         spine.set_linewidth(spine_linewidth)
                         spine.set_color(spine_color)
@@ -141,7 +125,7 @@ def prettify_axes(axes_args):
         "fontsize": get("COMMON", "letter_label_size"),
     }
     for j, title in enumerate(axes_args["column_titles"]):
-        axes_args["axs"][0, j, 0, int(nc / 2)].set_title(
+        axs[0, j, 0, int(nc / 2)].set_title(
             title,
             **params,
         )
@@ -156,13 +140,22 @@ def prettify_axes(axes_args):
         "fontsize": get("COMMON", "letter_label_size"),
     }
     for i, title in enumerate(axes_args["row_titles"]):
-        axes_args["axs"][i, -1, int(nr / 2), -1].annotate(title, **params)
+        axs[i, -1, int(nr / 2), -1].annotate(title, **params)
 
     params = {
         "labelsize": get("COMMON", "tick_label_size"),
         "size": get("COMMON", "tick_size"),
         "color": get("COMMON", "tick_color"),
     }
-    add_ticks(axes_args, params)
-
-    add_ticklabels(axes_args)
+    if axs.shape[2] == 1:
+        add_ticks_imshow(axs, len(axes_args["c_values"]), len(axes_args["r_values"]), params)
+        add_ticklabels_imshow(
+            axs,
+            axes_args["c_values"][0],
+            axes_args["c_values"][-1],
+            axes_args["r_values"][-1],
+            axes_args["r_values"][0],
+        )
+    else:
+        add_ticks_line2d(axs, params)
+        add_ticklabels_line2d(axs, axes_args["r_values"], axes_args["c_values"])
