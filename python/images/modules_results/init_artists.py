@@ -12,14 +12,19 @@ def init_artists_imshow(axs, mr, mc):
     artists = np.empty((nrows, ncols, nr, nc), dtype=object)
 
     dummy_zmatrix = np.zeros((mr, mc))
-    cmap = get("COMMON", "color_map")
+    plot_params = {
+        "cmap": get("COMMON", "color_map"),
+        "vmin": -1,
+        "vmax": 1,
+    }
 
     for i in range(nrows):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
                     artists[i, j, k, m] = axs[i, j, k, m].imshow(
-                        dummy_zmatrix, cmap=cmap, vmin=-1, vmax=1
+                        dummy_zmatrix,
+                        **plot_params,
                     )
     return artists
 
@@ -30,7 +35,10 @@ def init_artists_line2d(axs, x, y):
     nrows, ncols, nr, nc = axs.shape
     artists = np.empty((nrows, ncols, nr, nc), dtype=object)
 
-    lw = get("COMMON", "line_width") * get("COMMON", "plot_size")
+    plot_params = {
+        "c": "black",
+        "lw": get("COMMON", "line_width") * get("COMMON", "plot_size"),
+    }
 
     for i in range(nrows):
         for j in range(ncols):
@@ -39,7 +47,6 @@ def init_artists_line2d(axs, x, y):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x,
                         y[k, m],
-                        c="black",
-                        lw=lw,
+                        **plot_params,
                     )
     return artists

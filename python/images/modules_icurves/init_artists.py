@@ -16,8 +16,7 @@ def init_artists_line2d(axs, x, y, ic):
     icurves = np.empty((nr, nc), dtype=object)
     landscapes = np.empty((nr, nc), dtype=object)
 
-    plot_size = get("COMMON", "plot_size")
-    lw = get("COMMON", "line_width") * plot_size * 12 / nc
+    lw = get("COMMON", "line_width") * get("COMMON", "plot_size") * 12 / nc
 
     for i in range(nr):
         for j in range(nc):
