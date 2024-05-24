@@ -27,8 +27,7 @@ def prettify_axes(axes_args):
                 for m in range(nc):
                     ax = axs[i, j, k, m]
                     for spine in ax.spines.values():
-                        spine.set_linewidth(spine_linewidth)
-                        spine.set_color(spine_color)
+                        spine.Spine(linewidth=spine_linewidth, color=spine_color)
                     ax.set(xticks=[], yticks=[])
                     ax.set(xlim=axes_args["x_lim"], ylim=axes_args["y_lim"])
                     ax.set_axes_locator(
@@ -43,10 +42,7 @@ def prettify_axes(axes_args):
         "fontsize": get("COMMON", "letter_label_size"),
     }
     for j, title in enumerate(axes_args["column_titles"]):
-        axs[0, j, 0, int(nc / 2)].set_title(
-            title,
-            **params,
-        )
+        axs[0, j, 0, int(nc / 2)].set_title(title, **params)
 
     params = {
         "xy": (1, 0.5),
