@@ -68,6 +68,8 @@ def add_ticks(axes_args):
         add_ticks_imshow(axes_args)
         return
 
+    x_range = range(0, nr, nr // 2)
+    y_range = range(0, nc, nc // 2)
     y_min, y_max = axs[0, 0, 0, 0].get_ylim()
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()
     x_position_params = {
@@ -86,10 +88,10 @@ def add_ticks(axes_args):
 
     for i in range(nrows):
         for j in range(ncols):
-            for k in range(0, nr, nr // 2):
+            for k in x_range:
                 axs[i, j, k, 0].set(**y_position_params)
                 axs[i, j, k, 0].tick_params(axis="y", **format_params)
-            for m in range(0, nc, nc // 2):
+            for m in y_range:
                 axs[i, j, -1, m].set(**x_position_params)
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
