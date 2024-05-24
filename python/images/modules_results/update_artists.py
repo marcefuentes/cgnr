@@ -68,9 +68,7 @@ def update_artists_line2d(artists, zmatrix):
 
     for i in range(zmatrix.shape[0]):
         for j in range(zmatrix.shape[1]):
-            artists[i, j].axes.set_facecolor(
-                cmap((zmatrix[i, j] + 1) / 2)
-            )
+            artists[i, j].axes.set_facecolor(cmap((zmatrix[i, j] + 1) / 2))
 
     return artists
 
