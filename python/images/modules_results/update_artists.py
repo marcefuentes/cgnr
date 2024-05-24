@@ -46,6 +46,7 @@ def update_artists(t, update_args):
                     )
             else:
                 artists[0, 0].set_array(zmatrix)
+
     return update_args["artists"].flatten()
 
 
