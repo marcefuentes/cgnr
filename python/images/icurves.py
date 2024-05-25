@@ -7,8 +7,8 @@ import time
 
 from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
-from modules.prettify_axes import prettify_axes
-from modules.prettify_fig import get_distances, prettify_fig
+from modules.format_axes import format_axes
+from modules.format_fig import get_distances, format_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
@@ -51,7 +51,7 @@ def main(args):
     fig, axs = create_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
+    format_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
     update_args["x_values"], y, ic = get_static_data(
         update_args["alphas"], update_args["rhos"]
@@ -71,7 +71,7 @@ def main(args):
         "r_values": update_args["alphas"],
     }
 
-    prettify_axes(axes_args)
+    format_axes(axes_args)
 
     save_file(fig, update_args)
 
