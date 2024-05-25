@@ -7,7 +7,7 @@ import time
 
 from modules.fix_positions import create_divider
 from modules.get_setting import get_setting, get_titles
-from modules.init_fig import init_fig
+from modules.create_fig import create_fig
 from modules.prettify_axes import prettify_axes
 from modules.prettify_fig import get_distances, prettify_fig
 from modules.save_file import save_file
@@ -64,7 +64,7 @@ def main(args):
         fig_layout["nc"] = len(update_args["logess"])
         fig_layout["nr"] = len(update_args["alphas"])
 
-    fig, axs = init_fig(fig_layout)
+    fig, axs = create_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     prettify_fig(fig, fig_distances, update_args["file_name"], get_sm())
