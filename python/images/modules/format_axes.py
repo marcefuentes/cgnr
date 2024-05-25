@@ -28,7 +28,7 @@ def format_axes(axes_args):
             for k in range(nr):
                 for m in range(nc):
                     ax = axs[i, j, k, m]
-                    tools.set_spines(ax, **spine_params)
+                    tools.format_spines(ax, **spine_params)
                     ax.set(**params)
                     ax.set(
                         axes_locator=axes_args["divider"].new_locator(
