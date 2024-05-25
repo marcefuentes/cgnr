@@ -8,7 +8,7 @@ from modules_results.trait_map import trait_map
 
 
 def parse_args():
-    """Parse command line arguments and return them."""
+    """Parse command line arguments and return them as a dictionary"""
 
     folder = os.path.basename(os.getcwd())
 
