@@ -16,7 +16,7 @@ def format_axes(axes_args):
         "linewidth": get("COMMON", "border_width"),
         "color": get("COMMON", "border_color"),
     }
-    other_params = {
+    params = {
         "xticks": [],
         "yticks": [],
         "xlim": axes_args["x_lim"],
@@ -27,9 +27,10 @@ def format_axes(axes_args):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
-                    tools.set_spines(axs[i, j, k, m], **spine_params)
-                    axs[i, j, k, m].set(
-                        **other_params,
+                    ax = axs[i, j, k, m]
+                    tools.set_spines(ax, **spine_params)
+                    ax.set(
+                        **params,
                         axes_locator=axes_args["divider"].new_locator(
                             nx=j * (nc + 1) + m + int(m / nc),
                             ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
