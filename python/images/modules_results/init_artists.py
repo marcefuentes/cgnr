@@ -5,12 +5,12 @@ import numpy as np
 from modules.get_setting import get_setting as get
 
 
-def init_artists_imshow(axs, mr, mc):
+def init_imshow(axs, mr, mc):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     artists = np.empty_like(axs, dtype=object)
     dummy_zmatrix = np.zeros((mr, mc))
-    plot_params = {
+    params = {
         "cmap": get("COMMON", "color_map"),
         "vmin": -1,
         "vmax": 1,
@@ -22,16 +22,16 @@ def init_artists_imshow(axs, mr, mc):
                 for m in range(axs.shape[3]):
                     artists[i, j, k, m] = axs[i, j, k, m].imshow(
                         dummy_zmatrix,
-                        **plot_params,
+                        **params,
                     )
     return artists
 
 
-def init_artists_line2d(axs, x, y):
+def init_line2d(axs, x, y):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     artists = np.empty_like(axs, dtype=object)
-    plot_params = {
+    params = {
         "c": "black",
         "lw": get("COMMON", "line_width") * get("COMMON", "plot_size"),
     }
@@ -43,6 +43,6 @@ def init_artists_line2d(axs, x, y):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x,
                         y[k, m],
-                        **plot_params,
+                        **params,
                     )
     return artists

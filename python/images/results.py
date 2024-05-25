@@ -18,8 +18,8 @@ import modules_results.get_static_fitness as static_fitness
 import modules_results.get_static_hist as static_hist
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.init_artists import (
-    init_artists_imshow,
-    init_artists_line2d,
+    init_imshow,
+    init_line2d,
 )
 from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
@@ -72,15 +72,15 @@ def main(args):
     update_args["text"] = fig.texts[2]
 
     if args.fitness:
-        update_args["artists"] = init_artists_line2d(
+        update_args["artists"] = init_line2d(
             axs, *static_fitness.data(update_args)
         )
     elif args.histogram:
-        update_args["artists"] = init_artists_line2d(
+        update_args["artists"] = init_line2d(
             axs, *static_hist.data(update_args)
         )
     else:
-        update_args["artists"] = init_artists_imshow(
+        update_args["artists"] = init_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])
         )
 
