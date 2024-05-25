@@ -29,13 +29,11 @@ def format_axes(axes_args):
                 for m in range(nc):
                     ax = axs[i, j, k, m]
                     tools.set_spines(ax, **spine_params)
-                    ax.set(
-                        **params,
-                        axes_locator=axes_args["divider"].new_locator(
-                            nx=j * (nc + 1) + m + int(m / nc),
-                            ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
-                        ),
-                    )
+                    ax.set(**params)
+                    ax.set(axes_locator=axes_args["divider"].new_locator(
+                        nx=j * (nc + 1) + m + int(m / nc),
+                        ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
+                    ))
 
     # Add letters
 
