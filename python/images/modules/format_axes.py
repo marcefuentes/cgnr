@@ -1,4 +1,4 @@
-""" Prettify axes. """
+""" Format axes. """
 
 from modules.get_setting import get_setting as get
 import modules.format_axes_tools as tools
@@ -10,23 +10,26 @@ def format_axes(axes_args):
     axs = axes_args["axs"]
     nrows, ncols, nr, nc = axs.shape
 
-    # Prettify spines, reset ticks, set limits and position axes
+    # Format spines, reset ticks, set limits and position axes
 
-    params = {
+    spine_params = {
         "linewidth": get("COMMON", "border_width"),
         "color": get("COMMON", "border_color"),
+    }
+    other_params = {
+        "xticks": [],
+        "yticks": [],
+        "xlim": axes_args["x_lim"],
+        "ylim": axes_args["y_lim"],
     }
 
     for i in range(nrows):
         for j in range(ncols):
             for k in range(nr):
                 for m in range(nc):
-                    tools.set_spines(axs[i, j, k, m], **params)
+                    tools.set_spines(axs[i, j, k, m], **spine_params)
                     axs[i, j, k, m].set(
-                        xticks=[],
-                        yticks=[],
-                        xlim=axes_args["x_lim"],
-                        ylim=axes_args["y_lim"],
+                        **other_params,
                         axes_locator=axes_args["divider"].new_locator(
                             nx=j * (nc + 1) + m + int(m / nc),
                             ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
