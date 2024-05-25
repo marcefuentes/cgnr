@@ -14,7 +14,8 @@ from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from modules_results.get_sm import get_sm
-from modules_results.get_static_data import get_lims, get_static_data
+import modules_results.get_static_fitness as static_fitness
+import modules_results.get_static_hist as static_hist
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
 from modules_results.init_artists import (
     init_artists_imshow,
@@ -69,8 +70,11 @@ def main(args):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     format_fig(fig, fig_distances, update_args["file_name"], get_sm())
     update_args["text"] = fig.texts[2]
-    if args.fitness or args.histogram:
-        update_args["artists"] = init_artists_line2d(axs, *get_static_data(update_args))
+
+    if args.fitness:
+        update_args["artists"] = init_artists_line2d(axs, *static_fitness.data(update_args))
+    elif args.histogram:
+        update_args["artists"] = init_artists_line2d(axs, *static_hist.data(update_args))
     else:
         update_args["artists"] = init_artists_imshow(
             axs, len(update_args["alphas"]), len(update_args["logess"])
@@ -87,15 +91,14 @@ def main(args):
         "r_values": update_args["alphas"],
     }
 
-    if args.fitness or args.histogram:
-        axes_args["x_lim"], axes_args["y_lim"] = get_lims(args.fitness)
+    if args.fitness:
+        axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
+        file_name += "_fitness"
+    elif args.histogram:
+        axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
+        file_name += "_histogram"
 
     format_axes(axes_args)
-
-    if args.fitness:
-        file_name += "_fitness"
-    if args.histogram:
-        file_name += "_histogram"
 
     if args.trait_set == "all_traits":
         for trait in get_setting("results", "all_traits"):

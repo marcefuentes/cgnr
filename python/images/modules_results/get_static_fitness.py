@@ -1,25 +1,11 @@
-""" Calculates static fitness isoclines. """
+""" Calculates fitness isoclines. """
 
 import os
 
 import numpy as np
 
-from common_modules.get_config import get_config
 from modules.get_setting import get_setting
 from modules.theory import fitness, qbeq
-
-
-def dummy_y(update_args, x):
-    """Returns a dummy y array."""
-
-    y = np.zeros(
-        (
-            len(update_args["alphas"]),
-            len(update_args["logess"]),
-            len(x),
-        )
-    )
-    return y
 
 
 def fitness_curve(update_args, x):
@@ -55,27 +41,17 @@ def fitness_curve(update_args, x):
     return y
 
 
-def get_lims(fitness_limits):
+def lims():
     """Sets the limits of the axes."""
 
-    if fitness_limits:
-        x_lim = [0, 1]
-        y_lim = [0, 1]
-        return x_lim, y_lim
-
-    x_lim = [-2, get_config("bins") + 1]
-    y_lim = [0, 0.25]
+    x_lim = [0, 1]
+    y_lim = [0, 1]
     return x_lim, y_lim
 
 
-def get_static_data(update_args):
+def data(update_args):
     """Calculates static fitness isoclines."""
 
-    if update_args["fitness"]:
-        x = np.linspace(0.001, 0.999, num=get_setting("results", "n_x_values"))
-        y = fitness_curve(update_args, x)
-        return x, y
-
-    x = np.arange(get_config("bins"))
-    y = dummy_y(update_args, x)
+    x = np.linspace(0.001, 0.999, num=get_setting("results", "n_x_values"))
+    y = fitness_curve(update_args, x)
     return x, y
