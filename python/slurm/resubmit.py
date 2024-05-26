@@ -6,7 +6,7 @@ import os
 import sys
 
 from common_modules import color
-from common_modules.get_config import get_config
+from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.process_jobs import process_jobs
 import modules.slurm_tools as st
@@ -60,7 +60,7 @@ def process_folder(test):
             sys.exit()
         st.remove_files(jobs_to_submit)
 
-    constraints = get_config("constraints")
+    constraints = settings["constraints"]
     for constraint in constraints:
         if len(jobs_to_submit) == 0:
             print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")

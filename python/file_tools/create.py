@@ -5,14 +5,14 @@
 import os
 import numpy as np
 
-from common_modules.get_config import get_config
+from common_modules.settings import SETTINGS as settings
 from modules_create.parse_args import parse_args
 
 
 def main(args):
     """Main function"""
 
-    input_file_extension = get_config("input_file_extension")
+    input_file_extension = settings["input_file_extension"]
     counter = 101
 
     if args.language == 1:
@@ -39,19 +39,19 @@ def main(args):
     path += f"/{str(args.given)}"
     os.makedirs(path, exist_ok=True)
 
-    grid = get_config("grid")
-    alphas = np.linspace(get_config("alpha_min"), get_config("alpha_max"), grid)
-    logess = np.linspace(get_config("loges_min"), get_config("loges_max"), grid)
+    grid = settings["grid"]
+    alphas = np.linspace(settings["alpha_min"], settings["alpha_max"], grid)
+    logess = np.linspace(settings["loges_min"], settings["loges_max"], grid)
 
     standard_params = {
         "Seed": 1,
-        "N": get_config("N"),
-        "Runs": get_config("Runs"),
-        "Time": get_config("Time"),
-        "Periods": get_config("Periods"),
-        "qBMutationSize": get_config("qBMutationSize"),
-        "GrainMutationSize": get_config("GrainMutationSize"),
-        "DeathRate": get_config("DeathRate"),
+        "N": settings["N"],
+        "Runs": settings["Runs"],
+        "Time": settings["Time"],
+        "Periods": settings["Periods"],
+        "qBMutationSize": settings["qBMutationSize"],
+        "GrainMutationSize": settings["GrainMutationSize"],
+        "DeathRate": settings["DeathRate"],
     }
 
     for alpha in alphas:

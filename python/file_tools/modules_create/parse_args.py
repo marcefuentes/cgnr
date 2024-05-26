@@ -2,7 +2,7 @@
 
 import argparse
 
-from common_modules.get_config import get_config
+from common_modules.settings import SETTINGS as settings
 
 
 def parse_args(description):
@@ -13,9 +13,9 @@ def parse_args(description):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    default_groupsize = get_config("GroupSize")
-    default_cost = get_config("Cost")
-    default_given = get_config("Given")
+    default_groupsize = settings["GroupSize"]
+    default_cost = settings["Cost"]
+    default_given = settings["Given"]
 
     parser.add_argument(
         "--groupsize", type=int, default=default_groupsize, help="group size"

@@ -3,13 +3,13 @@
 import os
 import pandas as pd
 
-from common_modules.get_config import get_config
+from common_modules.settings import SETTINGS as settings
 
 
 def add_headers():
     """Add headers to files that don't have them."""
 
-    extensions = get_config("output_file_extensions")
+    extensions = settings["output_file_extensions"]
 
     for extension in extensions:
         files = [f for f in os.listdir(".") if f.endswith(extension)]
@@ -98,7 +98,7 @@ def remove_columns_from_csvs(extension, columns_to_remove):
 def remove_extra_headers():
     """Remove extra headers from files."""
 
-    extensions = get_config("output_file_extensions")
+    extensions = settings["output_file_extensions"]
 
     for extension in extensions:
         for file in os.listdir("."):

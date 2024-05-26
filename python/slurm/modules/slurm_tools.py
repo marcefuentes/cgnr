@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 from common_modules import color
-from common_modules.get_config import get_config
+from common_modules.settings import SETTINGS as settings
 
 
 def get_free_slots(constraint):
@@ -22,9 +22,9 @@ def get_free_slots(constraint):
 def get_jobs_to_submit(current_path_folders):
     """Returns a list of job array indices that need to be submitted."""
 
-    input_file_extension = get_config("input_file_extension")
-    output_file_extension, *_ = get_config("output_file_extensions")
-    number_of_lines = get_config("number_of_lines")
+    input_file_extension = settings["input_file_extension"]
+    output_file_extension, *_ = settings["output_file_extensions"]
+    number_of_lines = settings["number_of_lines"]
 
     jobs_to_submit = []
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
@@ -107,7 +107,7 @@ def get_qos_limit(constraint, specification):
 def get_qos_name(constraint):
     """Returns the name of the QOS that corresponds to the given constraint."""
 
-    hours = get_config("hours")
+    hours = settings["hours"]
     if constraint == "none":
         command = ["scontrol", "show", "partition", "short", "-o"]
         output = subprocess.check_output(command).decode()
@@ -162,7 +162,7 @@ def job_is_queued(current_path_folders, job_array_index):
 def remove_files(jobs_to_submit):
     """Removes the output files for the given job array indices."""
 
-    extensions = get_config("output_file_extensions")
+    extensions = settings["output_file_extensions"]
     for name in jobs_to_submit:
         for extension in extensions:
             if os.path.isfile(f"{name}{extension}"):
@@ -174,7 +174,7 @@ def remove_files(jobs_to_submit):
 def slots():
     """Prints the number of free slots for each QOS."""
 
-    constraints = get_config("constraints")
+    constraints = settings["constraints"]
     total_free_slots = 0
     # print(f"{'Qos':<12}{'Max':>5}{'Running':>9}{'Pending':>5}{'Free':>5}")
 
@@ -208,9 +208,9 @@ def submit_job(current_path_folders, job_array_string, constraint):
     """Submits a job to the SLURM scheduler."""
 
     exe = os.environ["PROJECT"]
-    hours = get_config("hours")
-    memory = get_config("memory")
-    mail_user = get_config("mail_user")
+    hours = settings["hours"]
+    memory = settings["memory"]
+    mail_user = settings["mail_user"]
 
     constraint = "" if constraint == "none" else constraint
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"

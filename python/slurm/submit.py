@@ -6,7 +6,7 @@ import os
 import sys
 
 from common_modules import color
-from common_modules.get_config import get_config
+from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.list_of_folders import list_of_folders
 from modules.process_jobs import process_jobs
@@ -19,7 +19,7 @@ import modules.slurm_tools as st
 def get_job_max(work_path):
     """Get the maximum job number in the work folder."""
 
-    input_file_extension = get_config("input_file_extension")
+    input_file_extension = settings["input_file_extension"]
     job_max = 0
     for file in os.listdir(work_path):
         if file.endswith(input_file_extension):
@@ -31,7 +31,7 @@ def get_job_max(work_path):
 def get_job_min(work_path):
     """Get the minimum job number in the work folder."""
 
-    input_file_extension = get_config("input_file_extension")
+    input_file_extension = settings["input_file_extension"]
     job_min = 9999
     for file in os.listdir(work_path):
         if file.endswith(input_file_extension):
@@ -60,7 +60,7 @@ def next_work_path(work_path):
 def process_folder(constraint, free_slots, last_job, test):
     """Submit jobs in the work folder"""
 
-    output_file_extension, *_ = get_config("output_file_extensions")
+    output_file_extension, *_ = settings["output_file_extensions"]
     work_path = os.getcwd()
     work_path_folders = work_path.split("/")
     work_path_print = "/".join(work_path_folders[-3:])
@@ -145,7 +145,7 @@ def main(test=False):
         print("\nThis is a test.")
     exe = os.environ["PROJECT"]
     last_job_file = f"/home/ulc/ba/mfu/code/{exe}/results/last_submitted_job.tmp"
-    constraints = get_config("constraints")
+    constraints = settings["constraints"]
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
         print(
