@@ -11,7 +11,7 @@ def get_titles(keys):
         if not key:
             titles.append("")
             continue
-        #title = TITLES[key].replace("\\n", "\n")
+        # title = TITLES[key].replace("\\n", "\n")
         title = TITLES[key]
         titles.append(title)
 

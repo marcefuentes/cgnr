@@ -1,6 +1,5 @@
 """ Settings for results plotting. """
 
-
 SETTINGS = {
     "all_traits": [
         "ChooseGrain",
