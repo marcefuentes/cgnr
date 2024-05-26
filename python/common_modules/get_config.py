@@ -18,22 +18,22 @@ def get_config(variable):
     config = configparser.ConfigParser()
     config.read(config_file_path)
 
-    float_variables = ["alpha_min", "alpha_max", "loges_min", "loges_max", "Given"]
+    float_variables = ["Given", "alpha_max", "alpha_min", "loges_max", "loges_min"]
     int_variables = [
+        "Cost",
+        "DeathRate",
+        "GrainMutationSize",
+        "GroupSize",
+        "N",
+        "Periods",
+        "Runs",
+        "bins",
+        "grid",
         "hours",
         "number_of_lines",
-        "N",
-        "Runs",
-        "Periods",
         "qBMutationSize",
-        "GrainMutationSize",
-        "DeathRate",
-        "GroupSize",
-        "Cost",
-        "grid",
-        "bins",
     ]
-    list_variables = ["output_file_extensions", "constraints"]
+    list_variables = ["constraints", "output_file_extensions"]
 
     if config.has_option("DEFAULT", variable):
         if variable in float_variables:
