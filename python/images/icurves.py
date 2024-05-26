@@ -63,13 +63,15 @@ def main(args):
 
     axes_args = {
         "axs": axs,
+        "c_values": update_args["logess"],
         "column_titles": [""],
         "divider": create_divider(fig, fig_layout, fig_distances),
+        "nc": fig_layout["nc"],
+        "nr": fig_layout["nr"],
+        "r_values": update_args["alphas"],
         "row_titles": [""],
         "x_lim": [0, 1],
-        "c_values": update_args["logess"],
         "y_lim": [0, 1],
-        "r_values": update_args["alphas"],
     }
 
     format_axes(axes_args)
