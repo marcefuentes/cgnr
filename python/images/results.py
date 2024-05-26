@@ -102,7 +102,7 @@ def main(args):
 
     if args.trait_set == "all_traits":
         for trait in settings["all_traits"]:
-            update_args["trait_set"] = f"_{trait}"
+            update_args["trait_set"] = trait
             update_args["file_name"] += f"_{trait}"
             save_file(fig, update_args)
     else:
