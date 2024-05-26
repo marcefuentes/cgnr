@@ -30,7 +30,6 @@ def main(args):
     """Main function"""
 
     start_time = time.perf_counter()
-    file_name = os.path.basename(__file__).split(".")[0]
 
     update_args = {
         "alphas": [],
@@ -40,7 +39,7 @@ def main(args):
         "df_none": [],
         "df_social": [],
         "dfs": [],
-        "file_name": file_name,
+        "file_name": os.path.basename(__file__).split(".")[0],
         "frames": [],
         "histogram": args.histogram,
         "logess": [],
@@ -94,20 +93,20 @@ def main(args):
 
     if args.fitness:
         axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
-        file_name += "_fitness"
+        update_args["file_name"] += "_fitness"
     elif args.histogram:
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
-        file_name += "_histogram"
+        update_args["file_name"] += "_histogram"
 
     format_axes(axes_args)
 
     if args.trait_set == "all_traits":
         for trait in settings["all_traits"]:
-            update_args["trait_set"] = trait
-            update_args["file_name"] = f"{file_name}_{trait}"
+            update_args["trait_set"] = f"_{trait}"
+            update_args["file_name"] += f"_{trait}"
             save_file(fig, update_args)
     else:
-        update_args["file_name"] = f"{file_name}_{args.trait_set}"
+        update_args["file_name"] += f"_{args.trait_set}"
         save_file(fig, update_args)
     close_plt(fig)
 
