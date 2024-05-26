@@ -76,19 +76,19 @@ def main(args):
     elif args.histogram:
         update_args["artists"] = init_line2d(axs, *static_hist.data(update_args))
     else:
-        update_args["artists"] = init_imshow(
-            axs, len(update_args["alphas"]), len(update_args["logess"])
-        )
+        update_args["artists"] = init_imshow(axs, len(update_args["alphas"]), len(update_args["logess"]))
 
     axes_args = {
         "axs": axs,
+        "c_values": [update_args["logess"][0], update_args["logess"][len(update_args["logess"])//2], update_args["logess"][-1]],
         "column_titles": get_titles(update_args["columns"]),
         "divider": create_divider(fig, fig_layout, fig_distances),
+        "nc": len(update_args["alphas"]),
+        "nr": len(update_args["logess"]),
+        "r_values": [update_args["alphas"][0], update_args["alphas"][len(update_args["alphas"])//2], update_args["alphas"][-1]],
         "row_titles": get_titles(update_args["rows"]),
         "x_lim": [None, None],
-        "c_values": update_args["logess"],
         "y_lim": [None, None],
-        "r_values": update_args["alphas"],
     }
 
     if args.fitness:

@@ -82,16 +82,8 @@ def format_axes(axes_args):
         "color": common["tick_color"],
     }
     if axs.shape[2] == 1:
-        tools.add_ticks_imshow(
-            axs, len(axes_args["c_values"]), len(axes_args["r_values"]), params
-        )
-        tools.add_ticklabels_imshow(
-            axs,
-            axes_args["c_values"][0],
-            axes_args["c_values"][-1],
-            axes_args["r_values"][-1],
-            axes_args["r_values"][0],
-        )
+        tools.add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], params)
+        tools.add_ticklabels_imshow(axs, axes_args["r_values"], axes_args["c_values"])
     else:
         tools.add_ticks_line2d(axs, params)
         tools.add_ticklabels_line2d(axs, axes_args["r_values"], axes_args["c_values"])
