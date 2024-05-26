@@ -76,7 +76,11 @@ def main(args):
     elif args.histogram:
         update_args["artists"] = init_line2d(axs, *static_hist.data(update_args))
     else:
-        update_args["artists"] = init_imshow(axs, len(update_args["alphas"]), len(update_args["logess"]))
+        update_args["artists"] = init_imshow(
+            axs,
+            len(update_args["alphas"]) * len(update_args["highs"]),
+            len(update_args["logess"]) * len(update_args["lows"]),
+        )
 
     axes_args = {
         "axs": axs,
