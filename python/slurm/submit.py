@@ -5,7 +5,8 @@
 import os
 import sys
 
-from common_modules import color
+from common_modules.colors import ASK as ask
+from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.list_of_folders import list_of_folders
@@ -70,8 +71,8 @@ def process_folder(constraint, free_slots, last_job, test):
         job_min = last_job + 1
     if os.path.isfile(os.path.join(work_path, f"{job_min}{output_file_extension}")):
         msg = (
-            f"{color.RED}{work_path_print}/{job_min}{output_file_extension} "
-            f"already exists.{color.RESET}"
+            f"{colors['red']}{work_path_print}/{job_min}{output_file_extension} "
+            f"already exists.{colors['reset']}"
         )
         print(msg)
         last_job = 0
@@ -106,7 +107,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
         work_path_folders = work_path.split("/")
         work_path_print = "/".join(work_path_folders[-3:])
         print(
-            f"\n{color.BOLD}Submit jobs in {work_path_print}?{color.RESET} {color.YESNO} ",
+            f"\n{colors['bold']}Submit jobs in {work_path_print}?{colors['reset']} {ask['yesno']} ",
             end="",
         )
         user_input = input()
@@ -120,17 +121,19 @@ def process_variant(constraint, free_slots, test, last_job_file):
         all_submitted, work_path = next_work_path(work_path)
         if all_submitted:
             if test:
-                print(f"Would remove {last_job_file}.{color.RESET}")
+                print(f"Would remove {last_job_file}.{colors['reset']}")
             else:
                 os.remove(last_job_file)
             print(
-                f"{color.BOLD}{color.GREEN}All jobs submitted{color.RESET}\n"
-                + f"{color.BOLD}{color.CYAN}{free_slots}{color.RESET} "
-                + f"free slots in {color.BOLD}{constraint}{color.RESET}\n"
+                f"{colors['bold']}{colors['green']}All jobs submitted{colors['reset']}\n"
+                + f"{colors['bold']}{colors['cyan']}{free_slots}{colors['reset']} "
+                + f"free slots in {colors['bold']}{constraint}{colors['reset']}\n"
             )
             sys.exit()
     if test:
-        print(f"Would write {work_path},{last_job} to {last_job_file}.{color.RESET}")
+        print(
+            f"Would write {work_path},{last_job} to {last_job_file}.{colors['reset']}"
+        )
     else:
         with open(last_job_file, "w", encoding="utf-8") as f:
             f.write(f"{work_path},{last_job}")
@@ -149,8 +152,8 @@ def main(test=False):
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
         print(
-            f"\n{color.BOLD}{constraint}:{color.RESET}"
-            + f"{color.CYAN}{free_slots}{color.RESET} free slots"
+            f"\n{colors['bold']}{constraint}:{colors['reset']}"
+            + f"{colors['cyan']}{free_slots}{colors['reset']} free slots"
         )
         if test and not free_slots:
             free_slots = 100

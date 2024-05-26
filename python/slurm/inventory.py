@@ -6,7 +6,8 @@ import csv
 import os
 import sys
 
-from common_modules import color
+from common_modules.colors import ASK as ask
+from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
@@ -28,13 +29,13 @@ def find_errors(current_path, input_file, folder_dict):
             if key == "Given":
                 if float(value) != folder_dict[key]:
                     print(
-                        f"{color.BOLD}{color.RED}{key} {folder_dict[key]} {value}{color.RESET}",
+                        f"{colors['bold']}{colors['red']}{key} {folder_dict[key]} {value}{colors['reset']}",
                         end=" ",
                     )
             elif key in folder_dict:
                 if int(value) != folder_dict[key]:
                     print(
-                        f"{color.BOLD}{color.RED}{key} {folder_dict[key]} {value}{color.RESET}",
+                        f"{colors['bold']}{colors['red']}{key} {folder_dict[key]} {value}{colors['reset']}",
                         end=" ",
                     )
 
@@ -98,7 +99,7 @@ def job_status(current_path, total_jobs):
 
     print(
         (
-            f"{color.BOLD}{color.GREEN}{finished_jobs:>4}{color.RESET}"
+            f"{colors['bold']}{colors['green']}{finished_jobs:>4}{colors['reset']}"
             if finished_jobs
             else ""
         ),
@@ -106,7 +107,7 @@ def job_status(current_path, total_jobs):
     )
     print(
         (
-            f"{color.BOLD}{color.YELLOW}{running_jobs:>4}{color.RESET}"
+            f"{colors['bold']}{colors['yellow']}{running_jobs:>4}{colors['reset']}"
             if running_jobs
             else ""
         ),
@@ -114,7 +115,7 @@ def job_status(current_path, total_jobs):
     )
     print(
         (
-            f"{color.BOLD}{color.WHITE}{pending_jobs:>4}{color.RESET}"
+            f"{colors['bold']}{colors['white']}{pending_jobs:>4}{colors['reset']}"
             if pending_jobs
             else ""
         ),
@@ -122,23 +123,31 @@ def job_status(current_path, total_jobs):
     )
     print(
         (
-            f"{color.BOLD}{color.GREY}{to_submit_jobs:>4}{color.RESET}"
+            f"{colors['bold']}{colors['grey']}{to_submit_jobs:>4}{colors['reset']}"
             if to_submit_jobs
             else ""
         ),
         end="",
     )
     print(
-        f"{color.BOLD}{color.RED}{dead_jobs:>4}{color.RESET}" if dead_jobs else "",
-        end="",
-    )
-    print(
-        f"{color.BOLD}{color.purple}{no_header:>4}{color.RESET}" if no_header else "",
+        (
+            f"{colors['bold']}{colors['red']}{dead_jobs:>4}{colors['reset']}"
+            if dead_jobs
+            else ""
+        ),
         end="",
     )
     print(
         (
-            f"{color.BOLD}{color.BLUE}{garbled_jobs:>4}{color.RESET}"
+            f"{colors['bold']}{colors['purple']}{no_header:>4}{colors['reset']}"
+            if no_header
+            else ""
+        ),
+        end="",
+    )
+    print(
+        (
+            f"{colors['bold']}{colors['blue']}{garbled_jobs:>4}{colors['reset']}"
             if garbled_jobs
             else ""
         ),
@@ -154,9 +163,9 @@ def process_given(current_path, folder_dict):
     given = current_path_folders[-1]
 
     if os.path.islink(current_path):
-        print(f"{color.CYAN}\t{given:<5}{color.RESET}", end="")
+        print(f"{colors['cyan']}\t{given:<5}{colors['reset']}", end="")
     else:
-        print(f"{color.WHITE}\t{given:<5}{color.RESET}", end="")
+        print(f"{colors['white']}\t{given:<5}{colors['reset']}", end="")
 
     input_file_extension = settings["input_file_extension"]
     input_files = [
@@ -168,7 +177,7 @@ def process_given(current_path, folder_dict):
     total_jobs = len(input_files)
     if total_jobs == 0:
         print(
-            f"{color.BOLD}{color.RED}no {input_file_extension[1:]} files{color.RESET}"
+            f"{colors['bold']}{colors['red']}no {input_file_extension[1:]} files{colors['reset']}"
         )
         return
 
@@ -180,9 +189,9 @@ def process_mechanism(current_path, folder_dict):
 
     mechanism = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{color.CYAN}{mechanism}{color.RESET}", end="")
+        print(f"{colors['cyan']}{mechanism}{colors['reset']}", end="")
     else:
-        print(f"{color.WHITE}{mechanism}{color.RESET}", end="")
+        print(f"{colors['white']}{mechanism}{colors['reset']}", end="")
 
     if "p" in mechanism:
         folder_dict["PartnerChoice"] = 1
@@ -210,9 +219,9 @@ def process_variant(current_path):
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
-        print(f"{color.CYAN}{variant}{color.RESET}")
+        print(f"{colors['cyan']}{variant}{colors['reset']}")
     else:
-        print(f"\n{color.WHITE}{variant}{color.RESET}")
+        print(f"\n{colors['white']}{variant}{colors['reset']}")
 
     folder_dict["Shuffle"] = "noshuffle" not in variant
     folder_dict["Language"] = "nolang" not in variant
@@ -238,16 +247,16 @@ def main(store=False):
         os.chdir(current_path)
     else:
         print(
-            f"{color.BOLD}{color.RED}Directory {current_path} does not exist{color.RESET}"
+            f"{colors['bold']}{colors['red']}Directory {current_path} does not exist{colors['reset']}"
         )
         sys.exit()
 
-    print(f"\n{color.WHITE}{current_path}{color.RESET}")
+    print(f"\n{colors['white']}{current_path}{colors['reset']}")
     for variant in list_of_folders(current_path):
         process_variant(variant)
     if "mfu" in current_path and not store:
         # Print - 30 times
-        print(f"\n{color.WHITE}{'-' * 30}{color.RESET}")
+        print(f"\n{colors['white']}{'-' * 30}{colors['reset']}")
         free_slots = slots()
         if free_slots:
             exe = os.environ["PROJECT"]
@@ -256,8 +265,8 @@ def main(store=False):
             )
             if os.path.isfile(last_job_file):
                 print(
-                    f"\n{color.BOLD}Submit {color.CYAN}{free_slots}{color.RESET}"
-                    + f"{color.BOLD} jobs{color.RESET} {color.YESNO} ",
+                    f"\n{colors['bold']}Submit {colors['cyan']}{free_slots}{colors['reset']}"
+                    + f"{colors['bold']} jobs{colors['reset']} {ask['yesno']} ",
                     end="",
                 )
                 user_input = input()

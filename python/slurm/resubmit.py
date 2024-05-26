@@ -5,7 +5,8 @@
 import os
 import sys
 
-from common_modules import color
+from common_modules.colors import ASK as ask
+from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.process_jobs import process_jobs
@@ -27,9 +28,9 @@ def process_folder(test):
             last_job_file_path, _ = f.read().strip().split(",")
         if last_job_file_path == current_path:
             print(
-                f"{color.RED}{last_job_file.split('/')[-1]} points to this folder.{color.RESET}"
+                f"{colors['red']}{last_job_file.split('/')[-1]} points to this folder.{colors['reset']}"
             )
-            print(f"{color.RED}Run submit first.{color.RESET}")
+            print(f"{colors['red']}Run submit first.{colors['reset']}")
             if test:
                 print("If this were not a test, the program would stop here.\n")
             else:
@@ -37,22 +38,22 @@ def process_folder(test):
     current_path_folders = current_path.split("/")
     jobs_to_submit = st.get_jobs_to_submit(current_path_folders)
     if len(jobs_to_submit) == 0:
-        print(f"\n{color.GREEN}No jobs to submit.\n{color.RESET}")
+        print(f"\n{colors['green']}No jobs to submit.\n{colors['reset']}")
         sys.exit()
-    print(f"\n{color.CYAN}{len(jobs_to_submit)}{color.RESET} jobs to submit.\n")
+    print(f"\n{colors['cyan']}{len(jobs_to_submit)}{colors['reset']} jobs to submit.\n")
 
     if test:
         msg = (
-            f"{color.WHITE}Would delete output files of jobs in {color.RESET}"
-            f"{color.RED}red{color.WHITE} and {color.GREY}grey{color.RESET}."
+            f"{colors['white']}Would delete output files of jobs in {colors['reset']}"
+            f"{colors['red']}red{colors['white']} and {colors['grey']}grey{colors['reset']}."
         )
         print(msg)
     else:
-        print(f"{color.BOLD}{color.RED}This is not a test!{color.RESET}")
+        print(f"{colors['bold']}{colors['red']}This is not a test!{colors['reset']}")
         msg = (
-            f"{color.WHITE}Delete output files of jobs in {color.RESET}"
-            f"{color.RED}red{color.WHITE} and {color.GREY}grey {color.RESET}"
-            f"{color.YESNO} "
+            f"{colors['white']}Delete output files of jobs in {colors['reset']}"
+            f"{colors['red']}red{colors['white']} and {colors['grey']}grey {colors['reset']}"
+            f"{ask['yesno']} "
         )
         print(msg, end="")
         user_input = input()
@@ -63,15 +64,15 @@ def process_folder(test):
     constraints = settings["constraints"]
     for constraint in constraints:
         if len(jobs_to_submit) == 0:
-            print(f"{color.GREEN}No jobs to submit.\n{color.RESET}")
+            print(f"{colors['green']}No jobs to submit.\n{colors['reset']}")
             sys.exit()
         free_slots = st.get_free_slots(constraint)
         print(
-            f"\n{constraint}:{color.RESET} {color.CYAN}{free_slots}{color.RESET} free slots"
+            f"\n{constraint}:{colors['reset']} {colors['cyan']}{free_slots}{colors['reset']} free slots"
         )
         if not free_slots:
             print(
-                f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted"
+                f"{colors['red']}{len(jobs_to_submit)}{colors['reset']} jobs remain to be submitted"
             )
             continue
         num_jobs_to_submit = min(free_slots, len(jobs_to_submit))
@@ -80,11 +81,11 @@ def process_folder(test):
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
         print(
-            f"{color.CYAN}{free_slots}{color.RESET} free slots in {constraint}{color.RESET}"
+            f"{colors['cyan']}{free_slots}{colors['reset']} free slots in {constraint}{colors['reset']}"
         )
         if not free_slots:
             print(
-                f"{color.RED}{len(jobs_to_submit)}{color.RESET} jobs remain to be submitted."
+                f"{colors['red']}{len(jobs_to_submit)}{colors['reset']} jobs remain to be submitted."
             )
 
 

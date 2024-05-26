@@ -4,7 +4,7 @@ import logging
 import os
 import sys
 
-from common_modules import color
+from common_modules.colors import COLORS as colors
 from modules.slurm_tools import submit_job
 
 
@@ -35,7 +35,7 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
         )
     if return_code != 0:
         print(
-            f"{color.RED}sbatch command failed with return code {return_code}{color.RESET}"
+            f"{colors['red']}sbatch command failed with return code {return_code}{colors['reset']}"
         )
         if stderr:
             print(stderr)
@@ -47,4 +47,4 @@ def process_jobs(current_path_folders, job_array_string, constraint, test):
                 print(line)
                 logging.info(line)
     logging.info(info)
-    print(f"{color.GREEN}{info}{color.RESET}")
+    print(f"{colors['green']}{info}{colors['reset']}")

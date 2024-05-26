@@ -6,7 +6,7 @@ import re
 import subprocess
 import sys
 
-from common_modules import color
+from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
 
 
@@ -41,21 +41,24 @@ def get_jobs_to_submit(current_path_folders):
                     current_number_of_lines = sum(1 for line in f)
                 if current_number_of_lines < number_of_lines - 1:
                     if job_is_queued(current_path_folders, name):
-                        print(f"{color.YELLOW}{name}{color.RESET}", end=" ")
+                        print(f"{colors['yellow']}{name}{colors['reset']}", end=" ")
                     else:
-                        print(f"{color.RED}{name}{color.RESET}", end=" ")
+                        print(f"{colors['red']}{name}{colors['reset']}", end=" ")
                         jobs_to_submit.append(name)
                 elif current_number_of_lines == number_of_lines - 1:
-                    print(f"{color.BOLD}{color.PURPLE}{name}{color.RESET}", end=" ")
+                    print(
+                        f"{colors['bold']}{colors['purple']}{name}{colors['reset']}",
+                        end=" ",
+                    )
                 elif current_number_of_lines == number_of_lines:
-                    print(f"{color.GREEN}{name}{color.RESET}", end=" ")
+                    print(f"{colors['green']}{name}{colors['reset']}", end=" ")
                 else:
-                    print(f"{color.BLUE}{name}{color.RESET}", end=" ")
+                    print(f"{colors['blue']}{name}{colors['reset']}", end=" ")
             else:
                 if job_is_queued(current_path_folders, name):
-                    print(f"{name}{color.RESET}", end=" ")
+                    print(f"{name}{colors['reset']}", end=" ")
                 else:
-                    print(f"{color.GREY}{name}{color.RESET}", end=" ")
+                    print(f"{colors['grey']}{name}{colors['reset']}", end=" ")
                     jobs_to_submit.append(name)
         print()
         current_num -= row_length
@@ -128,7 +131,7 @@ def get_qos_name(constraint):
     ]
     output = subprocess.check_output(command).decode().strip()
     if output is None:
-        print(f"{color.RED}QOS {qos_name} not found{color.RESET}")
+        print(f"{colors['red']}QOS {qos_name} not found{colors['reset']}")
         sys.exit()
     maxwall_hours = int(output.split(":", maxsplit=1)[0])
     if hours >= maxwall_hours:
@@ -194,11 +197,15 @@ def slots():
         else:
             print(f"{' ' * 5:>5}", end="")
         print(
-            f"{color.YELLOW}{running if running else ' ' * 5:>5}{color.RESET}", end=""
+            f"{colors['yellow']}{running if running else ' ' * 5:>5}{colors['reset']}",
+            end="",
         )
-        print(f"{color.WHITE}{pending if pending else ' ' * 4:>4}{color.RESET}", end="")
         print(
-            f"{color.BOLD}{color.CYAN}{free_slots if free_slots else '':>4}{color.RESET}"
+            f"{colors['white']}{pending if pending else ' ' * 4:>4}{colors['reset']}",
+            end="",
+        )
+        print(
+            f"{colors['bold']}{colors['cyan']}{free_slots if free_slots else '':>4}{colors['reset']}"
         )
 
     return total_free_slots
