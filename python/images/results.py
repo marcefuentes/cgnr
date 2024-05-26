@@ -6,13 +6,12 @@ import os
 import time
 
 from modules.fix_positions import create_divider
-from modules.get_setting import get_setting, get_titles
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
+from modules.get_titles import get_titles
 from modules.save_file import save_file
 from modules.save_image import close_plt
-from modules.get_titles import get_titles
 
 from modules_results.get_sm import get_sm
 import modules_results.get_static_fitness as static_fitness
