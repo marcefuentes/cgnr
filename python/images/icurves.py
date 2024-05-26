@@ -17,6 +17,7 @@ from modules_icurves.get_static_data import get_static_data
 from modules_icurves.get_update_args import get_update_args
 from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
+from modules_icurves.settings import SETTINGS as settings
 from modules_icurves.update_artists import update_artists
 
 
@@ -51,7 +52,7 @@ def main(args):
     fig, axs = create_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    format_fig(fig, fig_distances, update_args["file_name"], get_sm())
+    format_fig(fig, fig_distances, settings, get_sm())
     update_args["text"] = fig.texts[2]
     update_args["x_values"], y, ic = get_static_data(
         update_args["alphas"], update_args["rhos"]

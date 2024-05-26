@@ -2,18 +2,18 @@
 
 import numpy as np
 
-from modules.get_setting import get_setting as get
 from modules.theory import indifference
+from modules_icurves.settings import SETTINGS as settings
 
 
 def get_static_data(alphas, rhos):
     """Calculates static fitness isoclines."""
 
-    x = np.linspace(0.001, 0.999, num=get("icurves", "n_x_values"))
+    x = np.linspace(0.001, 0.999, num=settings["n_x_values"])
 
     y = np.zeros_like(x)
 
-    n_ic = get("icurves", "n_ic")
+    n_ic = settings["n_ic"]
 
     ws = np.linspace(
         1.0 / (n_ic + 1),

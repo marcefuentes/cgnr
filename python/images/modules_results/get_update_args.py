@@ -7,8 +7,8 @@ import sys
 import numpy as np
 import pandas as pd
 
-from common_modules.get_config import get_config
-from modules.get_setting import get_setting
+from common_modules.settings import SETTINGS as project
+from modules_results.settings import SETTINGS as exclusive
 import modules_results.layouts_single_folder as s_folder
 import modules_results.layouts_single_trait as s_trait
 
@@ -58,13 +58,13 @@ def get_df(path, filetype, movie, clean):
 def get_df_single_folder(trait_set, histogram, movie, clean):
     """Get the df for several traits in a variant."""
 
-    csv0, csv1 = get_config("output_file_extensions")
+    csv0, csv1 = project["output_file_extensions"]
 
     rows = s_folder.rows.get(trait_set, s_folder.rows["default"])
 
     dfs, dffrqs = [], []
 
-    given_folder = get_setting("results", "given_folder")
+    given_folder = exclusive["given_folder"]
 
     for row in rows:
         if row == "social":
@@ -95,11 +95,11 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
 def get_df_single_trait(histogram, movie, clean):
     """Get the df for a trait across several variants."""
 
-    csv0, csv1 = get_config("output_file_extensions")
+    csv0, csv1 = project["output_file_extensions"]
 
     dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
-    given_folder = get_setting("results", "given_folder")
+    given_folder = exclusive["given_folder"]
     for suffix, row in zip(s_trait.variant_suffixes, s_trait.rows):
         dfs.append(
             [
@@ -143,7 +143,7 @@ def get_df_single_trait(histogram, movie, clean):
 def get_df_single_trait_single_folder(histogram, movie, clean):
     """Get the df for a trait across several variants."""
 
-    csv0, csv1 = get_config("output_file_extensions")
+    csv0, csv1 = project["output_file_extensions"]
     given_folder = os.path.basename(os.getcwd())
 
     df, dffrq, df_none, df_social = [[]], [[]], [[]], [[]]

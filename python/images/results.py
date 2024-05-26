@@ -12,6 +12,7 @@ from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
+from modules.get_titles import get_titles
 
 from modules_results.get_sm import get_sm
 import modules_results.get_static_fitness as static_fitness
@@ -22,6 +23,7 @@ from modules_results.init_artists import (
     init_line2d,
 )
 from modules_results.parse_args import parse_args
+from modules_results.settings import SETTINGS as settings
 from modules_results.update_artists import update_artists
 
 
@@ -68,7 +70,7 @@ def main(args):
     fig, axs = create_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    format_fig(fig, fig_distances, update_args["file_name"], get_sm())
+    format_fig(fig, fig_distances, settings, get_sm())
     update_args["text"] = fig.texts[2]
 
     if args.fitness:
@@ -101,7 +103,7 @@ def main(args):
     format_axes(axes_args)
 
     if args.trait_set == "all_traits":
-        for trait in get_setting("results", "all_traits"):
+        for trait in settings["all_traits"]:
             update_args["trait_set"] = trait
             update_args["file_name"] = f"{file_name}_{trait}"
             save_file(fig, update_args)

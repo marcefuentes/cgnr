@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from common_modules.get_config import get_config
-from modules.get_setting import get_setting as get
+from common_modules.settings import SETTINGS as project
+from modules_icurves.settings import SETTINGS as exclusive
 
 
 def get_update_args(update_args):
@@ -13,14 +13,14 @@ def get_update_args(update_args):
     update_args["frames"] = np.append(update_args["frames"], 0.0)
 
     update_args["alphas"] = np.linspace(
-        get_config("alpha_max"),
-        get_config("alpha_min"),
-        num=get(update_args["file_name"], "nr"),
+        project["alpha_max"],
+        project["alpha_min"],
+        num=exclusive["nr"],
     )
     update_args["logess"] = np.linspace(
-        get_config("loges_min"),
-        get_config("loges_max"),
-        num=get(update_args["file_name"], "nc"),
+        project["loges_min"],
+        project["loges_max"],
+        num=exclusive["nc"],
     )
     update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
 

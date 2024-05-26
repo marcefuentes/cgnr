@@ -7,7 +7,7 @@ import numpy as np
 
 from matplotlib import colormaps
 
-from modules.get_setting import get_setting
+from modules.settings import SETTINGS as settings
 from modules_results.trait_map import trait_map
 from modules_results.get_zmatrix import get_zmatrix
 
@@ -65,7 +65,7 @@ def update_artists_histogram(artists, df, alphas, logess, trait):
 def update_artists_line2d(artists, zmatrix):
     """Update background colors of plots."""
 
-    cmap = colormaps.get_cmap(get_setting("COMMON", "color_map"))
+    cmap = colormaps.get_cmap(settings["color_map"])
 
     for i in range(zmatrix.shape[0]):
         for j in range(zmatrix.shape[1]):

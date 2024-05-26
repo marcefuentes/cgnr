@@ -1,6 +1,6 @@
 """ Format axes. """
 
-from modules.get_setting import get_setting as get
+from modules.settings import SETTINGS as common
 import modules.format_axes_tools as tools
 
 
@@ -13,8 +13,8 @@ def format_axes(axes_args):
     # Format spines, reset ticks, set limits and position axes
 
     spine_params = {
-        "linewidth": get("COMMON", "border_width"),
-        "color": get("COMMON", "border_color"),
+        "linewidth": common["border_width"],
+        "color": common["border_color"],
     }
     params = {
         "xticks": [],
@@ -39,9 +39,9 @@ def format_axes(axes_args):
 
     # Add letters
 
-    position = (0, 1.0 + get("COMMON", "letter_padding") * nr)
+    position = (0, 1.0 + common["letter_padding"] * nr)
     params = {
-        "fontsize": get("COMMON", "letter_label_size"),
+        "fontsize": common["letter_label_size"],
         "weight": "bold",
     }
     for i in range(nrows):
@@ -51,8 +51,8 @@ def format_axes(axes_args):
     # Add column titles
 
     params = {
-        "pad": get("COMMON", "plot_size") * get("COMMON", "title_padding"),
-        "fontsize": get("COMMON", "letter_label_size"),
+        "pad": common["plot_size"] * common["title_padding"],
+        "fontsize": common["letter_label_size"],
     }
     for j, title in enumerate(axes_args["column_titles"]):
         axs[0, j, 0, int(nc / 2)].set_title(title, **params)
@@ -63,13 +63,13 @@ def format_axes(axes_args):
         "xy": (1, 0.5),
         "xycoords": "axes fraction",
         "xytext": (
-            get("COMMON", "plot_size") * get("COMMON", "title_padding") * 3.5,
+            common["plot_size"] * common["title_padding"] * 3.5,
             0,
         ),
         "textcoords": "offset points",
         "va": "center",
         "ha": "left",
-        "fontsize": get("COMMON", "letter_label_size"),
+        "fontsize": common["letter_label_size"],
     }
     for i, title in enumerate(axes_args["row_titles"]):
         axs[i, -1, int(nr / 2), -1].annotate(title, **params)
@@ -77,9 +77,9 @@ def format_axes(axes_args):
     # Add ticks and tick labels
 
     params = {
-        "labelsize": get("COMMON", "tick_label_size"),
-        "size": get("COMMON", "tick_size"),
-        "color": get("COMMON", "tick_color"),
+        "labelsize": common["tick_label_size"],
+        "size": common["tick_size"],
+        "color": common["tick_color"],
     }
     if axs.shape[2] == 1:
         tools.add_ticks_imshow(

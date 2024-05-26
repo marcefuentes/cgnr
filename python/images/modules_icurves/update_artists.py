@@ -4,7 +4,7 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
 
-from modules.get_setting import get_setting as get
+from modules.settings import SETTINGS as settings
 from modules.theory import fitness, indifference, qbeq
 
 
@@ -27,7 +27,7 @@ def update_artists(given, update_args):
                 indifference(update_args["x_values"], w, alpha, rho)
             )
             update_args["icurves"][i, j].set_color(
-                cm.get_cmap(get("COMMON", "color_map"))(0.5 + 0.5 * w)
+                cm.get_cmap(settings["color_map"])(0.5 + 0.5 * w)
             )
 
             y = fitness(
@@ -39,7 +39,7 @@ def update_artists(given, update_args):
             )
             update_args["landscapes"][i, j].set_array(y)
             update_args["landscapes"][i, j].set_cmap(
-                cm.get_cmap(get("COMMON", "color_map"))
+                cm.get_cmap(settings["color_map"])
             )
             update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
 

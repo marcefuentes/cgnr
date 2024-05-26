@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from modules.get_setting import get_setting as get
+from modules.settings import SETTINGS as settings
 
 
 def init_imshow(axs, mr, mc):
@@ -11,7 +11,7 @@ def init_imshow(axs, mr, mc):
     artists = np.empty_like(axs, dtype=object)
     dummy_zmatrix = np.zeros((mr, mc))
     params = {
-        "cmap": get("COMMON", "color_map"),
+        "cmap": settings["color_map"],
         "vmin": -1,
         "vmax": 1,
     }
@@ -33,7 +33,7 @@ def init_line2d(axs, x, y):
     artists = np.empty_like(axs, dtype=object)
     params = {
         "c": "black",
-        "lw": get("COMMON", "line_width") * get("COMMON", "plot_size"),
+        "lw": settings["line_width"] * settings["plot_size"],
     }
 
     for i in range(axs.shape[0]):
