@@ -38,9 +38,7 @@ def update_artists(given, update_args):
                 np.concatenate([points[:-1], points[1:]], axis=1)
             )
             update_args["landscapes"][i, j].set_array(y)
-            update_args["landscapes"][i, j].set_cmap(
-                cm.get_cmap(settings["color_map"])
-            )
+            update_args["landscapes"][i, j].set_cmap(cm.get_cmap(settings["color_map"]))
             update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(
