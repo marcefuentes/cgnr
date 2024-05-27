@@ -16,7 +16,7 @@ from modules.save_image import close_plt
 from modules_results.get_sm import get_sm
 import modules_results.get_static_fitness as static_fitness
 import modules_results.get_static_hist as static_hist
-from modules_results.get_data_dict import get_data_dict, get_rows, get_columns
+from modules_results.get_data import get_data, get_rows, get_columns
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
 from modules_results.settings import SETTINGS as settings
@@ -36,7 +36,6 @@ def main(args):
         "df_none": [],
         "df_social": [],
         "dfs": [],
-        "file_name": os.path.basename(__file__).split(".")[0],
         "frames": [],
         "histogram": args.histogram,
         "logess": [],
@@ -49,7 +48,7 @@ def main(args):
         "update_function": update_artists,
     }
 
-    data_dict = get_data_dict(data_dict, args.clean)
+    data_dict = get_data(data_dict, args.clean)
     mr = len(data_dict["alphas"])
     mc = len(data_dict["logess"])
 
@@ -98,23 +97,24 @@ def main(args):
         "y_lim": [None, None],
     }
 
+    file_name = os.path.basename(__file__).split(".")[0]
     if args.fitness:
         axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
-        data_dict["file_name"] += "_fitness"
+        file_name += "_fitness"
     elif args.histogram:
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
-        data_dict["file_name"] += "_histogram"
+        file_name += "_histogram"
 
     format_axes(axes_args)
 
     if args.trait_set == "all_traits":
         for trait in settings["all_traits"]:
             data_dict["trait_set"] = trait
-            data_dict["file_name"] += f"_{trait}"
-            save_file(fig, data_dict)
+            file_name += f"_{trait}"
+            save_file(fig, data_dict, file_name)
     else:
-        data_dict["file_name"] += f"_{args.trait_set}"
-        save_file(fig, data_dict)
+        file_name += f"_{args.trait_set}"
+        save_file(fig, data_dict, file_name)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

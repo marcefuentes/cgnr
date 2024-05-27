@@ -12,9 +12,9 @@ from modules.format_fig import get_distances, format_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from modules_icurves.get_data import get_data
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_data import get_static_data
-from modules_icurves.get_data_dict import get_data_dict
 from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.settings import SETTINGS as settings
@@ -29,7 +29,6 @@ def main(args):
     data_dict = {
         "alphas": [],
         "budgets": [],
-        "file_name": os.path.basename(__file__).split(".")[0],
         "frames": [],
         "icurves": [],
         "landscapes": [],
@@ -40,7 +39,7 @@ def main(args):
         "x_values": [],
     }
 
-    data_dict = get_data_dict(data_dict)
+    data_dict = get_data(data_dict)
 
     fig_layout = {
         "nc": len(data_dict["logess"]),
@@ -76,7 +75,8 @@ def main(args):
 
     format_axes(axes_args)
 
-    save_file(fig, data_dict)
+    file_name = os.path.basename(__file__).split(".")[0]
+    save_file(fig, data_dict, file_name)
 
     close_plt(fig)
 
