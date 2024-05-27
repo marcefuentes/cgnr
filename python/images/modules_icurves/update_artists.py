@@ -30,9 +30,7 @@ def update_artists(given, data_dict):
                 cm.get_cmap(settings["color_map"])(0.5 + 0.5 * w)
             )
 
-            y = fitness(
-                data_dict["x_values"], data_dict["x_values"], given, alpha, rho
-            )
+            y = fitness(data_dict["x_values"], data_dict["x_values"], given, alpha, rho)
             points = np.array([data_dict["x_values"], y]).T.reshape((-1, 1, 2))
             data_dict["landscapes"][i, j].set_segments(
                 np.concatenate([points[:-1], points[1:]], axis=1)
