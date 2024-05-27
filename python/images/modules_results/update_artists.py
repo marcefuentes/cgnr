@@ -12,42 +12,42 @@ from modules_results.trait_map import trait_map
 from modules_results.get_zmatrix import get_zmatrix
 
 
-def get_frq(update_args, i, j):
+def get_frq(data_dict, i, j):
     """Return the dataframe and trait for a given grid."""
 
-    if update_args["single_trait"]:
-        df = update_args["dffrqs"][i][j]
-        trait = trait_map[update_args["trait_set"]]["frq"]
+    if data_dict["single_trait"]:
+        df = data_dict["dffrqs"][i][j]
+        trait = trait_map[data_dict["trait_set"]]["frq"]
     else:
-        df = update_args["dffrqs"][i]
-        trait = trait_map[update_args["columns"][j]]["frq"]
+        df = data_dict["dffrqs"][i]
+        trait = trait_map[data_dict["columns"][j]]["frq"]
     return df, trait
 
 
-def update_artists(t, update_args):
+def update_artists(t, data_dict):
     """Update artist data at time t."""
 
-    if update_args["movie"]:
-        update_args["text"].set_text(t)
+    if data_dict["movie"]:
+        data_dict["text"].set_text(t)
 
-    for i, _ in enumerate(update_args["rows"]):
-        for j, _ in enumerate(update_args["columns"]):
-            zmatrix = update_zmatrix(t, update_args, i, j)
-            artists = update_args["artists"][i, j]
-            if update_args["fitness"] or update_args["histogram"]:
+    for i, _ in enumerate(data_dict["rows"]):
+        for j, _ in enumerate(data_dict["columns"]):
+            zmatrix = update_zmatrix(t, data_dict, i, j)
+            artists = data_dict["artists"][i, j]
+            if data_dict["fitness"] or data_dict["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix)
-                if update_args["histogram"]:
-                    df, trait = get_frq(update_args, i, j)
+                if data_dict["histogram"]:
+                    df, trait = get_frq(data_dict, i, j)
                     if df.empty:
                         continue
                     df = df[df["Time"] == t]
                     artists = update_artists_histogram(
-                        artists, df, update_args["alphas"], update_args["logess"], trait
+                        artists, df, data_dict["alphas"], data_dict["logess"], trait
                     )
             else:
                 artists[0, 0].set_array(zmatrix)
 
-    return update_args["artists"].flatten()
+    return data_dict["artists"].flatten()
 
 
 def update_artists_histogram(artists, df, alphas, logess, trait):
@@ -74,24 +74,24 @@ def update_artists_line2d(artists, zmatrix):
     return artists
 
 
-def update_zmatrix(t, update_args, i, j):
+def update_zmatrix(t, data_dict, i, j):
     """Return the updated zmatrix for a given time and trait."""
 
-    if update_args["single_trait"]:
-        trait_in = update_args["trait_set"]
-        df = update_args["dfs"][i][j]
-        df_none = update_args["df_none"][i][j]
-        df_social = update_args["df_social"][i][j]
+    if data_dict["single_trait"]:
+        trait_in = data_dict["trait_set"]
+        df = data_dict["dfs"][i][j]
+        df_none = data_dict["df_none"][i][j]
+        df_social = data_dict["df_social"][i][j]
     else:
-        trait_in = update_args["columns"][j]
-        df = update_args["dfs"][i]
-        df_none = update_args["df_none"]
-        df_social = update_args["df_social"]
+        trait_in = data_dict["columns"][j]
+        df = data_dict["dfs"][i]
+        df_none = data_dict["df_none"]
+        df_social = data_dict["df_social"]
 
-    none = bool(update_args["rows"][i] == "none" and update_args["trait_set"] != "none")
+    none = bool(data_dict["rows"][i] == "none" and data_dict["trait_set"] != "none")
 
-    if not update_args["single_folder"] and ("nothing" in trait_in or df.empty):
-        zmatrix = np.zeros((len(update_args["alphas"]), len(update_args["logess"])))
+    if not data_dict["single_folder"] and ("nothing" in trait_in or df.empty):
+        zmatrix = np.zeros((len(data_dict["alphas"]), len(data_dict["logess"])))
         return zmatrix
 
     if trait_in not in trait_map:

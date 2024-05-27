@@ -3,15 +3,15 @@
 import matplotlib.pyplot as plt
 
 
-def save_image(update_args):
+def save_image(data_dict):
     """Process the figure"""
 
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
 
-    if update_args["update_function"] is not None:
-        update_args["update_function"](update_args["frames"][-1], update_args)
-    plt.savefig(f"{update_args['file_name']}.png", transparent=False)
+    if data_dict["update_function"] is not None:
+        data_dict["update_function"](data_dict["frames"][-1], data_dict)
+    plt.savefig(f"{data_dict['file_name']}.png", transparent=False)
 
 
 def close_plt(fig):

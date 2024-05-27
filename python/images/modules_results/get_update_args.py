@@ -166,55 +166,55 @@ def get_rows(single_trait, trait_set, single_folder):
     return s_folder.rows.get(trait_set, s_folder.rows["default"])
 
 
-def get_update_args(update_args, clean):
+def get_data_dict(data_dict, clean):
     """Get the df args for the given trait_set."""
 
-    if update_args["single_trait"] and update_args["single_folder"]:
+    if data_dict["single_trait"] and data_dict["single_folder"]:
         (
-            update_args["dfs"],
-            update_args["df_none"],
-            update_args["df_social"],
-            update_args["dffrqs"],
+            data_dict["dfs"],
+            data_dict["df_none"],
+            data_dict["df_social"],
+            data_dict["dffrqs"],
             df,
         ) = get_df_single_trait_single_folder(
-            update_args["histogram"],
-            update_args["movie"],
+            data_dict["histogram"],
+            data_dict["movie"],
             clean,
         )
 
-    elif update_args["single_trait"]:
+    elif data_dict["single_trait"]:
         (
-            update_args["dfs"],
-            update_args["df_none"],
-            update_args["df_social"],
-            update_args["dffrqs"],
+            data_dict["dfs"],
+            data_dict["df_none"],
+            data_dict["df_social"],
+            data_dict["dffrqs"],
             df,
         ) = get_df_single_trait(
-            update_args["histogram"],
-            update_args["movie"],
+            data_dict["histogram"],
+            data_dict["movie"],
             clean,
         )
     else:
         (
-            update_args["dfs"],
-            update_args["df_none"],
-            update_args["df_social"],
-            update_args["dffrqs"],
+            data_dict["dfs"],
+            data_dict["df_none"],
+            data_dict["df_social"],
+            data_dict["dffrqs"],
             df,
         ) = get_df_single_folder(
-            update_args["trait_set"],
-            update_args["histogram"],
-            update_args["movie"],
+            data_dict["trait_set"],
+            data_dict["histogram"],
+            data_dict["movie"],
             clean,
         )
 
-    update_args["frames"] = df.Time.unique()
-    update_args["alphas"] = np.sort(df["alpha"].unique())[::-1]
-    update_args["logess"] = np.sort(df["logES"].unique())
-    if update_args["fitness"]:
-        update_args["rhos"] = 1.0 - 1.0 / np.power(2.0, update_args["logess"])
+    data_dict["frames"] = df.Time.unique()
+    data_dict["alphas"] = np.sort(df["alpha"].unique())[::-1]
+    data_dict["logess"] = np.sort(df["logES"].unique())
+    if data_dict["fitness"]:
+        data_dict["rhos"] = 1.0 - 1.0 / np.power(2.0, data_dict["logess"])
 
-    return update_args
+    return data_dict
 
 
 def read_files(filelist, movie):

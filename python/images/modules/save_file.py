@@ -4,10 +4,10 @@ from modules.save_image import save_image
 from modules.save_movie import save_movie
 
 
-def save_file(fig, update_args):
+def save_file(fig, data_dict):
     """Save the figure to a file."""
 
-    if update_args["movie"]:
-        save_movie(fig, update_args)
+    if data_dict["movie"]:
+        save_movie(fig, data_dict)
     else:
-        save_image(update_args)
+        save_image(data_dict)

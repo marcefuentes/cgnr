@@ -14,7 +14,7 @@ from modules.save_image import close_plt
 
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_data import get_static_data
-from modules_icurves.get_update_args import get_update_args
+from modules_icurves.get_data_dict import get_data_dict
 from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.settings import SETTINGS as settings
@@ -26,7 +26,7 @@ def main(args):
 
     start_time = time.perf_counter()
 
-    update_args = {
+    data_dict = {
         "alphas": [],
         "budgets": [],
         "file_name": os.path.basename(__file__).split(".")[0],
@@ -40,12 +40,12 @@ def main(args):
         "x_values": [],
     }
 
-    update_args = get_update_args(update_args)
+    data_dict = get_data_dict(data_dict)
 
     fig_layout = {
-        "nc": len(update_args["logess"]),
+        "nc": len(data_dict["logess"]),
         "ncols": 2,
-        "nr": len(update_args["alphas"]),
+        "nr": len(data_dict["alphas"]),
         "nrows": 1,
     }
 
@@ -53,22 +53,22 @@ def main(args):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     format_fig(fig, fig_distances, settings, get_sm())
-    update_args["text"] = fig.texts[2]
-    update_args["x_values"], y, ic = get_static_data(
-        update_args["alphas"], update_args["rhos"]
+    data_dict["text"] = fig.texts[2]
+    data_dict["x_values"], y, ic = get_static_data(
+        data_dict["alphas"], data_dict["rhos"]
     )
-    update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
-        init_artists_line2d(axs, update_args["x_values"], y, ic)
+    data_dict["budgets"], data_dict["icurves"], data_dict["landscapes"] = (
+        init_artists_line2d(axs, data_dict["x_values"], y, ic)
     )
 
     axes_args = {
         "axs": axs,
-        "c_values": update_args["logess"],
+        "c_values": data_dict["logess"],
         "column_titles": [""],
         "divider": create_divider(fig, fig_layout, fig_distances),
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
-        "r_values": update_args["alphas"],
+        "r_values": data_dict["alphas"],
         "row_titles": [""],
         "x_lim": [0, 1],
         "y_lim": [0, 1],
@@ -76,7 +76,7 @@ def main(args):
 
     format_axes(axes_args)
 
-    save_file(fig, update_args)
+    save_file(fig, data_dict)
 
     close_plt(fig)
 

@@ -16,7 +16,7 @@ from modules.save_image import close_plt
 from modules_results.get_sm import get_sm
 import modules_results.get_static_fitness as static_fitness
 import modules_results.get_static_hist as static_hist
-from modules_results.get_update_args import get_update_args, get_rows, get_columns
+from modules_results.get_data_dict import get_data_dict, get_rows, get_columns
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
 from modules_results.settings import SETTINGS as settings
@@ -28,7 +28,7 @@ def main(args):
 
     start_time = time.perf_counter()
 
-    update_args = {
+    data_dict = {
         "alphas": [],
         "artists": [],
         "columns": get_columns(args.single_trait, args.trait_set, args.single_folder),
@@ -49,15 +49,15 @@ def main(args):
         "update_function": update_artists,
     }
 
-    update_args = get_update_args(update_args, args.clean)
-    mr = len(update_args["alphas"])
-    mc = len(update_args["logess"])
+    data_dict = get_data_dict(data_dict, args.clean)
+    mr = len(data_dict["alphas"])
+    mc = len(data_dict["logess"])
 
     fig_layout = {
         "nc": 1,
-        "ncols": len(update_args["columns"]),
+        "ncols": len(data_dict["columns"]),
         "nr": 1,
-        "nrows": len(update_args["rows"]),
+        "nrows": len(data_dict["rows"]),
     }
 
     if args.fitness or args.histogram:
@@ -68,53 +68,53 @@ def main(args):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
     format_fig(fig, fig_distances, settings, get_sm())
-    update_args["text"] = fig.texts[2]
+    data_dict["text"] = fig.texts[2]
 
     if args.fitness:
-        update_args["artists"] = init_line2d(axs, *static_fitness.data(update_args))
+        data_dict["artists"] = init_line2d(axs, *static_fitness.data(data_dict))
     elif args.histogram:
-        update_args["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
+        data_dict["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
     else:
-        update_args["artists"] = init_imshow(axs, mr, mc)
+        data_dict["artists"] = init_imshow(axs, mr, mc)
 
     axes_args = {
         "axs": axs,
         "c_values": [
-            update_args["logess"][0],
-            update_args["logess"][mc // 2],
-            update_args["logess"][-1],
+            data_dict["logess"][0],
+            data_dict["logess"][mc // 2],
+            data_dict["logess"][-1],
         ],
-        "column_titles": get_titles(update_args["columns"]),
+        "column_titles": get_titles(data_dict["columns"]),
         "divider": create_divider(fig, fig_layout, fig_distances),
         "nc": mc,
         "nr": mr,
         "r_values": [
-            update_args["alphas"][0],
-            update_args["alphas"][mr // 2],
-            update_args["alphas"][-1],
+            data_dict["alphas"][0],
+            data_dict["alphas"][mr // 2],
+            data_dict["alphas"][-1],
         ],
-        "row_titles": get_titles(update_args["rows"]),
+        "row_titles": get_titles(data_dict["rows"]),
         "x_lim": [None, None],
         "y_lim": [None, None],
     }
 
     if args.fitness:
         axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
-        update_args["file_name"] += "_fitness"
+        data_dict["file_name"] += "_fitness"
     elif args.histogram:
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
-        update_args["file_name"] += "_histogram"
+        data_dict["file_name"] += "_histogram"
 
     format_axes(axes_args)
 
     if args.trait_set == "all_traits":
         for trait in settings["all_traits"]:
-            update_args["trait_set"] = trait
-            update_args["file_name"] += f"_{trait}"
-            save_file(fig, update_args)
+            data_dict["trait_set"] = trait
+            data_dict["file_name"] += f"_{trait}"
+            save_file(fig, data_dict)
     else:
-        update_args["file_name"] += f"_{args.trait_set}"
-        save_file(fig, update_args)
+        data_dict["file_name"] += f"_{args.trait_set}"
+        save_file(fig, data_dict)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

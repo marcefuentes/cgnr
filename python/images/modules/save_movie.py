@@ -3,15 +3,15 @@
 from matplotlib.animation import FuncAnimation
 
 
-def save_movie(fig, update_args):
+def save_movie(fig, data_dict):
     """Function to create a movie"""
 
     movie = {
         "fig": fig,
-        "frames": update_args["frames"],
-        "func": update_args["update_function"],
-        "fargs": (update_args,),
+        "frames": data_dict["frames"],
+        "func": data_dict["update_function"],
+        "fargs": (data_dict,),
         "blit": True,
     }
     ani = FuncAnimation(**movie)
-    ani.save(f"{update_args['file_name']}.mp4", writer="ffmpeg", fps=10)
+    ani.save(f"{data_dict['file_name']}.mp4", writer="ffmpeg", fps=10)
