@@ -1,6 +1,6 @@
 """ Creates list of titles """
 
-from modules.titles import TITLES
+from settings_results.titles import TITLES
 
 
 def get_titles(keys):

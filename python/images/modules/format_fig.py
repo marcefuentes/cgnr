@@ -2,16 +2,14 @@
 
 import os
 
-from modules.settings import SETTINGS as common
 
-
-def get_distances(nrows, ncols):
+def get_distances(nrows, ncols, image):
     """Calculate distances for figure."""
 
-    inner_height = common["plot_size"] * nrows + common["spacing"] * (nrows - 1)
-    inner_width = common["plot_size"] * ncols + common["spacing"] * (ncols - 1)
-    width = common["left_margin"] + inner_width + common["right_margin"]
-    height = common["top_margin"] + inner_height + common["bottom_margin"]
+    inner_height = image["plot_size"] * nrows + image["spacing"] * (nrows - 1)
+    inner_width = image["plot_size"] * ncols + image["spacing"] * (ncols - 1)
+    width = image["left_margin"] + inner_width + image["right_margin"]
+    height = image["top_margin"] + inner_height + image["bottom_margin"]
     distances = {
         "width": width,
         "height": height,
@@ -22,61 +20,61 @@ def get_distances(nrows, ncols):
     return distances
 
 
-def format_fig(fig, distances, exclusive, sm):
+def format_fig(fig, distances, image, sm):
     """format the figure."""
 
     fig.set_size_inches(distances["width"], distances["height"])
     fig.supxlabel(
-        t=common["x_label"],
-        x=(common["left_margin"] + distances["inner_width"] / 2) / distances["width"],
-        y=common["bottom_margin"] / 2.5 / distances["height"],
-        fontsize=common["big_label_size"],
+        t=image["x_label"],
+        x=(image["left_margin"] + distances["inner_width"] / 2) / distances["width"],
+        y=image["bottom_margin"] / 2.5 / distances["height"],
+        fontsize=image["big_label_size"],
     )
     fig.supylabel(
-        t=common["y_label"],
-        x=common["left_margin"] / 2.8 / distances["width"],
-        y=(common["bottom_margin"] + distances["inner_height"] / 2)
+        t=image["y_label"],
+        x=image["left_margin"] / 2.8 / distances["width"],
+        y=(image["bottom_margin"] + distances["inner_height"] / 2)
         / distances["height"],
-        fontsize=common["big_label_size"],
+        fontsize=image["big_label_size"],
     )
 
     cax = fig.add_axes(
         [
             (
-                common["left_margin"]
+                image["left_margin"]
                 + distances["inner_width"]
-                + common["spacing"] * exclusive["colorbar_right_position"]
+                + image["spacing"] * image["colorbar_right_position"]
             )
             / distances["width"],
             (
-                common["bottom_margin"]
+                image["bottom_margin"]
                 + distances["inner_height"] / 2
-                - common["plot_size"] / 2
+                - image["plot_size"] / 2
             )
             / distances["height"],
-            (common["plot_size"] / exclusive["colorbar_width"]) / distances["width"],
-            common["plot_size"] / distances["height"],
+            (image["plot_size"] / image["colorbar_width"]) / distances["width"],
+            image["plot_size"] / distances["height"],
         ]
     )  # [left, bottom, width, height]
     ticks = [-1, 0, 1]
     cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
     cbar.ax.tick_params(
-        labelsize=common["tick_label_size"],
-        size=common["tick_size"],
-        color=common["tick_color"],
+        labelsize=image["tick_label_size"],
+        size=image["tick_size"],
+        color=image["tick_color"],
     )
-    cbar.outline.set_linewidth(common["border_width"])
-    cbar.outline.set_edgecolor(common["border_color"])
+    cbar.outline.set_linewidth(image["border_width"])
+    cbar.outline.set_edgecolor(image["border_color"])
 
-    if exclusive["print_folder"]:
+    if image["print_folder"]:
         bottom_text = os.path.basename(os.getcwd())
     else:
         bottom_text = ""
     fig.text(
-        x=(common["left_margin"] + distances["inner_width"]) / distances["width"],
-        y=(common["bottom_margin"] - common["x_label_size"]) / distances["height"],
+        x=(image["left_margin"] + distances["inner_width"]) / distances["width"],
+        y=(image["bottom_margin"] - image["x_label_size"]) / distances["height"],
         s=bottom_text,
-        fontsize=common["tick_label_size"],
+        fontsize=image["tick_label_size"],
         color="grey",
         ha="right",
     )

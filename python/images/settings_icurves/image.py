@@ -1,18 +1,22 @@
 """ Parameters for the images module. """
 
-PLOT_SIZE = 8
+PLOT_SIZE = 4
 
-SETTINGS = {
+IMAGE = {
     "big_label_size": 9 * PLOT_SIZE,
     "border_color": "0.3",
     "border_width": 0.1 * PLOT_SIZE,
     "bottom_margin": 0.625 * PLOT_SIZE,
     "color_map": "RdBu_r",
+    "colorbar_height": 21,
+    "colorbar_right_position": 1,
+    "colorbar_width": 21,
     "left_margin": 0.625 * PLOT_SIZE,
     "letter_label_size": 8 * PLOT_SIZE,
     "letter_padding": 0.035,
     "line_width": 0.05 * PLOT_SIZE,
     "plot_size": PLOT_SIZE,
+    "print_folder": False,
     "right_margin": 1 * PLOT_SIZE,
     "spacing": 0.1875 * PLOT_SIZE,
     "tick_color": "0.3",

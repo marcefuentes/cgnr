@@ -4,8 +4,8 @@ import os
 
 import numpy as np
 
-from modules_results.settings import SETTINGS as settings
 from modules.theory import fitness, qbeq
+from settings_results.data_constants import DATA_CONSTANTS as data_constants
 
 
 def fitness_curve(data_dict, x):
@@ -14,7 +14,7 @@ def fitness_curve(data_dict, x):
     if data_dict["single_folder"] and data_dict["single_trait"]:
         given = float(os.path.basename(os.getcwd()))
     else:
-        given = float(settings["given_folder"])
+        given = float(data_constants["given_folder"])
 
     reciprocator = np.zeros(
         (
@@ -52,6 +52,6 @@ def lims():
 def data(data_dict):
     """Calculates static fitness isoclines."""
 
-    x = np.linspace(0.001, 0.999, num=settings["n_x_values"])
+    x = np.linspace(0.001, 0.999, num=data_constants["n_x_values"])
     y = fitness_curve(data_dict, x)
     return x, y

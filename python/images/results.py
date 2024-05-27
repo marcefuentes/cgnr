@@ -13,14 +13,15 @@ from modules.get_titles import get_titles
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from modules_results.get_data import get_data, get_rows, get_columns
 from modules_results.get_sm import get_sm
 import modules_results.get_static_fitness as static_fitness
 import modules_results.get_static_hist as static_hist
-from modules_results.get_data import get_data, get_rows, get_columns
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
-from modules_results.settings import SETTINGS as settings
 from modules_results.update_artists import update_artists
+from settings_results.data_constants import DATA_CONSTANTS as data_constants
+from settings_results.image import IMAGE as image
 
 
 def main(args):
@@ -65,8 +66,8 @@ def main(args):
 
     fig, axs = create_fig(fig_layout)
 
-    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"])
-    format_fig(fig, fig_distances, settings, get_sm())
+    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    format_fig(fig, fig_distances, image, get_sm())
     data_dict["text"] = fig.texts[2]
 
     if args.fitness:
@@ -84,7 +85,7 @@ def main(args):
             data_dict["logess"][-1],
         ],
         "column_titles": get_titles(data_dict["columns"]),
-        "divider": create_divider(fig, fig_layout, fig_distances),
+        "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": mc,
         "nr": mr,
         "r_values": [
@@ -105,10 +106,10 @@ def main(args):
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
         file_name += "_histogram"
 
-    format_axes(axes_args)
+    format_axes(axes_args, image)
 
     if args.trait_set == "all_traits":
-        for trait in settings["all_traits"]:
+        for trait in data_constants["all_traits"]:
             data_dict["trait_set"] = trait
             file_name += f"_{trait}"
             save_file(fig, data_dict, file_name)

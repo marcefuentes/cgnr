@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib.lines import Line2D
 
-from modules.settings import SETTINGS as settings
+from settings_icurves.image import IMAGE as image
 
 
 def init_artists_line2d(axs, x, y, ic):
@@ -15,7 +15,7 @@ def init_artists_line2d(axs, x, y, ic):
     icurves = np.empty((nr, nc), dtype=object)
     landscapes = np.empty((nr, nc), dtype=object)
 
-    lw = settings["line_width"] * settings["plot_size"] * 12 / nc
+    lw = image["line_width"] * image["plot_size"] * 12 / nc
 
     for i in range(nr):
         for j in range(nc):

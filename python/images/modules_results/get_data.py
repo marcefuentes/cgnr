@@ -7,10 +7,10 @@ import sys
 import numpy as np
 import pandas as pd
 
-from common_modules.settings import SETTINGS as project
-from modules_results.settings import SETTINGS as exclusive
-import modules_results.layouts_single_folder as s_folder
-import modules_results.layouts_single_trait as s_trait
+from settings_results.data_constants import DATA_CONSTANTS as data_constants
+import settings_results.layouts_single_folder as s_folder
+import settings_results.layouts_single_trait as s_trait
+from settings_project.project import PROJECT as project
 
 
 def get_columns(single_trait, trait_set, single_folder):
@@ -64,7 +64,7 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
 
     dfs, dffrqs = [], []
 
-    given_folder = exclusive["given_folder"]
+    given_folder = data_constants["given_folder"]
 
     for row in rows:
         if row == "social":

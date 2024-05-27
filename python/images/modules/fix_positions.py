@@ -2,17 +2,15 @@
 
 from mpl_toolkits.axes_grid1 import Divider, Size
 
-from modules.settings import SETTINGS as common
 
-
-def create_divider(fig, layout, distances):
+def create_divider(fig, layout, distances, image):
     """Create divider."""
 
     nr = layout["nr"]
     nc = layout["nc"]
 
-    spacing_fixed = Size.Fixed(common["spacing"])
-    plot_size_fixed = Size.Fixed(common["plot_size"] / nc)
+    spacing_fixed = Size.Fixed(image["spacing"])
+    plot_size_fixed = Size.Fixed(image["plot_size"] / nc)
     column_fixed = [plot_size_fixed] * nc + (
         [spacing_fixed] + [plot_size_fixed] * nc
     ) * (layout["ncols"] - 1)
@@ -22,8 +20,8 @@ def create_divider(fig, layout, distances):
     divider = Divider(
         fig,
         (
-            common["left_margin"] / distances["width"],
-            common["bottom_margin"] / distances["height"],
+            image["left_margin"] / distances["width"],
+            image["bottom_margin"] / distances["height"],
             distances["inner_width"] / distances["width"],
             distances["inner_height"] / distances["height"],
         ),

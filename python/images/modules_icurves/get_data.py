@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from common_modules.settings import SETTINGS as project
-from modules_icurves.settings import SETTINGS as exclusive
+from settings_icurves.data_constants import DATA_CONSTANTS as data_constants
+from settings_project.project import PROJECT as project
 
 
 def get_data(data_dict):
@@ -15,12 +15,12 @@ def get_data(data_dict):
     data_dict["alphas"] = np.linspace(
         project["alpha_max"],
         project["alpha_min"],
-        num=exclusive["nr"],
+        num=data_constants["nr"],
     )
     data_dict["logess"] = np.linspace(
         project["loges_min"],
         project["loges_max"],
-        num=exclusive["nc"],
+        num=data_constants["nc"],
     )
     data_dict["rhos"] = 1.0 - 1.0 / np.power(2.0, data_dict["logess"])
 

@@ -4,8 +4,8 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
 
-from modules.settings import SETTINGS as settings
 from modules.theory import fitness, indifference, qbeq
+from settings_icurves.image import IMAGE as image
 
 
 def update_artists(given, data_dict):
@@ -27,7 +27,7 @@ def update_artists(given, data_dict):
                 indifference(data_dict["x_values"], w, alpha, rho)
             )
             data_dict["icurves"][i, j].set_color(
-                cm.get_cmap(settings["color_map"])(0.5 + 0.5 * w)
+                cm.get_cmap(image["color_map"])(0.5 + 0.5 * w)
             )
 
             y = fitness(data_dict["x_values"], data_dict["x_values"], given, alpha, rho)
@@ -36,7 +36,7 @@ def update_artists(given, data_dict):
                 np.concatenate([points[:-1], points[1:]], axis=1)
             )
             data_dict["landscapes"][i, j].set_array(y)
-            data_dict["landscapes"][i, j].set_cmap(cm.get_cmap(settings["color_map"]))
+            data_dict["landscapes"][i, j].set_cmap(cm.get_cmap(image["color_map"]))
             data_dict["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(

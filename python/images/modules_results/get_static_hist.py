@@ -1,7 +1,7 @@
 """ Creates dummy data for histograms. """
 
 import numpy as np
-from common_modules.settings import SETTINGS as project
+from settings_project.project import PROJECT as project
 
 
 def lims():

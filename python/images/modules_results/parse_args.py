@@ -3,8 +3,8 @@
 import argparse
 import os
 
-import modules_results.layouts_single_folder as s_folder
-from modules_results.trait_map import trait_map
+import settings_results.layouts_single_folder as s_folder
+from settings_results.trait_map import trait_map
 
 
 def parse_args():
