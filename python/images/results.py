@@ -53,6 +53,8 @@ def main(args):
     }
 
     update_args = get_update_args(update_args, args.clean)
+    mr = len(update_args["alphas"])
+    mc = len(update_args["logess"])
 
     fig_layout = {
         "nc": 1,
@@ -62,8 +64,8 @@ def main(args):
     }
 
     if args.fitness or args.histogram:
-        fig_layout["nc"] = len(update_args["logess"])
-        fig_layout["nr"] = len(update_args["alphas"])
+        fig_layout["nc"] = mc
+        fig_layout["nr"] = mr
 
     fig, axs = create_fig(fig_layout)
 
@@ -74,28 +76,24 @@ def main(args):
     if args.fitness:
         update_args["artists"] = init_line2d(axs, *static_fitness.data(update_args))
     elif args.histogram:
-        update_args["artists"] = init_line2d(axs, *static_hist.data(len(update_args["alphas"]), len(update_args["logess"])))
+        update_args["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
     else:
-        update_args["artists"] = init_imshow(
-            axs,
-            len(update_args["alphas"]),
-            len(update_args["logess"]),
-        )
+        update_args["artists"] = init_imshow(axs, mr, mc)
 
     axes_args = {
         "axs": axs,
         "c_values": [
             update_args["logess"][0],
-            update_args["logess"][len(update_args["logess"]) // 2],
+            update_args["logess"][mc // 2],
             update_args["logess"][-1],
         ],
         "column_titles": get_titles(update_args["columns"]),
         "divider": create_divider(fig, fig_layout, fig_distances),
-        "nc": len(update_args["alphas"]),
-        "nr": len(update_args["logess"]),
+        "nc": mc,
+        "nr": mr,
         "r_values": [
             update_args["alphas"][0],
-            update_args["alphas"][len(update_args["alphas"]) // 2],
+            update_args["alphas"][mr // 2],
             update_args["alphas"][-1],
         ],
         "row_titles": get_titles(update_args["rows"]),
