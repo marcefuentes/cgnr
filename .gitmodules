@@ -1,3 +1,6 @@
 [submodule "dtnorm"]
 	path = dtnorm
 	url = https://github.com/alanrogers/dtnorm
+[submodule "python/slurm/python_colors"]
+	path = python/slurm/python_colors
+	url = https://github.com/marcefuentes/python_colors.git

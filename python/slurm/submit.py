@@ -5,13 +5,13 @@
 import os
 import sys
 
-from common_modules.colors import ASK as ask
-from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.list_of_folders import list_of_folders
 from modules.process_jobs import process_jobs
 import modules.slurm_tools as st
+from python_colors.colors import ASK as ask
+from python_colors.colors import COLORS as colors
 
 # Purpose: browse through folders and submit jobs
 # Usage: python submit.py or python submit.py test

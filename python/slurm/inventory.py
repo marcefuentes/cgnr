@@ -6,12 +6,12 @@ import csv
 import os
 import sys
 
-from common_modules.colors import ASK as ask
-from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
+from python_colors.colors import ASK as ask
+from python_colors.colors import COLORS as colors
 import submit
 
 

@@ -6,8 +6,8 @@ import re
 import subprocess
 import sys
 
-from common_modules.colors import COLORS as colors
 from common_modules.settings import SETTINGS as settings
+from python_colors.colors import COLORS as colors
 
 
 def get_free_slots(constraint):
