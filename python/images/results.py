@@ -78,8 +78,8 @@ def main(args):
     else:
         update_args["artists"] = init_imshow(
             axs,
-            len(update_args["alphas"]) * len(update_args["highs"]),
-            len(update_args["logess"]) * len(update_args["lows"]),
+            len(update_args["alphas"]),
+            len(update_args["logess"]),
         )
 
     axes_args = {
