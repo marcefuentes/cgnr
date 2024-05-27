@@ -1,6 +1,5 @@
 """ ANSI color codes for terminal output. """
 
-
 COLORS = {
     "blue": "\033[94m",
     "cyan": "\033[96m",
