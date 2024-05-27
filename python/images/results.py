@@ -17,10 +17,7 @@ from modules_results.get_sm import get_sm
 import modules_results.get_static_fitness as static_fitness
 import modules_results.get_static_hist as static_hist
 from modules_results.get_update_args import get_update_args, get_rows, get_columns
-from modules_results.init_artists import (
-    init_imshow,
-    init_line2d,
-)
+from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
 from modules_results.settings import SETTINGS as settings
 from modules_results.update_artists import update_artists
