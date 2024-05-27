@@ -74,7 +74,7 @@ def main(args):
     if args.fitness:
         update_args["artists"] = init_line2d(axs, *static_fitness.data(update_args))
     elif args.histogram:
-        update_args["artists"] = init_line2d(axs, *static_hist.data(update_args))
+        update_args["artists"] = init_line2d(axs, *static_hist.data(len(update_args["alphas"]), len(update_args["logess"])))
     else:
         update_args["artists"] = init_imshow(
             axs,
