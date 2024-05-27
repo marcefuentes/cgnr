@@ -79,7 +79,7 @@ def main(args):
 
     axes_args = {
         "axs": axs,
-        "c_values": [
+        "c_labels": [
             data_dict["logess"][0],
             data_dict["logess"][mc // 2],
             data_dict["logess"][-1],
@@ -88,7 +88,7 @@ def main(args):
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": mc,
         "nr": mr,
-        "r_values": [
+        "r_labels": [
             data_dict["alphas"][0],
             data_dict["alphas"][mr // 2],
             data_dict["alphas"][-1],

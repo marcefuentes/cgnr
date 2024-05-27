@@ -99,7 +99,7 @@ def get_df_single_trait(histogram, movie, clean):
 
     dfs, dffrqs, df_nones, df_socials = [], [], [], []
 
-    given_folder = exclusive["given_folder"]
+    given_folder = data_constants["given_folder"]
     for suffix, row in zip(s_trait.variant_suffixes, s_trait.rows):
         dfs.append(
             [

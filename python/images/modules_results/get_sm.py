@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 from settings_results.image import IMAGE as image
 
+
 def get_sm():
     """Create ScalarMappable object for color mapping."""
 

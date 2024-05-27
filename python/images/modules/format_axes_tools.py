@@ -11,29 +11,29 @@ def add_letters(ax, position, params, n):
     ax.text(*position, **params)
 
 
-def add_ticklabels_imshow(axs, r_values, c_values):
+def add_ticklabels_imshow(axs, r_labels, c_labels):
     """add tick labels for (nrows x ncols)."""
 
-    r_values = [f"{r:.1f}" for r in r_values]
+    r_labels = [f"{r:.1f}" for r in r_labels]
     for ax in axs[:, 0, 0, 0]:
-        ax.set_yticklabels(r_values)
+        ax.set_yticklabels(r_labels)
 
-    c_values = [f"{c:.0f}" for c in c_values]
+    c_labels = [f"{c:.0f}" for c in c_labels]
     for ax in axs[-1, :, 0, 0]:
-        ax.set_xticklabels(c_values)
+        ax.set_xticklabels(c_labels)
 
 
-def add_ticklabels_line2d(axs, r_values, c_values):
+def add_ticklabels_line2d(axs, r_labels, c_labels):
     """add tick labels for (nrows x ncols x nr x nc)."""
 
     _range = range(0, axs.shape[2], axs.shape[2] // 2)
     for i in range(axs.shape[0]):
-        for k, r_value in zip(_range, r_values):
+        for k, r_value in zip(_range, r_labels):
             axs[i, 0, k, 0].set_yticklabels([f"{r_value:.1f}"])
 
     _range = range(0, axs.shape[3], axs.shape[3] // 2)
     for j in range(axs.shape[1]):
-        for m, c_value in zip(_range, c_values):
+        for m, c_value in zip(_range, c_labels):
             axs[-1, j, -1, m].set_xticklabels([f"{c_value:.0f}"])
 
 

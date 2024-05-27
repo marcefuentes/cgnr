@@ -62,12 +62,12 @@ def main(args):
 
     axes_args = {
         "axs": axs,
-        "c_values": data_dict["logess"],
+        "c_labels": data_dict["logess"],
         "column_titles": [""],
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
-        "r_values": data_dict["alphas"],
+        "r_labels": data_dict["alphas"],
         "row_titles": [""],
         "x_lim": [0, 1],
         "y_lim": [0, 1],
