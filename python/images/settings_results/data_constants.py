@@ -1,4 +1,4 @@
-""" Settings for results plotting. """
+""" data constants for results. """
 
 data_constants = {
     "all_traits": [
@@ -12,5 +12,4 @@ data_constants = {
     ],
     "given_folder": 1,
     "n_x_values": 64,
-    "print_folder": False,
 }

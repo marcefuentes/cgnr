@@ -1,4 +1,4 @@
-""" Data constants. """
+""" Data constants for icurves. """
 
 data_constants = {
     "n_ic": 5,
