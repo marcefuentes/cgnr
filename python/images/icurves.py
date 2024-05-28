@@ -51,7 +51,7 @@ def main(args):
     fig, axs = create_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, fig_distances, image, get_sm())
+    format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data_dict["text"] = fig.texts[2]
     data_dict["x_values"], y, ic = get_static_data(
         data_dict["alphas"], data_dict["rhos"]

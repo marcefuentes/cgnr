@@ -20,6 +20,7 @@ import modules_results.get_static_hist as static_hist
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
+
 from settings_results.data_constants import data_constants
 from settings_results.image import image
 from settings_results.titles import titles
@@ -68,11 +69,11 @@ def main(args):
     fig, axs = create_fig(fig_layout)
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, fig_distances, image, get_sm())
+    format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data_dict["text"] = fig.texts[2]
 
     if args.fitness:
-        data_dict["artists"] = init_line2d(axs, *static_fitness.data(data_dict))
+        data_dict["artists"] = init_line2d(axs, *static_fitness.data(data_dict, data_constants))
     elif args.histogram:
         data_dict["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
     else:

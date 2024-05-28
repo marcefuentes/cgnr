@@ -3,12 +3,10 @@
 from matplotlib.cm import ScalarMappable
 import matplotlib.pyplot as plt
 
-from settings_results.image import image
 
-
-def get_sm():
+def get_sm(color_map):
     """Create ScalarMappable object for color mapping."""
 
-    sm = ScalarMappable(cmap=image["color_map"], norm=plt.Normalize(-1, 1))
+    sm = ScalarMappable(cmap=color_map, norm=plt.Normalize(-1, 1))
 
     return sm
