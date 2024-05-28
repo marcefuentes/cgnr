@@ -6,8 +6,8 @@ import re
 import subprocess
 import sys
 
-from common_modules.settings import SETTINGS as settings
-from python_colors.colors import COLORS as colors
+from python_colors.colors import colors
+from settings_project.project import project
 
 
 def get_free_slots(constraint):
@@ -22,9 +22,9 @@ def get_free_slots(constraint):
 def get_jobs_to_submit(current_path_folders):
     """Returns a list of job array indices that need to be submitted."""
 
-    input_file_extension = settings["input_file_extension"]
-    output_file_extension, *_ = settings["output_file_extensions"]
-    number_of_lines = settings["number_of_lines"]
+    input_file_extension = project["input_file_extension"]
+    output_file_extension, *_ = project["output_file_extensions"]
+    number_of_lines = project["number_of_lines"]
 
     jobs_to_submit = []
     names = [name[:-4] for name in os.listdir() if name.endswith(input_file_extension)]
@@ -110,7 +110,7 @@ def get_qos_limit(constraint, specification):
 def get_qos_name(constraint):
     """Returns the name of the QOS that corresponds to the given constraint."""
 
-    hours = settings["hours"]
+    hours = project["hours"]
     if constraint == "none":
         command = ["scontrol", "show", "partition", "short", "-o"]
         output = subprocess.check_output(command).decode()
@@ -165,7 +165,7 @@ def job_is_queued(current_path_folders, job_array_index):
 def remove_files(jobs_to_submit):
     """Removes the output files for the given job array indices."""
 
-    extensions = settings["output_file_extensions"]
+    extensions = project["output_file_extensions"]
     for name in jobs_to_submit:
         for extension in extensions:
             if os.path.isfile(f"{name}{extension}"):
@@ -177,7 +177,7 @@ def remove_files(jobs_to_submit):
 def slots():
     """Prints the number of free slots for each QOS."""
 
-    constraints = settings["constraints"]
+    constraints = project["constraints"]
     total_free_slots = 0
     # print(f"{'Qos':<12}{'Max':>5}{'Running':>9}{'Pending':>5}{'Free':>5}")
 
@@ -215,9 +215,9 @@ def submit_job(current_path_folders, job_array_string, constraint):
     """Submits a job to the SLURM scheduler."""
 
     exe = os.environ["PROJECT"]
-    hours = settings["hours"]
-    memory = settings["memory"]
-    mail_user = settings["mail_user"]
+    hours = project["hours"]
+    memory = project["memory"]
+    mail_user = project["mail_user"]
 
     constraint = "" if constraint == "none" else constraint
     executable = f"/home/ulc/ba/mfu/code/{exe}/bin/{exe}"

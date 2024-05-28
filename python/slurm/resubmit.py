@@ -5,12 +5,12 @@
 import os
 import sys
 
-from common_modules.colors import ASK as ask
-from common_modules.colors import COLORS as colors
-from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.process_jobs import process_jobs
 import modules.slurm_tools as st
+from python_colors.colors import ask
+from python_colors.colors import colors
+from settings_project.project import project
 
 # Purpose: resubmit unfinished jobs
 # Usage: python resubmit.py
@@ -61,7 +61,7 @@ def process_folder(test):
             sys.exit()
         st.remove_files(jobs_to_submit)
 
-    constraints = settings["constraints"]
+    constraints = project["constraints"]
     for constraint in constraints:
         if len(jobs_to_submit) == 0:
             print(f"{colors['green']}No jobs to submit.\n{colors['reset']}")

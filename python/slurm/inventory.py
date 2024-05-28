@@ -6,12 +6,12 @@ import csv
 import os
 import sys
 
-from common_modules.settings import SETTINGS as settings
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
-from python_colors.colors import ASK as ask
-from python_colors.colors import COLORS as colors
+from python_colors.colors import ask
+from python_colors.colors import colors
+from settings_project.project import project
 import submit
 
 
@@ -56,7 +56,7 @@ def get_results_path(store=False):
 def job_status(current_path, total_jobs):
     """Find status of jobs in a given folder."""
 
-    output_file_extension, *_ = settings["output_file_extensions"]
+    output_file_extension, *_ = project["output_file_extensions"]
     finished_jobs = 0
     garbled_jobs = 0
     no_header = 0
@@ -67,11 +67,11 @@ def job_status(current_path, total_jobs):
     ]:
         with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
             n_lines = sum(1 for line in f)
-            if n_lines == settings["number_of_lines"]:
+            if n_lines == project["number_of_lines"]:
                 finished_jobs += 1
             elif n_lines == 1:
                 one_line_jobs += 1
-            elif n_lines == settings["number_of_lines"] - 1:
+            elif n_lines == project["number_of_lines"] - 1:
                 no_header += 1
             else:
                 garbled_jobs += 1
@@ -167,7 +167,7 @@ def process_given(current_path, folder_dict):
     else:
         print(f"{colors['white']}\t{given:<5}{colors['reset']}", end="")
 
-    input_file_extension = settings["input_file_extension"]
+    input_file_extension = project["input_file_extension"]
     input_files = [
         f for f in os.listdir(current_path) if f.endswith(input_file_extension)
     ]
