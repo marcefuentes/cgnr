@@ -2,7 +2,7 @@
 
 import argparse
 
-from common_modules.settings import SETTINGS as settings
+from settings_project.project import project
 
 
 def parse_args(description):
@@ -13,9 +13,9 @@ def parse_args(description):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    default_groupsize = settings["GroupSize"]
-    default_cost = settings["Cost"]
-    default_given = settings["Given"]
+    default_groupsize = project["GroupSize"]
+    default_cost = project["Cost"]
+    default_given = project["Given"]
 
     parser.add_argument(
         "--groupsize", type=int, default=default_groupsize, help="group size"
