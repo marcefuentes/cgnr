@@ -7,7 +7,6 @@ project = {
     "input_file_extension": ".glo",
     "output_file_extensions": [".csv", ".frq"],
     "constraints": ["clk", "epyc", "none"],
-    "mail_user": "marcelinofuentes@gmail.com",
     "N": 12,
     "Runs": 30,
     "Time": 21,
