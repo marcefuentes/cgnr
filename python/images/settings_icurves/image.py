@@ -19,7 +19,7 @@ image = {
     "print_folder": False,
     "right_margin": 1 * PLOT_SIZE,
     "spacing": 0.1875 * PLOT_SIZE,
-    "tick_color": "0.3",
+    "tick_color": "1.0",
     "tick_label_size": 6 * PLOT_SIZE,
     "tick_size": 2.0 * PLOT_SIZE,
     "title_padding": 11,
