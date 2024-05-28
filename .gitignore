@@ -3,6 +3,7 @@ bin/
 charts/
 obj/
 results/
+python/slurm/settings_project/project.py
 store
 t.glo
 *.frq
