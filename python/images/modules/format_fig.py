@@ -21,7 +21,7 @@ def get_distances(nrows, ncols, image):
 
 
 def format_fig(fig, distances, image, sm):
-    """format the figure."""
+    """Format the figure."""
 
     fig.set_size_inches(distances["width"], distances["height"])
     fig.supxlabel(
