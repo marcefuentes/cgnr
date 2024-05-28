@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from modules.theory import fitness, indifference, qbeq
-from settings_icurves.image import IMAGE as image
+from settings_icurves.image import image
 
 
 def update_artists(given, data_dict):

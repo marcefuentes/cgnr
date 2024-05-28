@@ -18,7 +18,7 @@ from modules_icurves.get_static_data import get_static_data
 from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
-from settings_icurves.image import IMAGE as image
+from settings_icurves.image import image
 
 
 def main(args):

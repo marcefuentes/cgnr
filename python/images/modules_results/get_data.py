@@ -7,10 +7,10 @@ import sys
 import numpy as np
 import pandas as pd
 
-from settings_results.data_constants import DATA_CONSTANTS as data_constants
+from settings_results.data_constants import data_constants
 import settings_results.layouts_single_folder as s_folder
 import settings_results.layouts_single_trait as s_trait
-from settings_project.project import PROJECT as project
+from settings_project.project import project
 
 
 def get_columns(single_trait, trait_set, single_folder):

@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 from modules.theory import fitness, qbeq
-from settings_results.data_constants import DATA_CONSTANTS as data_constants
+from settings_results.data_constants import data_constants
 
 
 def fitness_curve(data_dict, x):

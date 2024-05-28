@@ -1,6 +1,6 @@
 """ Settings for results plotting. """
 
-DATA_CONSTANTS = {
+data_constants = {
     "all_traits": [
         "ChooseGrain",
         "Choose_ltGrain",

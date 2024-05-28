@@ -1,6 +1,6 @@
 """ Data constants. """
 
-DATA_CONSTANTS = {
+data_constants = {
     "n_ic": 5,
     "n_x_values": 256,
     "nc": 3,

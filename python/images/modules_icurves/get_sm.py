@@ -6,7 +6,7 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
-from settings_icurves.image import IMAGE as image
+from settings_icurves.image import image
 
 
 def get_sm():

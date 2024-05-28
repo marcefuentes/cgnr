@@ -3,7 +3,7 @@
 from matplotlib.cm import ScalarMappable
 import matplotlib.pyplot as plt
 
-from settings_results.image import IMAGE as image
+from settings_results.image import image
 
 
 def get_sm():

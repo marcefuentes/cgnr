@@ -3,7 +3,7 @@
 import numpy as np
 
 from modules.theory import indifference
-from settings_icurves.data_constants import DATA_CONSTANTS as data_constants
+from settings_icurves.data_constants import data_constants
 
 
 def get_static_data(alphas, rhos):

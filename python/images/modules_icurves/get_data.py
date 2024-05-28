@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from settings_icurves.data_constants import DATA_CONSTANTS as data_constants
-from settings_project.project import PROJECT as project
+from settings_icurves.data_constants import data_constants
+from settings_project.project import project
 
 
 def get_data(data_dict):

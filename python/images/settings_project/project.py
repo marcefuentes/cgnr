@@ -1,6 +1,6 @@
 """ Settings for the project """
 
-PROJECT = {
+project = {
     "output_file_extensions": [".csv", ".frq"],
     "Time": 21,
     "Periods": 3,

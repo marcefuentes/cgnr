@@ -1,6 +1,6 @@
 """ Titles for the plots. """
 
-TITLES = {
+titles = {
     "nolang_noshuffle": "No shuffling\nShort memory",
     "nolang_shuffle": "Shuffling\nShort memory",
     "lang_noshuffle": "No shuffling\nLong memory",

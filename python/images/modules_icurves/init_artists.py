@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib.lines import Line2D
 
-from settings_icurves.image import IMAGE as image
+from settings_icurves.image import image
 
 
 def init_artists_line2d(axs, x, y, ic):
