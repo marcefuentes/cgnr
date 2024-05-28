@@ -49,7 +49,7 @@ def format_fig(fig, distances, image, sm):
             (
                 image["bottom_margin"]
                 + distances["inner_height"] / 2
-                - image["plot_size"] / 2
+                - image["colorbar_height"] / 2
             )
             / distances["height"],
             image["colorbar_width"] / distances["width"],
