@@ -73,7 +73,9 @@ def main(args):
     data_dict["text"] = fig.texts[2]
 
     if args.fitness:
-        data_dict["artists"] = init_line2d(axs, *static_fitness.data(data_dict, data_constants))
+        data_dict["artists"] = init_line2d(
+            axs, *static_fitness.data(data_dict, data_constants)
+        )
     elif args.histogram:
         data_dict["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
     else:
