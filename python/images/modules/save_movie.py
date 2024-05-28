@@ -1,4 +1,4 @@
-""" Module to process the plot """
+""" Module to create an animation """
 
 from matplotlib.animation import FuncAnimation
 
