@@ -1,9 +1,7 @@
 """ Creates list of titles """
 
-from settings_results.titles import TITLES
 
-
-def get_titles(keys):
+def get_titles(keys, titles_dict):
     """Reads the titles file and returns the value of the variable passed as argument"""
 
     titles = []
@@ -11,8 +9,8 @@ def get_titles(keys):
         if not key:
             titles.append("")
             continue
-        # title = TITLES[key].replace("\\n", "\n")
-        title = TITLES[key]
+        # title = titles_dict[key].replace("\\n", "\n")
+        title = titles_dict[key]
         titles.append(title)
 
     return titles

@@ -22,6 +22,7 @@ from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
 from settings_results.data_constants import DATA_CONSTANTS as data_constants
 from settings_results.image import IMAGE as image
+from settings_results.titles import TITLES as titles_dict
 
 
 def main(args):
@@ -84,7 +85,7 @@ def main(args):
             data_dict["logess"][mc // 2],
             data_dict["logess"][-1],
         ],
-        "column_titles": get_titles(data_dict["columns"]),
+        "column_titles": get_titles(data_dict["columns"], titles_dict),
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": mc,
         "nr": mr,
@@ -93,7 +94,7 @@ def main(args):
             data_dict["alphas"][mr // 2],
             data_dict["alphas"][-1],
         ],
-        "row_titles": get_titles(data_dict["rows"]),
+        "row_titles": get_titles(data_dict["rows"], titles_dict),
         "x_lim": [None, None],
         "y_lim": [None, None],
     }
