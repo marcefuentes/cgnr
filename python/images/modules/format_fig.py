@@ -52,8 +52,8 @@ def format_fig(fig, distances, image, sm):
                 - image["plot_size"] / 2
             )
             / distances["height"],
-            (image["plot_size"] / image["colorbar_width"]) / distances["width"],
-            image["plot_size"] / distances["height"],
+            image["colorbar_width"] / distances["width"],
+            image["colorbar_height"] / distances["height"],
         ]
     )  # [left, bottom, width, height]
     ticks = [-1, 0, 1]
