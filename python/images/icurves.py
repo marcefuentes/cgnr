@@ -78,6 +78,7 @@ def main(args):
     file_name = os.path.basename(__file__).split(".")[0]
     save_file(fig, data_dict, file_name)
 
+    # pylint: disable=duplicate-code
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
