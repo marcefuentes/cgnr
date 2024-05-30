@@ -17,8 +17,7 @@ import submit
 def find_errors(current_path, input_file, folder_dict):
     """Process a given folder for errors in input files."""
 
-    current_path_folders = current_path.split("/")
-    given = current_path_folders[-1]
+    given = current_path.split("/")[-1]
     folder_dict["Given"] = float(given)
 
     with open(os.path.join(current_path, input_file), "r", encoding="utf-8") as csvfile:
