@@ -123,31 +123,21 @@ def process_mechanism_folder(current_path, folder_data):
         process_given_folder(given_folder, folder_data)
 
 
-def process_variant(current_path):
+def process_variant_folder(current_path):
     """Process a variant folder."""
 
     folder_data = {}
-
     variant = current_path.split("/")[-1]
-    if os.path.islink(current_path):
-        print(f"{colors['cyan']}{variant}{colors['reset']}")
-    else:
-        print(f"\n{colors['white']}{variant}{colors['reset']}")
+    print(f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}\n{variant}{colors['reset']}")
 
     folder_data["Shuffle"] = "noshuffle" not in variant
     folder_data["Language"] = "nolang" not in variant
     cost_index = variant.find("cost")
-    cost = variant[cost_index + 4 : cost_index + 6]
-    folder_data["Cost"] = -int(cost)
-    if "_128" in variant:
-        folder_data["GroupSize"] = 7
-    else:
-        folder_data["GroupSize"] = 2
+    folder_data["Cost"] = -int(variant[cost_index + 4 : cost_index + 6])
+    folder_data["GroupSize"] = 7 if "_128" in variant else 2
 
-    mechanisms = list_of_folders(current_path)
-    for mechanism in mechanisms:
-        process_mechanism_folder(mechanism, folder_data)
-
+    for mechanism_folder in list_of_folders(current_path):
+        process_mechanism_folder(mechanism_folder, folder_data)
 
 def main(store=False):
     """Main function."""
@@ -164,7 +154,7 @@ def main(store=False):
 
     print(f"\n{colors['white']}{current_path}{colors['reset']}")
     for variant in list_of_folders(current_path):
-        process_variant(variant)
+        process_variant_folder(variant)
     if "mfu" in current_path and not store:
         # Print - 30 times
         print(f"\n{colors['white']}{'-' * 30}{colors['reset']}")
