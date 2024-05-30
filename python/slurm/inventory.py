@@ -109,32 +109,18 @@ def process_given_folder(current_path, folder_data):
     job_status(current_path, len(input_files))
 
 
-def process_mechanism(current_path, folder_data):
+def process_mechanism_folder(current_path, folder_data):
     """Process a mechanism folder."""
 
     mechanism = current_path.split("/")[-1]
-    if os.path.islink(current_path):
-        print(f"{colors['cyan']}{mechanism}{colors['reset']}", end="")
-    else:
-        print(f"{colors['white']}{mechanism}{colors['reset']}", end="")
+    print(f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}{mechanism}{colors['reset']}", end="")
 
-    if "p" in mechanism:
-        folder_data["PartnerChoice"] = 1
-    else:
-        folder_data["PartnerChoice"] = 0
-    if "i" in mechanism:
-        folder_data["Reciprocity"] = 1
-        folder_data["IndirectR"] = 1
-    elif "d" in mechanism:
-        folder_data["Reciprocity"] = 1
-        folder_data["IndirectR"] = 0
-    else:
-        folder_data["Reciprocity"] = 0
-        folder_data["IndirectR"] = 0
+    folder_data["PartnerChoice"] = int("p" in mechanism)
+    folder_data["Reciprocity"] = int("i" in mechanism or "d" in mechanism)
+    folder_data["IndirectR"] = int("i" in mechanism)
 
-    givens = list_of_folders(current_path)
-    for given in givens:
-        process_given_folder(given, folder_data)
+    for given_folder in list_of_folders(current_path):
+        process_given_folder(given_folder, folder_data)
 
 
 def process_variant(current_path):
@@ -160,7 +146,7 @@ def process_variant(current_path):
 
     mechanisms = list_of_folders(current_path)
     for mechanism in mechanisms:
-        process_mechanism(mechanism, folder_data)
+        process_mechanism_folder(mechanism, folder_data)
 
 
 def main(store=False):
