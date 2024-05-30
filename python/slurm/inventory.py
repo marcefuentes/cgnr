@@ -9,7 +9,7 @@ import sys
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
-from python_colors.colors import colors
+from python_colors.colors import colors, ask
 from settings_project.project import project
 import submit
 
@@ -26,7 +26,8 @@ def find_errors(current_path, input_file, folder_data):
             expected_value = folder_data.get(key)
             if expected_value is not None and expected_value != float(value):
                 print(
-                    f"{colors['bold']}{colors['red']}{key} {expected_value} {value}{colors['reset']}",
+                    f"{colors['bold']}{colors['red']}{key} "
+                    f"{expected_value} {value}{colors['reset']}",
                     end=" ",
                 )
 
@@ -54,7 +55,9 @@ def job_status(current_path, total_jobs):
 
     for output_file in os.listdir(current_path):
         if output_file.endswith(output_file_extension):
-            with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
+            with open(
+                os.path.join(current_path, output_file), "r", encoding="utf-8"
+            ) as f:
                 n_lines = sum(1 for line in f)
                 if n_lines == project["number_of_lines"]:
                     status_counts["finished"] += 1
@@ -64,14 +67,34 @@ def job_status(current_path, total_jobs):
                     status_counts["no_header"] += 1
                 else:
                     status_counts["garbled"] += 1
-    
+
     job_name = f"{current_path.split('/')[-2]}"
     job_name += f"_{current_path.split('/')[-1]}"
     job_name += f"_{current_path.split('/')[-3]}"
-    running_jobs = get_squeue_stats("name", job_name, "running") if "mfu" in current_path and "Store" not in current_path else 0
-    pending_jobs = get_squeue_stats("name", job_name, "pending") if "mfu" in current_path and "Store" not in current_path else status_counts["one_line"]
-    dead_jobs = status_counts["one_line"] - running_jobs if "mfu" in current_path and "Store" not in current_path else 0
-    to_submit_jobs = total_jobs - status_counts["finished"] - status_counts["garbled"] - status_counts["no_header"] - running_jobs - pending_jobs - dead_jobs
+    running_jobs = (
+        get_squeue_stats("name", job_name, "running")
+        if "mfu" in current_path and "Store" not in current_path
+        else 0
+    )
+    pending_jobs = (
+        get_squeue_stats("name", job_name, "pending")
+        if "mfu" in current_path and "Store" not in current_path
+        else status_counts["one_line"]
+    )
+    dead_jobs = (
+        status_counts["one_line"] - running_jobs
+        if "mfu" in current_path and "Store" not in current_path
+        else 0
+    )
+    to_submit_jobs = (
+        total_jobs
+        - status_counts["finished"]
+        - status_counts["garbled"]
+        - status_counts["no_header"]
+        - running_jobs
+        - pending_jobs
+        - dead_jobs
+    )
     status_output = [
         (colors["green"], status_counts["finished"]),
         (colors["yellow"], running_jobs),
@@ -93,15 +116,22 @@ def process_given_folder(current_path, folder_data):
 
     given = current_path.split("/")[-1]
 
-    print(f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}\t{given:<5}{colors['reset']}", end="")
+    print(
+        f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}\t"
+        f"{given:<5}{colors['reset']}",
+        end="",
+    )
 
     input_files = [
-        f for f in os.listdir(current_path) if f.endswith(project["input_file_extension"])
+        f
+        for f in os.listdir(current_path)
+        if f.endswith(project["input_file_extension"])
     ]
 
     if not input_files:
         print(
-            f"{colors['bold']}{colors['red']}no {project['input_file_extension'][1:]} files{colors['reset']}"
+            f"{colors['bold']}{colors['red']}no "
+            f"{project['input_file_extension'][1:]} files{colors['reset']}"
         )
         return
 
@@ -113,7 +143,11 @@ def process_mechanism_folder(current_path, folder_data):
     """Process a mechanism folder."""
 
     mechanism = current_path.split("/")[-1]
-    print(f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}{mechanism}{colors['reset']}", end="")
+    print(
+        f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}"
+        f"{mechanism}{colors['reset']}",
+        end="",
+    )
 
     folder_data["PartnerChoice"] = int("p" in mechanism)
     folder_data["Reciprocity"] = int("i" in mechanism or "d" in mechanism)
@@ -128,7 +162,10 @@ def process_variant_folder(current_path):
 
     folder_data = {}
     variant = current_path.split("/")[-1]
-    print(f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}\n{variant}{colors['reset']}")
+    print(
+        f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}\n"
+        f"{variant}{colors['reset']}"
+    )
 
     folder_data["Shuffle"] = "noshuffle" not in variant
     folder_data["Language"] = "nolang" not in variant
@@ -139,6 +176,7 @@ def process_variant_folder(current_path):
     for mechanism_folder in list_of_folders(current_path):
         process_mechanism_folder(mechanism_folder, folder_data)
 
+
 def main(store=False):
     """Main function."""
 
@@ -146,7 +184,8 @@ def main(store=False):
 
     if not os.path.isdir(current_path):
         print(
-            f"{colors['bold']}{colors['red']}Directory {current_path} does not exist{colors['reset']}"
+            f"{colors['bold']}{colors['red']}"
+            f"Directory {current_path} does not exist{colors['reset']}"
         )
         sys.exit()
 
@@ -166,8 +205,9 @@ def main(store=False):
             )
             if os.path.isfile(last_job_file):
                 print(
-                    f"\n{colors['bold']}Submit {colors['cyan']}{free_slots}{colors['reset']}"
-                    + f"{colors['bold']} jobs{colors['reset']} {ask['yesno']} ",
+                    f"\n{colors['bold']}Submit "
+                    f"{colors['cyan']}{free_slots}{colors['reset']}"
+                    f"{colors['bold']} jobs{colors['reset']} {ask['yesno']} ",
                     end="",
                 )
                 if input().strip().lower() == "n":
