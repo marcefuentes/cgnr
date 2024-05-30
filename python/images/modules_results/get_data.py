@@ -132,7 +132,7 @@ def get_df_single_trait(histogram, movie, clean):
         )
         df_socials.append(
             [
-                get_df(f"{column}_{suffix}/none/0", csv0, movie, clean)
+                get_df(f"{column}_{suffix}/none/0.0", csv0, movie, clean)
                 for column in s_trait.columns
             ]
         )
@@ -151,7 +151,7 @@ def get_df_single_trait_single_folder(histogram, movie, clean):
     if histogram:
         dffrq[0].append(get_df(".", csv1, movie, clean))
     df_none[0].append(get_df(f"../../none/{given_folder}", csv0, movie, clean))
-    df_social[0].append(get_df("../../none/0", csv0, movie, clean))
+    df_social[0].append(get_df("../../none/0.0", csv0, movie, clean))
 
     return df, df_none, df_social, dffrq, df_social[0][0]
 
