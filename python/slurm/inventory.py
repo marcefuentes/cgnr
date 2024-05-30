@@ -88,32 +88,25 @@ def job_status(current_path, total_jobs):
     print()
 
 
-def process_given(current_path, folder_data):
+def process_given_folder(current_path, folder_data):
     """Process a given folder."""
 
-    current_path_folders = current_path.split("/")
-    given = current_path_folders[-1]
+    given = current_path.split("/")[-1]
 
-    if os.path.islink(current_path):
-        print(f"{colors['cyan']}\t{given:<5}{colors['reset']}", end="")
-    else:
-        print(f"{colors['white']}\t{given:<5}{colors['reset']}", end="")
+    print(f"{colors['cyan'] if os.path.islink(current_path) else colors['white']}\t{given:<5}{colors['reset']}", end="")
 
-    input_file_extension = project["input_file_extension"]
     input_files = [
-        f for f in os.listdir(current_path) if f.endswith(input_file_extension)
+        f for f in os.listdir(current_path) if f.endswith(project["input_file_extension"])
     ]
 
-    find_errors(current_path, input_files[0], folder_data)
-
-    total_jobs = len(input_files)
-    if total_jobs == 0:
+    if not input_files:
         print(
-            f"{colors['bold']}{colors['red']}no {input_file_extension[1:]} files{colors['reset']}"
+            f"{colors['bold']}{colors['red']}no {project['input_file_extension'][1:]} files{colors['reset']}"
         )
         return
 
-    job_status(current_path, total_jobs)
+    find_errors(current_path, input_files[0], folder_data)
+    job_status(current_path, len(input_files))
 
 
 def process_mechanism(current_path, folder_data):
@@ -141,7 +134,7 @@ def process_mechanism(current_path, folder_data):
 
     givens = list_of_folders(current_path)
     for given in givens:
-        process_given(given, folder_data)
+        process_given_folder(given, folder_data)
 
 
 def process_variant(current_path):
