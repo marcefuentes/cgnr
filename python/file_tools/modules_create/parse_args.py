@@ -22,21 +22,21 @@ def parse_args(description):
     )
     parser.add_argument("--cost", type=float, default=default_cost, help="cost value")
     parser.add_argument(
-        "--partnerchoice",
+        "--p",
         action="store_const",
         const=1,
         default=0,
         help="enable partnerchoice",
     )
     parser.add_argument(
-        "--directr",
+        "--d",
         action="store_const",
         const=1,
         default=0,
         help="enable direct reciprocity",
     )
     parser.add_argument(
-        "--indirectr",
+        "--i",
         action="store_const",
         const=1,
         default=0,
