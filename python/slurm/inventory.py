@@ -144,19 +144,19 @@ def main(store=False):
 
     current_path = get_results_path(store)
 
-    if os.path.isdir(current_path):
-        os.chdir(current_path)
-    else:
+    if not os.path.isdir(current_path):
         print(
             f"{colors['bold']}{colors['red']}Directory {current_path} does not exist{colors['reset']}"
         )
         sys.exit()
 
+    os.chdir(current_path)
+
     print(f"\n{colors['white']}{current_path}{colors['reset']}")
-    for variant in list_of_folders(current_path):
-        process_variant_folder(variant)
+    for variant_folder in list_of_folders(current_path):
+        process_variant_folder(variant_folder)
+
     if "mfu" in current_path and not store:
-        # Print - 30 times
         print(f"\n{colors['white']}{'-' * 30}{colors['reset']}")
         free_slots = slots()
         if free_slots:
@@ -170,17 +170,15 @@ def main(store=False):
                     + f"{colors['bold']} jobs{colors['reset']} {ask['yesno']} ",
                     end="",
                 )
-                user_input = input()
-                if user_input.lower() == "n":
+                if input().strip().lower() == "n":
                     print()
                     sys.exit()
                 submit.main()
             else:
-                msg = (
+                print(
                     "\nTo submit jobs, go to a variant folder with "
                     "no running or finished jobs and run submit\n"
                 )
-                print(msg)
         else:
             print()
     else:
