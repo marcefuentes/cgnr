@@ -8,8 +8,7 @@ import sys
 from modules.argparse_utils import parse_args
 from modules.process_jobs import process_jobs
 import modules.slurm_tools as st
-from python_colors.colors import ask
-from python_colors.colors import colors
+from python_colors.colors import ask, colors
 from settings_project.project import project
 
 # Purpose: resubmit unfinished jobs

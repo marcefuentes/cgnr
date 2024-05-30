@@ -9,7 +9,6 @@ import sys
 from modules.argparse_utils import parse_args
 from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
-from python_colors.colors import ask
 from python_colors.colors import colors
 from settings_project.project import project
 import submit
