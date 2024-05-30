@@ -17,25 +17,18 @@ import submit
 def find_errors(current_path, input_file, folder_data):
     """Process a given folder for errors in input files."""
 
-    given = current_path.split("/")[-1]
-    folder_data["Given"] = float(given)
+    given_value = float(current_path.split("/")[-1])
+    folder_data["Given"] = given_value
 
     with open(os.path.join(current_path, input_file), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
-        for row in reader:
-            key, value = row
-            if key == "Given":
-                if float(value) != folder_data[key]:
-                    print(
-                        f"{colors['bold']}{colors['red']}{key} {folder_data[key]} {value}{colors['reset']}",
-                        end=" ",
-                    )
-            elif key in folder_data:
-                if int(value) != folder_data[key]:
-                    print(
-                        f"{colors['bold']}{colors['red']}{key} {folder_data[key]} {value}{colors['reset']}",
-                        end=" ",
-                    )
+        for key, value in reader:
+            expected_value = folder_data.get(key)
+            if expected_value is not None and expected_value != float(value):
+                print(
+                    f"{colors['bold']}{colors['red']}{key} {expected_value} {value}{colors['reset']}",
+                    end=" ",
+                )
 
 
 def get_results_path(store=False):
