@@ -35,13 +35,10 @@ def get_results_path(store=False):
     """Get the path to the results folder."""
 
     exe = os.environ["PROJECT"]
-    if store:
-        store_path = os.environ.get("STORE")
-        if store_path is None:
-            raise ValueError("STORE environment variable not set")
-        return f"{store_path}/code/{exe}/results"
-    home_path = os.environ.get("HOME")
-    return f"{home_path}/code/{exe}/results"
+    base_path = os.environ.get("STORE" if store else "HOME")
+    if base_path is None:
+        raise ValueError(f"{'STORE' if store else 'HOME'} environment variable not set")
+    return os.path.join(base_path, "code", exe, "results")
 
 
 def job_status(current_path, total_jobs):
