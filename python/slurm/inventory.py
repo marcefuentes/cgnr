@@ -14,26 +14,26 @@ from settings_project.project import project
 import submit
 
 
-def find_errors(current_path, input_file, folder_dict):
+def find_errors(current_path, input_file, folder_data):
     """Process a given folder for errors in input files."""
 
     given = current_path.split("/")[-1]
-    folder_dict["Given"] = float(given)
+    folder_data["Given"] = float(given)
 
     with open(os.path.join(current_path, input_file), "r", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             key, value = row
             if key == "Given":
-                if float(value) != folder_dict[key]:
+                if float(value) != folder_data[key]:
                     print(
-                        f"{colors['bold']}{colors['red']}{key} {folder_dict[key]} {value}{colors['reset']}",
+                        f"{colors['bold']}{colors['red']}{key} {folder_data[key]} {value}{colors['reset']}",
                         end=" ",
                     )
-            elif key in folder_dict:
-                if int(value) != folder_dict[key]:
+            elif key in folder_data:
+                if int(value) != folder_data[key]:
                     print(
-                        f"{colors['bold']}{colors['red']}{key} {folder_dict[key]} {value}{colors['reset']}",
+                        f"{colors['bold']}{colors['red']}{key} {folder_data[key]} {value}{colors['reset']}",
                         end=" ",
                     )
 
@@ -154,7 +154,7 @@ def job_status(current_path, total_jobs):
     print()
 
 
-def process_given(current_path, folder_dict):
+def process_given(current_path, folder_data):
     """Process a given folder."""
 
     current_path_folders = current_path.split("/")
@@ -170,7 +170,7 @@ def process_given(current_path, folder_dict):
         f for f in os.listdir(current_path) if f.endswith(input_file_extension)
     ]
 
-    find_errors(current_path, input_files[0], folder_dict)
+    find_errors(current_path, input_files[0], folder_data)
 
     total_jobs = len(input_files)
     if total_jobs == 0:
@@ -182,7 +182,7 @@ def process_given(current_path, folder_dict):
     job_status(current_path, total_jobs)
 
 
-def process_mechanism(current_path, folder_dict):
+def process_mechanism(current_path, folder_data):
     """Process a mechanism folder."""
 
     mechanism = current_path.split("/")[-1]
@@ -192,28 +192,28 @@ def process_mechanism(current_path, folder_dict):
         print(f"{colors['white']}{mechanism}{colors['reset']}", end="")
 
     if "p" in mechanism:
-        folder_dict["PartnerChoice"] = 1
+        folder_data["PartnerChoice"] = 1
     else:
-        folder_dict["PartnerChoice"] = 0
+        folder_data["PartnerChoice"] = 0
     if "i" in mechanism:
-        folder_dict["Reciprocity"] = 1
-        folder_dict["IndirectR"] = 1
+        folder_data["Reciprocity"] = 1
+        folder_data["IndirectR"] = 1
     elif "d" in mechanism:
-        folder_dict["Reciprocity"] = 1
-        folder_dict["IndirectR"] = 0
+        folder_data["Reciprocity"] = 1
+        folder_data["IndirectR"] = 0
     else:
-        folder_dict["Reciprocity"] = 0
-        folder_dict["IndirectR"] = 0
+        folder_data["Reciprocity"] = 0
+        folder_data["IndirectR"] = 0
 
     givens = list_of_folders(current_path)
     for given in givens:
-        process_given(given, folder_dict)
+        process_given(given, folder_data)
 
 
 def process_variant(current_path):
     """Process a variant folder."""
 
-    folder_dict = {}
+    folder_data = {}
 
     variant = current_path.split("/")[-1]
     if os.path.islink(current_path):
@@ -221,19 +221,19 @@ def process_variant(current_path):
     else:
         print(f"\n{colors['white']}{variant}{colors['reset']}")
 
-    folder_dict["Shuffle"] = "noshuffle" not in variant
-    folder_dict["Language"] = "nolang" not in variant
+    folder_data["Shuffle"] = "noshuffle" not in variant
+    folder_data["Language"] = "nolang" not in variant
     cost_index = variant.find("cost")
     cost = variant[cost_index + 4 : cost_index + 6]
-    folder_dict["Cost"] = -int(cost)
+    folder_data["Cost"] = -int(cost)
     if "_128" in variant:
-        folder_dict["GroupSize"] = 7
+        folder_data["GroupSize"] = 7
     else:
-        folder_dict["GroupSize"] = 2
+        folder_data["GroupSize"] = 2
 
     mechanisms = list_of_folders(current_path)
     for mechanism in mechanisms:
-        process_mechanism(mechanism, folder_dict)
+        process_mechanism(mechanism, folder_data)
 
 
 def main(store=False):
