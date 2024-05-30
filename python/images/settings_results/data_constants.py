@@ -10,6 +10,6 @@ data_constants = {
         "w_excess",
         "qBSeen_excess",
     ],
-    "given_folder": 1,
+    "given_folder": 1.0,
     "n_x_values": 64,
 }

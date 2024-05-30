@@ -68,7 +68,7 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
 
     for row in rows:
         if row == "social":
-            path = "none/0"
+            path = "none/0.0"
         elif "none" in row:
             path = f"none/{given_folder}"
         elif "none" in trait_set:
@@ -86,7 +86,7 @@ def get_df_single_folder(trait_set, histogram, movie, clean):
     if "social" in rows:
         df_social = dfs[rows.index("social")]
     else:
-        path = "none/0"
+        path = "none/0.0"
         df_social = get_df(path, csv0, movie, clean)
 
     return dfs, df_none, df_social, dffrqs, df_social

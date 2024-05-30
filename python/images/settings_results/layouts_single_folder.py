@@ -45,6 +45,6 @@ columns = {
 
 rows = {
     "default": ["p", "pi", "i", "none"],
-    "none": ["1", "0"],
+    "none": ["1.0", "0.0"],
     "test": ["p", "i", "none"],
 }
