@@ -44,103 +44,47 @@ def get_results_path(store=False):
 def job_status(current_path, total_jobs):
     """Find status of jobs in a given folder."""
 
-    output_file_extension, *_ = project["output_file_extensions"]
-    finished_jobs = 0
-    garbled_jobs = 0
-    no_header = 0
-    one_line_jobs = 0
+    output_file_extension = project["output_file_extensions"][0]
+    status_counts = {
+        "finished": 0,
+        "garbled": 0,
+        "no_header": 0,
+        "one_line": 0,
+    }
 
-    for output_file in [
-        f for f in os.listdir(current_path) if f.endswith(output_file_extension)
-    ]:
-        with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
-            n_lines = sum(1 for line in f)
-            if n_lines == project["number_of_lines"]:
-                finished_jobs += 1
-            elif n_lines == 1:
-                one_line_jobs += 1
-            elif n_lines == project["number_of_lines"] - 1:
-                no_header += 1
-            else:
-                garbled_jobs += 1
-
+    for output_file in os.listdir(current_path):
+        if output_file.endswith(output_file_extension):
+            with open(os.path.join(current_path, output_file), "r", encoding="utf-8") as f:
+                n_lines = sum(1 for line in f)
+                if n_lines == project["number_of_lines"]:
+                    status_counts["finished"] += 1
+                elif n_lines == 1:
+                    status_counts["one_line"] += 1
+                elif n_lines == project["number_of_lines"] - 1:
+                    status_counts["no_header"] += 1
+                else:
+                    status_counts["garbled"] += 1
+    
     job_name = f"{current_path.split('/')[-2]}"
     job_name += f"_{current_path.split('/')[-1]}"
     job_name += f"_{current_path.split('/')[-3]}"
-    if "mfu" in current_path and "Store" not in current_path:
-        running_jobs = get_squeue_stats("name", job_name, "running")
-        pending_jobs = get_squeue_stats("name", job_name, "pending")
-        dead_jobs = one_line_jobs - running_jobs
-    else:
-        running_jobs = 0
-        pending_jobs = one_line_jobs
-        dead_jobs = 0
-    to_submit_jobs = (
-        total_jobs
-        - pending_jobs
-        - running_jobs
-        - finished_jobs
-        - garbled_jobs
-        - no_header
-        - dead_jobs
-    )
+    running_jobs = get_squeue_stats("name", job_name, "running") if "mfu" in current_path and "Store" not in current_path else 0
+    pending_jobs = get_squeue_stats("name", job_name, "pending") if "mfu" in current_path and "Store" not in current_path else status_counts["one_line"]
+    dead_jobs = status_counts["one_line"] - running_jobs if "mfu" in current_path and "Store" not in current_path else 0
+    to_submit_jobs = total_jobs - status_counts["finished"] - status_counts["garbled"] - status_counts["no_header"] - running_jobs - pending_jobs - dead_jobs
+    status_output = [
+        (colors["green"], status_counts["finished"]),
+        (colors["yellow"], running_jobs),
+        (colors["white"], pending_jobs),
+        (colors["grey"], to_submit_jobs),
+        (colors["red"], dead_jobs),
+        (colors["purple"], status_counts["no_header"]),
+        (colors["blue"], status_counts["garbled"]),
+    ]
 
-    print(
-        (
-            f"{colors['bold']}{colors['green']}{finished_jobs:>4}{colors['reset']}"
-            if finished_jobs
-            else ""
-        ),
-        end="",
-    )
-    print(
-        (
-            f"{colors['bold']}{colors['yellow']}{running_jobs:>4}{colors['reset']}"
-            if running_jobs
-            else ""
-        ),
-        end="",
-    )
-    print(
-        (
-            f"{colors['bold']}{colors['white']}{pending_jobs:>4}{colors['reset']}"
-            if pending_jobs
-            else ""
-        ),
-        end="",
-    )
-    print(
-        (
-            f"{colors['bold']}{colors['grey']}{to_submit_jobs:>4}{colors['reset']}"
-            if to_submit_jobs
-            else ""
-        ),
-        end="",
-    )
-    print(
-        (
-            f"{colors['bold']}{colors['red']}{dead_jobs:>4}{colors['reset']}"
-            if dead_jobs
-            else ""
-        ),
-        end="",
-    )
-    print(
-        (
-            f"{colors['bold']}{colors['purple']}{no_header:>4}{colors['reset']}"
-            if no_header
-            else ""
-        ),
-        end="",
-    )
-    print(
-        (
-            f"{colors['bold']}{colors['blue']}{garbled_jobs:>4}{colors['reset']}"
-            if garbled_jobs
-            else ""
-        ),
-        end="",
-    )
+    for color, count in status_output:
+        if count:
+            print(f"{colors['bold']}{color}{count:>4}{colors['reset']}", end="")
     print()
 
 
