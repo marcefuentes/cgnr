@@ -3,7 +3,6 @@
 import numpy as np
 
 from settings_icurves.data_constants import data_constants
-from settings_project.project import project
 
 
 def get_data(data_dict):
@@ -13,13 +12,13 @@ def get_data(data_dict):
     data_dict["frames"] = np.append(data_dict["frames"], 0.0)
 
     data_dict["alphas"] = np.linspace(
-        project["alpha_max"],
-        project["alpha_min"],
+        data_constants["alpha_max"],
+        data_constants["alpha_min"],
         num=data_constants["nr"],
     )
     data_dict["logess"] = np.linspace(
-        project["loges_min"],
-        project["loges_max"],
+        data_constants["loges_min"],
+        data_constants["loges_max"],
         num=data_constants["nc"],
     )
     data_dict["rhos"] = 1.0 - 1.0 / np.power(2.0, data_dict["logess"])
