@@ -15,12 +15,14 @@ def fitness_curve(x, given, alphas, rhos):
     for i, alpha in enumerate(alphas):
         for j, rho in enumerate(rhos):
             qb_social = qbeq(0.0, alpha, rho)
-            reciprocator[i, j] = fitness(x, x, given, alpha, rho)
-            non_reciprocator[i, j] = fitness(x, x + increment, given, alpha, rho)
+            #reciprocator[i, j] = fitness(x, x, given, alpha, rho)
+            #non_reciprocator[i, j] = fitness(x, x + increment, given, alpha, rho)
+            reciprocator[i, j] = fitness(x + increment, x + increment, given, alpha, rho)
+            non_reciprocator[i, j] = fitness(x, x, given, alpha, rho)
             mask = x + increment > qb_social
             reciprocator[i, j][mask] = None
 
-    y = (reciprocator - non_reciprocator) * 1000
+    y = (reciprocator - non_reciprocator) * 500
     mask = y <= 0
     y[mask] = None
 
