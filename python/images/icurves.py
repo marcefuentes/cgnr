@@ -44,11 +44,8 @@ def main(config_data):
         dynamic_data["alphas"], dynamic_data["rhos"]
     )
     update_args = {
-        "budgtes": [],
         "file_name": os.path.basename(__file__).split(".")[0],
         "function": update_artists,
-        "icurves": [],
-        "landscapes": [],
     }
 
     update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (

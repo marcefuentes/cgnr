@@ -56,7 +56,6 @@ def main(config_data):
     dynamic_data["text"] = fig.texts[2]
 
     update_args = {
-        "artists": [],
         "file_name": os.path.basename(__file__).split(".")[0],
         "function": update_artists,
     }
