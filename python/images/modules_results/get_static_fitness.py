@@ -47,14 +47,14 @@ def process_grid(x, given, alphas, rhos):
 
 
 def process_plot(x, given, alpha, rho):
-    """ Difference in fitness between reciprocators and non-reciprocators. """
+    """Difference in fitness between reciprocators and non-reciprocators."""
 
     increment = 0.001
     reciprocator = fitness(x, x, given, alpha, rho)
     non_reciprocator = fitness(x, x + increment, given, alpha, rho)
 
-    #reciprocator[i, j] = fitness(x + increment, x + increment, given, alpha, rho)
-    #non_reciprocator[i, j] = fitness(x, x, given, alpha, rho)
+    # reciprocator[i, j] = fitness(x + increment, x + increment, given, alpha, rho)
+    # non_reciprocator[i, j] = fitness(x, x, given, alpha, rho)
     mask = x + increment > qbeq(0.0, alpha, rho)
     reciprocator[mask] = None
 

@@ -42,7 +42,11 @@ def update_artists(t, update_args, config_data, dynamic_data):
                         continue
                     df = df[df["Time"] == t]
                     artists = update_artists_histogram(
-                        artists, df, dynamic_data["alphas"], dynamic_data["logess"], trait
+                        artists,
+                        df,
+                        dynamic_data["alphas"],
+                        dynamic_data["logess"],
+                        trait,
                     )
             else:
                 artists[0, 0].set_array(zmatrix)

@@ -10,7 +10,11 @@ def save_movie(fig, update_args, config_data, dynamic_data):
         "fig": fig,
         "frames": dynamic_data["frames"],
         "func": update_args["function"],
-        "fargs": (update_args, config_data, dynamic_data,),
+        "fargs": (
+            update_args,
+            config_data,
+            dynamic_data,
+        ),
         "blit": True,
     }
     ani = FuncAnimation(**movie)

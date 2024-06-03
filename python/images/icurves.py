@@ -21,7 +21,6 @@ from modules_icurves.update_artists import update_artists
 from settings_icurves.image import image
 
 
-
 def main(config_data):
     """Main function"""
 
@@ -67,7 +66,6 @@ def main(config_data):
     update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
         init_artists_line2d(axs, dynamic_data["x_values"], y, ic)
     )
-
 
     axes_args = {
         "axs": axs,
