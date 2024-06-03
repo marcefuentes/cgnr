@@ -1,4 +1,4 @@
-""" Module to process the plot """
+""" Process the figure and save """
 
 import matplotlib.pyplot as plt
 

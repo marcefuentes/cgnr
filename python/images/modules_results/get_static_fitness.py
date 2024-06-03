@@ -5,38 +5,6 @@ import numpy as np
 from modules.theory import fitness, qbeq
 
 
-def fitness_curve(x, given, alphas, rhos):
-    """Calculates fitness curves."""
-
-    reciprocator = np.zeros((len(alphas), len(rhos), len(x)))
-    non_reciprocator = np.zeros_like(reciprocator)
-
-    increment = 0.001
-    for i, alpha in enumerate(alphas):
-        for j, rho in enumerate(rhos):
-            qb_social = qbeq(0.0, alpha, rho)
-            #reciprocator[i, j] = fitness(x, x, given, alpha, rho)
-            #non_reciprocator[i, j] = fitness(x, x + increment, given, alpha, rho)
-            reciprocator[i, j] = fitness(x + increment, x + increment, given, alpha, rho)
-            non_reciprocator[i, j] = fitness(x, x, given, alpha, rho)
-            mask = x + increment > qb_social
-            reciprocator[i, j][mask] = None
-
-    y = (reciprocator - non_reciprocator) * 500
-    mask = y <= 0
-    y[mask] = None
-
-    return y
-
-
-def lims():
-    """Sets the limits of the axes."""
-
-    x_lim = [0, 1]
-    y_lim = [0, 1]
-    return x_lim, y_lim
-
-
 def data(data_dict, data_constants):
     """Main function."""
 
@@ -50,6 +18,44 @@ def data(data_dict, data_constants):
     alphas = data_dict["alphas"]
     rhos = data_dict["rhos"]
 
-    y = fitness_curve(x, given, alphas, rhos)
+    y = process_grid(x, given, alphas, rhos)
 
     return x, y
+
+
+def lims():
+    """Sets the limits of the axes."""
+
+    x_lim = [0, 1]
+    y_lim = [0, 1]
+    return x_lim, y_lim
+
+
+def process_grid(x, given, alphas, rhos):
+    """Calculates fitness curves."""
+
+    y = np.zeros((len(alphas), len(rhos), len(x)))
+
+    for i, alpha in enumerate(alphas):
+        for j, rho in enumerate(rhos):
+            y[i, j] = process_plot(x, given, alpha, rho)
+
+    mask = y <= 0
+    y[mask] = None
+
+    return y
+
+
+def process_plot(x, given, alpha, rho):
+    """ Difference in fitness between reciprocators and non-reciprocators. """
+
+    increment = 0.001
+    reciprocator = fitness(x, x, given, alpha, rho)
+    non_reciprocator = fitness(x, x + increment, given, alpha, rho)
+
+    #reciprocator[i, j] = fitness(x + increment, x + increment, given, alpha, rho)
+    #non_reciprocator[i, j] = fitness(x, x, given, alpha, rho)
+    mask = x + increment > qbeq(0.0, alpha, rho)
+    reciprocator[mask] = None
+
+    return (reciprocator - non_reciprocator) * 500
