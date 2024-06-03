@@ -5,18 +5,18 @@ import numpy as np
 from modules.theory import fitness, qbeq
 
 
-def data(data_dict, data_constants):
+def data(config_data, dynamic_data, data_constants):
     """Main function."""
 
     x = np.linspace(0.001, 0.999, num=data_constants["n_x_values"])
 
-    if data_dict["single_folder"] and data_dict["single_trait"]:
+    if config_data["single_folder"] and config_data["single_trait"]:
         given = float(os.path.basename(os.getcwd()))
     else:
         given = float(data_constants["given_folder"])
 
-    alphas = data_dict["alphas"]
-    rhos = data_dict["rhos"]
+    alphas = dynamic_data["alphas"]
+    rhos = dynamic_data["rhos"]
 
     y = process_grid(x, given, alphas, rhos)
 

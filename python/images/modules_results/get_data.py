@@ -13,16 +13,16 @@ import settings_results.layouts_single_trait as s_trait
 from settings_project.project import project
 
 
-def get_columns(single_trait, trait_set, single_folder):
+def get_columns(config_data):
     """Get the columns for the given trait_set."""
 
-    if single_trait and single_folder:
+    if config_data["single_trait"] and config_data["single_folder"]:
         columns = [""]
         return columns
-    if single_trait:
+    if config_data["single_trait"]:
         columns = s_trait.columns
         return columns
-    columns = s_folder.columns[trait_set]
+    columns = s_folder.columns[config_data["trait_set"]]
     return columns
 
 
@@ -156,65 +156,65 @@ def get_df_single_trait_single_folder(histogram, movie, clean):
     return df, df_none, df_social, dffrq, df_social[0][0]
 
 
-def get_rows(single_trait, trait_set, single_folder):
+def get_rows(config_data):
     """Get the rows for the given trait_set."""
 
-    if single_trait and single_folder:
+    if config_data["single_trait"] and config_data["single_folder"]:
         return [""]
-    if single_trait:
+    if config_data["single_trait"]:
         return s_trait.rows
-    return s_folder.rows.get(trait_set, s_folder.rows["default"])
+    return s_folder.rows.get(config_data["trait_set"], s_folder.rows["default"])
 
 
-def get_data(data_dict, clean):
+def get_data(config_data, dynamic_data):
     """Get the df args for the given trait_set."""
 
-    if data_dict["single_trait"] and data_dict["single_folder"]:
+    if config_data["single_trait"] and config_data["single_folder"]:
         (
-            data_dict["dfs"],
-            data_dict["df_none"],
-            data_dict["df_social"],
-            data_dict["dffrqs"],
+            dynamic_data["dfs"],
+            dynamic_data["df_none"],
+            dynamic_data["df_social"],
+            dynamic_data["dffrqs"],
             df,
         ) = get_df_single_trait_single_folder(
-            data_dict["histogram"],
-            data_dict["movie"],
-            clean,
+            config_data["histogram"],
+            config_data["movie"],
+            config_data["clean"],
         )
 
-    elif data_dict["single_trait"]:
+    elif config_data["single_trait"]:
         (
-            data_dict["dfs"],
-            data_dict["df_none"],
-            data_dict["df_social"],
-            data_dict["dffrqs"],
+            dynamic_data["dfs"],
+            dynamic_data["df_none"],
+            dynamic_data["df_social"],
+            dynamic_data["dffrqs"],
             df,
         ) = get_df_single_trait(
-            data_dict["histogram"],
-            data_dict["movie"],
-            clean,
+            config_data["histogram"],
+            config_data["movie"],
+            config_data["clean"],
         )
     else:
         (
-            data_dict["dfs"],
-            data_dict["df_none"],
-            data_dict["df_social"],
-            data_dict["dffrqs"],
+            dynamic_data["dfs"],
+            dynamic_data["df_none"],
+            dynamic_data["df_social"],
+            dynamic_data["dffrqs"],
             df,
         ) = get_df_single_folder(
-            data_dict["trait_set"],
-            data_dict["histogram"],
-            data_dict["movie"],
-            clean,
+            config_data["trait_set"],
+            config_data["histogram"],
+            config_data["movie"],
+            config_data["clean"],
         )
 
-    data_dict["frames"] = df.Time.unique()
-    data_dict["alphas"] = np.sort(df["alpha"].unique())[::-1]
-    data_dict["logess"] = np.sort(df["logES"].unique())
-    if data_dict["fitness"]:
-        data_dict["rhos"] = 1.0 - 1.0 / np.power(2.0, data_dict["logess"])
+    dynamic_data["frames"] = df.Time.unique()
+    dynamic_data["alphas"] = np.sort(df["alpha"].unique())[::-1]
+    dynamic_data["logess"] = np.sort(df["logES"].unique())
+    if config_data["fitness"]:
+        dynamic_data["rhos"] = 1.0 - 1.0 / np.power(2.0, dynamic_data["logess"])
 
-    return data_dict
+    return dynamic_data
 
 
 def read_files(filelist, movie):

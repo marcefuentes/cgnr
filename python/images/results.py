@@ -26,43 +26,36 @@ from settings_results.image import image
 from settings_results.titles import titles
 
 
-def main(args):
+def main(config_data):
     """Main function"""
 
     start_time = time.perf_counter()
 
-    data_dict = {
+    config_data["rows"] = get_rows(config_data)
+    config_data["columns"] = get_columns(config_data)
+
+    dynamic_data = {
         "alphas": [],
-        "artists": [],
-        "columns": get_columns(args.single_trait, args.trait_set, args.single_folder),
-        "fitness": args.fitness,
         "df_none": [],
         "df_social": [],
         "dfs": [],
         "frames": [],
-        "histogram": args.histogram,
         "logess": [],
-        "movie": args.movie,
-        "rows": get_rows(args.single_trait, args.trait_set, args.single_folder),
-        "single_folder": args.single_folder,
-        "single_trait": args.single_trait,
         "text": "",
-        "trait_set": args.trait_set,
-        "update_function": update_artists,
     }
 
-    data_dict = get_data(data_dict, args.clean)
-    mr = len(data_dict["alphas"])
-    mc = len(data_dict["logess"])
+    dynamic_data = get_data(config_data, dynamic_data)
+    mr = len(dynamic_data["alphas"])
+    mc = len(dynamic_data["logess"])
 
     fig_layout = {
         "nc": 1,
-        "ncols": len(data_dict["columns"]),
+        "ncols": len(config_data["columns"]),
         "nr": 1,
-        "nrows": len(data_dict["rows"]),
+        "nrows": len(config_data["rows"]),
     }
 
-    if args.fitness or args.histogram:
+    if config_data["fitness"] or config_data["histogram"]:
         fig_layout["nc"] = mc
         fig_layout["nr"] = mr
 
@@ -70,56 +63,61 @@ def main(args):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
-    data_dict["text"] = fig.texts[2]
+    dynamic_data["text"] = fig.texts[2]
 
-    if args.fitness:
-        data_dict["artists"] = init_line2d(
-            axs, *static_fitness.data(data_dict, data_constants)
+    update_args = {
+        "artists": [],
+        "file_name": os.path.basename(__file__).split(".")[0],
+        "function": update_artists,
+    }
+
+    if config_data["fitness"]:
+        update_args["artists"] = init_line2d(
+            axs, *static_fitness.data(config_data, dynamic_data, data_constants)
         )
-    elif args.histogram:
-        data_dict["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
+    elif config_data["histogram"]:
+        update_args["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
     else:
-        data_dict["artists"] = init_imshow(axs, mr, mc)
+        update_args["artists"] = init_imshow(axs, mr, mc)
 
     axes_args = {
         "axs": axs,
         "c_labels": [
-            data_dict["logess"][0],
-            data_dict["logess"][mc // 2],
-            data_dict["logess"][-1],
+            dynamic_data["logess"][0],
+            dynamic_data["logess"][mc // 2],
+            dynamic_data["logess"][-1],
         ],
-        "column_titles": get_titles(data_dict["columns"], titles),
+        "column_titles": get_titles(config_data["columns"], titles),
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": mc,
         "nr": mr,
         "r_labels": [
-            data_dict["alphas"][0],
-            data_dict["alphas"][mr // 2],
-            data_dict["alphas"][-1],
+            dynamic_data["alphas"][0],
+            dynamic_data["alphas"][mr // 2],
+            dynamic_data["alphas"][-1],
         ],
-        "row_titles": get_titles(data_dict["rows"], titles),
+        "row_titles": get_titles(config_data["rows"], titles),
         "x_lim": [None, None],
         "y_lim": [None, None],
     }
 
-    file_name = os.path.basename(__file__).split(".")[0]
-    if args.fitness:
+    if config_data["fitness"]:
         axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
-        file_name += "_fitness"
-    elif args.histogram:
+        update_args["file_name"] += "_fitness"
+    elif config_data["histogram"]:
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
-        file_name += "_histogram"
+        update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)
 
-    if args.trait_set == "all_traits":
+    if config_data["trait_set"] == "all_traits":
         for trait in data_constants["all_traits"]:
-            data_dict["trait_set"] = trait
-            file_name += f"_{trait}"
-            save_file(fig, data_dict, file_name)
+            config_data["trait_set"] = trait
+            update_args["file_name"] += f"_{trait}"
+            save_file(fig, update_args, config_data, dynamic_data)
     else:
-        file_name += f"_{args.trait_set}"
-        save_file(fig, data_dict, file_name)
+        update_args["file_name"] += f"_{config_data['trait_set']}"
+        save_file(fig, update_args, config_data, dynamic_data)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
@@ -127,4 +125,4 @@ def main(args):
 
 if __name__ == "__main__":
     parsed_args = parse_args()
-    main(parsed_args)
+    main(vars(parsed_args))
