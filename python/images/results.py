@@ -34,17 +34,7 @@ def main(config_data):
     config_data["rows"] = get_rows(config_data)
     config_data["columns"] = get_columns(config_data)
 
-    dynamic_data = {
-        "alphas": [],
-        "df_none": [],
-        "df_social": [],
-        "dfs": [],
-        "frames": [],
-        "logess": [],
-        "text": "",
-    }
-
-    dynamic_data = get_data(config_data, dynamic_data)
+    dynamic_data = get_data(config_data)
     mr = len(dynamic_data["alphas"])
     mc = len(dynamic_data["logess"])
 

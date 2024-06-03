@@ -5,8 +5,10 @@ import numpy as np
 from settings_icurves.data_constants import data_constants
 
 
-def get_data(dynamic_data):
+def get_data():
     """Data common to all subplots."""
+
+    dynamic_data = {}
 
     dynamic_data["frames"] = np.linspace(0.0, 1.0, num=11)
     dynamic_data["frames"] = np.append(dynamic_data["frames"], 0.0)

@@ -26,19 +26,7 @@ def main(config_data):
 
     start_time = time.perf_counter()
 
-    dynamic_data = {
-        "alphas": [],
-        "budgets": [],
-        "frames": [],
-        "icurves": [],
-        "landscapes": [],
-        "logess": [],
-        "rhos": [],
-        "update_function": update_artists,
-        "x_values": [],
-    }
-
-    dynamic_data = get_data(dynamic_data)
+    dynamic_data = get_data()
 
     fig_layout = {
         "nc": len(dynamic_data["logess"]),

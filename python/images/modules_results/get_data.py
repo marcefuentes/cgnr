@@ -126,7 +126,12 @@ def get_df_single_trait(histogram, movie, clean):
             )
         df_nones.append(
             [
-                get_df(f"{column}_{suffix}/none/{given_folder}", csv0, movie, clean)
+                get_df(
+                    f"{column}_{suffix}/none/{given_folder}",
+                    csv0,
+                    movie,
+                    clean,
+                )
                 for column in s_trait.columns
             ]
         )
@@ -166,8 +171,10 @@ def get_rows(config_data):
     return s_folder.rows.get(config_data["trait_set"], s_folder.rows["default"])
 
 
-def get_data(config_data, dynamic_data):
+def get_data(config_data):
     """Get the df args for the given trait_set."""
+
+    dynamic_data = {}
 
     if config_data["single_trait"] and config_data["single_folder"]:
         (
