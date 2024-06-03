@@ -24,7 +24,7 @@ def get_frq(config_data, dynamic_data, i, j):
     return df, trait
 
 
-def update_artists(t, artists, config_data, dynamic_data):
+def update_artists(t, update_args, config_data, dynamic_data):
     """Update artist data at time t."""
 
     if config_data["movie"]:
@@ -33,18 +33,19 @@ def update_artists(t, artists, config_data, dynamic_data):
     for i, _ in enumerate(config_data["rows"]):
         for j, _ in enumerate(config_data["columns"]):
             zmatrix = update_zmatrix(t, config_data, dynamic_data, i, j)
+            artists = update_args["artists"][i, j]
             if config_data["fitness"] or config_data["histogram"]:
-                artists[i, j] = update_artists_line2d(artists[i, j], zmatrix)
+                artists = update_artists_line2d(artists, zmatrix)
                 if config_data["histogram"]:
                     df, trait = get_frq(config_data, dynamic_data, i, j)
                     if df.empty:
                         continue
                     df = df[df["Time"] == t]
-                    artists[i, j] = update_artists_histogram(
-                        artists[i, j], df, dynamic_data["alphas"], dynamic_data["logess"], trait
+                    artists = update_artists_histogram(
+                        artists, df, dynamic_data["alphas"], dynamic_data["logess"], trait
                     )
             else:
-                artists[i, j, 0, 0].set_array(zmatrix)
+                artists[0, 0].set_array(zmatrix)
 
     return artists.flatten()
 

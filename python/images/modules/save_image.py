@@ -10,7 +10,7 @@ def save_image(update_args, config_data, dynamic_data):
     plt.rcParams["ps.fonttype"] = 42
 
     if update_args["function"] is not None:
-        update_args["function"](dynamic_data["frames"][-1], update_args["artists"], config_data, dynamic_data)
+        update_args["function"](dynamic_data["frames"][-1], update_args, config_data, dynamic_data)
     plt.savefig(f"{update_args['file_name']}.png", transparent=False)
 
 

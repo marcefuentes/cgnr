@@ -21,30 +21,30 @@ from modules_icurves.update_artists import update_artists
 from settings_icurves.image import image
 
 
-def main(args):
+
+def main(config_data):
     """Main function"""
 
     start_time = time.perf_counter()
 
-    data_dict = {
+    dynamic_data = {
         "alphas": [],
         "budgets": [],
         "frames": [],
         "icurves": [],
         "landscapes": [],
         "logess": [],
-        "movie": args.movie,
         "rhos": [],
         "update_function": update_artists,
         "x_values": [],
     }
 
-    data_dict = get_data(data_dict)
+    dynamic_data = get_data(dynamic_data)
 
     fig_layout = {
-        "nc": len(data_dict["logess"]),
+        "nc": len(dynamic_data["logess"]),
         "ncols": 2,
-        "nr": len(data_dict["alphas"]),
+        "nr": len(dynamic_data["alphas"]),
         "nrows": 1,
     }
 
@@ -52,22 +52,31 @@ def main(args):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
-    data_dict["text"] = fig.texts[2]
-    data_dict["x_values"], y, ic = get_static_data(
-        data_dict["alphas"], data_dict["rhos"]
+    dynamic_data["text"] = fig.texts[2]
+    dynamic_data["x_values"], y, ic = get_static_data(
+        dynamic_data["alphas"], dynamic_data["rhos"]
     )
-    data_dict["budgets"], data_dict["icurves"], data_dict["landscapes"] = (
-        init_artists_line2d(axs, data_dict["x_values"], y, ic)
+    update_args = {
+        "budgtes": [],
+        "file_name": os.path.basename(__file__).split(".")[0],
+        "function": update_artists,
+        "icurves": [],
+        "landscapes": [],
+    }
+
+    update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
+        init_artists_line2d(axs, dynamic_data["x_values"], y, ic)
     )
+
 
     axes_args = {
         "axs": axs,
-        "c_labels": data_dict["logess"],
+        "c_labels": dynamic_data["logess"],
         "column_titles": [""],
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
-        "r_labels": data_dict["alphas"],
+        "r_labels": dynamic_data["alphas"],
         "row_titles": [""],
         "x_lim": [0, 1],
         "y_lim": [0, 1],
@@ -75,8 +84,7 @@ def main(args):
 
     format_axes(axes_args, image)
 
-    file_name = os.path.basename(__file__).split(".")[0]
-    save_file(fig, data_dict, file_name)
+    save_file(fig, update_args, config_data, dynamic_data)
 
     # pylint: disable=duplicate-code
     close_plt(fig)
@@ -86,4 +94,4 @@ def main(args):
 
 if __name__ == "__main__":
     parsed_args = parse_args()
-    main(parsed_args)
+    main(vars(parsed_args))
