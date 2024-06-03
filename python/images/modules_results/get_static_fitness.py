@@ -2,7 +2,7 @@
 
 import os
 import numpy as np
-from modules.theory import fitness, qbeq
+from modules.theory import calculate_trps, qbeq
 
 
 def data(options, dynamic_data, data_constants):
@@ -50,12 +50,12 @@ def process_plot(x, given, alpha, rho):
     """Difference in fitness between reciprocators and non-reciprocators."""
 
     increment = 0.001
-    reciprocator = fitness(x, x, given, alpha, rho)
-    non_reciprocator = fitness(x, x + increment, given, alpha, rho)
-
-    # reciprocator[i, j] = fitness(x + increment, x + increment, given, alpha, rho)
-    # non_reciprocator[i, j] = fitness(x, x, given, alpha, rho)
+    tt, rr, pp, ss = calculate_trps(x + increment, x, given, alpha, rho)
+    y = pp - ss # Reciprocity
+    #y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
+    # y = rr - pp # Partner choice
+    y *= 500
     mask = x + increment > qbeq(0.0, alpha, rho)
-    reciprocator[mask] = None
+    y[mask] = None
 
-    return (reciprocator - non_reciprocator) * 500
+    return y

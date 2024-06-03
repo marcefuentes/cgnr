@@ -53,6 +53,16 @@ def calculate_fitness(x, y, given, alpha, rho):
     return w
 
 
+def calculate_trps(high, low, given, alpha, rho):
+    """Calculates the fitness of the four possible trait pairs."""
+
+    tt = fitness(high, low, given, alpha, rho)
+    rr = fitness(high, high, given, alpha, rho)
+    pp = fitness(low, low, given, alpha, rho)
+    ss = fitness(low, high, given, alpha, rho)
+    return tt, rr, pp, ss
+
+
 def fitness(x, y, given, alpha, rho):
     """Compute fitness."""
 
