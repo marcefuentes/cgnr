@@ -5,12 +5,12 @@ import numpy as np
 from modules.theory import fitness, qbeq
 
 
-def data(config_data, dynamic_data, data_constants):
+def data(options, dynamic_data, data_constants):
     """Main function."""
 
     x = np.linspace(0.001, 0.999, num=data_constants["n_x_values"])
 
-    if config_data["single_folder"] and config_data["single_trait"]:
+    if options["single_folder"] and options["single_trait"]:
         given = float(os.path.basename(os.getcwd()))
     else:
         given = float(data_constants["given_folder"])

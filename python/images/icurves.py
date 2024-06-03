@@ -21,7 +21,7 @@ from modules_icurves.update_artists import update_artists
 from settings_icurves.image import image
 
 
-def main(config_data):
+def main(options):
     """Main function"""
 
     start_time = time.perf_counter()
@@ -67,7 +67,7 @@ def main(config_data):
 
     format_axes(axes_args, image)
 
-    save_file(fig, update_args, config_data, dynamic_data)
+    save_file(fig, update_args, options, dynamic_data)
 
     # pylint: disable=duplicate-code
     close_plt(fig)

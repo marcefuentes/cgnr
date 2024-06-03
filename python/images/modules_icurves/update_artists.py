@@ -8,10 +8,10 @@ from modules.theory import fitness, indifference, qbeq
 from settings_icurves.image import image
 
 
-def update_artists(given, update_args, config_data, dynamic_data):
+def update_artists(given, update_args, options, dynamic_data):
     """Update data in artists."""
 
-    if config_data["movie"]:
+    if options["movie"]:
         dynamic_data["text"].set_text(f"{given:.2f}")
 
     budget_own = (1.0 - dynamic_data["x_values"]) * (1.0 - given)

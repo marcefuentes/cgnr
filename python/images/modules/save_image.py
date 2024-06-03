@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 
 
-def save_image(update_args, config_data, dynamic_data):
+def save_image(update_args, options, dynamic_data):
     """Process the figure"""
 
     plt.rcParams["pdf.fonttype"] = 42
@@ -11,7 +11,7 @@ def save_image(update_args, config_data, dynamic_data):
 
     if update_args["function"] is not None:
         update_args["function"](
-            dynamic_data["frames"][-1], update_args, config_data, dynamic_data
+            dynamic_data["frames"][-1], update_args, options, dynamic_data
         )
     plt.savefig(f"{update_args['file_name']}.png", transparent=False)
 

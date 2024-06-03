@@ -3,7 +3,7 @@
 from matplotlib.animation import FuncAnimation
 
 
-def save_movie(fig, update_args, config_data, dynamic_data):
+def save_movie(fig, update_args, options, dynamic_data):
     """Function to create a movie"""
 
     movie = {
@@ -12,7 +12,7 @@ def save_movie(fig, update_args, config_data, dynamic_data):
         "func": update_args["function"],
         "fargs": (
             update_args,
-            config_data,
+            options,
             dynamic_data,
         ),
         "blit": True,

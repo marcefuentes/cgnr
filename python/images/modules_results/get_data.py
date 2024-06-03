@@ -13,16 +13,16 @@ import settings_results.layouts_single_trait as s_trait
 from settings_project.project import project
 
 
-def get_columns(config_data):
+def get_columns(options):
     """Get the columns for the given trait_set."""
 
-    if config_data["single_trait"] and config_data["single_folder"]:
+    if options["single_trait"] and options["single_folder"]:
         columns = [""]
         return columns
-    if config_data["single_trait"]:
+    if options["single_trait"]:
         columns = s_trait.columns
         return columns
-    columns = s_folder.columns[config_data["trait_set"]]
+    columns = s_folder.columns[options["trait_set"]]
     return columns
 
 
@@ -137,7 +137,12 @@ def get_df_single_trait(histogram, movie, clean):
         )
         df_socials.append(
             [
-                get_df(f"{column}_{suffix}/none/0.0", csv0, movie, clean)
+                get_df(
+                    f"{column}_{suffix}/none/0.0",
+                    csv0,
+                    movie,
+                    clean
+                )
                 for column in s_trait.columns
             ]
         )
@@ -161,22 +166,22 @@ def get_df_single_trait_single_folder(histogram, movie, clean):
     return df, df_none, df_social, dffrq, df_social[0][0]
 
 
-def get_rows(config_data):
+def get_rows(options):
     """Get the rows for the given trait_set."""
 
-    if config_data["single_trait"] and config_data["single_folder"]:
+    if options["single_trait"] and options["single_folder"]:
         return [""]
-    if config_data["single_trait"]:
+    if options["single_trait"]:
         return s_trait.rows
-    return s_folder.rows.get(config_data["trait_set"], s_folder.rows["default"])
+    return s_folder.rows.get(options["trait_set"], s_folder.rows["default"])
 
 
-def get_data(config_data):
+def get_data(options):
     """Get the df args for the given trait_set."""
 
     dynamic_data = {}
 
-    if config_data["single_trait"] and config_data["single_folder"]:
+    if options["single_trait"] and options["single_folder"]:
         (
             dynamic_data["dfs"],
             dynamic_data["df_none"],
@@ -184,12 +189,12 @@ def get_data(config_data):
             dynamic_data["dffrqs"],
             df,
         ) = get_df_single_trait_single_folder(
-            config_data["histogram"],
-            config_data["movie"],
-            config_data["clean"],
+            options["histogram"],
+            options["movie"],
+            options["clean"],
         )
 
-    elif config_data["single_trait"]:
+    elif options["single_trait"]:
         (
             dynamic_data["dfs"],
             dynamic_data["df_none"],
@@ -197,9 +202,9 @@ def get_data(config_data):
             dynamic_data["dffrqs"],
             df,
         ) = get_df_single_trait(
-            config_data["histogram"],
-            config_data["movie"],
-            config_data["clean"],
+            options["histogram"],
+            options["movie"],
+            options["clean"],
         )
     else:
         (
@@ -209,16 +214,16 @@ def get_data(config_data):
             dynamic_data["dffrqs"],
             df,
         ) = get_df_single_folder(
-            config_data["trait_set"],
-            config_data["histogram"],
-            config_data["movie"],
-            config_data["clean"],
+            options["trait_set"],
+            options["histogram"],
+            options["movie"],
+            options["clean"],
         )
 
     dynamic_data["frames"] = df.Time.unique()
     dynamic_data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     dynamic_data["logess"] = np.sort(df["logES"].unique())
-    if config_data["fitness"]:
+    if options["fitness"]:
         dynamic_data["rhos"] = 1.0 - 1.0 / np.power(2.0, dynamic_data["logess"])
 
     return dynamic_data
