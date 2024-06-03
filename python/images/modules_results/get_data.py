@@ -137,12 +137,7 @@ def get_df_single_trait(histogram, movie, clean):
         )
         df_socials.append(
             [
-                get_df(
-                    f"{column}_{suffix}/none/0.0",
-                    csv0,
-                    movie,
-                    clean
-                )
+                get_df(f"{column}_{suffix}/none/0.0", csv0, movie, clean)
                 for column in s_trait.columns
             ]
         )
