@@ -1,10 +1,14 @@
 """ Titles for the plots. """
 
 titles = {
-    "nolang_noshuffle": "No shuffling\nShort memory",
-    "nolang_shuffle": "Shuffling\nShort memory",
-    "lang_noshuffle": "No shuffling\nLong memory",
-    "lang_shuffle": "Shuffling\nLong memory",
+    # "nolang_noshuffle": "No shuffling\nShort memory",
+    # "nolang_shuffle": "Shuffling\nShort memory",
+    # "lang_noshuffle": "No shuffling\nLong memory",
+    # "lang_shuffle": "Shuffling\nLong memory",
+    "nolang_noshuffle": "No shuffling",
+    "nolang_shuffle": "Shuffling",
+    "lang_noshuffle": "No shuffling",
+    "lang_shuffle": "Shuffling",
     "none": "",
     "p": "P",
     "d": "D",

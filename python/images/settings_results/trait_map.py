@@ -51,6 +51,11 @@ trait_map = {
         "frq": "w",
         "relative": "no",
     },
+    "w_alleviate": {
+        "mean": "wmean",
+        "frq": "w",
+        "relative": "-none",
+    },
     "w_excess": {
         "mean": "wmean",
         "frq": "w",
