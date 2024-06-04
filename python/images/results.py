@@ -56,7 +56,6 @@ def main(options):
     dynamic_data["text"] = fig.texts[2]
 
     update_args = {
-        "file_name": os.path.basename(__file__).split(".")[0],
         "function": update_artists,
     }
 
@@ -90,22 +89,23 @@ def main(options):
         "y_lim": [None, None],
     }
 
+    file_name = os.path.basename(__file__).split(".")[0]
     if options["fitness"]:
         axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
-        update_args["file_name"] += "_fitness"
+        file_name += "_fitness"
     elif options["histogram"]:
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
-        update_args["file_name"] += "_histogram"
+        file_name += "_histogram"
 
     format_axes(axes_args, image)
 
     if options["trait_set"] == "all_traits":
         for trait in data_constants["all_traits"]:
             options["trait_set"] = trait
-            update_args["file_name"] += f"_{trait}"
+            update_args["file_name"] = f"{file_name}_{trait}"
             save_file(fig, update_args, options, dynamic_data)
     else:
-        update_args["file_name"] += f"_{options['trait_set']}"
+        update_args["file_name"] = f"{file_name}_{options['trait_set']}"
         save_file(fig, update_args, options, dynamic_data)
     close_plt(fig)
 
