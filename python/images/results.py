@@ -75,7 +75,7 @@ def main(options):
             dynamic_data["logess"][mc // 2],
             dynamic_data["logess"][-1],
         ],
-        "column_titles": get_titles(options["columns"], titles),
+        "column_titles": get_titles(True, options["columns"], titles),
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": mc,
         "nr": mr,
@@ -84,7 +84,7 @@ def main(options):
             dynamic_data["alphas"][mr // 2],
             dynamic_data["alphas"][-1],
         ],
-        "row_titles": get_titles(options["rows"], titles),
+        "row_titles": get_titles(image["add_row_titles"], options["rows"], titles),
         "x_lim": [None, None],
         "y_lim": [None, None],
     }

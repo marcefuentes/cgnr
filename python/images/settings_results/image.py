@@ -3,6 +3,7 @@
 PLOT_SIZE = 4
 
 image = {
+    "add_row_titles": False,
     "big_label_size": 9 * PLOT_SIZE,
     "border_color": "0.3",
     "border_width": 0.1 * PLOT_SIZE,
