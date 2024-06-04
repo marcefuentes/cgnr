@@ -112,18 +112,6 @@ def get_df_single_trait(histogram, movie, clean):
                 for column in s_trait.columns
             ]
         )
-        if histogram:
-            dffrqs.append(
-                [
-                    get_df(
-                        f"{column}_{suffix}/{row}/{given_folder}",
-                        csv1,
-                        movie,
-                        clean,
-                    )
-                    for column in s_trait.columns
-                ]
-            )
         df_nones.append(
             [
                 get_df(
@@ -141,6 +129,18 @@ def get_df_single_trait(histogram, movie, clean):
                 for column in s_trait.columns
             ]
         )
+        if histogram:
+            dffrqs.append(
+                [
+                    get_df(
+                        f"{column}_{suffix}/{row}/{given_folder}",
+                        csv1,
+                        movie,
+                        clean,
+                    )
+                    for column in s_trait.columns
+                ]
+            )
 
     return dfs, df_nones, df_socials, dffrqs, df_socials[0][0]
 
@@ -153,10 +153,10 @@ def get_df_single_trait_single_folder(histogram, movie, clean):
 
     df, dffrq, df_none, df_social = [[]], [[]], [[]], [[]]
     df[0].append(get_df(".", csv0, movie, clean))
-    if histogram:
-        dffrq[0].append(get_df(".", csv1, movie, clean))
     df_none[0].append(get_df(f"../../none/{given_folder}", csv0, movie, clean))
     df_social[0].append(get_df("../../none/0.0", csv0, movie, clean))
+    if histogram:
+        dffrq[0].append(get_df(".", csv1, movie, clean))
 
     return df, df_none, df_social, dffrq, df_social[0][0]
 
