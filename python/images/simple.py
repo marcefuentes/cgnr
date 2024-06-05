@@ -22,6 +22,7 @@ from modules_simple.init_artists import init_imshow, init_line2d
 from modules_simple.parse_args import parse_args
 from modules_simple.update_artists import update_artists
 
+from settings_project.project import project
 from settings_simple.data_constants import data_constants
 from settings_simple.image import image
 
@@ -36,7 +37,12 @@ def main(options):
         options["mechanism"],
         options["given"]
     )
-    dynamic_data = get_dynamic_data(data_layout, options)
+    dynamic_data = get_dynamic_data(
+        data_layout,
+        options,
+        *project["output_file_extensions"],
+    )
+
     mr = len(dynamic_data["alphas"])
     mc = len(dynamic_data["logess"])
 
@@ -72,7 +78,7 @@ def main(options):
             ),
         )
     elif options["histogram"]:
-        update_args["artists"] = init_line2d(axs, *static_hist.data(mr, mc))
+        update_args["artists"] = init_line2d(axs, *static_hist.data(project["bins"], mr, mc))
     else:
         update_args["artists"] = init_imshow(axs, mr, mc)
 
@@ -102,7 +108,7 @@ def main(options):
         axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
         file_name += "_fitness"
     elif options["histogram"]:
-        axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims()
+        axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims(project["bins"])
         file_name += "_histogram"
 
     format_axes(axes_args, image)
