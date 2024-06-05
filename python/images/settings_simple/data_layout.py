@@ -33,17 +33,17 @@ default = {
     "row_titles": ["", ""],
 }
 
-variant = "nolang_noshuffle_cost15_4"
+given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
+given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
 mechanism = "none"
-variant_list = [[variant for _ in range(ncols)] for _ in range(nrows)]
-variant_control_list = [[None for _ in range(ncols)] for _ in range(nrows)]
-mechanism_list = [[mechanism for _ in range(ncols)] for _ in range(nrows)]
-mechanism_control_list = [[None for _ in range(ncols)] for _ in range(nrows)]
-given_list = [["1.0", "1.0"], ["0.0", "0.0"]]
-given_control_list = [[None for _ in range(ncols)] for _ in range(nrows)]
+mechanism_list = [[mechanism, mechanism], [mechanism, mechanism], [mechanism, mechanism]]
+mechanism_control_list = [[None, mechanism], [None, mechanism], [None, mechanism]]
+variant = "nolang_noshuffle_cost15_4"
+variant_list = [[variant, variant], [variant, variant], [variant, variant]]
+variant_control_list = [[None, variant], [None, variant], [None, variant]]
 
 figure_2 = {
-    "column_titles": ["No shuffling", "Shuffling"],
+    "column_titles": ["Fitness", "Fitness\nrelative to optimum"],
     "folder_given": given_list,
     "folder_given_control": given_control_list,
     "folder_mechanism": mechanism_list,
