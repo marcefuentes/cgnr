@@ -26,7 +26,7 @@ def data(num, given, alphas, rhos):
     mask = y <= 0
     y[mask] = None
 
-    return y
+    return x, y
 
 
 def process_plot(x, given, alpha, rho):
