@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from settings_results.image import image
+from settings_simple.image import image
 
 
 def init_imshow(axs, mr, mc):
