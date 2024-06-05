@@ -12,13 +12,13 @@ from modules.format_fig import get_distances, format_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_results.get_sm import get_sm
-from modules_results.init_artists import init_imshow, init_line2d
 
-from modules_simple.get_data import get_data
+from modules_simple.get_dynamic_data import get_dynamic_data
 from modules_simple.get_data_layout import get_data_layout
+from modules_simple.get_sm import get_sm
 import modules_simple.get_static_fitness as static_fitness
 import modules_simple.get_static_hist as static_hist
+from modules_simple.init_artists import init_imshow, init_line2d
 from modules_simple.parse_args import parse_args
 from modules_simple.update_artists import update_artists
 
@@ -36,7 +36,7 @@ def main(options):
         options["mechanism"],
         options["given"]
     )
-    dynamic_data = get_data(data_layout, options)
+    dynamic_data = get_dynamic_data(data_layout, options)
     mr = len(dynamic_data["alphas"])
     mc = len(dynamic_data["logess"])
 
