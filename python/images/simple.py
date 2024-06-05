@@ -58,7 +58,7 @@ def main(options):
 
     if options["fitness"]:
         update_args["artists"] = init_line2d(
-            axs, 
+            axs,
             *static_fitness.data(
                 data_constants["n_x_values"],
                 float(data_layout["given"]),

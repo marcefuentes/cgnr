@@ -31,11 +31,17 @@ def get_data(data_layout, options):
     for i, row in enumerate(data_layout["folder_variant"]):
         for j, variant in enumerate(row):
             path = f"{variant}/{data_layout['folder_mechanism'][i][j]}/{data_layout['folder_given'][i][j]}"
-            dynamic_data["dfs"][i, j] = get_df(path, csv, options["movie"], options["clean"])
+            dynamic_data["dfs"][i, j] = get_df(
+                path, csv, options["movie"], options["clean"]
+            )
             if options["histogram"]:
-                dynamic_data["dffrqs"][i, j] = get_df(path, frq, options["movie"], options["clean"])
+                dynamic_data["dffrqs"][i, j] = get_df(
+                    path, frq, options["movie"], options["clean"]
+                )
             path = f"{variant}/{data_layout['folder_mechanism_control'][i][j]}/{data_layout['folder_given_control'][i][j]}"
-            dynamic_data["dfs_control"][i, j] = get_df(path, csv, options["movie"], options["clean"])
+            dynamic_data["dfs_control"][i, j] = get_df(
+                path, csv, options["movie"], options["clean"]
+            )
 
     df = dynamic_data["dfs"][0, 0]
 

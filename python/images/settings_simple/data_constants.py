@@ -1,6 +1,5 @@
 """ data constants for results. """
 
-
 data_constants = {
     "all_traits": [
         "ChooseGrain",

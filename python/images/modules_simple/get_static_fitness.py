@@ -34,8 +34,8 @@ def process_plot(x, given, alpha, rho):
 
     increment = 0.001
     tt, rr, pp, ss = calculate_trps(x + increment, x, given, alpha, rho)
-    y = pp - ss # Reciprocity
-    #y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
+    y = pp - ss  # Reciprocity
+    # y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
     # y = rr - pp # Partner choice
     y *= 500
     mask = x + increment > qbeq(0.0, alpha, rho)
