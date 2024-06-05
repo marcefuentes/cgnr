@@ -7,9 +7,9 @@ import numpy as np
 
 from matplotlib import colormaps
 
-from settings_results.image import image
 from settings_results.trait_map import trait_map
-from modules_results.get_zmatrix import get_zmatrix
+from settings_results.image import image
+from modules_simple.get_zmatrix import get_zmatrix
 
 
 def update_artists(t, update_args, options, dynamic_data):
@@ -18,14 +18,22 @@ def update_artists(t, update_args, options, dynamic_data):
     if options["movie"]:
         options["text"].set_text(t)
 
-    for i, _ in enumerate(options["rows"]):
-        for j, _ in enumerate(options["columns"]):
-            zmatrix = update_zmatrix(t, options, dynamic_data, i, j)
+    if options["histogram"]:
+        trait = trait_map[options["trait_set"]]["frq"]
+
+    for i, row in enumerate(dynamic_data["dfs"]):
+        for j, _ in enumerate(row):
+            zmatrix = update_zmatrix(
+                t,
+                dynamic_data["dfs"][i, j],
+                dynamic_data["dfs_control"][i, j],
+                options["trait_set"],
+            )
             artists = update_args["artists"][i, j]
             if options["fitness"] or options["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix)
                 if options["histogram"]:
-                    df, trait = get_frq(options, dynamic_data, i, j)
+                    df = dynamic_data["dffrqs"][i, j]
                     if df.empty:
                         continue
                     df = df[df["Time"] == t]
@@ -66,23 +74,10 @@ def update_artists_line2d(artists, zmatrix):
     return artists
 
 
-def update_zmatrix(t, options, dynamic_data, i, j):
+def update_zmatrix(t, df, df_control, trait_in):
     """Return the updated zmatrix for a given time and trait."""
 
-    if options["single_trait"]:
-        trait_in = options["trait_set"]
-        df = dynamic_data["dfs"][i][j]
-        df_none = dynamic_data["df_none"][i][j]
-        df_social = dynamic_data["df_social"][i][j]
-    else:
-        trait_in = options["columns"][j]
-        df = dynamic_data["dfs"][i]
-        df_none = dynamic_data["df_none"]
-        df_social = dynamic_data["df_social"]
-
-    none = bool(options["rows"][i] == "none" and options["trait_set"] != "none")
-
-    if not options["single_folder"] and ("nothing" in trait_in or df.empty):
+    if "nothing" in trait_in or df.empty:
         zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
         return zmatrix
 
@@ -90,21 +85,9 @@ def update_zmatrix(t, options, dynamic_data, i, j):
         print(f"Trait {trait_in} not in dictionary trait_map.py->trait_map.")
         sys.exit()
     trait = trait_map[trait_in]["mean"]
-    relative = trait_map[trait_in]["relative"]
-    zmatrix = get_zmatrix(t, df, trait)
+    zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
 
-    if relative == "-none":
-        zmatrix = zmatrix - get_zmatrix(t, df_none, trait)
-    elif relative == "none-":
-        if none:
-            zmatrix = 0.5 - zmatrix
-        else:
-            zmatrix = get_zmatrix(t, df_none, trait) - zmatrix
-    elif relative == "-social":
-        zmatrix = zmatrix - get_zmatrix(t, df_social, trait)
-    elif relative == "given":
-        zmatrix = zmatrix * df.iloc[0]["Given"]
-    elif relative == "neutral":
-        zmatrix = zmatrix - get_zmatrix(t, df, f"Neutral{trait}")
+    if "Grain" in trait:
+        zmatrix = -zmatrix
 
     return zmatrix

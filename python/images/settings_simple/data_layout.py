@@ -7,13 +7,13 @@ folder_variant_list = [
     ]
 folder_variant_control_list = folder_variant_list
 
-nrows = len(folder_variant_list)
-ncols = len(folder_variant_list[0]) if nrows > 0 else 0
-
 mechanism = "p"
 given = "1.0"
 mechanism_control = "none"
-given_control = "1.0"
+given_control = given
+
+nrows = len(folder_variant_list)
+ncols = len(folder_variant_list[0]) if nrows > 0 else 0
 
 mechanism_list = [[mechanism for _ in range(ncols)] for _ in range(nrows)]
 mechanism_control_list = [[mechanism_control for _ in range(ncols)] for _ in range(nrows)]
@@ -28,5 +28,6 @@ data_layout = {
     "folder_mechanism_control": mechanism_control_list,
     "folder_variant": folder_variant_list,
     "folder_variant_control": folder_variant_control_list,
+    "given": given,
     "row_titles": ["", ""],
 }

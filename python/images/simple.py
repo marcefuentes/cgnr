@@ -9,18 +9,17 @@ from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.get_titles import get_titles
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
-from modules_results.update_artists import update_artists
 
 from modules_simple.get_data import get_data
 import modules_simple.get_static_fitness as static_fitness
 import modules_simple.get_static_hist as static_hist
+from modules_simple.update_artists import update_artists
 
 from settings_simple.data_constants import data_constants
 from settings_simple.data_layout import data_layout
@@ -61,8 +60,8 @@ def main(options):
         update_args["artists"] = init_line2d(
             axs, 
             *static_fitness.data(
-                data_constants.n_x_values,
-                float(data_layout.given),
+                data_constants["n_x_values"],
+                float(data_layout["given"]),
                 dynamic_data["alphas"],
                 dynamic_data["rhos"],
             ),
