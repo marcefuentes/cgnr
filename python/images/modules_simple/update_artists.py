@@ -16,7 +16,7 @@ def update_artists(t, update_args, options, dynamic_data):
     """Update artist data at time t."""
 
     if options["movie"]:
-        options["text"].set_text(t)
+        dynamic_data["text"].set_text(t)
 
     if options["histogram"]:
         trait = trait_map[options["trait_set"]]["frq"]

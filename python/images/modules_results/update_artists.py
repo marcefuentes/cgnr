@@ -28,7 +28,7 @@ def update_artists(t, update_args, options, dynamic_data):
     """Update artist data at time t."""
 
     if options["movie"]:
-        options["text"].set_text(t)
+        dynamic_data["text"].set_text(t)
 
     for i, _ in enumerate(options["rows"]):
         for j, _ in enumerate(options["columns"]):
