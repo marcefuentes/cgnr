@@ -7,8 +7,8 @@ import numpy as np
 
 from matplotlib import colormaps
 
-from settings_results.trait_map import trait_map
-from settings_results.image import image
+from settings_simple.trait_map import trait_map
+from settings_simple.image import image
 from modules_simple.get_zmatrix import get_zmatrix
 
 
