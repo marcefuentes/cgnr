@@ -38,10 +38,11 @@ def get_data(data_layout, options):
                 dynamic_data["dffrqs"][i, j] = get_df(
                     path, frq, options["movie"], options["clean"]
                 )
-            path = f"{variant}/{data_layout['folder_mechanism_control'][i][j]}/{data_layout['folder_given_control'][i][j]}"
-            dynamic_data["dfs_control"][i, j] = get_df(
-                path, csv, options["movie"], options["clean"]
-            )
+            if data_layout["folder_mechanism_control"][i][j] not in ["", "None"]:
+                path = f"{variant}/{data_layout['folder_mechanism_control'][i][j]}/{data_layout['folder_given_control'][i][j]}"
+                dynamic_data["dfs_control"][i, j] = get_df(
+                    path, csv, options["movie"], options["clean"]
+                )
 
     df = dynamic_data["dfs"][0, 0]
 

@@ -85,6 +85,12 @@ def update_zmatrix(t, df, df_control, trait_in):
         print(f"Trait {trait_in} not in dictionary trait_map.py->trait_map.")
         sys.exit()
     trait = trait_map[trait_in]["mean"]
+    if df_control.empty:
+        zmatrix = get_zmatrix(t, df, trait)
+        if "Grain" in trait:
+            zmatrix = 1.0 - zmatrix
+        return zmatrix
+
     zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
 
     if "Grain" in trait:
