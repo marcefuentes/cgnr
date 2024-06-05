@@ -14,15 +14,15 @@ from modules.save_image import close_plt
 
 from modules_results.get_sm import get_sm
 from modules_results.init_artists import init_imshow, init_line2d
-from modules_results.parse_args import parse_args
 
 from modules_simple.get_data import get_data
+from modules_simple.get_data_layout import get_data_layout
 import modules_simple.get_static_fitness as static_fitness
 import modules_simple.get_static_hist as static_hist
+from modules_simple.parse_args import parse_args
 from modules_simple.update_artists import update_artists
 
 from settings_simple.data_constants import data_constants
-from settings_simple.data_layout import data_layout
 from settings_simple.image import image
 
 
@@ -31,6 +31,11 @@ def main(options):
 
     start_time = time.perf_counter()
 
+    data_layout = get_data_layout(
+        options["figure"],
+        options["mechanism"],
+        options["given"]
+    )
     dynamic_data = get_data(data_layout, options)
     mr = len(dynamic_data["alphas"])
     mc = len(dynamic_data["logess"])

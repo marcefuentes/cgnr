@@ -3,33 +3,13 @@
 import argparse
 import os
 
-import settings_results.layouts_single_folder as s_folder
 from settings_results.trait_map import trait_map
 
 
 def parse_args():
     """Parse command line arguments and return them as a dictionary"""
 
-    folder = os.path.basename(os.getcwd())
-
-    if folder.startswith("0") or folder.startswith("1"):
-        single_trait = True
-        single_folder = True
-        description = "description: Plot results for a trait in this folder"
-        choices_trait_set = list(trait_map.keys())
-        arg_help = "trait (required)"
-    elif folder == "results":
-        single_trait = True
-        single_folder = False
-        description = "description: Plot results for a trait across several variants"
-        choices_trait_set = list(trait_map.keys())
-        arg_help = "trait (required)"
-    else:
-        single_trait = False
-        single_folder = False
-        description = "description: Plot results for several traits in this variant"
-        choices_trait_set = list(s_folder.columns.keys())
-        arg_help = "trait set (required)"
+    description = "description: Plot results"
 
     parser = argparse.ArgumentParser(
         description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -38,8 +18,26 @@ def parse_args():
     args_dict = {
         "trait_set": {
             "type": str,
-            "choices": choices_trait_set,
-            "help": arg_help,
+            "choices": list(trait_map.keys()),
+            "help": "trait (required)",
+        },
+        "figure": {
+            "type": str,
+            "choices": ["figure_2", "figure_3"],
+            "default": "figure_3",
+            "help": "figure",
+        },
+        "given": {
+            "type": str,
+            "choices": ["0.5", "1.0"],
+            "default": "1.0",
+            "help": "given folder",
+        },
+        "mechanism": {
+            "type": str,
+            "choices": ["none", "d", "i", "p", "pd", "pi"],
+            "default": "none",
+            "help": "mechanism",
         },
         "fitness": {"action": "store_true", "help": "add fitness curve"},
         "histogram": {"action": "store_true", "help": "add histogram"},
@@ -51,7 +49,8 @@ def parse_args():
         parser.add_argument(f"--{arg}", **params)
 
     args = parser.parse_args()
-    args.single_trait = single_trait
-    args.single_folder = single_folder
+
+    if args.figure == "figure_2":
+        args.trait_set = "w"
 
     return args

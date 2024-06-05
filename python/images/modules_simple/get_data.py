@@ -7,7 +7,6 @@ import sys
 import numpy as np
 import pandas as pd
 
-from settings_simple.data_layout import data_layout
 from settings_project.project import project
 
 
