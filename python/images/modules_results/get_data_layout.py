@@ -60,9 +60,9 @@ def curves(trait):
 
     variant = "nolang_noshuffle_cost15_4"
 
-    if trait == "MimicGrain":
+    if "Mimic" in trait:
         mechanism = "d"
-    elif trait == "ChooseGrain":
+    elif "Choose" in trait:
         mechanism = "p"
 
     layout = {

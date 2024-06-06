@@ -3,8 +3,6 @@
 import argparse
 import os
 
-from settings_results.trait_map import trait_map
-
 
 def parse_args():
     """Parse command line arguments and return them as a dictionary"""
@@ -18,7 +16,6 @@ def parse_args():
     args_dict = {
         "trait": {
             "type": str,
-            "choices": list(trait_map.keys()),
             "help": "trait (required)",
         },
         "figure": {
@@ -29,7 +26,7 @@ def parse_args():
         },
         "given": {
             "type": str,
-            "choices": ["0.5", "1.0"],
+            "choices": ["0.0", "0.5", "1.0"],
             "default": "1.0",
             "help": "given folder",
         },

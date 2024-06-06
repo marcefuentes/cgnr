@@ -7,7 +7,6 @@ import numpy as np
 
 from matplotlib import colormaps
 
-from settings_results.trait_map import trait_map
 from settings_results.image import image
 from modules_results.get_zmatrix import get_zmatrix
 
@@ -47,10 +46,9 @@ def update_artists(t, update_args, options, dynamic_data):
     return artists.flatten()
 
 
-def update_artists_histogram(artists, df, alphas, logess, trait_in):
+def update_artists_histogram(artists, df, alphas, logess, trait):
     """Update histograms."""
 
-    trait = trait_map[trait_in]["frq"]
     for i, alpha in enumerate(alphas):
         for j, loges in enumerate(logess):
             d = df[(df["alpha"] == alpha) & (df["logES"] == loges)]
@@ -72,14 +70,13 @@ def update_artists_line2d(artists, zmatrix):
     return artists
 
 
-def update_zmatrix(t, df, df_control, trait_in):
+def update_zmatrix(t, df, df_control, trait):
     """Return the updated zmatrix for a given time and trait."""
 
-    if "nothing" in trait_in or df.empty:
+    if "nothing" in trait or df.empty:
         zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
         return zmatrix
 
-    trait = trait_map[trait_in]["mean"]
     if df_control.empty:
         zmatrix = get_zmatrix(t, df, trait)
         if "Grain" in trait:
