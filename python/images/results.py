@@ -48,9 +48,9 @@ def main(options):
 
     fig_layout = {
         "nc": 1,
-        "ncols": len(data_layout["folder_variant"][0]),
+        "ncols": len(data_layout["variants"][0]),
         "nr": 1,
-        "nrows": len(data_layout["folder_variant"]),
+        "nrows": len(data_layout["variants"]),
     }
 
     if options["fitness"] or options["histogram"]:
@@ -72,7 +72,7 @@ def main(options):
             axs,
             *static_fitness.data(
                 data_constants["n_x_values"],
-                float(data_layout["given"]),
+                data_layout["givens"],
                 dynamic_data["alphas"],
                 dynamic_data["rhos"],
             ),

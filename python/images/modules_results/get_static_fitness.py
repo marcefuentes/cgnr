@@ -13,15 +13,17 @@ def lims():
     return x_lim, y_lim
 
 
-def data(num, given, alphas, rhos):
+def data(num, givens, alphas, rhos):
     """Calculates fitness curves."""
 
     x = np.linspace(0.001, 0.999, num=num)
-    y = np.zeros((len(alphas), len(rhos), len(x)))
+    y = np.zeros((len(givens), len(givens[0]), len(alphas), len(rhos), len(x)))
 
-    for i, alpha in enumerate(alphas):
-        for j, rho in enumerate(rhos):
-            y[i, j] = process_plot(x, given, alpha, rho)
+    for i, givens_row in enumerate(givens):
+        for j, given in enumerate(givens_row):
+            for k, alpha in enumerate(alphas):
+                for m, rho in enumerate(rhos):
+                    y[i, j, k, m] = process_plot(x, float(given), alpha, rho)
 
     mask = y <= 0
     y[mask] = None

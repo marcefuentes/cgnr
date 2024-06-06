@@ -42,7 +42,7 @@ def init_line2d(axs, x, y):
                 for m in range(axs.shape[3]):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x,
-                        y[k, m],
+                        y[i, j, k, m],
                         **params,
                     )
     return artists

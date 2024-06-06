@@ -23,7 +23,7 @@ def parse_args():
         },
         "figure": {
             "type": str,
-            "choices": ["figure_2", "figure_3"],
+            "choices": ["figure_2", "figure_3", "p_fitness"],
             "default": "figure_3",
             "help": "figure",
         },

@@ -2,7 +2,7 @@
 
 
 def figure_2():
-    """ Data layout for Figure 2. """
+    """ Figure 2. """
 
     variant_list = [
         ["nolang_noshuffle_cost15_4", "nolang_noshuffle_cost15_4"],
@@ -18,13 +18,12 @@ def figure_2():
 
     layout = {
         "column_titles": ["Fitness", "Fitness\nrelative to optimum"],
-        "folder_given": [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]],
-        "folder_given_control": [[None, 0.0], [None, "0.0"], [None, "0.0"]],
-        "folder_mechanism": [["none", "none"], ["none", "none"], ["none", "none"]],
-        "folder_mechanism_control": [[None, "none"], [None, "none"], [None, "none"]],
-        "folder_variant": variant_list,
-        "folder_variant_control": variant_control_list,
-        "given": "",
+        "givens": [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]],
+        "givens_control": [[None, 0.0], [None, "0.0"], [None, "0.0"]],
+        "mechanisms": [["none", "none"], ["none", "none"], ["none", "none"]],
+        "mechanisms_control": [[None, "none"], [None, "none"], [None, "none"]],
+        "variants": variant_list,
+        "variants_control": variant_control_list,
         "row_titles": ["", ""],
     }
 
@@ -32,7 +31,7 @@ def figure_2():
 
 
 def figure_3(mechanism, given):
-    """ Data layout for Figure 3 and subsequent ones. """
+    """ Figure 3 and subsequent ones. """
 
     variant_list = [
         ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
@@ -44,14 +43,34 @@ def figure_3(mechanism, given):
 
     layout = {
         "column_titles": ["No shuffling", "Shuffling"],
-        "folder_given": [[given for _ in range(ncols)] for _ in range(nrows)],
-        "folder_given_control": [[given for _ in range(ncols)] for _ in range(nrows)],
-        "folder_mechanism": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
-        "folder_mechanism_control": [["none" for _ in range(ncols)] for _ in range(nrows)],
-        "folder_variant": variant_list,
-        "folder_variant_control": variant_list,
-        "given": given,
+        "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
+        "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
+        "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
+        "mechanisms_control": [["none" for _ in range(ncols)] for _ in range(nrows)],
+        "variants": variant_list,
+        "variants_control": variant_list,
         "row_titles": ["", ""],
+    }
+
+    return layout
+
+
+def p_fitness():
+    """ Fitness curves for partner choice. """
+
+    variant_list = [
+        ["nolang_noshuffle_cost15_4", "nolang_noshuffle_cost15_4"],
+    ]
+
+    layout = {
+        "column_titles": ["0.5", "1.0"],
+        "givens": [["0.5", "1.0"]],
+        "givens_control": [["0.5", "1.0"]],
+        "mechanisms": [["p", "p"]],
+        "mechanisms_control": [["none", "none"]],
+        "variants": variant_list,
+        "variants_control": variant_list,
+        "row_titles": [""],
     }
 
     return layout
@@ -64,5 +83,7 @@ def get_data_layout(figure, mechanism, given):
         return figure_2()
     elif figure == "figure_3":
         return figure_3(mechanism, given)
+    elif figure == "p_fitness":
+        return p_fitness()
     else:
         raise ValueError(f"Unknown figure: {figure}")
