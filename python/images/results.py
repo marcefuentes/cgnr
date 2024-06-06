@@ -16,7 +16,7 @@ from modules.save_image import close_plt
 from modules_results.get_dynamic_data import get_dynamic_data
 from modules_results.get_data_layout import get_data_layout
 from modules_results.get_sm import get_sm
-import modules_results.get_static_fitness as static_fitness
+import modules_results.get_static_curves as static_curves
 import modules_results.get_static_hist as static_hist
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
@@ -33,6 +33,7 @@ def main(options):
 
     data_layout = get_data_layout(
         options["figure"],
+        options["trait"],
         options["mechanism"],
         options["given"]
     )
@@ -52,7 +53,7 @@ def main(options):
         "nrows": len(data_layout["variants"]),
     }
 
-    if options["fitness"] or options["histogram"]:
+    if options["figure"] == "curves" or options["histogram"]:
         fig_layout["nc"] = mc
         fig_layout["nr"] = mr
 
@@ -67,11 +68,12 @@ def main(options):
         "function": update_artists,
     }
 
-    if options["fitness"]:
+    if options["figure"] == "curves":
         update_args["artists"] = init_line2d(
             axs,
-            *static_fitness.data(
+            *static_curves.data(
                 image["n_x_values"],
+                data_layout["traits"],
                 data_layout["givens"],
                 dynamic_data["alphas"],
                 dynamic_data["rhos"],
@@ -103,16 +105,16 @@ def main(options):
         "y_lim": [None, None],
     }
 
-    if options["fitness"]:
-        axes_args["x_lim"], axes_args["y_lim"] = static_fitness.lims()
-        update_args["file_name"] += "_fitness"
+    if options["figure"] == "curves":
+        axes_args["x_lim"], axes_args["y_lim"] = static_curves.lims()
+        update_args["file_name"] += "_curves"
     elif options["histogram"]:
         axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims(project["bins"])
         update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)
 
-    update_args["file_name"] += options["trait_set"]
+    update_args["file_name"] += f"_{options['trait']}"
     save_file(fig, update_args, options, dynamic_data)
     close_plt(fig)
 

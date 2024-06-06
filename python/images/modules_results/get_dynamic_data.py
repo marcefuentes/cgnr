@@ -17,6 +17,7 @@ def get_dynamic_data(data_layout, options, csv, frq):
     dynamic_data = {
         "dfs": np.empty((nrows, ncols), dtype=object),
         "dfs_control": np.empty((nrows, ncols), dtype=object),
+        "traits": data_layout["traits"],
     }
 
     for i in range(nrows):
@@ -44,7 +45,7 @@ def get_dynamic_data(data_layout, options, csv, frq):
     dynamic_data["frames"] = df.Time.unique()
     dynamic_data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     dynamic_data["logess"] = np.sort(df["logES"].unique())
-    if options["fitness"]:
+    if options["figure"] == "curves":
         dynamic_data["rhos"] = 1.0 - 1.0 / np.power(2.0, dynamic_data["logess"])
 
     return dynamic_data

@@ -16,14 +16,14 @@ def parse_args():
     )
 
     args_dict = {
-        "trait_set": {
+        "trait": {
             "type": str,
             "choices": list(trait_map.keys()),
             "help": "trait (required)",
         },
         "figure": {
             "type": str,
-            "choices": ["figure_2", "figure_3", "p_fitness"],
+            "choices": ["figure_2", "figure_3", "curves"],
             "default": "figure_3",
             "help": "figure",
         },
@@ -39,7 +39,6 @@ def parse_args():
             "default": "none",
             "help": "mechanism",
         },
-        "fitness": {"action": "store_true", "help": "add fitness curve"},
         "histogram": {"action": "store_true", "help": "add histogram"},
         "movie": {"action": "store_true", "help": "enable movie"},
         "clean": {"action": "store_true", "help": "clean folders"},
@@ -49,8 +48,5 @@ def parse_args():
         parser.add_argument(f"--{arg}", **params)
 
     args = parser.parse_args()
-
-    if args.figure == "figure_2":
-        args.trait_set = "w"
 
     return args

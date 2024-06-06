@@ -18,19 +18,16 @@ def update_artists(t, update_args, options, dynamic_data):
     if options["movie"]:
         dynamic_data["text"].set_text(t)
 
-    if options["histogram"]:
-        trait = trait_map[options["trait_set"]]["frq"]
-
     for i, row in enumerate(dynamic_data["dfs"]):
         for j, _ in enumerate(row):
             zmatrix = update_zmatrix(
                 t,
                 dynamic_data["dfs"][i, j],
                 dynamic_data["dfs_control"][i, j],
-                options["trait_set"],
+                dynamic_data["traits"][i][j],
             )
             artists = update_args["artists"][i, j]
-            if options["fitness"] or options["histogram"]:
+            if options["figure"] == "curves" or options["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix)
                 if options["histogram"]:
                     df = dynamic_data["dffrqs"][i, j]
@@ -42,7 +39,7 @@ def update_artists(t, update_args, options, dynamic_data):
                         df,
                         dynamic_data["alphas"],
                         dynamic_data["logess"],
-                        trait,
+                        dynamic_data["traits"][i][j],
                     )
             else:
                 artists[0, 0].set_array(zmatrix)
@@ -50,9 +47,10 @@ def update_artists(t, update_args, options, dynamic_data):
     return artists.flatten()
 
 
-def update_artists_histogram(artists, df, alphas, logess, trait):
+def update_artists_histogram(artists, df, alphas, logess, trait_in):
     """Update histograms."""
 
+    trait = trait_map[trait_in]["frq"]
     for i, alpha in enumerate(alphas):
         for j, loges in enumerate(logess):
             d = df[(df["alpha"] == alpha) & (df["logES"] == loges)]
@@ -81,9 +79,6 @@ def update_zmatrix(t, df, df_control, trait_in):
         zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
         return zmatrix
 
-    if trait_in not in trait_map:
-        print(f"Trait {trait_in} not in dictionary trait_map.py->trait_map.")
-        sys.exit()
     trait = trait_map[trait_in]["mean"]
     if df_control.empty:
         zmatrix = get_zmatrix(t, df, trait)
