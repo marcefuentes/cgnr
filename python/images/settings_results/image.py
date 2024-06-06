@@ -15,6 +15,7 @@ image = {
     "left_margin": 0.625 * PLOT_SIZE,
     "letter_label_size": 8 * PLOT_SIZE,
     "letter_padding": 0.035,
+    "line_color": "0.4",
     "line_width": 0.05 * PLOT_SIZE,
     "n_x_values": 64,
     "plot_size": PLOT_SIZE,
