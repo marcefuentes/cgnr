@@ -14,14 +14,9 @@ def init_imshow(axs, mr, mc, cmap):
         "vmax": 1,
     }
 
-    for i in range(axs.shape[0]):
-        for j in range(axs.shape[1]):
-            for k in range(axs.shape[2]):
-                for m in range(axs.shape[3]):
-                    artists[i, j, k, m] = axs[i, j, k, m].imshow(
-                        dummy_zmatrix,
-                        **params,
-                    )
+    for idx in np.ndindex(axs.shape):
+        artists[idx] = axs[idx].imshow(dummy_zmatrix, **params)
+
     return artists
 
 
