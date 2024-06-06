@@ -10,7 +10,12 @@ def get_zmatrix(t, df, trait):
         print(f"Trait {trait} not in the dataframe.")
         return None
     m = df.Time == t
-    zmatrix = pd.pivot(df.loc[m], values=trait, index="alpha", columns="logES")
+    params = {
+        "values": trait,
+        "index": "alpha",
+        "columns": "logES",
+    }
+    zmatrix = pd.pivot(df.loc[m], **params)
     zmatrix = zmatrix.sort_index(axis=0, ascending=False)
     zmatrix = zmatrix.to_numpy()
     return zmatrix
