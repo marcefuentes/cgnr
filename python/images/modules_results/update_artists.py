@@ -71,13 +71,13 @@ def update_zmatrix(t, df, df_control, trait):
 
     if df_control.empty:
         zmatrix = get_zmatrix(t, df, trait)
-        if "Grain" in trait:
+        if "Grainmean" in trait:
             zmatrix = 1.0 - zmatrix
         return zmatrix
 
     zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
 
-    if "Grain" in trait:
+    if "Grainmean" in trait:
         zmatrix = -zmatrix
 
     return zmatrix
