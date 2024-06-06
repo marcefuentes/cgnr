@@ -14,7 +14,7 @@ image = {
     "left_margin": 0.625 * PLOT_SIZE,
     "letter_label_size": 8 * PLOT_SIZE,
     "letter_padding": 0.035,
-    "line_width": 0.08 * PLOT_SIZE,
+    "line_width": 0.9 * PLOT_SIZE,
     "plot_size": PLOT_SIZE,
     "print_folder": False,
     "right_margin": 0.5 * PLOT_SIZE,
