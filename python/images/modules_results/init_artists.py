@@ -31,10 +31,6 @@ def init_line2d(axs, x, y):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     artists = np.empty_like(axs, dtype=object)
-    params = {
-        "c": "black",
-        "lw": image["line_width"] * image["plot_size"],
-    }
 
     for i in range(axs.shape[0]):
         for j in range(axs.shape[1]):
@@ -43,6 +39,5 @@ def init_line2d(axs, x, y):
                     (artists[i, j, k, m],) = axs[i, j, k, m].plot(
                         x,
                         y[i, j, k, m],
-                        **params,
                     )
     return artists

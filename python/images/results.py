@@ -15,6 +15,7 @@ from modules.format_fig import get_distances, format_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from modules_results.format_lines import format_lines
 from modules_results.get_dynamic_data import get_dynamic_data
 from modules_results.get_data_layout import get_data_layout
 from modules_results.get_sm import get_sm
@@ -68,30 +69,28 @@ def main(options):
     }
 
     if options["figure"] == "curves":
-        update_args["artists"] = init_line2d(
-            axs,
-            *get_curves(
-                image["n_x_values"],
-                data_layout["traits"],
-                data_layout["givens"],
-                dynamic_data["alphas"],
-                dynamic_data["rhos"],
-            ),
+        x, y = get_curves(
+            image["n_x_values"],
+            data_layout["traits"],
+            data_layout["givens"],
+            dynamic_data["alphas"],
+            dynamic_data["rhos"],
         )
     elif options["histogram"]:
-        update_args["artists"] = init_line2d(
-            axs,
-            np.arange(project["bins"]),
-            np.zeros(
-                (
-                    fig_layout["nrows"],
-                    fig_layout["ncols"],
-                    mr,
-                    mc,
-                    project["bins"],
-                )
-            ),
+        x = np.arange(project["bins"])
+        y = np.zeros(
+            (
+                fig_layout["nrows"],
+                fig_layout["ncols"],
+                mr,
+                mc,
+                project["bins"],
+            )
         )
+
+    if options["figure"] == "curves" or options["histogram"]:
+        update_args["artists"] = init_line2d(axs, x, y)
+        format_lines(update_args["artists"], image)
     else:
         update_args["artists"] = init_imshow(axs, mr, mc)
 
