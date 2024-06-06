@@ -16,26 +16,28 @@ def get_dynamic_data(data_layout, options, csv, frq):
         "traits": data_layout["traits"],
     }
 
+    params = {
+        "path": "",
+        "filetype": csv,
+        "movie": options["movie"],
+        "clean": options["clean"],
+    }
+
     for i in range(nrows):
         for j in range(ncols):
-            path = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
-            dynamic_data["dfs"][i][j] = get_df(
-                path, csv, options["movie"], options["clean"]
-            )
+            params["path"] = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
+            dynamic_data["dfs"][i][j] = get_df(**params)
             if data_layout["mechanisms_control"][i][j] not in ["", "None"]:
-                path = f"{data_layout['variants_control'][i][j]}/{data_layout['mechanisms_control'][i][j]}/{data_layout['givens_control'][i][j]}"
-                dynamic_data["dfs_control"][i][j] = get_df(
-                    path, csv, options["movie"], options["clean"]
-                )
+                params["path"] = f"{data_layout['variants_control'][i][j]}/{data_layout['mechanisms_control'][i][j]}/{data_layout['givens_control'][i][j]}"
+                dynamic_data["dfs_control"][i][j] = get_df(**params)
 
     if options["histogram"]:
         dynamic_data["dffrqs"] = np.empty((nrows, ncols), dtype=object)
+        params["filetype"] = frq
         for i in range(nrows):
             for j in range(ncols):
-                path = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
-                dynamic_data["dffrqs"][i][j] = get_df(
-                    path, frq, options["movie"], options["clean"]
-                )
+                params["path"] = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
+                dynamic_data["dffrqs"][i][j] = get_df(**params)
 
     df = dynamic_data["dfs"][0, 0]
 
