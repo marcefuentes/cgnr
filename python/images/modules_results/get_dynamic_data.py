@@ -25,10 +25,14 @@ def get_dynamic_data(data_layout, options, csv, frq):
 
     for i in range(nrows):
         for j in range(ncols):
-            params["path"] = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
+            params["path"] = (
+                f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
+            )
             dynamic_data["dfs"][i][j] = get_df(**params)
             if data_layout["mechanisms_control"][i][j] not in ["", "None"]:
-                params["path"] = f"{data_layout['variants_control'][i][j]}/{data_layout['mechanisms_control'][i][j]}/{data_layout['givens_control'][i][j]}"
+                params["path"] = (
+                    f"{data_layout['variants_control'][i][j]}/{data_layout['mechanisms_control'][i][j]}/{data_layout['givens_control'][i][j]}"
+                )
                 dynamic_data["dfs_control"][i][j] = get_df(**params)
 
     if options["histogram"]:
@@ -36,7 +40,9 @@ def get_dynamic_data(data_layout, options, csv, frq):
         params["filetype"] = frq
         for i in range(nrows):
             for j in range(ncols):
-                params["path"] = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
+                params["path"] = (
+                    f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
+                )
                 dynamic_data["dffrqs"][i][j] = get_df(**params)
 
     df = dynamic_data["dfs"][0, 0]
