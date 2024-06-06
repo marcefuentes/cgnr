@@ -2,10 +2,8 @@
 
 import numpy as np
 
-from settings_icurves.data_constants import data_constants
 
-
-def get_data():
+def get_data(data_constants):
     """Data common to all subplots."""
 
     dynamic_data = {}

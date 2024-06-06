@@ -19,6 +19,7 @@ from modules_icurves.get_static_data import get_static_data
 from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
+from settings_icurves.data_constants import data_constants
 from settings_icurves.image import image
 
 
@@ -27,7 +28,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    dynamic_data = get_data()
+    dynamic_data = get_data(data_constants)
 
     fig_layout = {
         "nc": len(dynamic_data["logess"]),
