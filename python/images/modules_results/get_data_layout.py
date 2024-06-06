@@ -80,8 +80,13 @@ def curves(trait):
     return layout
 
 
-def get_data_layout(figure, trait, mechanism, given):
+def get_data_layout(options):
     """Get data layout for a figure."""
+
+    figure = options["figure"]
+    trait = options["trait"]
+    mechanism = options["mechanism"]
+    given = options["given"]
 
     if figure == "figure_2":
         return figure_2(trait)

@@ -33,9 +33,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data_layout = get_data_layout(
-        options["figure"], options["trait"], options["mechanism"], options["given"]
-    )
+    data_layout = get_data_layout(options)
     dynamic_data = get_dynamic_data(
         data_layout,
         options,
