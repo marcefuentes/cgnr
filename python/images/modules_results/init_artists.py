@@ -30,12 +30,7 @@ def init_line2d(axs, x, y):
 
     artists = np.empty_like(axs, dtype=object)
 
-    for i in range(axs.shape[0]):
-        for j in range(axs.shape[1]):
-            for k in range(axs.shape[2]):
-                for m in range(axs.shape[3]):
-                    (artists[i, j, k, m],) = axs[i, j, k, m].plot(
-                        x,
-                        y[i, j, k, m],
-                    )
+    for idx in np.ndindex(axs.shape):
+        artists[idx] = axs[idx].plot(x, y[idx])[0]
+
     return artists
