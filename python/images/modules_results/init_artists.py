@@ -2,16 +2,14 @@
 
 import numpy as np
 
-from settings_results.image import image
 
-
-def init_imshow(axs, mr, mc):
+def init_imshow(axs, mr, mc, cmap):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     artists = np.empty_like(axs, dtype=object)
     dummy_zmatrix = np.zeros((mr, mc))
     params = {
-        "cmap": image["color_map"],
+        "cmap": cmap,
         "vmin": -1,
         "vmax": 1,
     }

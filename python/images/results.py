@@ -92,7 +92,7 @@ def main(options):
         update_args["artists"] = init_line2d(axs, x, y)
         format_lines(update_args["artists"], image)
     else:
-        update_args["artists"] = init_imshow(axs, mr, mc)
+        update_args["artists"] = init_imshow(axs, mr, mc, image["color_map"])
 
     axes_args = {
         "axs": axs,
