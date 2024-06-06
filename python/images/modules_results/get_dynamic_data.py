@@ -1,11 +1,7 @@
 """ This module reads the csv files in the given directory and returns a concatenated dataframe. """
 
-import os
-from glob import glob
-import sys
-
 import numpy as np
-import pandas as pd
+from modules_results.get_df import get_df
 
 
 def get_dynamic_data(data_layout, options, csv, frq):
@@ -49,45 +45,3 @@ def get_dynamic_data(data_layout, options, csv, frq):
         dynamic_data["rhos"] = 1.0 - 1.0 / np.power(2.0, dynamic_data["logess"])
 
     return dynamic_data
-
-
-def get_df(path, filetype, movie, clean):
-    """Return a concatenated dataframe of the 'filetype' files in the given directory."""
-
-    if not os.path.exists(path):
-        return pd.DataFrame()
-
-    if movie:
-        concatenated = os.path.join(path, f"{filetype[1:]}_for_movie.con")
-    else:
-        concatenated = os.path.join(path, f"{filetype[1:]}_for_image.con")
-
-    if os.path.exists(concatenated):
-        if clean:
-            os.remove(concatenated)
-        else:
-            df = pd.read_csv(concatenated)
-            return df
-
-    filelist = glob(os.path.join(path, f"*{filetype}"))
-    if not filelist:
-        print(f"No {path}/*{filetype} files found.")
-        sys.exit()
-    df = read_files(filelist, movie)
-
-    df.to_csv(concatenated, index=False)
-
-    return df
-
-
-def read_files(filelist, movie):
-    """Read the csv files in the given directory and return a concatenated dataframe."""
-
-    df_list = [None] * len(filelist)
-    for i, file in enumerate(filelist):
-        df = pd.read_csv(file)
-        if not movie:
-            df = df.tail(1)
-        df_list[i] = df
-    dfc = pd.concat(df_list, ignore_index=True)
-    return dfc
