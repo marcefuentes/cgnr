@@ -7,9 +7,9 @@ import numpy as np
 
 from matplotlib import colormaps
 
-from settings_simple.trait_map import trait_map
-from settings_simple.image import image
-from modules_simple.get_zmatrix import get_zmatrix
+from settings_results.trait_map import trait_map
+from settings_results.image import image
+from modules_results.get_zmatrix import get_zmatrix
 
 
 def update_artists(t, update_args, options, dynamic_data):

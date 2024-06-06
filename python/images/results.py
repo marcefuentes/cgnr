@@ -13,18 +13,18 @@ from modules.save_file import save_file
 from modules.save_image import close_plt
 
 
-from modules_simple.get_dynamic_data import get_dynamic_data
-from modules_simple.get_data_layout import get_data_layout
-from modules_simple.get_sm import get_sm
-import modules_simple.get_static_fitness as static_fitness
-import modules_simple.get_static_hist as static_hist
-from modules_simple.init_artists import init_imshow, init_line2d
-from modules_simple.parse_args import parse_args
-from modules_simple.update_artists import update_artists
+from modules_results.get_dynamic_data import get_dynamic_data
+from modules_results.get_data_layout import get_data_layout
+from modules_results.get_sm import get_sm
+import modules_results.get_static_fitness as static_fitness
+import modules_results.get_static_hist as static_hist
+from modules_results.init_artists import init_imshow, init_line2d
+from modules_results.parse_args import parse_args
+from modules_results.update_artists import update_artists
 
 from settings_project.project import project
-from settings_simple.data_constants import data_constants
-from settings_simple.image import image
+from settings_results.data_constants import data_constants
+from settings_results.image import image
 
 
 def main(options):

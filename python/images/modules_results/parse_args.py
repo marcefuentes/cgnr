@@ -3,7 +3,7 @@
 import argparse
 import os
 
-from settings_simple.trait_map import trait_map
+from settings_results.trait_map import trait_map
 
 
 def parse_args():
