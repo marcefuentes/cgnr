@@ -5,6 +5,8 @@
 import os
 import time
 
+from matplotlib import colormaps
+
 from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
@@ -60,6 +62,7 @@ def main(options):
     dynamic_data["text"] = fig.texts[2]
 
     update_args = {
+        "cmap": colormaps.get_cmap(image["color_map"]),
         "file_name": os.path.basename(__file__).split(".")[0],
         "function": update_artists,
     }

@@ -1,13 +1,7 @@
 """ Update data in artists. """
 
 import re
-import sys
-
 import numpy as np
-
-from matplotlib import colormaps
-
-from settings_results.image import image
 from modules_results.get_zmatrix import get_zmatrix
 
 
@@ -27,7 +21,7 @@ def update_artists(t, update_args, options, dynamic_data):
             )
             artists = update_args["artists"][i, j]
             if options["figure"] == "curves" or options["histogram"]:
-                artists = update_artists_line2d(artists, zmatrix)
+                artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
                 if options["histogram"]:
                     df = dynamic_data["dffrqs"][i, j]
                     if df.empty:
@@ -58,10 +52,8 @@ def update_artists_histogram(artists, df, alphas, logess, trait):
     return artists
 
 
-def update_artists_line2d(artists, zmatrix):
+def update_artists_line2d(artists, zmatrix, cmap):
     """Update background colors of plots."""
-
-    cmap = colormaps.get_cmap(image["color_map"])
 
     for i in range(zmatrix.shape[0]):
         for j in range(zmatrix.shape[1]):
