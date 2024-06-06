@@ -49,7 +49,7 @@ def main(options):
     }
 
     update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
-        init_artists_line2d(axs, dynamic_data["x_values"], y, ic)
+        init_artists_line2d(axs, dynamic_data["x_values"], y, ic, image)
     )
 
     axes_args = {

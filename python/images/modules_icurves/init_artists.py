@@ -4,10 +4,8 @@ import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib.lines import Line2D
 
-from settings_icurves.image import image
 
-
-def init_artists_line2d(axs, x, y, ic):
+def init_artists_line2d(axs, x, y, ic, image):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nr, nc = axs.shape[2:4]
