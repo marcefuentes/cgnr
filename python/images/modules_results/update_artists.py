@@ -43,6 +43,9 @@ def update_artists(t, update_args, options, dynamic_data):
 def update_artists_histogram(artists, df, alphas, logess, trait):
     """Update histograms."""
 
+    if "mean" in trait:
+        trait = trait[:-4]
+
     for i, alpha in enumerate(alphas):
         for j, loges in enumerate(logess):
             d = df[(df["alpha"] == alpha) & (df["logES"] == loges)]

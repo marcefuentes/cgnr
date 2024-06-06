@@ -32,6 +32,7 @@ def get_dynamic_data(data_layout, options, csv, frq):
         dynamic_data["dffrqs"] = np.empty((nrows, ncols), dtype=object)
         for i in range(nrows):
             for j in range(ncols):
+                path = f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
                 dynamic_data["dffrqs"][i][j] = get_df(
                     path, frq, options["movie"], options["clean"]
                 )

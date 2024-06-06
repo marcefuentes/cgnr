@@ -5,6 +5,7 @@
 import os
 import time
 
+import numpy as np
 from matplotlib import colormaps
 
 from modules.fix_positions import create_divider
@@ -17,8 +18,7 @@ from modules.save_image import close_plt
 from modules_results.get_dynamic_data import get_dynamic_data
 from modules_results.get_data_layout import get_data_layout
 from modules_results.get_sm import get_sm
-import modules_results.get_static_curves as static_curves
-import modules_results.get_static_hist as static_hist
+from modules_results.get_curves import get_curves
 from modules_results.init_artists import init_imshow, init_line2d
 from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
@@ -70,7 +70,7 @@ def main(options):
     if options["figure"] == "curves":
         update_args["artists"] = init_line2d(
             axs,
-            *static_curves.data(
+            *get_curves(
                 image["n_x_values"],
                 data_layout["traits"],
                 data_layout["givens"],
@@ -80,7 +80,17 @@ def main(options):
         )
     elif options["histogram"]:
         update_args["artists"] = init_line2d(
-            axs, *static_hist.data(project["bins"], mr, mc)
+            axs,
+            np.arange(project["bins"]),
+            np.zeros(
+                (
+                    fig_layout["nrows"],
+                    fig_layout["ncols"],
+                    mr,
+                    mc,
+                    project["bins"],
+                )
+            ),
         )
     else:
         update_args["artists"] = init_imshow(axs, mr, mc)
@@ -107,10 +117,12 @@ def main(options):
     }
 
     if options["figure"] == "curves":
-        axes_args["x_lim"], axes_args["y_lim"] = static_curves.lims()
+        axes_args["x_lim"] = [0, 1]
+        axes_args["y_lim"] = [0, 1]
         update_args["file_name"] += "_curves"
     elif options["histogram"]:
-        axes_args["x_lim"], axes_args["y_lim"] = static_hist.lims(project["bins"])
+        axes_args["x_lim"] = [-2, project["bins"] + 1]
+        axes_args["y_lim"] = [0, 0.25]
         update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)
