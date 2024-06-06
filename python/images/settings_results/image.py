@@ -16,6 +16,7 @@ image = {
     "letter_label_size": 8 * PLOT_SIZE,
     "letter_padding": 0.035,
     "line_width": 0.05 * PLOT_SIZE,
+    "n_x_values": 64,
     "plot_size": PLOT_SIZE,
     "print_folder": False,
     "right_margin": 1 * PLOT_SIZE,

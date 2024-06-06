@@ -66,5 +66,4 @@ trait_map = {
         "frq": "w",
         "relative": "-social",
     },
-    "all_traits": {},
 }
