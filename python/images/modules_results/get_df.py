@@ -7,22 +7,19 @@ import sys
 import pandas as pd
 
 
-def get_df(**kwargs):
+def get_df(path, filetype, clean, movie):
     """Return a concatenated dataframe of the 'filetype' files in the given directory."""
-
-    path = kwargs["path"]
-    filetype = kwargs["filetype"]
 
     if not os.path.exists(path):
         return pd.DataFrame()
 
-    if kwargs["movie"]:
+    if movie:
         concatenated = os.path.join(path, f"{filetype[1:]}_for_movie.con")
     else:
         concatenated = os.path.join(path, f"{filetype[1:]}_for_image.con")
 
     if os.path.exists(concatenated):
-        if kwargs["clean"]:
+        if clean:
             os.remove(concatenated)
         else:
             df = pd.read_csv(concatenated)
