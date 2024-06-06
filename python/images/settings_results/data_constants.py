@@ -1,4 +1,3 @@
 """ data constants for results. """
 
-data_constants = {
-}
+data_constants = {}

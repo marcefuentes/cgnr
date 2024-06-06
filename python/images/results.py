@@ -32,10 +32,7 @@ def main(options):
     start_time = time.perf_counter()
 
     data_layout = get_data_layout(
-        options["figure"],
-        options["trait"],
-        options["mechanism"],
-        options["given"]
+        options["figure"], options["trait"], options["mechanism"], options["given"]
     )
     dynamic_data = get_dynamic_data(
         data_layout,
@@ -80,7 +77,9 @@ def main(options):
             ),
         )
     elif options["histogram"]:
-        update_args["artists"] = init_line2d(axs, *static_hist.data(project["bins"], mr, mc))
+        update_args["artists"] = init_line2d(
+            axs, *static_hist.data(project["bins"], mr, mc)
+        )
     else:
         update_args["artists"] = init_imshow(axs, mr, mc)
 

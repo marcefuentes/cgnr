@@ -23,7 +23,9 @@ def data(num, traits, givens, alphas, rhos):
         for j, given in enumerate(givens_row):
             for k, alpha in enumerate(alphas):
                 for m, rho in enumerate(rhos):
-                    y[i, j, k, m] = process_plot(x, traits[i][j], float(given), alpha, rho)
+                    y[i, j, k, m] = process_plot(
+                        x, traits[i][j], float(given), alpha, rho
+                    )
 
     mask = y <= 0
     y[mask] = None
@@ -40,7 +42,7 @@ def process_plot(x, trait, given, alpha, rho):
         y = pp - ss
         # y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
     else:
-        y = rr - pp # Partner choice
+        y = rr - pp  # Partner choice
 
     y *= 500
     mask = (x + increment < qbeq(given, alpha, rho)) | (x > qbeq(0.0, alpha, rho))

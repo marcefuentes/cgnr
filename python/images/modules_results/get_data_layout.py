@@ -2,7 +2,7 @@
 
 
 def figure_2(trait):
-    """ Figure 2. """
+    """Figure 2."""
 
     given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
     given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
@@ -28,7 +28,7 @@ def figure_2(trait):
 
 
 def figure_3(trait, mechanism, given):
-    """ Figure 3 and subsequent ones. """
+    """Figure 3 and subsequent ones."""
 
     variant_list = [
         ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
@@ -54,7 +54,7 @@ def figure_3(trait, mechanism, given):
 
 
 def curves(trait):
-    """ Fitness curves for partner choice. """
+    """Fitness curves for partner choice."""
 
     given_list = [["0.5", "1.0"]]
 
@@ -81,7 +81,7 @@ def curves(trait):
 
 
 def get_data_layout(figure, trait, mechanism, given):
-    """ Get data layout for a figure. """
+    """Get data layout for a figure."""
 
     if figure == "figure_2":
         return figure_2(trait)
