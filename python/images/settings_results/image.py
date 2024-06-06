@@ -20,7 +20,7 @@ image = {
     "n_x_values": 64,
     "plot_size": PLOT_SIZE,
     "print_folder": False,
-    "right_margin": 1 * PLOT_SIZE,
+    "right_margin": 0.7 * PLOT_SIZE,
     "spacing": 0.1875 * PLOT_SIZE,
     "tick_color": "0.3",
     "tick_label_size": 6 * PLOT_SIZE,
