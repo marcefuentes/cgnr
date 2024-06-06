@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from modules.theory import fitness, indifference, qbeq
-from settings_icurves.image import image
 
 
 def update_artists(given, update_args, options, dynamic_data):
@@ -27,7 +26,7 @@ def update_artists(given, update_args, options, dynamic_data):
                 indifference(dynamic_data["x_values"], w, alpha, rho)
             )
             update_args["icurves"][i, j].set_color(
-                cm.get_cmap(image["color_map"])(0.5 + 0.5 * w)
+                cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w)
             )
 
             y = fitness(
@@ -38,7 +37,7 @@ def update_artists(given, update_args, options, dynamic_data):
                 np.concatenate([points[:-1], points[1:]], axis=1)
             )
             update_args["landscapes"][i, j].set_array(y)
-            update_args["landscapes"][i, j].set_cmap(cm.get_cmap(image["color_map"]))
+            update_args["landscapes"][i, j].set_cmap(cm.get_cmap(update_args["cmap"]))
             update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(
