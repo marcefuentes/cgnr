@@ -56,7 +56,7 @@ def figure_3(trait, mechanism, given):
 def curves(trait):
     """Fitness curves for partner choice."""
 
-    given_list = [["0.5", "1.0"]]
+    given_list = [["1.0"], ["0.5"]]
 
     variant = "nolang_noshuffle_cost15_4"
 
@@ -66,15 +66,15 @@ def curves(trait):
         mechanism = "p"
 
     layout = {
-        "column_titles": ["0.5", "1.0"],
+        "column_titles": [""],
         "givens": given_list,
         "givens_control": given_list,
-        "mechanisms": [[mechanism, mechanism]],
-        "mechanisms_control": [["none", "none"]],
-        "variants": [[variant, variant]],
-        "variants_control": [[variant, variant]],
-        "row_titles": [""],
-        "traits": [[trait, trait]],
+        "mechanisms": [[mechanism], [mechanism]],
+        "mechanisms_control": [["none"], ["none"]],
+        "variants": [[variant], [variant]],
+        "variants_control": [[variant], [variant]],
+        "row_titles": ["", ""],
+        "traits": [[trait], [trait]],
     }
 
     return layout
