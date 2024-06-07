@@ -23,6 +23,8 @@ def get_dynamic_data(data_layout, options, csv, frq):
         "clean": options["clean"],
     }
 
+    df = None
+
     for i in range(nrows):
         for j in range(ncols):
             params["path"] = (
@@ -36,6 +38,9 @@ def get_dynamic_data(data_layout, options, csv, frq):
                     f"{data_layout['variants_control'][i][j]}/{data_layout['mechanisms_control'][i][j]}/{data_layout['givens_control'][i][j]}"
                 )
                 dynamic_data["dfs_control"][i][j] = get_df(**params)
+
+    if df is None:
+        raise ValueError("No data found in any of the paths defined in data_layout.")
 
     if options["histogram"]:
         dynamic_data["dffrqs"] = np.empty((nrows, ncols), dtype=object)

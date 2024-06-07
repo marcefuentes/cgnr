@@ -34,11 +34,15 @@ def main(options):
     start_time = time.perf_counter()
 
     data_layout = get_data_layout(options)
-    dynamic_data = get_dynamic_data(
-        data_layout,
-        options,
-        *project["output_file_extensions"],
-    )
+    try:
+        dynamic_data = get_dynamic_data(
+            data_layout,
+            options,
+            *project["output_file_extensions"],
+        )
+    except ValueError as error:
+        print(error)
+        return
 
     mr = len(dynamic_data["alphas"])
     mc = len(dynamic_data["logess"])
