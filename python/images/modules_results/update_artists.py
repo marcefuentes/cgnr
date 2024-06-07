@@ -13,12 +13,7 @@ def update_artists(t, update_args, options, dynamic_data):
 
     for i, row in enumerate(dynamic_data["dfs"]):
         for j, _ in enumerate(row):
-            zmatrix = update_zmatrix(
-                t,
-                dynamic_data["dfs"][i, j],
-                dynamic_data["dfs_control"][i, j],
-                dynamic_data["traits"][i][j],
-            )
+            zmatrix = update_zmatrix(t, dynamic_data, i, j)
             artists = update_args["artists"][i, j]
             if options["figure"] == "curves" or options["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
@@ -65,8 +60,12 @@ def update_artists_line2d(artists, zmatrix, cmap):
     return artists
 
 
-def update_zmatrix(t, df, df_control, trait):
+def update_zmatrix(t, dynamic_data, i, j):
     """Return the updated zmatrix for a given time and trait."""
+
+    df = dynamic_data["dfs"][i, j]
+    df_control = dynamic_data["dfs_control"][i, j]
+    trait = dynamic_data["traits"][i][j]
 
     if "nothing" in trait or df.empty:
         zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
