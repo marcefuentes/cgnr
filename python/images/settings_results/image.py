@@ -35,3 +35,8 @@ image_lines = {
     "color": "0.4",
     "linewidth": 0.2 * PLOT_SIZE,
 }
+
+image_show = {
+    "cmap": image["color_map"],
+    "clim": (-1, 1),
+}

@@ -25,7 +25,7 @@ from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
 
 from settings_project.project import project
-from settings_results.image import image, image_lines
+from settings_results.image import image, image_lines, image_show
 
 
 def main(options):
@@ -94,7 +94,8 @@ def main(options):
         update_args["artists"] = init_line2d(axs, x, y)
         format_lines(update_args["artists"], image_lines)
     else:
-        update_args["artists"] = init_imshow(axs, mr, mc, image["color_map"])
+        update_args["artists"] = init_imshow(axs, mr, mc)
+        format_lines(update_args["artists"], image_show)
 
     axes_args = {
         "axs": axs,

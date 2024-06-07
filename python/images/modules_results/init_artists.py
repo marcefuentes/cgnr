@@ -3,19 +3,14 @@
 import numpy as np
 
 
-def init_imshow(axs, mr, mc, cmap):
+def init_imshow(axs, mr, mc):
     """Initialize (nrows x ncols) matrix of AxesImage artists."""
 
     artists = np.empty_like(axs, dtype=object)
     dummy_zmatrix = np.zeros((mr, mc))
-    params = {
-        "cmap": cmap,
-        "vmin": -1,
-        "vmax": 1,
-    }
 
     for idx in np.ndindex(axs.shape):
-        artists[idx] = axs[idx].imshow(dummy_zmatrix, **params)
+        artists[idx] = axs[idx].imshow(dummy_zmatrix)
 
     return artists
 
