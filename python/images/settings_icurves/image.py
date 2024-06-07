@@ -39,7 +39,6 @@ image_budgets = {
     "alpha": 0.6,
     "color": "0.300",
     "linewidth": 0.9 * PLOT_SIZE,
-
 }
 
 image_icurves = {
