@@ -12,10 +12,10 @@ from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
+from modules.format_lines import format_lines
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_results.format_lines import format_lines
 from modules_results.get_dynamic_data import get_dynamic_data
 from modules_results.get_data_layout import get_data_layout
 from modules_results.get_sm import get_sm
