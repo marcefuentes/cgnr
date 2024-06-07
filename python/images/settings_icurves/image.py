@@ -29,3 +29,20 @@ image = {
     "y_label": "Influence of $\\it{B}$",
     "y_label_size": 0.5 * PLOT_SIZE,
 }
+
+image_icurves_grey = {
+    "color": "0.850",
+    "linewidth": 0.4 * PLOT_SIZE,
+}
+
+image_budgets = {
+    "alpha": 0.6,
+    "color": "0.300",
+    "linewidth": 0.9 * PLOT_SIZE,
+
+}
+
+image_icurves = {
+    "alpha": 0.8,
+    "linewidth": 0.9 * PLOT_SIZE,
+}

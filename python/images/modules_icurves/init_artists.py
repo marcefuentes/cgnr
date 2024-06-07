@@ -22,24 +22,17 @@ def init_artists_line2d(axs, x, y, ic, image):
                 icurves_grey[i, j, k] = Line2D(
                     x,
                     ic[i, j, k],
-                    c="0.850",
-                    lw=lw / 2,
                 )
                 axs[0, 0, i, j].add_line(icurves_grey[i, j, k])
             budgets[i, j] = Line2D(
                 x,
                 y,
-                c="0.300",
-                lw=lw,
-                alpha=0.6,
             )
             axs[0, 0, i, j].add_line(budgets[i, j])
 
             icurves[i, j] = Line2D(
                 x,
                 y,
-                lw=lw,
-                alpha=0.8,
             )
             axs[0, 0, i, j].add_line(icurves[i, j])
 

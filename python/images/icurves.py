@@ -10,6 +10,7 @@ from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
+from modules.format_lines import format_lines
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
@@ -20,7 +21,7 @@ from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
 from settings_icurves.data_constants import data_constants
-from settings_icurves.image import image
+from settings_icurves.image import image, image_budgets, image_icurves, image_icurves_grey
 
 
 def main(options):
@@ -54,6 +55,10 @@ def main(options):
     update_args["budgets"], update_args["icurves"], update_args["icurves_grey"], update_args["landscapes"] = (
         init_artists_line2d(axs, dynamic_data["x_values"], y, ic, image)
     )
+
+    format_lines(update_args["budgets"], image_budgets)
+    format_lines(update_args["icurves"], image_icurves)
+    format_lines(update_args["icurves_grey"], image_icurves_grey)
 
     axes_args = {
         "axs": axs,
