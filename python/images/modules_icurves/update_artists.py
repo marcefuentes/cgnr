@@ -44,6 +44,7 @@ def update_artists(given, update_args, options, dynamic_data):
         [
             update_args["budgets"].flatten(),
             update_args["icurves"].flatten(),
+            update_args["icurves_grey"].flatten(),
             update_args["landscapes"].flatten(),
         ]
     )

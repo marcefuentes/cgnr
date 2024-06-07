@@ -51,7 +51,7 @@ def main(options):
         "function": update_artists,
     }
 
-    update_args["budgets"], update_args["icurves"], update_args["landscapes"] = (
+    update_args["budgets"], update_args["icurves"], update_args["icurves_grey"], update_args["landscapes"] = (
         init_artists_line2d(axs, dynamic_data["x_values"], y, ic, image)
     )
 

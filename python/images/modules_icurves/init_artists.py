@@ -11,6 +11,7 @@ def init_artists_line2d(axs, x, y, ic, image):
     nr, nc = axs.shape[2:4]
     budgets = np.empty((nr, nc), dtype=object)
     icurves = np.empty((nr, nc), dtype=object)
+    icurves_grey = np.empty((nr, nc, ic.shape[2]), dtype=object)
     landscapes = np.empty((nr, nc), dtype=object)
 
     lw = image["line_width"] * image["plot_size"] / nc
@@ -18,12 +19,13 @@ def init_artists_line2d(axs, x, y, ic, image):
     for i in range(nr):
         for j in range(nc):
             for k in range(ic.shape[2]):
-                axs[0, 0, i, j].plot(
+                icurves_grey[i, j, k] = Line2D(
                     x,
                     ic[i, j, k],
                     c="0.850",
                     lw=lw / 2,
                 )
+                axs[0, 0, i, j].add_line(icurves_grey[i, j, k])
             budgets[i, j] = Line2D(
                 x,
                 y,
@@ -47,4 +49,4 @@ def init_artists_line2d(axs, x, y, ic, image):
             )
             axs[0, 1, i, j].add_collection(landscapes[i, j])
 
-    return budgets, icurves, landscapes
+    return budgets, icurves, icurves_grey, landscapes
