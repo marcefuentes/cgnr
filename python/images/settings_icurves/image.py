@@ -46,3 +46,7 @@ image_icurves = {
     "alpha": 0.8,
     "linewidth": 0.9 * PLOT_SIZE,
 }
+
+image_landscapes = {
+    "linewidth": 1.0 * PLOT_SIZE,
+}

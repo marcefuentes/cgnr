@@ -5,7 +5,7 @@ from matplotlib.collections import LineCollection
 from matplotlib.lines import Line2D
 
 
-def init_artists_line2d(axs, x, y, ic, image):
+def init_artists_line2d(axs, x, y, ic):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nr, nc = axs.shape[2:4]
@@ -13,8 +13,6 @@ def init_artists_line2d(axs, x, y, ic, image):
     icurves = np.empty((nr, nc), dtype=object)
     icurves_grey = np.empty((nr, nc, ic.shape[2]), dtype=object)
     landscapes = np.empty((nr, nc), dtype=object)
-
-    lw = image["line_width"] * image["plot_size"] / nc
 
     for i in range(nr):
         for j in range(nc):
@@ -38,7 +36,6 @@ def init_artists_line2d(axs, x, y, ic, image):
 
             landscapes[i, j] = LineCollection(
                 [],
-                lw=lw,
             )
             axs[0, 1, i, j].add_collection(landscapes[i, j])
 

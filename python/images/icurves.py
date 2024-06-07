@@ -21,7 +21,7 @@ from modules_icurves.init_artists import init_artists_line2d
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
 from settings_icurves.data_constants import data_constants
-from settings_icurves.image import image, image_budgets, image_icurves, image_icurves_grey
+from settings_icurves.image import image, image_budgets, image_icurves, image_icurves_grey, image_landscapes
 
 
 def main(options):
@@ -53,12 +53,13 @@ def main(options):
     }
 
     update_args["budgets"], update_args["icurves"], update_args["icurves_grey"], update_args["landscapes"] = (
-        init_artists_line2d(axs, dynamic_data["x_values"], y, ic, image)
+        init_artists_line2d(axs, dynamic_data["x_values"], y, ic)
     )
 
     format_lines(update_args["budgets"], image_budgets)
     format_lines(update_args["icurves"], image_icurves)
     format_lines(update_args["icurves_grey"], image_icurves_grey)
+    format_lines(update_args["landscapes"], image_landscapes)
 
     axes_args = {
         "axs": axs,
