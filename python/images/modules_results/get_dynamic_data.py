@@ -29,6 +29,8 @@ def get_dynamic_data(data_layout, options, csv, frq):
                 f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
             )
             dynamic_data["dfs"][i][j] = get_df(**params)
+            if not dynamic_data["dfs"][i][j].empty:
+                df = dynamic_data["dfs"][i][j]
             if data_layout["mechanisms_control"][i][j] not in ["", "None"]:
                 params["path"] = (
                     f"{data_layout['variants_control'][i][j]}/{data_layout['mechanisms_control'][i][j]}/{data_layout['givens_control'][i][j]}"
@@ -44,8 +46,6 @@ def get_dynamic_data(data_layout, options, csv, frq):
                     f"{data_layout['variants'][i][j]}/{data_layout['mechanisms'][i][j]}/{data_layout['givens'][i][j]}"
                 )
                 dynamic_data["dffrqs"][i][j] = get_df(**params)
-
-    df = dynamic_data["dfs"][0, 0]
 
     dynamic_data["frames"] = df.Time.unique()
     dynamic_data["alphas"] = np.sort(df["alpha"].unique())[::-1]

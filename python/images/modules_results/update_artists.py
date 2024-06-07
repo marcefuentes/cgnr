@@ -18,28 +18,27 @@ def update_artists(t, update_args, options, dynamic_data):
             if options["figure"] == "curves" or options["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
                 if options["histogram"]:
-                    df = dynamic_data["dffrqs"][i, j]
-                    if df.empty:
-                        continue
-                    df = df[df["Time"] == t]
-                    artists = update_artists_histogram(
-                        artists,
-                        df,
-                        dynamic_data["alphas"],
-                        dynamic_data["logess"],
-                        dynamic_data["traits"][i][j],
-                    )
+                    artists = update_artists_histogram(t, artists, dynamic_data, i, j)
             else:
                 artists[0, 0].set_array(zmatrix)
 
     return artists.flatten()
 
 
-def update_artists_histogram(artists, df, alphas, logess, trait):
+def update_artists_histogram(t, artists, dynamic_data, i, j):
     """Update histograms."""
 
+    df = dynamic_data["dffrqs"][i][j]
+    if df.empty:
+        return artists
+
+    alphas = dynamic_data["alphas"]
+    logess = dynamic_data["logess"]
+    trait = dynamic_data["traits"][i][j]
     if "mean" in trait:
         trait = trait[:-4]
+
+    df = df[df["Time"] == t]
 
     for i, alpha in enumerate(alphas):
         for j, loges in enumerate(logess):
