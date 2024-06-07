@@ -92,7 +92,11 @@ def main(options):
 
     if options["figure"] == "curves" or options["histogram"]:
         update_args["artists"] = init_line2d(axs, x, y)
-        format_lines(update_args["artists"], image)
+        params = {
+            "color": image["line_color"],
+            "linewidth": image["line_width"] * image["plot_size"],
+        }
+        format_lines(update_args["artists"], params)
     else:
         update_args["artists"] = init_imshow(axs, mr, mc, image["color_map"])
 
