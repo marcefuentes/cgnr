@@ -12,7 +12,7 @@ from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.format_lines import format_lines
+from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
@@ -92,10 +92,10 @@ def main(options):
 
     if options["figure"] == "curves" or options["histogram"]:
         update_args["artists"] = init_line2d(axs, x, y)
-        format_lines(update_args["artists"], image_lines)
+        format_artists(update_args["artists"], image_lines)
     else:
         update_args["artists"] = init_imshow(axs, mr, mc)
-        format_lines(update_args["artists"], image_show)
+        format_artists(update_args["artists"], image_show)
 
     axes_args = {
         "axs": axs,

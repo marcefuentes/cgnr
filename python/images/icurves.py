@@ -10,7 +10,7 @@ from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.format_lines import format_lines
+from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
@@ -65,10 +65,10 @@ def main(options):
         update_args["landscapes"],
     ) = init_artists_line2d(axs, dynamic_data["x_values"], y, ic)
 
-    format_lines(update_args["budgets"], image_budgets)
-    format_lines(update_args["icurves"], image_icurves)
-    format_lines(update_args["icurves_grey"], image_icurves_grey)
-    format_lines(update_args["landscapes"], image_landscapes)
+    format_artists(update_args["budgets"], image_budgets)
+    format_artists(update_args["icurves"], image_icurves)
+    format_artists(update_args["icurves_grey"], image_icurves_grey)
+    format_artists(update_args["landscapes"], image_landscapes)
 
     axes_args = {
         "axs": axs,
