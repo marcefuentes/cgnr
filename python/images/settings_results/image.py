@@ -15,8 +15,6 @@ image = {
     "left_margin": 0.625 * PLOT_SIZE,
     "letter_label_size": 8 * PLOT_SIZE,
     "letter_padding": 0.035,
-    "line_color": "0.4",
-    "line_width": 0.05 * PLOT_SIZE,
     "n_x_values": 64,
     "plot_size": PLOT_SIZE,
     "print_folder": False,
@@ -31,4 +29,9 @@ image = {
     "x_label_size": 0.5 * PLOT_SIZE,
     "y_label": "Influence of $\\it{B}$",
     "y_label_size": 0.5 * PLOT_SIZE,
+}
+
+image_lines = {
+    "color": "0.4",
+    "linewidth": 0.2 * PLOT_SIZE,
 }

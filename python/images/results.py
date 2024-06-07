@@ -25,7 +25,7 @@ from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
 
 from settings_project.project import project
-from settings_results.image import image
+from settings_results.image import image, image_lines
 
 
 def main(options):
@@ -92,11 +92,7 @@ def main(options):
 
     if options["figure"] == "curves" or options["histogram"]:
         update_args["artists"] = init_line2d(axs, x, y)
-        params = {
-            "color": image["line_color"],
-            "linewidth": image["line_width"] * image["plot_size"],
-        }
-        format_lines(update_args["artists"], params)
+        format_lines(update_args["artists"], image_lines)
     else:
         update_args["artists"] = init_imshow(axs, mr, mc, image["color_map"])
 
