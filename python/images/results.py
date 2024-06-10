@@ -86,7 +86,9 @@ def main(options):
             (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
         )
     elif options["layout"] == "theory":
-        x, y = get_theory_imshow(layout["traits"], layout["givens"], data["alphas"], data["rhos"])
+        x, y = get_theory_imshow(
+            layout["traits"], layout["givens"], data["alphas"], data["rhos"]
+        )
     else:
         x = None
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
