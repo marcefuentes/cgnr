@@ -18,7 +18,7 @@ def figure_2(trait):
         "givens_control": given_control_list,
         "mechanisms": [["none", "none"] for _ in range(nrows)],
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
-        "variants": [[variant for _ in nrange(ncols)] for _ in range(nrows)],
+        "variants": [[variant for _ in range(ncols)] for _ in range(nrows)],
         "variants_control": [[variant for _ in range(ncols)] for _ in range(nrows)],
         "row_titles": ["", ""],
         "traits": [[trait, trait] for _ in range(nrows)],
