@@ -61,7 +61,7 @@ def get_data(layout, options, csv, frq):
     data["frames"] = df.Time.unique()
     data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     data["logess"] = np.sort(df["logES"].unique())
-    if options["layout"] == "curves":
+    if options["layout"] == "curves" or options["layout"] == "theory":
         data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
 
     return data

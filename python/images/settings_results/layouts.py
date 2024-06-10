@@ -92,14 +92,14 @@ def theory(trait, mechanism=None, given=None):
     _ = mechanism
 
     given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
-    given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
+    given_control_list = [[None, None], [None, None], [None, None]]
 
     variant = [None, "nolang_noshuffle_cost15_4"]
 
     nrows = len(given_list)
 
     layout = {
-        "column_titles": ["Fitness", "Fitness\nrelative to optimum"],
+        "column_titles": ["Fitness\n(theory)", "Fitness\n(simulations)"],
         "givens": given_list,
         "givens_control": given_control_list,
         "mechanisms": [[None, "none"] for _ in range(nrows)],

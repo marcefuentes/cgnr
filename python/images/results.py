@@ -8,25 +8,26 @@ import time
 import numpy as np
 from matplotlib import colormaps
 
-from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
+from modules.fix_positions import create_divider
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
 from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from modules_results.get_curves import get_curves
 from modules_results.get_data import get_data
 from modules_results.get_layout import get_layout
 from modules_results.get_sm import get_sm
-from modules_results.get_curves import get_curves
+from modules_results.get_theory_imshow import get_theory_imshow
 from modules_results.init_artists import init_artists
 from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
 
 from settings_project.project import project
-from settings_results.image import image, image_lines, image_show
 from settings_results import layouts
+from settings_results.image import image, image_lines, image_show
 
 
 def main(options):
@@ -84,6 +85,8 @@ def main(options):
         y = np.zeros(
             (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
         )
+    elif options["layout"] == "theory":
+        x, y = get_theory_imshow(layout["traits"], layout["givens"], data["alphas"], data["rhos"])
     else:
         x = None
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
@@ -120,6 +123,8 @@ def main(options):
         axes_args["x_lim"] = [0, 1]
         axes_args["y_lim"] = [0, 1]
         update_args["file_name"] += "_curves"
+    elif options["layout"] == "theory":
+        update_args["file_name"] += "_theory"
     elif options["histogram"]:
         axes_args["x_lim"] = [-2, project["bins"] + 1]
         axes_args["y_lim"] = [0, 0.25]
