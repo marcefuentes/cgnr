@@ -53,7 +53,7 @@ def process_folder(test):
             f"{colors['white']}Delete output files of jobs in {colors['reset']}"
             f"{colors['red']}red{colors['white']} and {colors['grey']}grey"
             f"{colors['white']}?{colors['reset']} "
-            f"{ask['yesno']}"
+            f"{ask['yesno']}", end=""
         )
         user_input = input()
         if user_input.lower() == "n":
