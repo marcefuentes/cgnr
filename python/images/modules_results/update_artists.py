@@ -75,9 +75,15 @@ def update_zmatrix(t, dynamic_data, i, j):
             zmatrix = 1.0 - zmatrix
         return zmatrix
 
-    zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
+    zmatrix_treatment = get_zmatrix(t, df, trait)
+    zmatrix_control = get_zmatrix(t, df_control, trait)
 
-    if "Grainmean" in trait:
-        zmatrix = -zmatrix
+    if zmatrix_treatment.shape == zmatrix_control.shape:
+        zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
+        if "Grainmean" in trait:
+            zmatrix = -zmatrix
+        return zmatrix
 
+    print("\nData for one of the plots is incomplete.")
+    zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
     return zmatrix
