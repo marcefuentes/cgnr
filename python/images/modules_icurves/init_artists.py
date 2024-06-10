@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.collections import LineCollection
 
 
-def init_artists_line2d(axs, x, y, ic):
+def init_artists(axs, x, y, ic):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     nr, nc = axs.shape[2:4]

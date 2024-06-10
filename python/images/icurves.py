@@ -17,7 +17,7 @@ from modules.save_image import close_plt
 from modules_icurves.get_data import get_data
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_data import get_static_data
-from modules_icurves.init_artists import init_artists_line2d
+from modules_icurves.init_artists import init_artists
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
 from settings_icurves.data_constants import data_constants
@@ -61,7 +61,7 @@ def main(options):
         update_args["icurves"],
         update_args["icurves_grey"],
         update_args["landscapes"],
-    ) = init_artists_line2d(axs, data["x_values"], y, ic)
+    ) = init_artists(axs, data["x_values"], y, ic)
 
     format_artists(update_args["budgets"], image_budgets)
     format_artists(update_args["icurves"], image_icurves)
