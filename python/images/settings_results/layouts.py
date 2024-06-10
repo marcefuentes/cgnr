@@ -1,7 +1,7 @@
 """ Data layouts. """
 
 
-def figure_2(trait):
+def figure_2(trait, mechanism=None, given=None):
     """Figure 2."""
 
     given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
@@ -53,7 +53,7 @@ def figure_3(trait, mechanism, given):
     return layout
 
 
-def curves(trait):
+def curves(trait, mechanism=None, given=None):
     """Fitness curves for partner choice."""
 
     given_list = [["1.0"], ["0.5"]]
