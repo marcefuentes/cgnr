@@ -8,9 +8,6 @@ from modules_results.get_zmatrix import get_zmatrix
 def update_artists(t, update_args, options, dynamic_data):
     """Update artist data at time t."""
 
-    if options["movie"]:
-        dynamic_data["text"].set_text(t)
-
     for i, row in enumerate(dynamic_data["dfs"]):
         for j, _ in enumerate(row):
             zmatrix = update_zmatrix(t, dynamic_data, i, j)
@@ -22,7 +19,9 @@ def update_artists(t, update_args, options, dynamic_data):
             else:
                 artists[0, 0].set_array(zmatrix)
 
-    return artists.flatten()
+    if options["movie"]:
+        dynamic_data["text"].set_text(t)
+        return artists.flatten()
 
 
 def update_artists_histogram(t, artists, dynamic_data, i, j):
