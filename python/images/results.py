@@ -72,30 +72,18 @@ def main(options):
     }
 
     if options["layout"] == "curves":
-        x, y = get_curves(
-            image["n_x_values"],
-            layout["traits"],
-            layout["givens"],
-            data["alphas"],
-            data["rhos"],
-        )
+        x, y = get_curves(image["n_x_values"], layout["traits"], layout["givens"], data["alphas"], data["rhos"])
     elif options["histogram"]:
         x = np.arange(project["bins"])
-        y = np.zeros(
-            (
-                fig_layout["nrows"],
-                fig_layout["ncols"],
-                mr,
-                mc,
-                project["bins"],
-            )
-        )
+        y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"]))
+    else:
+        y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 
     if options["layout"] == "curves" or options["histogram"]:
         update_args["artists"] = init_line2d(axs, x, y)
         format_artists(update_args["artists"], image_lines)
     else:
-        update_args["artists"] = init_imshow(axs, mr, mc)
+        update_args["artists"] = init_imshow(axs, y)
         format_artists(update_args["artists"], image_show)
 
     axes_args = {
