@@ -1,6 +1,33 @@
 """ Data layouts. """
 
 
+def curves(trait, mechanism=None, given=None):
+    """Fitness curves for partner choice."""
+
+    given_list = [["1.0"], ["0.5"]]
+
+    variant = "nolang_noshuffle_cost15_4"
+
+    if "Mimic" in trait:
+        mechanism = "d"
+    elif "Choose" in trait:
+        mechanism = "p"
+
+    layout = {
+        "column_titles": [""],
+        "givens": given_list,
+        "givens_control": given_list,
+        "mechanisms": [[mechanism], [mechanism]],
+        "mechanisms_control": [["none"], ["none"]],
+        "variants": [[variant], [variant]],
+        "variants_control": [[variant], [variant]],
+        "row_titles": ["", ""],
+        "traits": [[trait], [trait]],
+    }
+
+    return layout
+
+
 def figure_2(trait, mechanism=None, given=None):
     """Figure 2."""
 
@@ -48,33 +75,6 @@ def figure_3(trait, mechanism, given):
         "variants_control": variant_list,
         "row_titles": ["", ""],
         "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
-    }
-
-    return layout
-
-
-def curves(trait, mechanism=None, given=None):
-    """Fitness curves for partner choice."""
-
-    given_list = [["1.0"], ["0.5"]]
-
-    variant = "nolang_noshuffle_cost15_4"
-
-    if "Mimic" in trait:
-        mechanism = "d"
-    elif "Choose" in trait:
-        mechanism = "p"
-
-    layout = {
-        "column_titles": [""],
-        "givens": given_list,
-        "givens_control": given_list,
-        "mechanisms": [[mechanism], [mechanism]],
-        "mechanisms_control": [["none"], ["none"]],
-        "variants": [[variant], [variant]],
-        "variants_control": [[variant], [variant]],
-        "row_titles": ["", ""],
-        "traits": [[trait], [trait]],
     }
 
     return layout
