@@ -2,7 +2,7 @@
 
 
 def curves(trait, mechanism=None, given=None):
-    """Fitness curves for partner choice. """
+    """Fitness curves for partner choice."""
 
     _ = given
 
