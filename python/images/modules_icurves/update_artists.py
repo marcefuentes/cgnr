@@ -7,32 +7,32 @@ import numpy as np
 from modules.theory import fitness, indifference, qbeq
 
 
-def update_artists(given, update_args, options, dynamic_data):
+def update_artists(given, update_args, options, data):
     """Update data in artists."""
 
     if options["movie"]:
-        dynamic_data["text"].set_text(f"{given:.2f}")
+        data["text"].set_text(f"{given:.2f}")
 
-    budget_own = (1.0 - dynamic_data["x_values"]) * (1.0 - given)
+    budget_own = (1.0 - data["x_values"]) * (1.0 - given)
 
-    for i, alpha in enumerate(dynamic_data["alphas"]):
-        for j, rho in enumerate(dynamic_data["rhos"]):
+    for i, alpha in enumerate(data["alphas"]):
+        for j, rho in enumerate(data["rhos"]):
 
             qb_private = qbeq(given, alpha, rho)
             update_args["budgets"][i, j].set_ydata(budget_own + qb_private * given)
 
             w = fitness(qb_private, qb_private, given, alpha, rho)
             update_args["icurves"][i, j].set_ydata(
-                indifference(dynamic_data["x_values"], w, alpha, rho)
+                indifference(data["x_values"], w, alpha, rho)
             )
             update_args["icurves"][i, j].set_color(
                 cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w)
             )
 
             y = fitness(
-                dynamic_data["x_values"], dynamic_data["x_values"], given, alpha, rho
+                data["x_values"], data["x_values"], given, alpha, rho
             )
-            points = np.array([dynamic_data["x_values"], y]).T.reshape((-1, 1, 2))
+            points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
             update_args["landscapes"][i, j].set_segments(
                 np.concatenate([points[:-1], points[1:]], axis=1)
             )

@@ -5,35 +5,35 @@ import numpy as np
 from modules_results.get_zmatrix import get_zmatrix
 
 
-def update_artists(t, update_args, options, dynamic_data):
+def update_artists(t, update_args, options, data):
     """Update artist data at time t."""
 
-    for i, row in enumerate(dynamic_data["dfs"]):
+    for i, row in enumerate(data["dfs"]):
         for j, _ in enumerate(row):
-            zmatrix = update_zmatrix(t, dynamic_data, i, j)
+            zmatrix = update_zmatrix(t, data, i, j)
             artists = update_args["artists"][i, j]
             if options["layout"] == "curves" or options["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
                 if options["histogram"]:
-                    artists = update_artists_histogram(t, artists, dynamic_data, i, j)
+                    artists = update_artists_histogram(t, artists, data, i, j)
             else:
                 artists[0, 0].set_array(zmatrix)
 
     if options["movie"]:
-        dynamic_data["text"].set_text(t)
+        data["text"].set_text(t)
         return artists.flatten()
 
 
-def update_artists_histogram(t, artists, dynamic_data, i, j):
+def update_artists_histogram(t, artists, data, i, j):
     """Update histograms."""
 
-    df = dynamic_data["dffrqs"][i][j]
+    df = data["dffrqs"][i][j]
     if df.empty:
         return artists
 
-    alphas = dynamic_data["alphas"]
-    logess = dynamic_data["logess"]
-    trait = dynamic_data["traits"][i][j]
+    alphas = data["alphas"]
+    logess = data["logess"]
+    trait = data["traits"][i][j]
     if "mean" in trait:
         trait = trait[:-4]
 
@@ -58,15 +58,15 @@ def update_artists_line2d(artists, zmatrix, cmap):
     return artists
 
 
-def update_zmatrix(t, dynamic_data, i, j):
+def update_zmatrix(t, data, i, j):
     """Return the updated zmatrix for a given time and trait."""
 
-    df = dynamic_data["dfs"][i, j]
-    df_control = dynamic_data["dfs_control"][i, j]
-    trait = dynamic_data["traits"][i][j]
+    df = data["dfs"][i, j]
+    df_control = data["dfs_control"][i, j]
+    trait = data["traits"][i][j]
 
     if "nothing" in trait or df.empty:
-        zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
+        zmatrix = np.zeros((len(data["alphas"]), len(data["logess"])))
         return zmatrix
 
     if df_control.empty:
@@ -85,5 +85,5 @@ def update_zmatrix(t, dynamic_data, i, j):
         return zmatrix
 
     print("\nData for one of the plots is incomplete.")
-    zmatrix = np.zeros((len(dynamic_data["alphas"]), len(dynamic_data["logess"])))
+    zmatrix = np.zeros((len(data["alphas"]), len(data["logess"])))
     return zmatrix

@@ -35,12 +35,12 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    dynamic_data = get_data(data_constants)
+    data = get_data(data_constants)
 
     fig_layout = {
-        "nc": len(dynamic_data["logess"]),
+        "nc": len(data["logess"]),
         "ncols": 2,
-        "nr": len(dynamic_data["alphas"]),
+        "nr": len(data["alphas"]),
         "nrows": 1,
     }
 
@@ -48,9 +48,9 @@ def main(options):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
-    dynamic_data["text"] = fig.texts[2]
-    dynamic_data["x_values"], y, ic = get_static_data(
-        dynamic_data["alphas"], dynamic_data["rhos"]
+    data["text"] = fig.texts[2]
+    data["x_values"], y, ic = get_static_data(
+        data["alphas"], data["rhos"]
     )
     update_args = {
         "cmap": colormaps.get_cmap(image["color_map"]),
@@ -63,7 +63,7 @@ def main(options):
         update_args["icurves"],
         update_args["icurves_grey"],
         update_args["landscapes"],
-    ) = init_artists_line2d(axs, dynamic_data["x_values"], y, ic)
+    ) = init_artists_line2d(axs, data["x_values"], y, ic)
 
     format_artists(update_args["budgets"], image_budgets)
     format_artists(update_args["icurves"], image_icurves)
@@ -72,12 +72,12 @@ def main(options):
 
     axes_args = {
         "axs": axs,
-        "c_labels": dynamic_data["logess"],
+        "c_labels": data["logess"],
         "column_titles": [""],
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
-        "r_labels": dynamic_data["alphas"],
+        "r_labels": data["alphas"],
         "row_titles": [""],
         "x_lim": [0, 1],
         "y_lim": [0, 1],
@@ -85,7 +85,7 @@ def main(options):
 
     format_axes(axes_args, image)
 
-    save_file(fig, update_args, options, dynamic_data)
+    save_file(fig, update_args, options, data)
 
     # pylint: disable=duplicate-code
     close_plt(fig)

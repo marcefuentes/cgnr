@@ -3,17 +3,17 @@
 from matplotlib.animation import FuncAnimation
 
 
-def save_movie(fig, update_args, options, dynamic_data):
+def save_movie(fig, update_args, options, data):
     """Function to create a movie"""
 
     movie = {
         "fig": fig,
-        "frames": dynamic_data["frames"],
+        "frames": data["frames"],
         "func": update_args["function"],
         "fargs": (
             update_args,
             options,
-            dynamic_data,
+            data,
         ),
         "blit": True,
     }

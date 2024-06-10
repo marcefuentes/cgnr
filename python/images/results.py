@@ -16,7 +16,7 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_results.get_dynamic_data import get_dynamic_data
+from modules_results.get_data import get_data
 from modules_results.get_layout import get_layout
 from modules_results.get_sm import get_sm
 from modules_results.get_curves import get_curves
@@ -34,10 +34,10 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data_layout = get_layout(options, layouts)
+    layout = get_layout(options, layouts)
     try:
-        dynamic_data = get_dynamic_data(
-            data_layout,
+        data = get_data(
+            layout,
             options,
             *project["output_file_extensions"],
         )
@@ -45,14 +45,14 @@ def main(options):
         print(error)
         return
 
-    mr = len(dynamic_data["alphas"])
-    mc = len(dynamic_data["logess"])
+    mr = len(data["alphas"])
+    mc = len(data["logess"])
 
     fig_layout = {
         "nc": 1,
-        "ncols": len(data_layout["variants"][0]),
+        "ncols": len(layout["variants"][0]),
         "nr": 1,
-        "nrows": len(data_layout["variants"]),
+        "nrows": len(layout["variants"]),
     }
 
     if options["layout"] == "curves" or options["histogram"]:
@@ -63,7 +63,7 @@ def main(options):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
-    dynamic_data["text"] = fig.texts[2]
+    data["text"] = fig.texts[2]
 
     update_args = {
         "cmap": colormaps.get_cmap(image["color_map"]),
@@ -74,10 +74,10 @@ def main(options):
     if options["layout"] == "curves":
         x, y = get_curves(
             image["n_x_values"],
-            data_layout["traits"],
-            data_layout["givens"],
-            dynamic_data["alphas"],
-            dynamic_data["rhos"],
+            layout["traits"],
+            layout["givens"],
+            data["alphas"],
+            data["rhos"],
         )
     elif options["histogram"]:
         x = np.arange(project["bins"])
@@ -101,20 +101,20 @@ def main(options):
     axes_args = {
         "axs": axs,
         "c_labels": [
-            dynamic_data["logess"][0],
-            dynamic_data["logess"][mc // 2],
-            dynamic_data["logess"][-1],
+            data["logess"][0],
+            data["logess"][mc // 2],
+            data["logess"][-1],
         ],
-        "column_titles": data_layout["column_titles"],
+        "column_titles": layout["column_titles"],
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": mc,
         "nr": mr,
         "r_labels": [
-            dynamic_data["alphas"][0],
-            dynamic_data["alphas"][mr // 2],
-            dynamic_data["alphas"][-1],
+            data["alphas"][0],
+            data["alphas"][mr // 2],
+            data["alphas"][-1],
         ],
-        "row_titles": data_layout["row_titles"],
+        "row_titles": layout["row_titles"],
         "x_lim": [None, None],
         "y_lim": [None, None],
     }
@@ -131,7 +131,7 @@ def main(options):
     format_axes(axes_args, image)
 
     update_args["file_name"] += f"_{options['trait']}"
-    save_file(fig, update_args, options, dynamic_data)
+    save_file(fig, update_args, options, data)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
