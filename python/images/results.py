@@ -20,7 +20,7 @@ from modules_results.get_data import get_data
 from modules_results.get_layout import get_layout
 from modules_results.get_sm import get_sm
 from modules_results.get_curves import get_curves
-from modules_results.init_artists import init_imshow, init_line2d
+from modules_results.init_artists import init_artists
 from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
 
@@ -85,13 +85,14 @@ def main(options):
             (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
         )
     else:
+        x = None
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 
+    update_args["artists"] = init_artists(axs, x, y)
+
     if options["layout"] == "curves" or options["histogram"]:
-        update_args["artists"] = init_line2d(axs, x, y)
         format_artists(update_args["artists"], image_lines)
     else:
-        update_args["artists"] = init_imshow(axs, y)
         format_artists(update_args["artists"], image_show)
 
     axes_args = {
