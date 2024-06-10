@@ -17,7 +17,7 @@ from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from modules_results.get_dynamic_data import get_dynamic_data
-from modules_results.get_data_layout import get_data_layout
+from modules_results.get_layout import get_layout
 from modules_results.get_sm import get_sm
 from modules_results.get_curves import get_curves
 from modules_results.init_artists import init_imshow, init_line2d
@@ -33,7 +33,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data_layout = get_data_layout(options)
+    data_layout = get_layout(options)
     try:
         dynamic_data = get_dynamic_data(
             data_layout,
