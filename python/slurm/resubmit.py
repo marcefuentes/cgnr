@@ -42,19 +42,17 @@ def process_folder(test):
     print(f"\n{colors['cyan']}{len(jobs_to_submit)}{colors['reset']} jobs to submit.\n")
 
     if test:
-        msg = (
+        print(
             f"{colors['white']}Would delete output files of jobs in {colors['reset']}"
             f"{colors['red']}red{colors['white']} and {colors['grey']}grey{colors['reset']}."
         )
-        print(msg)
     else:
         print(f"{colors['bold']}{colors['red']}This is not a test!{colors['reset']}")
-        msg = (
+        print(
             f"{colors['white']}Delete output files of jobs in {colors['reset']}"
             f"{colors['red']}red{colors['white']} and {colors['grey']}grey {colors['reset']}"
             f"{ask['yesno']} "
         )
-        print(msg, end="")
         user_input = input()
         if user_input.lower() == "n":
             sys.exit()

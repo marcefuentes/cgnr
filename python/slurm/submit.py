@@ -69,11 +69,10 @@ def process_folder(constraint, free_slots, last_job, test):
     else:
         job_min = last_job + 1
     if os.path.isfile(os.path.join(work_path, f"{job_min}{output_file_extension}")):
-        msg = (
+        print(
             f"{colors['red']}{work_path_print}/{job_min}{output_file_extension} "
             f"already exists.{colors['reset']}"
         )
-        print(msg)
         last_job = 0
         return free_slots, last_job
     job_max = get_job_max(work_path)
