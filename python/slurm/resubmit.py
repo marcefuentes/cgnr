@@ -27,7 +27,8 @@ def process_folder(test):
             last_job_file_path, _ = f.read().strip().split(",")
         if last_job_file_path == current_path:
             print(
-                f"{colors['red']}{last_job_file.split('/')[-1]} points to this folder.{colors['reset']}"
+                f"{colors['red']}{last_job_file.split('/')[-1]} points to this folder."
+                f"{colors['reset']}"
             )
             print(f"{colors['red']}Run submit first.{colors['reset']}")
             if test:
@@ -65,7 +66,7 @@ def process_folder(test):
             sys.exit()
         free_slots = st.get_free_slots(constraint)
         print(
-            f"\n{constraint}:{colors['reset']} {colors['cyan']}{free_slots}{colors['reset']} free slots"
+            f"\n{constraint}: {colors['cyan']}{free_slots}{colors['reset']} free slots"
         )
         if not free_slots:
             print(
@@ -78,11 +79,12 @@ def process_folder(test):
         del jobs_to_submit[:num_jobs_to_submit]
         free_slots -= num_jobs_to_submit
         print(
-            f"{colors['cyan']}{free_slots}{colors['reset']} free slots in {constraint}{colors['reset']}"
+            f"{colors['cyan']}{free_slots}{colors['reset']} free slots in {constraint}."
         )
         if not free_slots:
             print(
-                f"{colors['red']}{len(jobs_to_submit)}{colors['reset']} jobs remain to be submitted."
+                f"{colors['red']}{len(jobs_to_submit)}{colors['reset']}"
+                f" jobs remain to be submitted."
             )
 
 

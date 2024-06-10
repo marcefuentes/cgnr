@@ -205,7 +205,8 @@ def slots():
             end="",
         )
         print(
-            f"{colors['bold']}{colors['cyan']}{free_slots if free_slots else '':>4}{colors['reset']}"
+            f"{colors['bold']}{colors['cyan']}{free_slots if free_slots else '':>4}"
+            f"{colors['reset']}"
         )
 
     return total_free_slots
