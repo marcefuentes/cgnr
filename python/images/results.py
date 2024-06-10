@@ -72,10 +72,18 @@ def main(options):
     }
 
     if options["layout"] == "curves":
-        x, y = get_curves(image["n_x_values"], layout["traits"], layout["givens"], data["alphas"], data["rhos"])
+        x, y = get_curves(
+            image["n_x_values"],
+            layout["traits"],
+            layout["givens"],
+            data["alphas"],
+            data["rhos"],
+        )
     elif options["histogram"]:
         x = np.arange(project["bins"])
-        y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"]))
+        y = np.zeros(
+            (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
+        )
     else:
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 

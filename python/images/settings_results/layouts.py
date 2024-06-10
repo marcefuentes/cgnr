@@ -83,7 +83,6 @@ def figure_3(trait, mechanism, given):
 def theory(trait, mechanism=None, given=None):
     """First column is theoretical."""
 
-
     given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
     given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
 
@@ -99,7 +98,7 @@ def theory(trait, mechanism=None, given=None):
         "mechanisms": [[None, "none"] for _ in range(nrows)],
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
         "variants": [variant for _ in range(nrows)],
-        "variants_control": [variant for  _ in range(nrows)],
+        "variants_control": [variant for _ in range(nrows)],
         "row_titles": ["", "", ""],
         "traits": [[None, trait] for _ in range(nrows)],
     }
