@@ -26,7 +26,7 @@ from modules_results.update_artists import update_artists
 
 from settings_project.project import project
 from settings_results.image import image, image_lines, image_show
-import settings_results.layouts as layouts
+from settings_results import layouts
 
 
 def main(options):

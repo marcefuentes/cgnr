@@ -11,13 +11,16 @@ def update_artists(t, update_args, options, data):
     for i, row in enumerate(data["dfs"]):
         for j, _ in enumerate(row):
             zmatrix = update_zmatrix(t, data, i, j)
-            artists = update_args["artists"][i, j]
-            if options["layout"] == "curves" or options["histogram"]:
-                artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
-                if options["histogram"]:
-                    artists = update_artists_histogram(t, artists, data, i, j)
+            if zmatrix is None:
+                print("\nData for one of the plots is incomplete.")
             else:
-                artists[0, 0].set_array(zmatrix)
+                artists = update_args["artists"][i, j]
+                if options["layout"] == "curves" or options["histogram"]:
+                    artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
+                    if options["histogram"]:
+                        artists = update_artists_histogram(t, artists, data, i, j)
+                else:
+                    artists[0, 0].set_array(zmatrix)
 
     if options["movie"]:
         data["text"].set_text(t)
@@ -66,8 +69,7 @@ def update_zmatrix(t, data, i, j):
     trait = data["traits"][i][j]
 
     if "nothing" in trait or df.empty:
-        zmatrix = np.zeros((len(data["alphas"]), len(data["logess"])))
-        return zmatrix
+        return None
 
     if df_control.empty:
         zmatrix = get_zmatrix(t, df, trait)
@@ -84,6 +86,4 @@ def update_zmatrix(t, data, i, j):
             zmatrix = -zmatrix
         return zmatrix
 
-    print("\nData for one of the plots is incomplete.")
-    zmatrix = np.zeros((len(data["alphas"]), len(data["logess"])))
-    return zmatrix
+    return None
