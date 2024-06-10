@@ -16,7 +16,9 @@ def update_artists(t, update_args, options, data):
             else:
                 artists = update_args["artists"][i, j]
                 if options["layout"] == "curves" or options["histogram"]:
-                    artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
+                    artists = update_artists_line2d(
+                        artists, zmatrix, update_args["cmap"]
+                    )
                     if options["histogram"]:
                         artists = update_artists_histogram(t, artists, data, i, j)
                 else:
