@@ -51,7 +51,8 @@ def process_folder(test):
         print(f"{colors['bold']}{colors['red']}This is not a test!{colors['reset']}")
         print(
             f"{colors['white']}Delete output files of jobs in {colors['reset']}"
-            f"{colors['red']}red{colors['white']} and {colors['grey']}grey{colors['reset'] }"
+            f"{colors['red']}red{colors['white']} and {colors['grey']}grey"
+            f"{colors['white']}?{colors['reset']} "
             f"{ask['yesno']}"
         )
         user_input = input()

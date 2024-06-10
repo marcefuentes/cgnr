@@ -4,8 +4,8 @@ import logging
 import os
 import sys
 
-from modules.slurm_tools import submit_job
 from python_colors.colors import colors
+from modules.slurm_tools import submit_job
 
 
 def process_jobs(current_path_folders, job_array_string, constraint, test):
