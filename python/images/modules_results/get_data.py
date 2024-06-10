@@ -28,14 +28,18 @@ def get_data(layout, options, csv, frq):
     for i in range(nrows):
         for j in range(ncols):
             params["path"] = (
-                f"{layout['variants'][i][j]}/{layout['mechanisms'][i][j]}/{layout['givens'][i][j]}"
+                f"{layout['variants'][i][j]}/"
+                f"{layout['mechanisms'][i][j]}/"
+                f"{layout['givens'][i][j]}"
             )
             data["dfs"][i][j] = get_df(**params)
             if not data["dfs"][i][j].empty:
                 df = data["dfs"][i][j]
             if layout["mechanisms_control"][i][j] not in ["", "None"]:
                 params["path"] = (
-                    f"{layout['variants_control'][i][j]}/{layout['mechanisms_control'][i][j]}/{layout['givens_control'][i][j]}"
+                    f"{layout['variants_control'][i][j]}/"
+                    f"{layout['mechanisms_control'][i][j]}/"
+                    f"{layout['givens_control'][i][j]}"
                 )
                 data["dfs_control"][i][j] = get_df(**params)
 
@@ -48,7 +52,9 @@ def get_data(layout, options, csv, frq):
         for i in range(nrows):
             for j in range(ncols):
                 params["path"] = (
-                    f"{layout['variants'][i][j]}/{layout['mechanisms'][i][j]}/{layout['givens'][i][j]}"
+                    f"{layout['variants'][i][j]}/"
+                    f"{layout['mechanisms'][i][j]}/"
+                    f"{layout['givens'][i][j]}"
                 )
                 data["dffrqs"][i][j] = get_df(**params)
 
