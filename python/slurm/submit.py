@@ -105,8 +105,8 @@ def process_variant(constraint, free_slots, test, last_job_file):
         work_path_folders = work_path.split("/")
         work_path_print = "/".join(work_path_folders[-3:])
         print(
-            f"\n{colors['bold']}Submit jobs in {work_path_print}?{colors['reset']} {ask['yesno']} ",
-            end="",
+            f"\n{colors['bold']}Submit jobs in {work_path_print}?{colors['reset']} "
+            f"{ask['yesno']}"
         )
         user_input = input()
         if user_input.lower() == "n":
