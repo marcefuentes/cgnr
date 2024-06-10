@@ -80,8 +80,8 @@ def figure_3(trait, mechanism, given):
     return layout
 
 
-def prueba(trait, mechanism=None, given=None):
-    """Prueba."""
+def theory(trait, mechanism=None, given=None):
+    """First column is theoretical."""
 
 
     given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
