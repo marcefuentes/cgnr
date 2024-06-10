@@ -55,7 +55,7 @@ def get_dynamic_data(data_layout, options, csv, frq):
     dynamic_data["frames"] = df.Time.unique()
     dynamic_data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     dynamic_data["logess"] = np.sort(df["logES"].unique())
-    if options["figure"] == "curves":
+    if options["layout"] == "curves":
         dynamic_data["rhos"] = 1.0 - 1.0 / np.power(2.0, dynamic_data["logess"])
 
     return dynamic_data

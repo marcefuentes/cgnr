@@ -12,7 +12,7 @@ def update_artists(t, update_args, options, dynamic_data):
         for j, _ in enumerate(row):
             zmatrix = update_zmatrix(t, dynamic_data, i, j)
             artists = update_args["artists"][i, j]
-            if options["figure"] == "curves" or options["histogram"]:
+            if options["layout"] == "curves" or options["histogram"]:
                 artists = update_artists_line2d(artists, zmatrix, update_args["cmap"])
                 if options["histogram"]:
                     artists = update_artists_histogram(t, artists, dynamic_data, i, j)

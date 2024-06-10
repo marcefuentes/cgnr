@@ -26,6 +26,7 @@ from modules_results.update_artists import update_artists
 
 from settings_project.project import project
 from settings_results.image import image, image_lines, image_show
+import settings_results.layouts as layouts
 
 
 def main(options):
@@ -33,7 +34,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data_layout = get_layout(options)
+    data_layout = get_layout(options, layouts)
     try:
         dynamic_data = get_dynamic_data(
             data_layout,
@@ -54,7 +55,7 @@ def main(options):
         "nrows": len(data_layout["variants"]),
     }
 
-    if options["figure"] == "curves" or options["histogram"]:
+    if options["layout"] == "curves" or options["histogram"]:
         fig_layout["nc"] = mc
         fig_layout["nr"] = mr
 
@@ -70,7 +71,7 @@ def main(options):
         "function": update_artists,
     }
 
-    if options["figure"] == "curves":
+    if options["layout"] == "curves":
         x, y = get_curves(
             image["n_x_values"],
             data_layout["traits"],
@@ -90,7 +91,7 @@ def main(options):
             )
         )
 
-    if options["figure"] == "curves" or options["histogram"]:
+    if options["layout"] == "curves" or options["histogram"]:
         update_args["artists"] = init_line2d(axs, x, y)
         format_artists(update_args["artists"], image_lines)
     else:
@@ -118,7 +119,7 @@ def main(options):
         "y_lim": [None, None],
     }
 
-    if options["figure"] == "curves":
+    if options["layout"] == "curves":
         axes_args["x_lim"] = [0, 1]
         axes_args["y_lim"] = [0, 1]
         update_args["file_name"] += "_curves"

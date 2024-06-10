@@ -1,8 +1,10 @@
 """ Parses the arguments of the command line. """
 
 import argparse
+import inspect
 import os
 
+import settings_results.layouts as layouts
 
 def parse_args():
     """Parse command line arguments and return them as a dictionary"""
@@ -13,14 +15,16 @@ def parse_args():
         description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
+    layout_names = [name for name, _ in inspect.getmembers(layouts, inspect.isfunction)]
+
     args_dict = {
         "trait": {
             "type": str,
             "help": "trait (required)",
         },
-        "figure": {
+        "layout": {
             "type": str,
-            "choices": ["figure_2", "figure_3", "curves"],
+            "choices": layout_names,
             "default": "figure_3",
             "help": "figure",
         },

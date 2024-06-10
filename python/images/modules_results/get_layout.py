@@ -1,12 +1,10 @@
 """Get data layout for a figure."""
 
-import settings_results.layouts as layouts
 
-
-def get_layout(options):
+def get_layout(options, layouts):
     """Get data layout for a figure."""
 
-    layout_function = getattr(layouts, options["figure"])
+    layout_function = getattr(layouts, options["layout"])
     return layout_function(
         options["trait"],
         options["mechanism"],
