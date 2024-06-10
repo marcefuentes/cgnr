@@ -29,9 +29,7 @@ def update_artists(given, update_args, options, data):
                 cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w)
             )
 
-            y = fitness(
-                data["x_values"], data["x_values"], given, alpha, rho
-            )
+            y = fitness(data["x_values"], data["x_values"], given, alpha, rho)
             points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
             update_args["landscapes"][i, j].set_segments(
                 np.concatenate([points[:-1], points[1:]], axis=1)

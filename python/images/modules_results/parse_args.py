@@ -6,6 +6,7 @@ import os
 
 import settings_results.layouts as layouts
 
+
 def parse_args():
     """Parse command line arguments and return them as a dictionary"""
 
