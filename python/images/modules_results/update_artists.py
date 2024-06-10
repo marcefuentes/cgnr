@@ -1,12 +1,14 @@
 """ Update data in artists. """
 
 import re
-import numpy as np
 from modules_results.get_zmatrix import get_zmatrix
 
 
 def update_artists(t, update_args, options, data):
     """Update artist data at time t."""
+
+    if options["movie"]:
+        data["text"].set_text(t)
 
     for i, row in enumerate(data["dfs"]):
         for j, _ in enumerate(row):
@@ -24,9 +26,7 @@ def update_artists(t, update_args, options, data):
                 else:
                     artists[0, 0].set_array(zmatrix)
 
-    if options["movie"]:
-        data["text"].set_text(t)
-        return artists.flatten()
+    return artists.flatten()
 
 
 def update_artists_histogram(t, artists, data, i, j):
@@ -36,20 +36,18 @@ def update_artists_histogram(t, artists, data, i, j):
     if df.empty:
         return artists
 
-    alphas = data["alphas"]
-    logess = data["logess"]
     trait = data["traits"][i][j]
     if "mean" in trait:
         trait = trait[:-4]
 
     df = df[df["Time"] == t]
 
-    for i, alpha in enumerate(alphas):
-        for j, loges in enumerate(logess):
+    for k, alpha in enumerate(data["alphas"]):
+        for m, loges in enumerate(data["logess"]):
             d = df[(df["alpha"] == alpha) & (df["logES"] == loges)]
             freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
             y = d.loc[:, freq_a].values[0].flatten()
-            artists[i, j].set_ydata(y)
+            artists[k, m].set_ydata(y)
     return artists
 
 

@@ -2,7 +2,9 @@
 
 
 def curves(trait, mechanism=None, given=None):
-    """Fitness curves for partner choice."""
+    """Fitness curves for partner choice. """
+
+    _ = given
 
     given_list = [["1.0"], ["0.5"]]
 
@@ -30,6 +32,9 @@ def curves(trait, mechanism=None, given=None):
 
 def figure_2(trait, mechanism=None, given=None):
     """Figure 2."""
+
+    _ = given
+    _ = mechanism
 
     given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
     given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
@@ -83,13 +88,15 @@ def figure_3(trait, mechanism, given):
 def theory(trait, mechanism=None, given=None):
     """First column is theoretical."""
 
+    _ = given
+    _ = mechanism
+
     given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
     given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
 
     variant = [None, "nolang_noshuffle_cost15_4"]
 
     nrows = len(given_list)
-    ncols = len(given_list[0])
 
     layout = {
         "column_titles": ["Fitness", "Fitness\nrelative to optimum"],

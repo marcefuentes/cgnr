@@ -2,9 +2,8 @@
 
 import argparse
 import inspect
-import os
 
-import settings_results.layouts as layouts
+from settings_results import layouts
 
 
 def parse_args():

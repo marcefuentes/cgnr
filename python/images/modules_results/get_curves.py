@@ -1,6 +1,5 @@
 """ Calculates fitness isoclines. """
 
-import os
 import numpy as np
 from modules.theory import calculate_trps, qbeq
 
