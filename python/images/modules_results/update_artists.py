@@ -83,7 +83,7 @@ def update_zmatrix(t, data, i, j):
     if zmatrix_treatment.shape == zmatrix_control.shape:
         zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
         if "Grainmean" in trait:
-            zmatrix = -zmatrix
+            zmatrix = 0.0 - zmatrix
         return zmatrix
 
     return None
