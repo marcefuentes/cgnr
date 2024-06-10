@@ -47,7 +47,7 @@ def figure_2(trait, mechanism=None, given=None):
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
         "variants": [[variant for _ in range(ncols)] for _ in range(nrows)],
         "variants_control": [[variant for _ in range(ncols)] for _ in range(nrows)],
-        "row_titles": ["", ""],
+        "row_titles": ["", "", ""],
         "traits": [[trait, trait] for _ in range(nrows)],
     }
 
@@ -75,6 +75,33 @@ def figure_3(trait, mechanism, given):
         "variants_control": variant_list,
         "row_titles": ["", ""],
         "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
+    }
+
+    return layout
+
+
+def prueba(trait, mechanism=None, given=None):
+    """Prueba."""
+
+
+    given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
+    given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
+
+    variant = [None, "nolang_noshuffle_cost15_4"]
+
+    nrows = len(given_list)
+    ncols = len(given_list[0])
+
+    layout = {
+        "column_titles": ["Fitness", "Fitness\nrelative to optimum"],
+        "givens": given_list,
+        "givens_control": given_control_list,
+        "mechanisms": [[None, "none"] for _ in range(nrows)],
+        "mechanisms_control": [[None, "none"] for _ in range(nrows)],
+        "variants": [variant for _ in range(nrows)],
+        "variants_control": [variant for  _ in range(nrows)],
+        "row_titles": ["", "", ""],
+        "traits": [[None, trait] for _ in range(nrows)],
     }
 
     return layout

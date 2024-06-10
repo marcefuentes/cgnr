@@ -70,7 +70,7 @@ def update_zmatrix(t, data, i, j):
     df_control = data["dfs_control"][i, j]
     trait = data["traits"][i][j]
 
-    if "nothing" in trait or df.empty:
+    if trait is None or df.empty:
         return None
 
     if df_control.empty:
