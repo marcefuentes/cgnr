@@ -14,7 +14,7 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_icurves.get_data import get_data
+from modules_icurves.get_data_constants import get_data_constants
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_data import get_static_data
 from modules_icurves.init_artists import init_artists
@@ -35,7 +35,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data = get_data(data_constants)
+    data = get_data_constants(data_constants)
 
     fig_layout = {
         "nc": len(data["logess"]),
@@ -71,7 +71,7 @@ def main(options):
     axes_args = {
         "axs": axs,
         "c_labels": data["logess"],
-        "column_titles": [""],
+        "column_titles": ["", ""],
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
