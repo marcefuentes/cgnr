@@ -14,7 +14,6 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_icurves.get_data_constants import get_data_constants
 from modules_icurves.get_sm import get_sm
 from modules_icurves.get_static_data import get_static_data
 from modules_icurves.init_artists import init_artists
@@ -35,7 +34,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data = get_data_constants(data_constants)
+    data = data_constants()
 
     fig_layout = {
         "nc": len(data["logess"]),
@@ -49,7 +48,7 @@ def main(options):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
-    data["x_values"], y, ic = get_static_data(data["alphas"], data["rhos"])
+    data["x_values"], y, ic = get_static_data(data)
     update_args = {
         "cmap": colormaps.get_cmap(image["color_map"]),
         "file_name": os.path.basename(__file__).split(".")[0],
