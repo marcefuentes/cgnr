@@ -40,13 +40,11 @@ def update_artists(given_movie, update_args, options, data):
                     rho,
                 )
                 points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
-                update_args["landscapes"][i, j, k].set_segments(
-                    np.concatenate([points[:-1], points[1:]], axis=1)
-                )
                 update_args["landscapes"][i, j, k].set(
                     array=y,
                     cmap=cm.get_cmap(update_args["cmap"]),
                     norm=plt.Normalize(-1, 1),
+                    segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
 
     return np.concatenate(
