@@ -9,7 +9,6 @@ def get_static_data(data):
     """Calculates static fitness isoclines."""
 
     x = np.linspace(0.001, 0.999, num=data["n_x_values"])
-
     y = np.zeros_like(x)
 
     n_ic = data["n_ic"]
@@ -22,10 +21,10 @@ def get_static_data(data):
 
     isoclines = np.zeros(
         (
-            len(data["alphas"]),
-            len(data["rhos"]),
+            data["nr"],
+            data["nc"],
             n_ic,
-            len(x),
+            data["n_x_values"],
         )
     )
 
