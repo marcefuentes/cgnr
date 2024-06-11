@@ -3,7 +3,6 @@
 PLOT_SIZE = 4
 
 image = {
-    "add_row_titles": False,
     "big_label_size": 9 * PLOT_SIZE,
     "border_color": "0.3",
     "border_width": 0.1 * PLOT_SIZE,
@@ -20,9 +19,33 @@ image = {
     "print_folder": False,
     "right_margin": 0.7 * PLOT_SIZE,
     "spacing": 0.1875 * PLOT_SIZE,
-    "tick_color": "0.3",
-    "tick_label_size": 6 * PLOT_SIZE,
-    "tick_size": 2.0 * PLOT_SIZE,
+    "column_titles": {
+        "fontsize": 8 * PLOT_SIZE,
+        "pad": 11 * PLOT_SIZE,
+    },
+    "letters": {
+        "fontsize": 8 * PLOT_SIZE,
+        "weight": "bold",
+    },
+    "row_titles": {
+        "fontsize": 8 * PLOT_SIZE,
+        "ha": "left",
+        "textcoords": "offset points",
+        "va": "center",
+        "xy": (1, 0.5),
+        "xycoords": "axes fraction",
+        "xytext": (11 * 3.5 * PLOT_SIZE, 0),
+    },
+    "spines": {
+        "color": "0.3",
+        "linewidth": 0.1 * PLOT_SIZE,
+    },
+    "ticks": {
+        "color": "0.3",
+        "labelsize": 6 * PLOT_SIZE,
+        "size": 2.0 * PLOT_SIZE,
+    },
+    "text_label_size": 8 * PLOT_SIZE,
     "title_padding": 11 * PLOT_SIZE,
     "top_margin": 0.625 * PLOT_SIZE,
     "x_label": "Substitutability of $\\it{B}$",

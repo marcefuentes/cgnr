@@ -22,12 +22,8 @@ def format_axes(axes_args, image):
 
     # Format spines
 
-    params = {
-        "linewidth": image["border_width"],
-        "color": image["border_color"],
-    }
     for ax in axs.flatten():
-        tools.format_spines(ax, **params)
+        tools.format_spines(ax, **image["spines"])
 
     # Set limits and reset ticks
 
@@ -42,51 +38,26 @@ def format_axes(axes_args, image):
 
     # Add ticks and tick labels
 
-    params = {
-        "labelsize": image["tick_label_size"],
-        "size": image["tick_size"],
-        "color": image["tick_color"],
-    }
     if axs.shape[2] == 1:
-        tools.add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], params)
+        tools.add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], image["ticks"])
         tools.add_ticklabels_imshow(axs, axes_args["r_labels"], axes_args["c_labels"])
     else:
-        tools.add_ticks_line2d(axs, params)
+        tools.add_ticks_line2d(axs, image["ticks"])
         tools.add_ticklabels_line2d(axs, axes_args["r_labels"], axes_args["c_labels"])
 
     # Add letters
 
     position = (0, 1.0 + image["letter_padding"] * nr)
-    params = {
-        "fontsize": image["letter_label_size"],
-        "weight": "bold",
-    }
     for i in range(nrows):
         for j in range(ncols):
-            tools.add_letters(axs[i, j, 0, 0], position, params, i * ncols + j)
+            tools.add_letters(axs[i, j, 0, 0], position, image["letters"], i * ncols + j)
 
     # Add column titles
 
-    params = {
-        "pad": image["title_padding"],
-        "fontsize": image["letter_label_size"],
-    }
     for j in range(ncols):
-        axs[0, j, 0, int(nc / 2)].set_title(axes_args["column_titles"][j], **params)
+        axs[0, j, 0, int(nc / 2)].set_title(axes_args["column_titles"][j], **image["column_titles"])
 
     # Add row titles
 
-    params = {
-        "xy": (1, 0.5),
-        "xycoords": "axes fraction",
-        "xytext": (
-            image["title_padding"] * 3.5,
-            0,
-        ),
-        "textcoords": "offset points",
-        "va": "center",
-        "ha": "left",
-        "fontsize": image["letter_label_size"],
-    }
     for i in range(nrows):
-        axs[i, -1, int(nr / 2), -1].annotate(axes_args["row_titles"][i], **params)
+        axs[i, -1, int(nr / 2), -1].annotate(axes_args["row_titles"][i], **image["row_titles"])
