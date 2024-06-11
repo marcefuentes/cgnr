@@ -10,16 +10,16 @@ def get_curves(num, traits, givens, alphas, rhos):
     x = np.linspace(0.001, 0.999, num=num)
     y = np.zeros((len(givens), len(givens[0]), len(alphas), len(rhos), len(x)))
 
-    for i, givens_row in enumerate(givens):
-        for j, given in enumerate(givens_row):
-            for k, alpha in enumerate(alphas):
-                for m, rho in enumerate(rhos):
+    for i in range(y.shape[0]):
+        for j in range(y.shape[1]):
+            for k in range(y.shape[2]):
+                for m in range(y.shape[3]):
                     y[i, j, k, m] = process_plot(
-                        x, traits[i][j], float(given), alpha, rho
+                        x, traits[i][j], float(givens[i][j]), alphas[k], rhos[m]
                     )
 
     mask = y <= 0
-    y[mask] = None
+    y[mask] = np.nan
 
     return x, y
 
