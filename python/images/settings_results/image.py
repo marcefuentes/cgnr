@@ -25,7 +25,6 @@ image = {
     "x_label_size": 0.5 * PLOT_SIZE,
     "y_label": "Influence of $\\it{B}$",
     "y_label_size": 0.5 * PLOT_SIZE,
-
     "colorbar": {
         "edgecolor": DARK_GREY,
         "linewidth": LINE_WIDTH * PLOT_SIZE,

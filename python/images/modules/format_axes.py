@@ -50,14 +50,20 @@ def format_axes(axes_args, image):
     position = (0, 1.0 + image["letter_padding"] * nr)
     for i in range(nrows):
         for j in range(ncols):
-            tools.add_letters(axs[i, j, 0, 0], position, image["letters"], i * ncols + j)
+            tools.add_letters(
+                axs[i, j, 0, 0], position, image["letters"], i * ncols + j
+            )
 
     # Add column titles
 
     for j in range(ncols):
-        axs[0, j, 0, int(nc / 2)].set_title(axes_args["column_titles"][j], **image["column_titles"])
+        axs[0, j, 0, int(nc / 2)].set_title(
+            axes_args["column_titles"][j], **image["column_titles"]
+        )
 
     # Add row titles
 
     for i in range(nrows):
-        axs[i, -1, int(nr / 2), -1].annotate(axes_args["row_titles"][i], **image["row_titles"])
+        axs[i, -1, int(nr / 2), -1].annotate(
+            axes_args["row_titles"][i], **image["row_titles"]
+        )

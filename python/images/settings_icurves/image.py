@@ -24,7 +24,6 @@ image = {
     "x_label_size": 0.5 * PLOT_SIZE,
     "y_label": "Influence of $\\it{B}$",
     "y_label_size": 0.5 * PLOT_SIZE,
-
     "budgets": {
         "alpha": 0.6,
         "color": "0.300",
