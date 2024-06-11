@@ -28,14 +28,14 @@ def format_fig(fig, distances, image, sm):
         t=image["x_label"],
         x=(image["left_margin"] + distances["inner_width"] / 2) / distances["width"],
         y=image["bottom_margin"] / 2.5 / distances["height"],
-        fontsize=image["big_label_size"],
+        fontsize=image["suplabel_size"],
     )
     fig.supylabel(
         t=image["y_label"],
         x=image["left_margin"] / 2.8 / distances["width"],
         y=(image["bottom_margin"] + distances["inner_height"] / 2)
         / distances["height"],
-        fontsize=image["big_label_size"],
+        fontsize=image["suplabel_size"],
     )
 
     cax = fig.add_axes(
@@ -66,10 +66,9 @@ def format_fig(fig, distances, image, sm):
     else:
         bottom_text = ""
     fig.text(
+        ha="right",
+        s=bottom_text,
         x=(image["left_margin"] + distances["inner_width"]) / distances["width"],
         y=(image["bottom_margin"] - image["x_label_size"]) / distances["height"],
-        s=bottom_text,
-        fontsize=image["text_label_size"],
-        color="grey",
-        ha="right",
+        **image["text"],
     )
