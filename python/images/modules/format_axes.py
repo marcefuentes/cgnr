@@ -13,10 +13,12 @@ def format_axes(axes_args, image):
     # Position axes
 
     for i, j, k, m in np.ndindex(axs.shape):
-        axs[i, j, k, m].set(axes_locator = axes_args["divider"].new_locator(
-            nx=j * (nc + 1) + m + int(m / nc),
-            ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
-        ))
+        axs[i, j, k, m].set(
+            axes_locator=axes_args["divider"].new_locator(
+                nx=j * (nc + 1) + m + int(m / nc),
+                ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
+            )
+        )
 
     # Format spines
 
