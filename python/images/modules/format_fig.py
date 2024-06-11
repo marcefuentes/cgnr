@@ -58,11 +58,7 @@ def format_fig(fig, distances, image, sm):
     )  # [left, bottom, width, height]
     ticks = [-1, 0, 1]
     cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
-    cbar.ax.tick_params(
-        labelsize=image["ticks"]["labelsize"],
-        size=image["ticks"]["size"],
-        color=image["ticks"]["color"],
-    )
+    cbar.ax.tick_params(**image["ticks"])
     cbar.outline.set_linewidth(image["border_width"])
     cbar.outline.set_edgecolor(image["border_color"])
 
