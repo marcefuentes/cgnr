@@ -59,8 +59,7 @@ def format_fig(fig, distances, image, sm):
     ticks = [-1, 0, 1]
     cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
     cbar.ax.tick_params(**image["ticks"])
-    cbar.outline.set_linewidth(image["border_width"])
-    cbar.outline.set_edgecolor(image["border_color"])
+    cbar.outline.set(**image["colorbar"])
 
     if image["print_folder"]:
         bottom_text = os.path.basename(os.getcwd())

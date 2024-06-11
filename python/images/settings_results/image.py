@@ -19,6 +19,10 @@ image = {
     "print_folder": False,
     "right_margin": 0.7 * PLOT_SIZE,
     "spacing": 0.1875 * PLOT_SIZE,
+    "colorbar": {
+        "edgecolor": "0.3",
+        "linewidth": 0.1 * PLOT_SIZE,
+    },
     "column_titles": {
         "fontsize": 8 * PLOT_SIZE,
         "pad": 11 * PLOT_SIZE,
