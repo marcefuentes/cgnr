@@ -64,6 +64,6 @@ image = {
     "ticks": {
         "color": "0.3",
         "labelsize": 6 * PLOT_SIZE,
-        "size": 2.0 * PLOT_SIZE,
+        "size": 1.0 * PLOT_SIZE,
     },
 }
