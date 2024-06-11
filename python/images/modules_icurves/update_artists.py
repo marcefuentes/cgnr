@@ -13,30 +13,30 @@ def update_artists(given, update_args, options, data):
     if options["movie"]:
         data["text"].set_text(f"{given:.2f}")
 
-    budget_own = (1.0 - data["x_values"]) * (1.0 - given)
+    for i, given in enumerate(data["givens"]):
+        budget_own = (1.0 - data["x_values"]) * (1.0 - given)
+        for j, alpha in enumerate(data["alphas"]):
+            for k, rho in enumerate(data["rhos"]):
 
-    for i, alpha in enumerate(data["alphas"]):
-        for j, rho in enumerate(data["rhos"]):
+                qb_private = qbeq(given, alpha, rho)
+                update_args["budgets"][i, j, k].set_ydata(budget_own + qb_private * given)
 
-            qb_private = qbeq(given, alpha, rho)
-            update_args["budgets"][i, j].set_ydata(budget_own + qb_private * given)
+                w = fitness(qb_private, qb_private, given, alpha, rho)
+                update_args["icurves"][i, j, k].set_ydata(
+                    indifference(data["x_values"], w, alpha, rho)
+                )
+                update_args["icurves"][i, j, k].set_color(
+                    cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w)
+                )
 
-            w = fitness(qb_private, qb_private, given, alpha, rho)
-            update_args["icurves"][i, j].set_ydata(
-                indifference(data["x_values"], w, alpha, rho)
-            )
-            update_args["icurves"][i, j].set_color(
-                cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w)
-            )
-
-            y = fitness(data["x_values"], data["x_values"], given, alpha, rho)
-            points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
-            update_args["landscapes"][i, j].set_segments(
-                np.concatenate([points[:-1], points[1:]], axis=1)
-            )
-            update_args["landscapes"][i, j].set_array(y)
-            update_args["landscapes"][i, j].set_cmap(cm.get_cmap(update_args["cmap"]))
-            update_args["landscapes"][i, j].set_norm(plt.Normalize(-1, 1))
+                y = fitness(data["x_values"], data["x_values"], given, alpha, rho)
+                points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
+                update_args["landscapes"][i, j, k].set_segments(
+                    np.concatenate([points[:-1], points[1:]], axis=1)
+                )
+                update_args["landscapes"][i, j, k].set_array(y)
+                update_args["landscapes"][i, j, k].set_cmap(cm.get_cmap(update_args["cmap"]))
+                update_args["landscapes"][i, j, k].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(
         [

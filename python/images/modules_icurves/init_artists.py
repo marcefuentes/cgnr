@@ -7,19 +7,20 @@ from matplotlib.collections import LineCollection
 def init_artists(axs, x, y, ic):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
-    nr, nc = axs.shape[2:4]
-    budgets = np.empty((nr, nc), dtype=object)
-    icurves = np.empty((nr, nc), dtype=object)
-    icurves_grey = np.empty((nr, nc, ic.shape[2]), dtype=object)
-    landscapes = np.empty((nr, nc), dtype=object)
+    nrows, _, nr, nc = axs.shape
+    budgets = np.empty((nrows, nr, nc), dtype=object)
+    icurves = np.empty((nrows, nr, nc), dtype=object)
+    icurves_grey = np.empty((nrows, nr, nc, ic.shape[2]), dtype=object)
+    landscapes = np.empty((nrows, nr, nc), dtype=object)
 
-    for i in range(nr):
-        for j in range(nc):
-            for k in range(ic.shape[2]):
-                icurves_grey[i, j, k] = axs[0, 0, i, j].plot(x, ic[i, j, k])[0]
-            budgets[i, j] = axs[0, 0, i, j].plot(x, y)[0]
-            icurves[i, j] = axs[0, 0, i, j].plot(x, y)[0]
-            landscapes[i, j] = LineCollection([])
-            axs[0, 1, i, j].add_collection(landscapes[i, j])
+    for i in range(nrows):
+        for j in range(nr):
+            for k in range(nc):
+                for m in range(ic.shape[2]):
+                    icurves_grey[i, j, k, m] = axs[i, 0, j, k].plot(x, ic[j, k, m])[0]
+                budgets[i, j, k] = axs[i, 0, j, k].plot(x, y)[0]
+                icurves[i, j, k] = axs[i, 0, j, k].plot(x, y)[0]
+                landscapes[i, j, k] = LineCollection([])
+                axs[i, 1, j, k].add_collection(landscapes[i, j, k])
 
     return budgets, icurves, icurves_grey, landscapes

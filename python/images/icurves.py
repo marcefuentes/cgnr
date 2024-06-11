@@ -31,10 +31,10 @@ def main(options):
     data = data_constants()
 
     fig_layout = {
-        "nc": len(data["logess"]),
+        "nc": data["nc"],
         "ncols": 2,
-        "nr": len(data["alphas"]),
-        "nrows": 1,
+        "nr": data["nr"],
+        "nrows": len(data["givens"]),
     }
 
     fig, axs = create_fig(fig_layout)
@@ -69,7 +69,7 @@ def main(options):
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
         "r_labels": data["alphas"],
-        "row_titles": [""],
+        "row_titles": [""] * fig_layout["nr"],
         "x_lim": [0, 1],
         "y_lim": [0, 1],
     }
