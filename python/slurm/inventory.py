@@ -6,9 +6,9 @@ import csv
 import os
 import sys
 
-from modules.argparse_utils import parse_args
-from modules.slurm_tools import get_squeue_stats, slots
 from modules.list_of_folders import list_of_folders
+from modules.parse_args import parse_args
+from modules.slurm_tools import get_squeue_stats, slots
 from python_colors.colors import colors, ask
 from settings_project.project import project
 import submit

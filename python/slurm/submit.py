@@ -5,7 +5,7 @@
 import os
 import sys
 
-from modules.argparse_utils import parse_args
+from modules.parse_args import parse_args
 from modules.list_of_folders import list_of_folders
 from modules.process_jobs import process_jobs
 import modules.slurm_tools as st
