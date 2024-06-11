@@ -45,11 +45,11 @@ def update_artists(given_movie, update_args, options, data):
                 update_args["landscapes"][i, j, k].set_segments(
                     np.concatenate([points[:-1], points[1:]], axis=1)
                 )
-                update_args["landscapes"][i, j, k].set_array(y)
-                update_args["landscapes"][i, j, k].set_cmap(
-                    cm.get_cmap(update_args["cmap"])
+                update_args["landscapes"][i, j, k].set(
+                    array=y,
+                    cmap=cm.get_cmap(update_args["cmap"]),
+                    norm=plt.Normalize(-1, 1),
                 )
-                update_args["landscapes"][i, j, k].set_norm(plt.Normalize(-1, 1))
 
     return np.concatenate(
         [
