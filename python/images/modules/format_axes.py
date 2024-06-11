@@ -10,27 +10,29 @@ def format_axes(axes_args, image):
     axs = axes_args["axs"]
     nrows, ncols, nr, nc = axs.shape
 
-    # Format spines, reset ticks, set limits and position axes
+    # Format spines
 
-    spine_params = {
+    params = {
         "linewidth": image["border_width"],
         "color": image["border_color"],
     }
+    for ax in axs.flatten():
+        tools.format_spines(ax, **params)
+
+    # Reset ticks, set limits and position axes
+
     params = {
         "xticks": [],
         "yticks": [],
         "xlim": axes_args["x_lim"],
         "ylim": axes_args["y_lim"],
     }
-
     for i, j, k, m in np.ndindex(axs.shape):
-        ax = axs[i, j, k, m]
-        tools.format_spines(ax, **spine_params)
         params["axes_locator"] = axes_args["divider"].new_locator(
             nx=j * (nc + 1) + m + int(m / nc),
             ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
         )
-        ax.set(**params)
+        axs[i, j, k, m].set(**params)
 
     # Add letters
 
@@ -49,8 +51,8 @@ def format_axes(axes_args, image):
         "pad": image["plot_size"] * image["title_padding"],
         "fontsize": image["letter_label_size"],
     }
-    for j, title in enumerate(axes_args["column_titles"]):
-        axs[0, j, 0, int(nc / 2)].set_title(title, **params)
+    for j in range(ncols):
+        axs[0, j, 0, int(nc / 2)].set_title(axes_args["column_titles"][j], **params)
 
     # Add row titles
 
@@ -66,8 +68,8 @@ def format_axes(axes_args, image):
         "ha": "left",
         "fontsize": image["letter_label_size"],
     }
-    for i, title in enumerate(axes_args["row_titles"]):
-        axs[i, -1, int(nr / 2), -1].annotate(title, **params)
+    for i in range(nrows):
+        axs[i, -1, int(nr / 2), -1].annotate(axes_args["row_titles"][i], **params)
 
     # Add ticks and tick labels
 
