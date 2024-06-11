@@ -1,6 +1,8 @@
 """ Parameters for the images module. """
 
 COLOR_MAP = "RdBu_r"
+DARK_GREY = "0.3"
+LINE_WIDTH = 0.2
 PLOT_SIZE = 4
 
 image = {
@@ -29,8 +31,8 @@ image = {
         "linewidth": 0.9 * PLOT_SIZE,
     },
     "colorbar": {
-        "edgecolor": "0.3",
-        "linewidth": 0.1 * PLOT_SIZE,
+        "edgecolor": DARK_GREY,
+        "linewidth": LINE_WIDTH * PLOT_SIZE,
     },
     "column_titles": {
         "fontsize": 8 * PLOT_SIZE,
@@ -65,16 +67,17 @@ image = {
         "clim": (-1, 1),
     },
     "spines": {
-        "color": "0.3",
-        "linewidth": 0.1 * PLOT_SIZE,
+        "color": DARK_GREY,
+        "linewidth": LINE_WIDTH * PLOT_SIZE,
     },
     "text": {
         "color": "0.3",
         "fontsize": 8 * PLOT_SIZE,
     },
     "ticks": {
-        "color": "0.3",
+        "color": DARK_GREY,
         "labelsize": 6 * PLOT_SIZE,
-        "size": 0 * PLOT_SIZE,
+        "length": 1.0 * PLOT_SIZE,
+        "width": LINE_WIDTH * PLOT_SIZE,
     },
 }
