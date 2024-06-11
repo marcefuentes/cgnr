@@ -21,7 +21,7 @@ image = {
     "tick_color": "1.0",
     "tick_label_size": 6 * PLOT_SIZE,
     "tick_size": 2.0 * PLOT_SIZE,
-    "title_padding": 11,
+    "title_padding": 11 * PLOT_SIZE,
     "top_margin": 0.3 * PLOT_SIZE,
     "x_label": "Substitutability of $\\it{B}$",
     "x_label_size": 0.5 * PLOT_SIZE,

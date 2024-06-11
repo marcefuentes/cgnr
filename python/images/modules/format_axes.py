@@ -68,7 +68,7 @@ def format_axes(axes_args, image):
     # Add column titles
 
     params = {
-        "pad": image["plot_size"] * image["title_padding"],
+        "pad": image["title_padding"],
         "fontsize": image["letter_label_size"],
     }
     for j in range(ncols):
@@ -80,7 +80,7 @@ def format_axes(axes_args, image):
         "xy": (1, 0.5),
         "xycoords": "axes fraction",
         "xytext": (
-            image["plot_size"] * image["title_padding"] * 3.5,
+            image["title_padding"] * 3.5,
             0,
         ),
         "textcoords": "offset points",
