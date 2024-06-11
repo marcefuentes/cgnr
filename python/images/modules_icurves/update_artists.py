@@ -22,8 +22,8 @@ def update_artists(given_movie, update_args, options, data):
             for k, rho in enumerate(data["rhos"]):
 
                 qb_private = qbeq(given, alpha, rho)
-                update_args["budgets"][i, j, k].set_ydata(
-                    budget_own + qb_private * given
+                update_args["budgets"][i, j, k].set(
+                    ydata=budget_own + qb_private * given,
                 )
 
                 w = fitness(qb_private, qb_private, given, alpha, rho)
