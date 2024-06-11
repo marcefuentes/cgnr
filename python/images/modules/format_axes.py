@@ -1,5 +1,6 @@
 """ Format axes. """
 
+import numpy as np
 import modules.format_axes_tools as tools
 
 
@@ -22,19 +23,14 @@ def format_axes(axes_args, image):
         "ylim": axes_args["y_lim"],
     }
 
-    for i in range(nrows):
-        for j in range(ncols):
-            for k in range(nr):
-                for m in range(nc):
-                    ax = axs[i, j, k, m]
-                    tools.format_spines(ax, **spine_params)
-                    ax.set(**params)
-                    ax.set(
-                        axes_locator=axes_args["divider"].new_locator(
-                            nx=j * (nc + 1) + m + int(m / nc),
-                            ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
-                        )
-                    )
+    for i, j, k, m in np.ndindex(axs.shape):
+        ax = axs[i, j, k, m]
+        tools.format_spines(ax, **spine_params)
+        params["axes_locator"] = axes_args["divider"].new_locator(
+            nx=j * (nc + 1) + m + int(m / nc),
+            ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
+        )
+        ax.set(**params)
 
     # Add letters
 
