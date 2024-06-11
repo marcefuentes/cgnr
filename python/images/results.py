@@ -27,7 +27,7 @@ from modules_results.update_artists import update_artists
 
 from settings_project.project import project
 from settings_results import layouts
-from settings_results.image import image, image_lines, image_show
+from settings_results.image import image
 
 
 def main(options):
@@ -96,9 +96,9 @@ def main(options):
     update_args["artists"] = init_artists(axs, x, y)
 
     if options["layout"] == "curves" or options["histogram"]:
-        format_artists(update_args["artists"], image_lines)
+        format_artists(update_args["artists"], image["lines"])
     else:
-        format_artists(update_args["artists"], image_show)
+        format_artists(update_args["artists"], image["show"])
 
     axes_args = {
         "axs": axs,
