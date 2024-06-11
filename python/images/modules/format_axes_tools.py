@@ -2,7 +2,7 @@
 
 
 def add_letters(ax, position, params, n):
-    """add letters."""
+    """Add letters."""
 
     params["s"] = chr(ord("a") + n % 26)
     if n >= 26:
@@ -12,7 +12,7 @@ def add_letters(ax, position, params, n):
 
 
 def add_ticklabels_imshow(axs, r_labels, c_labels):
-    """add tick labels for (nrows x ncols)."""
+    """Add tick labels for (nrows x ncols)."""
 
     r_labels = [f"{r:.1f}" for r in r_labels]
     for ax in axs[:, 0, 0, 0]:
@@ -24,7 +24,7 @@ def add_ticklabels_imshow(axs, r_labels, c_labels):
 
 
 def add_ticklabels_line2d(axs, r_labels, c_labels):
-    """add tick labels for (nrows x ncols x nr x nc)."""
+    """Add tick labels for (nrows x ncols x nr x nc)."""
 
     _range = range(0, axs.shape[2], axs.shape[2] // 2)
     for i in range(axs.shape[0]):
@@ -38,7 +38,7 @@ def add_ticklabels_line2d(axs, r_labels, c_labels):
 
 
 def add_ticks_imshow(axs, nr, nc, format_params):
-    """set ticks for (nrows x ncols) matrix."""
+    """Set ticks for (nrows x ncols) matrix."""
 
     r_min, r_max = 0, nr - 1
     c_min, c_max = 0, nc - 1
@@ -56,7 +56,7 @@ def add_ticks_imshow(axs, nr, nc, format_params):
 
 
 def add_ticks_line2d(axs, format_params):
-    """set ticks for (nrows x ncols x nr x nc)."""
+    """Set ticks for (nrows x ncols x nr x nc)."""
 
     y_range = range(0, axs.shape[2], axs.shape[2] // 2)
     x_range = range(0, axs.shape[3], axs.shape[3] // 2)
