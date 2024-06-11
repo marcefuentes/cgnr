@@ -27,11 +27,9 @@ def update_artists(given_movie, update_args, options, data):
                 )
 
                 w = fitness(qb_private, qb_private, given, alpha, rho)
-                update_args["icurves"][i, j, k].set_ydata(
-                    indifference(data["x_values"], w, alpha, rho)
-                )
-                update_args["icurves"][i, j, k].set_color(
-                    cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w)
+                update_args["icurves"][i, j, k].set(
+                    ydata=indifference(data["x_values"], w, alpha, rho),
+                    color=cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w),
                 )
 
                 y = fitness(
