@@ -150,7 +150,7 @@ def main(test=False):
     for constraint in constraints:
         free_slots = st.get_free_slots(constraint)
         print(
-            f"\n{colors['bold']}{constraint}:{colors['reset']}"
+            f"\n{colors['bold']}{constraint}: {colors['reset']}"
             + f"{colors['cyan']}{free_slots}{colors['reset']} free slots"
         )
         if test and not free_slots:
