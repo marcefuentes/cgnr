@@ -22,14 +22,9 @@ def update_artists(given_movie, update_args, options, data):
             for k, rho in enumerate(data["rhos"]):
 
                 qb_private = qbeq(given, alpha, rho)
+
                 update_args["budgets"][i, j, k].set(
                     ydata=budget_own + qb_private * given,
-                )
-
-                w = fitness(qb_private, qb_private, given, alpha, rho)
-                update_args["icurves"][i, j, k].set(
-                    ydata=indifference(data["x_values"], w, alpha, rho),
-                    color=cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w),
                 )
 
                 y = fitness(
@@ -45,6 +40,12 @@ def update_artists(given_movie, update_args, options, data):
                     cmap=cm.get_cmap(update_args["cmap"]),
                     norm=plt.Normalize(-1, 1),
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
+                )
+
+                w = fitness(qb_private, qb_private, given, alpha, rho)
+                update_args["icurves"][i, j, k].set(
+                    ydata=indifference(data["x_values"], w, alpha, rho),
+                    color=cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w),
                 )
 
     return np.concatenate(
