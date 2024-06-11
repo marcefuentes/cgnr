@@ -20,7 +20,7 @@ def data_constants():
     data["frames"] = np.linspace(0.0, 1.0, num=11)
     data["frames"] = np.append(data["frames"], 0.0)
 
-    data["givens"] = [1.0, 0.5, 0.0]
+    data["givens"] = [0.99, 0.5, 0.0]
     data["alphas"] = np.linspace(
         data["alpha_max"],
         data["alpha_min"],
