@@ -5,10 +5,10 @@ import numpy as np
 from modules.theory import indifference
 
 
-def get_static_data(data):
+def get_static_data(n_x_values, data):
     """Calculates static fitness isoclines."""
 
-    x = np.linspace(0.001, 0.999, num=data["n_x_values"])
+    x = np.linspace(0.001, 0.999, num=n_x_values)
     y = np.zeros_like(x)
 
     n_ic = data["n_ic"]
@@ -24,7 +24,7 @@ def get_static_data(data):
             len(data["alphas"]),
             len(data["rhos"]),
             n_ic,
-            data["n_x_values"],
+            n_x_values,
         )
     )
 

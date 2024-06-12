@@ -19,7 +19,7 @@ from modules_icurves.get_static_data import get_static_data
 from modules_icurves.init_artists import init_artists
 from modules_icurves.parse_args import parse_args
 from modules_icurves.update_artists import update_artists
-from settings_icurves.data_constants import data_constants
+from settings_icurves.layouts import layouts
 from settings_icurves.image import image
 
 
@@ -28,7 +28,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data = data_constants()
+    data = layouts()
 
     fig_layout = {
         "nc": len(data["logess"]),
@@ -42,7 +42,7 @@ def main(options):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
-    data["x_values"], y, ic = get_static_data(data)
+    data["x_values"], y, ic = get_static_data(image["n_x_values"], data)
     update_args = {
         "cmap": colormaps.get_cmap(image["color_map"]),
         "file_name": os.path.basename(__file__).split(".")[0],

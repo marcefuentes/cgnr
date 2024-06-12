@@ -8,6 +8,7 @@ image = {
     "colorbar_width": 0.025 * PLOT_SIZE,
     "margin_right": 0.5 * PLOT_SIZE,
     "margin_top": 0.3 * PLOT_SIZE,
+    "n_x_values": 64,
     "budgets": {
         "alpha": 0.6,
         "color": "0.300",

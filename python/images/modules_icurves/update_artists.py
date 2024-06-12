@@ -24,7 +24,7 @@ def update_artists(given_movie, update_args, options, data):
                 qb_partner = qbeq(given, alpha, rho)
 
                 y = fitness(
-                    np.full((data["n_x_values"]), qb_partner),
+                    np.full((len(data["x_values"])), qb_partner),
                     data["x_values"],
                     given,
                     alpha,
