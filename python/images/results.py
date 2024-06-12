@@ -25,7 +25,7 @@ from modules_results.init_artists import init_artists
 from modules_results.parse_args import parse_args
 from modules_results.update_artists import update_artists
 
-from settings_project.project import project
+from settings.project import project
 from settings_results import layouts
 from settings_results.image import image
 
