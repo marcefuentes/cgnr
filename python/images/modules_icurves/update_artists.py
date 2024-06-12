@@ -23,10 +23,6 @@ def update_artists(given_movie, update_args, options, data):
 
                 qb_partner = qbeq(given, alpha, rho)
 
-                update_args["budgets"][i, j, k].set(
-                    ydata=budget_own + qb_partner * given,
-                )
-
                 y = fitness(
                     np.full((data["n_x_values"]), qb_partner),
                     data["x_values"],
@@ -40,6 +36,10 @@ def update_artists(given_movie, update_args, options, data):
                     cmap=cm.get_cmap(update_args["cmap"]),
                     norm=plt.Normalize(-1, 1),
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
+                )
+
+                update_args["budgets"][i, j, k].set(
+                    ydata=budget_own + qb_partner * given,
                 )
 
                 w = fitness(qb_partner, qb_partner, given, alpha, rho)
