@@ -31,9 +31,9 @@ def main(options):
     data = data_constants()
 
     fig_layout = {
-        "nc": data["nc"],
+        "nc": len(data["logess"]),
         "ncols": 2,
-        "nr": data["nr"],
+        "nr": len(data["alphas"]),
         "nrows": len(data["givens"]),
     }
 

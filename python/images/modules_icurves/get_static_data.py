@@ -21,8 +21,8 @@ def get_static_data(data):
 
     isoclines = np.zeros(
         (
-            data["nr"],
-            data["nc"],
+            len(data["alphas"]),
+            len(data["rhos"]),
             n_ic,
             data["n_x_values"],
         )
