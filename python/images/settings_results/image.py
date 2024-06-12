@@ -9,7 +9,7 @@ image = {
     "lines": {
         "color": "0.4",
         "linewidth": 0.2 * PLOT_SIZE,
-    }
+    },
 }
 
 image = {**common.image, **image}
