@@ -9,7 +9,7 @@ def create_divider(fig, layout, distances, image):
     nr = layout["nr"]
     nc = layout["nc"]
 
-    spacing_fixed = Size.Fixed(image["spacing"])
+    spacing_fixed = Size.Fixed(image["margin_inner"])
     plot_size_fixed = Size.Fixed(image["plot_size"] / nc)
     column_fixed = [plot_size_fixed] * nc + (
         [spacing_fixed] + [plot_size_fixed] * nc
@@ -20,10 +20,10 @@ def create_divider(fig, layout, distances, image):
     divider = Divider(
         fig,
         (
-            image["left_margin"] / distances["width"],
-            image["bottom_margin"] / distances["height"],
-            distances["inner_width"] / distances["width"],
-            distances["inner_height"] / distances["height"],
+            image["margin_left"] / distances["width"],
+            image["margin_bottom"] / distances["height"],
+            distances["width_inner"] / distances["width"],
+            distances["height_inner"] / distances["height"],
         ),
         column_fixed,
         row_fixed,

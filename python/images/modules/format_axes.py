@@ -47,7 +47,7 @@ def format_axes(axes_args, image):
 
     # Add letters
 
-    position = (0, 1.0 + image["letter_padding"] * nr)
+    position = (0, 1.0 + image["padding_letter"] * nr)
     for i in range(nrows):
         for j in range(ncols):
             tools.add_letters(

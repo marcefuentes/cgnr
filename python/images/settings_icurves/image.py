@@ -6,8 +6,8 @@ PLOT_SIZE = common.PLOT_SIZE
 
 image = {
     "colorbar_width": 0.025 * PLOT_SIZE,
-    "right_margin": 0.5 * PLOT_SIZE,
-    "top_margin": 0.3 * PLOT_SIZE,
+    "margin_right": 0.5 * PLOT_SIZE,
+    "margin_top": 0.3 * PLOT_SIZE,
     "budgets": {
         "alpha": 0.6,
         "color": "0.300",

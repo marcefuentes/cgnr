@@ -3,6 +3,7 @@
 import settings.image as common
 
 PLOT_SIZE = common.PLOT_SIZE
+COLOR_MAP = common.COLOR_MAP
 
 image = {
     "n_x_values": 64,

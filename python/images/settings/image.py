@@ -6,27 +6,35 @@ LINE_WIDTH = 0.2
 PLOT_SIZE = 4
 
 image = {
-    "bottom_margin": 0.625 * PLOT_SIZE,
     "color_map": COLOR_MAP,
     "colorbar_height": PLOT_SIZE,
-    "colorbar_right_position": 1,
+    "colorbar_position_right": 1,
     "colorbar_width": PLOT_SIZE / 21,
-    "left_margin": 0.625 * PLOT_SIZE,
-    "letter_padding": 0.035,
+    "margin_bottom": 0.625 * PLOT_SIZE,
+    "margin_inner": 0.1875 * PLOT_SIZE,
+    "margin_left": 0.625 * PLOT_SIZE,
+    "margin_right": 0.7 * PLOT_SIZE,
+    "margin_top": 0.625 * PLOT_SIZE,
+    "padding_letter": 0.035,
+    "padding_title": 11 * PLOT_SIZE,
     "plot_size": PLOT_SIZE,
     "print_folder": False,
-    "right_margin": 0.7 * PLOT_SIZE,
-    "spacing": 0.1875 * PLOT_SIZE,
     "suplabel_size": 9 * PLOT_SIZE,
-    "title_padding": 11 * PLOT_SIZE,
-    "top_margin": 0.625 * PLOT_SIZE,
-    "x_label": "Substitutability of $\\it{B}$",
-    "x_label_size": 0.5 * PLOT_SIZE,
-    "y_label": "Influence of $\\it{B}$",
-    "y_label_size": 0.5 * PLOT_SIZE,
+    "suplabel_x": "Substitutability of $\\it{B}$",
+    "suplabel_y": "Influence of $\\it{B}$",
     "colorbar": {
         "edgecolor": GREY,
         "linewidth": LINE_WIDTH * PLOT_SIZE,
+    },
+    "spines": {
+        "color": GREY,
+        "linewidth": LINE_WIDTH * PLOT_SIZE,
+    },
+    "ticks": {
+        "color": GREY,
+        "labelsize": 6 * PLOT_SIZE,
+        "length": 1.0 * PLOT_SIZE,
+        "width": LINE_WIDTH * PLOT_SIZE,
     },
     "column_titles": {
         "fontsize": 8 * PLOT_SIZE,
@@ -45,18 +53,8 @@ image = {
         "xycoords": "axes fraction",
         "xytext": (11 * 3.5 * PLOT_SIZE, 0),
     },
-    "spines": {
-        "color": GREY,
-        "linewidth": LINE_WIDTH * PLOT_SIZE,
-    },
     "text": {
         "color": "0.3",
         "fontsize": 8 * PLOT_SIZE,
-    },
-    "ticks": {
-        "color": GREY,
-        "labelsize": 6 * PLOT_SIZE,
-        "length": 1.0 * PLOT_SIZE,
-        "width": LINE_WIDTH * PLOT_SIZE,
     },
 }
