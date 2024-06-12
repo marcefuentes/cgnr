@@ -45,10 +45,6 @@ image = {
         "xycoords": "axes fraction",
         "xytext": (11 * 3.5 * PLOT_SIZE, 0),
     },
-    "show": {
-        "cmap": COLOR_MAP,
-        "clim": (-1, 1),
-    },
     "spines": {
         "color": GREY,
         "linewidth": LINE_WIDTH * PLOT_SIZE,

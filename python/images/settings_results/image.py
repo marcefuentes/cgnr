@@ -10,6 +10,10 @@ image = {
         "color": "0.4",
         "linewidth": 0.2 * PLOT_SIZE,
     },
+    "show": {
+        "cmap": COLOR_MAP,
+        "clim": (-1, 1),
+    },
 }
 
 image = {**common.image, **image}
