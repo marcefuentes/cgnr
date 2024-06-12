@@ -63,13 +63,21 @@ def main(options):
 
     axes_args = {
         "axs": axs,
-        "c_labels": data["logess"],
-        "column_titles": ["", ""],
+        "c_labels": [
+            data["logess"][0],
+            data["logess"][fig_layout["nc"] // 2],
+            data["logess"][-1],
+        ],
+        "column_titles": [""] * fig_layout["ncols"],
         "divider": create_divider(fig, fig_layout, fig_distances, image),
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
-        "r_labels": data["alphas"],
-        "row_titles": [""] * fig_layout["nr"],
+        "r_labels": [
+            data["alphas"][0],
+            data["alphas"][fig_layout["nr"] // 2],
+            data["alphas"][-1],
+        ],
+        "row_titles": [""] * fig_layout["nrows"],
         "x_lim": [0, 1],
         "y_lim": [0, 1],
     }
