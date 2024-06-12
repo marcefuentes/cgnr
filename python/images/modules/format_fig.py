@@ -69,6 +69,8 @@ def format_fig(fig, distances, image, sm):
         ha="right",
         s=bottom_text,
         x=(image["margin_left"] + distances["width_inner"]) / distances["width"],
-        y=(image["margin_bottom"] - image["suplabel_size"]) / distances["height"] / 18.0,
+        y=(image["margin_bottom"] - image["suplabel_size"])
+        / distances["height"]
+        / 18.0,
         **image["text"],
     )

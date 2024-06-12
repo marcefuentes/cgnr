@@ -26,7 +26,7 @@ def data_constants():
 
     data = {
         "alphas": np.linspace(**alpha),
-        "frames": np.concatenate([np.linspace(**given), [0.0]])
+        "frames": np.concatenate([np.linspace(**given), [0.0]]),
         "givens": [1.0, 0.99, 0.5, 0.0],
         "logess": np.linspace(**loges),
         "n_ic": 5,
