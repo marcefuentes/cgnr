@@ -197,7 +197,7 @@ def slots():
         else:
             print(f"{' ' * 5:>5}", end="")
         print(
-            f"{colors['yellow']}{running if running else ' ' * 5:>5}{colors['reset']}",
+            f"{colors['bold']}{colors['yellow']}{running if running else ' ' * 5:>5}{colors['reset']}",
             end="",
         )
         print(
