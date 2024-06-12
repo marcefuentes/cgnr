@@ -16,10 +16,10 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_results.get_curves import get_curves
 from modules_results.get_data import get_data
 from modules_results.get_layout import get_layout
 from modules_results.get_sm import get_sm
+from modules_results.get_static_data import get_static_data
 from modules_results.get_theory_imshow import get_theory_imshow
 from modules_results.init_artists import init_artists
 from modules_results.parse_args import parse_args
@@ -73,7 +73,7 @@ def main(options):
     }
 
     if options["layout"] == "curves":
-        x, y = get_curves(
+        x, y = get_static_data(
             image["n_x_values"],
             layout["traits"],
             layout["givens"],
