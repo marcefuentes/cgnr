@@ -1,37 +1,27 @@
-""" Data constants for icurves. """
-
-import numpy as np
-
+""" Layouts for icurves. """
 
 def layouts():
     """Data common to all subplots."""
 
-    given = {
-        "start": 0.0,
-        "stop": 1.0,
-        "num": 11,
+    layout = {
+        "given_frames": {
+            "start": 0.0,
+            "stop": 1.0,
+            "num": 11,
+        },
+        "alphas": {
+            "start": 0.1,
+            "stop": 0.9,
+            "num": 3,
+        },
+        "logess": {
+            "start": -2.0,
+            "stop": 2.0,
+            "num": 3,
+        },
+        "given_rows": [1.0, 0.99, 0.5, 0.0],
+        "n_indifference_curves": 5,
+        "budget_line": True,
     }
 
-    alpha = {
-        "start": 0.1,
-        "stop": 0.9,
-        "num": 3,
-    }
-
-    loges = {
-        "start": -2.0,
-        "stop": 2.0,
-        "num": 3,
-    }
-
-    data = {
-        "alphas": np.linspace(**alpha),
-        "frames": np.concatenate([np.linspace(**given), [0.0]]),
-        "givens": [1.0, 0.99, 0.5, 0.0],
-        "logess": np.linspace(**loges),
-        "n_ic": 5,
-    }
-
-    data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
-
-    return data
+    return layout

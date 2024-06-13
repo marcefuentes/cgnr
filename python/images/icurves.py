@@ -14,6 +14,7 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from icurvesm.get_data import get_data
 from icurvesm.get_sm import get_sm
 from icurvesm.get_static_data import get_static_data
 from icurvesm.init_artists import init_artists
@@ -28,7 +29,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data = layouts()
+    data = get_data(layouts())
 
     fig_layout = {
         "nc": len(data["logess"]),
