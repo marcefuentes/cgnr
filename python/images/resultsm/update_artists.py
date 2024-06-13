@@ -1,7 +1,7 @@
 """ Update data in artists. """
 
 import re
-from modules_results.get_zmatrix import get_zmatrix
+from resultsm.get_zmatrix import get_zmatrix
 
 
 def update_artists(t, update_args, options, data):

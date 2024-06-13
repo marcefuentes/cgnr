@@ -3,7 +3,7 @@
 import argparse
 import inspect
 
-from settings_results import layouts
+from resultss import layouts
 
 
 def parse_args():

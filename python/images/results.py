@@ -16,18 +16,18 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_results.get_data import get_data
-from modules_results.get_layout import get_layout
-from modules_results.get_sm import get_sm
-from modules_results.get_static_data import get_static_data
-from modules_results.get_theory_imshow import get_theory_imshow
-from modules_results.init_artists import init_artists
-from modules_results.parse_args import parse_args
-from modules_results.update_artists import update_artists
+from resultsm.get_data import get_data
+from resultsm.get_layout import get_layout
+from resultsm.get_sm import get_sm
+from resultsm.get_static_data import get_static_data
+from resultsm.get_theory_imshow import get_theory_imshow
+from resultsm.init_artists import init_artists
+from resultsm.parse_args import parse_args
+from resultsm.update_artists import update_artists
 
 from settings.project import project
-from settings_results import layouts
-from settings_results.image import image
+from resultss import layouts
+from resultss.image import image
 
 
 def main(options):

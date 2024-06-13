@@ -1,7 +1,7 @@
 """ This module reads the csv files in the given directory and returns a concatenated dataframe. """
 
 import numpy as np
-from modules_results.get_df import get_df
+from resultsm.get_df import get_df
 
 
 def get_data(layout, options, csv, frq):
