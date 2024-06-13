@@ -26,6 +26,8 @@ def process_plot(x, trait, given, alpha, rho):
     increment = 0.001
     tt, rr, pp, ss = calculate_trps(x + increment, x, given, alpha, rho)
 
+    _ = tt  # To avoid warnings
+
     if trait == "MimicGrain":
         y = pp - ss
         # y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
