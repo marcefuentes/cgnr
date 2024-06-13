@@ -14,13 +14,13 @@ from modules.format_artists import format_artists
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from modules_icurves.get_sm import get_sm
-from modules_icurves.get_static_data import get_static_data
-from modules_icurves.init_artists import init_artists
-from modules_icurves.parse_args import parse_args
-from modules_icurves.update_artists import update_artists
-from settings_icurves.layouts import layouts
-from settings_icurves.image import image
+from icurvesm.get_sm import get_sm
+from icurvesm.get_static_data import get_static_data
+from icurvesm.init_artists import init_artists
+from icurvesm.parse_args import parse_args
+from icurvesm.update_artists import update_artists
+from icurvess.layouts import layouts
+from icurvess.image import image
 
 
 def main(options):
