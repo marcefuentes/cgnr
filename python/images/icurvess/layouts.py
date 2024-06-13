@@ -1,9 +1,10 @@
 """ Layouts for icurves. """
 
+
 def all3(options):
     """Data common to all subplots."""
 
-    _ = options # To avoid unused variable warning.
+    _ = options  # To avoid unused variable warning.
 
     layout = {
         "alphas": {
@@ -27,7 +28,7 @@ def all3(options):
 def all21(options):
     """Data common to all subplots."""
 
-    _ = options # To avoid unused variable warning.
+    _ = options  # To avoid unused variable warning.
 
     layout = {
         "alphas": {
