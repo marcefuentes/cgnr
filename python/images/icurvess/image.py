@@ -1,10 +1,10 @@
 """ Parameters for the images module. """
 
-import settings.image as common
+import settings.image as project
 
-PLOT_SIZE = common.PLOT_SIZE
+PLOT_SIZE = project.PLOT_SIZE
 
-image = {
+image_common = {
     "colorbar_width": 0.025 * PLOT_SIZE,
     "margin_right": 0.5 * PLOT_SIZE,
     "margin_top": 0.3 * PLOT_SIZE,
@@ -27,4 +27,22 @@ image = {
     },
 }
 
-image = {**common.image, **image}
+image_common = {**project.image, **image_common}
+
+
+image_unit = {
+    "colorbar_position_right": 0.35,
+    "labelpad": 4 * PLOT_SIZE,
+    "margin_right": 0.6 * PLOT_SIZE,
+    "margin_inner": 0.6 * PLOT_SIZE,
+    "suplabel_x": "",
+    "suplabel_y": "",
+    "title_x_0": "Quantity of $\\it{A}$",
+    "title_x_1": "Quantity of $\\it{B}$",
+    "title_y_0": "Quantity of $\\it{B}$",
+    "title_y_1": "Fitness",
+}
+
+image_unit = {**image_common, **image_unit}
+
+image_unit["ticks"]["labelsize"] *= 0.8

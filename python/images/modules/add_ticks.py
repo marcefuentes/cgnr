@@ -1,6 +1,13 @@
 """Format ticks."""
 
 
+def add_ticklabels_ax(ax, r_labels, c_labels):
+    """Add tick labels for a single line2d plot."""
+
+    ax.set_xticklabels(c_labels)
+    ax.set_yticklabels(r_labels)
+
+
 def add_ticklabels_imshow(axs, r_labels, c_labels):
     """Add tick labels for (nrows x ncols)."""
 
@@ -27,11 +34,20 @@ def add_ticklabels_line2d(axs, r_labels, c_labels):
             axs[-1, j, -1, m].set_xticklabels([f"{c_value:.0f}"])
 
 
-def add_ticklabels_unit(ax, r_labels, c_labels):
-    """Add tick labels for a single line2d plot."""
+def add_ticks_ax(ax, format_params):
+    """Set ticks for a single line2d plot."""
 
-    ax.set_xticklabels(c_labels)
-    ax.set_yticklabels(r_labels)
+    x_min, x_max = ax.get_xlim()
+    y_min, y_max = ax.get_ylim()
+    position_params = {
+        "xticks": [x_min, (x_min + x_max) / 2, x_max],
+        "xticklabels": [],
+        "yticks": [y_min, (y_min + y_max) / 2, y_max],
+        "yticklabels": [],
+    }
+
+    ax.set(**position_params)
+    ax.tick_params(axis="both", **format_params)
 
 
 def add_ticks_imshow(axs, nr, nc, format_params):
@@ -78,22 +94,6 @@ def add_ticks_line2d(axs, format_params):
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
 
-def add_ticks_unit(ax, format_params):
-    """Set ticks for a single line2d plot."""
-
-    x_min, x_max = ax.get_xlim()
-    y_min, y_max = ax.get_ylim()
-    position_params = {
-        "xticks": [x_min, (x_min + x_max) / 2, x_max],
-        "xticklabels": [],
-        "yticks": [y_min, (y_min + y_max) / 2, y_max],
-        "yticklabels": [],
-    }
-
-    ax.set(**position_params)
-    ax.tick_params(axis="both", **format_params)
-
-
 def ticks_imshow(axs, axes_args, format_params):
     """Format ticks for imshow plots."""
 
@@ -108,8 +108,8 @@ def ticks_line2d(axs, axes_args, format_params):
     add_ticklabels_line2d(axs, axes_args["r_labels"], axes_args["c_labels"])
 
 
-def ticks_unit(axs, axes_args, format_params):
+def ticks_ax(ax, axes_args, format_params):
     """Format ticks for a single line2d plot."""
 
-    add_ticks_unit(axs, format_params)
-    add_ticklabels_unit(axs, axes_args["r_labels"], axes_args["c_labels"])
+    add_ticks_ax(ax, format_params)
+    add_ticklabels_ax(ax, axes_args["r_labels"], axes_args["c_labels"])

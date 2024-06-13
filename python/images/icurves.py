@@ -6,12 +6,13 @@ import os
 import time
 
 from matplotlib import colormaps
+from modules.add_ax_titles import add_ax_titles
 from modules.create_fig import create_fig
 from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.add_ticks import ticks_line2d, ticks_unit
+from modules.add_ticks import ticks_ax, ticks_line2d
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
@@ -23,7 +24,7 @@ from icurvesm.init_artists import init_artists
 from icurvesm.parse_args import parse_args
 from icurvesm.update_artists import update_artists
 from icurvess import layouts
-from icurvess.image import image
+from icurvess.image import image_common, image_unit
 
 
 def main(options):
@@ -33,6 +34,10 @@ def main(options):
 
     layout = get_layout(options, layouts)
     data = get_data(options, layout)
+    if options["layout"] == "unit":
+        image = image_unit
+    else:
+        image = image_common
 
     fig_layout = {
         "nc": len(data["logess"]),
@@ -45,9 +50,6 @@ def main(options):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
-    if options["layout"] == "unit":
-        fig.supxlabel("")
-        fig.supylabel("")
     data["text"] = fig.texts[2]
     data["x_values"], y, ic = get_static_data(image["n_x_values"], data)
     update_args = {
@@ -89,8 +91,12 @@ def main(options):
 
     format_axes(axes_args, image)
     if options["layout"] == "unit":
-        ticks_unit(axs[0, 0, 0, 0], axes_args, image["ticks"])
-        ticks_unit(axs[0, 1, 0, 0], axes_args, image["ticks"])
+        axes_args["c_labels"] = [0.0, 0.5, 1.0]
+        axes_args["r_labels"] = [0.0, 0.5, 1.0]
+        ticks_ax(axs[0, 0, 0, 0], axes_args, image["ticks"])
+        ticks_ax(axs[0, 1, 0, 0], axes_args, image["ticks"])
+        add_ax_titles(axs[0, 0, 0, 0], image["title_x_0"], image["title_y_0"], image["column_titles"]["fontsize"], image["labelpad"])
+        add_ax_titles(axs[0, 1, 0, 0], image["title_x_1"], image["title_y_1"], image["column_titles"]["fontsize"], image["labelpad"])
     else:
         ticks_line2d(axs, axes_args, image["ticks"])
 
