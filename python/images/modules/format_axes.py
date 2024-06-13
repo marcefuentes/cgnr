@@ -13,14 +13,6 @@ def add_letters(ax, position, params, n):
     ax.text(*position, **params)
 
 
-def format_spines(ax, linewidth, color):
-    """Format ax spines."""
-
-    for spine in ax.spines.values():
-        spine.set_linewidth(linewidth)
-        spine.set_color(color)
-
-
 def format_axes(axes_args, image):
     """format (nrows x ncols x nr x nc) matrix."""
 
@@ -40,7 +32,8 @@ def format_axes(axes_args, image):
     # Format spines
 
     for ax in axs.flatten():
-        format_spines(ax, **image["spines"])
+        for spine in ax.spines.values():
+            spine.set(**image["spines"])
 
     # Set limits and reset ticks
 
