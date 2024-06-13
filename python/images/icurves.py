@@ -94,7 +94,7 @@ def main(options):
     else:
         ticks_line2d(axs, axes_args, image["ticks"])
 
-    update_args["file_name"] += f"_{options["layout"]}"
+    update_args["file_name"] += f"_{options['layout']}"
     save_file(fig, update_args, options, data)
 
     # pylint: disable=duplicate-code
