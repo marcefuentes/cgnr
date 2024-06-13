@@ -59,10 +59,8 @@ def main(options):
         update_args["landscapes"],
     ) = init_artists(axs, data["x_values"], y, ic)
 
-    format_artists(update_args["budgets"], image["budgets"])
-    format_artists(update_args["icurves"], image["icurves"])
-    format_artists(update_args["icurves_grey"], image["icurves_grey"])
-    format_artists(update_args["landscapes"], image["landscapes"])
+    for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
+        format_artists(update_args[artist], image[artist])
 
     axes_args = {
         "axs": axs,
