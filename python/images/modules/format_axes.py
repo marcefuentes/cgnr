@@ -1,7 +1,24 @@
 """ Format axes. """
 
 import numpy as np
-import modules.format_axes_tools as tools
+
+    
+def add_letters(ax, position, params, n):
+    """Add letters."""
+
+    params["s"] = chr(ord("a") + n % 26)
+    if n >= 26:
+        params["s"] = params["s"] + params["s"]
+    params["transform"] = ax.transAxes
+    ax.text(*position, **params)
+
+
+def format_spines(ax, linewidth, color):
+    """Format ax spines."""
+
+    for spine in ax.spines.values():
+        spine.set_linewidth(linewidth)
+        spine.set_color(color)
 
 
 def format_axes(axes_args, image):
@@ -23,7 +40,7 @@ def format_axes(axes_args, image):
     # Format spines
 
     for ax in axs.flatten():
-        tools.format_spines(ax, **image["spines"])
+        format_spines(ax, **image["spines"])
 
     # Set limits and reset ticks
 
@@ -36,21 +53,12 @@ def format_axes(axes_args, image):
     for ax in axs.flatten():
         ax.set(**params)
 
-    # Add ticks and tick labels
-
-    if axs.shape[2] == 1:
-        tools.add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], image["ticks"])
-        tools.add_ticklabels_imshow(axs, axes_args["r_labels"], axes_args["c_labels"])
-    else:
-        tools.add_ticks_line2d(axs, image["ticks"])
-        tools.add_ticklabels_line2d(axs, axes_args["r_labels"], axes_args["c_labels"])
-
     # Add letters
 
     position = (0, 1.0 + image["padding_letter"] * nr)
     for i in range(nrows):
         for j in range(ncols):
-            tools.add_letters(
+            add_letters(
                 axs[i, j, 0, 0], position, image["letters"], i * ncols + j
             )
 

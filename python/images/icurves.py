@@ -6,11 +6,12 @@ import os
 import time
 
 from matplotlib import colormaps
-from modules.fix_positions import create_divider
 from modules.create_fig import create_fig
+from modules.fix_positions import create_divider
+from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.format_artists import format_artists
+from modules.format_ticks import ticks_line2d, ticks_unit
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
@@ -44,6 +45,9 @@ def main(options):
 
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
+    if options["layout"] == "unit":
+        fig.supxlabel("")
+        fig.supylabel("")
     data["text"] = fig.texts[2]
     data["x_values"], y, ic = get_static_data(image["n_x_values"], data)
     update_args = {
@@ -84,6 +88,11 @@ def main(options):
     }
 
     format_axes(axes_args, image)
+    if options["layout"] == "unit":
+        ticks_unit(axs[0, 0, 0, 0], axes_args, image)
+        ticks_unit(axs[0, 1, 0, 0], axes_args, image)
+    else:
+        ticks_line2d(axs, axes_args, image)
 
     update_args["file_name"] += f"_{options["layout"]}"
     save_file(fig, update_args, options, data)
