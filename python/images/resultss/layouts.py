@@ -1,7 +1,7 @@
 """ Data layouts. """
 
 
-def curves(trait, mechanism=None, given=None):
+def curves(trait, mechanism, given=None):
     """Fitness curves for partner choice."""
 
     _ = given
