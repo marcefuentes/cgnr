@@ -4,7 +4,7 @@ import numpy as np
 from resultsm.get_df import get_df
 
 
-def get_data(layout, options, csv, frq):
+def get_data(options, layout, csv, frq):
     """Get the df args for the given trait_set."""
 
     nrows = len(layout["variants"])

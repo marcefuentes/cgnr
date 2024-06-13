@@ -1,14 +1,12 @@
 """ Data layouts. """
 
 
-def curves(trait, mechanism, given=None):
+def curves(options):
     """Fitness curves for partner choice."""
 
-    _ = given
-
-    given_list = [["1.0"], ["0.5"]]
-
     variant = "nolang_noshuffle_cost15_4"
+    given_list = [["1.0"], ["0.5"]]
+    trait = options["trait"]
 
     if "Mimic" in trait:
         mechanism = "d"
@@ -30,16 +28,13 @@ def curves(trait, mechanism, given=None):
     return layout
 
 
-def figure_2(trait, mechanism=None, given=None):
+def figure_2(options):
     """Figure 2."""
 
-    _ = given
-    _ = mechanism
-
+    variant = "nolang_noshuffle_cost15_4"
     given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
     given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
-
-    variant = "nolang_noshuffle_cost15_4"
+    trait = options["trait"]
 
     nrows = len(given_list)
     ncols = len(given_list[0])
@@ -59,13 +54,16 @@ def figure_2(trait, mechanism=None, given=None):
     return layout
 
 
-def figure_3(trait, mechanism, given):
+def figure_3(options):
     """Figure 3 and subsequent ones."""
 
     variant_list = [
         ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
         ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
     ]
+    mechanism = options["mechanism"]
+    given = options["given"]
+    trait = options["trait"]
 
     nrows = len(variant_list)
     ncols = len(variant_list[0])
@@ -85,16 +83,13 @@ def figure_3(trait, mechanism, given):
     return layout
 
 
-def theory(trait, mechanism=None, given=None):
+def theory(options):
     """First column is theoretical."""
 
-    _ = given
-    _ = mechanism
-
+    variant = [None, "nolang_noshuffle_cost15_4"]
     given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
     given_control_list = [[None, None], [None, None], [None, None]]
-
-    variant = [None, "nolang_noshuffle_cost15_4"]
+    trait = options["trait"]
 
     nrows = len(given_list)
 

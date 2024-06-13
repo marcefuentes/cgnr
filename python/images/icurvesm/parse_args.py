@@ -1,10 +1,13 @@
 """ Parses the arguments of the command line. """
 
 import argparse
+import inspect
+
+from icurvess import layouts
 
 
 def parse_args():
-    """Parse command line arguments."""
+    """Parse command line arguments and return them as a dictionary"""
 
     description = (
         "Plot indifference curves and budget constraints, and fitness landscapes."
@@ -13,7 +16,21 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("--movie", action="store_true", help="enable movie")
+
+    layout_names = [name for name, _ in inspect.getmembers(layouts, inspect.isfunction)]
+
+    args_dict = {
+        "layout": {
+            "type": str,
+            "choices": layout_names,
+            "default": "figure_3",
+            "help": "figure",
+        },
+        "movie": {"action": "store_true", "help": "enable movie"},
+    }
+
+    for arg, params in args_dict.items():
+        parser.add_argument(f"--{arg}", **params)
 
     args = parser.parse_args()
 

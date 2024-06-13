@@ -13,11 +13,11 @@ from modules.fix_positions import create_divider
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
 from modules.format_artists import format_artists
+from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from resultsm.get_data import get_data
-from resultsm.get_layout import get_layout
 from resultsm.get_sm import get_sm
 from resultsm.get_static_data import get_static_data
 from resultsm.get_theory_imshow import get_theory_imshow
@@ -38,8 +38,8 @@ def main(options):
     layout = get_layout(options, layouts)
     try:
         data = get_data(
-            layout,
             options,
+            layout,
             *project["output_file_extensions"],
         )
     except ValueError as error:
@@ -124,17 +124,14 @@ def main(options):
     if options["layout"] == "curves":
         axes_args["x_lim"] = [0, 1]
         axes_args["y_lim"] = [0, 1]
-        update_args["file_name"] += "_curves"
-    elif options["layout"] == "theory":
-        update_args["file_name"] += "_theory"
-    elif options["histogram"]:
+    if options["histogram"]:
         axes_args["x_lim"] = [-2, project["bins"] + 1]
         axes_args["y_lim"] = [0, 0.25]
         update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)
 
-    update_args["file_name"] += f"_{options['trait']}"
+    update_args["file_name"] += f"_{options['layout']}_{options['trait']}"
     save_file(fig, update_args, options, data)
     close_plt(fig)
 

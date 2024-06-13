@@ -11,6 +11,7 @@ from modules.create_fig import create_fig
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
 from modules.format_artists import format_artists
+from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
@@ -20,7 +21,7 @@ from icurvesm.get_static_data import get_static_data
 from icurvesm.init_artists import init_artists
 from icurvesm.parse_args import parse_args
 from icurvesm.update_artists import update_artists
-from icurvess.layouts import layouts
+from icurvess import layouts
 from icurvess.image import image
 
 
@@ -29,7 +30,8 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    data = get_data(layouts())
+    layout = get_layout(options, layouts)
+    data = get_data(options, layout)
 
     fig_layout = {
         "nc": len(data["logess"]),
@@ -85,6 +87,7 @@ def main(options):
 
     format_axes(axes_args, image)
 
+    update_args["file_name"] += f"_{options["layout"]}"
     save_file(fig, update_args, options, data)
 
     # pylint: disable=duplicate-code
