@@ -12,6 +12,8 @@ def curves(options):
         mechanism = "d"
     elif "Choose" in trait:
         mechanism = "p"
+    else:
+        mechanism = options["mechanism"]
 
     layout = {
         "column_titles": [""],

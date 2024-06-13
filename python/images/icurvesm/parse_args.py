@@ -23,7 +23,7 @@ def parse_args():
         "layout": {
             "type": str,
             "choices": layout_names,
-            "default": "figure_3",
+            "default": "all3",
             "help": "figure",
         },
         "movie": {"action": "store_true", "help": "enable movie"},
