@@ -89,10 +89,10 @@ def main(options):
 
     format_axes(axes_args, image)
     if options["layout"] == "unit":
-        ticks_unit(axs[0, 0, 0, 0], axes_args, image)
-        ticks_unit(axs[0, 1, 0, 0], axes_args, image)
+        ticks_unit(axs[0, 0, 0, 0], axes_args, image["ticks"])
+        ticks_unit(axs[0, 1, 0, 0], axes_args, image["ticks"])
     else:
-        ticks_line2d(axs, axes_args, image)
+        ticks_line2d(axs, axes_args, image["ticks"])
 
     update_args["file_name"] += f"_{options["layout"]}"
     save_file(fig, update_args, options, data)

@@ -94,22 +94,22 @@ def add_ticks_unit(ax, format_params):
     ax.tick_params(axis="both", **format_params)
 
 
-def ticks_imshow(axs, axes_args, image):
+def ticks_imshow(axs, axes_args, format_params):
     """Format ticks for imshow plots."""
 
-    add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], image["ticks"])
+    add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], format_params)
     add_ticklabels_imshow(axs, axes_args["r_labels"], axes_args["c_labels"])
 
 
-def ticks_line2d(axs, axes_args, image):
+def ticks_line2d(axs, axes_args, format_params):
     """Format ticks for line2d plots."""
 
-    add_ticks_line2d(axs, image["ticks"])
+    add_ticks_line2d(axs, format_params)
     add_ticklabels_line2d(axs, axes_args["r_labels"], axes_args["c_labels"])
 
 
-def ticks_unit(axs, axes_args, image):
+def ticks_unit(axs, axes_args, format_params):
     """Format ticks for a single line2d plot."""
 
-    add_ticks_unit(axs, image["ticks"])
+    add_ticks_unit(axs, format_params)
     add_ticklabels_unit(axs, axes_args["r_labels"], axes_args["c_labels"])
