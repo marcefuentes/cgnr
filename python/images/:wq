@@ -1,7 +1,0 @@
-""" Prettify the figure. """
-
-def format_fig_unit(fig):
-    """ Prettify the figure. """
-
-    fig.supxlabel("")
-    fig.supylabel("")
