@@ -11,7 +11,7 @@ from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.format_ticks import ticks_line2d, ticks_unit
+from modules.add_ticks import ticks_line2d, ticks_unit
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
