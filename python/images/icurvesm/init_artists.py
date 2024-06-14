@@ -14,13 +14,13 @@ def init_artists(axs, x, y, ic):
     landscapes = np.empty((nrows, 1, nr, nc), dtype=object)
 
     for i in range(nrows):
-        for j in range(nr):
-            for k in range(nc):
-                for m in range(ic.shape[2]):
-                    icurves_grey[i, 0, j, k, m] = axs[i, 0, j, k].plot(x, ic[j, k, m])[0]
-                budgets[i, 0, j, k] = axs[i, 0, j, k].plot(x, y)[0]
-                icurves[i, 0, j, k] = axs[i, 0, j, k].plot(x, y)[0]
-                landscapes[i, 0, j, k] = LineCollection([])
-                axs[i, 1, j, k].add_collection(landscapes[i, 0, j, k])
+        for k in range(nr):
+            for m in range(nc):
+                for n in range(ic.shape[2]):
+                    icurves_grey[i, 0, k, m, n] = axs[i, 0, k, m].plot(x, ic[k, m, n])[0]
+                budgets[i, 0, k, m] = axs[i, 0, k, m].plot(x, y)[0]
+                icurves[i, 0, k, m] = axs[i, 0, k, m].plot(x, y)[0]
+                landscapes[i, 0, k, m] = LineCollection([])
+                axs[i, 1, k, m].add_collection(landscapes[i, 0, k, m])
 
     return budgets, icurves, icurves_grey, landscapes
