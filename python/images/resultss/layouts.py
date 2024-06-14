@@ -58,7 +58,7 @@ def figure_2(options):
     return layout
 
 
-def figure_3(options):
+def default(options):
     """Figure 3 and subsequent ones."""
 
     variant_list = [
