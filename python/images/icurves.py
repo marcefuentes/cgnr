@@ -112,6 +112,7 @@ def main(options):
         ticks_line2d(axs, axes_args, image["ticks"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
+        image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(update_args[artist], image[artist])
 
     update_args["file_name"] += f"_{options['layout']}"

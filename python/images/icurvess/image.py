@@ -12,18 +12,18 @@ image_common = {
     "budgets": {
         "alpha": 0.6,
         "color": "0.300",
-        "linewidth": 0.9 * PLOT_SIZE,
+        "linewidth": 1.8 * PLOT_SIZE,
     },
     "icurves": {
         "alpha": 0.8,
-        "linewidth": 0.9 * PLOT_SIZE,
+        "linewidth": 1.8 * PLOT_SIZE,
     },
     "icurves_grey": {
         "color": "0.850",
-        "linewidth": 0.4 * PLOT_SIZE,
+        "linewidth": 0.8 * PLOT_SIZE,
     },
     "landscapes": {
-        "linewidth": 1.0 * PLOT_SIZE,
+        "linewidth": 2.0 * PLOT_SIZE,
     },
 }
 
