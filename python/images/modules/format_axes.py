@@ -53,14 +53,12 @@ def format_axes(axes_args, image):
         for j in range(ncols):
             add_letters(axs[i, j, 0, 0], position, image["letters"], i * ncols + j)
 
-    # Add column titles
+    # Add titles
 
     for j in range(ncols):
         axs[0, j, 0, int(nc / 2)].set_title(
             axes_args["titles_columns"][j], **image["titles_columns"]
         )
-
-    # Add row titles
 
     for i in range(nrows):
         axs[i, -1, int(nr / 2), -1].annotate(

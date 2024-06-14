@@ -23,7 +23,12 @@ def get_distances(nrows, ncols, image):
 def format_fig(fig, distances, image, sm):
     """Format the figure."""
 
+    # Size
+
     fig.set_size_inches(distances["width"], distances["height"])
+
+    # Sup labels
+
     fig.supxlabel(
         t=image["suplabel_x"],
         x=(image["margin_left"] + distances["width_inner"] / 2) / distances["width"],
@@ -37,6 +42,8 @@ def format_fig(fig, distances, image, sm):
         / distances["height"],
         fontsize=image["suplabel_size"],
     )
+
+    # Colorbar
 
     cax = fig.add_axes(
         [
@@ -60,6 +67,8 @@ def format_fig(fig, distances, image, sm):
     cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
     cbar.ax.tick_params(**image["ticks"])
     cbar.outline.set(**image["colorbar"])
+
+    # Text
 
     if image["print_folder"]:
         bottom_text = os.path.basename(os.getcwd())
