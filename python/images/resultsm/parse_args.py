@@ -27,7 +27,7 @@ def parse_args():
         "layout": {
             "type": str,
             "choices": layout_names,
-            "default": "figure_3",
+            "default": "default",
             "help": "figure",
         },
         "mechanism": {
