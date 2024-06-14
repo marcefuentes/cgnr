@@ -52,7 +52,6 @@ def update_artists(given_movie, update_args, options, data):
         [
             update_args["budgets"].flatten(),
             update_args["icurves"].flatten(),
-            update_args["icurves_grey"].flatten(),
             update_args["landscapes"].flatten(),
         ]
     )
