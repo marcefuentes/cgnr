@@ -42,7 +42,7 @@ def all21(options):
             "num": 21,
         },
         "given_rows": [1.0, 0.99, 0.5, 0.0],
-        "n_indifference_curves": 5,
+        "n_indifference_curves": 0,
         "budget_line": False,
     }
 
