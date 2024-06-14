@@ -28,7 +28,7 @@ def process_plot(x, trait, given, alpha, rho):
 
     _ = tt  # To avoid unused variable warning.
 
-    if trait == "MimicGrain":
+    if trait == "MimicGrainmean":
         y = pp - ss
         # y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
     else:
