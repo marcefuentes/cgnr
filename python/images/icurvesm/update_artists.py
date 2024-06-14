@@ -31,19 +31,19 @@ def update_artists(given_movie, update_args, options, data):
                     rho,
                 )
                 points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
-                update_args["landscapes"][i, j, k].set(
+                update_args["landscapes"][i, 0, j, k].set(
                     array=y,
                     cmap=cm.get_cmap(update_args["cmap"]),
                     norm=plt.Normalize(-1, 1),
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
 
-                update_args["budgets"][i, j, k].set(
+                update_args["budgets"][i, 0, j, k].set(
                     ydata=budget_own + qb_partner * given,
                 )
 
                 w = fitness(qb_partner, qb_partner, given, alpha, rho)
-                update_args["icurves"][i, j, k].set(
+                update_args["icurves"][i, 0, j, k].set(
                     ydata=indifference(data["x_values"], w, alpha, rho),
                     color=cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w),
                 )
