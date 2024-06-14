@@ -17,7 +17,9 @@ def init_artists(axs, x, y, ic):
         for k in range(nr):
             for m in range(nc):
                 for n in range(ic.shape[2]):
-                    icurves_grey[i, 0, k, m, n] = axs[i, 0, k, m].plot(x, ic[k, m, n])[0]
+                    icurves_grey[i, 0, k, m, n] = axs[i, 0, k, m].plot(x, ic[k, m, n])[
+                        0
+                    ]
                 budgets[i, 0, k, m] = axs[i, 0, k, m].plot(x, y)[0]
                 icurves[i, 0, k, m] = axs[i, 0, k, m].plot(x, y)[0]
                 landscapes[i, 0, k, m] = LineCollection([])
