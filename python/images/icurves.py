@@ -91,12 +91,24 @@ def main(options):
 
     format_axes(axes_args, image)
     if options["layout"] == "unit":
+        add_ax_titles(
+            axs[0, 0, 0, 0],
+            image["title_x_0"],
+            image["title_y_0"],
+            image["column_titles"]["fontsize"],
+            image["labelpad"],
+        )
+        add_ax_titles(
+            axs[0, 1, 0, 0],
+            image["title_x_1"],
+            image["title_y_1"],
+            image["column_titles"]["fontsize"],
+            image["labelpad"],
+        )
         axes_args["c_labels"] = [0.0, 0.5, 1.0]
         axes_args["r_labels"] = [0.0, 0.5, 1.0]
         ticks_ax(axs[0, 0, 0, 0], axes_args, image["ticks"])
         ticks_ax(axs[0, 1, 0, 0], axes_args, image["ticks"])
-        add_ax_titles(axs[0, 0, 0, 0], image["title_x_0"], image["title_y_0"], image["column_titles"]["fontsize"], image["labelpad"])
-        add_ax_titles(axs[0, 1, 0, 0], image["title_x_1"], image["title_y_1"], image["column_titles"]["fontsize"], image["labelpad"])
     else:
         ticks_line2d(axs, axes_args, image["ticks"])
 
