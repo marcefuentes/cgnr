@@ -63,6 +63,8 @@ def main(options):
 
     fig, axs = create_fig(fig_layout)
 
+    if options["layout"] == "curves":
+        image["margin_top"] *= 0.5
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]

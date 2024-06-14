@@ -36,11 +36,8 @@ def main(options):
 
     layout = get_layout(options, layouts)
     data = get_data(options, layout)
+
     options["budget_line"] = layout["budget_line"]
-    if options["layout"] == "unit":
-        image = image_unit
-    else:
-        image = image_common
 
     fig_layout = {
         "nc": len(data["logess"]),
@@ -51,6 +48,10 @@ def main(options):
 
     fig, axs = create_fig(fig_layout)
 
+    if options["layout"] == "unit":
+        image = image_unit
+    else:
+        image = image_common
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
