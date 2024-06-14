@@ -131,7 +131,9 @@ def relative(options):
         "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
         "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
         "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
-        "mechanisms_control": [[mechanism_control for _ in range(ncols)] for _ in range(nrows)],
+        "mechanisms_control": [
+            [mechanism_control for _ in range(ncols)] for _ in range(nrows)
+        ],
         "titles_columns": ["No shuffling", "Shuffling"],
         "titles_rows": [""] * nrows,
         "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
