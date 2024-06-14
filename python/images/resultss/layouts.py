@@ -110,3 +110,33 @@ def theory(options):
     }
 
     return layout
+
+
+def relative(options):
+    """Figure 3 and subsequent ones."""
+
+    variant_list = [
+        ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
+        ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
+    ]
+    mechanism = options["mechanism"]
+    mechanism_control = options["mechanism_control"]
+    given = options["given"]
+    trait = options["trait"]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    layout = {
+        "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
+        "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
+        "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
+        "mechanisms_control": [[mechanism_control for _ in range(ncols)] for _ in range(nrows)],
+        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_rows": [""] * nrows,
+        "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
