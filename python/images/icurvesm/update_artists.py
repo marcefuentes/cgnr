@@ -38,14 +38,13 @@ def update_artists(given_movie, update_args, options, data):
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
 
-                update_args["budgets"][i, 0, j, k].set(
-                    ydata=budget_own + qb_partner * given,
-                )
+                y = (budget_own + qb_partner * given) * options["budget_line"]
+                update_args["budgets"][i, 0, j, k].set(ydata=y)
 
-                w = fitness(qb_partner, qb_partner, given, alpha, rho)
+                y = fitness(qb_partner, qb_partner, given, alpha, rho)
                 update_args["icurves"][i, 0, j, k].set(
-                    ydata=indifference(data["x_values"], w, alpha, rho),
-                    color=cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * w),
+                    ydata=indifference(data["x_values"], y, alpha, rho),
+                    color=cm.get_cmap(update_args["cmap"])(0.5 + 0.5 * y),
                 )
 
     return np.concatenate(

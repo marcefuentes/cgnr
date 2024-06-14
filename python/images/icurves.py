@@ -36,6 +36,7 @@ def main(options):
 
     layout = get_layout(options, layouts)
     data = get_data(options, layout)
+    options["budget_line"] = layout["budget_line"]
     if options["layout"] == "unit":
         image = image_unit
     else:
