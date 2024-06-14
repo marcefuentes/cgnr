@@ -95,7 +95,6 @@ def main(options):
         "function": update_artists,
     }
 
-
     axes_args = {
         "axs": axs,
         "divider": create_divider(fig, fig_layout, fig_distances, image),
