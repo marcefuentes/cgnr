@@ -16,14 +16,14 @@ def curves(options):
         mechanism = options["mechanism"]
 
     layout = {
-        "column_titles": [""],
+        "titles_columns": [""],
         "givens": given_list,
         "givens_control": given_list,
         "mechanisms": [[mechanism], [mechanism]],
         "mechanisms_control": [["none"], ["none"]],
         "variants": [[variant], [variant]],
         "variants_control": [[variant], [variant]],
-        "row_titles": ["", ""],
+        "titles_rows": ["", ""],
         "traits": [[trait], [trait]],
     }
 
@@ -42,14 +42,14 @@ def figure_2(options):
     ncols = len(given_list[0])
 
     layout = {
-        "column_titles": ["Fitness", "Fitness\nrelative to optimum"],
+        "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
         "givens": given_list,
         "givens_control": given_control_list,
         "mechanisms": [["none", "none"] for _ in range(nrows)],
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
         "variants": [[variant for _ in range(ncols)] for _ in range(nrows)],
         "variants_control": [[variant for _ in range(ncols)] for _ in range(nrows)],
-        "row_titles": ["", "", ""],
+        "titles_rows": ["", "", ""],
         "traits": [[trait, trait] for _ in range(nrows)],
     }
 
@@ -71,14 +71,14 @@ def figure_3(options):
     ncols = len(variant_list[0])
 
     layout = {
-        "column_titles": ["No shuffling", "Shuffling"],
+        "titles_columns": ["No shuffling", "Shuffling"],
         "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
         "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
         "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
         "mechanisms_control": [["none" for _ in range(ncols)] for _ in range(nrows)],
         "variants": variant_list,
         "variants_control": variant_list,
-        "row_titles": ["", ""],
+        "titles_rows": ["", ""],
         "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
     }
 
@@ -96,14 +96,14 @@ def theory(options):
     nrows = len(given_list)
 
     layout = {
-        "column_titles": ["Fitness\n(theory)", "Fitness\n(simulations)"],
+        "titles_columns": ["Fitness\n(theory)", "Fitness\n(simulations)"],
         "givens": given_list,
         "givens_control": given_control_list,
         "mechanisms": [[None, "none"] for _ in range(nrows)],
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
         "variants": [variant for _ in range(nrows)],
         "variants_control": [variant for _ in range(nrows)],
-        "row_titles": ["", "", ""],
+        "titles_rows": ["", "", ""],
         "traits": [[None, trait] for _ in range(nrows)],
     }
 

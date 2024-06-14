@@ -6,6 +6,7 @@ import os
 import time
 
 from matplotlib import colormaps
+
 from modules.add_ax_titles import add_ax_titles
 from modules.create_fig import create_fig
 from modules.fix_positions import create_divider
@@ -23,6 +24,7 @@ from icurvesm.get_static_data import get_static_data
 from icurvesm.init_artists import init_artists
 from icurvesm.parse_args import parse_args
 from icurvesm.update_artists import update_artists
+
 from icurvess import layouts
 from icurvess.image import image_common, image_unit
 
@@ -65,28 +67,25 @@ def main(options):
         update_args["landscapes"],
     ) = init_artists(axs, data["x_values"], y, ic)
 
-    for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
-        format_artists(update_args[artist], image[artist])
-
     axes_args = {
         "axs": axs,
-        "c_labels": [
+        "divider": create_divider(fig, fig_layout, fig_distances, image),
+        "lim_x": [0, 1],
+        "lim_y": [0, 1],
+        "nc": fig_layout["nc"],
+        "nr": fig_layout["nr"],
+        "ticklabels_x": [
             data["logess"][0],
             data["logess"][fig_layout["nc"] // 2],
             data["logess"][-1],
         ],
-        "column_titles": [""] * fig_layout["ncols"],
-        "divider": create_divider(fig, fig_layout, fig_distances, image),
-        "nc": fig_layout["nc"],
-        "nr": fig_layout["nr"],
-        "r_labels": [
+        "ticklabels_y": [
             data["alphas"][0],
             data["alphas"][fig_layout["nr"] // 2],
             data["alphas"][-1],
         ],
-        "row_titles": [""] * fig_layout["nrows"],
-        "x_lim": [0, 1],
-        "y_lim": [0, 1],
+        "titles_columns": [""] * fig_layout["ncols"],
+        "titles_rows": [""] * fig_layout["nrows"],
     }
 
     format_axes(axes_args, image)
@@ -95,22 +94,25 @@ def main(options):
             axs[0, 0, 0, 0],
             image["title_x_0"],
             image["title_y_0"],
-            image["column_titles"]["fontsize"],
+            image["titles_columns"]["fontsize"],
             image["labelpad"],
         )
         add_ax_titles(
             axs[0, 1, 0, 0],
             image["title_x_1"],
             image["title_y_1"],
-            image["column_titles"]["fontsize"],
+            image["titles_columns"]["fontsize"],
             image["labelpad"],
         )
-        axes_args["c_labels"] = [0.0, 0.5, 1.0]
-        axes_args["r_labels"] = [0.0, 0.5, 1.0]
+        axes_args["ticklabels_x"] = [0.0, 0.5, 1.0]
+        axes_args["ticklabels_y"] = [0.0, 0.5, 1.0]
         ticks_ax(axs[0, 0, 0, 0], axes_args, image["ticks"])
         ticks_ax(axs[0, 1, 0, 0], axes_args, image["ticks"])
     else:
         ticks_line2d(axs, axes_args, image["ticks"])
+
+    for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
+        format_artists(update_args[artist], image[artist])
 
     update_args["file_name"] += f"_{options['layout']}"
     save_file(fig, update_args, options, data)

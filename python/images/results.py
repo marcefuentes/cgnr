@@ -26,9 +26,9 @@ from resultsm.init_artists import init_artists
 from resultsm.parse_args import parse_args
 from resultsm.update_artists import update_artists
 
-from settings.project import project
 from resultss import layouts
 from resultss.image import image
+from settings.project import project
 
 
 def main(options):
@@ -67,12 +67,6 @@ def main(options):
     format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
 
-    update_args = {
-        "cmap": colormaps.get_cmap(image["color_map"]),
-        "file_name": os.path.basename(__file__).split(".")[0],
-        "function": update_artists,
-    }
-
     if options["layout"] == "curves":
         x, y = get_static_data(
             image["n_x_values"],
@@ -94,35 +88,41 @@ def main(options):
         x = None
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 
-    update_args["artists"] = init_artists(axs, x, y)
+    update_args = {
+        "artists": init_artists(axs, x, y),
+        "cmap": colormaps.get_cmap(image["color_map"]),
+        "file_name": os.path.basename(__file__).split(".")[0],
+        "function": update_artists,
+    }
+
 
     axes_args = {
         "axs": axs,
-        "c_labels": [
+        "divider": create_divider(fig, fig_layout, fig_distances, image),
+        "lim_x": [None, None],
+        "lim_y": [None, None],
+        "nc": mc,
+        "nr": mr,
+        "ticklabels_x": [
             data["logess"][0],
             data["logess"][mc // 2],
             data["logess"][-1],
         ],
-        "column_titles": layout["column_titles"],
-        "divider": create_divider(fig, fig_layout, fig_distances, image),
-        "nc": mc,
-        "nr": mr,
-        "r_labels": [
+        "ticklabels_y": [
             data["alphas"][0],
             data["alphas"][mr // 2],
             data["alphas"][-1],
         ],
-        "row_titles": layout["row_titles"],
-        "x_lim": [None, None],
-        "y_lim": [None, None],
+        "titles_columns": layout["titles_columns"],
+        "titles_rows": layout["titles_rows"],
     }
 
     if options["layout"] == "curves":
-        axes_args["x_lim"] = [0, 1]
-        axes_args["y_lim"] = [0, 1]
+        axes_args["lim_x"] = [0, 1]
+        axes_args["lim_y"] = [0, 1]
     if options["histogram"]:
-        axes_args["x_lim"] = [-2, project["bins"] + 1]
-        axes_args["y_lim"] = [0, 0.25]
+        axes_args["lim_x"] = [-2, project["bins"] + 1]
+        axes_args["lim_y"] = [0, 0.25]
         update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)

@@ -38,8 +38,8 @@ def format_axes(axes_args, image):
     # Set limits and reset ticks
 
     params = {
-        "xlim": axes_args["x_lim"],
-        "ylim": axes_args["y_lim"],
+        "xlim": axes_args["lim_x"],
+        "ylim": axes_args["lim_y"],
         "xticks": [],
         "yticks": [],
     }
@@ -57,12 +57,12 @@ def format_axes(axes_args, image):
 
     for j in range(ncols):
         axs[0, j, 0, int(nc / 2)].set_title(
-            axes_args["column_titles"][j], **image["column_titles"]
+            axes_args["titles_columns"][j], **image["titles_columns"]
         )
 
     # Add row titles
 
     for i in range(nrows):
         axs[i, -1, int(nr / 2), -1].annotate(
-            axes_args["row_titles"][i], **image["row_titles"]
+            axes_args["titles_rows"][i], **image["titles_rows"]
         )
