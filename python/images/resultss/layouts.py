@@ -5,8 +5,10 @@ def curves(options):
     """Fitness curves for partner choice."""
 
     variant = "nolang_noshuffle_cost15_4"
-    given_list = [["1.0"], ["0.5"]]
+    given_list = [["1.0"], ["0.5"], ["0.0"]]
     trait = options["trait"]
+
+    nrows = len(given_list)
 
     if "Mimic" in trait:
         mechanism = "d"
@@ -16,15 +18,15 @@ def curves(options):
         mechanism = options["mechanism"]
 
     layout = {
-        "titles_columns": [""],
         "givens": given_list,
         "givens_control": given_list,
-        "mechanisms": [[mechanism], [mechanism]],
-        "mechanisms_control": [["none"], ["none"]],
-        "variants": [[variant], [variant]],
-        "variants_control": [[variant], [variant]],
-        "titles_rows": ["", ""],
-        "traits": [[trait], [trait]],
+        "mechanisms": [[mechanism] for _ in range(nrows)],
+        "mechanisms_control": [["none"] for _ in range(nrows)],
+        "titles_columns": [""],
+        "titles_rows": [""] * nrows,
+        "traits": [[trait] for _ in range(nrows)],
+        "variants": [[variant] for _ in range(nrows)],
+        "variants_control": [[variant] for _ in range(nrows)],
     }
 
     return layout
@@ -42,15 +44,15 @@ def figure_2(options):
     ncols = len(given_list[0])
 
     layout = {
-        "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
         "givens": given_list,
         "givens_control": given_control_list,
         "mechanisms": [["none", "none"] for _ in range(nrows)],
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
+        "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
+        "titles_rows": [""] * nrows,
+        "traits": [[trait, trait] for _ in range(nrows)],
         "variants": [[variant for _ in range(ncols)] for _ in range(nrows)],
         "variants_control": [[variant for _ in range(ncols)] for _ in range(nrows)],
-        "titles_rows": ["", "", ""],
-        "traits": [[trait, trait] for _ in range(nrows)],
     }
 
     return layout
@@ -71,15 +73,15 @@ def figure_3(options):
     ncols = len(variant_list[0])
 
     layout = {
-        "titles_columns": ["No shuffling", "Shuffling"],
         "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
         "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
         "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
         "mechanisms_control": [["none" for _ in range(ncols)] for _ in range(nrows)],
+        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_rows": [""] * nrows,
+        "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
         "variants": variant_list,
         "variants_control": variant_list,
-        "titles_rows": ["", ""],
-        "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
     }
 
     return layout
@@ -96,15 +98,15 @@ def theory(options):
     nrows = len(given_list)
 
     layout = {
-        "titles_columns": ["Fitness\n(theory)", "Fitness\n(simulations)"],
         "givens": given_list,
         "givens_control": given_control_list,
         "mechanisms": [[None, "none"] for _ in range(nrows)],
         "mechanisms_control": [[None, "none"] for _ in range(nrows)],
+        "titles_columns": ["Fitness\n(theory)", "Fitness\n(simulations)"],
+        "titles_rows": [""] * nrows,
+        "traits": [[None, trait] for _ in range(nrows)],
         "variants": [variant for _ in range(nrows)],
         "variants_control": [variant for _ in range(nrows)],
-        "titles_rows": ["", "", ""],
-        "traits": [[None, trait] for _ in range(nrows)],
     }
 
     return layout
