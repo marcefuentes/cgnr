@@ -52,7 +52,8 @@ def process_folder(test):
             f"{colors['white']}Will delete output files of jobs in "
             f"{colors['red']}red{colors['white']}, if there are any. "
             f"Continue?{colors['reset']} "
-            f"{ask['noyes']}", end=""
+            f"{ask['noyes']}",
+            end="",
         )
         user_input = input()
         if user_input.lower() == "n":

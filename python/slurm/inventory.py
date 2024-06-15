@@ -208,7 +208,8 @@ def main(store=False):
                     f"\n{colors['bold']}Submit "
                     f"{colors['cyan']}{free_slots}{colors['reset']}"
                     f"{colors['bold']} jobs?{colors['reset']} "
-                    f"{ask['yesno']}", end=""
+                    f"{ask['yesno']}",
+                    end="",
                 )
                 if input().strip().lower() == "n":
                     print()

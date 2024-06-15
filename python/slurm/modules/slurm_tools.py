@@ -197,14 +197,10 @@ def slots():
         else:
             print(f"{' ' * 5:>5}", end="")
         print(
-            f"{colors['bold']}{colors['yellow']}{running if running else ' ' * 5:>5}{colors['reset']}",
-            end="",
-        )
-        print(
-            f"{colors['white']}{pending if pending else ' ' * 4:>4}{colors['reset']}",
-            end="",
-        )
-        print(
+            f"{colors['bold']}{colors['yellow']}{running if running else ' ' * 5:>5}"
+            f"{colors['reset']}"
+            f"{colors['white']}{pending if pending else ' ' * 4:>4}"
+            f"{colors['reset']}"
             f"{colors['bold']}{colors['cyan']}{free_slots if free_slots else '':>4}"
             f"{colors['reset']}"
         )
