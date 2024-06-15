@@ -28,9 +28,8 @@ def process_folder(test):
         if last_job_file_path == current_path:
             print(
                 f"{colors['red']}{last_job_file.split('/')[-1]} points to this folder."
-                f"{colors['reset']}"
+                f"Run submit first.{colors['reset']}"
             )
-            print(f"{colors['red']}Run submit first.{colors['reset']}")
             if test:
                 print("If this were not a test, the program would stop here.\n")
             else:
@@ -44,16 +43,16 @@ def process_folder(test):
 
     if test:
         print(
-            f"{colors['white']}Would delete output files of jobs in {colors['reset']}"
-            f"{colors['red']}red{colors['white']} and {colors['grey']}grey{colors['reset']}."
+            f"{colors['white']}Would delete output files of jobs in "
+            f"{colors['red']}red{colors['white']}.{colors['reset']}"
         )
     else:
-        print(f"{colors['bold']}{colors['red']}This is not a test!{colors['reset']}")
         print(
-            f"{colors['white']}Delete output files of jobs in {colors['reset']}"
-            f"{colors['red']}red{colors['white']} and {colors['grey']}grey"
-            f"{colors['white']}?{colors['reset']} "
-            f"{ask['yesno']}", end=""
+            f"{colors['bold']}{colors['red']}This is not a test.{colors['reset']}\n"
+            f"{colors['white']}Will delete output files of jobs in "
+            f"{colors['red']}red{colors['white']}, if there are any. "
+            f"Continue?{colors['reset']} "
+            f"{ask['noyes']}", end=""
         )
         user_input = input()
         if user_input.lower() == "n":
