@@ -20,13 +20,13 @@ def curves(options):
     layout = {
         "givens": given_list,
         "givens_control": given_list,
-        "mechanisms": [[mechanism] for _ in range(nrows)],
-        "mechanisms_control": [["none"] for _ in range(nrows)],
+        "mechanisms": repeat_for_matrix(mechanism, nrows, 1),
+        "mechanisms_control": repeat_for_matrix("none", nrows, 1),
         "titles_columns": [""],
         "titles_rows": [""] * nrows,
-        "traits": [[trait] for _ in range(nrows)],
-        "variants": [[variant] for _ in range(nrows)],
-        "variants_control": [[variant] for _ in range(nrows)],
+        "traits": repeat_for_matrix(trait, nrows, 1),
+        "variants": repeat_for_matrix(variant, nrows, 1),
+        "variants_control": repeat_for_matrix(variant, nrows, 1),
     }
 
     return layout
@@ -43,30 +43,21 @@ def default(options):
     nrows = len(variant_list)
     ncols = len(variant_list[0])
 
-    mechanisms = [[options["mechanism"] for _ in range(ncols)] for _ in range(nrows)]
-
-    givens = [[options["given"] for _ in range(ncols)] for _ in range(nrows)]
     if options["mechanism_control"] == "social":
-        mechanisms_control = [["none" for _ in range(ncols)] for _ in range(nrows)]
-        givens_control = [["0.0" for _ in range(ncols)] for _ in range(nrows)]
+        mechanisms_control = repeat_for_matrix("none", nrows, ncols)
+        givens_control = repeat_for_matrix("0.0", nrows, ncols)
     else:
-        mechanisms_control = [
-            [options["mechanism_control"] for _ in range(ncols)] for _ in range(nrows)
-        ]
-        givens_control = [
-            [options["given"] for _ in range(ncols)] for _ in range(nrows)
-        ]
-
-    traits = [[options["trait"] for _ in range(ncols)] for _ in range(nrows)]
+        mechanisms_control = repeat_for_matrix(options["mechanism_control"], nrows, ncols)
+        givens_control = repeat_for_matrix(options["given"], nrows, ncols)
 
     layout = {
-        "givens": givens,
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": givens_control,
-        "mechanisms": mechanisms,
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
         "mechanisms_control": mechanisms_control,
         "titles_columns": ["No shuffling", "Shuffling"],
         "titles_rows": [""] * nrows,
-        "traits": traits,
+        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
         "variants": variant_list,
         "variants_control": variant_list,
     }
@@ -93,11 +84,17 @@ def figure_2(options):
         "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
         "titles_rows": [""] * nrows,
         "traits": [[trait, trait] for _ in range(nrows)],
-        "variants": [[variant for _ in range(ncols)] for _ in range(nrows)],
-        "variants_control": [[variant for _ in range(ncols)] for _ in range(nrows)],
+        "variants": repeat_for_matrix(variant, nrows, ncols),
+        "variants_control": repeat_for_matrix(variant, nrows, ncols),
     }
 
     return layout
+
+
+def repeat_for_matrix(value, nrows, ncols):
+    """Repeat a value for a matrix."""
+
+    return [[value for _ in range(ncols)] for _ in range(nrows)]
 
 
 def theory(options):
