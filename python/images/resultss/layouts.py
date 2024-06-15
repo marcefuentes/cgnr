@@ -32,6 +32,44 @@ def curves(options):
     return layout
 
 
+def default(options):
+    """Figure 3 and subsequent ones."""
+
+    variant_list = [
+        ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
+        ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
+    ]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    mechanisms = [[options["mechanism"] for _ in range(ncols)] for _ in range(nrows)]
+
+    givens = [[options["given"] for _ in range(ncols)] for _ in range(nrows)]
+    if options["mechanism_control"] == "social":
+        mechanisms_control = [["none" for _ in range(ncols)] for _ in range(nrows)]
+        givens_control = [["0.0" for _ in range(ncols)] for _ in range(nrows)]
+    else:
+        mechanisms_control = [[options["mechanism_control"] for _ in range(ncols)] for _ in range(nrows)]
+        givens_control = [[options["given"] for _ in range(ncols)] for _ in range(nrows)]
+
+    traits = [[options["trait"] for _ in range(ncols)] for _ in range(nrows)]
+
+    layout = {
+        "givens": givens,
+        "givens_control": givens_control,
+        "mechanisms": mechanisms,
+        "mechanisms_control": mechanisms_control,
+        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_rows": [""] * nrows,
+        "traits": traits,
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
+
+
 def figure_2(options):
     """Figure 2."""
 
@@ -58,35 +96,6 @@ def figure_2(options):
     return layout
 
 
-def default(options):
-    """Figure 3 and subsequent ones."""
-
-    variant_list = [
-        ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
-        ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
-    ]
-    mechanism = options["mechanism"]
-    given = options["given"]
-    trait = options["trait"]
-
-    nrows = len(variant_list)
-    ncols = len(variant_list[0])
-
-    layout = {
-        "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
-        "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
-        "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
-        "mechanisms_control": [["none" for _ in range(ncols)] for _ in range(nrows)],
-        "titles_columns": ["No shuffling", "Shuffling"],
-        "titles_rows": [""] * nrows,
-        "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
-        "variants": variant_list,
-        "variants_control": variant_list,
-    }
-
-    return layout
-
-
 def theory(options):
     """First column is theoretical."""
 
@@ -107,38 +116,6 @@ def theory(options):
         "traits": [[None, trait] for _ in range(nrows)],
         "variants": [variant for _ in range(nrows)],
         "variants_control": [variant for _ in range(nrows)],
-    }
-
-    return layout
-
-
-def relative(options):
-    """Figure 3 and subsequent ones."""
-
-    variant_list = [
-        ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
-        ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
-    ]
-    mechanism = options["mechanism"]
-    mechanism_control = options["mechanism_control"]
-    given = options["given"]
-    trait = options["trait"]
-
-    nrows = len(variant_list)
-    ncols = len(variant_list[0])
-
-    layout = {
-        "givens": [[given for _ in range(ncols)] for _ in range(nrows)],
-        "givens_control": [[given for _ in range(ncols)] for _ in range(nrows)],
-        "mechanisms": [[mechanism for _ in range(ncols)] for _ in range(nrows)],
-        "mechanisms_control": [
-            [mechanism_control for _ in range(ncols)] for _ in range(nrows)
-        ],
-        "titles_columns": ["No shuffling", "Shuffling"],
-        "titles_rows": [""] * nrows,
-        "traits": [[trait for _ in range(ncols)] for _ in range(nrows)],
-        "variants": variant_list,
-        "variants_control": variant_list,
     }
 
     return layout

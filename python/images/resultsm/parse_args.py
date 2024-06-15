@@ -32,13 +32,13 @@ def parse_args():
         },
         "mechanism": {
             "type": str,
-            "choices": ["none", "d", "i", "p", "pd", "pi"],
+            "choices": ["none", "d", "i", "p", "pd", "pi", "social"],
             "default": "none",
             "help": "mechanism",
         },
         "mechanism_control": {
             "type": str,
-            "choices": ["none", "d", "i", "p", "pd", "pi"],
+            "choices": ["none", "d", "i", "p", "pd", "pi", "social"],
             "default": "none",
             "help": "mechanism",
         },
