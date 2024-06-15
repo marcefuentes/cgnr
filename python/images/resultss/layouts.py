@@ -48,7 +48,9 @@ def default(options):
         mechanisms_control = repeat_for_matrix("none", nrows, ncols)
         givens_control = repeat_for_matrix("0.0", nrows, ncols)
     else:
-        mechanisms_control = repeat_for_matrix(options["mechanism_control"], nrows, ncols)
+        mechanisms_control = repeat_for_matrix(
+            options["mechanism_control"], nrows, ncols
+        )
         givens_control = repeat_for_matrix(options["given"], nrows, ncols)
 
     layout = {
@@ -71,25 +73,27 @@ def figure_2(options):
 
     variant = "nolang_noshuffle_cost15_4"
     given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
-    given_control_list = [[None, 0.0], [None, "0.0"], [None, "0.0"]]
+    given_control_list = [[None, "0.0"], [None, "0.0"], [None, "0.0"]]
 
     nrows = len(given_list)
     ncols = len(given_list[0])
 
     variants = repeat_for_matrix(variant, nrows, ncols)
+    mechanisms_control = [[None, "none"] for _ in range(nrows)]
 
     layout = {
         "givens": given_list,
         "givens_control": given_control_list,
-        "mechanisms": repeat_for_matrix(["none", "none"], nrows, 1),
-        "mechanisms_control": repeat_for_matrix([None, "none"], nrows, 1),
+        "mechanisms": repeat_for_matrix("none", nrows, ncols),
+        "mechanisms_control": mechanisms_control,
         "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, 2),
+        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
         "variants": variants,
         "variants_control": variants,
     }
 
+    print(layout)
     return layout
 
 
@@ -107,17 +111,18 @@ def theory(options):
 
     nrows = len(given_list)
 
-    variants = repeat_for_matrix(variant, nrows, 1)
-    mechanisms = repeat_for_matrix([None, "none"], nrows, 1)
+    variants = [variant for _ in range(nrows)]
+    mechanisms = [[None, "none"] for _ in range(nrows)]
+    traits = [[None, options["trait"]] for _ in range(nrows)]
 
     layout = {
         "givens": given_list,
-        "givens_control": repeat_for_matrix([None, "0.0"], nrows, 1),
+        "givens_control": repeat_for_matrix(None, nrows, 2),
         "mechanisms": mechanisms,
         "mechanisms_control": mechanisms,
         "titles_columns": ["Fitness\n(theory)", "Fitness\n(simulations)"],
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix([None, options["trait"]], nrows, 1),
+        "traits": traits,
         "variants": variants,
         "variants_control": variants,
     }
