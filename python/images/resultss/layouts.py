@@ -50,8 +50,12 @@ def default(options):
         mechanisms_control = [["none" for _ in range(ncols)] for _ in range(nrows)]
         givens_control = [["0.0" for _ in range(ncols)] for _ in range(nrows)]
     else:
-        mechanisms_control = [[options["mechanism_control"] for _ in range(ncols)] for _ in range(nrows)]
-        givens_control = [[options["given"] for _ in range(ncols)] for _ in range(nrows)]
+        mechanisms_control = [
+            [options["mechanism_control"] for _ in range(ncols)] for _ in range(nrows)
+        ]
+        givens_control = [
+            [options["given"] for _ in range(ncols)] for _ in range(nrows)
+        ]
 
     traits = [[options["trait"] for _ in range(ncols)] for _ in range(nrows)]
 
