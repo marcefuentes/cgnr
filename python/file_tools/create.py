@@ -40,6 +40,7 @@ def main(args):
     ]
 
     reciprocity = 1 if args.d or args.i else 0
+
     option_lines = [
         f"GroupSize,{args.groupsize}\n",
         f"Cost,{args.cost}\n",
@@ -66,7 +67,7 @@ def main(args):
                 f.writelines(constant_lines)
                 f.writelines(option_lines)
                 f.writelines(remaining_lines)
-            counter = counter + 1
+            counter += 1
     print()
 
 
