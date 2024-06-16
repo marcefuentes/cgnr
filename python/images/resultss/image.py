@@ -8,7 +8,7 @@ COLOR_MAP = common.COLOR_MAP
 image = {
     "n_x_values": 64,
     "lines": {
-        "color": "0.4",
+        "color": "brown",
         "linewidth": 0.2 * PLOT_SIZE,
     },
     "show": {
