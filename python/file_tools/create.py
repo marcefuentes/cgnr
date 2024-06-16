@@ -28,38 +28,46 @@ def main(args):
     path += f"/{str(args.given)}"
     os.makedirs(path, exist_ok=True)
 
-    standard_params = {
-        "Seed": 1,
-        "N": project["N"],
-        "Runs": project["Runs"],
-        "Time": project["Time"],
-        "Periods": project["Periods"],
-        "qBMutationSize": project["qBMutationSize"],
-        "GrainMutationSize": project["GrainMutationSize"],
-        "DeathRate": project["DeathRate"],
-    }
+    constant_lines = [
+        f"Seed,1\n",
+        f"N,{project['N']}\n",
+        f"Runs,{project['Runs']}\n",
+        f"Time,{project['Time']}\n",
+        f"Periods,{project['Periods']}\n",
+        f"qBMutationSize,{project['qBMutationSize']}\n",
+        f"GrainMutationSize,{project['GrainMutationSize']}\n",
+        f"DeathRate,{project['DeathRate']}\n",
+    ]
+
+    reciprocity = 1 if args.d or args.i else 0
+    option_lines = [
+        f"GroupSize,{args.groupsize}\n",
+        f"Cost,{args.cost}\n",
+        f"PartnerChoice,{args.p}\n",
+        f"Reciprocity,{reciprocity}\n",
+        f"IndirectR,{args.i}\n",
+        f"Language,{args.language}\n",
+        f"Shuffle,{args.shuffle}\n",
+    ]
 
     alphas = np.linspace(project["alpha_min"], project["alpha_max"], project["grid"])
     logess = np.linspace(project["loges_min"], project["loges_max"], project["grid"])
-    reciprocity = 1 if args.d or args.i else 0
 
     for alpha in alphas:
         for loges in logess:
             filename = f"{path}/{counter}{input_file_extension}"
+            print(f"\r{filename}", end="", flush=True)
             with open(filename, "w", encoding="utf-8") as f:
-                for key, value in standard_params.items():
-                    f.write(f"{key},{value}\n")
-                f.write(f"GroupSize,{args.groupsize}\n")
-                f.write(f"Cost,{args.cost}\n")
-                f.write(f"PartnerChoice,{args.p}\n")
-                f.write(f"Reciprocity,{reciprocity}\n")
-                f.write(f"IndirectR,{args.i}\n")
-                f.write(f"Language,{args.language}\n")
-                f.write(f"Shuffle,{args.shuffle}\n")
-                f.write(f"alpha,{alpha:.6}\n")
-                f.write(f"logES,{loges}\n")
-                f.write(f"Given,{args.given}\n")
+                remaining_lines = [
+                    f"alpha,{alpha:.6}\n",
+                    f"logES,{loges}\n",
+                    f"Given,{args.given}\n",
+                ]
+                f.writelines(constant_lines)
+                f.writelines(option_lines)
+                f.writelines(remaining_lines)
             counter = counter + 1
+    print()
 
 
 if __name__ == "__main__":
