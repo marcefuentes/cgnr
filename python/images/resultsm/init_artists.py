@@ -14,6 +14,6 @@ def init_artists(axs, x, y):
         return artists
 
     for idx in np.ndindex(axs.shape):
-        artists[idx] = axs[idx].plot(x, y[idx])[0]
+        artists[idx] = axs[idx].fill_between(x, 0, y[idx])
 
     return artists
