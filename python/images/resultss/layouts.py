@@ -93,7 +93,6 @@ def figure_2(options):
         "variants_control": variants,
     }
 
-    print(layout)
     return layout
 
 
