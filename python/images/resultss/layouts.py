@@ -37,8 +37,8 @@ def default(options):
     """Figure 3 and subsequent ones."""
 
     variant_list = [
-        ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
-        ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
+        ["lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
