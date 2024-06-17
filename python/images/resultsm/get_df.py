@@ -2,7 +2,6 @@
 
 import os
 from glob import glob
-import sys
 
 import pandas as pd
 
@@ -27,7 +26,7 @@ def get_df(path, filetype, clean, movie):
 
     filelist = glob(os.path.join(path, f"*{filetype}"))
     if not filelist:
-        print(f"No {path}/*{filetype} files found.")
+        print(f"\nNo {path}/*{filetype} files found.")
         return pd.DataFrame()
     df = read_files(filelist, movie)
 
