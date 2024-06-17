@@ -28,7 +28,7 @@ def get_df(path, filetype, clean, movie):
     filelist = glob(os.path.join(path, f"*{filetype}"))
     if not filelist:
         print(f"No {path}/*{filetype} files found.")
-        sys.exit()
+        return pd.DataFrame()
     df = read_files(filelist, movie)
 
     df.to_csv(concatenated, index=False)
