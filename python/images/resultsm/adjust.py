@@ -4,7 +4,7 @@ from modules.add_ticks import add_ticklabels_ax
 
 
 def adjust(axs):
-    """ Adjust ax when there are 3 subplots """
+    """Adjust ax when there are 3 subplots"""
 
     axs[1, 0, 0, 0].remove()
     ax = axs[0, 0, 0, 0]

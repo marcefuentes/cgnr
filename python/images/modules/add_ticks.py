@@ -114,4 +114,6 @@ def ticks_line2d(axes_args, format_params):
     """Format ticks for line2d plots."""
 
     add_ticks_line2d(axes_args["axs"], format_params)
-    add_ticklabels_line2d(axes_args["axs"], axes_args["ticklabels_y"], axes_args["ticklabels_x"])
+    add_ticklabels_line2d(
+        axes_args["axs"], axes_args["ticklabels_y"], axes_args["ticklabels_x"]
+    )
