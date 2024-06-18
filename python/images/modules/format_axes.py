@@ -3,16 +3,6 @@
 import numpy as np
 
 
-def add_letters(ax, position, params, n):
-    """Add letters."""
-
-    params["s"] = chr(ord("a") + n % 26)
-    if n >= 26:
-        params["s"] = params["s"] + params["s"]
-    params["transform"] = ax.transAxes
-    ax.text(*position, **params)
-
-
 def format_axes(axes_args, image):
     """format (nrows x ncols x nr x nc) matrix."""
 
@@ -45,13 +35,6 @@ def format_axes(axes_args, image):
     }
     for ax in axs.flatten():
         ax.set(**params)
-
-    # Add letters
-
-    position = (0, 1.0 + image["padding_letter"] * nr)
-    for i in range(nrows):
-        for j in range(ncols):
-            add_letters(axs[i, j, 0, 0], position, image["letters"], i * ncols + j)
 
     # Add titles
 

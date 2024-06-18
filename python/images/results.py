@@ -8,12 +8,13 @@ import time
 import numpy as np
 from matplotlib import colormaps
 
+from modules.add_letters import add_letters
+from modules.add_ticks import ticks_imshow, ticks_line2d
 from modules.create_fig import create_fig
 from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.add_ticks import ticks_imshow, ticks_line2d
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
@@ -127,6 +128,11 @@ def main(options):
         update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)
+    add_letters(
+        axs,
+        (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
+        image["letters"],
+    )
     if options["layout"] == "curves" or options["histogram"]:
         format_artists(update_args["artists"], image["lines"])
         ticks_line2d(axes_args, image["ticks"])
