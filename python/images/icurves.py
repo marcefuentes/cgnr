@@ -13,7 +13,7 @@ from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.add_ticks import ticks_ax, ticks_line2d
+from modules.add_ticks import ticks_ax_line2d, ticks_line2d
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
@@ -108,10 +108,10 @@ def main(options):
         )
         axes_args["ticklabels_x"] = [0.0, 0.5, 1.0]
         axes_args["ticklabels_y"] = [0.0, 0.5, 1.0]
-        ticks_ax(axs[0, 0, 0, 0], axes_args, image["ticks"])
-        ticks_ax(axs[0, 1, 0, 0], axes_args, image["ticks"])
+        ticks_ax_line2d(axs[0, 0, 0, 0], axes_args, image["ticks"])
+        ticks_ax_line2d(axs[0, 1, 0, 0], axes_args, image["ticks"])
     else:
-        ticks_line2d(axs, axes_args, image["ticks"])
+        ticks_line2d(axes_args, image["ticks"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
