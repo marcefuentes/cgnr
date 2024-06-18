@@ -129,10 +129,10 @@ def main(options):
     format_axes(axes_args, image)
     if options["layout"] == "curves" or options["histogram"]:
         format_artists(update_args["artists"], image["lines"])
-        ticks_line2d(axs, axes_args, image["ticks"])
+        ticks_line2d(axes_args, image["ticks"])
     else:
         format_artists(update_args["artists"], image["show"])
-        ticks_imshow(axs, axes_args, image["ticks"])
+        ticks_imshow(axes_args, image["ticks"])
 
     update_args["file_name"] += f"_{options['layout']}_{options['trait']}"
     save_file(fig, update_args, options, data)

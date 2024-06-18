@@ -94,11 +94,11 @@ def add_ticks_line2d(axs, format_params):
                 axs[i, j, -1, m].tick_params(axis="x", **format_params)
 
 
-def ticks_imshow(axs, axes_args, format_params):
+def ticks_imshow(axes_args, format_params):
     """Format ticks for imshow plots."""
 
-    add_ticks_imshow(axs, axes_args["nr"], axes_args["nc"], format_params)
-    add_ticklabels_imshow(axs, axes_args["ticklabels_y"], axes_args["ticklabels_x"])
+    add_ticks_imshow(axes_args["axs"], axes_args["nr"], axes_args["nc"], format_params)
+    add_ticklabels_imshow(axes_args["axs"], axes_args["ticklabels_y"], axes_args["ticklabels_x"])
 
 
 def ticks_line2d(axs, axes_args, format_params):
