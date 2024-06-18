@@ -10,6 +10,7 @@ def get_df(path, filetype, clean, movie):
     """Return a concatenated dataframe of the 'filetype' files in the given directory."""
 
     if not os.path.exists(path):
+        print(f"{path} does not exist.")
         return pd.DataFrame()
 
     if movie:
