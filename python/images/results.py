@@ -125,7 +125,6 @@ def main(options):
     if options["histogram"]:
         axes_args["lim_x"] = [-2, project["bins"] + 1]
         axes_args["lim_y"] = [0, 0.25]
-        update_args["file_name"] += "_histogram"
 
     format_axes(axes_args, image)
     add_letters(
@@ -140,7 +139,6 @@ def main(options):
         format_artists(update_args["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
-    update_args["file_name"] += f"_{options['layout']}_{options['trait']}"
     save_file(fig, update_args, options, data)
     close_plt(fig)
 
