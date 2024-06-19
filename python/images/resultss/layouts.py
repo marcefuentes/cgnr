@@ -38,6 +38,11 @@ def default(options):
     """Figure 3 and subsequent ones."""
 
     variant_list = [
+        ["lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
+    ]
+
+    variant_control_list = [
         ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
         ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
     ]
@@ -66,7 +71,7 @@ def default(options):
         "traits": traits,
         "traits_control": traits,
         "variants": variant_list,
-        "variants_control": variant_list,
+        "variants_control": variant_control_list,
     }
 
     return layout
