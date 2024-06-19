@@ -123,7 +123,6 @@ def main(options):
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(update_args[artist], image[artist])
 
-    update_args["file_name"] += f"_{options['layout']}"
     save_file(fig, update_args, options, data)
 
     # pylint: disable=duplicate-code
