@@ -46,6 +46,11 @@ def parse_args():
             "type": str,
             "help": "trait (required)",
         },
+        "trait_control": {
+            "type": str,
+            "default": "none",
+            "help": "trait (control)",
+        },
         "histogram": {"action": "store_true", "help": "add histogram"},
         "movie": {"action": "store_true", "help": "enable movie"},
         "clean": {"action": "store_true", "help": "clean folders"},
@@ -55,5 +60,8 @@ def parse_args():
         parser.add_argument(f"--{arg}", **params)
 
     args = parser.parse_args()
+
+    if args.trait_control == "none":
+        args.trait_control = args.trait
 
     return args

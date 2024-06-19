@@ -14,6 +14,7 @@ def get_data(options, layout, csv, frq):
         "dfs": np.empty((nrows, ncols), dtype=object),
         "dfs_control": np.empty((nrows, ncols), dtype=object),
         "traits": layout["traits"],
+        "traits_control": layout["traits_control"],
     }
 
     params = {

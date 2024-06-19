@@ -65,23 +65,23 @@ def update_zmatrix(t, data, i, j):
     """Return the updated zmatrix for a given time and trait."""
 
     df = data["dfs"][i, j]
-    df_control = data["dfs_control"][i, j]
     trait = data["traits"][i][j]
 
     if trait is None or df.empty:
         return None
 
+    zmatrix = get_zmatrix(t, df, trait)
+
+    df_control = data["dfs_control"][i, j]
     if df_control.empty:
-        zmatrix = get_zmatrix(t, df, trait)
         if "Grainmean" in trait:
             zmatrix = 1.0 - zmatrix
         return zmatrix
 
-    zmatrix_treatment = get_zmatrix(t, df, trait)
-    zmatrix_control = get_zmatrix(t, df_control, trait)
+    zmatrix_control = get_zmatrix(t, df_control, data["traits_control"][i][j])
 
-    if zmatrix_treatment.shape == zmatrix_control.shape:
-        zmatrix = get_zmatrix(t, df, trait) - get_zmatrix(t, df_control, trait)
+    if zmatrix.shape == zmatrix_control.shape:
+        zmatrix -= zmatrix_control
         if "Grainmean" in trait:
             zmatrix = 0.0 - zmatrix
         return zmatrix

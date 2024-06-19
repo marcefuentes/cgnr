@@ -4,12 +4,9 @@
 def curves(options):
     """Fitness curves for partner choice."""
 
-    variant = "nolang_noshuffle_cost15_4"
     given_list = [["1.0"], ["0.5"], ["0.0"]]
 
     nrows = len(given_list)
-
-    variants = repeat_for_matrix(variant, nrows, 1)
 
     if "Mimic" in options["trait"]:
         mechanism = "d"
@@ -18,6 +15,9 @@ def curves(options):
     else:
         mechanism = options["mechanism"]
 
+    traits = repeat_for_matrix(options["trait"], nrows, 1)
+    variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, 1)
+
     layout = {
         "givens": given_list,
         "givens_control": given_list,
@@ -25,7 +25,8 @@ def curves(options):
         "mechanisms_control": repeat_for_matrix("none", nrows, 1),
         "titles_columns": [""],
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, 1),
+        "traits": traits,
+        "traits_control": traits,
         "variants": variants,
         "variants_control": variants,
     }
@@ -53,6 +54,8 @@ def default(options):
         )
         givens_control = repeat_for_matrix(options["given"], nrows, ncols)
 
+    traits = repeat_for_matrix(options["trait"], nrows, ncols)
+
     layout = {
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": givens_control,
@@ -60,7 +63,8 @@ def default(options):
         "mechanisms_control": mechanisms_control,
         "titles_columns": ["No shuffling", "Shuffling"],
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
+        "traits": traits,
+        "traits_control": traits,
         "variants": variant_list,
         "variants_control": variant_list,
     }
@@ -71,15 +75,15 @@ def default(options):
 def figure_2(options):
     """Figure 2."""
 
-    variant = "nolang_noshuffle_cost15_4"
     given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
     given_control_list = [[None, "0.0"], [None, "0.0"], [None, "0.0"]]
 
     nrows = len(given_list)
     ncols = len(given_list[0])
 
-    variants = repeat_for_matrix(variant, nrows, ncols)
     mechanisms_control = [[None, "none"] for _ in range(nrows)]
+    traits = repeat_for_matrix(options["trait"], nrows, ncols)
+    variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols)
 
     layout = {
         "givens": given_list,
@@ -88,7 +92,8 @@ def figure_2(options):
         "mechanisms_control": mechanisms_control,
         "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
+        "traits": traits,
+        "traits_control": traits,
         "variants": variants,
         "variants_control": variants,
     }
@@ -105,14 +110,13 @@ def repeat_for_matrix(value, nrows, ncols):
 def theory(options):
     """First column is theoretical."""
 
-    variant = [None, "nolang_noshuffle_cost15_4"]
     given_list = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
 
     nrows = len(given_list)
 
-    variants = [variant for _ in range(nrows)]
     mechanisms = [[None, "none"] for _ in range(nrows)]
     traits = [[None, options["trait"]] for _ in range(nrows)]
+    variants = [[None, "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
 
     layout = {
         "givens": given_list,
@@ -122,6 +126,7 @@ def theory(options):
         "titles_columns": ["Fitness\n(theory)", "Fitness\n(simulations)"],
         "titles_rows": [""] * nrows,
         "traits": traits,
+        "traits_control": traits,
         "variants": variants,
         "variants_control": variants,
     }
