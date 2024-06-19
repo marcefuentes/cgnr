@@ -9,8 +9,9 @@ def add_letters(axs, position, params):
     for i in range(nrows):
         for j in range(ncols):
             n = i * ncols + j
-            params["s"] = chr(ord("a") + n % 26)
-            params["transform"] = axs[i, j, 0, 0].transAxes
+            letter = chr(ord("a") + n % 26)
             if n >= 26:
-                params["s"] = params["s"] + params["s"]
+                letter += letter
+            params["s"] = letter
+            params["transform"] = axs[i, j, 0, 0].transAxes
             axs[i, j, 0, 0].text(*position, **params)
