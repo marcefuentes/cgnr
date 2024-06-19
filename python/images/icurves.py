@@ -8,6 +8,7 @@ import time
 from matplotlib import colormaps
 
 from modules.add_ax_titles import add_ax_titles
+from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters
 from modules.add_ticks import ticks_ax_line2d, ticks_line2d
 from modules.create_fig import create_fig
@@ -54,7 +55,8 @@ def main(options):
     else:
         image = image_common
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
+    format_fig(fig, fig_distances, image)
+    add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
     data["x_values"], y, ic = get_static_data(image["n_x_values"], data)
     update_args = {

@@ -8,6 +8,7 @@ import time
 import numpy as np
 from matplotlib import colormaps
 
+from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters
 from modules.add_ticks import ticks_imshow, ticks_line2d
 from modules.create_fig import create_fig
@@ -67,7 +68,8 @@ def main(options):
     if options["layout"] == "curves":
         image["margin_top"] *= 0.5
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, fig_distances, image, get_sm(image["color_map"]))
+    format_fig(fig, fig_distances, image)
+    add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
 
     if options["layout"] == "curves":
