@@ -8,7 +8,7 @@ def create_fig(fig_layout):
     """Create figure with subplots based on the fig_layout dictionary."""
 
     fig = plt.figure()
-    outergrid = fig.add_gridspec(nrows=fig_layout["nrows"], ncols=fig_layout["ncols"])
+    outer_grid = fig.add_gridspec(nrows=fig_layout["nrows"], ncols=fig_layout["ncols"])
     axs = np.empty(
         (
             fig_layout["nrows"],
@@ -20,7 +20,7 @@ def create_fig(fig_layout):
     )
     for i in range(fig_layout["nrows"]):
         for j in range(fig_layout["ncols"]):
-            grid = outergrid[i, j].subgridspec(
+            grid = outer_grid[i, j].subgridspec(
                 nrows=fig_layout["nr"],
                 ncols=fig_layout["nc"],
                 hspace=0.0,
