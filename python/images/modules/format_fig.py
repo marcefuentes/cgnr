@@ -43,7 +43,7 @@ def format_fig(fig, distances, image):
         fontsize=image["suplabel_size"],
     )
 
-    # Text
+    # Text (folder name or movie time)
 
     if image["print_folder"]:
         bottom_text = os.path.basename(os.getcwd())
