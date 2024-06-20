@@ -10,11 +10,13 @@ def update_artists(t, update_args, options, data):
     if options["movie"]:
         data["text"].set_text(t)
 
-    for i, row in enumerate(data["dfs"]):
+    for i, row in enumerate(update_args["artists"]):
         for j, _ in enumerate(row):
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
-                print("\nData for one of the plots is incomplete.")
+                print("Data for one of the plots is incomplete.")
+                if options["layout"] != "curves" or not options["histogram"]:
+                    update_args["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
                 artists = update_args["artists"][i, j]
                 if options["layout"] == "curves" or options["histogram"]:
