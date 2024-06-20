@@ -8,6 +8,7 @@ def save_image(update_args, options, data):
 
     plt.rcParams["pdf.fonttype"] = 42
     plt.rcParams["ps.fonttype"] = 42
+    plt.rcParams["text.usetex"] = True
 
     if update_args["function"] is not None:
         _ = update_args["function"](data["frames"][-1], update_args, options, data)

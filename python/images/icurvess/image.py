@@ -37,10 +37,10 @@ image_unit = {
     "margin_inner": 0.6 * PLOT_SIZE,
     "suplabel_x": "",
     "suplabel_y": "",
-    "label_x_0": "Quantity of $\\it{A}$",
-    "label_x_1": "Quantity of $\\it{B}$",
-    "label_y_0": "Quantity of $\\it{B}$",
-    "label_y_1": "Fitness",
+    "label_x_0": "$\\mathit{c}_{\\mathit{A}}$",
+    "label_x_1": "$\\mathit{q}_{\\mathit{B}}$",
+    "label_y_0": "$\\mathit{c}_{\\mathit{B}}$",
+    "label_y_1": "$\\mathit{w}$",
 }
 
 image_unit = {**image_common, **image_unit}
