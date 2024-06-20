@@ -7,7 +7,7 @@ import time
 
 from matplotlib import colormaps
 
-from modules.add_ax_titles import add_ax_titles
+from modules.add_ax_labels import add_ax_labels
 from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters
 from modules.add_ticks import ticks_ax_line2d, ticks_line2d
@@ -100,17 +100,17 @@ def main(options):
         image["letters"],
     )
     if options["layout"] == "unit":
-        add_ax_titles(
+        add_ax_labels(
             axs[0, 0, 0, 0],
-            image["title_x_0"],
-            image["title_y_0"],
+            image["label_x_0"],
+            image["label_y_0"],
             image["titles_columns"]["fontsize"],
             image["labelpad"],
         )
-        add_ax_titles(
+        add_ax_labels(
             axs[0, 1, 0, 0],
-            image["title_x_1"],
-            image["title_y_1"],
+            image["label_x_1"],
+            image["label_y_1"],
             image["titles_columns"]["fontsize"],
             image["labelpad"],
         )
