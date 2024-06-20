@@ -1,6 +1,39 @@
 """ Data layouts. """
 
 
+def all_128(options):
+    """All figures."""
+
+    variant_list = [
+        "nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128",
+        "lang_noshuffle_cost15_128", "lang_shuffle_cost15_128",
+    ]
+
+    ncols = len(variant_list)
+
+    mechanism_list = ["p", "d", "pd", "i", "pi"]
+    mechanisms = [[mech for _ in range(ncols)] for mech in mechanism_list]
+
+    nrows = len(mechanism_list)
+
+    variants = [variant_list for _ in range(nrows)]
+
+    layout = {
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
+        "givens_control": repeat_for_matrix("0.0", nrows, ncols),
+        "mechanisms": mechanisms,
+        "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
+        "titles_columns": ["Short memory\nNo shuffling", "Short memory\nShuffling", "Long memory\nNo shuffling", "Long memory\nShuffling"],
+        "titles_rows": mechanism_list,
+        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
+        "traits_control": repeat_for_matrix(options["trait"], nrows, ncols),
+        "variants": variants,
+        "variants_control": variants,
+    }
+
+    return layout
+
+
 def curves(options):
     """Fitness curves for partner choice."""
 
