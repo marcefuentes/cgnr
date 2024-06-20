@@ -137,3 +137,24 @@ def theory(options):
     }
 
     return layout
+
+
+def unit(options):
+    """Single plot."""
+
+    variant_list = [["lang_shuffle_cost15_128"]]
+
+    layout = {
+        "givens": [[options["given"]]],
+        "givens_control": [["0.0"]],
+        "mechanisms": [[options["mechanism"]]],
+        "mechanisms_control": [[options["mechanism_control"]]],
+        "titles_columns": [""],
+        "titles_rows": [""],
+        "traits": [[options["trait"]]],
+        "traits_control": [[options["trait_control"]]],
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
