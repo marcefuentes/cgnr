@@ -1,12 +1,15 @@
 """ Data layouts. """
 
 
-def all_128(options):
+def all(options):
     """All figures."""
 
+    group_size = 4
     variant_list = [
-        "nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128",
-        "lang_noshuffle_cost15_128", "lang_shuffle_cost15_128",
+        f"nolang_noshuffle_cost15_{group_size}",
+        f"nolang_shuffle_cost15_{group_size}",
+        f"lang_noshuffle_cost15_{group_size}",
+        f"lang_shuffle_cost15_{group_size}",
     ]
 
     ncols = len(variant_list)
@@ -23,7 +26,12 @@ def all_128(options):
         "givens_control": repeat_for_matrix("0.0", nrows, ncols),
         "mechanisms": mechanisms,
         "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
-        "titles_columns": ["Short memory\nNo shuffling", "Short memory\nShuffling", "Long memory\nNo shuffling", "Long memory\nShuffling"],
+        "titles_columns": [
+            "Short memory\nNo shuffling",
+            "Short memory\nShuffling",
+            "Long memory\nNo shuffling",
+            "Long memory\nShuffling",
+        ],
         "titles_rows": mechanism_list,
         "traits": repeat_for_matrix(options["trait"], nrows, ncols),
         "traits_control": repeat_for_matrix(options["trait"], nrows, ncols),
