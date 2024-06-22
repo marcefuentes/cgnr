@@ -10,7 +10,7 @@ void decide_qB(struct itype *i, struct itype *i_last, int imimic)
 	for (; i < i_last; i++) {
 		if (i->age > 0 && i->partner->age > 0) {
 			if (i->partner == i->oldpartner) {
-				if (i->Imimic_ltGrain < i->MimicGrain) {
+				if (imimic == 1 && i->Imimic_ltGrain < i->MimicGrain) {
 					partner = i->partner->qBSeen_lt;
 					grain = i->Imimic_ltGrain;
 				} else {

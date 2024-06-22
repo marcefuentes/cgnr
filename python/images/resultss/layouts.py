@@ -4,12 +4,12 @@
 def all(options):
     """All figures."""
 
-    group_size = 4
+    lang = "nolang"
     variant_list = [
-        f"nolang_noshuffle_cost15_{group_size}",
-        f"nolang_shuffle_cost15_{group_size}",
-        f"lang_noshuffle_cost15_{group_size}",
-        f"lang_shuffle_cost15_{group_size}",
+        f"{lang}_noshuffle_cost15_4",
+        f"{lang}_noshuffle_cost15_128",
+        f"{lang}_shuffle_cost15_4",
+        f"{lang}_shuffle_cost15_128",
     ]
 
     ncols = len(variant_list)
@@ -27,10 +27,10 @@ def all(options):
         "mechanisms": mechanisms,
         "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
         "titles_columns": [
-            "Short memory\nNo shuffling",
-            "Short memory\nShuffling",
-            "Long memory\nNo shuffling",
-            "Long memory\nShuffling",
+            "No shuffling\n4",
+            "No shuffling\n128",
+            "Shuffling\n4",
+            "Shuffling\n128",
         ],
         "titles_rows": mechanism_list,
         "traits": repeat_for_matrix(options["trait"], nrows, ncols),
