@@ -4,7 +4,10 @@
 def allp(options):
     """All figures."""
 
-    lang = "nolang"
+    if options["lang"]:
+        lang = "lang"
+    else:
+        lang = "nolang"
     variant_list = [
         f"{lang}_noshuffle_cost15_4",
         f"{lang}_noshuffle_cost15_128",
@@ -14,8 +17,8 @@ def allp(options):
 
     ncols = len(variant_list)
 
-    # mechanism_list = ["p", "d", "i", "pd", "pi"]
-    mechanism_list = ["i", "pi"]
+    mechanism_list = ["p", "d", "i", "pd", "pi"]
+    #mechanism_list = ["i", "pi"]
     mechanisms = [[mech for _ in range(ncols)] for mech in mechanism_list]
 
     nrows = len(mechanism_list)
