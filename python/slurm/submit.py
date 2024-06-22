@@ -96,7 +96,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
     else:
         if test:
             print(
-                "Submission is about to start in a new variant. Cannot run with --test option."
+                "Submission is about to start in a new variant. Cannot run with --test."
             )
             sys.exit()
         mechanisms = list_of_folders(os.getcwd())
