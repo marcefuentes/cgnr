@@ -12,13 +12,13 @@ def update_artists(t, update_args, options, data):
 
     for i, row in enumerate(update_args["artists"]):
         for j, _ in enumerate(row):
+            artists = update_args["artists"][i, j]
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
                 print(f"No simulation data for plot [{i}, {j}].")
                 if options["layout"] != "curves" or not options["histogram"]:
                     update_args["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
-                artists = update_args["artists"][i, j]
                 if options["layout"] == "curves" or options["histogram"]:
                     artists = update_artists_line2d(
                         artists, zmatrix, update_args["cmap"]
@@ -70,6 +70,10 @@ def update_zmatrix(t, data, i, j):
     trait = data["traits"][i][j]
 
     if trait is None or df.empty:
+        return None
+
+    if trait not in df.columns:
+        print(f"Trait {trait} does not exist.")
         return None
 
     zmatrix = get_zmatrix(t, df, trait)
