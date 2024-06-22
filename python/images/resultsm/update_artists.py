@@ -14,7 +14,7 @@ def update_artists(t, update_args, options, data):
         for j, _ in enumerate(row):
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
-                print("Data for one of the plots is incomplete.")
+                print(f"No simulation data for plot [{i}, {j}].")
                 if options["layout"] != "curves" or not options["histogram"]:
                     update_args["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
