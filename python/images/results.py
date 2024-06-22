@@ -142,7 +142,7 @@ def main(options):
         format_artists(update_args["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
-    enlarge_ticks(axs, options, image["margin_inner"])
+    enlarge_ticks(axs, options, image["margin_inner"], image["spines"]["linewidth"])
     save_file(fig, update_args, options, data)
     close_plt(fig)
 
