@@ -18,7 +18,7 @@ def allp(options):
     ncols = len(variant_list)
 
     mechanism_list = ["p", "d", "i", "pd", "pi"]
-    #mechanism_list = ["i", "pi"]
+    # mechanism_list = ["i", "pi"]
     mechanisms = [[mech for _ in range(ncols)] for mech in mechanism_list]
 
     nrows = len(mechanism_list)
