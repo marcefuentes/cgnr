@@ -24,6 +24,12 @@ def parse_args():
             "default": "1.0",
             "help": "given folder",
         },
+        "given_control": {
+            "type": str,
+            "choices": ["none", "0.0", "0.5", "1.0"],
+            "default": "0.0",
+            "help": "given folder (control)",
+        },
         "layout": {
             "type": str,
             "choices": layout_names,

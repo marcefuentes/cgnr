@@ -27,7 +27,7 @@ def allp(options):
 
     layout = {
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
-        "givens_control": repeat_for_matrix("0.0", nrows, ncols),
+        "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
         "mechanisms": mechanisms,
         "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
         "titles_columns": [
@@ -102,7 +102,7 @@ def default(options):
         mechanisms_control = repeat_for_matrix(
             options["mechanism_control"], nrows, ncols
         )
-        givens_control = repeat_for_matrix(options["given"], nrows, ncols)
+        givens_control = repeat_for_matrix(options["given_control"], nrows, ncols)
 
     traits = repeat_for_matrix(options["trait"], nrows, ncols)
 
