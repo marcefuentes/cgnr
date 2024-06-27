@@ -56,8 +56,8 @@ def update_artists_histogram(t, artists, data, i, j):
 def update_artists_line2d(artists, zmatrix, cmap):
     """Update background colors of plots."""
 
-    for i in range(zmatrix.shape[0]):
-        for j in range(zmatrix.shape[1]):
+    for i in range(artists.shape[0]):
+        for j in range(artists.shape[1]):
             artists[i, j].axes.set_facecolor(cmap((zmatrix[i, j] + 1) / 2))
 
     return artists
