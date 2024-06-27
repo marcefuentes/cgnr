@@ -7,7 +7,7 @@ def init_artists(axs, x, y, ax_type):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     artists = np.empty_like(axs, dtype=object)
-    
+
     for idx in np.ndindex(axs.shape):
         if ax_type == "AxesImage":
             artists[idx] = axs[idx].imshow(y[idx])
