@@ -80,14 +80,16 @@ def curves(options):
 def default(options):
     """Figure 3 and subsequent ones."""
 
+    lang = "lang" if options["lang"] else "nolang"
+
     variant_list = [
-        ["lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
-        ["lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
+        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
     variant_control_list = [
-        ["lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
-        ["lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
+        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
