@@ -4,10 +4,8 @@
 def allp(options):
     """All figures."""
 
-    if options["lang"]:
-        lang = "lang"
-    else:
-        lang = "nolang"
+    lang = "lang" if options["lang"] else "nolang"
+
     variant_list = [
         f"{lang}_noshuffle_cost15_4",
         f"{lang}_noshuffle_cost15_128",
@@ -88,8 +86,8 @@ def default(options):
     ]
 
     variant_control_list = [
-        ["nolang_noshuffle_cost15_128", "nolang_shuffle_cost15_128"],
-        ["nolang_noshuffle_cost15_4", "nolang_shuffle_cost15_4"],
+        ["lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
