@@ -122,6 +122,32 @@ def default(options):
     return layout
 
 
+def dilemmas(options):
+    """Magnitud of social dilemmas."""
+
+    given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
+
+    nrows = len(given_list)
+    ncols = len(given_list[0])
+
+    trait_list = [["qBSeenmean", "wmean"] for _ in range(nrows)]
+
+    layout = {
+        "givens": given_list,
+        "givens_control": repeat_for_matrix("0.0", nrows, ncols),
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
+        "titles_columns": ["$\\mathit{q}_{\\mathit{B}}$", "Fitness"],
+        "titles_rows": [""] * nrows,
+        "traits": trait_list,
+        "traits_control": trait_list,
+        "variants": repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols),
+        "variants_control": repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols),
+    }
+
+    return layout
+
+
 def figure_2(options):
     """Figure 2."""
 
