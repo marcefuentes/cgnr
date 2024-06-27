@@ -8,8 +8,8 @@ COLOR_MAP = common.COLOR_MAP
 image = {
     "n_x_values": 64,
     "lines": {
-        "color": "brown",
-        "linewidth": 0.2 * PLOT_SIZE,
+        "color": "black",
+        "linewidth": 0.3 * PLOT_SIZE,
     },
     "show": {
         "cmap": COLOR_MAP,
