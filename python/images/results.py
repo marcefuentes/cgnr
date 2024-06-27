@@ -95,7 +95,7 @@ def main(options):
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 
     update_args = {
-        "artists": init_artists(axs, x, y),
+        "artists": init_artists(axs, x, y, options["ax_type"]),
         "cmap": colormaps.get_cmap(image["color_map"]),
         "file_name": os.path.basename(__file__).split(".")[0],
         "function": update_artists,

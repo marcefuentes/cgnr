@@ -3,18 +3,17 @@
 import numpy as np
 
 
-def init_artists(axs, x, y):
+def init_artists(axs, x, y, ax_type):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     artists = np.empty_like(axs, dtype=object)
-
-    if x is None:
-        for idx in np.ndindex(axs.shape):
-            artists[idx] = axs[idx].imshow(y[idx])
-        return artists
-
+    
     for idx in np.ndindex(axs.shape):
-        # artists[idx] = axs[idx].fill_between(x, 0, y[idx])
-        artists[idx] = axs[idx].plot(x, y[idx])[0]
+        if ax_type == "AxesImage":
+            artists[idx] = axs[idx].imshow(y[idx])
+        elif ax_type == "Line2D":
+            artists[idx] = axs[idx].plot(x, y[idx])[0]
+        else:
+            artists[idx] = axs[idx].fill_between(x, 0, y[idx])
 
     return artists

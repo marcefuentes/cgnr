@@ -64,7 +64,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
         for ax in axs_to_change:
             if ax[1] == "x":
                 ticks = ax[0].xaxis.get_major_ticks()
-            if ax[1] == "y":
+            else:
                 ticks = ax[0].yaxis.get_major_ticks()
 
             ticks[len(ticks) // 2].tick1line.set_markersize(margin_inner * 72)

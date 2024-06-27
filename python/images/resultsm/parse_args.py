@@ -71,4 +71,11 @@ def parse_args():
     if args.trait_control == "none":
         args.trait_control = args.trait
 
+    if args.layout == "curves":
+        args.ax_type = "PolyCollection"
+    elif args.histogram:
+        args.ax_type = "Line2D"
+    else:
+        args.ax_type = "AxesImage"
+
     return args
