@@ -23,8 +23,8 @@ def get_static_data(num, traits, givens, alphas, rhos):
 def process_plot(x, trait, given, alpha, rho):
     """Difference in fitness between reciprocators and non-reciprocators."""
 
-    increment = 0.001
-    tt, rr, pp, ss = calculate_trps(x + increment, x, given, alpha, rho)
+    inc = 0.001
+    tt, rr, pp, ss = calculate_trps(x + inc, x, given, alpha, rho)
 
     _ = tt  # To avoid unused variable warning.
 
@@ -35,7 +35,7 @@ def process_plot(x, trait, given, alpha, rho):
         y = rr - pp  # Partner choice
 
     y *= 500
-    mask = (x + increment < qbeq(given, alpha, rho)) | (x > qbeq(0.0, alpha, rho))
+    mask = (x + inc < qbeq(given, alpha, rho)) | (x + inc > qbeq(0.0, alpha, rho))
     y[mask] = np.nan
 
     return y
