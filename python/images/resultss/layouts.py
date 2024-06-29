@@ -81,19 +81,30 @@ def custom(options):
     """Single column."""
 
     variant_list = [
-        ["nolang_shuffle_cost15_128"],
-        ["nolang_shuffle_cost15_4"],
+        ["nolang_noshuffle_cost15_128", "lang_noshuffle_cost15_128", "nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["nolang_noshuffle_cost15_128", "lang_noshuffle_cost15_128", "nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["nolang_noshuffle_cost15_4", "lang_noshuffle_cost15_4", "nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
+        ["nolang_noshuffle_cost15_4", "lang_noshuffle_cost15_4", "nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
     ]
+
+    titles_columns = ["No shuffling\nShort memory", "No shuffling\nLong memory", "Shuffling\nShort memory", "Shuffling\nLong memory"]
 
     nrows = len(variant_list)
     ncols = len(variant_list[0])
 
+    mechanisms = [
+        ["pd", "pd", "pd", "pd"],
+        ["pi", "pi", "pi", "pi"],
+        ["pd", "pd", "pd", "pd"],
+        ["pi", "pi", "pi", "pi"],
+    ]
+
     layout = {
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
-        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms": mechanisms,
         "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
-        "titles_columns": ["Shuffling"],
+        "titles_columns": titles_columns,
         "titles_rows": [""] * nrows,
         "traits": repeat_for_matrix(options["trait"], nrows, ncols),
         "traits_control": repeat_for_matrix(options["trait_control"], nrows, ncols),
