@@ -81,8 +81,8 @@ def custom(options):
     """Single column."""
 
     variant_list = [
-        [f"lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
-        [f"lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
+        ["nolang_shuffle_cost15_128"],
+        ["nolang_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
@@ -93,7 +93,7 @@ def custom(options):
         "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
         "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
         "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
-        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_columns": ["Shuffling"],
         "titles_rows": [""] * nrows,
         "traits": repeat_for_matrix(options["trait"], nrows, ncols),
         "traits_control": repeat_for_matrix(options["trait_control"], nrows, ncols),
@@ -240,7 +240,7 @@ def theory(options):
 def unit(options):
     """Single plot."""
 
-    variant_list = [["nolang_shuffle_cost15_4"]]
+    variant_list = [["nolang_noshuffle_cost15_4"]]
 
     layout = {
         "givens": [[options["given"]]],
