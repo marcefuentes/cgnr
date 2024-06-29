@@ -77,6 +77,33 @@ def curves(options):
     return layout
 
 
+def custom(options):
+    """Single column."""
+
+    variant_list = [
+        [f"lang_noshuffle_cost15_128", "lang_shuffle_cost15_128"],
+        [f"lang_noshuffle_cost15_4", "lang_shuffle_cost15_4"],
+    ]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    layout = {
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
+        "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
+        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_rows": [""] * nrows,
+        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
+        "traits_control": repeat_for_matrix(options["trait_control"], nrows, ncols),
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
+
+
 def default(options):
     """Figure 3 and subsequent ones."""
 
@@ -181,35 +208,6 @@ def repeat_for_matrix(value, nrows, ncols):
     """Repeat a value for a matrix."""
 
     return [[value for _ in range(ncols)] for _ in range(nrows)]
-
-
-def single_column(options):
-    """Single column."""
-
-    lang = "lang" if options["lang"] else "nolang"
-
-    variant_list = [
-        [f"{lang}_shuffle_cost15_128"],
-        [f"{lang}_shuffle_cost15_4"],
-    ]
-
-    nrows = len(variant_list)
-    ncols = len(variant_list[0])
-
-    layout = {
-        "givens": repeat_for_matrix(options["given"], nrows, ncols),
-        "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
-        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
-        "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
-        "titles_columns": ["Shuffling"],
-        "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
-        "traits_control": repeat_for_matrix(options["trait_control"], nrows, ncols),
-        "variants": variant_list,
-        "variants_control": variant_list,
-    }
-
-    return layout
 
 
 def theory(options):
