@@ -39,11 +39,14 @@ def get_df(path, filetype, clean, movie):
 def read_files(filelist, movie):
     """Read the csv files in the given directory and return a concatenated dataframe."""
 
-    df_list = [None] * len(filelist)
-    for i, file in enumerate(filelist):
+    df_list = []
+    for file in filelist:
         df = pd.read_csv(file)
         if not movie:
             df = df.tail(1)
-        df_list[i] = df
+        if not df.empty and not df.isna().all().all():
+            df_list.append(df)
+
     dfc = pd.concat(df_list, ignore_index=True)
+
     return dfc
