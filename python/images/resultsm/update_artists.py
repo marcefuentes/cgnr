@@ -15,7 +15,7 @@ def update_artists(t, update_args, options, data):
             artists = update_args["artists"][i, j]
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
-                print(f"No simulation data for plot [{i}, {j}].")
+                print(f"Insufficient data for plot [{i}, {j}].")
                 if options["layout"] != "curves" or not options["histogram"]:
                     update_args["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
@@ -92,4 +92,8 @@ def update_zmatrix(t, data, i, j):
             zmatrix = 0.0 - zmatrix
         return zmatrix
 
+    print(
+        f"\nFocal zmatrix {zmatrix.shape} and control zmatrix {zmatrix_control.shape} "
+        f"have different shapes."
+    )
     return None
