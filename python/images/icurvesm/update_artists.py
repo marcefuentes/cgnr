@@ -1,6 +1,5 @@
 """ Update data in artists. """
 
-from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
 
