@@ -81,13 +81,38 @@ def custom(options):
     """Single column."""
 
     variant_list = [
-        ["nolang_noshuffle_cost15_128", "lang_noshuffle_cost15_128", "nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
-        ["nolang_noshuffle_cost15_128", "lang_noshuffle_cost15_128", "nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
-        ["nolang_noshuffle_cost15_4", "lang_noshuffle_cost15_4", "nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
-        ["nolang_noshuffle_cost15_4", "lang_noshuffle_cost15_4", "nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
+        [
+            "nolang_noshuffle_cost15_128",
+            "lang_noshuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+        ],
+        [
+            "nolang_noshuffle_cost15_128",
+            "lang_noshuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+        ],
+        [
+            "nolang_noshuffle_cost15_4",
+            "lang_noshuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+        ],
+        [
+            "nolang_noshuffle_cost15_4",
+            "lang_noshuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+        ],
     ]
 
-    titles_columns = ["No shuffling\nShort memory", "No shuffling\nLong memory", "Shuffling\nShort memory", "Shuffling\nLong memory"]
+    titles_columns = [
+        "No shuffling\nShort memory",
+        "No shuffling\nLong memory",
+        "Shuffling\nShort memory",
+        "Shuffling\nLong memory",
+    ]
 
     nrows = len(variant_list)
     ncols = len(variant_list[0])
@@ -174,13 +199,17 @@ def dilemmas(options):
         "givens": given_list,
         "givens_control": repeat_for_matrix("0.0", nrows, ncols),
         "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
-        "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(
+            options["mechanism_control"], nrows, ncols
+        ),
         "titles_columns": ["$\\mathit{q}_{\\mathit{B}}$", "Fitness"],
         "titles_rows": [""] * nrows,
         "traits": trait_list,
         "traits_control": trait_list,
         "variants": repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols),
-        "variants_control": repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols),
+        "variants_control": repeat_for_matrix(
+            "nolang_noshuffle_cost15_4", nrows, ncols
+        ),
     }
 
     return layout
