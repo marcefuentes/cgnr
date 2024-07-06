@@ -78,7 +78,7 @@ def curves(options):
 
 
 def custom(options):
-    """Single column."""
+    """Custom."""
 
     variant_list = [
         [
