@@ -250,6 +250,38 @@ def repeat_for_matrix(value, nrows, ncols):
     return [[value for _ in range(ncols)] for _ in range(nrows)]
 
 
+def sss(options):
+    """Different combinations of reciprocity."""
+
+    variant_list = [
+        ["nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
+    ]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    traits = repeat_for_matrix(options["trait"], nrows, ncols)
+
+    titles = [ 
+        "$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$",
+        "$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$, $\\mathit{s}_{\\mathit{3}}$",
+    ]
+
+    layout = {
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
+        "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
+        "titles_columns": titles,
+        "titles_rows": [""] * nrows,
+        "traits": traits,
+        "traits_control": traits,
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
 def theory(options):
     """First column is theoretical."""
 
