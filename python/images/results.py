@@ -12,7 +12,6 @@ from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters
 from modules.add_ticks import ticks_imshow, ticks_line2d
 from modules.create_fig import create_fig
-from modules.enlarge_ticks import enlarge_ticks
 from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
@@ -144,7 +143,6 @@ def main(options):
         (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
         image["letters"],
     )
-    enlarge_ticks(axs, options, image["margin_inner"], image["spines"]["linewidth"])
     save_file(fig, update_args, options, data)
     close_plt(fig)
 
