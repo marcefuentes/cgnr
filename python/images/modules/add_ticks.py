@@ -32,6 +32,8 @@ def add_ticklabels_line2d(axs, ticklabels_y, ticklabels_x):
     for j in range(axs.shape[1]):
         for m, c_value in zip(_range, ticklabels_x):
             axs[-1, j, -1, m].set_xticklabels([f"{c_value:.0f}"])
+            if c_value == 0.75:
+                axs[-1, j, -1, m].set_xticklabels([f"{c_value:.2f}"])
 
 
 def add_ticks_ax_line2d(ax, format_params):
