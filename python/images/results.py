@@ -108,11 +108,7 @@ def main(options):
         "lim_y": [None, None],
         "nc": mc,
         "nr": mr,
-        "ticklabels_x": [
-            data["logess"][0],
-            data["logess"][mc // 2],
-            data["logess"][-1],
-        ],
+        "ticklabels_x": [-31, 0, 0.97],
         "ticklabels_y": [
             data["alphas"][0],
             data["alphas"][mr // 2],
