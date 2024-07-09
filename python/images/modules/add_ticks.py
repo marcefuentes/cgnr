@@ -16,6 +16,7 @@ def add_ticklabels_imshow(axs, ticklabels_y, ticklabels_x):
         ax.set_yticklabels(ticklabels_y)
 
     ticklabels_x = [f"{c:.0f}" for c in ticklabels_x]
+    ticklabels_x[-1] = "0.97"
     for ax in axs[-1, :, 0, 0]:
         ax.set_xticklabels(ticklabels_x)
 
