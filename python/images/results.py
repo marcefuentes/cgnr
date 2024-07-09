@@ -51,7 +51,7 @@ def main(options):
         return
 
     mr = len(data["alphas"])
-    mc = len(data["logess"])
+    mc = len(data["rhos"])
 
     fig_layout = {
         "nc": 1,
@@ -108,7 +108,11 @@ def main(options):
         "lim_y": [None, None],
         "nc": mc,
         "nr": mr,
-        "ticklabels_x": [-31, 0, 0.97],
+        "ticklabels_x": [
+            data["rhos"][0],
+            data["rhos"][mc // 2],
+            data["rhos"][-1],
+        ],
         "ticklabels_y": [
             data["alphas"][0],
             data["alphas"][mr // 2],

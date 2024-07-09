@@ -42,7 +42,7 @@ def main(options):
     options["budget_line"] = layout["budget_line"]
 
     fig_layout = {
-        "nc": len(data["logess"]),
+        "nc": len(data["rhos"]),
         "ncols": 2,
         "nr": len(data["alphas"]),
         "nrows": len(data["givens"]),
@@ -80,9 +80,9 @@ def main(options):
         "nc": fig_layout["nc"],
         "nr": fig_layout["nr"],
         "ticklabels_x": [
-            data["logess"][0],
-            data["logess"][fig_layout["nc"] // 2],
-            data["logess"][-1],
+            data["rhos"][0],
+            data["rhos"][fig_layout["nc"] // 2],
+            data["rhos"][-1],
         ],
         "ticklabels_y": [
             data["alphas"][0],
