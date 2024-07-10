@@ -312,7 +312,7 @@ def theory(options):
 def unit(options):
     """Single plot."""
 
-    variant_list = [["lang_shuffle_cost15_128"]]
+    variant_list = [["nolang_noshuffle_cost15_4"]]
 
     layout = {
         "givens": [[options["given"]]],
