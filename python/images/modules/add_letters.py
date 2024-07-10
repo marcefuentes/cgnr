@@ -11,7 +11,7 @@ def add_letters(axs, position, params):
             n = i * ncols + j
             letter = chr(ord("a") + n % 26)
             # if letter == "d":
-            #    letter = "c"
+            #   letter = "c"
             if n >= 26:
                 letter += letter
             params["s"] = letter

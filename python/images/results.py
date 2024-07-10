@@ -137,7 +137,7 @@ def main(options):
         format_artists(update_args["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
-    # adjust(axs)
+    #adjust(axs)
     add_letters(
         axs,
         (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
