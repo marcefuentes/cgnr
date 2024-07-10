@@ -146,13 +146,13 @@ def default(options):
     lang = "lang" if options["lang"] else "nolang"
 
     variant_list = [
-        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
-        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
+        [f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_shuffle_cost15_4"],
     ]
 
     variant_control_list = [
-        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
-        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
+        [f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
@@ -174,7 +174,7 @@ def default(options):
         "givens_control": givens_control,
         "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
         "mechanisms_control": mechanisms_control,
-        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_columns": ["Shuffling"],
         "titles_rows": [""] * nrows,
         "traits": traits,
         "traits_control": traits,
@@ -254,16 +254,18 @@ def sss(options):
     """Different combinations of reciprocity."""
 
     variant_list = [
-        ["nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
-        ["nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
+        ["nolang_shuffle_cost15_128", "nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["nolang_shuffle_cost15_4", "nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
     ncols = len(variant_list[0])
 
+    mechanisms = [["d", "i", "i"], ["d", "i", "i"]]
     traits = repeat_for_matrix(options["trait"], nrows, ncols)
 
     titles = [ 
+        "$\\mathit{s}_{\\mathit{1}}$",
         "$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$",
         "$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$, $\\mathit{s}_{\\mathit{3}}$",
     ]
@@ -271,7 +273,7 @@ def sss(options):
     layout = {
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
-        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms": mechanisms,
         "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
         "titles_columns": titles,
         "titles_rows": [""] * nrows,
