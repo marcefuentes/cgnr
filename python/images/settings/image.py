@@ -20,8 +20,8 @@ image = {
     "plot_size": PLOT_SIZE,
     "print_folder": False,
     "suplabel_size": 9 * PLOT_SIZE,
-    "suplabel_x": "Substitutability of $\\it{B}$ ($\\rho$)",
-    "suplabel_y": "Influence of $\\it{B}$ ($\\alpha$)",
+    "suplabel_x": "Substitutability of $\\it{B}$",
+    "suplabel_y": "Influence of $\\it{B}$",
     "colorbar": {
         "edgecolor": GREY,
         "linewidth": LINE_WIDTH * PLOT_SIZE,
