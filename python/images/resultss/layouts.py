@@ -59,7 +59,7 @@ def curves(options):
         mechanism = options["mechanism"]
 
     traits = repeat_for_matrix(options["trait"], nrows, 1)
-    variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, 1)
+    variants = repeat_for_matrix("nolang_noshuffle_cost15_128", nrows, 1)
 
     layout = {
         "givens": given_list,
