@@ -146,13 +146,8 @@ def default(options):
     lang = "lang" if options["lang"] else "nolang"
 
     variant_list = [
-        [f"{lang}_shuffle_cost15_128"],
-        [f"{lang}_shuffle_cost15_4"],
-    ]
-
-    variant_control_list = [
-        [f"{lang}_shuffle_cost15_128"],
-        [f"{lang}_shuffle_cost15_4"],
+        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
     nrows = len(variant_list)
@@ -174,12 +169,12 @@ def default(options):
         "givens_control": givens_control,
         "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
         "mechanisms_control": mechanisms_control,
-        "titles_columns": ["Shuffling"],
+        "titles_columns": ["No shuffling", "Shuffling"],
         "titles_rows": [""] * nrows,
         "traits": traits,
         "traits_control": traits,
         "variants": variant_list,
-        "variants_control": variant_control_list,
+        "variants_control": variant_list,
     }
 
     return layout
