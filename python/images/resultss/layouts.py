@@ -245,6 +245,46 @@ def repeat_for_matrix(value, nrows, ncols):
     return [[value for _ in range(ncols)] for _ in range(nrows)]
 
 
+def single_column(options):
+    """Single column."""
+
+    lang = "lang" if options["lang"] else "nolang"
+
+    variant_list = [
+        [f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_shuffle_cost15_4"],
+    ]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    if options["mechanism_control"] == "social":
+        mechanisms_control = repeat_for_matrix("none", nrows, ncols)
+        givens_control = repeat_for_matrix("0.0", nrows, ncols)
+    else:
+        mechanisms_control = repeat_for_matrix(
+            options["mechanism_control"], nrows, ncols
+        )
+        givens_control = repeat_for_matrix(options["given_control"], nrows, ncols)
+
+    traits = repeat_for_matrix(options["trait"], nrows, ncols)
+
+    layout = {
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
+        "givens_control": givens_control,
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms_control": mechanisms_control,
+        "titles_columns": ["Shuffling"],
+        "titles_rows": [""] * nrows,
+        "traits": traits,
+        "traits_control": traits,
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
+
+
 def sss(options):
     """Different combinations of reciprocity."""
 
@@ -279,6 +319,8 @@ def sss(options):
     }
 
     return layout
+
+
 def theory(options):
     """First column is theoretical."""
 
@@ -309,14 +351,16 @@ def theory(options):
 def unit(options):
     """Single plot."""
 
-    variant_list = [["nolang_noshuffle_cost15_4"]]
+    lang = "lang" if options["lang"] else "nolang"
+
+    variant_list = [[f"{lang}_noshuffle_cost15_4"]]
 
     layout = {
         "givens": [[options["given"]]],
         "givens_control": [["0.0"]],
         "mechanisms": [[options["mechanism"]]],
         "mechanisms_control": [[options["mechanism_control"]]],
-        "titles_columns": [""],
+        "titles_columns": ["No shuffling"],
         "titles_rows": [""],
         "traits": [[options["trait"]]],
         "traits_control": [[options["trait_control"]]],
