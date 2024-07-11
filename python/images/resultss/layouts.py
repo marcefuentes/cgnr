@@ -81,58 +81,31 @@ def custom(options):
     """Custom."""
 
     variant_list = [
-        [
-            "nolang_noshuffle_cost15_128",
-            "lang_noshuffle_cost15_128",
-            "nolang_shuffle_cost15_128",
-            "lang_shuffle_cost15_128",
-        ],
-        [
-            "nolang_noshuffle_cost15_128",
-            "lang_noshuffle_cost15_128",
-            "nolang_shuffle_cost15_128",
-            "lang_shuffle_cost15_128",
-        ],
-        [
-            "nolang_noshuffle_cost15_4",
-            "lang_noshuffle_cost15_4",
-            "nolang_shuffle_cost15_4",
-            "lang_shuffle_cost15_4",
-        ],
-        [
-            "nolang_noshuffle_cost15_4",
-            "lang_noshuffle_cost15_4",
-            "nolang_shuffle_cost15_4",
-            "lang_shuffle_cost15_4",
-        ],
+        ["lang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
+        ["lang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
+    ]
+
+    traits = [
+        ["MimicGrainmean", "Imimic_ltGrainmean"],
+        ["MimicGrainmean", "Imimic_ltGrainmean"],
     ]
 
     titles_columns = [
-        "No shuffling\nShort memory",
-        "No shuffling\nLong memory",
-        "Shuffling\nShort memory",
-        "Shuffling\nLong memory",
+        "$\\mathit{s}_{\\mathit{1}}$", "$\\mathit{s}_{\\mathit{3}}$",
     ]
 
     nrows = len(variant_list)
     ncols = len(variant_list[0])
 
-    mechanisms = [
-        ["pd", "pd", "pd", "pd"],
-        ["pi", "pi", "pi", "pi"],
-        ["pd", "pd", "pd", "pd"],
-        ["pi", "pi", "pi", "pi"],
-    ]
-
     layout = {
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
-        "mechanisms": mechanisms,
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
         "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
         "titles_columns": titles_columns,
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
-        "traits_control": repeat_for_matrix(options["trait_control"], nrows, ncols),
+        "traits": traits,
+        "traits_control": traits,
         "variants": variant_list,
         "variants_control": variant_list,
     }
