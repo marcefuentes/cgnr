@@ -59,7 +59,7 @@ def curves(options):
         mechanism = options["mechanism"]
 
     traits = repeat_for_matrix(options["trait"], nrows, 1)
-    variants = repeat_for_matrix("nolang_noshuffle_cost15_128", nrows, 1)
+    variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, 1)
 
     layout = {
         "givens": given_list,
@@ -156,7 +156,7 @@ def default(options):
 def dilemmas(options):
     """Magnitud of social dilemmas."""
 
-    given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
+    given_list = [["1.0", "1.0"], ["0.5", "0.5"]]
 
     nrows = len(given_list)
     ncols = len(given_list[0])
