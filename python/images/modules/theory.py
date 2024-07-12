@@ -125,5 +125,5 @@ def qbeq(given, alpha, rho):
         mrt = 1.0 - given
         q_b = 1.0 / (1.0 + pow(mrt * alpha / (1.0 - alpha), 1.0 / (rho - 1.0)))
     else:
-        q_b = alpha * 0.0
+        q_b = 0.0
     return q_b
