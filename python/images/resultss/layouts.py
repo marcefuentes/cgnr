@@ -183,35 +183,6 @@ def dilemmas(options):
     return layout
 
 
-def figure_2(options):
-    """Figure 2."""
-
-    given_list = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
-    given_control_list = [[None, "0.0"], [None, "0.0"], [None, "0.0"]]
-
-    nrows = len(given_list)
-    ncols = len(given_list[0])
-
-    mechanisms_control = [[None, "none"] for _ in range(nrows)]
-    traits = repeat_for_matrix(options["trait"], nrows, ncols)
-    variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols)
-
-    layout = {
-        "givens": given_list,
-        "givens_control": given_control_list,
-        "mechanisms": repeat_for_matrix("none", nrows, ncols),
-        "mechanisms_control": mechanisms_control,
-        "titles_columns": ["Fitness", "Fitness\nrelative to optimum"],
-        "titles_rows": [""] * nrows,
-        "traits": traits,
-        "traits_control": traits,
-        "variants": variants,
-        "variants_control": variants,
-    }
-
-    return layout
-
-
 def repeat_for_matrix(value, nrows, ncols):
     """Repeat a value for a matrix."""
 
