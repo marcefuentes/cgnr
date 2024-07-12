@@ -190,7 +190,7 @@ def repeat_for_matrix(value, nrows, ncols):
 
 
 def single_column(options):
-    """Single column."""
+    """Two plots."""
 
     lang = "lang" if options["lang"] else "nolang"
 
