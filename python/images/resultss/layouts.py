@@ -114,7 +114,7 @@ def custom(options):
 
 
 def default(options):
-    """Figure 3 and subsequent ones."""
+    """Four plots."""
 
     lang = "lang" if options["lang"] else "nolang"
 
