@@ -302,7 +302,7 @@ def unit(options):
 
     layout = {
         "givens": [[options["given"]]],
-        "givens_control": [["0.0"]],
+        "givens_control": [[options["given_control"]]],
         "mechanisms": [[options["mechanism"]]],
         "mechanisms_control": [[options["mechanism_control"]]],
         "titles_columns": ["No shuffling"],
