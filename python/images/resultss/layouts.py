@@ -170,7 +170,7 @@ def dilemmas(options):
         "mechanisms_control": repeat_for_matrix(
             options["mechanism_control"], nrows, ncols
         ),
-        "titles_columns": ["$\\mathit{q}_{\\mathit{B}}$", "Fitness"],
+        "titles_columns": ["Production of $\\it{B}$", "Fitness"],
         "titles_rows": [""] * nrows,
         "traits": trait_list,
         "traits_control": trait_list,
@@ -304,13 +304,14 @@ def theory(options):
     mechanisms = [[None, "none"] for _ in range(nrows)]
     traits = [[None, options["trait"]] for _ in range(nrows)]
     variants = [[None, "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
+    titles_columns = ["Production of $\\it{B}$\n(theory)", "Production of $\\it{B}$\n(simulations)"]
 
     layout = {
         "givens": given_list,
         "givens_control": repeat_for_matrix(None, nrows, 2),
         "mechanisms": mechanisms,
         "mechanisms_control": mechanisms,
-        "titles_columns": ["Fitness\n(theory)", "Fitness\n(simulations)"],
+        "titles_columns": titles_columns,
         "titles_rows": [""] * nrows,
         "traits": traits,
         "traits_control": traits,
