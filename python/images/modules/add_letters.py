@@ -4,20 +4,17 @@
 def add_letters(axs, position, params):
     """Add letters."""
 
-    nrows, ncols = axs.shape[:2]
+    flattened_axs = axs.flatten()
 
-    for i in range(nrows):
-        for j in range(ncols):
-            n = i * ncols + j
-            letter = chr(ord("a") + n % 26)
-            if letter == "h":
-                letter = "f"
-            if letter == "i":
-                letter = "g"
-            if letter == "j":
-                letter = "h"
-            if n >= 26:
-                letter += letter
-            params["s"] = letter
-            params["transform"] = axs[i, j, 0, 0].transAxes
-            axs[i, j, 0, 0].text(*position, **params)
+    i = 0
+    for ax in axs.flatten():
+        if not ax.axes:
+            continue
+
+        letter = chr(ord("a") + i % 26)
+        if i >= 26:
+            letter += letter
+        params["s"] = letter
+        params["transform"] = ax.transAxes
+        ax.text(*position, **params)
+        i += 1
