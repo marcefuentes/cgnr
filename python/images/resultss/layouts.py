@@ -216,8 +216,8 @@ def five(options):
     ]
 
     traits = [
-        [options["trait"], options["trait"], options["trait"]],
-        [options["trait"], options["trait"], options["trait"]],
+        [options["trait"], None, options["trait"]],
+        [options["trait"], None, options["trait"]],
     ]
 
     nrows = len(variant_list)
