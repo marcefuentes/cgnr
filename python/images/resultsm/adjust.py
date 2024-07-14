@@ -9,7 +9,7 @@ def adjust1(axs):
     axs[1, 0, 0, 0].remove()
     ax = axs[0, 0, 0, 0]
     ax.set_axes_locator(None)
-    ax.set_position((0.133, 0.3443, 0.213, 0.315))
+    ax.set_position((0.133, 0.3433, 0.213, 0.315))
     ax.set_title(
         "No shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{3}}$",
         fontsize=32,
@@ -24,7 +24,7 @@ def adjust2(axs):
     axs[1, 0, 0, 0].remove()
     ax = axs[0, 0, 0, 0]
     ax.set_axes_locator(None)
-    ax.set_position((0.133, 0.5443, 0.213, 0.315))  # for 1 row
+    ax.set_position((0.133, 0.5473, 0.213, 0.315))  # for 1 row
     ax.set_title(
         "No shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{3}}$",
         fontsize=32,
@@ -35,5 +35,5 @@ def adjust2(axs):
     axs[3, 0, 0, 0].remove()
     ax = axs[2, 0, 0, 0]
     ax.set_axes_locator(None)
-    ax.set_position((0.133, 0.1443, 0.213, 0.315))  # for 1 row
+    ax.set_position((0.133, 0.1373, 0.213, 0.315))  # for 1 row
     add_ticklabels_ax(ax, [0.9, 0.5, 0.1], [-31, 0, 0.97])
