@@ -4,8 +4,6 @@
 def add_letters(axs, position, params):
     """Add letters."""
 
-    flattened_axs = axs.flatten()
-
     i = 0
     for ax in axs.flatten():
         if not ax.axes:

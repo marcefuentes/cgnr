@@ -137,7 +137,12 @@ def main(options):
         format_artists(update_args["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
-    if options["layout"] == "three" or options["layout"] == "five" or options["layout"] == "six" or options["layout"] == "seven":
+    if (
+        options["layout"] == "three"
+        or options["layout"] == "five"
+        or options["layout"] == "six"
+        or options["layout"] == "seven"
+    ):
         adjust1(axs)
     elif options["layout"] == "ten":
         adjust2(axs)
