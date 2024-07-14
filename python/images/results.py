@@ -20,7 +20,7 @@ from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from resultsm.adjust import adjust
+from resultsm.adjust import adjust1, adjust2
 from resultsm.get_data import get_data
 from resultsm.get_sm import get_sm
 from resultsm.get_static_data import get_static_data
@@ -137,7 +137,11 @@ def main(options):
         format_artists(update_args["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
-    adjust(axs)
+    if options["layout"] == "five":
+        adjust1(axs)
+    elif options["layout"] == "ten":
+        adjust2(axs)
+
     add_letters(
         axs,
         (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),

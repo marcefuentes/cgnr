@@ -77,8 +77,8 @@ def curves(options):
     return layout
 
 
-def custom(options):
-    """Custom."""
+def five(options):
+    """1 + 2 + 2 plots."""
 
     variant_list = [
         [
@@ -99,6 +99,11 @@ def custom(options):
         "Shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$, $\\mathit{s}_{\\mathit{3}}$",
     ]
 
+    traits = [
+        [options["trait"], options["trait"], options["trait"]],
+        [options["trait"], options["trait"], options["trait"]],
+    ]
+
     nrows = len(variant_list)
     ncols = len(variant_list[0])
 
@@ -111,8 +116,8 @@ def custom(options):
         ),
         "titles_columns": titles_columns,
         "titles_rows": [""] * nrows,
-        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
-        "traits_control": repeat_for_matrix(options["trait"], nrows, ncols),
+        "traits": traits,
+        "traits_control": traits,
         "variants": variant_list,
         "variants_control": variant_list,
     }
@@ -308,6 +313,68 @@ def sss(options):
             options["mechanism_control"], nrows, ncols
         ),
         "titles_columns": titles,
+        "titles_rows": [""] * nrows,
+        "traits": traits,
+        "traits_control": traits,
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
+
+
+def ten(options):
+    """1 + 2 + 2 plots, twice."""
+
+    variant_list = [
+        [
+            "lang_noshuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+        ],
+        [
+            "lang_noshuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+        ],
+        [
+            "lang_noshuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+        ],
+        [
+            "lang_noshuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+        ],
+    ]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    traits = repeat_for_matrix(options["trait"], nrows, ncols)
+
+    givens_control = [
+        [options["given"], options["given"], options["given"]],
+        [options["given"], options["given"], options["given"]],
+        ["0.0", "0.0", "0.0"],
+        ["0.0", "0.0", "0.0"],
+    ]
+
+    titles_columns = [
+        "No shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{3}}$",
+        "Shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$",
+        "Shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$, $\\mathit{s}_{\\mathit{3}}$",
+    ]
+
+    layout = {
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
+        "givens_control": givens_control,
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(
+            options["mechanism_control"], nrows, ncols
+        ),
+        "titles_columns": titles_columns,
         "titles_rows": [""] * nrows,
         "traits": traits,
         "traits_control": traits,
