@@ -81,17 +81,22 @@ def custom(options):
     """Custom."""
 
     variant_list = [
-        ["lang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
-        ["lang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
-    ]
-
-    traits = [
-        ["MimicGrainmean", "Imimic_ltGrainmean"],
-        ["MimicGrainmean", "Imimic_ltGrainmean"],
+        [
+            "lang_noshuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+        ],
+        [
+            "lang_noshuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+        ],
     ]
 
     titles_columns = [
-        "$\\mathit{s}_{\\mathit{1}}$", "$\\mathit{s}_{\\mathit{3}}$",
+        "No shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{3}}$",
+        "Shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$",
+        "Shuffling\n$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$, $\\mathit{s}_{\\mathit{3}}$",
     ]
 
     nrows = len(variant_list)
@@ -101,11 +106,13 @@ def custom(options):
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
         "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
-        "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(
+            options["mechanism_control"], nrows, ncols
+        ),
         "titles_columns": titles_columns,
         "titles_rows": [""] * nrows,
-        "traits": traits,
-        "traits_control": traits,
+        "traits": repeat_for_matrix(options["trait"], nrows, ncols),
+        "traits_control": repeat_for_matrix(options["trait"], nrows, ncols),
         "variants": variant_list,
         "variants_control": variant_list,
     }
@@ -183,6 +190,46 @@ def dilemmas(options):
     return layout
 
 
+def eight(options):
+    """Eight plots. 4 relative to none. 4 relative to social."""
+
+    lang = "lang" if options["lang"] else "nolang"
+
+    variant_list = [
+        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
+        [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
+        [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
+    ]
+
+    nrows = len(variant_list)
+    ncols = len(variant_list[0])
+
+    givens_control = [
+        [options["given"], options["given"]],
+        [options["given"], options["given"]],
+        ["0.0", "0.0"],
+        ["0.0", "0.0"],
+    ]
+
+    traits = repeat_for_matrix(options["trait"], nrows, ncols)
+
+    layout = {
+        "givens": repeat_for_matrix(options["given"], nrows, ncols),
+        "givens_control": givens_control,
+        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
+        "titles_columns": ["No shuffling", "Shuffling"],
+        "titles_rows": [""] * nrows,
+        "traits": traits,
+        "traits_control": traits,
+        "variants": variant_list,
+        "variants_control": variant_list,
+    }
+
+    return layout
+
+
 def repeat_for_matrix(value, nrows, ncols):
     """Repeat a value for a matrix."""
 
@@ -233,7 +280,11 @@ def sss(options):
     """Different combinations of reciprocity."""
 
     variant_list = [
-        ["nolang_shuffle_cost15_128", "nolang_shuffle_cost15_128", "lang_shuffle_cost15_128"],
+        [
+            "nolang_shuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+        ],
         ["nolang_shuffle_cost15_4", "nolang_shuffle_cost15_4", "lang_shuffle_cost15_4"],
     ]
 
@@ -243,7 +294,7 @@ def sss(options):
     mechanisms = [["d", "i", "i"], ["d", "i", "i"]]
     traits = repeat_for_matrix(options["trait"], nrows, ncols)
 
-    titles = [ 
+    titles = [
         "$\\mathit{s}_{\\mathit{1}}$",
         "$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$",
         "$\\mathit{s}_{\\mathit{1}}$, $\\mathit{s}_{\\mathit{2}}$, $\\mathit{s}_{\\mathit{3}}$",
@@ -253,7 +304,9 @@ def sss(options):
         "givens": repeat_for_matrix(options["given"], nrows, ncols),
         "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
         "mechanisms": mechanisms,
-        "mechanisms_control": repeat_for_matrix(options["mechanism_control"], nrows, ncols),
+        "mechanisms_control": repeat_for_matrix(
+            options["mechanism_control"], nrows, ncols
+        ),
         "titles_columns": titles,
         "titles_rows": [""] * nrows,
         "traits": traits,
@@ -275,7 +328,10 @@ def theory(options):
     mechanisms = [[None, "none"] for _ in range(nrows)]
     traits = [[None, options["trait"]] for _ in range(nrows)]
     variants = [[None, "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
-    titles_columns = ["Production of $\\it{B}$\n(theory)", "Production of $\\it{B}$\n(simulations)"]
+    titles_columns = [
+        "Production of $\\it{B}$\n(theory)",
+        "Production of $\\it{B}$\n(simulations)",
+    ]
 
     layout = {
         "givens": given_list,

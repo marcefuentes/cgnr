@@ -10,8 +10,12 @@ def add_letters(axs, position, params):
         for j in range(ncols):
             n = i * ncols + j
             letter = chr(ord("a") + n % 26)
-            # if letter == "d":
-            #   letter = "c"
+            if letter == "h":
+                letter = "f"
+            if letter == "i":
+                letter = "g"
+            if letter == "j":
+                letter = "h"
             if n >= 26:
                 letter += letter
             params["s"] = letter
