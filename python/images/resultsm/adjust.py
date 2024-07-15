@@ -12,18 +12,18 @@ def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
         ncols = len(options["variants"][0])
 
         left_0 = image["margin_left"]/distances["width"]
-        top_ax = (image["margin_bottom"] + (image["plot_size"] + image["margin_inner"])*nrows/2.0)/distances["height"]
+        top_ax = (image["margin_bottom"] + (image["plot_size"] + image["margin_inner"])*(nrows - 1.5))/distances["height"]
 
         axs[1, 0, 0, 0].remove()
         ax = axs[0, 0, 0, 0]
         ax.set_axes_locator(None)
         # new_position = (2.5/width, (2.5 + (4.0 + 0.75)*n - 4.0)/height, 4.0/width, 0.315)
-        new_position = (left_0, top_ax, image["plot_size"]/distances["width"], 0.315)
+        new_position = [left_0, top_ax, image["plot_size"]/distances["width"], image["plot_size"]/distances["height"]]
         ax.set_position(new_position)
+        ax.set_title(options["titles_columns"][0], fontsize=32, pad=214)
 
         if nrows == 2:
             add_ticklabels_ax(ax, ticklabels_y, ticklabels_x)
-            ax.set_title(options["titles_columns"][0], fontsize=32, pad=214)
         else:
             add_ticklabels_ax(ax, ticklabels_y, ["", "", ""])
                 
@@ -31,8 +31,7 @@ def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
             ax = axs[3, 0, 0, 0]
             ax.set_axes_locator(None)
             bottom_ax = (image["margin_bottom"] + (image["plot_size"] + image["margin_inner"])*0.5)/distances["height"]
-            #new_position = (2.5/width, (2.5 + (4.0 + 0.75)*n - 4.0)/height, 4.0/width, 0.315)
-            new_position = (left_0, bottom_ax, image["plot_size"]/distances["width"], 0.315)
+            new_position[1] = bottom_ax
             ax.set_position(new_position)
             add_ticklabels_ax(ax, ticklabels_y, ticklabels_x)
 
@@ -40,18 +39,18 @@ def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
                 
                 left_1 = left_0 + (image["plot_size"] + image["margin_inner"])/distances["width"]
 
-                axs[1, 1, 0, 0].remove()
-                ax = axs[0, 1, 0, 0]
-                ax.set_axes_locator(None)
-                n = 3
-                # ax.set_position(((2.5 + 4.0 + 0.75)/width, (2.5 + (4.0 + 0.75)*n - 4.0)/height, 4.0/width, 0.315))
-                ax.set_position((left_1, top_ax, image["plot_size"]/distances["width"], 0.315))
-                ax.set_title(options["titles_columns"][1], fontsize=32, pad=214)
-
                 axs[2, 1, 0, 0].remove()
                 ax = axs[3, 1, 0, 0]
                 ax.set_axes_locator(None)
-                #ax.set_position(((2.5 + 4.0 + 0.75)/width, (2.5 + (4.0 + 0.75)*n - 4.0)/height, 4.0/width, 0.315))
-                ax.set_position((left_1, bottom_ax, image["plot_size"]/distances["width"], 0.315))
+                new_position[0] = left_1
+                ax.set_position(new_position)
                 add_ticklabels_ax(ax, ["", "", ""], ticklabels_x)
+
+                axs[1, 1, 0, 0].remove()
+                ax = axs[0, 1, 0, 0]
+                ax.set_axes_locator(None)
+                new_position[1] = top_ax
+                ax.set_position(new_position)
+                ax.set_title(options["titles_columns"][1], fontsize=32, pad=214)
+
 
