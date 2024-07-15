@@ -3,6 +3,7 @@
 from resultsm.repeat_for_matrix import repeat_for_matrix
 from resultss.layouts.default_layout import default_layout
 
+
 def curves(options):
     """Fitness curves for partner choice."""
 

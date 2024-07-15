@@ -60,8 +60,9 @@ def m16(options):
 
     if "Imimic" in options["trait"]:
         layout["traits"] = [
-            [None, options["trait"], None, options["trait"]] for _ in range(len(variants))
-        ] 
+            [None, options["trait"], None, options["trait"]]
+            for _ in range(len(variants))
+        ]
 
     layout["titles_columns"] = [
         f"No shuffling\n{S1}, {S4}",

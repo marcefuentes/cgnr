@@ -23,7 +23,7 @@ def m08(options):
         ["0.0", "0.0"],
         ["0.0", "0.0"],
     ]
-        
+
     layout["titles_columns"] = ["No shuffling", "Shuffling"]
 
     return layout
