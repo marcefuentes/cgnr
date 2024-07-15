@@ -4,7 +4,7 @@ from resultss.layouts.default_layout import default_layout
 
 
 def m08(options):
-    """4 relative to none. 4 relative to social."""
+    """4 given=1.0. 4 given=0.5."""
 
     lang = "lang" if options["lang"] else "nolang"
 
@@ -17,12 +17,15 @@ def m08(options):
 
     layout = default_layout(variants, options)
 
-    layout["givens_control"] = [
-        [options["given"], options["given"]],
-        [options["given"], options["given"]],
-        ["0.0", "0.0"],
-        ["0.0", "0.0"],
+    layout["givens"] = [
+        ["1.0", "1.0", "1.0"],
+        ["1.0", "1.0", "1.0"],
+        ["0.5", "0.5", "0.5"],
+        ["0.5", "0.5", "0.5"],
     ]
+
+    if options["given_control"] != "0.0":
+        layout["givens"] = layout["givens"]
 
     layout["titles_columns"] = ["No shuffling", "Shuffling"]
 

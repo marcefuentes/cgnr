@@ -32,12 +32,6 @@ def m10(options):
 
     layout = default_layout(variants, options)
 
-    layout["titles_columns"] = [
-        f"No shuffling\n{S1}, {S3}",
-        f"Shuffling\n{S1}, {S2}",
-        f"Shuffling\n{S1}, {S2}, {S3}",
-    ]
-
     if options["given_control"] != "0.0":
         layout["givens_control"] = [
             ["1.0", "1.0", "1.0"],
@@ -45,6 +39,12 @@ def m10(options):
             ["0.5", "0.5", "0.5"],
             ["0.5", "0.5", "0.5"],
         ]
+
+    layout["titles_columns"] = [
+        f"No shuffling\n{S1}, {S3}",
+        f"Shuffling\n{S1}, {S2}",
+        f"Shuffling\n{S1}, {S2}, {S3}",
+    ]
 
     if options["trait"] == "ImimicGrainmean":
         for i in range(len(variants)):
