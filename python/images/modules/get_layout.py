@@ -1,9 +1,7 @@
 """Get data layout for a figure."""
 
-from resultss import layouts
 
-
-def get_layout(options):
+def get_layout(options, layouts):
     """Get data layout for a figure."""
 
     layout_function = getattr(layouts, options["layout"])
