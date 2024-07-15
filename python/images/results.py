@@ -9,7 +9,7 @@ import numpy as np
 from matplotlib import colormaps
 
 from modules.add_colorbar import add_colorbar
-from modules.add_letters import add_letters
+from modules.add_letters import add_letters_imshow, add_letters_line2d
 from modules.add_ticks import ticks_imshow, ticks_line2d
 from modules.create_fig import create_fig
 from modules.fix_positions import create_divider
@@ -137,20 +137,26 @@ def main(options):
         ticks_imshow(axes_args, image["ticks"])
 
     if (
-        options["layout"] == "three"
-        or options["layout"] == "five"
-        or options["layout"] == "six"
-        or options["layout"] == "seven"
+        options["layout"] == "m03"
+        or options["layout"] == "m05"
+        or options["layout"] == "m07"
     ):
         adjust1(axs)
-    elif options["layout"] == "ten":
+    elif options["layout"] == "m10":
         adjust2(axs)
 
-    add_letters(
-        axs,
-        (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
-        image["letters"],
-    )
+    if options["layout"] == "curves" or options["histogram"]:
+        add_letters_line2d(
+            axs,
+            (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
+            image["letters"],
+        )
+    else:
+        add_letters_imshow(
+            axs,
+            (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
+            image["letters"],
+        )
     save_file(fig, update_args, options, data)
     close_plt(fig)
 

@@ -9,25 +9,24 @@ from matplotlib import colormaps
 
 from modules.add_ax_labels import add_ax_labels
 from modules.add_colorbar import add_colorbar
-from modules.add_letters import add_letters
+from modules.add_letters import add_letters_line2d
 from modules.add_ticks import ticks_ax_line2d, ticks_line2d
 from modules.create_fig import create_fig
 from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
-from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from icurvesm.get_data import get_data
+from icurvesm.get_layout import get_layout
 from icurvesm.get_sm import get_sm
 from icurvesm.get_static_data import get_static_data
 from icurvesm.init_artists import init_artists
 from icurvesm.parse_args import parse_args
 from icurvesm.update_artists import update_artists
 
-from icurvess import layouts
 from icurvess.image import image_common, image_unit
 
 
@@ -36,7 +35,7 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    layout = get_layout(options, layouts)
+    layout = get_layout(options)
     data = get_data(options, layout)
 
     options["budget_line"] = layout["budget_line"]
@@ -94,7 +93,7 @@ def main(options):
     }
 
     format_axes(axes_args, image)
-    add_letters(
+    add_letters_line2d(
         axs,
         (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
         image["letters"],
