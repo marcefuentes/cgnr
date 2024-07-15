@@ -49,7 +49,7 @@ def main(options):
 
     fig, axs = create_fig(fig_layout)
 
-    if options["layout"] == "unit":
+    if options["layout"] == "m01":
         image = image_unit
     else:
         image = image_common
@@ -98,7 +98,7 @@ def main(options):
         (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
         image["letters"],
     )
-    if options["layout"] == "unit":
+    if options["layout"] == "m01":
         add_ax_labels(
             axs[0, 0, 0, 0],
             image["label_x_0"],

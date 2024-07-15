@@ -25,7 +25,7 @@ def parse_args():
         "layout": {
             "type": str,
             "choices": layout_names,
-            "default": "all3",
+            "default": "m01",
             "help": "figure",
         },
         "movie": {"action": "store_true", "help": "enable movie"},
