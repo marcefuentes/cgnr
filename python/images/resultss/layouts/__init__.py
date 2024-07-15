@@ -11,6 +11,7 @@ from .m06 import m06
 from .m08 import m08
 from .m10 import m10
 from .m16 import m16
+from .m16r import m16r
 from .theory import theory
 
 
@@ -26,5 +27,6 @@ __all__ = [
     "m08",
     "m10",
     "m16",
+    "m16r",
     "theory",
 ]
