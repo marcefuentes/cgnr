@@ -6,7 +6,7 @@ from modules.add_ticks import add_ticklabels_ax
 def adjust(axs, layout):
     """Adjust the plots"""
 
-    if layout == "m03" or layout == "m05" or layout == "m07":
+    if layout == "m03" or layout == "m05":
         adjust1(axs)
     elif layout == "m10":
         adjust2(axs)

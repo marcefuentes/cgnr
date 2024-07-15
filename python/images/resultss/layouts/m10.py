@@ -1,6 +1,7 @@
-"""Ten plots."""
+"""10 plots."""
 
 from resultsm.repeat_for_matrix import repeat_for_matrix
+from resultss.layouts.default_layout import default_layout
 from resultss.layouts.ss import S1, S2, S3
 
 
@@ -30,45 +31,25 @@ def m10(options):
         ],
     ]
 
-    nrows = len(variants)
-    ncols = len(variants[0])
+    layout = default_layout(variants, options)
 
-    givens = [
-        ["1.0", "1.0", "1.0"],
-        ["1.0", "1.0", "1.0"],
-        ["0.5", "0.5", "0.5"],
-        ["0.5", "0.5", "0.5"],
-    ]
-
-    givens_control = givens
-    givens_control = repeat_for_matrix("0.0", nrows, ncols)
-
-    mechanisms = repeat_for_matrix("i", nrows, ncols)
+    if options["given_control"] != "0.0":
+        layout["givens_control"] = [
+            ["1.0", "1.0", "1.0"],
+            ["1.0", "1.0", "1.0"],
+            ["0.5", "0.5", "0.5"],
+            ["0.5", "0.5", "0.5"],
+        ]
 
     if options["trait"] == "ImimicGrainmean":
-        traits = [[None, options["trait"], options["trait"]] for _ in range(nrows)]
+        layout["traits"] = [[None, "ImimicGrainmean", "ImimicGrainmean"] for _ in range(len(variants))]
     elif options["trait"] == "Imimic_ltGrainmean":
-        traits = [[options["trait"], None, options["trait"]] for _ in range(nrows)]
-    else:
-        traits = repeat_for_matrix(options["trait"], nrows, ncols)
+        layout["traits"] = [["Imimic_ltGrainmean", None, "Imimic_ltGrainmean"] for _ in range(len(variants))]
 
-    titles_columns = [
+    layout["titles_columns"] = [
         f"No shuffling\n{S1}, {S3}",
         f"Shuffling\n{S1}, {S2}",
         f"Shuffling\n{S1}, {S2}, {S3}",
     ]
-
-    layout = {
-        "givens": givens,
-        "givens_control": givens_control,
-        "mechanisms": mechanisms,
-        "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
-        "titles_columns": titles_columns,
-        "titles_rows": [""] * nrows,
-        "traits": traits,
-        "traits_control": traits,
-        "variants": variants,
-        "variants_control": variants,
-    }
 
     return layout

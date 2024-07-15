@@ -1,10 +1,10 @@
-"""Eight plots. """
+"""8 plots. """
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
+from resultss.layouts.default_layout import default_layout
 
 
 def m08(options):
-    """Eight plots. 4 relative to none. 4 relative to social."""
+    """4 relative to none. 4 relative to social."""
 
     lang = "lang" if options["lang"] else "nolang"
 
@@ -15,31 +15,15 @@ def m08(options):
         [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
-    nrows = len(variants)
-    ncols = len(variants[0])
+    layout = default_layout(variants, options)
 
-    givens_control = [
+    layout["givens_control"] = [
         [options["given"], options["given"]],
         [options["given"], options["given"]],
         ["0.0", "0.0"],
         ["0.0", "0.0"],
     ]
-
-    traits = repeat_for_matrix(options["trait"], nrows, ncols)
-
-    layout = {
-        "givens": repeat_for_matrix(options["given"], nrows, ncols),
-        "givens_control": givens_control,
-        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
-        "mechanisms_control": repeat_for_matrix(
-            options["mechanism_control"], nrows, ncols
-        ),
-        "titles_columns": ["No shuffling", "Shuffling"],
-        "titles_rows": [""] * nrows,
-        "traits": traits,
-        "traits_control": traits,
-        "variants": variants,
-        "variants_control": variants,
-    }
+        
+    layout["titles_columns"] = ["No shuffling", "Shuffling"]
 
     return layout

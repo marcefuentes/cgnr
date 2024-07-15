@@ -28,7 +28,7 @@ def parse_args():
         },
         "given_control": {
             "type": str,
-            "choices": ["none", "0.0", "0.5", "1.0"],
+            "choices": ["0.0", "0.5", "1.0"],
             "default": "0.0",
             "help": "given folder (control)",
         },
@@ -40,19 +40,19 @@ def parse_args():
         },
         "mechanism": {
             "type": str,
-            "choices": ["none", "d", "i", "p", "pd", "pi", "social"],
+            "choices": ["none", "d", "i", "p", "pd", "pi"],
             "default": "none",
             "help": "mechanism",
         },
         "mechanism_control": {
             "type": str,
-            "choices": ["none", "d", "i", "p", "pd", "pi", "social"],
+            "choices": ["none", "d", "i", "p", "pd", "pi"],
             "default": "none",
-            "help": "mechanism",
+            "help": "mechanism (control)",
         },
         "trait": {
             "type": str,
-            "help": "trait (required)",
+            "help": "trait",
         },
         "trait_control": {
             "type": str,

@@ -1,6 +1,6 @@
-"""Five plots."""
+"""5 plots."""
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
+from resultss.layouts.default_layout import default_layout
 from resultss.layouts.ss import S1, S2, S3
 
 
@@ -20,44 +20,17 @@ def m05(options):
         ],
     ]
 
-    titles_columns = [
+    layout = default_layout(variants, options)
+
+    layout["titles_columns"] = [
         f"No shuffling\n{S1}, {S3}",
         f"Shuffling\n{S1}, {S2}",
         f"Shuffling\n{S1}, {S2}, {S3}",
     ]
 
-    if options["trait"] == "Imimic_ltGrainmean":
-        traits = [
-            [options["trait"], None, options["trait"]],
-            [options["trait"], None, options["trait"]],
-        ]
-    elif options["trait"] == "ImimicGrainmean":
-        traits = [
-            [None, options["trait"], options["trait"]],
-            [None, options["trait"], options["trait"]],
-        ]
-    else:
-        traits = [
-            [options["trait"], options["trait"], options["trait"]],
-            [options["trait"], options["trait"], options["trait"]],
-        ]
-
-    nrows = len(variants)
-    ncols = len(variants[0])
-
-    layout = {
-        "givens": repeat_for_matrix(options["given"], nrows, ncols),
-        "givens_control": repeat_for_matrix(options["given_control"], nrows, ncols),
-        "mechanisms": repeat_for_matrix(options["mechanism"], nrows, ncols),
-        "mechanisms_control": repeat_for_matrix(
-            options["mechanism_control"], nrows, ncols
-        ),
-        "titles_columns": titles_columns,
-        "titles_rows": [""] * nrows,
-        "traits": traits,
-        "traits_control": traits,
-        "variants": variants,
-        "variants_control": variants,
-    }
+    if options["trait"] == "ImimicGrainmean":
+        layout["traits"] = [[None, "ImimicGrainmean", "ImimicGrainmean"] for _ in range(len(variants))]
+    elif options["trait"] == "Imimic_ltGrainmean":
+        layout["traits"] = [["Imimic_ltGrainmean", None, "Imimic_ltGrainmean"] for _ in range(len(variants))]
 
     return layout

@@ -1,6 +1,6 @@
 """16 plots."""
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
+from resultss.layouts.default_layout import default_layout
 from resultss.layouts.ss import S1, S2, S3, S4, S5
 
 
@@ -36,46 +36,38 @@ def m16(options):
         ],
     ]
 
-    nrows = len(variants)
-    ncols = len(variants[0])
+    layout = default_layout(variants, options)
 
-    givens = [
-        ["1.0", "1.0", "1.0", "1.0"],
-        ["1.0", "1.0", "1.0", "1.0"],
-        ["0.5", "0.5", "0.5", "0.5"],
-        ["0.5", "0.5", "0.5", "0.5"],
-    ]
-
-    givens_control = givens
-    givens_control = repeat_for_matrix("0.0", nrows, ncols)
-
-    mechanisms = [["pd", "pi", "pd", "pi"] for _ in range(nrows)]
-
-    if "Imimic" in options["trait"]:
-        traits = [
-            [None, options["trait"], None, options["trait"]] for _ in range(nrows)
+    if options["trait"] == "qBSeenmean" or options["trait"] == "wmean":
+        layout["givens_control"] = [
+            [options["given"], options["given"], options["given"], options["given"]],
+            [options["given"], options["given"], options["given"], options["given"]],
+            ["0.0", "0.0", "0.0", "0.0"],
+            ["0.0", "0.0", "0.0", "0.0"],
         ]
     else:
-        traits = repeat_for_matrix(options["trait"], nrows, ncols)
+        layout["givens"] = [
+            ["1.0", "1.0", "1.0", "1.0"],
+            ["1.0", "1.0", "1.0", "1.0"],
+            ["0.5", "0.5", "0.5", "0.5"],
+            ["0.5", "0.5", "0.5", "0.5"],
+        ]
 
-    titles_columns = [
+        if options["given_control"] != "0.0":
+            layout["given_control"] = layout["givens"]
+
+    layout["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
+
+    if "Imimic" in options["trait"]:
+        layout["traits"] = [
+            [None, options["trait"], None, options["trait"]] for _ in range(len(variants))
+        ] 
+
+    layout["titles_columns"] = [
         f"No shuffling\n{S1}, {S4}",
         f"No shuffling\n{S1}, {S2}, {S4}",
         f"Shuffling\n{S1}, {S4}",
         f"Shuffling\n{S1}, {S2}, {S4}",
     ]
-
-    layout = {
-        "givens": givens,
-        "givens_control": givens_control,
-        "mechanisms": mechanisms,
-        "mechanisms_control": repeat_for_matrix("none", nrows, ncols),
-        "titles_columns": titles_columns,
-        "titles_rows": [""] * nrows,
-        "traits": traits,
-        "traits_control": traits,
-        "variants": variants,
-        "variants_control": variants,
-    }
 
     return layout
