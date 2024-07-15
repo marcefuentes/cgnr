@@ -29,10 +29,21 @@ def m05(options):
         f"Shuffling\n{s1}, {s2}, {s3}",
     ]
 
-    traits = [
-        [options["trait"], None, options["trait"]],
-        [options["trait"], None, options["trait"]],
-    ]
+    if options["trait"] == "Imimic_ltGrainmean":
+        traits = [
+            [options["trait"], None, options["trait"]],
+            [options["trait"], None, options["trait"]],
+        ]
+    elif options["trait"] == "ImimicGrainmean":
+        traits = [
+            [None, options["trait"], options["trait"]],
+            [None, options["trait"], options["trait"]],
+        ]
+    else:
+        traits = [
+            [options["trait"], options["trait"], options["trait"]],
+            [options["trait"], options["trait"], options["trait"]],
+        ]
 
     nrows = len(variants)
     ncols = len(variants[0])
