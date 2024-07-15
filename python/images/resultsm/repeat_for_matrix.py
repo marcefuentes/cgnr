@@ -1,3 +1,6 @@
+"""Repeat a value for a matrix."""
+
+
 def repeat_for_matrix(value, nrows, ncols):
     """Repeat a value for a matrix."""
 
