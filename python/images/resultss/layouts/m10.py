@@ -32,7 +32,7 @@ def m10(options):
 
     options = default_options(variants, options)
 
-    if options["givens_control"] != "0.0":
+    if options["givens_control"][0][0] != "0.0":
         options["givens_control"] = [
             ["1.0", "1.0", "1.0"],
             ["1.0", "1.0", "1.0"],
