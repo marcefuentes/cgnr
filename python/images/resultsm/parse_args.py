@@ -3,7 +3,7 @@
 import argparse
 import inspect
 
-import resultsm.layouts as layouts
+from resultsm import layouts
 
 
 def parse_args():
