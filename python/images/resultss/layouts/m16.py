@@ -64,11 +64,19 @@ def m16(options):
             for _ in range(len(variants))
         ]
 
-    layout["titles_columns"] = [
-        f"No shuffling\n{S1}, {S4}",
-        f"No shuffling\n{S1}, {S2}, {S4}",
-        f"Shuffling\n{S1}, {S4}",
-        f"Shuffling\n{S1}, {S2}, {S4}",
-    ]
+    if options["lang"]:
+        layout["titles_columns"] = [
+            f"No shuffling\n{S1}, {S4}, {S5}",
+            f"No shuffling\n{S1}, {S2}, {S3}, {S4}, {S5}",
+            f"Shuffling\n{S1}, {S4}, {S5}",
+            f"Shuffling\n{S1}, {S2}, {S3}, {S4}, {S5}",
+        ]
+    else:
+        layout["titles_columns"] = [
+            f"No shuffling\n{S1}, {S4}",
+            f"No shuffling\n{S1}, {S2}, {S4}",
+            f"Shuffling\n{S1}, {S4}",
+            f"Shuffling\n{S1}, {S2}, {S4}",
+        ]
 
     return layout
