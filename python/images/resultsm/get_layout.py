@@ -1,6 +1,6 @@
 """Get data layout for a figure."""
 
-from resultsm import layouts
+from resultss import layouts
 
 
 def get_layout(options):
