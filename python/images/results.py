@@ -139,8 +139,9 @@ def main(options):
 
     adjust(
         axs,
-        options["layout"],
-        layout["titles_columns"][0],
+        options,
+        layout,
+        image,
         axes_args["ticklabels_x"],
         axes_args["ticklabels_y"],
     )
