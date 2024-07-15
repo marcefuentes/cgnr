@@ -1,6 +1,5 @@
 """10 plots."""
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
 from resultss.layouts.default_layout import default_layout
 from resultss.layouts.ss import S1, S2, S3
 
@@ -42,14 +41,11 @@ def m10(options):
         ]
 
     if options["trait"] == "ImimicGrainmean":
-        layout["traits"] = [
-            [None, "ImimicGrainmean", "ImimicGrainmean"] for _ in range(len(variants))
-        ]
+        for i in range(len(variants)):
+            layout["traits"][i][0] = None
     elif options["trait"] == "Imimic_ltGrainmean":
-        layout["traits"] = [
-            ["Imimic_ltGrainmean", None, "Imimic_ltGrainmean"]
-            for _ in range(len(variants))
-        ]
+        for i in range(len(variants)):
+            layout["traits"][i][1] = None
 
     layout["titles_columns"] = [
         f"No shuffling\n{S1}, {S3}",

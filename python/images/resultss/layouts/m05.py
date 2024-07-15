@@ -29,13 +29,10 @@ def m05(options):
     ]
 
     if options["trait"] == "ImimicGrainmean":
-        layout["traits"] = [
-            [None, "ImimicGrainmean", "ImimicGrainmean"] for _ in range(len(variants))
-        ]
+        for i in range(len(variants)):
+            layout["traits"][i][0] = None
     elif options["trait"] == "Imimic_ltGrainmean":
-        layout["traits"] = [
-            ["Imimic_ltGrainmean", None, "Imimic_ltGrainmean"]
-            for _ in range(len(variants))
-        ]
+        for i in range(len(variants)):
+            layout["traits"][i][1] = None
 
     return layout

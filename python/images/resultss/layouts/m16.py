@@ -59,10 +59,9 @@ def m16(options):
     layout["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
 
     if "Imimic" in options["trait"]:
-        layout["traits"] = [
-            [None, options["trait"], None, options["trait"]]
-            for _ in range(len(variants))
-        ]
+        for i in range(len(variants)):
+            layout["traits"][i][0] = None
+            layout["traits"][i][2] = None
 
     if options["lang"]:
         layout["titles_columns"] = [
