@@ -139,6 +139,7 @@ def main(options):
     adjust(
         axs,
         options,
+        fig_distances,
         image,
         axes_args["ticklabels_x"],
         axes_args["ticklabels_y"],
