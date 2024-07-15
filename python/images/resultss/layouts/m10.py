@@ -1,6 +1,7 @@
 """Ten plots."""
 
 from resultsm.repeat_for_matrix import repeat_for_matrix
+from resultss.layouts.ss import S1, S2, S3
 
 
 def m10(options):
@@ -51,14 +52,10 @@ def m10(options):
     else:
         traits = repeat_for_matrix(options["trait"], nrows, ncols)
 
-    s1 = "$\\mathit{s}_{\\mathit{1}}$"
-    s2 = "$\\mathit{s}_{\\mathit{2}}$"
-    s3 = "$\\mathit{s}_{\\mathit{3}}$"
-
     titles_columns = [
-        f"No shuffling\n{s1}, {s3}",
-        f"Shuffling\n{s1}, {s2}",
-        f"Shuffling\n{s1}, {s2}, {s3}",
+        f"No shuffling\n{S1}, {S3}",
+        f"Shuffling\n{S1}, {S2}",
+        f"Shuffling\n{S1}, {S2}, {S3}",
     ]
 
     layout = {
