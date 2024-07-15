@@ -36,10 +36,11 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    layout = get_layout(options, layouts)
-    data = get_data(options, layout)
+    options = get_layout(options, layouts)
+    
+    data = get_data(options)
 
-    options["budget_line"] = layout["budget_line"]
+    options["budget_line"] = options["budget_line"]
 
     fig_layout = {
         "nc": len(data["rhos"]),

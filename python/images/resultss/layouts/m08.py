@@ -1,6 +1,6 @@
 """8 plots. """
 
-from resultss.layouts.default_layout import default_layout
+from resultss.layouts.default_options import default_options
 
 
 def m08(options):
@@ -15,16 +15,16 @@ def m08(options):
         [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
-    layout = default_layout(variants, options)
+    options = default_options(variants, options)
 
-    layout["givens"] = [
+    options["givens"] = [
         ["1.0", "1.0", "1.0"],
         ["1.0", "1.0", "1.0"],
         ["0.5", "0.5", "0.5"],
         ["0.5", "0.5", "0.5"],
     ]
 
-    if options["given_control"] != "0.0":
-        layout["givens"] = layout["givens"]
+    if options["givens_control"] != "0.0":
+        options["givens_control"] = options["givens"]
 
-    return layout
+    return options

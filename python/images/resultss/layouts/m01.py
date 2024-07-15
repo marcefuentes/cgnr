@@ -8,6 +8,6 @@ def m01(options):
 
     variants = [[f"{lang}_noshuffle_cost15_4"]]
 
-    layout = default_layout(variants, options)
+    options = default_options(variants, options)
 
-    return layout
+    return options

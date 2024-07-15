@@ -1,6 +1,6 @@
 """16 plots."""
 
-from resultss.layouts.default_layout import default_layout
+from resultss.layouts.default_options import default_options
 from resultss.layouts.ss import S1, S2, S3
 
 
@@ -38,33 +38,33 @@ def m16r(options):
         ],
     ]
 
-    layout = default_layout(variants, options)
+    options = default_options(variants, options)
 
-    if options["given_control"] != "0.0":
-        layout["givens_control"] = [
+    if options["givens_control"] != "0.0":
+        options["givens_control"] = [
             ["1.0", "1.0", "1.0", "1.0", "1.0"],
             ["1.0", "1.0", "1.0", "1.0", "1.0"],
             ["0.5", "0.5", "0.5", "0.5", "0.5"],
             ["0.5", "0.5", "0.5", "0.5", "0.5"],
         ]
 
-    layout["mechanisms"] = [["d", "i", "d", "i", "i"] for _ in range(len(variants))]
+    options["mechanisms"] = [["d", "i", "d", "i", "i"] for _ in range(len(variants))]
 
-    layout["titles_columns"][0] += f"\n{S1}"
-    layout["titles_columns"][1] += f"\n{S1}, {S3}"
-    layout["titles_columns"][2] += f"\n{S1}"
-    layout["titles_columns"][3] += f"\n{S1}, {S2}"
-    layout["titles_columns"][4] += f"\n{S1}, {S2}, {S3}"
+    options["titles_columns"][0] += f"\n{S1}"
+    options["titles_columns"][1] += f"\n{S1}, {S3}"
+    options["titles_columns"][2] += f"\n{S1}"
+    options["titles_columns"][3] += f"\n{S1}, {S2}"
+    options["titles_columns"][4] += f"\n{S1}, {S2}, {S3}"
 
-    if options["trait"] == "ImimicGrainmean":
+    if options["traits"] == "ImimicGrainmean":
         for i in range(len(variants)):
-            layout["traits"][i][0] = None
-            layout["traits"][i][1] = None
-            layout["traits"][i][2] = None
-    elif options["trait"] == "Imimic_ltGrainmean":
+            options["traits"][i][0] = None
+            options["traits"][i][1] = None
+            options["traits"][i][2] = None
+    elif options["traits"] == "Imimic_ltGrainmean":
         for i in range(len(variants)):
-            layout["traits"][i][0] = None
-            layout["traits"][i][2] = None
-            layout["traits"][i][3] = None
+            options["traits"][i][0] = None
+            options["traits"][i][2] = None
+            options["traits"][i][3] = None
 
-    return layout
+    return options

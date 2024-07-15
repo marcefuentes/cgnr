@@ -1,6 +1,6 @@
 """16 plots."""
 
-from resultss.layouts.default_layout import default_layout
+from resultss.layouts.default_options import default_options
 from resultss.layouts.ss import S1, S2, S3, S4, S5
 
 
@@ -36,42 +36,42 @@ def m16(options):
         ],
     ]
 
-    layout = default_layout(variants, options)
+    options = default_options(variants, options)
 
-    if options["trait"] == "qBSeenmean" or options["trait"] == "wmean":
-        layout["givens_control"] = [
+    if options["traits"] == "qBSeenmean" or options["traits"] == "wmean":
+        options["givens_control"] = [
             [options["given"], options["given"], options["given"], options["given"]],
             [options["given"], options["given"], options["given"], options["given"]],
             ["0.0", "0.0", "0.0", "0.0"],
             ["0.0", "0.0", "0.0", "0.0"],
         ]
     else:
-        layout["givens"] = [
+        options["givens"] = [
             ["1.0", "1.0", "1.0", "1.0"],
             ["1.0", "1.0", "1.0", "1.0"],
             ["0.5", "0.5", "0.5", "0.5"],
             ["0.5", "0.5", "0.5", "0.5"],
         ]
 
-        if options["given_control"] != "0.0":
-            layout["given_control"] = layout["givens"]
+        if options["givens_control"] != "0.0":
+            options["givens_control"] = options["givens"]
 
-    layout["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
+    options["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
 
-    if "Imimic" in options["trait"]:
+    if "Imimic" in options["traits"]:
         for i in range(len(variants)):
-            layout["traits"][i][0] = None
-            layout["traits"][i][2] = None
+            options["traits"][i][0] = None
+            options["traits"][i][2] = None
 
     if options["lang"]:
-        layout["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
-        layout["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
-        layout["titles_columns"][2] += f"\n{S1}, {S4}, {S5}"
-        layout["titles_columns"][3] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
+        options["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
+        options["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
+        options["titles_columns"][2] += f"\n{S1}, {S4}, {S5}"
+        options["titles_columns"][3] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
     else:
-        layout["titles_columns"][0] += f"\n{S1}, {S4}"
-        layout["titles_columns"][1] += f"\n{S1}, {S2}, {S4}"
-        layout["titles_columns"][2] += f"\n{S1}, {S4}"
-        layout["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
+        options["titles_columns"][0] += f"\n{S1}, {S4}"
+        options["titles_columns"][1] += f"\n{S1}, {S2}, {S4}"
+        options["titles_columns"][2] += f"\n{S1}, {S4}"
+        options["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
 
-    return layout
+    return options

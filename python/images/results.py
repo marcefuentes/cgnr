@@ -39,11 +39,10 @@ def main(options):
 
     start_time = time.perf_counter()
 
-    layout = get_layout(options, layouts)
+    options = get_layout(options, layouts)
     try:
         data = get_data(
             options,
-            layout,
             *project["output_file_extensions"],
         )
     except ValueError as error:
@@ -55,9 +54,9 @@ def main(options):
 
     fig_layout = {
         "nc": 1,
-        "ncols": len(layout["variants"][0]),
+        "ncols": len(options["variants"][0]),
         "nr": 1,
-        "nrows": len(layout["variants"]),
+        "nrows": len(options["variants"]),
     }
 
     if options["layout"] == "curves" or options["histogram"]:
@@ -76,8 +75,8 @@ def main(options):
     if options["layout"] == "curves":
         x, y = get_static_data(
             image["n_x_values"],
-            layout["traits"],
-            layout["givens"],
+            options["traits"],
+            options["givens"],
             data["alphas"],
             data["rhos"],
         )
@@ -88,7 +87,7 @@ def main(options):
         )
     elif options["layout"] == "theory":
         x, y = get_theory_imshow(
-            layout["traits"], layout["givens"], data["alphas"], data["rhos"]
+            options["traits"], options["givens"], data["alphas"], data["rhos"]
         )
     else:
         x = None
@@ -118,8 +117,8 @@ def main(options):
             f"{data["alphas"][mr // 2]:.1f}",
             f"{data["alphas"][-1]:.1f}",
         ],
-        "titles_columns": layout["titles_columns"],
-        "titles_rows": layout["titles_rows"],
+        "titles_columns": options["titles_columns"],
+        "titles_rows": options["titles_rows"],
     }
 
     if options["layout"] == "curves":
@@ -140,7 +139,6 @@ def main(options):
     adjust(
         axs,
         options,
-        layout,
         image,
         axes_args["ticklabels_x"],
         axes_args["ticklabels_y"],

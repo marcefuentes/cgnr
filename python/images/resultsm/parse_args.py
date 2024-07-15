@@ -20,16 +20,16 @@ def parse_args():
     ]
 
     args_dict = {
-        "given": {
+        "givens": {
             "type": str,
             "choices": ["0.0", "0.5", "1.0"],
             "default": "1.0",
             "help": "given folder",
         },
-        "given_control": {
+        "givens_control": {
             "type": str,
-            "choices": ["0.0", "0.5", "1.0"],
-            "default": "0.0",
+            "choices": ["none", "0.0", "0.5", "1.0"],
+            "default": "none",
             "help": "given folder (control)",
         },
         "layout": {
@@ -38,23 +38,23 @@ def parse_args():
             "default": "theory",
             "help": "figure",
         },
-        "mechanism": {
+        "mechanisms": {
             "type": str,
             "choices": ["none", "d", "i", "p", "pd", "pi"],
             "default": "none",
             "help": "mechanism",
         },
-        "mechanism_control": {
+        "mechanisms_control": {
             "type": str,
             "choices": ["none", "d", "i", "p", "pd", "pi"],
             "default": "none",
             "help": "mechanism (control)",
         },
-        "trait": {
+        "traits": {
             "type": str,
             "help": "trait",
         },
-        "trait_control": {
+        "traits_control": {
             "type": str,
             "default": "none",
             "help": "trait (control)",
@@ -70,8 +70,11 @@ def parse_args():
 
     args = parser.parse_args()
 
-    if args.trait_control == "none":
-        args.trait_control = args.trait
+    if args.traits_control == "none":
+        args.traits_control = args.traits
+
+    if args.givens_control == "none":
+        args.givens_control = args.given
 
     if args.layout == "curves":
         args.ax_type = "PolyCollection"

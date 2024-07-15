@@ -6,7 +6,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
 
     if options["layout"] == "allp":
         axs_to_change = []
-        if "Choose" in options["trait"]:
+        if "Choose" in options["traits"]:
             axs_to_change = [
                 (axs[1, 0, 0, 0], "x"),
                 (axs[1, 1, 0, 0], "y"),
@@ -19,7 +19,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
                 (axs[2, 2, 0, 0], "y"),
                 (axs[2, 3, 0, 0], "y"),
             ]
-        elif options["trait"] == "MimicGrainmean":
+        elif options["traits"] == "MimicGrainmean":
             axs_to_change = [
                 (axs[0, 1, 0, 0], "y"),
                 (axs[0, 2, 0, 0], "y"),
@@ -30,7 +30,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
             if not options["lang"]:
                 axs_to_change.append((axs[1, 0, 0, 0], "x"))
                 axs_to_change.append((axs[1, 1, 0, 0], "x"))
-        elif "Imimic" in options["trait"]:
+        elif "Imimic" in options["traits"]:
             axs_to_change = [
                 (axs[0, 0, 0, 0], "x"),
                 (axs[0, 1, 0, 0], "y"),

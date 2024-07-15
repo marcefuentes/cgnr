@@ -3,7 +3,7 @@
 from modules.add_ticks import add_ticklabels_ax
 
 
-def adjust(axs, options, layout, image, ticklabels_x, ticklabels_y):
+def adjust(axs, options, image, ticklabels_x, ticklabels_y):
     """Adjust plots"""
 
     if options["layout"] in ("m03", "m05", "m06", "m10", "m16r"):
@@ -39,7 +39,7 @@ def adjust(axs, options, layout, image, ticklabels_x, ticklabels_y):
         new_position = (2.5/width, (2.5 + (4.0 + 0.75)*n - 4.0)/height, 4.0/width, 0.315)
                 
         ax.set_position(new_position)
-        ax.set_title(layout["titles_columns"][0], fontsize=32, pad=214)
+        ax.set_title(options["titles_columns"][0], fontsize=32, pad=214)
 
         if options["layout"] in ("m06", "m10", "m16r"):
             axs[2, 0, 0, 0].remove()
@@ -56,7 +56,7 @@ def adjust(axs, options, layout, image, ticklabels_x, ticklabels_y):
             ax.set_axes_locator(None)
             n = 3
             ax.set_position(((2.5 + 4.0 + 0.75)/width, (2.5 + (4.0 + 0.75)*n - 4.0)/height, 4.0/width, 0.315))
-            ax.set_title(layout["titles_columns"][1], fontsize=32, pad=214)
+            ax.set_title(options["titles_columns"][1], fontsize=32, pad=214)
             axs[2, 1, 0, 0].remove()
             ax = axs[3, 1, 0, 0]
             ax.set_axes_locator(None)

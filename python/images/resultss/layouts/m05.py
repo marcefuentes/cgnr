@@ -1,18 +1,18 @@
 """5 plots."""
 
-from resultss.layouts.default_layout import default_layout
+from resultss.layouts.default_options import default_options
 from resultss.layouts.m10 import m10
 
 
 def m05(options):
     """1 + 2 + 2 plots."""
 
-    layout_m10 = m10(options)
-    variants = layout_m10["variants"][:-2]
+    options_m10 = m10(options)
+    variants = options_m10["variants"][:-2]
 
-    layout = default_layout(variants, options)
+    options = default_options(variants, options)
 
-    layout["titles_columns"] = layout_m10["titles_columns"]
-    layout["traits"] = layout_m10["traits"][:-2]
+    options["titles_columns"] = options_m10["titles_columns"]
+    options["traits"] = options_m10["traits"][:-2]
 
-    return layout
+    return options

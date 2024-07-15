@@ -1,6 +1,6 @@
 """Two plots."""
 
-from resultss.layouts.default_layout import default_layout
+from resultss.layouts.default_options import default_options
 
 
 def m02(options):
@@ -13,6 +13,6 @@ def m02(options):
         [f"{lang}_shuffle_cost15_4"],
     ]
 
-    layout = default_layout(variants, options)
+    options = default_options(variants, options)
 
-    return layout
+    return options

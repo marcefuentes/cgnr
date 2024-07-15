@@ -11,14 +11,14 @@ def theory(options):
     nrows = len(givens)
 
     mechanisms = [[None, "none"] for _ in range(nrows)]
-    traits = [[None, options["trait"]] for _ in range(nrows)]
+    traits = [[None, options["traits"]] for _ in range(nrows)]
     variants = [[None, "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
     titles_columns = [
         "Production of $\\it{B}$\n(theory)",
         "Production of $\\it{B}$\n(simulations)",
     ]
 
-    layout = {
+    options = {
         "givens": givens,
         "givens_control": repeat_for_matrix(None, nrows, 2),
         "mechanisms": mechanisms,
@@ -31,4 +31,4 @@ def theory(options):
         "variants_control": variants,
     }
 
-    return layout
+    return options
