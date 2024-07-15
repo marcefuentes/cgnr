@@ -2,7 +2,6 @@
 
 from resultss.layouts.default_layout import default_layout
 from resultss.layouts.m10 import m10
-from resultss.layouts.ss import S1, S2, S3
 
 
 def m05(options):
