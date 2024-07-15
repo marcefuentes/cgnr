@@ -11,12 +11,9 @@ def add_ticklabels_ax(ax, ticklabels_y, ticklabels_x):
 def add_ticklabels_imshow(axs, ticklabels_y, ticklabels_x):
     """Add tick labels for (nrows x ncols)."""
 
-    ticklabels_y = [f"{r:.1f}" for r in ticklabels_y]
     for ax in axs[:, 0, 0, 0]:
         ax.set_yticklabels(ticklabels_y)
 
-    ticklabels_x = [f"{c:.0f}" for c in ticklabels_x]
-    ticklabels_x[-1] = "0.97"
     for ax in axs[-1, :, 0, 0]:
         ax.set_xticklabels(ticklabels_x)
 
@@ -27,14 +24,12 @@ def add_ticklabels_line2d(axs, ticklabels_y, ticklabels_x):
     _range = range(0, axs.shape[2], axs.shape[2] // 2)
     for i in range(axs.shape[0]):
         for k, r_value in zip(_range, ticklabels_y):
-            axs[i, 0, k, 0].set_yticklabels([f"{r_value:.1f}"])
+            axs[i, 0, k, 0].set_yticklabels([r_value])
 
     _range = range(0, axs.shape[3], axs.shape[3] // 2)
     for j in range(axs.shape[1]):
         for m, c_value in zip(_range, ticklabels_x):
-            axs[-1, j, -1, m].set_xticklabels([f"{c_value:.0f}"])
-            if c_value > 0.96:
-                axs[-1, j, -1, m].set_xticklabels([f"{c_value:.2f}"])
+            axs[-1, j, -1, m].set_xticklabels([c_value])
 
 
 def add_ticks_ax_line2d(ax, format_params):
