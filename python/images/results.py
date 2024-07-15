@@ -137,7 +137,13 @@ def main(options):
         format_artists(update_args["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
-    adjust(axs, options["layout"], layout["titles_columns"][0], axes_args["ticklabels_x"], axes_args["ticklabels_y"])
+    adjust(
+        axs,
+        options["layout"],
+        layout["titles_columns"][0],
+        axes_args["ticklabels_x"],
+        axes_args["ticklabels_y"],
+    )
 
     if options["layout"] == "curves" or options["histogram"]:
         add_letters_line2d(
