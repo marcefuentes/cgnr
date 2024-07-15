@@ -26,8 +26,8 @@ def adjust(axs, layout, title, ticklabels_x, ticklabels_y):
         ax.set_title(title, fontsize=32, pad=215)
 
         if layout in ("m06", "m10"):
-            axs[3, 0, 0, 0].remove()
-            ax = axs[2, 0, 0, 0]
+            axs[2, 0, 0, 0].remove()
+            ax = axs[3, 0, 0, 0]
             ax.set_axes_locator(None)
             if layout == "m06":
                 ax.set_position((0.1787, 0.1373, 0.283, 0.315))
