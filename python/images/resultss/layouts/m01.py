@@ -8,17 +8,8 @@ def m01(options):
 
     variants = [[f"{lang}_noshuffle_cost15_4"]]
 
-    layout = {
-        "givens": [[options["given"]]],
-        "givens_control": [[options["given_control"]]],
-        "mechanisms": [[options["mechanism"]]],
-        "mechanisms_control": [[options["mechanism_control"]]],
-        "titles_columns": ["No shuffling"],
-        "titles_rows": [""],
-        "traits": [[options["trait"]]],
-        "traits_control": [[options["trait_control"]]],
-        "variants": variants,
-        "variants_control": variants,
-    }
+    layout = default_layout(variants, options)
+
+    layout["titles_columns"] = ["No shuffling"]
 
     return layout
