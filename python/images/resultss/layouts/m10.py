@@ -41,9 +41,9 @@ def m10(options):
         ]
 
     layout["titles_columns"] = [
-        f"No shuffling\n{S1}, {S3}",
-        f"Shuffling\n{S1}, {S2}",
-        f"Shuffling\n{S1}, {S2}, {S3}",
+        layout["titles_columns"][0] += f"\n{S1}, {S3}"
+        layout["titles_columns"][1] += f"\n{S1}, {S2}"
+        layout["titles_columns"][2] += f"\n{S1}, {S2}, {S3}"
     ]
 
     if options["trait"] == "ImimicGrainmean":
