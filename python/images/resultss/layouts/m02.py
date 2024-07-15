@@ -15,6 +15,4 @@ def m02(options):
 
     layout = default_layout(variants, options)
 
-    layout["titles_columns"] = ["Shuffling"]
-
     return layout

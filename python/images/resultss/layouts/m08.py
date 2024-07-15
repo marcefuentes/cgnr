@@ -27,6 +27,4 @@ def m08(options):
     if options["given_control"] != "0.0":
         layout["givens"] = layout["givens"]
 
-    layout["titles_columns"] = ["No shuffling", "Shuffling"]
-
     return layout

@@ -10,6 +10,4 @@ def m01(options):
 
     layout = default_layout(variants, options)
 
-    layout["titles_columns"] = ["No shuffling"]
-
     return layout
