@@ -32,8 +32,6 @@ def adjust(data, distances, image):
         if nrows == 2:
             add_ticklabels_ax(ax, image["ticklabels_y"], image["ticklabels_x"])
         else:
-            add_ticklabels_ax(ax, image["ticklabels_y"], ["", "", ""])
-
             image["axs"][2, 0, 0, 0].remove()
             ax = image["axs"][3, 0, 0, 0]
             ax.set_axes_locator(None)
@@ -43,7 +41,6 @@ def adjust(data, distances, image):
             ) / distances["height"]
             new_position[1] = bottom_ax
             ax.set_position(new_position)
-            add_ticklabels_ax(ax, image["ticklabels_y"], image["ticklabels_x"])
 
             if ncols == 5:
 
@@ -57,7 +54,6 @@ def adjust(data, distances, image):
                 ax.set_axes_locator(None)
                 new_position[0] = left_1
                 ax.set_position(new_position)
-                add_ticklabels_ax(ax, ["", "", ""], image["ticklabels_x"])
 
                 image["axs"][1, 1, 0, 0].remove()
                 ax = image["axs"][0, 1, 0, 0]
