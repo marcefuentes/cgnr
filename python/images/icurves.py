@@ -37,7 +37,7 @@ def main(options):
     start_time = time.perf_counter()
 
     options = get_layout(options, layouts)
-    
+
     data = get_data(options)
 
     options["budget_line"] = options["budget_line"]

@@ -17,7 +17,9 @@ def default_options(variants, options):
             titles.append("Shuffling")
 
     options["givens"] = repeat_for_matrix(options["givens"], nrows, ncols)
-    options["givens_control"] = repeat_for_matrix(options["givens_control"], nrows, ncols)
+    options["givens_control"] = repeat_for_matrix(
+        options["givens_control"], nrows, ncols
+    )
     options["mechanisms"] = repeat_for_matrix(options["mechanisms"], nrows, ncols)
     options["mechanisms_control"] = repeat_for_matrix(
         options["mechanisms_control"], nrows, ncols
@@ -25,7 +27,9 @@ def default_options(variants, options):
     options["titles_columns"] = titles
     options["titles_rows"] = [""] * nrows
     options["traits"] = repeat_for_matrix(options["traits"], nrows, ncols)
-    options["traits_control"] = repeat_for_matrix(options["traits_control"], nrows, ncols)
+    options["traits_control"] = repeat_for_matrix(
+        options["traits_control"], nrows, ncols
+    )
     options["variants"] = variants
     options["variants_control"] = variants
 
