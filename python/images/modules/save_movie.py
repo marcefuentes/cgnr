@@ -10,7 +10,7 @@ def save_movie(fig, data):
         "fig": fig,
         "frames": data["frames"],
         "func": data["function"],
-        "fargs": (data),
+        "fargs": (data,),
         "blit": True,
     }
     ani = FuncAnimation(**params)

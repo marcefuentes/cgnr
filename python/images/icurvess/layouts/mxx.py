@@ -15,7 +15,7 @@ def mxx(data):
         "num": 3,
     }
     data["givens"] = [1.0, 0.99, 0.5, 0.0]
-    data["n_indifference_curves"] = 5
+    data["n_ic"] = 5
     data["budget_line"] = True
 
     return data

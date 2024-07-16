@@ -15,7 +15,7 @@ def m01(data):
         "num": 1,
     }
     data["givens"] = [0.0]
-    data["n_indifference_curves"] = 5
+    data["n_ic"] = 5
     data["budget_line"] = True
 
     if data["movie"]:
