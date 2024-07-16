@@ -95,8 +95,7 @@ def main(data):
     data["function"] = update_artists
 
     image["divider"] = create_divider(fig, fig_layout, fig_distances, image)
-    image["lim_x"] = [None, None]
-    image["lim_y"] = [None, None]
+    image["letter_position"] = (0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
@@ -115,36 +114,36 @@ def main(data):
     if data["layout"] == "curves":
         image["lim_x"] = [0, 1]
         image["lim_y"] = [0, 1]
-    if data["histogram"]:
+    elif data["histogram"]:
         image["lim_x"] = [-2, project["bins"] + 1]
         image["lim_y"] = [0, 0.25]
+    else:
+        image["lim_x"] = [None, None]
+        image["lim_y"] = [None, None]
 
     format_axes(image)
     if data["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines"])
         ticks_line2d(image, image["ticks"])
+        add_letters_line2d(
+            image["axs"],
+            image["letter_position"],
+            image["letters"],
+        )
     else:
         format_artists(data["artists"], image["show"])
         ticks_axesimage(image, image["ticks"])
-
-    adjust(
-        data,
-        fig_distances,
-        image,
-    )
-
-    if data["ax_type"] == "Line2D":
-        add_letters_line2d(
-            image["axs"],
-            (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
-            image["letters"],
+        adjust(
+            data,
+            fig_distances,
+            image,
         )
-    else:
         add_letters_axesimage(
             image["axs"],
-            (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
+            image["letter_position"],
             image["letters"],
         )
+
     save_file(fig, data)
     close_plt(fig)
 
