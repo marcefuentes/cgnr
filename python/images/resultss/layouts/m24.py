@@ -5,7 +5,7 @@ from .repeat_for_matrix import repeat_for_matrix
 from .ss import S1, S2, S3, S4, S5
 
 
-def m16(data):
+def m24(data):
     """24 plots."""
 
     lang = "lang" if data["lang"] else "nolang"
@@ -68,18 +68,18 @@ def m16(data):
 
     if data["lang"]:
         data["titles_columns"][0] += f"\n{S4}, {S5}"
-        data["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
-        data["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
-        data["titles_columns"][0] += f"\n{S4}, {S5}"
-        data["titles_columns"][2] += f"\n{S1}, {S4}, {S5}"
-        data["titles_columns"][3] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
+        data["titles_columns"][1] += f"\n{S1}, {S4}, {S5}"
+        data["titles_columns"][2] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
+        data["titles_columns"][3] += f"\n{S4}, {S5}"
+        data["titles_columns"][4] += f"\n{S1}, {S4}, {S5}"
+        data["titles_columns"][5] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
     else:
         data["titles_columns"][0] += f"\n{S4}"
-        data["titles_columns"][0] += f"\n{S1}, {S4}"
-        data["titles_columns"][1] += f"\n{S1}, {S2}, {S4}"
-        data["titles_columns"][0] += f"\n{S4}"
-        data["titles_columns"][2] += f"\n{S1}, {S4}"
-        data["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
+        data["titles_columns"][1] += f"\n{S1}, {S4}"
+        data["titles_columns"][2] += f"\n{S1}, {S2}, {S4}"
+        data["titles_columns"][3] += f"\n{S4}"
+        data["titles_columns"][4] += f"\n{S1}, {S4}"
+        data["titles_columns"][5] += f"\n{S1}, {S2}, {S4}"
 
     if "Imimic" in data["traits"]:
         for i in range(nrows):
