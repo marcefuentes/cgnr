@@ -43,17 +43,17 @@ def m16(data):
     if data["traits"] == "qBSeenmean" or data["traits"] == "wmean":
         givens = repeat_for_matrix(data["givens"], nrows, ncols)
         givens_control = [
-            [data["givens"], data["givens"], data["givens"], data["givens"]],
-            [data["givens"], data["givens"], data["givens"], data["givens"]],
-            ["0.0", "0.0", "0.0", "0.0"],
-            ["0.0", "0.0", "0.0", "0.0"],
+            [data["givens"] for _ in range(ncols)],
+            [data["givens"] for _ in range(ncols)],
+            ["0.0" for _ in range(ncols)],
+            ["0.0" for _ in range(ncols)],
         ]
     else:
         givens = [
-            ["1.0", "1.0", "1.0", "1.0"],
-            ["1.0", "1.0", "1.0", "1.0"],
-            ["0.5", "0.5", "0.5", "0.5"],
-            ["0.5", "0.5", "0.5", "0.5"],
+            ["1.0" for _ in range(ncols)],
+            ["1.0" for _ in range(ncols)],
+            ["0.5" for _ in range(ncols)],
+            ["0.5" for _ in range(ncols)],
         ]
 
         if data["givens_control"] == "0.0":
@@ -65,7 +65,7 @@ def m16(data):
 
     data["givens"] = givens
     data["givens_control"] = givens_control
-    data["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
+    data["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(nrows)]
     if data["lang"]:
         data["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
         data["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
@@ -78,7 +78,7 @@ def m16(data):
         data["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
 
     if "Imimic" in data["traits"]:
-        for i in range(len(variants)):
+        for i in range(nrows):
             data["traits"][i][0] = None
             data["traits"][i][2] = None
 

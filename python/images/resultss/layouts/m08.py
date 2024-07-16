@@ -15,16 +15,20 @@ def m08(data):
         [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
-    data = default_data(variants, data)
+    nrows = len(variants)
+    ncols = len(variants[0])
 
-    data["givens"] = [
+    givens = [
         ["1.0", "1.0", "1.0"],
         ["1.0", "1.0", "1.0"],
         ["0.5", "0.5", "0.5"],
         ["0.5", "0.5", "0.5"],
     ]
 
+    data = default_data(variants, data)
+
+    data["givens"] = givens
     if data["givens_control"] != "0.0":
-        data["givens_control"] = data["givens"]
+        data["givens_control"] = givens
 
     return data
