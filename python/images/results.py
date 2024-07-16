@@ -23,15 +23,12 @@ from modules.save_image import close_plt
 from resultsm.adjust import adjust
 from resultsm.get_data import get_data
 from resultsm.get_sm import get_sm
-from resultsm.get_static_data import get_static_data
-from resultsm.get_theory_axesimage import get_theory_axesimage
 from resultsm.init_artists import init_artists
 from resultsm.parse_args import parse_args
 from resultsm.update_artists import update_artists
 
 from resultss import layouts
 from resultss.image import image
-from settings.project import project
 
 
 def main(data):
@@ -41,10 +38,7 @@ def main(data):
 
     data = get_layout(data, layouts)
     try:
-        data = get_data(
-            data,
-            *project["output_file_extensions"],
-        )
+        data = get_data(data)
     except ValueError as error:
         print(error)
         return
@@ -66,30 +60,9 @@ def main(data):
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image)
     add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
+
     data["text"] = fig.texts[2]
-
-    if data["layout"] == "curves":
-        x, y = get_static_data(
-            image["n_x_values"],
-            data["traits"],
-            data["givens"],
-            data["alphas"],
-            data["rhos"],
-        )
-    elif data["histogram"]:
-        x = np.arange(project["bins"])
-        y = np.zeros(
-            (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
-        )
-    elif data["layout"] == "theory":
-        x, y = get_theory_axesimage(
-            data["traits"], data["givens"], data["alphas"], data["rhos"]
-        )
-    else:
-        x = None
-        y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
-
-    data["artists"] = init_artists(image["axs"], x, y, data["ax_type"])
+    data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = os.path.basename(__file__).split(".")[0]
     data["function"] = update_artists
@@ -115,7 +88,7 @@ def main(data):
         image["lim_x"] = [0, 1]
         image["lim_y"] = [0, 1]
     elif data["histogram"]:
-        image["lim_x"] = [-2, project["bins"] + 1]
+        image["lim_x"] = [-2, len(data["x"]) + 1]
         image["lim_y"] = [0, 0.25]
     else:
         image["lim_x"] = [None, None]

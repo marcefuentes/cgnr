@@ -1,10 +1,15 @@
 """ This module reads the csv files in the given directory and returns a concatenated dataframe. """
 
 import numpy as np
+
 from resultsm.get_df import get_df
+from resultsm.get_static_data import get_static_data
+from resultsm.get_theory_axesimage import get_theory_axesimage
+
+from settings.project import project
 
 
-def get_data(data, csv, frq):
+def get_data(data):
     """Get the df args for the given trait_set."""
 
     nrows = len(data["variants"])
@@ -13,6 +18,7 @@ def get_data(data, csv, frq):
     data["dfs"] = np.empty((nrows, ncols), dtype=object)
     data["dfs_control"] = np.empty((nrows, ncols), dtype=object)
 
+    csv, frq = project["output_file_extensions"]
     params = {
         "path": "",
         "filetype": csv,
@@ -59,5 +65,23 @@ def get_data(data, csv, frq):
     data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     data["logess"] = np.sort(df["logES"].unique())
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
+    if data["layout"] == "curves":
+        data["x"], data["y"] = get_static_data(
+            data["traits"],
+            data["givens"],
+            data["alphas"],
+            data["rhos"],
+        )
+    elif data["histogram"]:
+        data["x"] = np.arange(project["bins"])
+        data["y"] = np.zeros((nrows, ncols, len(data["alphas"]), len(data["rhos"]), project["bins"]))
+    elif data["layout"] == "theory":
+        data["x"], data["y"] = get_theory_axesimage(
+            data["traits"], data["givens"], data["alphas"], data["rhos"]
+        )
+    else:
+        data["x"] = None
+        data["y"] = np.zeros((nrows, ncols, 1, 1, len(data["alphas"]), len(data["rhos"])))
+
 
     return data

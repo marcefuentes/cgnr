@@ -2,12 +2,13 @@
 
 import numpy as np
 from modules.theory import calculate_trps, qbeq
+from settings.image import image
 
 
-def get_static_data(num, traits, givens, alphas, rhos):
+def get_static_data(traits, givens, alphas, rhos):
     """Calculates fitness curves."""
 
-    x = np.linspace(0.001, 0.999, num=num)
+    x = np.linspace(0.001, 0.999, num=image["n_x_values"])
     y = np.zeros((len(givens), len(givens[0]), len(alphas), len(rhos), len(x)))
 
     for i, j, k, m in np.ndindex(y.shape[:-1]):
