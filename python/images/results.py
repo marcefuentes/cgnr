@@ -127,7 +127,7 @@ def main(options):
         axes_args["lim_y"] = [0, 0.25]
 
     format_axes(axes_args, image)
-    if options["layout"] == "curves" or options["histogram"]:
+    if options["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines"])
         ticks_line2d(axes_args, image["ticks"])
     else:
@@ -143,7 +143,7 @@ def main(options):
         axes_args["ticklabels_y"],
     )
 
-    if options["layout"] == "curves" or options["histogram"]:
+    if options["ax_type"] == "Line2D":
         add_letters_line2d(
             axs,
             (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
