@@ -26,7 +26,6 @@ def format_fig(fig, distances, image):
     # Size
 
     fig.set_size_inches(distances["width"], distances["height"])
-    print(f"Figure size: {distances['width']} x {distances['height']} inches")
 
     # Sup labels
 
