@@ -5,7 +5,6 @@
 import os
 import time
 
-import numpy as np
 from matplotlib import colormaps
 
 from modules.add_colorbar import add_colorbar
