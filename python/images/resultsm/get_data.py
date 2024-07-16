@@ -74,14 +74,17 @@ def get_data(data):
         )
     elif data["histogram"]:
         data["x"] = np.arange(project["bins"])
-        data["y"] = np.zeros((nrows, ncols, len(data["alphas"]), len(data["rhos"]), project["bins"]))
+        data["y"] = np.zeros(
+            (nrows, ncols, len(data["alphas"]), len(data["rhos"]), project["bins"])
+        )
     elif data["layout"] == "theory":
         data["x"], data["y"] = get_theory_axesimage(
             data["traits"], data["givens"], data["alphas"], data["rhos"]
         )
     else:
         data["x"] = None
-        data["y"] = np.zeros((nrows, ncols, 1, 1, len(data["alphas"]), len(data["rhos"])))
-
+        data["y"] = np.zeros(
+            (nrows, ncols, 1, 1, len(data["alphas"]), len(data["rhos"]))
+        )
 
     return data
