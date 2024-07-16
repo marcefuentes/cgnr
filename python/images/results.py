@@ -36,19 +36,15 @@ def main(data):
     start_time = time.perf_counter()
 
     data = get_layout(data, layouts)
-    try:
-        data = get_data(data)
-    except ValueError as error:
-        print(error)
-        return
+    data = get_data(data)
 
     mr = len(data["alphas"])
     mc = len(data["rhos"])
 
     fig_layout = {
-        "nc": mc if data["ax_type"] == "Line2" else 1,
+        "nc": mc if data["ax_type"] == "Line2D" else 1,
         "ncols": len(data["variants"][0]),
-        "nr": mr if data["ax_type"] == "Line2" else 1,
+        "nr": mr if data["ax_type"] == "Line2D" else 1,
         "nrows": len(data["variants"]),
     }
 
@@ -95,11 +91,11 @@ def main(data):
 
     format_axes(image)
     if data["ax_type"] == "Line2D":
-        format_artists(data["artists"], image["lines"])
+        format_artists(data["artists"], image["lines2d"])
         ticks_line2d(image, image["ticks"])
         add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
     else:
-        format_artists(data["artists"], image["show"])
+        format_artists(data["artists"], image["axesimage"])
         ticks_axesimage(image, image["ticks"])
         adjust(data, fig_distances, image)
         add_letters_axesimage(image["axs"], image["letter_position"], image["letters"])
