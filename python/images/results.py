@@ -125,24 +125,12 @@ def main(data):
     if data["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines"])
         ticks_line2d(image, image["ticks"])
-        add_letters_line2d(
-            image["axs"],
-            image["letter_position"],
-            image["letters"],
-        )
+        add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
     else:
         format_artists(data["artists"], image["show"])
         ticks_axesimage(image, image["ticks"])
-        adjust(
-            data,
-            fig_distances,
-            image,
-        )
-        add_letters_axesimage(
-            image["axs"],
-            image["letter_position"],
-            image["letters"],
-        )
+        adjust(data, fig_distances, image)
+        add_letters_axesimage(image["axs"], image["letter_position"], image["letters"])
 
     save_file(fig, data)
     close_plt(fig)
