@@ -3,7 +3,7 @@
 from modules.add_ticks import add_ticklabels_ax
 
 
-def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
+def adjust(axs, options, distances, image):
     """Adjust plots"""
 
     if options["layout"] in ("m03", "m05", "m06", "m10", "m16r"):
@@ -31,9 +31,9 @@ def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
         ax.set_title(options["titles_columns"][0], fontsize=32, pad=214)
 
         if nrows == 2:
-            add_ticklabels_ax(ax, ticklabels_y, ticklabels_x)
+            add_ticklabels_ax(ax, image["ticklabels_y"], image["ticklabels_x"])
         else:
-            add_ticklabels_ax(ax, ticklabels_y, ["", "", ""])
+            add_ticklabels_ax(ax, image["ticklabels_y"], ["", "", ""])
 
             axs[2, 0, 0, 0].remove()
             ax = axs[3, 0, 0, 0]
@@ -44,7 +44,7 @@ def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
             ) / distances["height"]
             new_position[1] = bottom_ax
             ax.set_position(new_position)
-            add_ticklabels_ax(ax, ticklabels_y, ticklabels_x)
+            add_ticklabels_ax(ax, image["ticklabels_y"], image["ticklabels_x"])
 
             if ncols == 5:
 
@@ -58,7 +58,7 @@ def adjust(axs, options, distances, image, ticklabels_x, ticklabels_y):
                 ax.set_axes_locator(None)
                 new_position[0] = left_1
                 ax.set_position(new_position)
-                add_ticklabels_ax(ax, ["", "", ""], ticklabels_x)
+                add_ticklabels_ax(ax, ["", "", ""], image["ticklabels_x"])
 
                 axs[1, 1, 0, 0].remove()
                 ax = axs[0, 1, 0, 0]

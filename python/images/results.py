@@ -105,15 +105,15 @@ def main(options):
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
-            f"{data["rhos"][0]:.0f}",
-            f"{data["rhos"][mc // 2]:.0f}",
-            f"{data["rhos"][-1]:.2f}",
-        ]
+        f"{data["rhos"][0]:.0f}",
+        f"{data["rhos"][mc // 2]:.0f}",
+        f"{data["rhos"][-1]:.2f}",
+    ]
     image["ticklabels_y"] = [
-            f"{data["alphas"][0]:.1f}",
-            f"{data["alphas"][mr // 2]:.1f}",
-            f"{data["alphas"][-1]:.1f}",
-        ]
+        f"{data["alphas"][0]:.1f}",
+        f"{data["alphas"][mr // 2]:.1f}",
+        f"{data["alphas"][-1]:.1f}",
+    ]
     image["titles_columns"] = options["titles_columns"]
     image["titles_rows"] = options["titles_rows"]
 
@@ -137,8 +137,6 @@ def main(options):
         options,
         fig_distances,
         image,
-        image["ticklabels_x"],
-        image["ticklabels_y"],
     )
 
     if options["ax_type"] == "Line2D":

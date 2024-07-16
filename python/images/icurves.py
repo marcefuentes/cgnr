@@ -77,15 +77,15 @@ def main(options):
     image["nc"] = fig_layout["nc"]
     image["nr"] = fig_layout["nr"]
     image["ticklabels_x"] = [
-            f"{data["rhos"][0]:.0f}",
-            f"{data["rhos"][fig_layout["nc"] // 2]:.0f}",
-            f"{data["rhos"][-1]:.2f}",
-        ]
+        f"{data["rhos"][0]:.0f}",
+        f"{data["rhos"][fig_layout["nc"] // 2]:.0f}",
+        f"{data["rhos"][-1]:.2f}",
+    ]
     image["ticklabels_y"] = [
-            f"{data["alphas"][0]:.1f}",
-            f"{data["alphas"][fig_layout["nr"] // 2]:.1f}",
-            f"{data["alphas"][-1]:.1f}",
-        ]
+        f"{data["alphas"][0]:.1f}",
+        f"{data["alphas"][fig_layout["nr"] // 2]:.1f}",
+        f"{data["alphas"][-1]:.1f}",
+    ]
     image["titles_columns"] = [""] * fig_layout["ncols"]
     image["titles_rows"] = [""] * fig_layout["nrows"]
 
@@ -112,8 +112,18 @@ def main(options):
         )
         image["ticklabels_x"] = [0.0, 0.5, 1.0]
         image["ticklabels_y"] = [0.0, 0.5, 1.0]
-        ticks_ax_line2d(axs[0, 0, 0, 0], image["ticklabels_x"], image["ticklabels_y"], image["ticks"])
-        ticks_ax_line2d(axs[0, 1, 0, 0], image["ticklabels_x"], image["ticklabels_y"], image["ticks"])
+        ticks_ax_line2d(
+            axs[0, 0, 0, 0],
+            image["ticklabels_y"],
+            image["ticklabels_x"],
+            image["ticks"],
+        )
+        ticks_ax_line2d(
+            axs[0, 1, 0, 0],
+            image["ticklabels_y"],
+            image["ticklabels_x"],
+            image["ticks"],
+        )
     else:
         ticks_line2d(image, image["ticks"])
 
