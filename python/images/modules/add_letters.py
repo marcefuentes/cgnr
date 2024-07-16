@@ -1,7 +1,7 @@
 """ Add letters. """
 
 
-def add_letters_imshow(axs, position, params):
+def add_letters_axesimage(axs, position, params):
     """Add letters."""
 
     i = 0

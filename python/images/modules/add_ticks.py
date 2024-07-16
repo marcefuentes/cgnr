@@ -2,13 +2,13 @@
 
 
 def add_ticklabels_ax(ax, ticklabels_y, ticklabels_x):
-    """Add tick labels for a single line2d plot."""
+    """Add tick labels for a single Line2D plot."""
 
     ax.set_xticklabels(ticklabels_x)
     ax.set_yticklabels(ticklabels_y)
 
 
-def add_ticklabels_imshow(axs, ticklabels_y, ticklabels_x):
+def add_ticklabels_axesimage(axs, ticklabels_y, ticklabels_x):
     """Add tick labels for (nrows x ncols)."""
 
     for ax in axs[:, 0, 0, 0]:
@@ -33,7 +33,7 @@ def add_ticklabels_line2d(axs, ticklabels_y, ticklabels_x):
 
 
 def add_ticks_ax_line2d(ax, format_params):
-    """Set ticks for a single line2d plot."""
+    """Set ticks for a single Line2D plot."""
 
     x_min, x_max = ax.get_xlim()
     y_min, y_max = ax.get_ylim()
@@ -48,7 +48,7 @@ def add_ticks_ax_line2d(ax, format_params):
     ax.tick_params(axis="both", **format_params)
 
 
-def add_ticks_imshow(axs, nr, nc, format_params):
+def add_ticks_axesimage(axs, nr, nc, format_params):
     """Set ticks for (nrows x ncols) matrix."""
 
     r_min, r_max = 0, nr - 1
@@ -93,23 +93,23 @@ def add_ticks_line2d(axs, format_params):
 
 
 def ticks_ax_line2d(ax, axes_args, format_params):
-    """Format ticks for a single line2d plot."""
+    """Format ticks for a single Line2D plot."""
 
     add_ticks_ax_line2d(ax, format_params)
     add_ticklabels_ax(ax, axes_args["ticklabels_y"], axes_args["ticklabels_x"])
 
 
-def ticks_imshow(axes_args, format_params):
-    """Format ticks for imshow plots."""
+def ticks_axesimage(axes_args, format_params):
+    """Format ticks for AxesImage plots."""
 
-    add_ticks_imshow(axes_args["axs"], axes_args["nr"], axes_args["nc"], format_params)
-    add_ticklabels_imshow(
+    add_ticks_axesimage(axes_args["axs"], axes_args["nr"], axes_args["nc"], format_params)
+    add_ticklabels_axesimage(
         axes_args["axs"], axes_args["ticklabels_y"], axes_args["ticklabels_x"]
     )
 
 
 def ticks_line2d(axes_args, format_params):
-    """Format ticks for line2d plots."""
+    """Format ticks for Line2D plots."""
 
     add_ticks_line2d(axes_args["axs"], format_params)
     add_ticklabels_line2d(

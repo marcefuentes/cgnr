@@ -9,8 +9,8 @@ import numpy as np
 from matplotlib import colormaps
 
 from modules.add_colorbar import add_colorbar
-from modules.add_letters import add_letters_imshow, add_letters_line2d
-from modules.add_ticks import ticks_imshow, ticks_line2d
+from modules.add_letters import add_letters_axesimage, add_letters_line2d
+from modules.add_ticks import ticks_axesimage, ticks_line2d
 from modules.create_fig import create_fig
 from modules.fix_positions import create_divider
 from modules.format_artists import format_artists
@@ -24,7 +24,7 @@ from resultsm.adjust import adjust
 from resultsm.get_data import get_data
 from resultsm.get_sm import get_sm
 from resultsm.get_static_data import get_static_data
-from resultsm.get_theory_imshow import get_theory_imshow
+from resultsm.get_theory_axesimage import get_theory_axesimage
 from resultsm.init_artists import init_artists
 from resultsm.parse_args import parse_args
 from resultsm.update_artists import update_artists
@@ -86,7 +86,7 @@ def main(options):
             (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
         )
     elif options["layout"] == "theory":
-        x, y = get_theory_imshow(
+        x, y = get_theory_axesimage(
             options["traits"], options["givens"], data["alphas"], data["rhos"]
         )
     else:
@@ -132,7 +132,7 @@ def main(options):
         ticks_line2d(axes_args, image["ticks"])
     else:
         format_artists(data["artists"], image["show"])
-        ticks_imshow(axes_args, image["ticks"])
+        ticks_axesimage(axes_args, image["ticks"])
 
     adjust(
         axs,
@@ -150,7 +150,7 @@ def main(options):
             image["letters"],
         )
     else:
-        add_letters_imshow(
+        add_letters_axesimage(
             axs,
             (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
             image["letters"],
