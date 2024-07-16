@@ -20,9 +20,7 @@ def update_artists(t, data, options):
                     data["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
                 if options["ax_type"] == "Line2D":
-                    artists = update_artists_line2d(
-                        artists, zmatrix, data["cmap"]
-                    )
+                    artists = update_artists_line2d(artists, zmatrix, data["cmap"])
                     if options["histogram"]:
                         artists = update_artists_histogram(t, artists, data, i, j)
                 else:
