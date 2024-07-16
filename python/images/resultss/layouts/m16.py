@@ -40,32 +40,24 @@ def m16(data):
     nrows = len(variants)
     ncols = len(variants[0])
 
-    if data["traits"] == "qBSeenmean" or data["traits"] == "wmean":
-        givens = repeat_for_matrix(data["givens"], nrows, ncols)
-        givens_control = [
-            [data["givens"] for _ in range(ncols)],
-            [data["givens"] for _ in range(ncols)],
-            ["0.0" for _ in range(ncols)],
-            ["0.0" for _ in range(ncols)],
-        ]
-    else:
-        givens = [
-            ["1.0" for _ in range(ncols)],
-            ["1.0" for _ in range(ncols)],
-            ["0.5" for _ in range(ncols)],
-            ["0.5" for _ in range(ncols)],
-        ]
+    givens = [
+        ["1.0" for _ in range(ncols)],
+        ["1.0" for _ in range(ncols)],
+        ["0.5" for _ in range(ncols)],
+        ["0.5" for _ in range(ncols)],
+    ]
 
-        if data["givens_control"] == "0.0":
-            givens_control = repeat_for_matrix("0.0", nrows, ncols)
-        else:
-            givens_control = givens
+    if data["givens_control"] == "0.0":
+        givens_control = repeat_for_matrix("0.0", nrows, ncols)
+    else:
+        givens_control = givens
 
     data = default_data(variants, data)
 
     data["givens"] = givens
     data["givens_control"] = givens_control
     data["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(nrows)]
+
     if data["lang"]:
         data["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
         data["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
