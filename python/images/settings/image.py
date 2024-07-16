@@ -36,7 +36,7 @@ image = {
         "length": 1.0 * PLOT_SIZE,
         "width": LINE_WIDTH * PLOT_SIZE,
     },
-    "titles_columns": {
+    "titles_columns_params": {
         "fontsize": 8 * PLOT_SIZE,
         "pad": 11 * PLOT_SIZE,
     },
@@ -44,7 +44,7 @@ image = {
         "fontsize": 8 * PLOT_SIZE,
         "weight": "bold",
     },
-    "titles_rows": {
+    "titles_rows_params": {
         "fontsize": 8 * PLOT_SIZE,
         "ha": "left",
         "textcoords": "offset points",

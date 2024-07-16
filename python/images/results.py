@@ -98,49 +98,47 @@ def main(options):
     data["file_name"] = os.path.basename(__file__).split(".")[0]
     data["function"] = update_artists
 
-    axes_args = {
-        "axs": axs,
-        "divider": create_divider(fig, fig_layout, fig_distances, image),
-        "lim_x": [None, None],
-        "lim_y": [None, None],
-        "nc": mc,
-        "nr": mr,
-        "ticklabels_x": [
+    image["axs"] = axs
+    image["divider"] = create_divider(fig, fig_layout, fig_distances, image)
+    image["lim_x"] = [None, None]
+    image["lim_y"] = [None, None]
+    image["nc"] = mc
+    image["nr"] = mr
+    image["ticklabels_x"] = [
             f"{data["rhos"][0]:.0f}",
             f"{data["rhos"][mc // 2]:.0f}",
             f"{data["rhos"][-1]:.2f}",
-        ],
-        "ticklabels_y": [
+        ]
+    image["ticklabels_y"] = [
             f"{data["alphas"][0]:.1f}",
             f"{data["alphas"][mr // 2]:.1f}",
             f"{data["alphas"][-1]:.1f}",
-        ],
-        "titles_columns": options["titles_columns"],
-        "titles_rows": options["titles_rows"],
-    }
+        ]
+    image["titles_columns"] = options["titles_columns"]
+    image["titles_rows"] = options["titles_rows"]
 
     if options["layout"] == "curves":
-        axes_args["lim_x"] = [0, 1]
-        axes_args["lim_y"] = [0, 1]
+        image["lim_x"] = [0, 1]
+        image["lim_y"] = [0, 1]
     if options["histogram"]:
-        axes_args["lim_x"] = [-2, project["bins"] + 1]
-        axes_args["lim_y"] = [0, 0.25]
+        image["lim_x"] = [-2, project["bins"] + 1]
+        image["lim_y"] = [0, 0.25]
 
-    format_axes(axes_args, image)
+    format_axes(image)
     if options["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines"])
-        ticks_line2d(axes_args, image["ticks"])
+        ticks_line2d(image, image["ticks"])
     else:
         format_artists(data["artists"], image["show"])
-        ticks_axesimage(axes_args, image["ticks"])
+        ticks_axesimage(image, image["ticks"])
 
     adjust(
         axs,
         options,
         fig_distances,
         image,
-        axes_args["ticklabels_x"],
-        axes_args["ticklabels_y"],
+        image["ticklabels_x"],
+        image["ticklabels_y"],
     )
 
     if options["ax_type"] == "Line2D":

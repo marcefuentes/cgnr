@@ -70,31 +70,29 @@ def main(options):
         data["landscapes"],
     ) = init_artists(axs, data["x_values"], y, ic)
 
-    axes_args = {
-        "axs": axs,
-        "divider": create_divider(fig, fig_layout, fig_distances, image),
-        "lim_x": [0, 1],
-        "lim_y": [0, 1],
-        "nc": fig_layout["nc"],
-        "nr": fig_layout["nr"],
-        "ticklabels_x": [
+    image["axs"] = axs
+    image["divider"] = create_divider(fig, fig_layout, fig_distances, image)
+    image["lim_x"] = [0, 1]
+    image["lim_y"] = [0, 1]
+    image["nc"] = fig_layout["nc"]
+    image["nr"] = fig_layout["nr"]
+    image["ticklabels_x"] = [
             f"{data["rhos"][0]:.0f}",
             f"{data["rhos"][fig_layout["nc"] // 2]:.0f}",
             f"{data["rhos"][-1]:.2f}",
-        ],
-        "ticklabels_y": [
+        ]
+    image["ticklabels_y"] = [
             f"{data["alphas"][0]:.1f}",
             f"{data["alphas"][fig_layout["nr"] // 2]:.1f}",
             f"{data["alphas"][-1]:.1f}",
-        ],
-        "titles_columns": [""] * fig_layout["ncols"],
-        "titles_rows": [""] * fig_layout["nrows"],
-    }
+        ]
+    image["titles_columns"] = [""] * fig_layout["ncols"]
+    image["titles_rows"] = [""] * fig_layout["nrows"]
 
-    format_axes(axes_args, image)
+    format_axes(image)
     add_letters_line2d(
         axs,
-        (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
+        (0, 1.0 + image["padding_letter"] * image["nr"]),
         image["letters"],
     )
     if options["layout"] == "m01":
@@ -102,22 +100,22 @@ def main(options):
             axs[0, 0, 0, 0],
             image["label_x_0"],
             image["label_y_0"],
-            image["titles_columns"]["fontsize"],
+            image["titles_columns_params"]["fontsize"],
             image["labelpad"],
         )
         add_ax_labels(
             axs[0, 1, 0, 0],
             image["label_x_1"],
             image["label_y_1"],
-            image["titles_columns"]["fontsize"],
+            image["titles_columns_params"]["fontsize"],
             image["labelpad"],
         )
-        axes_args["ticklabels_x"] = [0.0, 0.5, 1.0]
-        axes_args["ticklabels_y"] = [0.0, 0.5, 1.0]
-        ticks_ax_line2d(axs[0, 0, 0, 0], axes_args, image["ticks"])
-        ticks_ax_line2d(axs[0, 1, 0, 0], axes_args, image["ticks"])
+        image["ticklabels_x"] = [0.0, 0.5, 1.0]
+        image["ticklabels_y"] = [0.0, 0.5, 1.0]
+        ticks_ax_line2d(axs[0, 0, 0, 0], image["ticklabels_x"], image["ticklabels_y"], image["ticks"])
+        ticks_ax_line2d(axs[0, 1, 0, 0], image["ticklabels_x"], image["ticklabels_y"], image["ticks"])
     else:
-        ticks_line2d(axes_args, image["ticks"])
+        ticks_line2d(image, image["ticks"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
