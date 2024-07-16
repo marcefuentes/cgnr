@@ -74,7 +74,7 @@ def parse_args():
         args.traits_control = args.traits
 
     if args.givens_control == "none":
-        args.givens_control = args.given
+        args.givens_control = args.givens
 
     if args.layout == "curves":
         args.ax_type = "PolyCollection"

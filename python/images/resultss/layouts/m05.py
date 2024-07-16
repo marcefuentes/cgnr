@@ -1,7 +1,6 @@
 """5 plots."""
 
-from resultss.layouts.default_options import default_options
-from resultss.layouts.m10 import m10
+from .m10 import m10
 
 
 def m05(options):

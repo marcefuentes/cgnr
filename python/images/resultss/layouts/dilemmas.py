@@ -1,7 +1,7 @@
 """Social dilemmas."""
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
-from resultss.layouts.default_options import default_options
+from .repeat_for_matrix import repeat_for_matrix
+from .default_options import default_options
 
 
 def dilemmas(options):
@@ -14,14 +14,12 @@ def dilemmas(options):
 
     variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols)
 
-    traits = [["qBSeenmean", "wmean"] for _ in range(nrows)]
-
     options = default_options(variants, options)
 
     options["givens"] = givens
     options["givens_control"] = repeat_for_matrix("0.0", nrows, ncols)
     options["titles_columns"] = ["Production of $\\it{B}$", "Fitness"]
-    options["traits"] = traits
-    options["traits_control"] = traits
+    options["traits"] = [["qBSeenmean", "wmean"] for _ in range(nrows)]
+    options["traits_control"] = options["traits"]
 
     return options

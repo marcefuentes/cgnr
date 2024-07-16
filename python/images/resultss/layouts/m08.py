@@ -1,6 +1,6 @@
 """8 plots. """
 
-from resultss.layouts.default_options import default_options
+from .default_options import default_options
 
 
 def m08(options):

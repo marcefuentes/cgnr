@@ -1,5 +1,7 @@
 """Single plot."""
 
+from .default_options import default_options
+
 
 def m01(options):
     """Single plot."""

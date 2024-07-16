@@ -1,7 +1,7 @@
 """Theoretical curves for partner choice and reciprocity."""
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
-from resultss.layouts.default_options import default_options
+from .repeat_for_matrix import repeat_for_matrix
+from .default_options import default_options
 
 
 def curves(options):

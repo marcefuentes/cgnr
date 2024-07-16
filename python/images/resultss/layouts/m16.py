@@ -1,7 +1,7 @@
 """16 plots."""
 
-from resultss.layouts.default_options import default_options
-from resultss.layouts.ss import S1, S2, S3, S4, S5
+from .default_options import default_options
+from .ss import S1, S2, S3, S4, S5
 
 
 def m16(options):

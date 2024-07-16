@@ -1,6 +1,6 @@
 """3 plots."""
 
-from resultss.layouts.default_options import default_options
+from .default_options import default_options
 
 
 def m04(options):

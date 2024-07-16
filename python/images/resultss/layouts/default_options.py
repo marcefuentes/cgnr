@@ -1,6 +1,6 @@
 """Default options."""
 
-from resultsm.repeat_for_matrix import repeat_for_matrix
+from .repeat_for_matrix import repeat_for_matrix
 
 
 def default_options(variants, options):
@@ -11,7 +11,9 @@ def default_options(variants, options):
 
     titles = []
     for variant in variants[0]:
-        if "noshuffle" in variant:
+        if not variant:
+            titles.append("")
+        elif "noshuffle" in variant:
             titles.append("No shuffling")
         else:
             titles.append("Shuffling")

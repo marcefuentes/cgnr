@@ -1,6 +1,6 @@
 """6 plots."""
 
-from resultss.layouts.m08 import m08
+from .m08 import m08
 
 
 def m06(options):
