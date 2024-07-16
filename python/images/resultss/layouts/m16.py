@@ -77,7 +77,6 @@ def m16(data):
         data["titles_columns"][2] += f"\n{S1}, {S4}"
         data["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
 
-
     if "Imimic" in data["traits"]:
         for i in range(len(variants)):
             data["traits"][i][0] = None

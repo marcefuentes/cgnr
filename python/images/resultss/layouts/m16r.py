@@ -45,8 +45,20 @@ def m16r(data):
     if data["traits"] == "qBSeenmean" or data["traits"] == "wmean":
         givens = repeat_for_matrix(data["givens"], nrows, ncols)
         givens_control = [
-            [data["givens"], data["givens"], data["givens"], data["givens"], data["givens"]],
-            [data["givens"], data["givens"], data["givens"], data["givens"], data["givens"]],
+            [
+                data["givens"],
+                data["givens"],
+                data["givens"],
+                data["givens"],
+                data["givens"],
+            ],
+            [
+                data["givens"],
+                data["givens"],
+                data["givens"],
+                data["givens"],
+                data["givens"],
+            ],
             ["0.0", "0.0", "0.0", "0.0", "0.0"],
             ["0.0", "0.0", "0.0", "0.0", "0.0"],
         ]
