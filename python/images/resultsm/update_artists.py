@@ -16,12 +16,10 @@ def update_artists(t, update_args, options, data):
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
                 print(f"Insufficient data for plot [{i}, {j}].")
-                if (
-                    options["layout"] != "curves" or not options["histogram"]
-                ) and options["layout"] != "theory":
+                if options["ax_type"] == "AxesImage" and options["layout"] != "theory":
                     update_args["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
-                if options["layout"] == "curves" or options["histogram"]:
+                if options["ax_type"] == "Line2D":
                     artists = update_artists_line2d(
                         artists, zmatrix, update_args["cmap"]
                     )
