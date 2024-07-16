@@ -60,17 +60,14 @@ def main(options):
     add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
     data["x_values"], y, ic = get_static_data(image["n_x_values"], data)
-    update_args = {
-        "cmap": colormaps.get_cmap(image["color_map"]),
-        "file_name": os.path.basename(__file__).split(".")[0],
-        "function": update_artists,
-    }
-
+    data["cmap"] = colormaps.get_cmap(image["color_map"])
+    data["file_name"] = os.path.basename(__file__).split(".")[0]
+    data["function"] = update_artists
     (
-        update_args["budgets"],
-        update_args["icurves"],
-        update_args["icurves_grey"],
-        update_args["landscapes"],
+        data["budgets"],
+        data["icurves"],
+        data["icurves_grey"],
+        data["landscapes"],
     ) = init_artists(axs, data["x_values"], y, ic)
 
     axes_args = {
@@ -124,9 +121,9 @@ def main(options):
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
-        format_artists(update_args[artist], image[artist])
+        format_artists(data[artist], image[artist])
 
-    save_file(fig, update_args, options, data)
+    save_file(fig, data, options)
 
     # pylint: disable=duplicate-code
     close_plt(fig)

@@ -6,7 +6,7 @@ import numpy as np
 from modules.theory import fitness, indifference, qbeq
 
 
-def update_artists(given_movie, update_args, options, data):
+def update_artists(given_movie, data, options):
     """Update data in artists."""
 
     if options["movie"]:
@@ -30,26 +30,26 @@ def update_artists(given_movie, update_args, options, data):
                     rho,
                 )
                 points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
-                update_args["landscapes"][i, 0, j, k].set(
+                data["landscapes"][i, 0, j, k].set(
                     array=y,
-                    cmap=plt.get_cmap(update_args["cmap"]),
+                    cmap=plt.get_cmap(data["cmap"]),
                     norm=plt.Normalize(-1, 1),
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
 
                 y = (budget_own + qb_partner * given) * options["budget_line"]
-                update_args["budgets"][i, 0, j, k].set(ydata=y)
+                data["budgets"][i, 0, j, k].set(ydata=y)
 
                 y = fitness(qb_partner, qb_partner, given, alpha, rho)
-                update_args["icurves"][i, 0, j, k].set(
+                data["icurves"][i, 0, j, k].set(
                     ydata=indifference(data["x_values"], y, alpha, rho),
-                    color=plt.get_cmap(update_args["cmap"])(0.5 + 0.5 * y),
+                    color=plt.get_cmap(data["cmap"])(0.5 + 0.5 * y),
                 )
 
     return np.concatenate(
         [
-            update_args["budgets"].flatten(),
-            update_args["icurves"].flatten(),
-            update_args["landscapes"].flatten(),
+            data["budgets"].flatten(),
+            data["icurves"].flatten(),
+            data["landscapes"].flatten(),
         ]
     )

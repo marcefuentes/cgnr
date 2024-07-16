@@ -93,12 +93,10 @@ def main(options):
         x = None
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 
-    update_args = {
-        "artists": init_artists(axs, x, y, options["ax_type"]),
-        "cmap": colormaps.get_cmap(image["color_map"]),
-        "file_name": os.path.basename(__file__).split(".")[0],
-        "function": update_artists,
-    }
+    data["artists"] = init_artists(axs, x, y, options["ax_type"])
+    data["cmap"] = colormaps.get_cmap(image["color_map"])
+    data["file_name"] = os.path.basename(__file__).split(".")[0]
+    data["function"] = update_artists
 
     axes_args = {
         "axs": axs,
@@ -130,10 +128,10 @@ def main(options):
 
     format_axes(axes_args, image)
     if options["layout"] == "curves" or options["histogram"]:
-        format_artists(update_args["artists"], image["lines"])
+        format_artists(data["artists"], image["lines"])
         ticks_line2d(axes_args, image["ticks"])
     else:
-        format_artists(update_args["artists"], image["show"])
+        format_artists(data["artists"], image["show"])
         ticks_imshow(axes_args, image["ticks"])
 
     adjust(
@@ -157,7 +155,7 @@ def main(options):
             (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
             image["letters"],
         )
-    save_file(fig, update_args, options, data)
+    save_file(fig, data, options)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
