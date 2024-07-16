@@ -33,5 +33,5 @@ def theory(options):
     options["mechanisms_control"] = options["mechanisms"]
     options["titles_columns"] = titles
     options["traits"] = traits
-        
+
     return options
