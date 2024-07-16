@@ -1,10 +1,10 @@
 """Social dilemmas."""
 
 from .repeat_for_matrix import repeat_for_matrix
-from .default_options import default_options
+from .default_data import default_data
 
 
-def dilemmas(options):
+def dilemmas(data):
     """Magnitude of social dilemmas."""
 
     givens = [["1.0", "1.0"], ["0.5", "0.5"]]
@@ -14,12 +14,12 @@ def dilemmas(options):
 
     variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols)
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    options["givens"] = givens
-    options["givens_control"] = repeat_for_matrix("0.0", nrows, ncols)
-    options["titles_columns"] = ["Production of $\\it{B}$", "Fitness"]
-    options["traits"] = [["qBSeenmean", "wmean"] for _ in range(nrows)]
-    options["traits_control"] = options["traits"]
+    data["givens"] = givens
+    data["givens_control"] = repeat_for_matrix("0.0", nrows, ncols)
+    data["titles_columns"] = ["Production of $\\it{B}$", "Fitness"]
+    data["traits"] = [["qBSeenmean", "wmean"] for _ in range(nrows)]
+    data["traits_control"] = data["traits"]
 
-    return options
+    return data

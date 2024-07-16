@@ -6,10 +6,10 @@ import numpy as np
 from modules.theory import fitness, indifference, qbeq
 
 
-def update_artists(given_movie, data, options):
+def update_artists(given_movie, data):
     """Update data in artists."""
 
-    if options["movie"]:
+    if data["movie"]:
         data["text"].set_text(f"{given_movie:.2f}")
         givens = [given_movie]
     else:
@@ -37,7 +37,7 @@ def update_artists(given_movie, data, options):
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
 
-                y = (budget_own + qb_partner * given) * options["budget_line"]
+                y = (budget_own + qb_partner * given) * data["budget_line"]
                 data["budgets"][i, 0, j, k].set(ydata=y)
 
                 y = fitness(qb_partner, qb_partner, given, alpha, rho)

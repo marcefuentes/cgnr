@@ -4,10 +4,10 @@ import re
 from resultsm.get_zmatrix import get_zmatrix
 
 
-def update_artists(t, data, options):
+def update_artists(t, data):
     """Update artist data at time t."""
 
-    if options["movie"]:
+    if data["movie"]:
         data["text"].set_text(t)
 
     for i, row in enumerate(data["artists"]):
@@ -16,12 +16,12 @@ def update_artists(t, data, options):
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
                 print(f"Insufficient data for plot [{i}, {j}].")
-                if options["ax_type"] == "AxesImage" and options["layout"] != "theory":
+                if data["ax_type"] == "AxesImage" and data["layout"] != "theory":
                     data["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
-                if options["ax_type"] == "Line2D":
+                if data["ax_type"] == "Line2D":
                     artists = update_artists_line2d(artists, zmatrix, data["cmap"])
-                    if options["histogram"]:
+                    if data["histogram"]:
                         artists = update_artists_histogram(t, artists, data, i, j)
                 else:
                     artists[0, 0].set_array(zmatrix)

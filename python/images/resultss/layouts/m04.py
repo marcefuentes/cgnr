@@ -1,18 +1,18 @@
 """3 plots."""
 
-from .default_options import default_options
+from .default_data import default_data
 
 
-def m04(options):
+def m04(data):
     """4 plots."""
 
-    lang = "lang" if options["lang"] else "nolang"
+    lang = "lang" if data["lang"] else "nolang"
 
     variants = [
         [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
         [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    return options
+    return data

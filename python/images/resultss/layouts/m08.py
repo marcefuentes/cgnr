@@ -1,12 +1,12 @@
 """8 plots. """
 
-from .default_options import default_options
+from .default_data import default_data
 
 
-def m08(options):
+def m08(data):
     """4 given=1.0. 4 given=0.5."""
 
-    lang = "lang" if options["lang"] else "nolang"
+    lang = "lang" if data["lang"] else "nolang"
 
     variants = [
         [f"{lang}_noshuffle_cost15_128", f"{lang}_shuffle_cost15_128"],
@@ -15,16 +15,16 @@ def m08(options):
         [f"{lang}_noshuffle_cost15_4", f"{lang}_shuffle_cost15_4"],
     ]
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    options["givens"] = [
+    data["givens"] = [
         ["1.0", "1.0", "1.0"],
         ["1.0", "1.0", "1.0"],
         ["0.5", "0.5", "0.5"],
         ["0.5", "0.5", "0.5"],
     ]
 
-    if options["givens_control"] != "0.0":
-        options["givens_control"] = options["givens"]
+    if data["givens_control"] != "0.0":
+        data["givens_control"] = data["givens"]
 
-    return options
+    return data

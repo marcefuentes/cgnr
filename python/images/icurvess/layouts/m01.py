@@ -1,28 +1,28 @@
 """Single combination of alphas and logess."""
 
 
-def m01(options):
+def m01(data):
     """Single combination of alphas and logess."""
 
-    options["alphas"] = {
+    data["alphas_params"] = {
         "start": 0.5,
         "stop": 0.5,
         "num": 1,
     }
-    options["logess"] = {
+    data["logess_params"] = {
         "start": 0.0,
         "stop": 0.0,
         "num": 1,
     }
-    options["given_rows"] = [0.0]
-    options["n_indifference_curves"] = 5
-    options["budget_line"] = True
+    data["givens"] = [0.0]
+    data["n_indifference_curves"] = 5
+    data["budget_line"] = True
 
-    if options["movie"]:
-        options["movie_frames"] = {
+    if data["movie"]:
+        data["frames_params"] = {
             "start": 0.0,
             "stop": 1.0,
             "num": 11,
         }
 
-    return options
+    return data

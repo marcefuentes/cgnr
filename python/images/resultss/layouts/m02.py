@@ -1,18 +1,18 @@
 """Two plots."""
 
-from .default_options import default_options
+from .default_data import default_data
 
 
-def m02(options):
+def m02(data):
     """Two plots."""
 
-    lang = "lang" if options["lang"] else "nolang"
+    lang = "lang" if data["lang"] else "nolang"
 
     variants = [
         [f"{lang}_shuffle_cost15_128"],
         [f"{lang}_shuffle_cost15_4"],
     ]
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    return options
+    return data

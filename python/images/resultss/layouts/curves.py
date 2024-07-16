@@ -1,10 +1,10 @@
 """Theoretical curves for partner choice and reciprocity."""
 
 from .repeat_for_matrix import repeat_for_matrix
-from .default_options import default_options
+from .default_data import default_data
 
 
-def curves(options):
+def curves(data):
     """Fitness curves for partner choice."""
 
     givens = [["1.0"], ["0.5"], ["0.0"]]
@@ -13,9 +13,9 @@ def curves(options):
 
     variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, 1)
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    options["givens"] = givens
-    options["givens_control"] = givens
+    data["givens"] = givens
+    data["givens_control"] = givens
 
-    return options
+    return data

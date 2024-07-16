@@ -1,13 +1,13 @@
 """16 plots."""
 
-from .default_options import default_options
+from .default_data import default_data
 from .ss import S1, S2, S3, S4, S5
 
 
-def m16(options):
+def m16(data):
     """All figures."""
 
-    lang = "lang" if options["lang"] else "nolang"
+    lang = "lang" if data["lang"] else "nolang"
 
     variants = [
         [
@@ -36,42 +36,42 @@ def m16(options):
         ],
     ]
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    if options["traits"] == "qBSeenmean" or options["traits"] == "wmean":
-        options["givens_control"] = [
-            [options["given"], options["given"], options["given"], options["given"]],
-            [options["given"], options["given"], options["given"], options["given"]],
+    if data["traits"] == "qBSeenmean" or data["traits"] == "wmean":
+        data["givens_control"] = [
+            [data["given"], data["given"], data["given"], data["given"]],
+            [data["given"], data["given"], data["given"], data["given"]],
             ["0.0", "0.0", "0.0", "0.0"],
             ["0.0", "0.0", "0.0", "0.0"],
         ]
     else:
-        options["givens"] = [
+        data["givens"] = [
             ["1.0", "1.0", "1.0", "1.0"],
             ["1.0", "1.0", "1.0", "1.0"],
             ["0.5", "0.5", "0.5", "0.5"],
             ["0.5", "0.5", "0.5", "0.5"],
         ]
 
-        if options["givens_control"] != "0.0":
-            options["givens_control"] = options["givens"]
+        if data["givens_control"] != "0.0":
+            data["givens_control"] = data["givens"]
 
-    options["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
+    data["mechanisms"] = [["pd", "pi", "pd", "pi"] for _ in range(len(variants))]
 
-    if "Imimic" in options["traits"]:
+    if "Imimic" in data["traits"]:
         for i in range(len(variants)):
-            options["traits"][i][0] = None
-            options["traits"][i][2] = None
+            data["traits"][i][0] = None
+            data["traits"][i][2] = None
 
-    if options["lang"]:
-        options["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
-        options["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
-        options["titles_columns"][2] += f"\n{S1}, {S4}, {S5}"
-        options["titles_columns"][3] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
+    if data["lang"]:
+        data["titles_columns"][0] += f"\n{S1}, {S4}, {S5}"
+        data["titles_columns"][1] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
+        data["titles_columns"][2] += f"\n{S1}, {S4}, {S5}"
+        data["titles_columns"][3] += f"\n{S1}, {S2}, {S3}, {S4}, {S5}"
     else:
-        options["titles_columns"][0] += f"\n{S1}, {S4}"
-        options["titles_columns"][1] += f"\n{S1}, {S2}, {S4}"
-        options["titles_columns"][2] += f"\n{S1}, {S4}"
-        options["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
+        data["titles_columns"][0] += f"\n{S1}, {S4}"
+        data["titles_columns"][1] += f"\n{S1}, {S2}, {S4}"
+        data["titles_columns"][2] += f"\n{S1}, {S4}"
+        data["titles_columns"][3] += f"\n{S1}, {S2}, {S4}"
 
-    return options
+    return data

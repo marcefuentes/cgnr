@@ -3,9 +3,9 @@
 from .m08 import m08
 
 
-def m06(options):
+def m06(data):
     """6 plots."""
 
-    options = m08(options)
+    data = m08(data)
 
-    return options
+    return data

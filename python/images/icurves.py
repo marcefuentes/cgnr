@@ -31,16 +31,16 @@ from icurvess import layouts
 from icurvess.image import image_common, image_unit
 
 
-def main(options):
+def main(data):
     """Main function"""
 
     start_time = time.perf_counter()
 
-    options = get_layout(options, layouts)
+    data = get_layout(data, layouts)
 
-    data = get_data(options)
+    data = get_data(data)
 
-    options["budget_line"] = options["budget_line"]
+    data["budget_line"] = data["budget_line"]
 
     fig_layout = {
         "nc": len(data["rhos"]),
@@ -51,7 +51,7 @@ def main(options):
 
     fig, axs = create_fig(fig_layout)
 
-    if options["layout"] == "m01":
+    if data["layout"] == "m01":
         image = image_unit
     else:
         image = image_common
@@ -95,7 +95,7 @@ def main(options):
         (0, 1.0 + image["padding_letter"] * image["nr"]),
         image["letters"],
     )
-    if options["layout"] == "m01":
+    if data["layout"] == "m01":
         add_ax_labels(
             axs[0, 0, 0, 0],
             image["label_x_0"],
@@ -131,7 +131,7 @@ def main(options):
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(data[artist], image[artist])
 
-    save_file(fig, data, options)
+    save_file(fig, data)
 
     # pylint: disable=duplicate-code
     close_plt(fig)

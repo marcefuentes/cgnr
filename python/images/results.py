@@ -34,15 +34,15 @@ from resultss.image import image
 from settings.project import project
 
 
-def main(options):
+def main(data):
     """Main function"""
 
     start_time = time.perf_counter()
 
-    options = get_layout(options, layouts)
+    data = get_layout(data, layouts)
     try:
         data = get_data(
-            options,
+            data,
             *project["output_file_extensions"],
         )
     except ValueError as error:
@@ -53,52 +53,47 @@ def main(options):
     mc = len(data["rhos"])
 
     fig_layout = {
-        "nc": 1,
-        "ncols": len(options["variants"][0]),
-        "nr": 1,
-        "nrows": len(options["variants"]),
+        "nc": mc if data["ax_type"] == "Line2" else 1,
+        "ncols": len(data["variants"][0]),
+        "nr": mr if data["ax_type"] == "Line2" else 1,
+        "nrows": len(data["variants"]),
     }
 
-    if options["layout"] == "curves" or options["histogram"]:
-        fig_layout["nc"] = mc
-        fig_layout["nr"] = mr
+    fig, image["axs"] = create_fig(fig_layout)
 
-    fig, axs = create_fig(fig_layout)
-
-    if options["layout"] == "curves":
+    if data["layout"] == "curves":
         image["margin_top"] *= 0.5
     fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, fig_distances, image)
     add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
     data["text"] = fig.texts[2]
 
-    if options["layout"] == "curves":
+    if data["layout"] == "curves":
         x, y = get_static_data(
             image["n_x_values"],
-            options["traits"],
-            options["givens"],
+            data["traits"],
+            data["givens"],
             data["alphas"],
             data["rhos"],
         )
-    elif options["histogram"]:
+    elif data["histogram"]:
         x = np.arange(project["bins"])
         y = np.zeros(
             (fig_layout["nrows"], fig_layout["ncols"], mr, mc, project["bins"])
         )
-    elif options["layout"] == "theory":
+    elif data["layout"] == "theory":
         x, y = get_theory_axesimage(
-            options["traits"], options["givens"], data["alphas"], data["rhos"]
+            data["traits"], data["givens"], data["alphas"], data["rhos"]
         )
     else:
         x = None
         y = np.zeros((fig_layout["nrows"], fig_layout["ncols"], 1, 1, mr, mc))
 
-    data["artists"] = init_artists(axs, x, y, options["ax_type"])
+    data["artists"] = init_artists(image["axs"], x, y, data["ax_type"])
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = os.path.basename(__file__).split(".")[0]
     data["function"] = update_artists
 
-    image["axs"] = axs
     image["divider"] = create_divider(fig, fig_layout, fig_distances, image)
     image["lim_x"] = [None, None]
     image["lim_y"] = [None, None]
@@ -114,18 +109,18 @@ def main(options):
         f"{data["alphas"][mr // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
-    image["titles_columns"] = options["titles_columns"]
-    image["titles_rows"] = options["titles_rows"]
+    image["titles_columns"] = data["titles_columns"]
+    image["titles_rows"] = data["titles_rows"]
 
-    if options["layout"] == "curves":
+    if data["layout"] == "curves":
         image["lim_x"] = [0, 1]
         image["lim_y"] = [0, 1]
-    if options["histogram"]:
+    if data["histogram"]:
         image["lim_x"] = [-2, project["bins"] + 1]
         image["lim_y"] = [0, 0.25]
 
     format_axes(image)
-    if options["ax_type"] == "Line2D":
+    if data["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines"])
         ticks_line2d(image, image["ticks"])
     else:
@@ -133,25 +128,24 @@ def main(options):
         ticks_axesimage(image, image["ticks"])
 
     adjust(
-        axs,
-        options,
+        data,
         fig_distances,
         image,
     )
 
-    if options["ax_type"] == "Line2D":
+    if data["ax_type"] == "Line2D":
         add_letters_line2d(
-            axs,
+            image["axs"],
             (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
             image["letters"],
         )
     else:
         add_letters_axesimage(
-            axs,
+            image["axs"],
             (0, 1.0 + image["padding_letter"] * fig_layout["nr"]),
             image["letters"],
         )
-    save_file(fig, data, options)
+    save_file(fig, data)
     close_plt(fig)
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")

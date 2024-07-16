@@ -1,12 +1,12 @@
 """ Increase the length of the middle tick of a given axis. """
 
 
-def enlarge_ticks(axs, options, margin_inner, linewidth):
+def enlarge_ticks(axs, data, margin_inner, linewidth):
     """Increase the length of the middle tick of a given axis."""
 
-    if options["layout"] == "allp":
+    if data["layout"] == "allp":
         axs_to_change = []
-        if "Choose" in options["traits"]:
+        if "Choose" in data["traits"]:
             axs_to_change = [
                 (axs[1, 0, 0, 0], "x"),
                 (axs[1, 1, 0, 0], "y"),
@@ -19,7 +19,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
                 (axs[2, 2, 0, 0], "y"),
                 (axs[2, 3, 0, 0], "y"),
             ]
-        elif options["traits"] == "MimicGrainmean":
+        elif data["traits"] == "MimicGrainmean":
             axs_to_change = [
                 (axs[0, 1, 0, 0], "y"),
                 (axs[0, 2, 0, 0], "y"),
@@ -27,10 +27,10 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
                 (axs[1, 1, 0, 0], "y"),
                 (axs[2, 1, 0, 0], "y"),
             ]
-            if not options["lang"]:
+            if not data["lang"]:
                 axs_to_change.append((axs[1, 0, 0, 0], "x"))
                 axs_to_change.append((axs[1, 1, 0, 0], "x"))
-        elif "Imimic" in options["traits"]:
+        elif "Imimic" in data["traits"]:
             axs_to_change = [
                 (axs[0, 0, 0, 0], "x"),
                 (axs[0, 1, 0, 0], "y"),
@@ -47,7 +47,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
                 (axs[3, 2, 0, 0], "y"),
                 (axs[3, 3, 0, 0], "y"),
             ]
-            if not options["lang"]:
+            if not data["lang"]:
                 axs_to_change.append((axs[1, 0, 0, 0], "x"))
                 axs_to_change.append((axs[1, 1, 0, 0], "x"))
                 axs_to_change.append((axs[2, 0, 0, 0], "x"))
@@ -57,7 +57,7 @@ def enlarge_ticks(axs, options, margin_inner, linewidth):
                 (axs[1, 1, 0, 0], "y"),
                 (axs[2, 1, 0, 0], "y"),
             ]
-            if not options["lang"]:
+            if not data["lang"]:
                 axs_to_change.append((axs[1, 0, 0, 0], "x"))
                 axs_to_change.append((axs[1, 1, 0, 0], "x"))
 

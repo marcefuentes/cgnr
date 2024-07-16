@@ -1,9 +1,9 @@
 """Theory and simulations."""
 
-from .default_options import default_options
+from .default_data import default_data
 
 
-def theory(options):
+def theory(data):
     """First column is theoretical."""
 
     givens = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
@@ -11,11 +11,11 @@ def theory(options):
     nrows = len(givens)
 
     variants = [[None, "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
-    traits = [[None, options["traits"]] for _ in range(nrows)]
+    traits = [[None, data["traits"]] for _ in range(nrows)]
 
-    options["givens_control"] = None
+    data["givens_control"] = None
 
-    if options["traits"] == "wmean":
+    if data["traits"] == "wmean":
         titles = [
             "Fitness\n(theory)",
             "Fitness\n(simulations)",
@@ -26,12 +26,12 @@ def theory(options):
             "Production of $\\it{B}$\n(simulations)",
         ]
 
-    options = default_options(variants, options)
+    data = default_data(variants, data)
 
-    options["givens"] = givens
-    options["mechanisms"] = [[None, "none"] for _ in range(nrows)]
-    options["mechanisms_control"] = options["mechanisms"]
-    options["titles_columns"] = titles
-    options["traits"] = traits
+    data["givens"] = givens
+    data["mechanisms"] = [[None, "none"] for _ in range(nrows)]
+    data["mechanisms_control"] = data["mechanisms"]
+    data["titles_columns"] = titles
+    data["traits"] = traits
 
-    return options
+    return data

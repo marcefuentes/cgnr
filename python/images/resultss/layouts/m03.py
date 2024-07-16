@@ -3,9 +3,9 @@
 from .m04 import m04
 
 
-def m03(options):
+def m03(data):
     """3 plots."""
 
-    options = m04(options)
+    data = m04(data)
 
-    return options
+    return data
