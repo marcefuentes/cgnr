@@ -6,7 +6,7 @@ from modules.add_ticks import add_ticklabels_ax
 def adjust(data, distances, image):
     """Adjust plots"""
 
-    if data["layout"] in ("m03", "m05", "m06", "m10", "m16r"):
+    if "adjust" in data["layout"]:
 
         nrows = len(data["variants"])
         ncols = len(data["variants"][0])
