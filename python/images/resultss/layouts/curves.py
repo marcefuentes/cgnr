@@ -13,7 +13,7 @@ def curves(data):
 
     variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, 1)
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = givens

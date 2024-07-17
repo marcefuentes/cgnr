@@ -26,7 +26,7 @@ def theory(data):
             "Production of $\\it{B}$\n(simulations)",
         ]
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     data["givens"] = givens
     data["mechanisms"] = [[None, "none"] for _ in range(nrows)]

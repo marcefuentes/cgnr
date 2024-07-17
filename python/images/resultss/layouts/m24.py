@@ -70,7 +70,7 @@ def m24(data):
     elif data["traits"] == "Imimic_ltGrainmean":
         imimic_lt = True
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = givens_control

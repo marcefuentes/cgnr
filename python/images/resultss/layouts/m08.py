@@ -31,7 +31,7 @@ def m08(data):
     else:
         givens_control = givens
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = givens_control

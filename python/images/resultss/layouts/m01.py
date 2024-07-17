@@ -10,6 +10,6 @@ def m01(data):
 
     variants = [[f"{lang}_noshuffle_cost15_4"]]
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     return data

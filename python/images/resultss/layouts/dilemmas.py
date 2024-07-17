@@ -14,7 +14,7 @@ def dilemmas(data):
 
     variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, ncols)
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = repeat_for_matrix("0.0", nrows, ncols)

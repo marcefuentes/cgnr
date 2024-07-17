@@ -30,7 +30,7 @@ def m10(data):
         ],
     ]
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     if data["givens_control"][0][0] != "0.0":
         data["givens_control"] = [

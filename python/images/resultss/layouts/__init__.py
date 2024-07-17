@@ -13,6 +13,7 @@ from .m10 import m10
 from .m16 import m16
 from .m24 import m24
 from .s1_i_adjust import s1_i_adjust
+from .s1_pi import s1_pi
 from .theory import theory
 
 
@@ -30,5 +31,6 @@ __all__ = [
     "m16",
     "m24",
     "s1_i_adjust",
+    "s1_pi",
     "theory",
 ]

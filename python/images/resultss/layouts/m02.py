@@ -13,6 +13,6 @@ def m02(data):
         [f"{lang}_shuffle_cost15_4"],
     ]
 
-    data = default_data(variants, data)
+    data = default_data(data, variants)
 
     return data
