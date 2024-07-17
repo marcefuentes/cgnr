@@ -2,6 +2,8 @@
 
 from .curves import curves
 from .dilemmas import dilemmas
+from .fig5 import fig5
+from .fig6 import fig6
 from .m01 import m01
 from .m02 import m02
 from .m03_adjust import m03_adjust
@@ -16,6 +18,8 @@ from .theory import theory
 __all__ = [
     "curves",
     "dilemmas",
+    "fig5",
+    "fig6",
     "m01",
     "m02",
     "m03_adjust",
