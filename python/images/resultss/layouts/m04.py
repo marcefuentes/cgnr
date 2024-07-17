@@ -1,4 +1,4 @@
-"""3 plots."""
+"""4 plots."""
 
 from .default_data import default_data
 
