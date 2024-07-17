@@ -36,7 +36,6 @@ def get_data(data):
                 f"{data['givens'][i][j]}"
             )
             data["dfs"][i][j] = get_df(**params)
-            print(params["path"])
             if not data["dfs"][i][j].empty:
                 df = data["dfs"][i][j]
             if data["mechanisms_control"][i][j] not in ["", "None"]:
@@ -46,7 +45,6 @@ def get_data(data):
                     f"{data['givens_control'][i][j]}"
                 )
                 data["dfs_control"][i][j] = get_df(**params)
-                print(params["path"])
 
     if df is None:
         raise ValueError("No data found in any of the paths defined in data.")

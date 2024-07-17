@@ -29,9 +29,10 @@ def get_df(path, filetype, clean, movie):
     if not filelist:
         print(f"{path} is empty.")
         return pd.DataFrame()
-    df = read_files(filelist, movie)
 
+    df = read_files(filelist, movie)
     df.to_csv(concatenated, index=False)
+    print(f"{path}")
 
     return df
 
@@ -46,6 +47,10 @@ def read_files(filelist, movie):
             df = df.tail(1)
         if not df.empty and not df.isna().all().all():
             df_list.append(df)
+
+    if not df_list:
+        print(f"Files are still empty. Data will be zeros.")
+        return pd.DataFrame()
 
     dfc = pd.concat(df_list, ignore_index=True)
 
