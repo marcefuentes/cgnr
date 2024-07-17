@@ -60,6 +60,16 @@ def m24(data):
     else:
         givens_control = givens
 
+    mimic = False
+    imimic = False
+    imimic_lt = False
+    if data["traits"] == "MimicGrainmean":
+        mimic = True
+    elif data["traits"] == "ImimicGrainmean":
+        imimic = True
+    elif data["traits"] == "Imimic_ltGrainmean":
+        imimic_lt = True
+
     data = default_data(variants, data)
 
     data["givens"] = givens
@@ -81,9 +91,15 @@ def m24(data):
         data["titles_columns"][4] += f"\n{S1}, {S4}"
         data["titles_columns"][5] += f"\n{S1}, {S2}, {S4}"
 
-    if "Imimic" in data["traits"]:
+    if imimic:
         for i in range(nrows):
             data["traits"][i][0] = None
-            data["traits"][i][2] = None
+            data["traits"][i][1] = None
+            data["traits"][i][3] = None
+            data["traits"][i][4] = None
+    elif mimic:
+        for i in range(nrows):
+            data["traits"][i][0] = None
+            data["traits"][i][3] = None
 
     return data
