@@ -45,9 +45,9 @@ def s1_i_adjust(data):
     choose_lt = False
     if "imic" in data["traits"]:
         mimic = True
-        if mimic in data["traits"]:
+        if "mimic" in data["traits"]:
             imimic = True
-            if lt in data["traits"]:
+            if "lt" in data["traits"]:
                 imimic_lt = True
     if "Choose" in data["traits"]:
         choose = True
@@ -67,25 +67,24 @@ def s1_i_adjust(data):
             data["titles_columns"][column] += f"\n{S1}"
             if "nolang" in variant:
                 data["titles_columns"][column] += f", {S2}"
-                if imimic_lt:
-                    for i in range(nrows):
-                        data["traits"][i][column] = None
             else:
                 if "_shuffle" in variant or "p" in mechanism:
                     data["titles_columns"][column] += f", {S2}"
-                elif imimic:
-                    for i in range(nrows):
-                        data["traits"][i][column] = None
+                else:
+                    imimic = False
                 data["titles_columns"][column] += f", {S3}"
-        elif mimic or imimic or imimic_lt:
-            for i in range(nrows):
-                data["traits"][i][column] = None
         if "p" in mechanism:
             data["titles_columns"][column] += f", {S4}"
             if variant.startswith("lang"):
                 data["titles_columns"][column] += f", {S5}"
-            elif choose_lt:
-                for i in range(nrows):
-                    data["traits"][i][column] = None
+        if (
+            (mimic and S1 not in data["titles_columns"][column])
+            or (imimic and S2 not in data["titles_columns"][column])
+            or (imimic_lt and S3 not in data["titles_columns"][column])
+            or (choose and S4 not in data["titles_columns"][column])
+            or (choose_lt and S5 not in data["titles_columns"][column])
+        ):
+            for i in range(nrows):
+                data["traits"][i][column] = None
 
     return data

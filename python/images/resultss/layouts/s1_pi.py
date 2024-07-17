@@ -41,12 +41,21 @@ def s1_pi(data):
     else:
         givens_control = givens
 
+    mimic = False
     imimic = False
     imimic_lt = False
-    if data["traits"] == "ImimicGrainmean":
-        imimic = True
-    elif data["traits"] == "Imimic_ltGrainmean":
-        imimic_lt = True
+    choose = False
+    choose_lt = False
+    if "imic" in data["traits"]:
+        mimic = True
+        if "mimic" in data["traits"]:
+            imimic = True
+            if "lt" in data["traits"]:
+                imimic_lt = True
+    if "Choose" in data["traits"]:
+        choose = True
+        if "lt" in data["traits"]:
+            choose_lt = True
 
     data = default_data(variants, data)
 
@@ -55,20 +64,30 @@ def s1_pi(data):
     data["mechanisms"] = [mechanisms for _ in range(nrows)]
 
     for column, (variant, mechanism) in enumerate(zip(variants_common, mechanisms)):
-        data["titles_columns"][column] += f"\n{S1}"
+        if "d" in mechanism:
+            data["titles_columns"][column] += f"\n{S1}"
         if "i" in mechanism:
+            data["titles_columns"][column] += f"\n{S1}"
             if "nolang" in variant:
                 data["titles_columns"][column] += f", {S2}"
-                if imimic_lt:
-                    for i in range(nrows):
-                        data["traits"][i][column] = None
             else:
                 if "_shuffle" in variant or "p" in mechanism:
                     data["titles_columns"][column] += f", {S2}"
                 else:
-                    if imimic:
-                        for i in range(nrows):
-                            data["traits"][i][column] = None
+                    imimic = False
                 data["titles_columns"][column] += f", {S3}"
+        if "p" in mechanism:
+            data["titles_columns"][column] += f", {S4}"
+            if variant.startswith("lang"):
+                data["titles_columns"][column] += f", {S5}"
+        if (
+            (mimic and S1 not in data["titles_columns"][column])
+            or (imimic and S2 not in data["titles_columns"][column])
+            or (imimic_lt and S3 not in data["titles_columns"][column])
+            or (choose and S4 not in data["titles_columns"][column])
+            or (choose_lt and S5 not in data["titles_columns"][column])
+        ):
+            for i in range(nrows):
+                data["traits"][i][column] = None
 
     return data
