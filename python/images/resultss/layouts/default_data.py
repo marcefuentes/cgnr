@@ -16,6 +16,7 @@ def default_data(data, variants):
     data["mechanisms_control"] = repeat_for_matrix(
         data["mechanisms_control"], nrows, ncols
     )
+    data["titles_columns"] = [""] * ncols
     data["titles_rows"] = [""] * nrows
     data["traits"] = repeat_for_matrix(data["traits"], nrows, ncols)
     data["traits_control"] = repeat_for_matrix(data["traits_control"], nrows, ncols)

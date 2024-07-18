@@ -32,6 +32,12 @@ def parse_args():
             "default": "none",
             "help": "given folder (control)",
         },
+        "lang": {
+            "type": str,
+            "choices": ["lang", "nolang"],
+            "default": "nolang",
+            "help": "language",
+        },
         "layout": {
             "type": str,
             "choices": layout_names,
@@ -60,7 +66,6 @@ def parse_args():
             "help": "trait (control)",
         },
         "histogram": {"action": "store_true", "help": "add histogram"},
-        "lang": {"action": "store_true", "help": "lang folders"},
         "movie": {"action": "store_true", "help": "enable movie"},
         "clean": {"action": "store_true", "help": "clean folders"},
     }
