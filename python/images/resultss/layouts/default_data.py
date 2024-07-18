@@ -25,7 +25,7 @@ def default_data(data, variants):
     return data
 
 
-def default_data_subtitles(data, mechanisms, variants_common):
+def default_data_ipi(data, mechanisms, variants_common):
     """Default data for large figures with subtitles."""
 
     suffixes = ["_128", "_4"]
