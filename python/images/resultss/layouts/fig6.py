@@ -15,7 +15,9 @@ def fig6(data):
     data["mechanisms"] = "pi"
     data = default_data(data, variants)
 
-    data["givens_control"] = [["1.0", "1.0", "0.0", "0.0"] for _ in range(len(variants))]
+    data["givens_control"] = [
+        ["1.0", "1.0", "0.0", "0.0"] for _ in range(len(variants))
+    ]
     data["titles_columns"] = [S5, S3, "Production of $\\it{B}$", "Fitness"]
     data["traits"] = data["traits_control"] = [
         ["Choose_ltGrainmean", "Imimic_ltGrainmean", "qBSeenmean", "wmean"]
