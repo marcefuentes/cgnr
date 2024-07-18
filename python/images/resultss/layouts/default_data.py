@@ -39,6 +39,24 @@ def get_titles(variants):
     return titles
 
 
+def get_givens(control, nrows, ncols):
+    """Get givens."""
+
+    givens = [
+        ["1.0" for _ in range(ncols)],
+        ["1.0" for _ in range(ncols)],
+        ["0.5" for _ in range(ncols)],
+        ["0.5" for _ in range(ncols)],
+    ]
+
+    if control == "0.0":
+        givens_control = repeat_for_matrix("0.0", nrows, ncols)
+    else:
+        givens_control = givens
+
+    return givens, givens_control
+
+
 def default_data_subtitles(data, mechanisms, variants_common):
     """Default data for large figures with subtitles."""
 
@@ -51,18 +69,7 @@ def default_data_subtitles(data, mechanisms, variants_common):
     nrows = len(variants)
     ncols = len(variants_common)
 
-    givens = [
-        ["1.0" for _ in range(ncols)],
-        ["1.0" for _ in range(ncols)],
-        ["0.5" for _ in range(ncols)],
-        ["0.5" for _ in range(ncols)],
-    ]
-
-    if data["givens_control"] == "0.0":
-        givens_control = repeat_for_matrix("0.0", nrows, ncols)
-    else:
-        givens_control = givens
-
+    givens, givens_control = get_givens(data["givens_control"], nrows, ncols)
     data = default_data(data, variants)
 
     data["givens"] = givens
