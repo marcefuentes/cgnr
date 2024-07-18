@@ -8,27 +8,17 @@ def fig5(data):
     """Figure 5."""
 
     variants = [
-        [
-            "nolang_shuffle_cost15_128",
-            "nolang_shuffle_cost15_128",
-            "nolang_shuffle_cost15_128",
-        ],
-        [
-            "nolang_shuffle_cost15_4",
-            "nolang_shuffle_cost15_4",
-            "nolang_shuffle_cost15_4",
-        ],
+        ["nolang_shuffle_cost15_128" for _ in range(3)],
+        ["nolang_shuffle_cost15_4" for _ in range(3)],
     ]
 
     data["givens_control"] = "1.0"
     data["mechanisms"] = "i"
     data = default_data(data, variants)
 
-    nrows = len(variants)
-
     data["titles_columns"] = [S1, S2, "Fitness"]
     data["traits"] = [
-        ["MimicGrainmean", "ImimicGrainmean", "wmean"] for _ in range(nrows)
+        ["MimicGrainmean", "ImimicGrainmean", "wmean"] for _ in range(len(variants))
     ]
     data["traits_control"] = data["traits"]
 
