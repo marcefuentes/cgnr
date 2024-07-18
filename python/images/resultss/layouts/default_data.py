@@ -44,7 +44,6 @@ def default_data_subtitles(data, mechanisms, variants_common):
     data["givens_control"] = givens_control
     data["mechanisms"] = [mechanisms for _ in range(nrows)]
     data["titles_columns"] = get_titles(variants_common)
-    data["titles_columns"] = get_subtitles(data["titles_columns"], variants_common, mechanisms)
 
     return data
 

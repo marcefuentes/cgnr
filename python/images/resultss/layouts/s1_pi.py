@@ -1,6 +1,6 @@
 """Plots for partner choice plus reciprocity."""
 
-from .default_data import default_data_subtitles
+from .default_data import default_data_subtitles, get_subtitles
 
 
 def s1_pi(data):
@@ -16,5 +16,6 @@ def s1_pi(data):
     ]
 
     data = default_data_subtitles(data, mechanisms, variants_common)
+    data["titles_columns"] = get_subtitles(data["titles_columns"], variants_common, mechanisms)
 
     return data
