@@ -25,11 +25,35 @@ def default_data(data, variants):
     return data
 
 
+def default_data_subtitles(data, mechanisms, variants_common):
+    """Default data for large figures with subtitles."""
+
+    suffixes = ["_128", "_4"]
+    variants = []
+    for _ in range(2):
+        for suffix in suffixes:
+            variants.append([f"{variant}{suffix}" for variant in variants_common])
+
+    nrows = len(variants)
+    ncols = len(variants_common)
+
+    givens, givens_control = get_givens(data["givens_control"], nrows, ncols)
+    data = default_data(data, variants)
+
+    data["givens"] = givens
+    data["givens_control"] = givens_control
+    data["mechanisms"] = [mechanisms for _ in range(nrows)]
+    data["titles_columns"] = get_titles(variants_common)
+    data["titles_columns"] = get_subtitles(data["titles_columns"], variants_common, mechanisms)
+
+    return data
+
+
 def get_titles(variants):
     """Get titles."""
 
     titles = []
-    for variant in variants[0]:
+    for variant in variants:
         if not variant:
             titles.append("")
         elif "noshuffle" in variant:
@@ -57,44 +81,27 @@ def get_givens(control, nrows, ncols):
     return givens, givens_control
 
 
-def default_data_subtitles(data, mechanisms, variants_common):
-    """Default data for large figures with subtitles."""
+def get_subtitles(titles, variants, mechanisms):
+    """Get subtitles."""
 
-    suffixes = ["_128", "_4"]
-    variants = []
-    for _ in range(2):
-        for suffix in suffixes:
-            variants.append([f"{variant}{suffix}" for variant in variants_common])
-
-    nrows = len(variants)
-    ncols = len(variants_common)
-
-    givens, givens_control = get_givens(data["givens_control"], nrows, ncols)
-    data = default_data(data, variants)
-
-    data["givens"] = givens
-    data["givens_control"] = givens_control
-    data["mechanisms"] = [mechanisms for _ in range(nrows)]
-    data["titles_columns"] = get_titles(variants)
-
-    for column, (variant, mechanism) in enumerate(zip(variants_common, mechanisms)):
+    for column, (variant, mechanism) in enumerate(zip(variants, mechanisms)):
         if "d" in mechanism:
-            data["titles_columns"][column] += f"\n{S1}"
+            titles[column] += f"\n{S1}"
         if "i" in mechanism:
-            data["titles_columns"][column] += f"\n{S1}"
+            titles[column] += f"\n{S1}"
             if "nolang" in variant:
-                data["titles_columns"][column] += f", {S2}"
+                titles[column] += f", {S2}"
             else:
                 if "_shuffle" in variant or "p" in mechanism:
-                    data["titles_columns"][column] += f", {S2}"
-                data["titles_columns"][column] += f", {S3}"
+                    titles[column] += f", {S2}"
+                titles[column] += f", {S3}"
         if mechanism == "p":
-            data["titles_columns"][column] += f"\n{S4}"
+            titles[column] += f"\n{S4}"
             if variant.startswith("lang"):
-                data["titles_columns"][column] += f"\n{S5}"
+                titles[column] += f"\n{S5}"
         if mechanism in ("pd", "pi"):
-            data["titles_columns"][column] += f", {S4}"
+            titles[column] += f", {S4}"
             if variant.startswith("lang"):
-                data["titles_columns"][column] += f", {S5}"
+                titles[column] += f", {S5}"
 
-    return data
+    return titles
