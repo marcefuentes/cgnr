@@ -8,31 +8,18 @@ def fig6(data):
     """Figure 6."""
 
     variants = [
-        [
-            "lang_shuffle_cost15_128",
-            "lang_shuffle_cost15_128",
-            "lang_shuffle_cost15_128",
-            "lang_shuffle_cost15_128",
-        ],
-        [
-            "lang_shuffle_cost15_4",
-            "lang_shuffle_cost15_4",
-            "lang_shuffle_cost15_4",
-            "lang_shuffle_cost15_4",
-        ],
+        ["lang_shuffle_cost15_128" for _ in range(4)],
+        ["lang_shuffle_cost15_4" for _ in range(4)],
     ]
 
+    data["mechanisms"] = "pi"
     data = default_data(data, variants)
 
-    nrows = len(variants)
-
-    data["givens_control"] = [["1.0", "1.0", "0.0", "0.0"] for _ in range(nrows)]
-    data["mechanisms"] = [["pi", "pi", "pi", "pi"] for _ in range(nrows)]
+    data["givens_control"] = [["1.0", "1.0", "0.0", "0.0"] for _ in range(len(variants))]
     data["titles_columns"] = [S5, S3, "Production of $\\it{B}$", "Fitness"]
-    data["traits"] = [
+    data["traits"] = data["traits_control"] = [
         ["Choose_ltGrainmean", "Imimic_ltGrainmean", "qBSeenmean", "wmean"]
-        for _ in range(nrows)
+        for _ in range(len(variants))
     ]
-    data["traits_control"] = data["traits"]
 
     return data
