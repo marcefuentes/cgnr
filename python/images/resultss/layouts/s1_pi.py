@@ -1,8 +1,6 @@
 """Plots for partner choice plus reciprocity."""
 
 from .default_data import default_data_subtitles
-from .repeat_for_matrix import repeat_for_matrix
-from .ss import S1, S2, S3
 
 
 def s1_pi(data):

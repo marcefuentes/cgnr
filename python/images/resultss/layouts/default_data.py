@@ -63,22 +63,6 @@ def default_data_subtitles(data, mechanisms, variants_common):
     else:
         givens_control = givens
 
-    mimic = False
-    imimic = False
-    imimic_lt = False
-    choose = False
-    choose_lt = False
-    if "imic" in data["traits"]:
-        mimic = True
-        if "mimic" in data["traits"]:
-            imimic = True
-            if "lt" in data["traits"]:
-                imimic_lt = True
-    if "Choose" in data["traits"]:
-        choose = True
-        if "lt" in data["traits"]:
-            choose_lt = True
-
     data = default_data(data, variants)
 
     data["givens"] = givens

@@ -9,20 +9,20 @@ def fig5(data):
 
     variants = [
         [
-            f"nolang_shuffle_cost15_128",
-            f"nolang_shuffle_cost15_128",
-            f"nolang_shuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
+            "nolang_shuffle_cost15_128",
         ],
         [
-            f"nolang_shuffle_cost15_4",
-            f"nolang_shuffle_cost15_4",
-            f"nolang_shuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
+            "nolang_shuffle_cost15_4",
         ],
     ]
 
-    nrows = len(variants)
-
     data = default_data(data, variants)
+
+    nrows = len(variants)
 
     data["givens_control"] = [["1.0", "1.0", "1.0"] for _ in range(nrows)]
     data["mechanisms"] = [["i", "i", "i"] for _ in range(nrows)]

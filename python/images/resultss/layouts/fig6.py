@@ -9,22 +9,22 @@ def fig6(data):
 
     variants = [
         [
-            f"lang_shuffle_cost15_128",
-            f"lang_shuffle_cost15_128",
-            f"lang_shuffle_cost15_128",
-            f"lang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
+            "lang_shuffle_cost15_128",
         ],
         [
-            f"lang_shuffle_cost15_4",
-            f"lang_shuffle_cost15_4",
-            f"lang_shuffle_cost15_4",
-            f"lang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
+            "lang_shuffle_cost15_4",
         ],
     ]
 
-    nrows = len(variants)
-
     data = default_data(data, variants)
+
+    nrows = len(variants)
 
     data["givens_control"] = [["1.0", "1.0", "0.0", "0.0"] for _ in range(nrows)]
     data["mechanisms"] = [["pi", "pi", "pi", "pi"] for _ in range(nrows)]

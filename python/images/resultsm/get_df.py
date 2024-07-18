@@ -49,7 +49,7 @@ def read_files(filelist, movie):
             df_list.append(df)
 
     if not df_list:
-        print(f"Files are still empty. Data will be zeros.")
+        print("Files are still empty. Data will be zeros.")
         return pd.DataFrame()
 
     dfc = pd.concat(df_list, ignore_index=True)
