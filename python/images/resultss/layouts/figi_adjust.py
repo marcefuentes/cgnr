@@ -3,7 +3,7 @@
 from .default_data import default_data_ipi, get_subtitles
 
 
-def figi(data):
+def figi_adjust(data):
     """Plots for reciprocity."""
 
     mechanisms = ["d", "i", "d", "i", "i"]

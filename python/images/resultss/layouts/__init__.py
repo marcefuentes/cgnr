@@ -4,7 +4,7 @@ from .curves import curves
 from .dilemmas import dilemmas
 from .fig5 import fig5
 from .fig6 import fig6
-from .figi import figi
+from .figi_adjust import figi_adjust
 from .figp import figp
 from .figpi import figpi
 from .m01 import m01
@@ -19,7 +19,7 @@ __all__ = [
     "dilemmas",
     "fig5",
     "fig6",
-    "figi",
+    "figi_adjust",
     "m01",
     "m02",
     "m03_adjust",
