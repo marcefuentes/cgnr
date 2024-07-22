@@ -60,9 +60,8 @@ def main(data):
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
-    data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
 
-    image["letter_position"] = (0, 1.0 + image["padding_letter"] * fig_layout["nr"])
+    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
@@ -88,6 +87,7 @@ def main(data):
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
 
+    data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     format_axes(image)
     if data["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines2d"])

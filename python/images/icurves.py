@@ -62,12 +62,6 @@ def main(data):
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
-    (
-        data["budgets"],
-        data["icurves"],
-        data["icurves_grey"],
-        data["landscapes"],
-    ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
 
     image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["nc"] = mc
@@ -86,8 +80,6 @@ def main(data):
     image["titles_rows"] = [""] * fig_layout["nrows"]
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
-
-    format_axes(image)
 
     if data["layout"] == "m01":
         add_ax_labels(
@@ -121,6 +113,13 @@ def main(data):
     else:
         ticks_line2d(image)
 
+    (
+        data["budgets"],
+        data["icurves"],
+        data["icurves_grey"],
+        data["landscapes"],
+    ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
+    format_axes(image)
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(data[artist], image[artist])

@@ -4,12 +4,12 @@
 def mxx(data):
     """Many combinations of alphas and logess."""
 
-    data["alphas"] = {
+    data["alphas_params"] = {
         "start": 0.9,
         "stop": 0.1,
         "num": 3,
     }
-    data["logess"] = {
+    data["logess_params"] = {
         "start": -2.0,
         "stop": 2.0,
         "num": 3,
