@@ -2,7 +2,7 @@
 
 import numpy as np
 from modules.theory import calculate_trps, qbeq
-from settings.image import image
+from resultss.image import image
 
 
 def get_static_data(traits, givens, alphas, rhos):
@@ -25,15 +25,18 @@ def process_plot(x, trait, given, alpha, rho):
     """Difference in fitness between reciprocators and non-reciprocators."""
 
     inc = 0.001
-    tt, rr, pp, ss = calculate_trps(x + inc, x, given, alpha, rho)
+    t_sup, r_sup, p_sup, s_sup = calculate_trps(x + inc, x, given, alpha, rho)
+    t_inf, r_inf, p_inf, s_inf = calculate_trps(x - inc, x, given, alpha, rho)
 
-    _ = tt  # To avoid unused variable warning.
+    # tt, rr, pp, ss = calculate_trps(x + inc, x, given, alpha, rho)
+    # _ = tt  # To avoid unused variable warning.
 
     if trait == "MimicGrainmean":
         # y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
-        y = pp - ss
+        y = p_sup - s_sup + r_inf - t_inf
     else:
-        y = rr - pp  # Partner choice
+        # y = rr - pp
+        y = r_sup - p_sup  # Partner choice
 
     y *= 500
     mask = (x + inc < qbeq(given, alpha, rho)) | (x + inc > qbeq(0.0, alpha, rho))

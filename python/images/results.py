@@ -44,9 +44,9 @@ def main(data):
         image["margin_top"] *= 0.5
 
     fig_layout = {
-        "nc": mc if data["ax_type"] == "Line2D" else 1,
+        "nc": mc if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection" else 1,
         "ncols": len(data["variants"][0]),
-        "nr": mr if data["ax_type"] == "Line2D" else 1,
+        "nr": mr if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection" else 1,
         "nrows": len(data["variants"]),
     }
 
@@ -89,7 +89,7 @@ def main(data):
 
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     format_axes(image)
-    if data["ax_type"] == "Line2D":
+    if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection":
         format_artists(data["artists"], image["lines2d"])
         ticks_line2d(image)
         add_letters_line2d(image["axs"], image["letter_position"], image["letters"])

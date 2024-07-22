@@ -19,7 +19,7 @@ def update_artists(t, data):
                 if data["ax_type"] == "AxesImage" and data["layout"] != "theory":
                     data["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
-                if data["ax_type"] == "Line2D":
+                if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection":
                     artists = update_artists_line2d(artists, zmatrix, data["cmap"])
                     if data["histogram"]:
                         artists = update_artists_histogram(t, artists, data, i, j)
