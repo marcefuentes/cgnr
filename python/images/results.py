@@ -35,8 +35,8 @@ def main(data):
 
     start_time = time.perf_counter()
 
-    data = get_layout(data, layouts)
-    data = get_data(data)
+    get_layout(data, layouts)
+    get_data(data)
 
     mr = len(data["alphas"])
     mc = len(data["rhos"])

@@ -86,5 +86,3 @@ def get_data(data):
         data["y"] = np.zeros(
             (nrows, ncols, 1, 1, len(data["alphas"]), len(data["rhos"]))
         )
-
-    return data
