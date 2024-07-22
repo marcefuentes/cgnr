@@ -92,11 +92,11 @@ def main(data):
     format_axes(image)
     if data["ax_type"] == "Line2D":
         format_artists(data["artists"], image["lines2d"])
-        ticks_line2d(image, image["ticks"])
+        ticks_line2d(image)
         add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
     else:
         format_artists(data["artists"], image["axesimage"])
-        ticks_axesimage(image, image["ticks"])
+        ticks_axesimage(image)
         adjust(data, image)
         add_letters_axesimage(image["axs"], image["letter_position"], image["letters"])
 

@@ -119,7 +119,7 @@ def main(data):
             image["ticks"],
         )
     else:
-        ticks_line2d(image, image["ticks"])
+        ticks_line2d(image)
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
