@@ -57,10 +57,10 @@ def main(data):
     create_divider(fig_layout, image)
 
     data["text"] = image["fig"].texts[2]
-    data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
+    data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
 
     image["letter_position"] = (0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["nc"] = mc

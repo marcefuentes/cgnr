@@ -37,15 +37,18 @@ def main(data):
     get_layout(data, layouts)
     get_data(data)
 
+    mr = len(data["alphas"])
+    mc = len(data["rhos"])
+
     if data["layout"] == "m01":
         image = image_unit
     else:
         image = image_common
 
     fig_layout = {
-        "nc": len(data["rhos"]),
+        "nc": mc,
         "ncols": 2,
-        "nr": len(data["alphas"]),
+        "nr": mr,
         "nrows": len(data["givens"]),
     }
 
@@ -67,25 +70,24 @@ def main(data):
     ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
 
     image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * fig_layout["nr"])
-    image["lim_x"] = [0, 1]
-    image["lim_y"] = [0, 1]
-    image["nc"] = fig_layout["nc"]
-    image["nr"] = fig_layout["nr"]
+    image["nc"] = mc
+    image["nr"] = mr
     image["ticklabels_x"] = [
         f"{data["rhos"][0]:.0f}",
-        f"{data["rhos"][fig_layout["nc"] // 2]:.0f}",
+        f"{data["rhos"][mc // 2]:.0f}",
         f"{data["rhos"][-1]:.2f}",
     ]
     image["ticklabels_y"] = [
         f"{data["alphas"][0]:.1f}",
-        f"{data["alphas"][fig_layout["nr"] // 2]:.1f}",
+        f"{data["alphas"][mr // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
     image["titles_columns"] = [""] * fig_layout["ncols"]
     image["titles_rows"] = [""] * fig_layout["nrows"]
+    image["lim_x"] = [0, 1]
+    image["lim_y"] = [0, 1]
 
     format_axes(image)
-    add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
 
     if data["layout"] == "m01":
         add_ax_labels(
@@ -122,10 +124,9 @@ def main(data):
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(data[artist], image[artist])
+    add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
 
     save_file(image["fig"], data)
-
-    # pylint: disable=duplicate-code
     close_plt(image["fig"])
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
