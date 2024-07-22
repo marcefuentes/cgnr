@@ -23,8 +23,6 @@ def default_data(data, variants):
     data["variants"] = variants
     data["variants_control"] = variants
 
-    return data
-
 
 def default_data_ipi(data, mechanisms, variants_common):
     """Default data for large figures with subtitles."""
@@ -39,14 +37,12 @@ def default_data_ipi(data, mechanisms, variants_common):
     ncols = len(variants_common)
 
     givens, givens_control = get_givens(data["givens_control"], nrows, ncols)
-    data = default_data(data, variants)
+    default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = givens_control
     data["mechanisms"] = [mechanisms for _ in range(nrows)]
     data["titles_columns"] = get_titles(variants_common)
-
-    return data
 
 
 def get_titles(variants):

@@ -13,7 +13,7 @@ def fig6(data):
     ]
 
     data["mechanisms"] = "pi"
-    data = default_data(data, variants)
+    default_data(data, variants)
 
     data["givens_control"] = [
         ["1.0", "1.0", "0.0", "0.0"] for _ in range(len(variants))
@@ -23,5 +23,3 @@ def fig6(data):
         ["Choose_ltGrainmean", "Imimic_ltGrainmean", "qBSeenmean", "wmean"]
         for _ in range(len(variants))
     ]
-
-    return data

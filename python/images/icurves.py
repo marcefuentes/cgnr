@@ -52,9 +52,9 @@ def main(data):
 
     fig, image["axs"] = create_fig(fig_layout)
 
-    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, fig_distances, image)
-    add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
+    image["distances"] = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    format_fig(fig, image)
+    add_colorbar(fig, image, get_sm(image["color_map"]))
 
     data["text"] = fig.texts[2]
     data["cmap"] = colormaps.get_cmap(image["color_map"])
@@ -67,7 +67,7 @@ def main(data):
         data["landscapes"],
     ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
 
-    image["divider"] = create_divider(fig, fig_layout, fig_distances, image)
+    image["divider"] = create_divider(fig, fig_layout, image)
     image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]

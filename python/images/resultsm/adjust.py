@@ -3,11 +3,12 @@
 from modules.add_ticks import add_ticklabels_ax
 
 
-def adjust(data, distances, image):
+def adjust(data, image):
     """Adjust plots"""
 
     if "adjust" in data["layout"]:
 
+        distances = image["distances"]
         nrows = len(data["variants"])
         ncols = len(data["variants"][0])
 

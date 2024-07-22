@@ -15,9 +15,7 @@ def figi_adjust(data):
         "lang_shuffle_cost15",
     ]
 
-    data = default_data_ipi(data, mechanisms, variants_common)
+    default_data_ipi(data, mechanisms, variants_common)
     data["titles_columns"] = get_subtitles(
         data["titles_columns"], variants_common, mechanisms
     )
-
-    return data

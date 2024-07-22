@@ -3,9 +3,10 @@
 from mpl_toolkits.axes_grid1 import Divider, Size
 
 
-def create_divider(fig, layout, distances, image):
+def create_divider(fig, layout, image):
     """Create divider."""
 
+    distances = image["distances"]
     nr = layout["nr"]
     nc = layout["nc"]
 

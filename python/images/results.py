@@ -52,9 +52,9 @@ def main(data):
 
     if data["layout"] == "curves":
         image["margin_top"] *= 0.5
-    fig_distances = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, fig_distances, image)
-    add_colorbar(fig, fig_distances, image, get_sm(image["color_map"]))
+    image["distances"] = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    format_fig(fig, image)
+    add_colorbar(fig, image, get_sm(image["color_map"]))
 
     data["text"] = fig.texts[2]
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
@@ -62,7 +62,7 @@ def main(data):
     data["file_name"] = os.path.basename(__file__).split(".")[0]
     data["function"] = update_artists
 
-    image["divider"] = create_divider(fig, fig_layout, fig_distances, image)
+    image["divider"] = create_divider(fig, fig_layout, image)
     image["letter_position"] = (0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["nc"] = mc
     image["nr"] = mr
@@ -97,7 +97,7 @@ def main(data):
     else:
         format_artists(data["artists"], image["axesimage"])
         ticks_axesimage(image, image["ticks"])
-        adjust(data, fig_distances, image)
+        adjust(data, image)
         add_letters_axesimage(image["axs"], image["letter_position"], image["letters"])
 
     save_file(fig, data)

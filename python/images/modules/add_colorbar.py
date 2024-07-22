@@ -1,8 +1,10 @@
 """ Add colorbar to the figure """
 
 
-def add_colorbar(fig, distances, image, sm):
+def add_colorbar(fig, image, sm):
     """Add colorbar to the figure"""
+
+    distances = image["distances"]  
 
     cax = fig.add_axes(
         [

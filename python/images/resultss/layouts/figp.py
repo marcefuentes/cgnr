@@ -12,6 +12,4 @@ def figp(data):
         f"{data['lang']}_shuffle_cost15",
     ]
 
-    data = default_data_ipi(data, mechanisms, variants_common)
-
-    return data
+    default_data_ipi(data, mechanisms, variants_common)

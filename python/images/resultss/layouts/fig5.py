@@ -14,11 +14,9 @@ def fig5(data):
 
     data["givens_control"] = "1.0"
     data["mechanisms"] = "i"
-    data = default_data(data, variants)
+    default_data(data, variants)
 
     data["titles_columns"] = [S1, S2, "Fitness"]
     data["traits"] = data["traits_control"] = [
         ["MimicGrainmean", "ImimicGrainmean", "wmean"] for _ in range(len(variants))
     ]
-
-    return data

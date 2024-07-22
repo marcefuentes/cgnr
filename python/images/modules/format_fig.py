@@ -20,8 +20,10 @@ def get_distances(nrows, ncols, image):
     return distances
 
 
-def format_fig(fig, distances, image):
+def format_fig(fig, image):
     """Format the figure."""
+
+    distances = image["distances"]
 
     # Size
 
