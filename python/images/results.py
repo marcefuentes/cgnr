@@ -11,7 +11,7 @@ from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters_axesimage, add_letters_line2d
 from modules.add_ticks import ticks_axesimage, ticks_line2d
 from modules.create_fig import create_fig
-from modules.fix_positions import create_divider
+from modules.create_divider import create_divider
 from modules.format_artists import format_artists
 from modules.format_axes import format_axes
 from modules.format_fig import get_distances, format_fig
