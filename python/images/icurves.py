@@ -52,13 +52,13 @@ def main(data):
 
     fig, image["axs"] = create_fig(fig_layout)
 
-    image["distances"] = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, image)
     add_colorbar(fig, image, get_sm(image["color_map"]))
 
     data["text"] = fig.texts[2]
     data["cmap"] = colormaps.get_cmap(image["color_map"])
-    data["file_name"] = os.path.basename(__file__).split(".")[0]
+    data["file_name"] = "output"
     data["function"] = update_artists
     (
         data["budgets"],

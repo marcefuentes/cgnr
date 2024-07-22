@@ -52,7 +52,7 @@ def main(data):
 
     if data["layout"] == "curves":
         image["margin_top"] *= 0.5
-    image["distances"] = get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, image)
     add_colorbar(fig, image, get_sm(image["color_map"]))
 

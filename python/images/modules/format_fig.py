@@ -10,14 +10,12 @@ def get_distances(nrows, ncols, image):
     width_inner = image["plot_size"] * ncols + image["margin_inner"] * (ncols - 1)
     width = image["margin_left"] + width_inner + image["margin_right"]
     height = image["margin_top"] + height_inner + image["margin_bottom"]
-    distances = {
+    image["distances"] = {
         "height": height,
         "height_inner": height_inner,
         "width": width,
         "width_inner": width_inner,
     }
-
-    return distances
 
 
 def format_fig(fig, image):
