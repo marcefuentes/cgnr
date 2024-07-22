@@ -81,6 +81,14 @@ def main(data):
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
 
+    (
+        data["budgets"],
+        data["icurves"],
+        data["icurves_grey"],
+        data["landscapes"],
+    ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
+
+    format_axes(image)
     if data["layout"] == "m01":
         add_ax_labels(
             image["axs"][0, 0, 0, 0],
@@ -112,18 +120,11 @@ def main(data):
         )
     else:
         ticks_line2d(image)
+    add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
 
-    (
-        data["budgets"],
-        data["icurves"],
-        data["icurves_grey"],
-        data["landscapes"],
-    ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
-    format_axes(image)
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(data[artist], image[artist])
-    add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
 
     save_file(image["fig"], data)
     close_plt(image["fig"])
