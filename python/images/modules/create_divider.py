@@ -3,7 +3,7 @@
 from mpl_toolkits.axes_grid1 import Divider, Size
 
 
-def create_divider(fig, layout, image):
+def create_divider(layout, image):
     """Create divider."""
 
     distances = image["distances"]
@@ -19,7 +19,7 @@ def create_divider(fig, layout, image):
         layout["nrows"] - 1
     )
     image["divider"] = Divider(
-        fig,
+        image["fig"],
         (
             image["margin_left"] / distances["width"],
             image["margin_bottom"] / distances["height"],

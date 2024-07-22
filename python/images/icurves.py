@@ -49,14 +49,14 @@ def main(data):
         "nrows": len(data["givens"]),
     }
 
-    fig, image["axs"] = create_fig(fig_layout)
+    image["fig"], image["axs"] = create_fig(fig_layout)
 
     get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, image)
-    add_colorbar(fig, image, get_sm(image["color_map"]))
-    create_divider(fig, fig_layout, image)
+    format_fig(image)
+    add_colorbar(image, get_sm(image["color_map"]))
+    create_divider(fig_layout, image)
 
-    data["text"] = fig.texts[2]
+    data["text"] = image["fig"].texts[2]
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
@@ -124,10 +124,10 @@ def main(data):
         image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
         format_artists(data[artist], image[artist])
 
-    save_file(fig, data)
+    save_file(image["fig"], data)
 
     # pylint: disable=duplicate-code
-    close_plt(fig)
+    close_plt(image["fig"])
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
 

@@ -47,16 +47,16 @@ def main(data):
         "nrows": len(data["variants"]),
     }
 
-    fig, image["axs"] = create_fig(fig_layout)
+    image["fig"], image["axs"] = create_fig(fig_layout)
 
     if data["layout"] == "curves":
         image["margin_top"] *= 0.5
     get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
-    format_fig(fig, image)
-    add_colorbar(fig, image, get_sm(image["color_map"]))
-    create_divider(fig, fig_layout, image)
+    format_fig(image)
+    add_colorbar(image, get_sm(image["color_map"]))
+    create_divider(fig_layout, image)
 
-    data["text"] = fig.texts[2]
+    data["text"] = image["fig"].texts[2]
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
@@ -99,8 +99,8 @@ def main(data):
         adjust(data, image)
         add_letters_axesimage(image["axs"], image["letter_position"], image["letters"])
 
-    save_file(fig, data)
-    close_plt(fig)
+    save_file(image["fig"], data)
+    close_plt(image["fig"])
 
     print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
 
