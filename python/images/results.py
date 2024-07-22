@@ -55,6 +55,7 @@ def main(data):
     get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(fig, image)
     add_colorbar(fig, image, get_sm(image["color_map"]))
+    create_divider(fig, fig_layout, image)
 
     data["text"] = fig.texts[2]
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
@@ -62,7 +63,6 @@ def main(data):
     data["file_name"] = os.path.basename(__file__).split(".")[0]
     data["function"] = update_artists
 
-    image["divider"] = create_divider(fig, fig_layout, image)
     image["letter_position"] = (0, 1.0 + image["padding_letter"] * fig_layout["nr"])
     image["nc"] = mc
     image["nr"] = mr

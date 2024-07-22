@@ -18,7 +18,7 @@ def create_divider(fig, layout, image):
     row_fixed = [plot_size_fixed] * nr + ([spacing_fixed] + [plot_size_fixed] * nr) * (
         layout["nrows"] - 1
     )
-    divider = Divider(
+    image["divider"] = Divider(
         fig,
         (
             image["margin_left"] / distances["width"],
@@ -30,5 +30,3 @@ def create_divider(fig, layout, image):
         row_fixed,
         aspect=False,
     )
-
-    return divider
