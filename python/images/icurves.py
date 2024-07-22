@@ -50,7 +50,6 @@ def main(data):
     }
 
     image["fig"], image["axs"] = create_fig(fig_layout)
-
     get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(image)
     add_colorbar(image, get_sm(image["color_map"]))

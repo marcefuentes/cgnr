@@ -40,6 +40,9 @@ def main(data):
     mr = len(data["alphas"])
     mc = len(data["rhos"])
 
+    if data["layout"] == "curves":
+        image["margin_top"] *= 0.5
+
     fig_layout = {
         "nc": mc if data["ax_type"] == "Line2D" else 1,
         "ncols": len(data["variants"][0]),
@@ -48,9 +51,6 @@ def main(data):
     }
 
     image["fig"], image["axs"] = create_fig(fig_layout)
-
-    if data["layout"] == "curves":
-        image["margin_top"] *= 0.5
     get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
     format_fig(image)
     add_colorbar(image, get_sm(image["color_map"]))
