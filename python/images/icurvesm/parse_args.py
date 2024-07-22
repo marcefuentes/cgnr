@@ -13,7 +13,6 @@ def parse_args():
         "Plot indifference curves and budget constraints, and fitness landscapes."
     )
 
-    # pylint: disable=duplicate-code
     parser = argparse.ArgumentParser(
         description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
