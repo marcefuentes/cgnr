@@ -2,7 +2,6 @@
 
 """ Plots indifference curves and budget lines, and fitness landscapes"""
 
-import os
 import time
 
 from matplotlib import colormaps

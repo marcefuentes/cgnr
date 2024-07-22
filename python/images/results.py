@@ -2,7 +2,6 @@
 
 """ Plots results. """
 
-import os
 import time
 
 from matplotlib import colormaps
@@ -60,7 +59,7 @@ def main(data):
     data["text"] = fig.texts[2]
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     data["cmap"] = colormaps.get_cmap(image["color_map"])
-    data["file_name"] = os.path.basename(__file__).split(".")[0]
+    data["file_name"] = "output"
     data["function"] = update_artists
 
     image["letter_position"] = (0, 1.0 + image["padding_letter"] * fig_layout["nr"])
