@@ -17,5 +17,3 @@ def mxx(data):
     data["givens"] = [1.0, 0.99, 0.5, 0.0]
     data["n_ic"] = 5
     data["budget_line"] = True
-
-    return data

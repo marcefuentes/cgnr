@@ -24,5 +24,3 @@ def m01(data):
             "stop": 1.0,
             "num": 11,
         }
-
-    return data
