@@ -7,11 +7,11 @@ from .default_data import default_data
 def curves(data):
     """Fitness curves for partner choice."""
 
-    givens = [["1.0"], ["0.5"], ["0.0"]]
+    givens = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
 
     nrows = len(givens)
 
-    variants = repeat_for_matrix("nolang_noshuffle_cost15_4", nrows, 1)
+    variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
 
     default_data(data, variants)
 

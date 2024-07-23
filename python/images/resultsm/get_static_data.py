@@ -12,9 +12,10 @@ def get_static_data(traits, givens, alphas, rhos):
     y = np.zeros((len(givens), len(givens[0]), len(alphas), len(rhos), len(x)))
 
     for i, j, k, m in np.ndindex(y.shape[:-1]):
-        y[i, j, k, m] = process_plot(
-            x, traits[i][j], float(givens[i][j]), alphas[k], rhos[m]
-        )
+        if j == 0:
+            y[i, j, k, m] = process_plot(
+                x, traits[i][j], float(givens[i][j]), alphas[k], rhos[m]
+            )
 
     y[y <= 0] = np.nan
 
