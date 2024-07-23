@@ -4,10 +4,10 @@
 def add_letters(ax_type, axs, params):
     """Add letters."""
 
-    if ax_type == "Line2D" or ax_type == "PolyCollection":
-        add_letters_line2d(axs, params)
-    else:
+    if ax_type == "AxesImage":
         add_letters_axesimage(axs, params)
+    else:
+        add_letters_line2d(axs, params)
 
 
 def add_letters_axesimage(axs, params):

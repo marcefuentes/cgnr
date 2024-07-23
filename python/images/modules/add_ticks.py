@@ -35,14 +35,14 @@ def add_ticklabels_line2d(axs, ticklabels_y, ticklabels_x):
 def add_ticks(ax_type, image):
     """Add ticks and tick labels plots."""
 
-    if ax_type == "Line2D" or ax_type == "PolyCollection":
-        add_ticks_line2d(image["axs"], image["ticks"])
-        add_ticklabels_line2d(
+    if ax_type == "AxesImage":
+        add_ticks_axesimage(image["axs"], image["nr"], image["nc"], image["ticks"])
+        add_ticklabels_axesimage(
             image["axs"], image["ticklabels_y"], image["ticklabels_x"]
         )
     else:
-        add_ticks_axesimage(image["axs"], image["nr"], image["nc"], image["ticks"])
-        add_ticklabels_axesimage(
+        add_ticks_line2d(image["axs"], image["ticks"])
+        add_ticklabels_line2d(
             image["axs"], image["ticklabels_y"], image["ticklabels_x"]
         )
 
