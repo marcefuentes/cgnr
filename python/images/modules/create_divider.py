@@ -3,12 +3,13 @@
 from mpl_toolkits.axes_grid1 import Divider, Size
 
 
-def create_divider(layout, image):
+def create_divider(image):
     """Create divider."""
 
-    distances = image["distances"]
+    layout = image["fig_layout"]
     nr = layout["nr"]
     nc = layout["nc"]
+    distances = image["distances"]
 
     spacing_fixed = Size.Fixed(image["margin_inner"])
     plot_size_fixed = Size.Fixed(image["plot_size"] / nc)

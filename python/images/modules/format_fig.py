@@ -3,9 +3,11 @@
 import os
 
 
-def get_distances(nrows, ncols, image):
+def get_distances(image):
     """Calculate distances for figure."""
 
+    nrows = image["fig_layout"]["nrows"]
+    ncols = image["fig_layout"]["ncols"]
     height_inner = image["plot_size"] * nrows + image["margin_inner"] * (nrows - 1)
     width_inner = image["plot_size"] * ncols + image["margin_inner"] * (ncols - 1)
     width = image["margin_left"] + width_inner + image["margin_right"]

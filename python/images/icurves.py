@@ -45,25 +45,25 @@ def main(data):
     else:
         image = image_common
 
-    fig_layout = {
+    image["fig_layout"] = {
         "nc": mc,
         "ncols": 2,
         "nr": mr,
         "nrows": len(data["givens"]),
     }
 
-    image["fig"], image["axs"] = create_fig(fig_layout)
-    get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    image["fig"], image["axs"] = create_fig(image["fig_layout"])
+    get_distances(image)
     format_fig(image)
     add_colorbar(image, get_sm(image["color_map"]))
-    create_divider(fig_layout, image)
+    create_divider(image)
 
     data["text"] = image["fig"].texts[2]
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
 
-    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * fig_layout["nr"])
+    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * image["fig_layout"]["nr"])
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
@@ -76,8 +76,8 @@ def main(data):
         f"{data["alphas"][mr // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
-    image["titles_columns"] = [""] * fig_layout["ncols"]
-    image["titles_rows"] = [""] * fig_layout["nrows"]
+    image["titles_columns"] = [""] * image["fig_layout"]["ncols"]
+    image["titles_rows"] = [""] * image["fig_layout"]["nrows"]
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
 
@@ -123,7 +123,7 @@ def main(data):
     add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
-        image[artist]["linewidth"] /= pow(fig_layout["nr"], 0.5)
+        image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
         format_artists(data[artist], image[artist])
 
     save_file(image["fig"], data)

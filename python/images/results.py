@@ -43,25 +43,25 @@ def main(data):
     if data["layout"] == "curves":
         image["margin_top"] *= 0.5
 
-    fig_layout = {
+    image["fig_layout"] = {
         "nc": mc if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection" else 1,
         "ncols": len(data["variants"][0]),
         "nr": mr if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection" else 1,
         "nrows": len(data["variants"]),
     }
 
-    image["fig"], image["axs"] = create_fig(fig_layout)
-    get_distances(fig_layout["nrows"], fig_layout["ncols"], image)
+    image["fig"], image["axs"] = create_fig(image["fig_layout"])
+    get_distances(image)
     format_fig(image)
     add_colorbar(image, get_sm(image["color_map"]))
-    create_divider(fig_layout, image)
+    create_divider(image)
 
     data["text"] = image["fig"].texts[2]
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
 
-    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * fig_layout["nr"])
+    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * image["fig_layout"]["nr"])
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
