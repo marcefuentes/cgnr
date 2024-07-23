@@ -11,7 +11,10 @@ def curves(data):
 
     nrows = len(givens)
 
-    variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
+    if data["traits"] == "MimicGrainmean":
+        variants = [["nothing", "nolang_noshuffle_cost15_128"] for _ in range(nrows)]
+    else:
+        variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
 
     default_data(data, variants)
 
