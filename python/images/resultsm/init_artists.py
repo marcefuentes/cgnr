@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def init_artists(axs, x, y, ax_type):
+def init_artists(ax_type, axs, x, y):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     artists = np.empty_like(axs, dtype=object)

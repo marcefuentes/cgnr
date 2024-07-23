@@ -88,7 +88,7 @@ def main(data):
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
 
-    data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
+    data["artists"] = init_artists(data["ax_type"], image["axs"], data["x"], data["y"])
     format_axes(image)
     add_letters(data["ax_type"], image["axs"], image["letters"])
     add_ticks(data["ax_type"], image)
