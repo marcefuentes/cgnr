@@ -30,13 +30,12 @@ def process_plot(x, trait, given, alpha, rho):
     _ = tt  # To avoid unused variable warning.
 
     if trait == "MimicGrainmean":
-        # y = (pp - ss) / (64 * rr - ss + 2 * pp - tt - 64 * pp)
-        y = pp - ss
+        y = (pp - ss) / (64.25 * rr - ss + 2 * pp - tt - 64.25 * pp)
+        y *= 50
     else:
         y = rr - pp  # Partner choice
-
-    y *= 500
-    mask = (x + inc < qbeq(given, alpha, rho)) | (x + inc > qbeq(0.0, alpha, rho))
-    y[mask] = np.nan
+        y *= 500
+        mask = (x + inc < qbeq(given, alpha, rho)) | (x + inc > qbeq(0.0, alpha, rho))
+        y[mask] = np.nan
 
     return y
