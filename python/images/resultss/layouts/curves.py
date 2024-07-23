@@ -1,6 +1,5 @@
 """Theoretical curves for partner choice and reciprocity."""
 
-from .repeat_for_matrix import repeat_for_matrix
 from .default_data import default_data
 
 
