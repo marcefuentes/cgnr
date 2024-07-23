@@ -24,3 +24,6 @@ def m01(data):
             "stop": 1.0,
             "num": 11,
         }
+
+    data["titles_columns"] = ["", ""]
+    data["titles_rows"] = ["", ""]

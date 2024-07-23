@@ -77,8 +77,9 @@ def main(data):
         f"{data["alphas"][mr // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
-    image["titles_columns"] = [""] * image["fig_layout"]["ncols"]
-    image["titles_rows"] = [""] * image["fig_layout"]["nrows"]
+    image["titles_columns"] = data["titles_columns"]
+    image["titles_rows"] = data["titles_rows"]
+
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
 
