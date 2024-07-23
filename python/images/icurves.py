@@ -8,7 +8,7 @@ from matplotlib import colormaps
 
 from modules.add_ax_labels import add_ax_labels
 from modules.add_colorbar import add_colorbar
-from modules.add_letters import add_letters_line2d
+from modules.add_letters import add_letters
 from modules.add_ticks import ticks_ax_line2d, ticks_line2d
 from modules.create_fig import create_fig
 from modules.create_divider import create_divider
@@ -123,7 +123,7 @@ def main(data):
         )
     else:
         ticks_line2d(image)
-    add_letters_line2d(image["axs"], image["letter_position"], image["letters"])
+    add_letters("Line2D", image["axs"], image["letter_position"], image["letters"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)

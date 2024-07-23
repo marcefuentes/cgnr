@@ -1,6 +1,15 @@
 """ Add letters. """
 
 
+def add_letters(ax_type, axs, position, params):
+    """Add letters."""
+
+    if ax_type == "Line2D" or ax_type == "PolyCollection":
+        add_letters_line2d(axs, position, params)
+    else:
+        add_letters_axesimage(axs, position, params)
+
+
 def add_letters_axesimage(axs, position, params):
     """Add letters."""
 
