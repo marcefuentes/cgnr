@@ -64,10 +64,10 @@ def main(data):
     add_colorbar(image, get_sm(image["color_map"]))
     create_divider(image)
 
-    data["text"] = image["fig"].texts[2]
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
     data["function"] = update_artists
+    data["text"] = image["fig"].texts[2]
 
     image["letter_position"] = (
         0.0,
