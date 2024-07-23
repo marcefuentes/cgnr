@@ -37,10 +37,14 @@ def add_ticks(ax_type, image):
 
     if ax_type == "Line2D" or ax_type == "PolyCollection":
         add_ticks_line2d(image["axs"], image["ticks"])
-        add_ticklabels_line2d(image["axs"], image["ticklabels_y"], image["ticklabels_x"])
+        add_ticklabels_line2d(
+            image["axs"], image["ticklabels_y"], image["ticklabels_x"]
+        )
     else:
         add_ticks_axesimage(image["axs"], image["nr"], image["nc"], image["ticks"])
-        add_ticklabels_axesimage(image["axs"], image["ticklabels_y"], image["ticklabels_x"])
+        add_ticklabels_axesimage(
+            image["axs"], image["ticklabels_y"], image["ticklabels_x"]
+        )
 
 
 def add_ticks_ax_line2d(ax, format_params):

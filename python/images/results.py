@@ -100,7 +100,9 @@ def main(data):
 
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     format_axes(image)
-    add_letters(data["ax_type"], image["axs"], image["letter_position"], image["letters"])
+    add_letters(
+        data["ax_type"], image["axs"], image["letter_position"], image["letters"]
+    )
     add_ticks(data["ax_type"], image)
     if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection":
         format_artists(data["artists"], image["lines2d"])
