@@ -8,7 +8,7 @@ from matplotlib import colormaps
 
 from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters
-from modules.add_ticks import ticks_axesimage, ticks_line2d
+from modules.add_ticks import add_ticks
 from modules.create_fig import create_fig
 from modules.create_divider import create_divider
 from modules.format_artists import format_artists
@@ -101,12 +101,11 @@ def main(data):
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     format_axes(image)
     add_letters(data["ax_type"], image["axs"], image["letter_position"], image["letters"])
+    add_ticks(data["ax_type"], image)
     if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection":
         format_artists(data["artists"], image["lines2d"])
-        ticks_line2d(image)
     else:
         format_artists(data["artists"], image["axesimage"])
-        ticks_axesimage(image)
         adjust(data, image)
 
     save_file(image["fig"], data)
