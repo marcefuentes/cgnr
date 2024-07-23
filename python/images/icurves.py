@@ -63,7 +63,10 @@ def main(data):
     data["file_name"] = "output"
     data["function"] = update_artists
 
-    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * image["fig_layout"]["nr"])
+    image["letter_position"] = (
+        0.0,
+        1.0 + image["padding_letter"] * image["fig_layout"]["nr"],
+    )
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [

@@ -44,9 +44,17 @@ def main(data):
         image["margin_top"] *= 0.5
 
     image["fig_layout"] = {
-        "nc": mc if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection" else 1,
+        "nc": (
+            mc
+            if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection"
+            else 1
+        ),
         "ncols": len(data["variants"][0]),
-        "nr": mr if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection" else 1,
+        "nr": (
+            mr
+            if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection"
+            else 1
+        ),
         "nrows": len(data["variants"]),
     }
 
@@ -61,7 +69,10 @@ def main(data):
     data["file_name"] = "output"
     data["function"] = update_artists
 
-    image["letter_position"] = (0.0, 1.0 + image["padding_letter"] * image["fig_layout"]["nr"])
+    image["letter_position"] = (
+        0.0,
+        1.0 + image["padding_letter"] * image["fig_layout"]["nr"],
+    )
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
