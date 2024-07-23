@@ -1,16 +1,16 @@
 """ Add letters. """
 
 
-def add_letters(ax_type, axs, position, params):
+def add_letters(ax_type, axs, params):
     """Add letters."""
 
     if ax_type == "Line2D" or ax_type == "PolyCollection":
-        add_letters_line2d(axs, position, params)
+        add_letters_line2d(axs, params)
     else:
-        add_letters_axesimage(axs, position, params)
+        add_letters_axesimage(axs, params)
 
 
-def add_letters_axesimage(axs, position, params):
+def add_letters_axesimage(axs, params):
     """Add letters."""
 
     i = 0
@@ -23,11 +23,11 @@ def add_letters_axesimage(axs, position, params):
             letter += letter
         params["s"] = letter
         params["transform"] = ax.transAxes
-        ax.text(*position, **params)
+        ax.text(**params)
         i += 1
 
 
-def add_letters_line2d(axs, position, params):
+def add_letters_line2d(axs, params):
     """Add letters."""
 
     nrows, ncols = axs.shape[:2]
@@ -40,4 +40,4 @@ def add_letters_line2d(axs, position, params):
                 letter += letter
             params["s"] = letter
             params["transform"] = axs[i, j, 0, 0].transAxes
-            axs[i, j, 0, 0].text(*position, **params)
+            axs[i, j, 0, 0].text(**params)

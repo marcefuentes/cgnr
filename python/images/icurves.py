@@ -63,10 +63,8 @@ def main(data):
     data["function"] = update_artists
     data["text"] = image["fig"].texts[2]
 
-    image["letter_position"] = (
-        0.0,
-        1.0 + image["padding_letter"] * image["fig_layout"]["nr"],
-    )
+    image["letters"]["x"] = 0.0
+    image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
@@ -123,7 +121,7 @@ def main(data):
         )
     else:
         add_ticks("Line2D", image)
-    add_letters("Line2D", image["axs"], image["letter_position"], image["letters"])
+    add_letters("Line2D", image["axs"], image["letters"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)

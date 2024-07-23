@@ -61,10 +61,8 @@ def main(data):
     data["function"] = update_artists
     data["text"] = image["fig"].texts[2]
 
-    image["letter_position"] = (
-        0.0,
-        1.0 + image["padding_letter"] * image["fig_layout"]["nr"],
-    )
+    image["letters"]["x"] = 0.0
+    image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["nc"] = mc
     image["nr"] = mr
     image["ticklabels_x"] = [
@@ -92,9 +90,7 @@ def main(data):
 
     data["artists"] = init_artists(image["axs"], data["x"], data["y"], data["ax_type"])
     format_axes(image)
-    add_letters(
-        data["ax_type"], image["axs"], image["letter_position"], image["letters"]
-    )
+    add_letters(data["ax_type"], image["axs"], image["letters"])
     add_ticks(data["ax_type"], image)
     if data["ax_type"] == "AxesImage":
         format_artists(data["artists"], image["axesimage"])
