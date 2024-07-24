@@ -14,8 +14,11 @@ def figi_adjust(data):
         "nolang_shuffle_cost15",
         "lang_shuffle_cost15",
     ]
-
+    trait = data["traits"]
     default_data_ipi(data, mechanisms, variants_common)
     data["titles_columns"] = get_subtitles(
         data["titles_columns"], variants_common, mechanisms
     )
+
+    if trait == "ImimicGrainmean":
+        data["traits"] = [["nothing", "ImimicGrainmean", "nothing", "ImimicGrainmean", "ImimicGrainmean"] for _ in range(4)]

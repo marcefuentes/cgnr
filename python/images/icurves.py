@@ -122,11 +122,11 @@ def main(data):
         )
     else:
         add_ticks("Line2D", image)
-    add_letters("Line2D", image["axs"], image["letters"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
         format_artists(data[artist], image[artist])
+    add_letters("Line2D", image["axs"], image["letters"])
 
     save_file(image["fig"], data)
     close_plt(image["fig"])
