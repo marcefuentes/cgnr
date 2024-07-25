@@ -13,7 +13,7 @@ def figpi(data):
         f"{data['lang']}_shuffle_cost15",
         f"{data['lang']}_shuffle_cost15",
     ]
-
+    trait = data["traits"]
     default_data_ipi(data, mechanisms, variants_common)
     data["titles_columns"] = get_subtitles(
         data["titles_columns"], variants_common, mechanisms
