@@ -18,3 +18,14 @@ def figpi(data):
     data["titles_columns"] = get_subtitles(
         data["titles_columns"], variants_common, mechanisms
     )
+
+    if trait == "ImimicGrainmean":
+        data["traits"] = [
+            ["nothing", "ImimicGrainmean", "nothing", "ImimicGrainmean"]
+            for _ in range(4)
+        ]
+    elif trait == "Imimic_ltGrainmean":
+        data["traits"] = [
+            ["nothing", "Imimic_ltGrainmean", "nothing", "Imimic_ltGrainmean"]
+            for _ in range(4)
+        ]
