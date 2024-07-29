@@ -65,9 +65,9 @@ def parse_args():
             "default": "none",
             "help": "trait (control)",
         },
+        "clean": {"action": "store_true", "help": "clean folders"},
         "histogram": {"action": "store_true", "help": "add histogram"},
         "movie": {"action": "store_true", "help": "enable movie"},
-        "clean": {"action": "store_true", "help": "clean folders"},
     }
 
     for arg, params in args_dict.items():
