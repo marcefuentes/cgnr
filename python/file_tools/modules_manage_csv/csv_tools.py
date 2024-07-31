@@ -29,6 +29,7 @@ def call_function(function_name, *args, **kwargs):
 
     functions = {
         "add_headers": add_headers,
+        "move_time": move_time,
         # Add more functions here if needed
     }
 
