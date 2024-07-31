@@ -29,7 +29,7 @@ def main(args):
     os.makedirs(path, exist_ok=True)
 
     constant_lines = [
-        f"Seed,1\n",
+        "Seed,1\n",
         f"N,{project['N']}\n",
         f"Runs,{project['Runs']}\n",
         f"Time,{project['Time']}\n",
