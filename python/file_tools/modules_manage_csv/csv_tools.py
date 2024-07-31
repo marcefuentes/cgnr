@@ -57,12 +57,14 @@ def move_time():
 
     input_extension = ".gl2"
     output_extension = ".glo"
-    
+
     for root, _, files in os.walk("."):
         for file in files:
             if file.endswith(input_extension):
                 input_file = os.path.join(root, file)
-                output_file = os.path.join(root, file.replace(input_extension, output_extension))
+                output_file = os.path.join(
+                    root, file.replace(input_extension, output_extension)
+                )
                 with open(input_file, "r", encoding="utf-8") as f:
                     line = f.readline()
                     while line:
@@ -76,7 +78,6 @@ def move_time():
                     f.write(content)
                     f.write(time)
                 os.remove(input_file)
-
 
 
 def remove_columns_from_csvs(extension, columns_to_remove):
