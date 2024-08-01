@@ -15,6 +15,9 @@ def get_data(data):
     nrows = len(data["variants"])
     ncols = len(data["variants"][0])
 
+    data["column_index"] = "logES"
+    data["row_index"] = "alpha"
+
     data["dfs"] = np.empty((nrows, ncols), dtype=object)
     data["dfs_control"] = np.empty((nrows, ncols), dtype=object)
 

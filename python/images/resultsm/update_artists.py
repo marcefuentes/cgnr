@@ -74,7 +74,13 @@ def update_zmatrix(t, data, i, j):
         print(f"Trait {trait} does not exist.")
         return None
 
-    zmatrix = get_zmatrix(t, df, trait, "alpha", "logES")
+    zmatrix = get_zmatrix(
+        t,
+        df,
+        trait,
+        data["row_index"],
+        data["column_index"],
+    )
 
     df_control = data["dfs_control"][i, j]
     if df_control.empty:
@@ -86,8 +92,8 @@ def update_zmatrix(t, data, i, j):
         t,
         df_control,
         data["traits_control"][i][j],
-        "alpha",
-        "logES",
+        data["row_index"],
+        data["column_index"],
     )
 
     if zmatrix.shape == zmatrix_control.shape:
