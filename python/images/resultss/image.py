@@ -7,13 +7,17 @@ COLOR_MAP = common.COLOR_MAP
 
 image = {
     "n_x_values": 64,
-    "lines2d": {
+    "AxesImage": {
+        "cmap": COLOR_MAP,
+        "clim": (-1, 1),
+    },
+    "Line2D": {
         "color": "brown",
         "linewidth": 0.00001 * PLOT_SIZE,
     },
-    "axesimage": {
-        "cmap": COLOR_MAP,
-        "clim": (-1, 1),
+    "PolyCollection": {
+        "color": "brown",
+        "linewidth": 0.00001 * PLOT_SIZE,
     },
 }
 

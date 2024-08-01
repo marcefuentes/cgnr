@@ -92,10 +92,8 @@ def main(data):
     format_axes(image)
     add_ticks(data["ax_type"], image)
     if data["ax_type"] == "AxesImage":
-        format_artists(data["artists"], image["axesimage"])
         adjust(data, image)
-    else:
-        format_artists(data["artists"], image["lines2d"])
+    format_artists(data["artists"], image[data["ax_type"]])
     add_letters(data["ax_type"], image["axs"], image["letters"])
 
     save_file(image["fig"], data)
