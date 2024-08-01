@@ -6,7 +6,7 @@ from .default_data import default_data, get_subtitles
 def fig7(data):
     """Plots for partner choice plus reciprocity."""
 
-    mechanisms= ["p", "pi", "p", "pi"]
+    mechanisms = ["p", "pi", "p", "pi"]
     variants = [
         [
             "nolang_noshuffle_cost15_128",

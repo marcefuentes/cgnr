@@ -38,8 +38,7 @@ def adjust(data, image):
         ax = image["axs"][3, 0, 0, 0]
         ax.set_axes_locator(None)
         bottom_ax = (
-            image["margin_bottom"]
-            + (image["plot_size"] + image["margin_inner"]) * 0.5
+            image["margin_bottom"] + (image["plot_size"] + image["margin_inner"]) * 0.5
         ) / distances["height"]
         new_position[1] = bottom_ax
         ax.set_position(new_position)
