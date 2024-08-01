@@ -91,8 +91,7 @@ def main(data):
     data["artists"] = init_artists(data["ax_type"], image["axs"], data["x"], data["y"])
     format_axes(image)
     add_ticks(data["ax_type"], image)
-    if data["ax_type"] == "AxesImage":
-        adjust(data, image)
+    adjust(data, image)
     format_artists(data["artists"], image[data["ax_type"]])
     add_letters(data["ax_type"], image["axs"], image["letters"])
 
