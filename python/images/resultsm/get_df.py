@@ -44,7 +44,8 @@ def read_files(filelist, movie):
     for file in filelist:
         df = pd.read_csv(file)
         if not movie:
-            df = df.tail(1)
+            t = df.Time.tail(1).values[0]
+            df = df[df.Time == t]
         if not df.empty and not df.isna().all().all():
             df_list.append(df)
 
