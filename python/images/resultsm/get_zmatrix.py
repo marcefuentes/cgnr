@@ -6,13 +6,13 @@ import pandas as pd
 def get_zmatrix(t, df, trait):
     """Returns the zmatrix for a given time, dataframe, and trait."""
 
-    m = df.Time == t
+    df = df.loc[df.Time == t]
     params = {
         "values": trait,
         "index": "alpha",
         "columns": "logES",
     }
-    zmatrix = pd.pivot(df.loc[m], **params)
+    zmatrix = pd.pivot(df, **params)
     zmatrix = zmatrix.sort_index(axis=0, ascending=False)
     zmatrix = zmatrix.to_numpy()
     return zmatrix
