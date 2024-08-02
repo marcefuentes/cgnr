@@ -18,7 +18,7 @@ from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from icurvesm.format_axes_m01 import format_axes_m01
+from icurvesm.reformat_m01 import reformat_m01
 from icurvesm.get_data import get_data
 from icurvesm.get_sm import get_sm
 from icurvesm.init_artists import init_artists
@@ -81,7 +81,7 @@ def main(data):
 
     format_axes(image)
     if data["layout"] == "m01":
-        format_axes_m01(image)
+        reformat_m01(image)
     else:
         add_ticks("Line2D", image)
 
