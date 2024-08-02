@@ -12,8 +12,8 @@ image = {
         "clim": (-1, 1),
     },
     "Line2D": {
-        "color": "brown",
-        "linewidth": 0.00001 * PLOT_SIZE,
+        "color": "black",
+        "linewidth": 0.1 * PLOT_SIZE,
     },
     "PolyCollection": {
         "color": "brown",
