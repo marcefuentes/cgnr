@@ -6,10 +6,9 @@ import time
 
 from matplotlib import colormaps
 
-from modules.add_ax_labels import add_ax_labels
 from modules.add_colorbar import add_colorbar
 from modules.add_letters import add_letters
-from modules.add_ticks import add_ticks, ticks_ax_line2d
+from modules.add_ticks import add_ticks
 from modules.create_fig import create_fig
 from modules.create_divider import create_divider
 from modules.format_artists import format_artists
@@ -19,6 +18,7 @@ from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from icurvesm.format_axes_m01 import format_axes_m01
 from icurvesm.get_data import get_data
 from icurvesm.get_sm import get_sm
 from icurvesm.init_artists import init_artists
@@ -81,34 +81,7 @@ def main(data):
 
     format_axes(image)
     if data["layout"] == "m01":
-        add_ax_labels(
-            image["axs"][0, 0, 0, 0],
-            image["label_x_0"],
-            image["label_y_0"],
-            image["titles_columns_params"]["fontsize"],
-            image["labelpad"],
-        )
-        add_ax_labels(
-            image["axs"][0, 1, 0, 0],
-            image["label_x_1"],
-            image["label_y_1"],
-            image["titles_columns_params"]["fontsize"],
-            image["labelpad"],
-        )
-        image["ticklabels_x"] = [0.0, 0.5, 1.0]
-        image["ticklabels_y"] = [0.0, 0.5, 1.0]
-        ticks_ax_line2d(
-            image["axs"][0, 0, 0, 0],
-            image["ticklabels_y"],
-            image["ticklabels_x"],
-            image["ticks"],
-        )
-        ticks_ax_line2d(
-            image["axs"][0, 1, 0, 0],
-            image["ticklabels_y"],
-            image["ticklabels_x"],
-            image["ticks"],
-        )
+        format_axes_m01(image)
     else:
         add_ticks("Line2D", image)
 
