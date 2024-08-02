@@ -1,6 +1,6 @@
 """2 plots."""
 
-from .default_data import default_data
+from resultsm.default_data import default_data
 
 
 def m02(data):

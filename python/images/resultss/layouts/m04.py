@@ -1,6 +1,6 @@
 """4 plots."""
 
-from .default_data import default_data, get_titles
+from resultsm.default_data import default_data, get_titles
 
 
 def m04(data):

@@ -1,6 +1,6 @@
 """8 plots. """
 
-from .default_data import default_data_ipi
+from resultsm.default_data import default_data_ipi
 
 
 def figp(data):

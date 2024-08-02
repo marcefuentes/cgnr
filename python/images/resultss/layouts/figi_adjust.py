@@ -1,6 +1,6 @@
 """Plots for reciprocity."""
 
-from .default_data import default_data_ipi, get_subtitles
+from resultsm.default_data import default_data_ipi, get_subtitles
 
 
 def figi_adjust(data):

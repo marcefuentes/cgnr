@@ -1,6 +1,6 @@
 """Plots for partner choice plus reciprocity."""
 
-from .default_data import default_data_ipi, get_subtitles
+from resultsm.default_data import default_data_ipi, get_subtitles
 
 
 def figpi(data):

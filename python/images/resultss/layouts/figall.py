@@ -1,6 +1,6 @@
 """Show how adding cooperation mechanisms contributes to aaleviating social dilemmas."""
 
-from .default_data import default_data_ipi, get_subtitles
+from resultsm.default_data import default_data_ipi, get_subtitles
 
 
 def figall(data):

@@ -1,7 +1,7 @@
 """Social dilemmas."""
 
-from .default_data import default_data
-from .fill_matrix import fill_matrix
+from modules.fill_matrix import fill_matrix
+from resultsm.default_data import default_data
 
 
 def dilemmas(data):

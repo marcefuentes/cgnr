@@ -1,7 +1,7 @@
 """Figure 6."""
 
-from .default_data import default_data
-from .ss import S3, S5
+from resultsm.default_data import default_data
+from resultss.ss import S3, S5
 
 
 def fig6(data):

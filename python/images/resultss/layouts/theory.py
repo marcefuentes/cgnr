@@ -1,6 +1,6 @@
 """Theory and simulations."""
 
-from .default_data import default_data
+from resultsm.default_data import default_data
 
 
 def theory(data):

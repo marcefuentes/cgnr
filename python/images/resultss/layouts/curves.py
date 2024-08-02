@@ -1,6 +1,6 @@
 """Theoretical curves for partner choice and reciprocity."""
 
-from .default_data import default_data
+from resultsm.default_data import default_data
 
 
 def curves(data):
