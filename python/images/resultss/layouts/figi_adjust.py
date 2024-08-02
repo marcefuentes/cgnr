@@ -23,7 +23,7 @@ def figi_adjust(data):
     if trait == "ImimicGrainmean":
         data["traits"] = [
             ["nothing", "nothing", "nothing", "ImimicGrainmean", "ImimicGrainmean"]
-            for _ in variants
+            for _ in data["variants"]
         ]
     elif trait == "Imimic_ltGrainmean":
         data["traits"] = [
@@ -34,5 +34,5 @@ def figi_adjust(data):
                 "nothing",
                 "Imimic_ltGrainmean",
             ]
-            for _ in variants
+            for _ in data["variants"]
         ]
