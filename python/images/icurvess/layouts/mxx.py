@@ -19,4 +19,4 @@ def mxx(data):
     data["budget_line"] = True
 
     data["titles_columns"] = ["", ""]
-    data["titles_rows"] = [[""] for _ in range(len(data["givens"]))]
+    data["titles_rows"] = [[""] for _ in data["givens"]]
