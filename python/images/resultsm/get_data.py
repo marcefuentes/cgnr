@@ -12,14 +12,15 @@ from settings.project import project
 def get_data(data):
     """Get the df args for the given trait_set."""
 
-    nrows = data["layout_i"]
-    ncols = data["layout_j"]
+    layout = (data["layout_i"], data["layout_j"])
+    rows = range(layout[0])
+    cols = range(layout[1])
 
     data["column_index"] = "logES"
     data["row_index"] = "alpha"
 
-    data["dfs"] = np.empty((nrows, ncols), dtype=object)
-    data["dfs_control"] = np.empty((nrows, ncols), dtype=object)
+    data["dfs"] = np.empty(layout, dtype=object)
+    data["dfs_control"] = np.empty(layout, dtype=object)
 
     csv, frq = project["output_file_extensions"]
     params = {
@@ -31,8 +32,8 @@ def get_data(data):
 
     df = None
 
-    for i in range(nrows):
-        for j in range(ncols):
+    for i in rows:
+        for j in cols:
             params["path"] = (
                 f"{data['variants'][i][j]}/"
                 f"{data['mechanisms'][i][j]}/"
@@ -53,10 +54,10 @@ def get_data(data):
         raise ValueError("No data found in any of the paths defined in data.")
 
     if data["histogram"]:
-        data["dffrqs"] = np.empty((nrows, ncols), dtype=object)
+        data["dffrqs"] = np.empty(layout, dtype=object)
         params["filetype"] = frq
-        for i in range(nrows):
-            for j in range(ncols):
+        for i in rows:
+            for j in cols:
                 params["path"] = (
                     f"{data['variants'][i][j]}/"
                     f"{data['mechanisms'][i][j]}/"
@@ -78,7 +79,7 @@ def get_data(data):
     elif data["histogram"]:
         data["x"] = np.arange(project["bins"])
         data["y"] = np.zeros(
-            (nrows, ncols, len(data["alphas"]), len(data["rhos"]), project["bins"])
+            (layout[0], layout[1], len(data["alphas"]), len(data["rhos"]), project["bins"])
         )
     elif data["layout"] == "theory":
         data["x"], data["y"] = get_theory_axesimage(
@@ -87,5 +88,5 @@ def get_data(data):
     else:
         data["x"] = None
         data["y"] = np.zeros(
-            (nrows, ncols, 1, 1, len(data["alphas"]), len(data["rhos"]))
+            (layout[0], layout[1], 1, 1, len(data["alphas"]), len(data["rhos"]))
         )
