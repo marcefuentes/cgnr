@@ -22,10 +22,10 @@ def figpi(data):
     if trait == "ImimicGrainmean":
         data["traits"] = [
             ["nothing", "ImimicGrainmean", "nothing", "ImimicGrainmean"]
-            for _ in range(4)
+            for _ in variants
         ]
     elif trait == "Imimic_ltGrainmean":
         data["traits"] = [
             ["nothing", "Imimic_ltGrainmean", "nothing", "Imimic_ltGrainmean"]
-            for _ in range(4)
+            for _ in variants
         ]

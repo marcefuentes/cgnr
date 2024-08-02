@@ -16,23 +16,15 @@ def figi_adjust(data):
     ]
     trait = data["traits"]
     default_data_ipi(data, mechanisms, variants_common)
-    data["titles_columns"] = get_subtitles(
-        data["titles_columns"], variants_common, mechanisms
-    )
+    data["titles_columns"] = get_subtitles(data["titles_columns"], variants_common, mechanisms)
 
     if trait == "ImimicGrainmean":
         data["traits"] = [
             ["nothing", "nothing", "nothing", "ImimicGrainmean", "ImimicGrainmean"]
-            for _ in range(4)
+            for _ in variants
         ]
     elif trait == "Imimic_ltGrainmean":
         data["traits"] = [
-            [
-                "nothing",
-                "Imimic_ltGrainmean",
-                "nothing",
-                "nothing",
-                "Imimic_ltGrainmean",
-            ]
-            for _ in range(4)
+            ["nothing", "Imimic_ltGrainmean", "nothing", "nothing", "Imimic_ltGrainmean"]
+            for _ in variants
         ]

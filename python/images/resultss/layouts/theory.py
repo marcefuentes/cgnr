@@ -8,10 +8,8 @@ def theory(data):
 
     givens = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
 
-    nrows = len(givens)
-
-    variants = [[None, "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
-    traits = [[None, data["traits"]] for _ in range(nrows)]
+    variants = [[None, "nolang_noshuffle_cost15_4"] for _ in givens]
+    traits = [[None, data["traits"]] for _ in givens]
 
     data["givens_control"] = None
 
@@ -29,7 +27,7 @@ def theory(data):
     default_data(data, variants)
 
     data["givens"] = givens
-    data["mechanisms"] = [[None, "none"] for _ in range(nrows)]
+    data["mechanisms"] = [[None, "none"] for _ in givens]
     data["mechanisms_control"] = data["mechanisms"]
     data["titles_columns"] = titles
     data["traits"] = traits

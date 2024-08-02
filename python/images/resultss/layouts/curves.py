@@ -8,9 +8,7 @@ def curves(data):
 
     givens = [["1.0", "1.0"], ["0.5", "0.5"], ["0.0", "0.0"]]
 
-    nrows = len(givens)
-
-    variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in range(nrows)]
+    variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in len(givens)] 
 
     default_data(data, variants)
 

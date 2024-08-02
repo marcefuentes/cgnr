@@ -1,25 +1,22 @@
 """Default data."""
 
-from .repeat_for_matrix import repeat_for_matrix
+from .fill_matrix import fill_matrix
 from .ss import S1, S2, S3, S4, S5
 
 
 def default_data(data, variants):
     """Default data."""
 
-    nrows = len(variants)
-    ncols = len(variants[0])
-
-    data["givens"] = repeat_for_matrix(data["givens"], nrows, ncols)
-    data["givens_control"] = repeat_for_matrix(data["givens_control"], nrows, ncols)
-    data["mechanisms"] = repeat_for_matrix(data["mechanisms"], nrows, ncols)
-    data["mechanisms_control"] = repeat_for_matrix(
-        data["mechanisms_control"], nrows, ncols
-    )
-    data["titles_columns"] = [""] * ncols
-    data["titles_rows"] = [""] * nrows
-    data["traits"] = repeat_for_matrix(data["traits"], nrows, ncols)
-    data["traits_control"] = repeat_for_matrix(data["traits_control"], nrows, ncols)
+    data["givens"] = fill_matrix(data["givens"], variants)
+    data["givens_control"] = fill_matrix(data["givens_control"], variants)
+    data["layout_i"] = len(variants)
+    data["layout_j"] = len(variants[0])
+    data["mechanisms"] = fill_matrix(data["mechanisms"], variants)
+    data["mechanisms_control"] = fill_matrix(data["mechanisms_control"], variants)
+    data["titles_columns"] = [""] * len(variants[0])
+    data["titles_rows"] = [""] * len(variants)
+    data["traits"] = fill_matrix(data["traits"], variants)
+    data["traits_control"] = fill_matrix(data["traits_control"], variants)
     data["variants"] = variants
     data["variants_control"] = variants
 
@@ -33,44 +30,29 @@ def default_data_ipi(data, mechanisms, variants_common):
         for suffix in suffixes:
             variants.append([f"{variant}{suffix}" for variant in variants_common])
 
-    nrows = len(variants)
-    ncols = len(variants_common)
-
-    givens, givens_control = get_givens(data["givens_control"], nrows, ncols)
+    givens, givens_control = get_givens(data["givens_control"], variants)
     default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = givens_control
-    data["mechanisms"] = [mechanisms for _ in range(nrows)]
+    data["layout_i"] = len(variants)
+    data["layout_j"] = len(variants[0])
+    data["mechanisms"] = [mechanisms for _ in variants]
     data["titles_columns"] = get_titles(variants_common)
 
 
-def get_titles(variants):
-    """Get titles."""
-
-    titles = []
-    for variant in variants:
-        if not variant:
-            titles.append("")
-        elif "noshuffle" in variant:
-            titles.append("No shuffling")
-        else:
-            titles.append("Shuffling")
-    return titles
-
-
-def get_givens(control, nrows, ncols):
+def get_givens(control, variants):
     """Get givens."""
 
     givens = [
-        ["1.0" for _ in range(ncols)],
-        ["1.0" for _ in range(ncols)],
-        ["0.5" for _ in range(ncols)],
-        ["0.5" for _ in range(ncols)],
+        ["1.0" for _ in variants[0]],
+        ["1.0" for _ in variants[0]],
+        ["0.5" for _ in variants[0]],
+        ["0.5" for _ in variants[0]],
     ]
 
     if control == "0.0":
-        givens_control = repeat_for_matrix("0.0", nrows, ncols)
+        givens_control = fill_matrix("0.0", variants)
     else:
         givens_control = givens
 
@@ -100,4 +82,18 @@ def get_subtitles(titles, variants, mechanisms):
             if variant.startswith("lang"):
                 titles[column] += f", {S5}"
 
+    return titles
+
+
+def get_titles(variants):
+    """Get titles."""
+
+    titles = []
+    for variant in variants:
+        if not variant:
+            titles.append("")
+        elif "noshuffle" in variant:
+            titles.append("No shuffling")
+        else:
+            titles.append("Shuffling")
     return titles
