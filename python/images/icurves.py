@@ -37,18 +37,15 @@ def main(data):
     get_layout(data, layouts)
     get_data(data)
 
-    mr = len(data["alphas"])
-    mc = len(data["rhos"])
-
     if data["layout"] == "m01":
         image = image_unit
     else:
         image = image_common
 
     image["fig_layout"] = {
-        "nc": mc,
+        "nc": data["layout_m"],
         "ncols": 2,
-        "nr": mr,
+        "nr": data["layout_k"],
         "nrows": len(data["givens"]),
     }
 
@@ -65,18 +62,10 @@ def main(data):
 
     image["letters"]["x"] = 0.0
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
-    image["nc"] = mc
-    image["nr"] = mr
-    image["ticklabels_x"] = [
-        f"{data["rhos"][0]:.0f}",
-        f"{data["rhos"][mc // 2]:.0f}",
-        f"{data["rhos"][-1]:.2f}",
-    ]
-    image["ticklabels_y"] = [
-        f"{data["alphas"][0]:.1f}",
-        f"{data["alphas"][mr // 2]:.1f}",
-        f"{data["alphas"][-1]:.1f}",
-    ]
+    image["nc"] = data["layout_m"]
+    image["nr"] = data["layout_k"]
+    image["ticklabels_x"] = data["ticklabels_x"]
+    image["ticklabels_y"] = data["ticklabels_y"]
     image["titles_columns"] = data["titles_columns"]
     image["titles_rows"] = data["titles_rows"]
 
