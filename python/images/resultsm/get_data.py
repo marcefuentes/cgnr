@@ -69,6 +69,18 @@ def get_data(data):
     data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     data["logess"] = np.sort(df["logES"].unique())
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
+    data["layout_k"] = len(data["alphas"])
+    data["layout_m"] = len(data["rhos"])
+    data["ticklabels_x"] = [
+        f"{data["rhos"][0]:.0f}",
+        f"{data["rhos"][data['layout_m'] // 2]:.0f}",
+        f"{data["rhos"][-1]:.2f}",
+    ]
+    data["ticklabels_y"] = [
+        f"{data["alphas"][0]:.1f}",
+        f"{data["alphas"][data['layout_k'] // 2]:.1f}",
+        f"{data["alphas"][-1]:.1f}",
+    ]
     if data["layout"] == "curves":
         data["x"], data["y"] = get_static_data(
             data["traits"],
@@ -79,7 +91,7 @@ def get_data(data):
     elif data["histogram"]:
         data["x"] = np.arange(project["bins"])
         data["y"] = np.zeros(
-            (layout[0], layout[1], len(data["alphas"]), len(data["rhos"]), project["bins"])
+            (layout[0], layout[1], data["layout_k"], data["layout_m"], project["bins"])
         )
     elif data["layout"] == "theory":
         data["x"], data["y"] = get_theory_axesimage(
@@ -88,5 +100,5 @@ def get_data(data):
     else:
         data["x"] = None
         data["y"] = np.zeros(
-            (layout[0], layout[1], 1, 1, len(data["alphas"]), len(data["rhos"]))
+            (layout[0], layout[1], 1, 1, data["layout_k"], data["layout_m"])
         )

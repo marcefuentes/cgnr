@@ -37,17 +37,14 @@ def main(data):
     get_layout(data, layouts)
     get_data(data)
 
-    mr = len(data["alphas"])
-    mc = len(data["rhos"])
-
     if data["layout"] == "curves":
         image["margin_top"] *= 0.5
 
     image["fig_layout"] = {
-        "nc": (1 if data["ax_type"] == "AxesImage" else mc),
-        "ncols": len(data["variants"][0]),
-        "nr": (1 if data["ax_type"] == "AxesImage" else mr),
-        "nrows": len(data["variants"]),
+        "nc": (1 if data["ax_type"] == "AxesImage" else data["layout_m"]),
+        "ncols": data["layout_j"],
+        "nr": (1 if data["ax_type"] == "AxesImage" else data["layout_k"]),
+        "nrows": data["layout_i"],
     }
 
     image["fig"], image["axs"] = create_fig(image["fig_layout"])
@@ -63,18 +60,10 @@ def main(data):
 
     image["letters"]["x"] = 0.0
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
-    image["nc"] = mc
-    image["nr"] = mr
-    image["ticklabels_x"] = [
-        f"{data["rhos"][0]:.0f}",
-        f"{data["rhos"][mc // 2]:.0f}",
-        f"{data["rhos"][-1]:.2f}",
-    ]
-    image["ticklabels_y"] = [
-        f"{data["alphas"][0]:.1f}",
-        f"{data["alphas"][mr // 2]:.1f}",
-        f"{data["alphas"][-1]:.1f}",
-    ]
+    image["nc"] = data["layout_m"]
+    image["nr"] = data["layout_k"]
+    image["ticklabels_x"] = data["ticklabels_x"]
+    image["ticklabels_y"] = data["ticklabels_y"]
     image["titles_columns"] = data["titles_columns"]
     image["titles_rows"] = data["titles_rows"]
 
