@@ -18,11 +18,11 @@ from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from icurvesm.reformat_m01 import reformat_m01
 from icurvesm.get_data import get_data
 from icurvesm.get_sm import get_sm
 from icurvesm.init_artists import init_artists
 from icurvesm.parse_args import parse_args
+from icurvesm.reformat_m01 import reformat_m01
 from icurvesm.update_artists import update_artists
 
 from icurvess import layouts
@@ -37,10 +37,7 @@ def main(data):
     get_layout(data, layouts)
     get_data(data)
 
-    if data["layout"] == "m01":
-        image = image_unit
-    else:
-        image = image_common
+    image = image_unit if data["layout"] == "m01" else image_common
 
     image["fig_layout"] = {
         "nc": data["layout_m"],
