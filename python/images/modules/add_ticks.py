@@ -66,11 +66,9 @@ def add_ticks_ax_line2d(ax, format_params):
 def add_ticks_axesimage(axs, nr, nc, format_params):
     """Set ticks for (nrows x ncols) matrix."""
 
-    r_min, r_max = 0, nr - 1
-    c_min, c_max = 0, nc - 1
     position_params = {
-        "xticks": [c_min, c_max / 2, c_max],
-        "yticks": [r_min, r_max / 2, r_max],
+        "xticks": [0, (nc - 1) / 2, nc - 1],
+        "yticks": [0, (nc - 1) / 2, nr - 1],
         "xticklabels": [],
         "yticklabels": [],
     }
