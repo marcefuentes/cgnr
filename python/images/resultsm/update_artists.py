@@ -10,8 +10,8 @@ def update_artists(t, data):
     if data["movie"]:
         data["text"].set_text(t)
 
-    for i in data["layout_i_range"]:
-        for j in data["layout_j_range"]:
+    for i in range(data["layout_i"]):
+        for j in range(data["layout_j"]):
             artists = data["artists"][i, j]
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:

@@ -12,8 +12,8 @@ from settings.project import project
 def get_data(data):
     """Get the df args for the given trait_set."""
 
-    nrows = len(data["variants"])
-    ncols = len(data["variants"][0])
+    nrows = data["layout_i"]
+    ncols = data["layout_j"]
 
     data["column_index"] = "logES"
     data["row_index"] = "alpha"
