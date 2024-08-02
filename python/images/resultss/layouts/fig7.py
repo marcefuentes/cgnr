@@ -24,4 +24,6 @@ def fig7(data):
     default_data(data, variants)
     data["mechanisms"] = [mechanisms for _ in variants]
     data["titles_columns"] = ["No shuffling", "No shuffling", "Shuffling", "Shuffling"]
-    data["titles_columns"] = get_subtitles(data["titles_columns"], variants[0], mechanisms)
+    data["titles_columns"] = get_subtitles(
+        data["titles_columns"], variants[0], mechanisms
+    )

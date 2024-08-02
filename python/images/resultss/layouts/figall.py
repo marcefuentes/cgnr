@@ -17,4 +17,6 @@ def figall(data):
     ]
     default_data_ipi(data, mechanisms, variants_common)
     data["titles_columns"] = [""] * data["layout_j"]
-    data["titles_columns"] = get_subtitles(data["titles_columns"], variants_common, mechanisms)
+    data["titles_columns"] = get_subtitles(
+        data["titles_columns"], variants_common, mechanisms
+    )
