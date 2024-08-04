@@ -68,7 +68,7 @@ def axes_ticks_axesimage(axs, nr, nc, format_params):
 
     position_params = {
         "xticks": [0, (nc - 1) / 2, nc - 1],
-        "yticks": [0, (nc - 1) / 2, nr - 1],
+        "yticks": [0, (nr - 1) / 2, nr - 1],
         "xticklabels": [],
         "yticklabels": [],
     }
