@@ -2,7 +2,7 @@
 
 """ Plots indifference curves and budget lines, and fitness landscapes"""
 
-import time
+from time import perf_counter
 
 from modules.artists_format import artists_format
 from modules.axes_format import axes_format
@@ -30,7 +30,7 @@ from icurvess.image import image_common, image_unit
 def main(data):
     """Main function"""
 
-    start_time = time.perf_counter()
+    start_time = perf_counter()
 
     add_layout(data, layouts)
     add_data(data)
@@ -88,7 +88,7 @@ def main(data):
     save_file(image["fig"], data)
     close_plt(image["fig"])
 
-    print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
+    print(f"\nTime elapsed: {(perf_counter() - start_time):.2f} seconds")
 
 
 if __name__ == "__main__":

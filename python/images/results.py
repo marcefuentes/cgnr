@@ -2,7 +2,7 @@
 
 """ Plots results. """
 
-import time
+from time import perf_counter
 
 from modules.add_divider import add_divider
 from modules.add_layout import add_layout
@@ -30,7 +30,7 @@ from resultss.image import image
 def main(data):
     """Main function"""
 
-    start_time = time.perf_counter()
+    start_time = perf_counter()
 
     add_layout(data, layouts)
     add_data(data)
@@ -85,7 +85,7 @@ def main(data):
     save_file(image["fig"], data)
     close_plt(image["fig"])
 
-    print(f"\nTime elapsed: {(time.perf_counter() - start_time):.2f} seconds")
+    print(f"\nTime elapsed: {(perf_counter() - start_time):.2f} seconds")
 
 
 if __name__ == "__main__":
