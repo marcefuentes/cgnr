@@ -20,7 +20,7 @@ def artists_update(t, data):
                     data["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
                 if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection":
-                    artists = artists_update_line2d(artists, zmatrix, data["cmap"])
+                    artists = artists_update_line2d(artists, zmatrix, data["color_map"])
                     if data["histogram"]:
                         artists = artists_update_histogram(t, artists, data, i, j)
                 else:
@@ -51,12 +51,12 @@ def artists_update_histogram(t, artists, data, i, j):
     return artists
 
 
-def artists_update_line2d(artists, zmatrix, cmap):
+def artists_update_line2d(artists, zmatrix, color_map):
     """Update background colors of plots."""
 
     for i in range(artists.shape[0]):
         for j in range(artists.shape[1]):
-            artists[i, j].axes.set_facecolor(cmap((zmatrix[i, j] + 1) / 2))
+            artists[i, j].axes.set_facecolor(color_map((zmatrix[i, j] + 1) / 2))
 
     return artists
 

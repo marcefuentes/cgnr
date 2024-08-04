@@ -4,8 +4,6 @@
 
 import time
 
-from matplotlib import colormaps
-
 from modules.add_divider import add_divider
 from modules.add_layout import add_layout
 from modules.artists_format import artists_format
@@ -52,7 +50,7 @@ def main(data):
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
-    data["cmap"] = colormaps[image["color_map"]]
+    data["color_map"] = image["color_map"]
     data["file_name"] = "output"
     data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
