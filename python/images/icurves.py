@@ -51,7 +51,7 @@ def main(data):
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
-    data["cmap"] = colormaps.get_cmap(image["color_map"])
+    data["cmap"] = colormaps[image["color_map"]]
     data["file_name"] = "output"
     data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
