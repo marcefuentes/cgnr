@@ -49,10 +49,10 @@ def main(data):
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
-    data["color_map"] = image["color_map"]
-    data["file_name"] = "output"
-    data["function"] = artists_update
-    data["text"] = image["fig"].texts[2]
+    add_artists(data, image["axs"])
+    for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
+        image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
+        artists_format(data[artist], image[artist])
 
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["nc"] = data["layout_m"]
@@ -65,7 +65,6 @@ def main(data):
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
 
-    add_artists(data, image["axs"])
     add_divider(image)
     axes_format(image)
     if data["layout"] == "m01":
@@ -74,11 +73,12 @@ def main(data):
         axes_ticks("Line2D", image)
     axes_letters("Line2D", image["axs"], image["letters"])
 
-    for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
-        image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
-        artists_format(data[artist], image[artist])
-
+    data["color_map"] = image["color_map"]
+    data["file_name"] = "output"
+    data["function"] = artists_update
+    data["text"] = image["fig"].texts[2]
     save_file(image["fig"], data)
+
     close_plt(image["fig"])
 
     print(f"\nTime elapsed: {(perf_counter() - start_time):.2f} seconds")
