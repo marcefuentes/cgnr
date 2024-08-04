@@ -6,7 +6,7 @@ import numpy as np
 from modules.theory import fitness, indifference, qbeq
 
 
-def update_artists(given_movie, data):
+def artists_update(given_movie, data):
     """Update data in artists."""
 
     if data["movie"]:

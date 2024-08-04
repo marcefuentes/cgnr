@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def format_axes(image):
+def axes_format(image):
     """format (nrows x ncols x nr x nc) matrix."""
 
     axs = image["axs"]

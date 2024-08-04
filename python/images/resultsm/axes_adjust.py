@@ -1,9 +1,9 @@
 """ Adjust ax when there are 3 subplots """
 
-from modules.add_ticks import add_ticklabels_ax
+from modules.axes_ticks import add_ticklabels_ax
 
 
-def adjust(data, image):
+def axes_adjust(data, image):
     """Adjust plots"""
 
     if data["ax_type"] != "AxesImage" or "adjust" not in data["layout"]:

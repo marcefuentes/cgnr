@@ -20,7 +20,7 @@ def get_distances(image):
     }
 
 
-def format_fig(image):
+def fig_format(image):
     """Format the figure."""
 
     fig = image["fig"]

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def create_fig(fig_layout):
+def fig_create(fig_layout):
     """Create figure with subplots based on the fig_layout dictionary."""
 
     fig = plt.figure()

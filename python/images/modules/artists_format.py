@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def format_artists(artists, params):
+def artists_format(artists, params):
     """Format artists."""
 
     for idx in np.ndindex(artists.shape):

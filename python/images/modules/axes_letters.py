@@ -1,16 +1,16 @@
 """ Add letters. """
 
 
-def add_letters(ax_type, axs, params):
+def axes_letters(ax_type, axs, params):
     """Add letters."""
 
     if ax_type == "AxesImage":
-        add_letters_axesimage(axs, params)
+        axes_letters_axesimage(axs, params)
     else:
-        add_letters_line2d(axs, params)
+        axes_letters_line2d(axs, params)
 
 
-def add_letters_axesimage(axs, params):
+def axes_letters_axesimage(axs, params):
     """Add letters."""
 
     i = 0
@@ -27,7 +27,7 @@ def add_letters_axesimage(axs, params):
         i += 1
 
 
-def add_letters_line2d(axs, params):
+def axes_letters_line2d(axs, params):
     """Add letters."""
 
     nrows, ncols = axs.shape[:2]

@@ -1,20 +1,20 @@
 """Format axes for layout m01."""
 
-from modules.add_ax_labels import add_ax_labels
-from modules.add_ticks import ticks_ax_line2d
+from modules.axes_labels import axes_labels
+from modules.axes_ticks import ticks_ax_line2d
 
 
-def reformat_m01(image):
+def m01_reformat(image):
     """Format axes for layout m01."""
 
-    add_ax_labels(
+    axes_labels(
         image["axs"][0, 0, 0, 0],
         image["label_x_0"],
         image["label_y_0"],
         image["titles_columns_params"]["fontsize"],
         image["labelpad"],
     )
-    add_ax_labels(
+    axes_labels(
         image["axs"][0, 1, 0, 0],
         image["label_x_1"],
         image["label_y_1"],

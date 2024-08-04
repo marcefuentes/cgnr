@@ -4,7 +4,7 @@ import re
 from resultsm.get_zmatrix import get_zmatrix
 
 
-def update_artists(t, data):
+def artists_update(t, data):
     """Update artist data at time t."""
 
     if data["movie"]:
@@ -20,16 +20,16 @@ def update_artists(t, data):
                     data["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
                 if data["ax_type"] == "Line2D" or data["ax_type"] == "PolyCollection":
-                    artists = update_artists_line2d(artists, zmatrix, data["cmap"])
+                    artists = artists_update_line2d(artists, zmatrix, data["cmap"])
                     if data["histogram"]:
-                        artists = update_artists_histogram(t, artists, data, i, j)
+                        artists = artists_update_histogram(t, artists, data, i, j)
                 else:
                     artists[0, 0].set_array(zmatrix)
 
     return artists.flatten()
 
 
-def update_artists_histogram(t, artists, data, i, j):
+def artists_update_histogram(t, artists, data, i, j):
     """Update histograms."""
 
     df = data["dffrqs"][i][j]
@@ -51,7 +51,7 @@ def update_artists_histogram(t, artists, data, i, j):
     return artists
 
 
-def update_artists_line2d(artists, zmatrix, cmap):
+def artists_update_line2d(artists, zmatrix, cmap):
     """Update background colors of plots."""
 
     for i in range(artists.shape[0]):

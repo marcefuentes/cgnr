@@ -1,7 +1,7 @@
 """ Add colorbar to the figure """
 
 
-def add_colorbar(image, sm):
+def fig_colorbar(image, sm):
     """Add colorbar to the figure"""
 
     fig = image["fig"]

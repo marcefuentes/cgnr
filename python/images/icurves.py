@@ -6,24 +6,24 @@ import time
 
 from matplotlib import colormaps
 
-from modules.add_colorbar import add_colorbar
-from modules.add_letters import add_letters
-from modules.add_ticks import add_ticks
-from modules.create_fig import create_fig
+from modules.fig_colorbar import fig_colorbar
+from modules.axes_letters import axes_letters
+from modules.axes_ticks import axes_ticks
+from modules.fig_create import fig_create
 from modules.create_divider import create_divider
-from modules.format_artists import format_artists
-from modules.format_axes import format_axes
-from modules.format_fig import get_distances, format_fig
+from modules.artists_format import artists_format
+from modules.axes_format import axes_format
+from modules.fig_format import get_distances, fig_format
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
 from icurvesm.get_data import get_data
 from icurvesm.get_sm import get_sm
-from icurvesm.init_artists import init_artists
+from icurvesm.artists_init import artists_init
 from icurvesm.parse_args import parse_args
-from icurvesm.reformat_m01 import reformat_m01
-from icurvesm.update_artists import update_artists
+from icurvesm.m01_reformat import m01_reformat
+from icurvesm.artists_update import artists_update
 
 from icurvess import layouts
 from icurvess.image import image_common, image_unit
@@ -46,15 +46,15 @@ def main(data):
         "nrows": len(data["givens"]),
     }
 
-    image["fig"], image["axs"] = create_fig(image["fig_layout"])
+    image["fig"], image["axs"] = fig_create(image["fig_layout"])
     get_distances(image)
-    format_fig(image)
-    add_colorbar(image, get_sm(image["color_map"]))
+    fig_format(image)
+    fig_colorbar(image, get_sm(image["color_map"]))
     create_divider(image)
 
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
-    data["function"] = update_artists
+    data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
 
     image["letters"]["x"] = 0.0
@@ -74,18 +74,18 @@ def main(data):
         data["icurves"],
         data["icurves_grey"],
         data["landscapes"],
-    ) = init_artists(image["axs"], data["x_values"], data["y"], data["ic"])
+    ) = artists_init(image["axs"], data["x_values"], data["y"], data["ic"])
 
-    format_axes(image)
+    axes_format(image)
     if data["layout"] == "m01":
-        reformat_m01(image)
+        m01_reformat(image)
     else:
-        add_ticks("Line2D", image)
+        axes_ticks("Line2D", image)
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
-        format_artists(data[artist], image[artist])
-    add_letters("Line2D", image["axs"], image["letters"])
+        artists_format(data[artist], image[artist])
+    axes_letters("Line2D", image["axs"], image["letters"])
 
     save_file(image["fig"], data)
     close_plt(image["fig"])

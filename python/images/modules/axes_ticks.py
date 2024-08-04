@@ -32,22 +32,22 @@ def add_ticklabels_line2d(axs, ticklabels_y, ticklabels_x):
             axs[-1, j, -1, m].set_xticklabels([c_value])
 
 
-def add_ticks(ax_type, image):
+def axes_ticks(ax_type, image):
     """Add ticks and tick labels plots."""
 
     if ax_type == "AxesImage":
-        add_ticks_axesimage(image["axs"], image["nr"], image["nc"], image["ticks"])
+        axes_ticks_axesimage(image["axs"], image["nr"], image["nc"], image["ticks"])
         add_ticklabels_axesimage(
             image["axs"], image["ticklabels_y"], image["ticklabels_x"]
         )
     else:
-        add_ticks_line2d(image["axs"], image["ticks"])
+        axes_ticks_line2d(image["axs"], image["ticks"])
         add_ticklabels_line2d(
             image["axs"], image["ticklabels_y"], image["ticklabels_x"]
         )
 
 
-def add_ticks_ax_line2d(ax, format_params):
+def axes_ticks_ax_line2d(ax, format_params):
     """Set ticks for a single Line2D plot."""
 
     x_min, x_max = ax.get_xlim()
@@ -63,7 +63,7 @@ def add_ticks_ax_line2d(ax, format_params):
     ax.tick_params(axis="both", **format_params)
 
 
-def add_ticks_axesimage(axs, nr, nc, format_params):
+def axes_ticks_axesimage(axs, nr, nc, format_params):
     """Set ticks for (nrows x ncols) matrix."""
 
     position_params = {
@@ -79,7 +79,7 @@ def add_ticks_axesimage(axs, nr, nc, format_params):
             axs[i, j, 0, 0].tick_params(**format_params)
 
 
-def add_ticks_line2d(axs, format_params):
+def axes_ticks_line2d(axs, format_params):
     """Set ticks for (nrows x ncols x nr x nc)."""
 
     x_range = range(0, axs.shape[3], axs.shape[3] // 2)
@@ -108,5 +108,5 @@ def add_ticks_line2d(axs, format_params):
 def ticks_ax_line2d(ax, ticklabels_y, ticklabels_x, format_params):
     """Add ticks and tick labels to a single Line2D plot."""
 
-    add_ticks_ax_line2d(ax, format_params)
+    axes_ticks_ax_line2d(ax, format_params)
     add_ticklabels_ax(ax, ticklabels_y, ticklabels_x)

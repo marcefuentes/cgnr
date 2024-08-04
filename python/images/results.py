@@ -6,24 +6,24 @@ import time
 
 from matplotlib import colormaps
 
-from modules.add_colorbar import add_colorbar
-from modules.add_letters import add_letters
-from modules.add_ticks import add_ticks
-from modules.create_fig import create_fig
+from modules.artists_format import artists_format
+from modules.axes_format import axes_format
+from modules.axes_letters import axes_letters
+from modules.axes_ticks import axes_ticks
 from modules.create_divider import create_divider
-from modules.format_artists import format_artists
-from modules.format_axes import format_axes
-from modules.format_fig import get_distances, format_fig
+from modules.fig_colorbar import fig_colorbar
+from modules.fig_create import fig_create
+from modules.fig_format import get_distances, fig_format
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from resultsm.adjust import adjust
+from resultsm.axes_adjust import axes_adjust
+from resultsm.artists_init import artists_init
+from resultsm.artists_update import artists_update
 from resultsm.get_data import get_data
 from resultsm.get_sm import get_sm
-from resultsm.init_artists import init_artists
 from resultsm.parse_args import parse_args
-from resultsm.update_artists import update_artists
 
 from resultss import layouts
 from resultss.image import image
@@ -47,15 +47,15 @@ def main(data):
         "nrows": data["layout_i"],
     }
 
-    image["fig"], image["axs"] = create_fig(image["fig_layout"])
+    image["fig"], image["axs"] = fig_create(image["fig_layout"])
     get_distances(image)
-    format_fig(image)
-    add_colorbar(image, get_sm(image["color_map"]))
+    fig_format(image)
+    fig_colorbar(image, get_sm(image["color_map"]))
     create_divider(image)
 
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
-    data["function"] = update_artists
+    data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
 
     image["letters"]["x"] = 0.0
@@ -77,12 +77,12 @@ def main(data):
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
 
-    data["artists"] = init_artists(data["ax_type"], image["axs"], data["x"], data["y"])
-    format_axes(image)
-    add_ticks(data["ax_type"], image)
-    adjust(data, image)
-    format_artists(data["artists"], image[data["ax_type"]])
-    add_letters(data["ax_type"], image["axs"], image["letters"])
+    data["artists"] = artists_init(data["ax_type"], image["axs"], data["x"], data["y"])
+    axes_format(image)
+    axes_ticks(data["ax_type"], image)
+    axes_adjust(data, image)
+    axes_letters(data["ax_type"], image["axs"], image["letters"])
+    artists_format(data["artists"], image[data["ax_type"]])
 
     save_file(image["fig"], data)
     close_plt(image["fig"])
