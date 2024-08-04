@@ -16,5 +16,3 @@ def add_distances(image):
         "width": width,
         "width_inner": width_inner,
     }
-
-

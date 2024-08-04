@@ -6,14 +6,10 @@ def axes_ticks(ax_type, image):
 
     if ax_type == "AxesImage":
         ticks_axesimage(image["axs"], image["nr"], image["nc"], image["ticks"])
-        ticklabels_axesimage(
-            image["axs"], image["ticklabels_y"], image["ticklabels_x"]
-        )
+        ticklabels_axesimage(image["axs"], image["ticklabels_y"], image["ticklabels_x"])
     else:
         ticks_line2d(image["axs"], image["ticks"])
-        ticklabels_line2d(
-            image["axs"], image["ticklabels_y"], image["ticklabels_x"]
-        )
+        ticklabels_line2d(image["axs"], image["ticklabels_y"], image["ticklabels_x"])
 
 
 def ticklabels_ax(ax, ticklabels_y, ticklabels_x):
