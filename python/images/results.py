@@ -16,11 +16,11 @@ from modules.get_fig import get_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from resultsm.add_artists import add_artists
 from resultsm.add_data import add_data
 from resultsm.artists_update import artists_update
 from resultsm.artists_theory import artists_theory
 from resultsm.axes_adjust import axes_adjust
-from resultsm.get_artists import get_artists
 from resultsm.get_sm import get_sm
 from resultsm.parse_args import parse_args
 
@@ -51,7 +51,7 @@ def main(data):
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
-    data["artists"] = get_artists(data["ax_type"], image["axs"], data["x"], data["y"])
+    add_artists(data, image["axs"], data["ax_type"])
     artists_format(data["artists"], image[data["ax_type"]])
     if data["layout"] == "theory":
         artists_theory(data)
