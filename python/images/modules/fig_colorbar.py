@@ -4,10 +4,9 @@
 def fig_colorbar(image, sm):
     """Add colorbar to the figure"""
 
-    fig = image["fig"]
     distances = image["distances"]
 
-    cax = fig.add_axes(
+    cax = image["fig"].add_axes(
         [
             (
                 image["margin_left"]
@@ -26,6 +25,6 @@ def fig_colorbar(image, sm):
         ]
     )  # [left, bottom, width, height]
     ticks = [-1, 0, 1]
-    cbar = fig.colorbar(sm, cax=cax, ticks=ticks)
+    cbar = image["fig"].colorbar(sm, cax=cax, ticks=ticks)
     cbar.ax.tick_params(**image["ticks"])
     cbar.outline.set(**image["colorbar"])

@@ -11,16 +11,16 @@ from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
 from modules.fig_colorbar import fig_colorbar
-from modules.fig_create import fig_create
-from modules.fig_format import get_distances, fig_format
-from modules.get_divider import get_divider
-from modules.get_layout import get_layout
+from modules.get_fig import get_fig
+from modules.fig_format import add_distances, fig_format
+from modules.add_divider import add_divider
+from modules.add_layout import add_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from icurvesm.artists_init import artists_init
+from icurvesm.get_artists import get_artists
 from icurvesm.artists_update import artists_update
-from icurvesm.get_data import get_data
+from icurvesm.add_data import add_data
 from icurvesm.get_sm import get_sm
 from icurvesm.m01_reformat import m01_reformat
 from icurvesm.parse_args import parse_args
@@ -34,8 +34,8 @@ def main(data):
 
     start_time = time.perf_counter()
 
-    get_layout(data, layouts)
-    get_data(data)
+    add_layout(data, layouts)
+    add_data(data)
 
     image = image_unit if data["layout"] == "m01" else image_common
 
@@ -46,8 +46,8 @@ def main(data):
         "nrows": len(data["givens"]),
     }
 
-    image["fig"], image["axs"] = fig_create(image["fig_layout"])
-    get_distances(image)
+    image["fig"], image["axs"] = get_fig(image["fig_layout"])
+    add_distances(image)
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
@@ -73,8 +73,8 @@ def main(data):
         data["icurves"],
         data["icurves_grey"],
         data["landscapes"],
-    ) = artists_init(image["axs"], data["x_values"], data["y"], data["ic"])
-    get_divider(image)
+    ) = get_artists(image["axs"], data["x_values"], data["y"], data["ic"])
+    add_divider(image)
 
     axes_format(image)
     if data["layout"] == "m01":

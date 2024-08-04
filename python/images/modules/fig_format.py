@@ -3,7 +3,7 @@
 import os
 
 
-def get_distances(image):
+def add_distances(image):
     """Calculate distances for figure."""
 
     nrows = image["fig_layout"]["nrows"]

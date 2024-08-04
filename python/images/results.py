@@ -6,22 +6,22 @@ import time
 
 from matplotlib import colormaps
 
+from modules.add_divider import add_divider
+from modules.add_layout import add_layout
 from modules.artists_format import artists_format
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
 from modules.fig_colorbar import fig_colorbar
-from modules.fig_create import fig_create
-from modules.fig_format import get_distances, fig_format
-from modules.get_divider import get_divider
-from modules.get_layout import get_layout
+from modules.fig_format import add_distances, fig_format
+from modules.get_fig import get_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from resultsm.artists_init import artists_init
+from resultsm.add_data import add_data
 from resultsm.artists_update import artists_update
 from resultsm.axes_adjust import axes_adjust
-from resultsm.get_data import get_data
+from resultsm.get_artists import get_artists
 from resultsm.get_sm import get_sm
 from resultsm.parse_args import parse_args
 
@@ -34,8 +34,8 @@ def main(data):
 
     start_time = time.perf_counter()
 
-    get_layout(data, layouts)
-    get_data(data)
+    add_layout(data, layouts)
+    add_data(data)
 
     if data["layout"] == "curves":
         image["margin_top"] *= 0.5
@@ -47,8 +47,8 @@ def main(data):
         "nrows": data["layout_i"],
     }
 
-    image["fig"], image["axs"] = fig_create(image["fig_layout"])
-    get_distances(image)
+    image["fig"], image["axs"] = get_fig(image["fig_layout"])
+    add_distances(image)
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
@@ -76,8 +76,8 @@ def main(data):
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
 
-    data["artists"] = artists_init(data["ax_type"], image["axs"], data["x"], data["y"])
-    get_divider(image)
+    data["artists"] = get_artists(data["ax_type"], image["axs"], data["x"], data["y"])
+    add_divider(image)
     axes_format(image)
     axes_ticks(data["ax_type"], image)
     axes_adjust(data, image)
