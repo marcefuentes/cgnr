@@ -6,24 +6,24 @@ import time
 
 from matplotlib import colormaps
 
-from modules.fig_colorbar import fig_colorbar
-from modules.axes_letters import axes_letters
-from modules.axes_ticks import axes_ticks
-from modules.fig_create import fig_create
-from modules.create_divider import create_divider
 from modules.artists_format import artists_format
 from modules.axes_format import axes_format
+from modules.axes_letters import axes_letters
+from modules.axes_ticks import axes_ticks
+from modules.create_divider import create_divider
+from modules.fig_colorbar import fig_colorbar
+from modules.fig_create import fig_create
 from modules.fig_format import get_distances, fig_format
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from icurvesm.artists_init import artists_init
+from icurvesm.artists_update import artists_update
 from icurvesm.get_data import get_data
 from icurvesm.get_sm import get_sm
-from icurvesm.artists_init import artists_init
-from icurvesm.parse_args import parse_args
 from icurvesm.m01_reformat import m01_reformat
-from icurvesm.artists_update import artists_update
+from icurvesm.parse_args import parse_args
 
 from icurvess import layouts
 from icurvess.image import image_common, image_unit
@@ -81,11 +81,11 @@ def main(data):
         m01_reformat(image)
     else:
         axes_ticks("Line2D", image)
+    axes_letters("Line2D", image["axs"], image["letters"])
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
         artists_format(data[artist], image[artist])
-    axes_letters("Line2D", image["axs"], image["letters"])
 
     save_file(image["fig"], data)
     close_plt(image["fig"])

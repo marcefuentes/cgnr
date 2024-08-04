@@ -18,9 +18,9 @@ from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from resultsm.axes_adjust import axes_adjust
 from resultsm.artists_init import artists_init
 from resultsm.artists_update import artists_update
+from resultsm.axes_adjust import axes_adjust
 from resultsm.get_data import get_data
 from resultsm.get_sm import get_sm
 from resultsm.parse_args import parse_args
