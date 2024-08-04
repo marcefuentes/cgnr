@@ -1,6 +1,6 @@
 """ Calculates theoretical values for AxesImage. """
 
-import numpy as np
+from numpy import zeros
 from modules.theory import calculate_fitness, qbeq
 
 
@@ -8,7 +8,7 @@ def get_theory_axesimage(traits, givens, alphas, rhos):
     """Calculates theoretical values for AxesImage."""
 
     x = None
-    y = np.zeros((len(givens), len(givens[0]), 1, 1, len(alphas), len(rhos)))
+    y = zeros((len(givens), len(givens[0]), 1, 1, len(alphas), len(rhos)))
 
     for i, givens_row in enumerate(givens):
         for k, alpha in enumerate(alphas):
