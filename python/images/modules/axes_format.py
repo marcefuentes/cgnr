@@ -1,6 +1,6 @@
 """ Format axes. """
 
-import numpy as np
+from numpy import ndindex
 
 
 def axes_format(image):
@@ -11,7 +11,7 @@ def axes_format(image):
 
     # Position axes
 
-    for i, j, k, m in np.ndindex(axs.shape):
+    for i, j, k, m in ndindex(axs.shape):
         axs[i, j, k, m].set(
             axes_locator=image["divider"].new_locator(
                 nx=j * (nc + 1) + m + int(m / nc),
