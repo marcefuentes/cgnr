@@ -10,8 +10,8 @@ def axes_adjust(data, image):
         return
 
     distances = image["distances"]
-    nrows = len(data["variants"])
-    ncols = len(data["variants"][0])
+    nrows = data["layout_i"]
+    ncols = data["layout_j"]
 
     left_0 = image["margin_left"] / distances["width"]
     top_ax = (
