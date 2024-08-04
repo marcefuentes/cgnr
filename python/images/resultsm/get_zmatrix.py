@@ -1,13 +1,13 @@
 """Creates a zmatrix for the given time, dataframe, and trait."""
 
-import pandas as pd
+from pandas import pivot_table
 
 
 def get_zmatrix(t, df, trait, rows, cols):
     """Returns the zmatrix for a given time, dataframe, and trait."""
 
     df = df.loc[df.Time == t]
-    zmatrix = pd.pivot_table(
+    zmatrix = pivot_table(
         df,
         values=trait,
         index=rows,
