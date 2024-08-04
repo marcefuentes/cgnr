@@ -51,7 +51,7 @@ def main(data):
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
-    add_artists(data, image["axs"], data["ax_type"])
+    add_artists(data, image["axs"])
     artists_format(data["artists"], image[data["ax_type"]])
 
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]

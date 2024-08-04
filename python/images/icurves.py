@@ -16,9 +16,9 @@ from modules.get_fig import get_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
+from icurvesm.add_artists import add_artists
 from icurvesm.add_data import add_data
 from icurvesm.artists_update import artists_update
-from icurvesm.get_artists import get_artists
 from icurvesm.get_sm import get_sm
 from icurvesm.m01_reformat import m01_reformat
 from icurvesm.parse_args import parse_args
@@ -65,12 +65,11 @@ def main(data):
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
 
-    (
         data["budgets"],
         data["icurves"],
         data["icurves_grey"],
         data["landscapes"],
-    ) = get_artists(image["axs"], data["x_values"], data["y"], data["ic"])
+    add_artists(image["axs"], data["x_values"], data["y"], data["ic"])
     add_divider(image)
     axes_format(image)
     if data["layout"] == "m01":
