@@ -45,6 +45,7 @@ image = {
     "letters": {
         "fontsize": 8 * PLOT_SIZE,
         "weight": "bold",
+        "x": 0.0,
     },
     "titles_rows_params": {
         "fontsize": 8 * PLOT_SIZE,

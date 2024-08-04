@@ -54,7 +54,6 @@ def main(data):
     data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
 
-    image["letters"]["x"] = 0.0
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["nc"] = data["layout_m"]
     image["nr"] = data["layout_k"]
