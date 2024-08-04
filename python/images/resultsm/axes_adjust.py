@@ -1,6 +1,6 @@
 """ Adjust ax when there are 3 subplots """
 
-from modules.axes_ticks import add_ticklabels_ax
+from modules.axes_ticks import ticklabels_ax
 
 
 def axes_adjust(data, image):
@@ -32,7 +32,7 @@ def axes_adjust(data, image):
     ax.set_title(data["titles_columns"][0], fontsize=32, pad=214)
 
     if nrows == 2:
-        add_ticklabels_ax(ax, image["ticklabels_y"], image["ticklabels_x"])
+        ticklabels_ax(ax, image["ticklabels_y"], image["ticklabels_x"])
     else:
         image["axs"][2, 0, 0, 0].remove()
         ax = image["axs"][3, 0, 0, 0]
