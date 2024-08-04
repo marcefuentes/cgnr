@@ -10,9 +10,9 @@ def get_artists(ax_type, axs, x, y):
 
     for idx in np.ndindex(axs.shape):
         if ax_type == "AxesImage":
-            artists[idx] = axs[idx].imshow(y[idx])
+            artists[idx] = axs[idx].imshow(y)
         elif ax_type == "Line2D":
-            artists[idx] = axs[idx].plot(x, y[idx])[0]
+            artists[idx] = axs[idx].plot(x, y)[0]
         else:
             artists[idx] = axs[idx].fill_between(x, 0, y[idx])
 

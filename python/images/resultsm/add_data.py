@@ -90,15 +90,11 @@ def add_data(data):
         )
     elif data["histogram"]:
         data["x"] = np.arange(project["bins"])
-        data["y"] = np.zeros(
-            (layout[0], layout[1], data["layout_k"], data["layout_m"], project["bins"])
-        )
+        data["y"] = np.zeros_like(data["x"])
     elif data["layout"] == "theory":
         data["x"], data["y"] = get_theory_axesimage(
             data["traits"], data["givens"], data["alphas"], data["rhos"]
         )
     else:
         data["x"] = None
-        data["y"] = np.zeros(
-            (layout[0], layout[1], 1, 1, data["layout_k"], data["layout_m"])
-        )
+        data["y"] = np.zeros((data["layout_k"], data["layout_m"]))
