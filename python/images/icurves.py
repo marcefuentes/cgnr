@@ -10,10 +10,10 @@ from modules.artists_format import artists_format
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
-from modules.create_divider import create_divider
 from modules.fig_colorbar import fig_colorbar
 from modules.fig_create import fig_create
 from modules.fig_format import get_distances, fig_format
+from modules.get_divider import get_divider
 from modules.get_layout import get_layout
 from modules.save_file import save_file
 from modules.save_image import close_plt
@@ -50,7 +50,6 @@ def main(data):
     get_distances(image)
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
-    create_divider(image)
 
     data["cmap"] = colormaps.get_cmap(image["color_map"])
     data["file_name"] = "output"
@@ -75,6 +74,7 @@ def main(data):
         data["icurves_grey"],
         data["landscapes"],
     ) = artists_init(image["axs"], data["x_values"], data["y"], data["ic"])
+    get_divider(image)
 
     axes_format(image)
     if data["layout"] == "m01":
