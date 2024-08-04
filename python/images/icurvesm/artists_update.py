@@ -16,20 +16,20 @@ def artists_update(given_movie, data):
         givens = data["givens"]
 
     for i, given in enumerate(givens):
-        budget_own = (1.0 - data["x_values"]) * (1.0 - given)
+        budget_own = (1.0 - data["x"]) * (1.0 - given)
         for j, alpha in enumerate(data["alphas"]):
             for k, rho in enumerate(data["rhos"]):
 
                 qb_partner = qbeq(given, alpha, rho)
 
                 y = fitness(
-                    np.full((len(data["x_values"])), qb_partner),
-                    data["x_values"],
+                    np.full((len(data["x"])), qb_partner),
+                    data["x"],
                     given,
                     alpha,
                     rho,
                 )
-                points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
+                points = np.array([data["x"], y]).T.reshape((-1, 1, 2))
                 data["landscapes"][i, 0, j, k].set(
                     array=y,
                     cmap=data["color_map"],
@@ -42,7 +42,7 @@ def artists_update(given_movie, data):
 
                 y = fitness(qb_partner, qb_partner, given, alpha, rho)
                 data["icurves"][i, 0, j, k].set(
-                    ydata=indifference(data["x_values"], y, alpha, rho),
+                    ydata=indifference(data["x"], y, alpha, rho),
                     color=data["color_map"](0.5 + 0.5 * y),
                 )
 

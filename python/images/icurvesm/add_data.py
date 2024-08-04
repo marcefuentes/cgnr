@@ -23,7 +23,7 @@ def add_data(data):
         f"{data["alphas"][data['layout_k'] // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
-    data["x_values"], data["y"], data["ic"] = get_static_data(
+    data["x"], data["y"], data["ic"] = get_static_data(
         data["alphas"], data["rhos"], data["n_ic"]
     )
     data["frames"] = [0.0]

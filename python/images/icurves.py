@@ -65,11 +65,7 @@ def main(data):
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
 
-        data["budgets"],
-        data["icurves"],
-        data["icurves_grey"],
-        data["landscapes"],
-    add_artists(image["axs"], data["x_values"], data["y"], data["ic"])
+    add_artists(data, image["axs"])
     add_divider(image)
     axes_format(image)
     if data["layout"] == "m01":
