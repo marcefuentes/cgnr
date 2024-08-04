@@ -1,6 +1,6 @@
 """ Update data in artists. """
 
-import re
+from re import match
 from resultsm.get_zmatrix import get_zmatrix
 
 
@@ -45,7 +45,7 @@ def artists_update_histogram(t, artists, data, i, j):
     for k, alpha in enumerate(data["alphas"]):
         for m, loges in enumerate(data["logess"]):
             d = df[(df["alpha"] == alpha) & (df["logES"] == loges)]
-            freq_a = [col for col in d.columns if re.match(rf"^{trait}\d+$", col)]
+            freq_a = [col for col in d.columns if match(rf"^{trait}\d+$", col)]
             y = d.loc[:, freq_a].values[0].flatten()
             artists[k, m].set_ydata(y)
     return artists

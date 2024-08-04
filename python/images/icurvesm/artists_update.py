@@ -1,6 +1,6 @@
 """ Update data in artists. """
 
-import matplotlib.pyplot as plt
+from matplotlib.pyplot import Normalize
 import numpy as np
 
 from modules.theory import fitness, indifference, qbeq
@@ -33,7 +33,7 @@ def artists_update(given_movie, data):
                 data["landscapes"][i, 0, j, k].set(
                     array=y,
                     cmap=data["color_map"],
-                    norm=plt.Normalize(-1, 1),
+                    norm=Normalize(-1, 1),
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
 
