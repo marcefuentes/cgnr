@@ -36,9 +36,6 @@ def main(data):
     add_layout(data, layouts)
     add_data(data)
 
-    if data["layout"] == "curves":
-        image["margin_top"] *= 0.5
-
     image["fig_layout"] = {
         "nc": (1 if data["ax_type"] == "AxesImage" else data["layout_m"]),
         "ncols": data["layout_j"],
@@ -47,18 +44,15 @@ def main(data):
     }
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
+
+    if data["layout"] == "curves":
+        image["margin_top"] *= 0.5
     add_distances(image)
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
     add_artists(data, image["axs"], data["ax_type"])
     artists_format(data["artists"], image[data["ax_type"]])
-    if data["layout"] == "theory":
-        artists_theory(data)
-    data["color_map"] = image["color_map"]
-    data["file_name"] = "output"
-    data["function"] = artists_update
-    data["text"] = image["fig"].texts[2]
 
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["nc"] = data["layout_m"]
@@ -84,7 +78,14 @@ def main(data):
     axes_adjust(data, image)
     axes_letters(data["ax_type"], image["axs"], image["letters"])
 
+    if data["layout"] == "theory":
+        artists_theory(data)
+    data["color_map"] = image["color_map"]
+    data["file_name"] = "output"
+    data["function"] = artists_update
+    data["text"] = image["fig"].texts[2]
     save_file(image["fig"], data)
+
     close_plt(image["fig"])
 
     print(f"\nTime elapsed: {(perf_counter() - start_time):.2f} seconds")
