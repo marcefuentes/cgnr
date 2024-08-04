@@ -1,7 +1,7 @@
 """ Parses the arguments of the command line. """
 
-import argparse
-import inspect
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from inspect import isfunction
 
 from resultss import layouts
 
@@ -11,12 +11,12 @@ def parse_args():
 
     description = "description: Plot results"
 
-    parser = argparse.ArgumentParser(
-        description=description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    parser = ArgumentParser(
+        description=description, formatter_class=ArgumentDefaultsHelpFormatter
     )
 
     layout_names = [
-        name for name in layouts.__all__ if inspect.isfunction(getattr(layouts, name))
+        name for name in layouts.__all__ if isfunction(getattr(layouts, name))
     ]
 
     args_dict = {
