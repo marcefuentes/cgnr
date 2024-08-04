@@ -1,15 +1,15 @@
 """ Create figure with subplots. """
 
-import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
+from numpy import empty
 
 
 def get_fig(fig_layout):
     """Create figure with subplots based on the fig_layout dictionary."""
 
-    fig = plt.figure()
+    fig = figure()
     outer_grid = fig.add_gridspec(nrows=fig_layout["nrows"], ncols=fig_layout["ncols"])
-    axs = np.empty(
+    axs = empty(
         (
             fig_layout["nrows"],
             fig_layout["ncols"],
