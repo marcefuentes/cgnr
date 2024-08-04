@@ -1,12 +1,14 @@
 """ Parameters for the images module. """
 
+from matplotlib import colormaps
+
 COLOR_MAP = "RdBu_r"
 GREY = "0.7"
 LINE_WIDTH = 0.2
 PLOT_SIZE = 4
 
 image = {
-    "color_map": COLOR_MAP,
+    "color_map": colormaps[COLOR_MAP],
     "colorbar_height": PLOT_SIZE,
     "colorbar_position_right": 1,
     "colorbar_width": PLOT_SIZE / 21,

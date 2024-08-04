@@ -32,7 +32,7 @@ def artists_update(given_movie, data):
                 points = np.array([data["x_values"], y]).T.reshape((-1, 1, 2))
                 data["landscapes"][i, 0, j, k].set(
                     array=y,
-                    cmap=plt.get_cmap(data["cmap"]),
+                    cmap=plt.get_cmap(data["color_map"]),
                     norm=plt.Normalize(-1, 1),
                     segments=np.concatenate([points[:-1], points[1:]], axis=1),
                 )
@@ -43,7 +43,7 @@ def artists_update(given_movie, data):
                 y = fitness(qb_partner, qb_partner, given, alpha, rho)
                 data["icurves"][i, 0, j, k].set(
                     ydata=indifference(data["x_values"], y, alpha, rho),
-                    color=plt.get_cmap(data["cmap"])(0.5 + 0.5 * y),
+                    color=plt.get_cmap(data["color_map"])(0.5 + 0.5 * y),
                 )
 
     return np.concatenate(
