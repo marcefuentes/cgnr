@@ -4,6 +4,7 @@
 
 from time import perf_counter
 
+from modules.add_distances import add_distances
 from modules.add_divider import add_divider
 from modules.add_layout import add_layout
 from modules.artists_format import artists_format
@@ -11,7 +12,7 @@ from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
 from modules.fig_colorbar import fig_colorbar
-from modules.fig_format import add_distances, fig_format
+from modules.fig_format import fig_format
 from modules.get_fig import get_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
