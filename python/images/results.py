@@ -75,16 +75,16 @@ def main(data):
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
 
-    data["artists"] = get_artists(data["ax_type"], image["axs"], data["x"], data["y"])
     add_divider(image)
     axes_format(image)
     axes_ticks(data["ax_type"], image)
     axes_adjust(data, image)
     axes_letters(data["ax_type"], image["axs"], image["letters"])
-    artists_format(data["artists"], image[data["ax_type"]])
 
+    data["artists"] = get_artists(data["ax_type"], image["axs"], data["x"], data["y"])
     if data["layout"] == "theory":
         artists_theory(data)
+    artists_format(data["artists"], image[data["ax_type"]])
 
     save_file(image["fig"], data)
     close_plt(image["fig"])
