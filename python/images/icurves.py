@@ -4,21 +4,21 @@
 
 from time import perf_counter
 
+from modules.add_divider import add_divider
+from modules.add_layout import add_layout
 from modules.artists_format import artists_format
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
 from modules.fig_colorbar import fig_colorbar
-from modules.get_fig import get_fig
 from modules.fig_format import add_distances, fig_format
-from modules.add_divider import add_divider
-from modules.add_layout import add_layout
+from modules.get_fig import get_fig
 from modules.save_file import save_file
 from modules.save_image import close_plt
 
-from icurvesm.get_artists import get_artists
-from icurvesm.artists_update import artists_update
 from icurvesm.add_data import add_data
+from icurvesm.artists_update import artists_update
+from icurvesm.get_artists import get_artists
 from icurvesm.get_sm import get_sm
 from icurvesm.m01_reformat import m01_reformat
 from icurvesm.parse_args import parse_args
@@ -73,7 +73,6 @@ def main(data):
         data["landscapes"],
     ) = get_artists(image["axs"], data["x_values"], data["y"], data["ic"])
     add_divider(image)
-
     axes_format(image)
     if data["layout"] == "m01":
         m01_reformat(image)
