@@ -34,17 +34,7 @@ def main(data):
     start_time = perf_counter()
 
     add_layout(data, layouts)
-    add_data(data)
-
-    if data["layout"] == "curves":
-        image["margin_top"] *= 0.5
-
-    image["fig_layout"] = {
-        "nc": (1 if data["ax_type"] == "AxesImage" else data["layout_m"]),
-        "ncols": data["layout_j"],
-        "nr": (1 if data["ax_type"] == "AxesImage" else data["layout_k"]),
-        "nrows": data["layout_i"],
-    }
+    add_data(data, image)
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
     add_distances(image)
@@ -52,24 +42,6 @@ def main(data):
     fig_colorbar(image, get_sm(image["color_map"]))
 
     add_artists(data, image)
-
-    image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
-    image["nc"] = data["layout_m"]
-    image["nr"] = data["layout_k"]
-    image["ticklabels_x"] = data["ticklabels_x"]
-    image["ticklabels_y"] = data["ticklabels_y"]
-    image["titles_columns"] = data["titles_columns"]
-    image["titles_rows"] = data["titles_rows"]
-
-    if data["layout"] == "curves":
-        image["lim_x"] = [0, 1]
-        image["lim_y"] = [0, 1]
-    elif data["histogram"]:
-        image["lim_x"] = [-2, len(data["x"]) + 1]
-        image["lim_y"] = [0, 0.25]
-    else:
-        image["lim_x"] = [None, None]
-        image["lim_y"] = [None, None]
 
     add_divider(image)
     axes_format(image)

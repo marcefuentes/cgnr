@@ -8,7 +8,7 @@ from resultsm.get_static_data import get_static_data
 from settings.project import project
 
 
-def add_data(data):
+def add_data(data, image):
     """Get the df args for the given trait_set."""
 
     layout = (data["layout_i"], data["layout_j"])
@@ -68,18 +68,28 @@ def add_data(data):
     data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     data["logess"] = np.sort(df["logES"].unique())
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
-    data["layout_k"] = len(data["alphas"])
-    data["layout_m"] = len(data["rhos"])
-    data["ticklabels_x"] = [
+    image["nr"] = data["layout_k"] = len(data["alphas"])
+    image["nc"] = data["layout_m"] = len(data["rhos"])
+    image["fig_layout"] = {
+        "nc": (1 if data["ax_type"] == "AxesImage" else image["nc"]),
+        "ncols": data["layout_j"],
+        "nr": (1 if data["ax_type"] == "AxesImage" else image["nr"]),
+        "nrows": data["layout_i"],
+    }
+    image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
+    image["titles_columns"] = data["titles_columns"]
+    image["titles_rows"] = data["titles_rows"]
+    image["ticklabels_x"] = [
         f"{data["rhos"][0]:.0f}",
         f"{data["rhos"][data['layout_m'] // 2]:.0f}",
         f"{data["rhos"][-1]:.2f}",
     ]
-    data["ticklabels_y"] = [
+    image["ticklabels_y"] = [
         f"{data["alphas"][0]:.1f}",
         f"{data["alphas"][data['layout_k'] // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
+
     if data["layout"] == "curves":
         data["x"], data["y"] = get_static_data(
             data["traits"],
@@ -87,9 +97,16 @@ def add_data(data):
             data["alphas"],
             data["rhos"],
         )
+        image["lim_x"] = [0, 1]
+        image["lim_y"] = [0, 1]
+        image["margin_top"] *= 0.5
     elif data["histogram"]:
         data["x"] = np.arange(project["bins"])
         data["y"] = np.zeros_like(data["x"])
+        image["lim_x"] = [-2, len(data["x"]) + 1]
+        image["lim_y"] = [0, 0.25]
     else:
         data["x"] = None
         data["y"] = np.zeros((data["layout_k"], data["layout_m"]))
+        image["lim_x"] = [None, None]
+        image["lim_y"] = [None, None]
