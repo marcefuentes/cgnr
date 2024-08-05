@@ -3,7 +3,7 @@
 import numpy as np
 
 from resultsm.get_df import get_df
-from resultsm.get_static_data import get_static_data
+from resultsm.add_static_data import add_static_data
 
 from settings.project import project
 
@@ -27,22 +27,18 @@ def add_data(data, image):
     image["titles_rows"] = data["titles_rows"]
     image["ticklabels_x"] = [
         f"{data["rhos"][0]:.0f}",
-        f"{data["rhos"][data['layout_m'] // 2]:.0f}",
+        f"{data["rhos"][len(data['rhos']) // 2]:.0f}",
         f"{data["rhos"][-1]:.2f}",
     ]
     image["ticklabels_y"] = [
         f"{data["alphas"][0]:.1f}",
-        f"{data["alphas"][data['layout_k'] // 2]:.1f}",
+        f"{data["alphas"][len(data['alphas']) // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
 
     if data["layout"] == "curves":
-        data["x"], data["y"] = get_static_data(
-            data["traits"],
-            data["givens"],
-            data["alphas"],
-            data["rhos"],
-        )
+        data["x"] = np.linspace(0.001, 0.999, num=image["n_x_values"])
+        add_static_data(data)
         image["lim_x"] = [0, 1]
         image["lim_y"] = [0, 1]
         image["margin_top"] *= 0.5

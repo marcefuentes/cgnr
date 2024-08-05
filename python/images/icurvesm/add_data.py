@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from icurvesm.get_static_data import get_static_data
+from icurvesm.add_static_data import add_static_data
 
 
 def add_data(data, image):
@@ -38,9 +38,9 @@ def add_data(data, image):
         f"{data["alphas"][data['layout_k'] // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
-    data["x"], data["y"], data["ic"] = get_static_data(
-        data["alphas"], data["rhos"], data["n_ic"]
-    )
+    data["x"] = np.linspace(0.001, 0.999, num=image["n_x_values"])
+    data["y"] = np.zeros_like(data["x"])
+    add_static_data(data)
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
     data["color_map"] = image["color_map"]
