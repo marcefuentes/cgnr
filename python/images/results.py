@@ -6,7 +6,6 @@ from time import perf_counter
 
 from modules.add_distances import add_distances
 from modules.add_divider import add_divider
-from modules.add_layout import add_layout
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
@@ -24,15 +23,12 @@ from resultsm.axes_adjust import axes_adjust
 from resultsm.get_sm import get_sm
 from resultsm.parse_args import parse_args
 
-from resultss import layouts
-
 
 def main(data, image):
     """Main function"""
 
     start_time = perf_counter()
 
-    add_layout(data, layouts)
     add_data(data, image)
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])

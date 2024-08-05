@@ -3,6 +3,7 @@
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from inspect import isfunction
 
+from modules.add_layout import add_layout
 from resultss import layouts
 from resultss.image import image
 
@@ -90,5 +91,6 @@ def parse_args():
         args.ax_type = "AxesImage"
 
     data = vars(args)
+    add_layout(data, layouts)
 
     return data, image
