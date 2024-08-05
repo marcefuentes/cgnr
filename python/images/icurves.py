@@ -7,7 +7,6 @@ from time import perf_counter
 from modules.add_distances import add_distances
 from modules.add_divider import add_divider
 from modules.add_layout import add_layout
-from modules.artists_format import artists_format
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
