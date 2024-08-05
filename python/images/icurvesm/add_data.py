@@ -42,5 +42,3 @@ def add_data(data, image):
     data["frames"] = [0.0]
     if data["movie"]:
         data["frames"] = np.concatenate([np.linspace(**data["frames_params"]), [0.0]])
-
-
