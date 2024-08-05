@@ -18,7 +18,6 @@ from modules.save_image import close_plt
 from resultsm.add_artists import add_artists
 from resultsm.add_data import add_data
 from resultsm.artists_update import artists_update
-from resultsm.artists_theory import artists_theory
 from resultsm.axes_adjust import axes_adjust
 from resultsm.get_sm import get_sm
 from resultsm.parse_args import parse_args
@@ -44,8 +43,6 @@ def main(data, image):
     axes_adjust(data, image)
     axes_letters(data["ax_type"], image["axs"], image["letters"])
 
-    if data["layout"] == "theory":
-        artists_theory(data)
     data["file_name"] = "output"
     data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
