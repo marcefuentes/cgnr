@@ -3,7 +3,9 @@
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from inspect import isfunction
 
+from modules.add_layout import add_layout
 from icurvess import layouts
+from icurvess.image import image_common, image_unit
 
 
 def parse_args():
@@ -36,4 +38,8 @@ def parse_args():
 
     args = parser.parse_args()
 
-    return args
+    data = vars(args)
+    add_layout(data, layouts)
+    image = image_unit if data["layout"] == "m01" else image_common
+
+    return data, image

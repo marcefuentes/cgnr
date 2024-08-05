@@ -6,7 +6,6 @@ from time import perf_counter
 
 from modules.add_distances import add_distances
 from modules.add_divider import add_divider
-from modules.add_layout import add_layout
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
 from modules.axes_ticks import axes_ticks
@@ -23,17 +22,12 @@ from icurvesm.get_sm import get_sm
 from icurvesm.m01_reformat import m01_reformat
 from icurvesm.parse_args import parse_args
 
-from icurvess import layouts
-from icurvess.image import image_common, image_unit
 
-
-def main(data):
+def main(data, image):
     """Main function"""
 
     start_time = perf_counter()
 
-    add_layout(data, layouts)
-    image = image_unit if data["layout"] == "m01" else image_common
     add_data(data, image)
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
@@ -62,5 +56,4 @@ def main(data):
 
 
 if __name__ == "__main__":
-    parsed_args = parse_args()
-    main(vars(parsed_args))
+    main(*parse_args())
