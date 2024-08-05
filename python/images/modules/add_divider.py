@@ -12,14 +12,12 @@ def add_divider(image):
     nc = image["fig_layout"]["nc"]
     distances = image["distances"]
 
-    spacing_fixed = Size.Fixed(image["margin_inner"])
-    size_fixed = Size.Fixed(image["plot_size"] / nc)
-    column_fixed = [size_fixed] * nc + (
-        [spacing_fixed] + [size_fixed] * nc
-    ) * (ncols - 1)
-    row_fixed = [size_fixed] * nr + ([spacing_fixed] + [size_fixed] * nr) * (
-        nrows - 1
+    spacing = Size.Fixed(image["margin_inner"])
+    size = Size.Fixed(image["plot_size"] / nc)
+    column = [size] * nc + ([spacing] + [size] * nc) * (
+        ncols - 1
     )
+    row = [size] * nr + ([spacing] + [size] * nr) * (nrows - 1)
     image["divider"] = Divider(
         image["fig"],
         (
@@ -28,7 +26,7 @@ def add_divider(image):
             distances["width_inner"] / distances["width"],
             distances["height_inner"] / distances["height"],
         ),
-        column_fixed,
-        row_fixed,
+        column,
+        row,
         aspect=False,
     )
