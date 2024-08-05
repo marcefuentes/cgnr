@@ -25,10 +25,9 @@ from resultsm.get_sm import get_sm
 from resultsm.parse_args import parse_args
 
 from resultss import layouts
-from resultss.image import image
 
 
-def main(data):
+def main(data, image):
     """Main function"""
 
     start_time = perf_counter()
@@ -62,5 +61,4 @@ def main(data):
 
 
 if __name__ == "__main__":
-    parsed_args = parse_args()
-    main(vars(parsed_args))
+    main(*parse_args())

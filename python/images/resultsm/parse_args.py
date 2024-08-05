@@ -4,6 +4,7 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from inspect import isfunction
 
 from resultss import layouts
+from resultss.image import image
 
 
 def parse_args():
@@ -88,4 +89,6 @@ def parse_args():
     else:
         args.ax_type = "AxesImage"
 
-    return args
+    data = vars(args)
+
+    return data, image
