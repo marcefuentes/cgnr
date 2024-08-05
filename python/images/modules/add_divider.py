@@ -6,18 +6,19 @@ from mpl_toolkits.axes_grid1 import Divider, Size
 def add_divider(image):
     """Create divider."""
 
-    layout = image["fig_layout"]
-    nr = layout["nr"]
-    nc = layout["nc"]
+    nrows = image["fig_layout"]["nrows"]
+    ncols = image["fig_layout"]["ncols"]
+    nr = image["fig_layout"]["nr"]
+    nc = image["fig_layout"]["nc"]
     distances = image["distances"]
 
     spacing_fixed = Size.Fixed(image["margin_inner"])
-    plot_size_fixed = Size.Fixed(image["plot_size"] / nc)
-    column_fixed = [plot_size_fixed] * nc + (
-        [spacing_fixed] + [plot_size_fixed] * nc
-    ) * (layout["ncols"] - 1)
-    row_fixed = [plot_size_fixed] * nr + ([spacing_fixed] + [plot_size_fixed] * nr) * (
-        layout["nrows"] - 1
+    size_fixed = Size.Fixed(image["plot_size"] / nc)
+    column_fixed = [size_fixed] * nc + (
+        [spacing_fixed] + [size_fixed] * nc
+    ) * (ncols - 1)
+    row_fixed = [size_fixed] * nr + ([spacing_fixed] + [size_fixed] * nr) * (
+        nrows - 1
     )
     image["divider"] = Divider(
         image["fig"],
