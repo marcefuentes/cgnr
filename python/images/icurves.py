@@ -33,16 +33,8 @@ def main(data):
     start_time = perf_counter()
 
     add_layout(data, layouts)
-    add_data(data)
-
     image = image_unit if data["layout"] == "m01" else image_common
-
-    image["fig_layout"] = {
-        "nc": data["layout_m"],
-        "ncols": 2,
-        "nr": data["layout_k"],
-        "nrows": len(data["givens"]),
-    }
+    add_data(data, image)
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
     add_distances(image)
@@ -50,17 +42,6 @@ def main(data):
     fig_colorbar(image, get_sm(image["color_map"]))
 
     add_artists(data, image)
-
-    image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
-    image["nc"] = data["layout_m"]
-    image["nr"] = data["layout_k"]
-    image["ticklabels_x"] = data["ticklabels_x"]
-    image["ticklabels_y"] = data["ticklabels_y"]
-    image["titles_columns"] = data["titles_columns"]
-    image["titles_rows"] = data["titles_rows"]
-
-    image["lim_x"] = [0, 1]
-    image["lim_y"] = [0, 1]
 
     add_divider(image)
     axes_format(image)
