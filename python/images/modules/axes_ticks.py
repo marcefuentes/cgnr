@@ -32,6 +32,9 @@ def ticklabels_axesimage(axs, ticklabels_y, ticklabels_x):
 def ticklabels_line2d(axs, ticklabels_y, ticklabels_x):
     """Add tick labels for (nrows x ncols x nr x nc)."""
 
+    if axs.shape[3] == 1 or axs.shape[2] == 1:
+        return
+
     _range = range(0, axs.shape[2], axs.shape[2] // 2)
     for i in range(axs.shape[0]):
         for k, r_value in zip(_range, ticklabels_y):
@@ -79,6 +82,8 @@ def ticks_axesimage(axs, nr, nc, format_params):
 def ticks_line2d(axs, format_params):
     """Set ticks for (nrows x ncols x nr x nc)."""
 
+    if axs.shape[3] == 1 or axs.shape[2] == 1:
+        return
     x_range = range(0, axs.shape[3], axs.shape[3] // 2)
     y_range = range(0, axs.shape[2], axs.shape[2] // 2)
     x_min, x_max = axs[0, 0, 0, 0].get_xlim()

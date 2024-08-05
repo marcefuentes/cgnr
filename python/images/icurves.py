@@ -18,8 +18,8 @@ from modules.save_image import close_plt
 from icurvesm.add_artists import add_artists
 from icurvesm.add_data import add_data
 from icurvesm.artists_update import artists_update
+from icurvesm.axes_adjust import axes_adjust
 from icurvesm.get_sm import get_sm
-from icurvesm.m01_reformat import m01_reformat
 from icurvesm.parse_args import parse_args
 
 
@@ -39,10 +39,8 @@ def main(data, image):
 
     add_divider(image)
     axes_format(image)
-    if data["layout"] == "m01":
-        m01_reformat(image)
-    else:
-        axes_ticks(data["ax_type"], image)
+    axes_ticks(data["ax_type"], image)
+    axes_adjust(data, image)
     axes_letters(data["ax_type"], image["axs"], image["letters"])
 
     data["file_name"] = "output"
