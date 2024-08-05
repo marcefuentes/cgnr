@@ -1,4 +1,4 @@
-"""Create ScalarMappable object for color mapping."""
+"""Create object for the upper half of the color map."""
 
 from numpy import linspace
 
