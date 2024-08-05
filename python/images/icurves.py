@@ -51,7 +51,6 @@ def main(data):
         axes_ticks("Line2D", image)
     axes_letters("Line2D", image["axs"], image["letters"])
 
-    data["color_map"] = image["color_map"]
     data["file_name"] = "output"
     data["function"] = artists_update
     data["text"] = image["fig"].texts[2]

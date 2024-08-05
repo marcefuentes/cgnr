@@ -51,7 +51,6 @@ def main(data):
 
     if data["layout"] == "theory":
         artists_theory(data)
-    data["color_map"] = image["color_map"]
     data["file_name"] = "output"
     data["function"] = artists_update
     data["text"] = image["fig"].texts[2]

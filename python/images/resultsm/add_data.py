@@ -57,6 +57,8 @@ def add_data(data, image):
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
 
+    data["color_map"] = image["color_map"]
+
 
 def add_simulation_data(data):
     """Add dataframes from csv files to data."""

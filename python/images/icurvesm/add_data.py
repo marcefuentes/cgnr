@@ -10,7 +10,13 @@ def add_data(data, image):
 
     data["alphas"] = np.linspace(**data["alphas_params"])
     data["logess"] = np.linspace(**data["logess_params"])
+    if data["movie"]:
+        data["frames"] = np.concatenate([np.linspace(**data["frames_params"]), [0.0]])
+    else:
+        data["frames"] = [0.0]
+
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
+
     image["nr"] = data["layout_k"] = len(data["alphas"])
     image["nc"] = data["layout_m"] = len(data["rhos"])
     image["fig_layout"] = {
@@ -37,6 +43,4 @@ def add_data(data, image):
     )
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
-    data["frames"] = [0.0]
-    if data["movie"]:
-        data["frames"] = np.concatenate([np.linspace(**data["frames_params"]), [0.0]])
+    data["color_map"] = image["color_map"]
