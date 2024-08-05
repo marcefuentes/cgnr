@@ -4,6 +4,7 @@ import numpy as np
 
 from resultsm.artists_theory import artists_theory
 
+
 def add_artists(data, image):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
