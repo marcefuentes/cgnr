@@ -39,6 +39,7 @@ def parse_args():
     args = parser.parse_args()
 
     data = vars(args)
+    data["ax_type"] = "Line2D"
     add_layout(data, layouts)
     image = image_unit if data["layout"] == "m01" else image_common
 

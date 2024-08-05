@@ -42,8 +42,8 @@ def main(data, image):
     if data["layout"] == "m01":
         m01_reformat(image)
     else:
-        axes_ticks("Line2D", image)
-    axes_letters("Line2D", image["axs"], image["letters"])
+        axes_ticks(data["ax_type"], image)
+    axes_letters(data["ax_type"], image["axs"], image["letters"])
 
     data["file_name"] = "output"
     data["function"] = artists_update

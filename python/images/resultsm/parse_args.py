@@ -83,14 +83,14 @@ def parse_args():
     if args.givens_control == "none":
         args.givens_control = args.givens
 
-    if args.layout == "curves":
-        args.ax_type = "PolyCollection"
-    elif args.histogram:
-        args.ax_type = "Line2D"
-    else:
-        args.ax_type = "AxesImage"
-
     data = vars(args)
+    if data["layout"] == "curves":
+        data["ax_type"] = "PolyCollection"
+    elif data["histogram"]:
+        data["ax_type"] = "Line2D"
+    else:
+        data["ax_type"] = "AxesImage"
+
     add_layout(data, layouts)
 
     return data, image
