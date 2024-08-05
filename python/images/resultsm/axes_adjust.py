@@ -28,7 +28,7 @@ def axes_adjust(data, image):
         left_pos / image["distances"]["width"],
         top_pos / image["distances"]["height"],
         plot_size / image["distances"]["width"],
-        plot_size / image["distances"]["height"]
+        plot_size / image["distances"]["height"],
     ]
     ax.set_position(new_position)
     ax.set_title(data["titles_columns"][0], fontsize=32, pad=214)
