@@ -13,14 +13,12 @@ def add_data(data, image):
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
     image["nr"] = data["layout_k"] = len(data["alphas"])
     image["nc"] = data["layout_m"] = len(data["rhos"])
-
     image["fig_layout"] = {
         "nc": data["layout_m"],
         "ncols": 2,
         "nr": data["layout_k"],
         "nrows": len(data["givens"]),
     }
-
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["titles_columns"] = data["titles_columns"]
     image["titles_rows"] = data["titles_rows"]
