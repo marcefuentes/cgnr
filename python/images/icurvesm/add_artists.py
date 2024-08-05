@@ -30,5 +30,7 @@ def add_artists(data, image):
                 data["icurves"][i, 0, k, m] = axs[i, 0, k, m].plot(
                     data["x"], data["y"], **image["icurves"]
                 )[0]
-                data["landscapes"][i, 0, k, m] = LineCollection([], **image["landscapes"])
+                data["landscapes"][i, 0, k, m] = LineCollection(
+                    [], **image["landscapes"]
+                )
                 axs[i, 1, k, m].add_collection(data["landscapes"][i, 0, k, m])

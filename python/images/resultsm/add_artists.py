@@ -15,6 +15,8 @@ def add_artists(data, image):
         elif data["ax_type"] == "Line2D":
             artists[idx] = axs[idx].plot(data["x"], data["y"], **image["Line2D"])[0]
         else:
-            artists[idx] = axs[idx].fill_between(data["x"], 0, data["y"][idx], **image["PolyCollection"])
+            artists[idx] = axs[idx].fill_between(
+                data["x"], 0, data["y"][idx], **image["PolyCollection"]
+            )
 
     data["artists"] = artists
