@@ -36,6 +36,9 @@ def main(data):
     add_layout(data, layouts)
     add_data(data)
 
+    if data["layout"] == "curves":
+        image["margin_top"] *= 0.5
+
     image["fig_layout"] = {
         "nc": (1 if data["ax_type"] == "AxesImage" else data["layout_m"]),
         "ncols": data["layout_j"],
@@ -44,9 +47,6 @@ def main(data):
     }
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
-
-    if data["layout"] == "curves":
-        image["margin_top"] *= 0.5
     add_distances(image)
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
