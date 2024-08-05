@@ -50,10 +50,7 @@ def main(data):
     fig_format(image)
     fig_colorbar(image, get_sm(image["color_map"]))
 
-    add_artists(data, image["axs"])
-    for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
-        image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
-        artists_format(data[artist], image[artist])
+    add_artists(data, image)
 
     image["letters"]["y"] = 1.0 + image["padding_letter"] * image["fig_layout"]["nr"]
     image["nc"] = data["layout_m"]
