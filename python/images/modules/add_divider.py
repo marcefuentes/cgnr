@@ -14,10 +14,9 @@ def add_divider(image):
 
     spacing = Size.Fixed(image["margin_inner"])
     size = Size.Fixed(image["plot_size"] / nc)
-    column = [size] * nc + ([spacing] + [size] * nc) * (
-        ncols - 1
-    )
+    column = [size] * nc + ([spacing] + [size] * nc) * (ncols - 1)
     row = [size] * nr + ([spacing] + [size] * nr) * (nrows - 1)
+
     image["divider"] = Divider(
         image["fig"],
         (
