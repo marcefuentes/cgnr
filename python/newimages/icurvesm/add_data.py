@@ -6,15 +6,9 @@ from icurvesm.add_static_data import add_static_data
 
 
 def add_data(data, image):
-    """Gets data from data."""
+    """Add data to dictionary data"""
 
-    data["alphas"] = np.linspace(**data["alphas_params"])
-    data["logess"] = np.linspace(**data["logess_params"])
-    if data["movie"]:
-        data["frames"] = np.concatenate([np.linspace(**data["frames_params"]), [0.0]])
-    else:
-        data["frames"] = [0.0]
-    data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
+    add_simulation_data(data)
 
     data["color_map"] = image["color_map"]
     image["nr"] = data["layout_k"] = len(data["alphas"])
@@ -38,8 +32,21 @@ def add_data(data, image):
         f"{data["alphas"][len(data['alphas']) // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
+
     data["x"] = np.linspace(0.001, 0.999, num=image["n_x_values"])
     data["y"] = np.zeros_like(data["x"])
     add_static_data(data)
     image["lim_x"] = [0, 1]
     image["lim_y"] = [0, 1]
+
+
+def add_simulation_data(data):
+    """Add givens, alphas and rhos."""
+
+    data["alphas"] = np.linspace(**data["alphas_params"])
+    data["logess"] = np.linspace(**data["logess_params"])
+    if data["movie"]:
+        data["frames"] = np.concatenate([np.linspace(**data["frames_params"]), [0.0]])
+    else:
+        data["frames"] = [0.0]
+    data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])

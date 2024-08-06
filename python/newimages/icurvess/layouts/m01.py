@@ -15,7 +15,7 @@ def m01(data):
         "num": 1,
     }
     data["givens"] = [0.0]
-    data["layout_i"] = 1
+    data["layout_i"] = len(data["givens"])
     data["layout_j"] = 2
     data["n_ic"] = 5
     data["budget_line"] = True
