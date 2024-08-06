@@ -35,23 +35,18 @@ def add_static_data(data, image):
 def curves_data(data):
     """Calculates fitness curves."""
 
-    for i in range(data["layout_i"]):
-        for j in range(data["layout_j"]):
-            curves_data_grid(data, i, j)
+    layout = (data["layout_i"], data["layout_j"])
 
+    for i, j in np.ndindex(layout):
+        trait = data["traits"][i][j]
+        given = float(data["givens"][i][j])
 
-def curves_data_grid(data, i, j):
-    """Processes a grid."""
-
-    trait = data["traits"][i][j]
-    given = float(data["givens"][i][j])
-
-    for k, alpha in enumerate(data["alphas"]):
-        for m, rho in enumerate(data["rhos"]):
-            if j == 0:
-                data["y"][i, j, k, m] = get_curves_data_plot(
-                    data["x"], trait, given, alpha, rho
-                )
+        for k, alpha in enumerate(data["alphas"]):
+            for m, rho in enumerate(data["rhos"]):
+                if j == 0:
+                    data["y"][i, j, k, m] = get_curves_data_plot(
+                        data["x"], trait, given, alpha, rho
+                    )
 
 
 def get_curves_data_plot(x, trait, given, alpha, rho):
