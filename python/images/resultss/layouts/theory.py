@@ -6,7 +6,7 @@ from resultsm.default_data import default_data
 def theory(data):
     """First column is theoretical."""
 
-    givens = [[None, "1.0"], [None, "0.5"], [None, "0.0"]]
+    givens = [[1.0, "1.0"], [0.5, "0.5"], [0.0, "0.0"]]
 
     variants = [[None, "nolang_noshuffle_cost15_4"] for _ in givens]
     traits = [[None, data["traits"]] for _ in givens]
