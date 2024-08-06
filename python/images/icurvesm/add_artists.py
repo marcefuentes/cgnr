@@ -9,10 +9,11 @@ def add_artists(data, image):
 
     axs = image["axs"]
     nrows, _, nr, nc = axs.shape
-    data["budgets"] = empty((nrows, 1, nr, nc), dtype=object)
-    data["icurves"] = empty((nrows, 1, nr, nc), dtype=object)
-    data["icurves_grey"] = empty((nrows, 1, nr, nc, data["ic"].shape[2]), dtype=object)
-    data["landscapes"] = empty((nrows, 1, nr, nc), dtype=object)
+    layout = (nrows, 1, nr, nc)
+    data["budgets"] = empty(layout, dtype=object)
+    data["icurves"] = empty(layout, dtype=object)
+    data["icurves_grey"] = empty((*layout, data["ic"].shape[2]), dtype=object)
+    data["landscapes"] = empty(layout, dtype=object)
 
     for artist in ["budgets", "icurves", "icurves_grey", "landscapes"]:
         image[artist]["linewidth"] /= pow(image["fig_layout"]["nr"], 0.5)
