@@ -16,7 +16,6 @@ def add_data(data, image):
         data["frames"] = [0.0]
 
     data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
-
     image["nr"] = data["layout_k"] = len(data["alphas"])
     image["nc"] = data["layout_m"] = len(data["rhos"])
     image["fig_layout"] = {
@@ -30,12 +29,12 @@ def add_data(data, image):
     image["titles_rows"] = data["titles_rows"]
     image["ticklabels_x"] = [
         f"{data["rhos"][0]:.0f}",
-        f"{data["rhos"][data['layout_m'] // 2]:.0f}",
+        f"{data["rhos"][len(data['rhos']) // 2]:.0f}",
         f"{data["rhos"][-1]:.2f}",
     ]
     image["ticklabels_y"] = [
         f"{data["alphas"][0]:.1f}",
-        f"{data["alphas"][data['layout_k'] // 2]:.1f}",
+        f"{data["alphas"][len(data['alphas']) // 2]:.1f}",
         f"{data["alphas"][-1]:.1f}",
     ]
     data["x"] = np.linspace(0.001, 0.999, num=image["n_x_values"])
