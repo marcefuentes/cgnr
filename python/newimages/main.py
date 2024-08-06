@@ -24,28 +24,26 @@ def main(data, image):
 
     start_time = perf_counter()
 
-    import_module(f"{data['modules']}.add_simulation_data").add_simulation_data(data)
+    mm = data["modules"]
+    import_module(f"{mm}.add_simulation_data").add_simulation_data(data)
     add_data(data, image)
-    import_module(f"{data['modules']}.add_static_data").add_static_data(data, image)
+    import_module(f"{mm}.add_static_data").add_static_data(data, image)
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
     add_distances(image)
     fig_format(image)
-    fig_colorbar(
-        image,
-        import_module(f"{data['modules']}.get_sm").get_sm(image["color_map"]),
-    )
+    fig_colorbar(image, import_module(f"{mm}.get_sm").get_sm(image["color_map"]))
 
-    import_module(f"{data['modules']}.add_artists").add_artists(data, image)
+    import_module(f"{mm}.add_artists").add_artists(data, image)
 
     add_divider(image)
     axes_format(image)
     axes_ticks(data["ax_type"], image)
-    import_module(f"{data['modules']}.axes_adjust").axes_adjust(data, image)
+    import_module(f"{mm}.axes_adjust").axes_adjust(data, image)
     axes_letters(data["ax_type"], image["axs"], image["letters"])
 
     data["file_name"] = "output"
-    data["function"] = import_module(f"{data['modules']}.artists_update").artists_update
+    data["function"] = import_module(f"{mm}.artists_update").artists_update
     data["text"] = image["fig"].texts[2]
     save_file(image["fig"], data)
 
