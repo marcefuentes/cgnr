@@ -13,7 +13,7 @@ def add_data(data, image):
 
     add_simulation_data(data)
 
-    data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])
+    data["color_map"] = image["color_map"]
     image["nr"] = data["layout_k"] = len(data["alphas"])
     image["nc"] = data["layout_m"] = len(data["rhos"])
     image["fig_layout"] = {
@@ -52,8 +52,6 @@ def add_data(data, image):
         data["y"] = np.zeros((data["layout_k"], data["layout_m"]))
         image["lim_x"] = [None, None]
         image["lim_y"] = [None, None]
-
-    data["color_map"] = image["color_map"]
 
 
 def add_simulation_data(data):
@@ -115,3 +113,4 @@ def add_simulation_data(data):
     data["frames"] = df.Time.unique()
     data["alphas"] = np.sort(df["alpha"].unique())[::-1]
     data["logess"] = np.sort(df["logES"].unique())
+    data["rhos"] = 1.0 - 1.0 / np.power(2.0, data["logess"])

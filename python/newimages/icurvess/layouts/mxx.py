@@ -15,6 +15,8 @@ def mxx(data):
         "num": 3,
     }
     data["givens"] = [1.0, 0.99, 0.5, 0.0]
+    data["layout_i"] = len(data["givens"])
+    data["layout_j"] = 2
     data["n_ic"] = 5
     data["budget_line"] = True
 
