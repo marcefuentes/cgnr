@@ -8,7 +8,7 @@ from resultss import layouts
 from resultss.image import image
 
 
-def parse_args():
+def parse_args(args):
     """Parse command line arguments and return them as a dictionary"""
 
     description = "description: Plot results"
@@ -75,7 +75,7 @@ def parse_args():
     for arg, params in args_dict.items():
         parser.add_argument(f"--{arg}", **params)
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     if args.traits_control == "none":
         args.traits_control = args.traits
@@ -91,6 +91,7 @@ def parse_args():
     else:
         data["ax_type"] = "AxesImage"
 
+    data["modules"] = "resultsm"
     add_layout(data, layouts)
 
     return data, image

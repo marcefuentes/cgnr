@@ -8,7 +8,7 @@ from icurvess import layouts
 from icurvess.image import image_common, image_unit
 
 
-def parse_args():
+def parse_args(args):
     """Parse command line arguments and return them as a dictionary"""
 
     description = (
@@ -36,10 +36,11 @@ def parse_args():
     for arg, params in args_dict.items():
         parser.add_argument(f"--{arg}", **params)
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     data = vars(args)
     data["ax_type"] = "Line2D"
+    data["modules"] = "icurvesm"
     add_layout(data, layouts)
     image = image_unit if data["layout"] == "m01" else image_common
 
