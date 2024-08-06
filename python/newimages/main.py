@@ -28,7 +28,10 @@ def main(data, image):
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
     add_distances(image)
     fig_format(image)
-    fig_colorbar(image, import_module(f"{data['module_folder']}.get_sm").get_sm(image["color_map"]))
+    fig_colorbar(
+        image,
+        import_module(f"{data['module_folder']}.get_sm").get_sm(image["color_map"]),
+    )
 
     import_module(f"{data['module_folder']}.add_artists").add_artists(data, image)
 
@@ -39,7 +42,9 @@ def main(data, image):
     axes_letters(data["ax_type"], image["axs"], image["letters"])
 
     data["file_name"] = "output"
-    data["function"] = import_module(f"{data['module_folder']}.artists_update").artists_update
+    data["function"] = import_module(
+        f"{data['module_folder']}.artists_update"
+    ).artists_update
     data["text"] = image["fig"].texts[2]
     save_file(image["fig"], data)
 
