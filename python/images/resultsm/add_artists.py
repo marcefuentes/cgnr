@@ -8,17 +8,18 @@ def add_artists(data, image):
 
     axs = image["axs"]
     artists = np.empty_like(axs, dtype=object)
+    y = data["y"]
 
     for idx in np.ndindex(axs.shape):
         if data["ax_type"] == "AxesImage":
-            artists[idx] = axs[idx].imshow(data["y"][idx], **image["AxesImage"])
+            artists[idx] = axs[idx].imshow(y[idx], **image["AxesImage"])
         elif data["ax_type"] == "Line2D":
-            artists[idx] = axs[idx].plot(data["x"], data["y"][idx], **image["Line2D"])[
+            artists[idx] = axs[idx].plot(data["x"], y[idx], **image["Line2D"])[
                 0
             ]
         else:
             artists[idx] = axs[idx].fill_between(
-                data["x"], 0, data["y"][idx], **image["PolyCollection"]
+                data["x"], 0, y[idx], **image["PolyCollection"]
             )
 
     data["artists"] = artists
