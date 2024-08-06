@@ -25,7 +25,7 @@ def main(data, image):
 
     add_artists = import_module(f"{data['module_folder']}.add_artists").add_artists
     add_data = import_module(f"{data['module_folder']}.add_data").add_data
-    artists_update = import_module(
+    data["function"] = import_module(
         f"{data['module_folder']}.artists_update"
     ).artists_update
     axes_adjust = import_module(f"{data['module_folder']}.axes_adjust").axes_adjust
@@ -47,7 +47,6 @@ def main(data, image):
     axes_letters(data["ax_type"], image["axs"], image["letters"])
 
     data["file_name"] = "output"
-    data["function"] = artists_update
     data["text"] = image["fig"].texts[2]
     save_file(image["fig"], data)
 
