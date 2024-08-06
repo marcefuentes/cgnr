@@ -1,13 +1,16 @@
 """ Calculates static fitness isoclines. """
 
 import numpy as np
-
 from modules.theory import indifference
 
 
-def add_static_data(data):
+def add_static_data(data, image):
     """Calculates static fitness isoclines."""
 
+    data["x"] = np.linspace(0.001, 0.999, num=image["n_x_values"])
+    data["y"] = np.zeros_like(data["x"])
+    image["lim_x"] = [0, 1]
+    image["lim_y"] = [0, 1]
     n_ic = data["n_ic"]
 
     ws = np.linspace(

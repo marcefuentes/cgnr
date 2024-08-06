@@ -5,6 +5,7 @@
 from time import perf_counter
 from importlib import import_module
 
+from modules.add_data import add_data
 from modules.add_distances import add_distances
 from modules.add_divider import add_divider
 from modules.axes_format import axes_format
@@ -23,7 +24,9 @@ def main(data, image):
 
     start_time = perf_counter()
 
-    import_module(f"{data['module_folder']}.add_data").add_data(data, image)
+    import_module(f"{data['module_folder']}.add_simulation_data").add_simulation_data(data)
+    add_data(data, image)
+    import_module(f"{data['module_folder']}.add_static_data").add_static_data(data, image)
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
     add_distances(image)
