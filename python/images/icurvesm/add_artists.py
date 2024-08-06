@@ -25,13 +25,7 @@ def add_artists(data, image):
             data["icurves_grey"][idx + (n,)] = ax.plot(
                 data["x"], data["ic"][k, m, n], **image["icurves_grey"]
             )[0]
-        data["budgets"][idx] = ax.plot(
-            data["x"], data["y"], **image["budgets"]
-        )[0]
-        data["icurves"][idx] = ax.plot(
-            data["x"], data["y"], **image["icurves"]
-        )[0]
-        data["landscapes"][idx] = LineCollection(
-            [], **image["landscapes"]
-        )
+        data["budgets"][idx] = ax.plot(data["x"], data["y"], **image["budgets"])[0]
+        data["icurves"][idx] = ax.plot(data["x"], data["y"], **image["icurves"])[0]
+        data["landscapes"][idx] = LineCollection([], **image["landscapes"])
         axs[i, 1, k, m].add_collection(data["landscapes"][idx])
