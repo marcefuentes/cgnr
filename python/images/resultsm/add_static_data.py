@@ -87,7 +87,9 @@ def eq_data(data):
         given = float(givens_row[1])
         for k, alpha in enumerate(data["alphas"]):
             for m, rho in enumerate(data["rhos"]):
-                data["y"][i, 0, 0, 0, k, m] = get_eq_data_pixel(trait, given, alpha, rho)
+                data["y"][i, 0, 0, 0, k, m] = get_eq_data_pixel(
+                    trait, given, alpha, rho
+                )
 
 
 def get_eq_data_pixel(trait, given, alpha, rho):
