@@ -91,7 +91,7 @@ def parse_args(args):
     else:
         data["ax_type"] = "AxesImage"
 
-    data["module_folder"] = "resultsm"
+    data["modules"] = "resultsm"
     add_layout(data, layouts)
 
     return data, image

@@ -40,7 +40,7 @@ def parse_args(args):
 
     data = vars(args)
     data["ax_type"] = "Line2D"
-    data["module_folder"] = "icurvesm"
+    data["modules"] = "icurvesm"
     add_layout(data, layouts)
     image = image_unit if data["layout"] == "m01" else image_common
 
