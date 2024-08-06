@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Plots results. """
+""" Plots. """
 
 from time import perf_counter
 from importlib import import_module
