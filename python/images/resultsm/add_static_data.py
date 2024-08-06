@@ -29,26 +29,21 @@ def add_static_data(data, image):
         image["lim_y"] = [None, None]
 
     if data["layout"] == "curves" or data["layout"] == "theory":
-        add_synthetic_data(data)
 
+        trait = data["traits"][0][1]
 
-def add_synthetic_data(data):
-    """Adds synthetic data."""
-
-    trait = data["traits"][0][1]
-
-    for i in range(data["layout_i"]):
-        given = data["givens"][i][0]
-        for k, alpha in enumerate(data["alphas"]):
-            for m, rho in enumerate(data["rhos"]):
-                if data["layout"] == "curves":
-                    data["y"][i, 0, k, m] = get_curves_data_plot(
-                        data["x"], trait, given, alpha, rho
-                    )
-                else:
-                    data["y"][i, 0, 0, 0, k, m] = get_eq_data_pixel(
-                        trait, given, alpha, rho
-                    )
+        for i in range(data["layout_i"]):
+            given = data["givens"][i][0]
+            for k, alpha in enumerate(data["alphas"]):
+                for m, rho in enumerate(data["rhos"]):
+                    if data["layout"] == "curves":
+                        data["y"][i, 0, k, m] = get_curves_data_plot(
+                            data["x"], trait, given, alpha, rho
+                        )
+                    else:
+                        data["y"][i, 0, 0, 0, k, m] = get_eq_data_pixel(
+                            trait, given, alpha, rho
+                        )
 
 
 def get_curves_data_plot(x, trait, given, alpha, rho):
