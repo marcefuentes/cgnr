@@ -24,9 +24,13 @@ def main(data, image):
 
     start_time = perf_counter()
 
-    import_module(f"{data['module_folder']}.add_simulation_data").add_simulation_data(data)
+    import_module(f"{data['module_folder']}.add_simulation_data").add_simulation_data(
+        data
+    )
     add_data(data, image)
-    import_module(f"{data['module_folder']}.add_static_data").add_static_data(data, image)
+    import_module(f"{data['module_folder']}.add_static_data").add_static_data(
+        data, image
+    )
 
     image["fig"], image["axs"] = get_fig(image["fig_layout"])
     add_distances(image)
