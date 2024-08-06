@@ -13,9 +13,3 @@ def save_image(data):
     if data["function"] is not None:
         _ = data["function"](data["frames"][-1], data)
     plt.savefig(f"{data['file_name']}.png", transparent=False)
-
-
-def close_plt(fig):
-    """Close the figure"""
-
-    plt.close(fig)

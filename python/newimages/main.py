@@ -16,7 +16,6 @@ from modules.fig_format import fig_format
 from modules.get_fig import get_fig
 from modules.parse_args import parse_args
 from modules.save_file import save_file
-from modules.save_image import close_plt
 
 
 def main(data, image):
@@ -46,8 +45,6 @@ def main(data, image):
     data["function"] = import_module(f"{mm}.artists_update").artists_update
     data["text"] = image["fig"].texts[2]
     save_file(image["fig"], data)
-
-    close_plt(image["fig"])
 
     print(f"\nTime elapsed: {(perf_counter() - start_time):.2f} seconds")
 
