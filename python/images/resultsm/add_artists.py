@@ -2,8 +2,6 @@
 
 import numpy as np
 
-from resultsm.artists_theory import artists_theory
-
 
 def add_artists(data, image):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
@@ -13,15 +11,12 @@ def add_artists(data, image):
 
     for idx in np.ndindex(axs.shape):
         if data["ax_type"] == "AxesImage":
-            artists[idx] = axs[idx].imshow(data["y"], **image["AxesImage"])
+            artists[idx] = axs[idx].imshow(data["y"][idx], **image["AxesImage"])
         elif data["ax_type"] == "Line2D":
-            artists[idx] = axs[idx].plot(data["x"], data["y"], **image["Line2D"])[0]
+            artists[idx] = axs[idx].plot(data["x"], data["y"][idx], **image["Line2D"])[0]
         else:
             artists[idx] = axs[idx].fill_between(
                 data["x"], 0, data["y"][idx], **image["PolyCollection"]
             )
 
     data["artists"] = artists
-
-    if data["layout"] == "theory":
-        artists_theory(data)
