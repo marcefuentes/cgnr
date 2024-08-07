@@ -37,16 +37,16 @@ def add_static_data(data, image):
             for k, alpha in enumerate(data["alphas"]):
                 for m, rho in enumerate(data["rhos"]):
                     if data["layout"] == "curves":
-                        data["y"][i, 0, k, m] = get_curves_data_plot(
+                        data["y"][i, 0, k, m] = get_curve(
                             data["x"], trait, given, alpha, rho
                         )
                     else:
-                        data["y"][i, 0, 0, 0, k, m] = get_eq_data_pixel(
+                        data["y"][i, 0, 0, 0, k, m] = get_eq(
                             trait, given, alpha, rho
                         )
 
 
-def get_curves_data_plot(x, trait, given, alpha, rho):
+def get_curve(x, trait, given, alpha, rho):
     """Difference in fitness between reciprocators and non-reciprocators."""
 
     inc = 0.001
@@ -70,7 +70,7 @@ def get_curves_data_plot(x, trait, given, alpha, rho):
     return y
 
 
-def get_eq_data_pixel(trait, given, alpha, rho):
+def get_eq(trait, given, alpha, rho):
     """Processes the plot."""
 
     qb = get_qbeq(given, alpha, rho)
