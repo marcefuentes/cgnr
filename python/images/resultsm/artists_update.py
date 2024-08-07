@@ -15,7 +15,7 @@ def artists_update(t, data):
             artists = data["artists"][i, j]
             zmatrix = update_zmatrix(t, data, i, j)
             if zmatrix is None:
-                print(f"Insufficient data for plot [{i}, {j}].")
+                print(f"Plot [{i}, {j}] has no simulation data.")
                 if data["ax_type"] == "AxesImage" and data["layout"] != "theory":
                     data["artists"][i, j, 0, 0].set(cmap="Greys", clim=(0, 1))
             else:
