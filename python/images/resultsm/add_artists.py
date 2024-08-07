@@ -1,15 +1,15 @@
 """ Initialize artists for plotting. """
 
-from numpy import empty_like, ndindex
+import numpy as np
 
 
 def add_artists(data, image):
     """Initialize(nrows x ncols x nr x nc) matrix of Line2D artists."""
 
     axs = image["axs"]
-    artists = empty_like(axs, dtype=object)
+    artists = np.empty_like(axs, dtype=object)
 
-    for idx in ndindex(axs.shape):
+    for idx in np.ndindex(axs.shape):
         ax = axs[idx]
         y = data["y"][idx]
         if data["ax_type"] == "AxesImage":
