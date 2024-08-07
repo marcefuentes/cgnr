@@ -8,17 +8,6 @@ def axes_format(image):
 
     axs = image["axs"]
 
-    # Position axes
-
-    nrows, ncols, nr, nc = axs.shape
-    for i, j, k, m in ndindex(axs.shape):
-        axs[i, j, k, m].set(
-            axes_locator=image["divider"].new_locator(
-                nx=j * (nc + 1) + m + int(m / nc),
-                ny=(nrows - i - 1) * (nr + 1) + nr - k - int(k / nr) - 1,
-            )
-        )
-
     # Format spines
 
     for ax in axs.flatten():
@@ -37,6 +26,8 @@ def axes_format(image):
         ax.set(**params)
 
     # Add titles
+
+    nrows, ncols, nr, nc = axs.shape
 
     for j in range(ncols):
         axs[0, j, 0, int(nc / 2)].set_title(

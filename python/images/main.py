@@ -7,9 +7,9 @@ from importlib import import_module
 
 from modules.add_data import add_data
 from modules.add_distances import add_distances
-from modules.add_divider import add_divider
 from modules.axes_format import axes_format
 from modules.axes_letters import axes_letters
+from modules.axes_place import axes_place
 from modules.axes_ticks import axes_ticks
 from modules.fig_colorbar import fig_colorbar
 from modules.fig_format import fig_format
@@ -35,7 +35,7 @@ def main(data, image):
 
     import_module(f"{mm}.add_artists").add_artists(data, image)
 
-    add_divider(image)
+    axes_place(image)
     axes_format(image)
     axes_ticks(data["ax_type"], image)
     import_module(f"{mm}.axes_adjust").axes_adjust(data, image)
