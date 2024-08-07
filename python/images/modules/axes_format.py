@@ -7,10 +7,10 @@ def axes_format(image):
     """format (nrows x ncols x nr x nc) matrix."""
 
     axs = image["axs"]
-    nrows, ncols, nr, nc = axs.shape
 
     # Position axes
 
+    nrows, ncols, nr, nc = axs.shape
     for i, j, k, m in ndindex(axs.shape):
         axs[i, j, k, m].set(
             axes_locator=image["divider"].new_locator(
