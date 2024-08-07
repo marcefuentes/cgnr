@@ -18,9 +18,7 @@ def add_theoretical_data(data):
                         data["x"], trait, given, alpha, rho
                     )
                 else:
-                    data["y"][i, 0, 0, 0, k, m] = get_eq(
-                        trait, given, alpha, rho
-                    )
+                    data["y"][i, 0, 0, 0, k, m] = get_eq(trait, given, alpha, rho)
 
 
 def get_curve(x, trait, given, alpha, rho):

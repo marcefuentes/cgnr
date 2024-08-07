@@ -6,7 +6,7 @@ from modules.theory import get_icurves
 
 def add_theoretical_data(data):
     """Calculates theoretical data."""
-        
+
     n_ic = data["n_ic"]
 
     ws = np.linspace(
