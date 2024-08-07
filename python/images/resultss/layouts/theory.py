@@ -11,7 +11,7 @@ def theory(data):
     variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in givens]
     trait = data["traits"]
 
-    data["givens_control"] = None
+    data["givens_control"] = "nothing"
 
     if data["traits"] == "wmean":
         titles = [
