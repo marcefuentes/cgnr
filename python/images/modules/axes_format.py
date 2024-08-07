@@ -2,7 +2,7 @@
 
 
 def axes_format(image):
-    """format (nrows x ncols x nr x nc) matrix."""
+    """Format axes."""
 
     axs = image["axs"]
 
