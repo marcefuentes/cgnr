@@ -56,10 +56,10 @@ def get_fitness(x, y, given, alpha, rho):
 def get_trps(high, low, given, alpha, rho):
     """Calculates the fitness of the four possible trait pairs."""
 
-    tt = get_fitness(high, low, given, alpha, rho)
-    rr = get_fitness(high, high, given, alpha, rho)
-    pp = get_fitness(low, low, given, alpha, rho)
-    ss = get_fitness(low, high, given, alpha, rho)
+    tt = get_fitness_curve(high, low, given, alpha, rho)
+    rr = get_fitness_curve(high, high, given, alpha, rho)
+    pp = get_fitness_curve(low, low, given, alpha, rho)
+    ss = get_fitness_curve(low, high, given, alpha, rho)
     return tt, rr, pp, ss
 
 
