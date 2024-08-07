@@ -1,7 +1,5 @@
 """ Format axes. """
 
-from numpy import ndindex
-
 
 def axes_format(image):
     """format (nrows x ncols x nr x nc) matrix."""
