@@ -7,10 +7,7 @@ def theory(data):
     """First column is theoretical."""
 
     givens = [[1.0, "1.0"], [0.5, "0.5"], [0.0, "0.0"]]
-
     variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in givens]
-    trait = data["traits"]
-
     data["givens_control"] = "nothing"
 
     if data["traits"] == "wmean":
