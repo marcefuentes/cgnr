@@ -1,7 +1,7 @@
 """Social dilemmas."""
 
 from modules.fill_matrix import fill_matrix
-from resultsm.default_data import default_data
+from resultsm.add_default_data import add_default_data
 
 
 def dilemmas(data):
@@ -11,7 +11,7 @@ def dilemmas(data):
 
     variants = fill_matrix("nolang_noshuffle_cost15_4", givens)
 
-    default_data(data, variants)
+    add_default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = fill_matrix("0.0", givens)

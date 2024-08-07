@@ -1,6 +1,6 @@
 """Plots for reciprocity."""
 
-from resultsm.default_data import default_data_ipi, get_subtitles
+from resultsm.add_default_data import add_default_data_ipi, get_subtitles
 
 
 def figi_adjust(data):
@@ -15,7 +15,7 @@ def figi_adjust(data):
         "lang_shuffle_cost15",
     ]
     trait = data["traits"]
-    default_data_ipi(data, mechanisms, variants_common)
+    add_default_data_ipi(data, mechanisms, variants_common)
     data["titles_columns"] = get_subtitles(
         data["titles_columns"], variants_common, mechanisms
     )

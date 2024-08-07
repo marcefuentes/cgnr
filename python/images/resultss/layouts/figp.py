@@ -1,6 +1,6 @@
 """8 plots. """
 
-from resultsm.default_data import default_data_ipi
+from resultsm.add_default_data import add_default_data_ipi
 
 
 def figp(data):
@@ -12,4 +12,4 @@ def figp(data):
         f"{data['lang']}_shuffle_cost15",
     ]
 
-    default_data_ipi(data, mechanisms, variants_common)
+    add_default_data_ipi(data, mechanisms, variants_common)

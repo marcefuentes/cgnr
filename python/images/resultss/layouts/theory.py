@@ -1,6 +1,6 @@
 """Theory and simulations."""
 
-from resultsm.default_data import default_data
+from resultsm.add_default_data import add_default_data
 
 
 def theory(data):
@@ -24,7 +24,7 @@ def theory(data):
             "Production of $\\it{B}$\n(simulations)",
         ]
 
-    default_data(data, variants)
+    add_default_data(data, variants)
 
     data["givens"] = givens
     data["titles_columns"] = titles

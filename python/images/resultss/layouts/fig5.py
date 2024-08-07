@@ -1,6 +1,6 @@
 """Figure 5."""
 
-from resultsm.default_data import default_data
+from resultsm.add_default_data import add_default_data
 from resultss.ss import S1, S2
 
 
@@ -14,7 +14,7 @@ def fig5(data):
 
     data["givens_control"] = "1.0"
     data["mechanisms"] = "i"
-    default_data(data, variants)
+    add_default_data(data, variants)
 
     data["titles_columns"] = [S1, S2, "Fitness"]
     data["traits"] = data["traits_control"] = [

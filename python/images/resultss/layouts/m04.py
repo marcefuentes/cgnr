@@ -1,6 +1,6 @@
 """4 plots."""
 
-from resultsm.default_data import default_data, get_titles
+from resultsm.add_default_data import add_default_data, get_titles
 
 
 def m04(data):
@@ -11,5 +11,5 @@ def m04(data):
         [f"{data['lang']}_noshuffle_cost15_4", f"{data['lang']}_shuffle_cost15_4"],
     ]
 
-    default_data(data, variants)
+    add_default_data(data, variants)
     data["titles_columns"] = get_titles(variants[0])

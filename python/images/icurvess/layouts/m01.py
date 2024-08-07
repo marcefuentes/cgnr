@@ -1,5 +1,7 @@
 """Single combination of alphas and logess."""
 
+from icurvesm.add_default_data import add_default_data
+
 
 def m01(data):
     """Single combination of alphas and logess."""
@@ -15,10 +17,6 @@ def m01(data):
         "num": 1,
     }
     data["givens"] = [0.0]
-    data["layout_i"] = len(data["givens"])
-    data["layout_j"] = 2
-    data["n_ic"] = 5
-    data["budget_line"] = True
 
     if data["movie"]:
         data["frames_params"] = {
@@ -27,5 +25,4 @@ def m01(data):
             "num": 11,
         }
 
-    data["titles_columns"] = ["", ""]
-    data["titles_rows"] = ["", ""]
+    add_default_data(data)

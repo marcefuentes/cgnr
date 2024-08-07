@@ -1,6 +1,6 @@
 """Theoretical curves for partner choice and reciprocity."""
 
-from resultsm.default_data import default_data
+from resultsm.add_default_data import add_default_data
 
 
 def curves(data):
@@ -10,7 +10,7 @@ def curves(data):
 
     variants = [["nothing", "nolang_noshuffle_cost15_4"] for _ in givens]
 
-    default_data(data, variants)
+    add_default_data(data, variants)
 
     data["givens"] = givens
     data["givens_control"] = givens

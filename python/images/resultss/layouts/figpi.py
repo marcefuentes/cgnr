@@ -1,6 +1,6 @@
 """Plots for partner choice plus reciprocity."""
 
-from resultsm.default_data import default_data_ipi, get_subtitles
+from resultsm.add_default_data import add_default_data_ipi, get_subtitles
 
 
 def figpi(data):
@@ -14,7 +14,7 @@ def figpi(data):
         f"{data['lang']}_shuffle_cost15",
     ]
     trait = data["traits"]
-    default_data_ipi(data, mechanisms, variants_common)
+    add_default_data_ipi(data, mechanisms, variants_common)
     data["titles_columns"] = get_subtitles(
         data["titles_columns"], variants_common, mechanisms
     )

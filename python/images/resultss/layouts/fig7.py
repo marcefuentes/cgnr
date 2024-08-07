@@ -1,6 +1,6 @@
 """Show how adding cooperation mechanisms contributes to aaleviating social dilemmas."""
 
-from resultsm.default_data import default_data, get_subtitles
+from resultsm.add_default_data import add_default_data, get_subtitles
 
 
 def fig7(data):
@@ -21,7 +21,7 @@ def fig7(data):
             "lang_shuffle_cost15_4",
         ],
     ]
-    default_data(data, variants)
+    add_default_data(data, variants)
     data["mechanisms"] = [mechanisms for _ in variants]
     data["titles_columns"] = ["No shuffling", "No shuffling", "Shuffling", "Shuffling"]
     data["titles_columns"] = get_subtitles(

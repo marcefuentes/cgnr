@@ -1,5 +1,7 @@
 """Many combinations of alphas and logess."""
 
+from icurvesm.add_default_data import add_default_data
+
 
 def mxx(data):
     """Many combinations of alphas and logess."""
@@ -15,10 +17,5 @@ def mxx(data):
         "num": 3,
     }
     data["givens"] = [1.0, 0.99, 0.5, 0.0]
-    data["layout_i"] = len(data["givens"])
-    data["layout_j"] = 2
-    data["n_ic"] = 5
-    data["budget_line"] = True
 
-    data["titles_columns"] = ["", ""]
-    data["titles_rows"] = [[""] for _ in data["givens"]]
+    add_default_data(data)

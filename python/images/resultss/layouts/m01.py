@@ -1,6 +1,6 @@
 """Single plot."""
 
-from resultsm.default_data import default_data
+from resultsm.add_default_data import add_default_data
 
 
 def m01(data):
@@ -8,4 +8,4 @@ def m01(data):
 
     variants = [[f"{data['lang']}_noshuffle_cost15_4"]]
 
-    default_data(data, variants)
+    add_default_data(data, variants)
