@@ -27,7 +27,7 @@ game_map = {
 }
 
 
-def calculate_fitness(x, y, given, alpha, rho):
+def get_fitness(x, y, given, alpha, rho):
     """Calculate fitness for a single pair of x and y."""
 
     q_a = 1.0 - y
@@ -53,7 +53,7 @@ def calculate_fitness(x, y, given, alpha, rho):
     return w
 
 
-def calculate_trps(high, low, given, alpha, rho):
+def get_trps(high, low, given, alpha, rho):
     """Calculates the fitness of the four possible trait pairs."""
 
     tt = fitness(high, low, given, alpha, rho)
@@ -63,7 +63,7 @@ def calculate_trps(high, low, given, alpha, rho):
     return tt, rr, pp, ss
 
 
-def fitness(x, y, given, alpha, rho):
+def get_fitness_curve(x, y, given, alpha, rho):
     """Compute fitness."""
 
     if isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
@@ -72,26 +72,26 @@ def fitness(x, y, given, alpha, rho):
 
         ws = np.zeros(len(x))
         for i, _ in enumerate(ws):
-            ws[i] = calculate_fitness(x[i], y[i], given, alpha, rho)
+            ws[i] = get_fitness(x[i], y[i], given, alpha, rho)
         return ws
 
     if isinstance(x, np.ndarray) and not isinstance(y, np.ndarray):
         ws = np.zeros(len(x))
         for i, _ in enumerate(ws):
-            ws[i] = calculate_fitness(x[i], y, given, alpha, rho)
+            ws[i] = get_fitness(x[i], y, given, alpha, rho)
         return ws
 
     if not isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
         ws = np.zeros(len(y))
         for i, _ in enumerate(ws):
-            ws[i] = calculate_fitness(x, y[i], given, alpha, rho)
+            ws[i] = get_fitness(x, y[i], given, alpha, rho)
         return ws
 
-    w = calculate_fitness(x, y, given, alpha, rho)
+    w = get_fitness(x, y, given, alpha, rho)
     return w
 
 
-def game_condition(game, tt, rr, pp, ss):
+def get_game_condition(game, tt, rr, pp, ss):
     """Compute the condition of the game."""
 
     if game not in game_map:
@@ -99,7 +99,7 @@ def game_condition(game, tt, rr, pp, ss):
     return game_map[game](tt, rr, pp, ss)
 
 
-def indifference(qs, w, alpha, rho):
+def get_icurves(qs, w, alpha, rho):
     """Compute indifference curves."""
 
     q_b = np.full(qs.shape, 1000.0)
@@ -118,7 +118,7 @@ def indifference(qs, w, alpha, rho):
     return q_b
 
 
-def qbeq(given, alpha, rho):
+def get_qbeq(given, alpha, rho):
     """Compute q_b*."""
 
     if given < 1.0:

@@ -1,7 +1,7 @@
 """ Calculates static fitness isoclines. """
 
 import numpy as np
-from modules.theory import indifference
+from modules.theory import get_icurves
 
 
 def add_static_data(data, image):
@@ -26,4 +26,4 @@ def add_static_data(data, image):
     for i, alpha in enumerate(data["alphas"]):
         for j, rho in enumerate(data["rhos"]):
             for k, w in enumerate(ws):
-                data["ic"][i, j, k] = indifference(data["x"], w, alpha, rho)
+                data["ic"][i, j, k] = get_icurves(data["x"], w, alpha, rho)

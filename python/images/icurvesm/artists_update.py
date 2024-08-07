@@ -3,7 +3,7 @@
 from matplotlib.pyplot import Normalize
 import numpy as np
 
-from modules.theory import fitness, indifference, qbeq
+from modules.theory import get_fitness, get_fitness_curve, get_icurves, get_qbeq
 
 
 def artists_update(given_movie, data):
@@ -20,9 +20,9 @@ def artists_update(given_movie, data):
         for j, alpha in enumerate(data["alphas"]):
             for k, rho in enumerate(data["rhos"]):
 
-                qb_partner = qbeq(given, alpha, rho)
+                qb_partner = get_qbeq(given, alpha, rho)
 
-                y = fitness(
+                y = get_fitness_curve(
                     np.full((len(data["x"])), qb_partner),
                     data["x"],
                     given,
@@ -40,9 +40,9 @@ def artists_update(given_movie, data):
                 y = (budget_own + qb_partner * given) * data["budget_line"]
                 data["budgets"][i, 0, j, k].set(ydata=y)
 
-                y = fitness(qb_partner, qb_partner, given, alpha, rho)
+                y = get_fitness(qb_partner, qb_partner, given, alpha, rho)
                 data["icurves"][i, 0, j, k].set(
-                    ydata=indifference(data["x"], y, alpha, rho),
+                    ydata=get_icurves(data["x"], y, alpha, rho),
                     color=data["color_map"](0.5 + 0.5 * y),
                 )
 

@@ -3,7 +3,7 @@
 import numpy as np
 
 from settings.project import project
-from modules.theory import calculate_fitness, calculate_trps, qbeq
+from modules.theory import get_fitness, get_trps, get_qbeq
 
 
 def add_static_data(data, image):
@@ -50,7 +50,7 @@ def get_curves_data_plot(x, trait, given, alpha, rho):
     """Difference in fitness between reciprocators and non-reciprocators."""
 
     inc = 0.001
-    tt, rr, pp, ss = calculate_trps(x + inc, x, given, alpha, rho)
+    tt, rr, pp, ss = get_trps(x + inc, x, given, alpha, rho)
 
     _ = tt  # To avoid unused variable warning.
 
@@ -61,8 +61,8 @@ def get_curves_data_plot(x, trait, given, alpha, rho):
         y = rr - pp  # Partner choice
         y *= 1000
     mask = (
-        (x + inc < qbeq(given, alpha, rho))
-        | (x + inc > qbeq(0.0, alpha, rho))
+        (x + inc < get_qbeq(given, alpha, rho))
+        | (x + inc > get_qbeq(0.0, alpha, rho))
         | (y < 0)
     )
     y[mask] = np.nan
@@ -73,7 +73,7 @@ def get_curves_data_plot(x, trait, given, alpha, rho):
 def get_eq_data_pixel(trait, given, alpha, rho):
     """Processes the plot."""
 
-    qb = qbeq(given, alpha, rho)
+    qb = get_qbeq(given, alpha, rho)
     if trait == "qBSeenmean":
         return qb
-    return calculate_fitness(qb, qb, given, alpha, rho)
+    return get_fitness(qb, qb, given, alpha, rho)
