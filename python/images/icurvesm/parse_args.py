@@ -19,14 +19,12 @@ def parse_args(args):
         description=description, formatter_class=ArgumentDefaultsHelpFormatter
     )
 
-    layout_names = [
-        name for name in layouts.__all__ if isfunction(getattr(layouts, name))
-    ]
-
     args_dict = {
         "layout": {
             "type": str,
-            "choices": layout_names,
+            "choices": [
+                name for name in layouts.__all__ if isfunction(getattr(layouts, name))
+            ],
             "default": "m01",
             "help": "figure",
         },
