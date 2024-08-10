@@ -35,7 +35,7 @@ def main():
     """Main function."""
 
     # Replace 'path/to/your/directory' with the actual directory path
-    total_hours = sum_hours_from_glo_files("/home/marcelino/code/gnr3/results/")
+    total_hours = sum_hours_from_glo_files("/home/marcelino/code/cgnr/results/")
     print(f"Total hours from all *.glo files: {total_hours}")
 
 

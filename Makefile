@@ -13,8 +13,8 @@ INCLUDES = -I$(SRCDIR) -I$(DTNORMDIR)
 SOURCES = $(wildcard $(SRCDIR)/*.c) $(wildcard $(DTNORMDIR)/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
 
-RELEASE_TARGET = $(BINDIR)/gnr
-TEST_TARGET = $(BINDIR)/gnr_test
+RELEASE_TARGET = $(BINDIR)/cgnr
+TEST_TARGET = $(BINDIR)/cgnr_test
 
 .PHONY: clean release test
 

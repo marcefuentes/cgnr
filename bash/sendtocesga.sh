@@ -1,8 +1,8 @@
 #!/bin/bash
 
 remote="cesga"
-local_folder="$HOME/code/gnr/results" # source
-remote_folder="/home/ulc/ba/mfu/code/gnr/" # destination
+local_folder="$HOME/code/cgnr/results" # source
+remote_folder="/home/ulc/ba/mfu/code/cgnr/" # destination
 
 files="*.png"
 
