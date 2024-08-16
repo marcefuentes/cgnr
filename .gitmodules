@@ -7,3 +7,4 @@
 [submodule "plot"]
 	path = plot
 	url = https://github.com/marcefuentes/plot.git
+	branch = main
