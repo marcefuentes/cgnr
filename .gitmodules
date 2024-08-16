@@ -4,6 +4,7 @@
 [submodule "python/slurm/python_colors"]
 	path = python/slurm/python_colors
 	url = https://github.com/marcefuentes/python_colors.git
+	branch = main
 [submodule "plot"]
 	path = plot
 	url = https://github.com/marcefuentes/plot.git
