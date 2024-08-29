@@ -1,24 +1,31 @@
 CC = gcc
-CFLAGS_RELEASE = -DNDEBUG -O3 -finline-functions -Wall -lm -lgsl -lgslcblas
-CFLAGS_TEST = -g -Wall -lm -lgsl -lgslcblas
+CFLAGS_RELEASE = -DNDEBUG -O3 -finline-functions -Wall
+CFLAGS_TEST = -g -Wall
+
+LIBS = -lm -lgsl -lgslcblas
 
 SRCDIR = src
 DTNORMDIR = dtnorm/src
-OBJDIR = obj
+OBJDIR_RELEASE = obj/release
+OBJDIR_TEST = obj/test
 BINDIR = bin
 TESTDIR = test
 
 INCLUDES = -I$(SRCDIR) -I$(DTNORMDIR)
 
 SOURCES = $(wildcard $(SRCDIR)/*.c) $(wildcard $(DTNORMDIR)/*.c)
-OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
+OBJECTS_RELEASE = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_RELEASE)/%.o, $(SOURCES))
+OBJECTS_TEST = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_TEST)/%.o, $(SOURCES))
 
 RELEASE_TARGET = $(BINDIR)/cgnr
 TEST_TARGET = $(BINDIR)/cgnr_test
 
-.PHONY: clean release test
+.PHONY: clean release test all
+
+all: release
 
 release: $(RELEASE_TARGET)
+
 test: $(TEST_TARGET)
 	cp $(TESTDIR)/test.glo $(TESTDIR)/t.glo
 	mv $(TESTDIR)/t.csv $(TESTDIR)/old_t.csv
@@ -26,18 +33,27 @@ test: $(TEST_TARGET)
 	./$(TEST_TARGET) $(TESTDIR)/t
 	-diff $(TESTDIR)/t.csv $(TESTDIR)/old_t.csv
 
-$(RELEASE_TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) $^ -o $@
+$(RELEASE_TARGET): $(OBJECTS_RELEASE)
+	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) $^ $(LIBS) -o $@
 
-$(TEST_TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS_TEST) $(INCLUDES) $^ -o $@
+$(TEST_TARGET): $(OBJECTS_TEST)
+	$(CC) $(CFLAGS_TEST) $(INCLUDES) $^ $(LIBS) -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/sim.h
+$(OBJDIR_RELEASE)/%.o: $(SRCDIR)/%.c $(SRCDIR)/sim.h
+	@mkdir -p $(OBJDIR_RELEASE)
+	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR_RELEASE)/%.o: $(DTNORMDIR)/%.c
+	@mkdir -p $(OBJDIR_RELEASE)
+	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR_TEST)/%.o: $(SRCDIR)/%.c $(SRCDIR)/sim.h
+	@mkdir -p $(OBJDIR_TEST)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR)/%.o: $(DTNORMDIR)/%.c
+$(OBJDIR_TEST)/%.o: $(DTNORMDIR)/%.c
+	@mkdir -p $(OBJDIR_TEST)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -rf $(OBJDIR)/*.o $(RELEASE_TARGET) $(TEST_TARGET)
-
+	rm -rf $(OBJDIR_RELEASE) $(OBJDIR_TEST) $(BINDIR)/cgnr $(BINDIR)/cgnr_test
