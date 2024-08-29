@@ -1,3 +1,5 @@
+TARGET_NAME = cgnr
+
 CC = gcc
 CFLAGS_RELEASE = -DNDEBUG -O3 -finline-functions -Wall
 CFLAGS_TEST = -g -Wall
@@ -17,8 +19,8 @@ SOURCES = $(wildcard $(SRCDIR)/*.c) $(wildcard $(DTNORMDIR)/*.c)
 OBJECTS_RELEASE = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_RELEASE)/%.o, $(SOURCES))
 OBJECTS_TEST = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_TEST)/%.o, $(SOURCES))
 
-RELEASE_TARGET = $(BINDIR)/cgnr
-TEST_TARGET = $(BINDIR)/cgnr_test
+RELEASE_TARGET = $(BINDIR)/$(TARGET_NAME)
+TEST_TARGET = $(BINDIR)/$(TARGET_NAME)_test
 
 .PHONY: clean release test all
 
@@ -56,4 +58,4 @@ $(OBJDIR_TEST)/%.o: $(DTNORMDIR)/%.c
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -rf $(OBJDIR_RELEASE) $(OBJDIR_TEST) $(BINDIR)/cgnr $(BINDIR)/cgnr_test
+	rm -rf $(OBJDIR_RELEASE) $(OBJDIR_TEST) $(BINDIR)/$(TARGET_NAME) $(BINDIR)/$(TARGET_NAME)_test
