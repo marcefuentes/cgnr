@@ -198,7 +198,7 @@ void caso(struct ptype *p_first, char *filename)
 				if (gRuns == 1) {
 					write_i(filename, (float)galpha,
 						(float)glogES, (float)gGiven,
-						t, i_first, i_last);
+						t + 1, i_first, i_last);
 				}
 			}
 
