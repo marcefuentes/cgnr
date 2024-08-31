@@ -5,8 +5,8 @@ Time,10
 Periods,1
 qBMutationSize,-6
 GrainMutationSize,-6
-DeathRate,-4
-GroupSize,3
+DeathRate,-7
+GroupSize,2
 Cost,-15
 PartnerChoice,1
 Reciprocity,1
