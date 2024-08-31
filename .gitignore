@@ -2,7 +2,7 @@ __pycache__/
 bin/
 charts/
 obj/
-results/
+results*/
 python/slurm/settings_project/project.py
 store
 t.glo
