@@ -80,6 +80,7 @@ void write_headers_i(char *filename);
 void write_headers_frq(char *filename);
 void write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last);
 void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last);
-void write_i(char *filename, int t, struct itype *i, struct itype *i_last);
+void write_i(char *filename, float alpha, float logES, float Given, int t,
+	     struct itype *i, struct itype *i_last);
 void write_time_elapsed(char *filename, float time_elapsed);
 void file_write_error(char *filename);

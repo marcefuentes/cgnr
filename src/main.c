@@ -196,7 +196,9 @@ void caso(struct ptype *p_first, char *filename)
 				stats_period(i_first, i_last, prun, gN);
 				prun++;
 				if (gRuns == 1) {
-					write_i(filename, t, i_first, i_last);
+					write_i(filename, (float)galpha,
+						(float)glogES, (float)gGiven,
+						t, i_first, i_last);
 				}
 			}
 
