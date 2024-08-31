@@ -127,9 +127,7 @@ void write_headers_i(char *filename)
 		file_write_error(filename);
 	}
 
-	fprintf(fp, "alpha,"
-		    "logES,"
-		    "Given,"
+	fprintf(fp, "t,"
 		    "qBDefault,"
 		    "qBDecided,"
 		    "qBSeen,"
@@ -146,8 +144,7 @@ void write_headers_i(char *filename)
 	fclose(fp);
 }
 
-void write_i(char *filename, float alpha, float logES, float Given,
-	     struct itype *i, struct itype *i_last)
+void write_i(char *filename, int t, struct itype *i, struct itype *i_last)
 {
 	double wc = 0.0;
 	FILE *fp;
@@ -157,8 +154,8 @@ void write_i(char *filename, float alpha, float logES, float Given,
 	}
 
 	for (; i < i_last; i++) {
-		fprintf(fp, "\n%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
-			alpha, logES, Given, i->qBDefault, i->qBDecided,
+		fprintf(fp, "\n%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
+			t, i->qBDefault, i->qBDecided,
 			i->qBSeen, i->qBSeenSum, i->wCumulative - wc,
 			i->ChooseGrain, i->Choose_ltGrain, i->MimicGrain,
 			i->ImimicGrain, i->Imimic_ltGrain, i->cost, i->age);

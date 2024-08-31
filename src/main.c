@@ -195,10 +195,8 @@ void caso(struct ptype *p_first, char *filename)
 				prun->time = t + 1;
 				stats_period(i_first, i_last, prun, gN);
 				prun++;
-				if (gRuns == 1 && t == gTime - 1) {
-					write_i(filename, (float)galpha,
-						(float)glogES, (float)gGiven,
-						i_first, i_last);
+				if (gRuns == 1) {
+					write_i(filename, t, i_first, i_last);
 				}
 			}
 
