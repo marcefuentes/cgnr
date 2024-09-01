@@ -12,26 +12,28 @@ def main():
     remote = "cesga"
 
     exe = os.environ["PROJECT"]
+    folders = ["results", "results_scatter"]
 
-    if remote == "cesga":
-        source_folder = f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{exe}/results/"
-    else:
-        source_folder = f"/home/marcelino/code/{exe}/results/"
+    for folder in folders:
+        if remote == "cesga":
+            source_folder = f"/mnt/netapp2/Store_uni/home/ulc/ba/mfu/code/{exe}/{folder}/"
+        else:
+            source_folder = f"/home/marcelino/code/{exe}/{folder}/"
 
-    destination_folder = f"/home/marcelino/code/{exe}/results/"
+        destination_folder = f"/home/marcelino/code/{exe}/{folder}/"
 
-    rsync_command = [
-        "rsync",
-        "--archive",
-        "--info=progress2",
-        "--compress",
-        "--exclude=*.sh",
-        "--exclude=*.png",
-        "--rsh=ssh",
-        f"{remote}:{source_folder}",
-        destination_folder,
-    ]
-    subprocess.run(rsync_command, check=True)
+        rsync_command = [
+            "rsync",
+            "--archive",
+            "--info=progress2",
+            "--compress",
+            "--exclude=*.sh",
+            "--exclude=*.png",
+            "--rsh=ssh",
+            f"{remote}:{source_folder}",
+            destination_folder,
+        ]
+        subprocess.run(rsync_command, check=True)
 
 
 if __name__ == "__main__":

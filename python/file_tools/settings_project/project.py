@@ -3,7 +3,7 @@
 project = {
     "input_file_extension": ".glo",
     "N": 12,
-    "Runs": 30,
+    "Runs": 1,
     "Time": 21,
     "Periods": 3,
     "qBMutationSize": -6,
