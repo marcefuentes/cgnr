@@ -135,7 +135,6 @@ void write_headers_i(char *filename)
 		    "qBDecided,"
 		    "qBSeen,"
 		    "qBSeen_j,"
-		    "qBSeenSum,"
 		    "w,"
 		    "ChooseGrain,"
 		    "Choose_ltGrain,"
@@ -159,9 +158,9 @@ void write_i(char *filename, float alpha, float logES, float Given,
 	}
 
 	for (; i < i_last; i++) {
-		fprintf(fp, "\n%f,%f,%f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
+		fprintf(fp, "\n%f,%f,%f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
 			alpha, logES, Given, t, i->qBDefault, i->qBDecided,
-			i->qBSeen, i->partner->qBSeen, i->qBSeenSum, i->wCumulative - wc,
+			i->qBSeen, i->partner->qBSeen, i->wCumulative - wc,
 			i->ChooseGrain, i->Choose_ltGrain, i->MimicGrain,
 			i->ImimicGrain, i->Imimic_ltGrain, i->cost, i->age);
 
