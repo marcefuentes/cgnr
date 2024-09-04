@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sim.h"
 
 const char *headersc[CONTINUOUS_V] = {
@@ -119,12 +120,17 @@ void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
 	fclose(fp);
 }
 
-void write_headers_i(char *filename)
+void write_i(char *filename, int sequence, float alpha, float logES, float Given,
+	     int t, struct itype *i, struct itype *i_last)
 {
+	char new_filename[17];
+	double wc = 0.0;
 	FILE *fp;
 
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
+	snprintf(new_filename, sizeof(new_filename), "%s_%03d.ics", filename, sequence);
+
+	if ((fp = fopen(new_filename, "a+")) == NULL) {
+		file_write_error(new_filename);
 	}
 
 	fprintf(fp, "alpha,"
@@ -143,19 +149,6 @@ void write_headers_i(char *filename)
 		    "Imimic_ltGrain,"
 		    "cost,"
 		    "age");
-
-	fclose(fp);
-}
-
-void write_i(char *filename, float alpha, float logES, float Given,
-	     int t, struct itype *i, struct itype *i_last)
-{
-	double wc = 0.0;
-	FILE *fp;
-
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
-	}
 
 	for (; i < i_last; i++) {
 		fprintf(fp, "\n%f,%f,%f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",

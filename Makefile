@@ -29,11 +29,11 @@ all: release
 release: $(RELEASE_TARGET)
 
 test: $(TEST_TARGET)
-	cp $(TESTDIR)/test.glo $(TESTDIR)/t.glo
-	mv $(TESTDIR)/t.csv $(TESTDIR)/old_t.csv
-	rm -f $(TESTDIR)/t.frq $(TESTDIR)/t.ics
-	./$(TEST_TARGET) $(TESTDIR)/t
-	-diff $(TESTDIR)/t.csv $(TESTDIR)/old_t.csv
+	cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
+	mv $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
+	rm -f $(TESTDIR)/000.frq $(TESTDIR)/000.ics
+	./$(TEST_TARGET) $(TESTDIR)/000
+	-diff $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
 
 $(RELEASE_TARGET): $(OBJECTS_RELEASE)
 	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) $^ $(LIBS) -o $@

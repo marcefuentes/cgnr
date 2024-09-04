@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
 	char glo[13];
 	char csv[13];
-	char ics[13];
+	char ics[9];
 	char frq[13];
 	strcpy(glo, argv[1]);
 	strcpy(csv, argv[1]);
@@ -73,15 +73,12 @@ int main(int argc, char *argv[])
 	strcpy(frq, argv[1]);
 	strcat(glo, ".glo");
 	strcat(csv, ".csv");
-	strcat(ics, ".ics");
 	strcat(frq, ".frq");
 
+	fprintf(stdout, "Running %s,%s\n", glo, ics);
 	write_headers_csv(csv);
 	write_headers_frq(frq);
 	read_globals(glo);
-	if (gRuns == 1) {
-		write_headers_i(ics);
-	}
 
 	rng = gsl_rng_alloc(gsl_rng_taus);
 
@@ -164,6 +161,7 @@ void caso(struct ptype *p_first, char *filename)
 {
 	struct itype *i_first, *i_last;
 	struct pruntype *prun_first, *prun_last, *prun;
+	int sequence = 0;
 
 	for (int r = 0; r < gRuns; r++) {
 		i_first = calloc(gN, sizeof *i_first);
@@ -196,9 +194,10 @@ void caso(struct ptype *p_first, char *filename)
 				stats_period(i_first, i_last, prun, gN);
 				prun++;
 				if (gRuns == 1) {
-					write_i(filename, (float)galpha,
+					write_i(filename, sequence, (float)galpha,
 						(float)glogES, (float)gGiven,
 						t + 1, i_first, i_last);
+					sequence++;
 				}
 			}
 
