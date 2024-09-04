@@ -127,7 +127,7 @@ void write_i(char *filename, int sequence, float alpha, float logES, float Given
 	double wc = 0.0;
 	FILE *fp;
 
-	snprintf(new_filename, sizeof(new_filename), "%s_%03d.ics", filename, sequence);
+	snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, sequence);
 
 	if ((fp = fopen(new_filename, "a+")) == NULL) {
 		file_write_error(new_filename);
