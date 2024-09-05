@@ -31,7 +31,7 @@ release: $(RELEASE_TARGET)
 test: $(TEST_TARGET)
 	cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
 	mv $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
-	rm -f $(TESTDIR)/000.frq $(TESTDIR)/000.ics
+	rm -f $(TESTDIR)/000.frq $(TESTDIR)/000*.ics
 	./$(TEST_TARGET) $(TESTDIR)/000
 	-diff $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
 
