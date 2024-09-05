@@ -78,7 +78,7 @@ def process_folder(constraint, free_slots, last_job, test):
     job_max = get_job_max(work_path)
     num_jobs_to_submit = min(free_slots, job_max - job_min + 1)
     last_job = job_min + num_jobs_to_submit - 1
-    job_array_string = f"{job_min}-{last_job}"
+    job_array_string = f"{job_min:03d}-{last_job:03d}"
     process_jobs(work_path_folders, job_array_string, constraint, test)
     free_slots -= num_jobs_to_submit
     if last_job == job_max:
