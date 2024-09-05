@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
 	char glo[13];
 	char csv[13];
-	char ics[9];
+	char ics[18];
 	char frq[13];
 	strcpy(glo, argv[1]);
 	strcpy(csv, argv[1]);
@@ -75,7 +75,6 @@ int main(int argc, char *argv[])
 	strcat(csv, ".csv");
 	strcat(frq, ".frq");
 
-	fprintf(stdout, "Running %s,%s\n", glo, ics);
 	write_headers_csv(csv);
 	write_headers_frq(frq);
 	read_globals(glo);

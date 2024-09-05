@@ -123,7 +123,7 @@ void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
 void write_i(char *filename, int sequence, float alpha, float logES, float Given,
 	     int t, struct itype *i, struct itype *i_last)
 {
-	char new_filename[17];
+	char new_filename[18];
 	double wc = 0.0;
 	FILE *fp;
 
