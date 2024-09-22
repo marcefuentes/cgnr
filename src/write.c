@@ -120,7 +120,7 @@ void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
 	fclose(fp);
 }
 
-void write_i(char *filename, int sequence, float alpha, float logES, float Given,
+void write_ics(char *filename, int sequence, float alpha, float logES, float Given,
 	     int t, struct itype *i, struct itype *i_last)
 {
 	char new_filename[18];
