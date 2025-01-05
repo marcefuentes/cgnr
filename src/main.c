@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	write_headers_frq(frq);
 
 	char glo[MAX_FILENAME_LEN];
-        snprintf(glo, sizeof(glo), "%s.glo", filename);
+	snprintf(glo, sizeof(glo), "%s.glo", filename);
 	read_globals(glo);
 
 	rng = gsl_rng_alloc(gsl_rng_taus);
