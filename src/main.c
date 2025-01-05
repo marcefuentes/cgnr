@@ -64,12 +64,11 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	const char *filename = argv[1];
-
 	char csv[MAX_FILENAME_LEN];
 	char frq[MAX_FILENAME_LEN];
 	char glo[MAX_FILENAME_LEN];
 	char ics[MAX_FILENAME_LEN];
+	const char *filename = argv[1];
 	snprintf(csv, sizeof(csv), "%s.csv", filename);
 	snprintf(frq, sizeof(frq), "%s.frq", filename);
 	snprintf(glo, sizeof(glo), "%s.glo", filename);

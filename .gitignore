@@ -7,6 +7,6 @@ python/slurm/settings_project/project.py
 store
 000.glo
 *.frq
-*.ics
+*.ics*
 *.mp4
 *.png
