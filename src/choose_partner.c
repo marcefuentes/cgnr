@@ -14,26 +14,22 @@ void choose_partner(struct itype *i, struct itype *i_last, int groupsize)
 	struct gtype {
 		int ind;
 		struct gtype *next;
-	} *head, *temp, *previous;
-
-	struct itype *j, *k;
-	int c, start, cc;
+	} ;
 
 	for (; i < i_last; i += groupsize) {
-		head = NULL;
+		struct gtype *head = NULL;
 
-		start = gsl_rng_uniform_int(rng, groupsize);
+		int start = gsl_rng_uniform_int(rng, groupsize);
 
-		for (c = 0; c < groupsize; c++) {
-			cc = (start + c) % groupsize;
+		for (int c = 0; c < groupsize; c++) {
 
-			temp = malloc(sizeof *temp);
+			struct gtype *temp = malloc(sizeof *temp);
 			if (temp == NULL) {
 				printf("\nFailed malloc (choose)");
 				exit(EXIT_FAILURE);
 			}
 
-			temp->ind = cc;
+			temp->ind = (start + c) % groupsize;
 			temp->next = NULL;
 
 			if (head != NULL) {
@@ -44,11 +40,11 @@ void choose_partner(struct itype *i, struct itype *i_last, int groupsize)
 		}
 
 		while (head != NULL && head->next != NULL) {
-			previous = head;
-			temp = head->next;
-			j = i +
+			struct gtype *previous = head;
+			struct gtype *temp = head->next;
+			struct itype *j = i +
 			    head->ind; // j is a nickname of i + head->ind to make the lines below more readable
-			k = i +
+			struct itype *k = i +
 			    temp->ind; // k is a nickname of i + temp->ind to make the lines below more readable
 
 			while (temp != NULL && (willing(j, k) == false ||
@@ -77,7 +73,7 @@ void choose_partner(struct itype *i, struct itype *i_last, int groupsize)
 		}
 
 		if (head != NULL) {
-			temp = head;
+			struct gtype *temp = head;
 			head = NULL;
 			free(temp);
 		}
