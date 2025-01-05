@@ -51,7 +51,6 @@ void update_scores(struct itype *i, struct itype *i_last);
 
 int main(int argc, char *argv[])
 {
-	struct ptype *p_first = NULL, *p_last = NULL;
 	clock_t start = clock();
 
 	if (argc != 2) {
@@ -90,6 +89,7 @@ int main(int argc, char *argv[])
 		gsl_rng_set(rng, tv.tv_sec + tv.tv_usec);
 	}
 
+	struct ptype *p_first = NULL;
 	p_first = calloc(gPeriods + 1, sizeof(*p_first));
 	if (p_first == NULL) {
 		fprintf(stderr, "Failed calloc (periods).\n");
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 
 	caso(p_first, ics);
 
-	p_last = p_first + gPeriods + 1;
+	struct ptype *p_last = p_first + gPeriods + 1;
 	stats_runs(p_first, p_last, gRuns);
 	write_stats_csv(csv, p_first, p_last); // Writes periodic data
 	write_stats_frq(frq, p_first, p_last); // Writes periodic data
