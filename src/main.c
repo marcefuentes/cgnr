@@ -68,13 +68,15 @@ int main(int argc, char *argv[])
 
 	char csv[MAX_FILENAME_LEN];
 	char frq[MAX_FILENAME_LEN];
+	char glo[MAX_FILENAME_LEN];
+	char ics[MAX_FILENAME_LEN];
 	snprintf(csv, sizeof(csv), "%s.csv", filename);
 	snprintf(frq, sizeof(frq), "%s.frq", filename);
+	snprintf(glo, sizeof(glo), "%s.glo", filename);
+	snprintf(ics, sizeof(ics), "%s.ics", filename);
+
 	write_headers_csv(csv);
 	write_headers_frq(frq);
-
-	char glo[MAX_FILENAME_LEN];
-	snprintf(glo, sizeof(glo), "%s.glo", filename);
 	read_globals(glo);
 
 	rng = gsl_rng_alloc(gsl_rng_taus);
@@ -89,20 +91,17 @@ int main(int argc, char *argv[])
 		gsl_rng_set(rng, tv.tv_sec + tv.tv_usec);
 	}
 
-	struct ptype *p_first = NULL;
-	p_first = calloc(gPeriods + 1, sizeof(*p_first));
+	struct ptype *p_first = calloc(gPeriods + 1, sizeof(*p_first));
 	if (p_first == NULL) {
 		fprintf(stderr, "Failed calloc (periods).\n");
 		gsl_rng_free(rng);
 		exit(EXIT_FAILURE);
 	}
 
-	char ics[MAX_FILENAME_LEN];
-	snprintf(ics, sizeof(ics), "%s.ics", filename);
+	struct ptype *p_last = p_first + gPeriods + 1;
 
 	caso(p_first, ics);
 
-	struct ptype *p_last = p_first + gPeriods + 1;
 	stats_runs(p_first, p_last, gRuns);
 	write_stats_csv(csv, p_first, p_last); // Writes periodic data
 	write_stats_frq(frq, p_first, p_last); // Writes periodic data
