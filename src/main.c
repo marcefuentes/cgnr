@@ -57,7 +57,9 @@ int main(int argc, char *argv[])
 	if (argc != 2) {
 		fprintf(stderr, "You must run the program with an argument.\n");
 		exit(EXIT_FAILURE);
-	} else if (strlen(argv[1]) > 8) {
+	} 
+
+	if (strlen(argv[1]) > 8) {
 		fprintf(stderr,
 			"The argument must have fewer than 8 characters.\n");
 		exit(EXIT_FAILURE);
