@@ -51,31 +51,38 @@ void update_scores(struct itype *i, struct itype *i_last);
 
 int main(int argc, char *argv[])
 {
-	struct ptype *p_first, *p_last;
+	struct ptype *p_first = NULL, *p_last = NULL;
 	clock_t start = clock();
 
 	if (argc != 2) {
 		fprintf(stderr, "You must run the program with an argument.\n");
 		exit(EXIT_FAILURE);
 	}
+
 	if (strlen(argv[1]) > 8) {
 		fprintf(stderr,
 			"The argument must have fewer than 8 characters.\n");
 		exit(EXIT_FAILURE);
 	}
 
+	const char *filename = argv[1];
+
 	char csv[MAX_FILENAME_LEN];
 	char frq[MAX_FILENAME_LEN];
-	snprintf(csv, sizeof(csv), "%s.csv", argv[1]);
-	snprintf(frq, sizeof(frq), "%s.frq", argv[1]);
+	snprintf(csv, sizeof(csv), "%s.csv", filename);
+	snprintf(frq, sizeof(frq), "%s.frq", filename);
 	write_headers_csv(csv);
 	write_headers_frq(frq);
 
 	char glo[MAX_FILENAME_LEN];
-        snprintf(glo, sizeof(glo), "%s.glo", argv[1]);
+        snprintf(glo, sizeof(glo), "%s.glo", filename);
 	read_globals(glo);
 
 	rng = gsl_rng_alloc(gsl_rng_taus);
+	if (rng == NULL) {
+		fprintf(stderr, "Failed gsl_rng_alloc.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	if (gSeed == 1) {
 		struct timeval tv;
@@ -83,14 +90,15 @@ int main(int argc, char *argv[])
 		gsl_rng_set(rng, tv.tv_sec + tv.tv_usec);
 	}
 
-	p_first = calloc(gPeriods + 1, sizeof *p_first);
+	p_first = calloc(gPeriods + 1, sizeof(*p_first));
 	if (p_first == NULL) {
 		fprintf(stderr, "Failed calloc (periods).\n");
+		gsl_rng_free(rng);
 		exit(EXIT_FAILURE);
 	}
 
 	char ics[MAX_FILENAME_LEN];
-	snprintf(ics, sizeof(ics), "%s.ics", argv[1]);
+	snprintf(ics, sizeof(ics), "%s.ics", filename);
 
 	caso(p_first, ics);
 
