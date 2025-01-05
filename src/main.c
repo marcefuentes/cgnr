@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
 	p_first = calloc(gPeriods + 1, sizeof *p_first);
 	if (p_first == NULL) {
-		printf("\nFailed calloc (periods)");
+		fprintf(stderr, "Failed calloc (periods).\n");
 		exit(EXIT_FAILURE);
 	}
 
