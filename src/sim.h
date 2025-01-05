@@ -1,8 +1,9 @@
 #include <stdio.h>
 
+#define BINS 64
 #define CONTINUOUS_V 8
 #define CORRELATIONS 15
-#define BINS 64
+#define MAX_FILENAME_LEN 20
 
 // Structures
 

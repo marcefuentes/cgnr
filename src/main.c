@@ -64,14 +64,14 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	char csv[13];
-	char frq[13];
+	char csv[MAX_FILENAME_LEN];
+	char frq[MAX_FILENAME_LEN];
 	snprintf(csv, sizeof(csv), "%s.csv", argv[1]);
 	snprintf(frq, sizeof(frq), "%s.frq", argv[1]);
 	write_headers_csv(csv);
 	write_headers_frq(frq);
 
-	char glo[13];
+	char glo[MAX_FILENAME_LEN];
         snprintf(glo, sizeof(glo), "%s.glo", argv[1]);
 	read_globals(glo);
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	char ics[18];
+	char ics[MAX_FILENAME_LEN];
 	snprintf(ics, sizeof(ics), "%s.ics", argv[1]);
 
 	caso(p_first, ics);
