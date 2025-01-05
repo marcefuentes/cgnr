@@ -163,27 +163,25 @@ void read_globals(char *filename)
 
 void caso(struct ptype *p_first, char *filename)
 {
-	struct itype *i_first, *i_last;
-	struct pruntype *prun_first, *prun_last, *prun;
 	int sequence = 0;
 
 	for (int r = 0; r < gRuns; r++) {
-		i_first = calloc(gN, sizeof *i_first);
+		struct itype *i_first = calloc(gN, sizeof *i_first);
 		if (i_first == NULL) {
 			printf("\nFailed calloc (individuals)");
 			exit(EXIT_FAILURE);
 		}
 
-		i_last = i_first + gN;
+		struct itype *i_last = i_first + gN;
 
-		prun_first = calloc(gPeriods + 1, sizeof *prun_first);
+		struct pruntype *prun_first = calloc(gPeriods + 1, sizeof *prun_first);
 		if (prun_first == NULL) {
 			printf("\nFailed calloc (periods of each run)");
 			exit(EXIT_FAILURE);
 		}
 
-		prun_last = prun_first + gPeriods + 1;
-		prun = prun_first;
+		struct pruntype *prun_last = prun_first + gPeriods + 1;
+		struct pruntype *prun = prun_first;
 
 		start_population(i_first, i_last);
 
