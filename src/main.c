@@ -65,20 +65,15 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	char glo[13];
 	char csv[13];
-	char ics[18];
 	char frq[13];
-	strcpy(glo, argv[1]);
-	strcpy(csv, argv[1]);
-	strcpy(ics, argv[1]);
-	strcpy(frq, argv[1]);
-	strcat(glo, ".glo");
-	strcat(csv, ".csv");
-	strcat(frq, ".frq");
-
+	snprintf(csv, sizeof(csv), "%s.csv", argv[1]);
+	snprintf(frq, sizeof(frq), "%s.frq", argv[1]);
 	write_headers_csv(csv);
 	write_headers_frq(frq);
+
+	char glo[13];
+        snprintf(glo, sizeof(glo), "%s.glo", argv[1]);
 	read_globals(glo);
 
 	rng = gsl_rng_alloc(gsl_rng_taus);
@@ -94,6 +89,9 @@ int main(int argc, char *argv[])
 		printf("\nFailed calloc (periods)");
 		exit(EXIT_FAILURE);
 	}
+
+	char ics[18];
+	snprintf(ics, sizeof(ics), "%s.ics", argv[1]);
 
 	caso(p_first, ics);
 
