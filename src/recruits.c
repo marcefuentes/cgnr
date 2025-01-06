@@ -9,19 +9,16 @@ extern gsl_rng *rng;
 
 struct rtype *create_recruits(int deaths, double wc)
 {
-	struct rtype *temp, *head, *member;
-	double random;
-
-	head = NULL;
+	struct rtype *head = NULL;
 
 	for (int d = 0; d < deaths; d++) {
-		temp = malloc(sizeof *temp);
+		struct rtype *temp = malloc(sizeof *temp);
 		if (temp == NULL) {
-			printf("\nFailed malloc (create_recruits)");
+			fprintf(stderr, "\nFailed malloc (create_recruits)");
 			exit(EXIT_FAILURE);
 		}
 
-		random = gsl_rng_uniform(rng);
+		double random = gsl_rng_uniform(rng);
 		temp->randomwc = wc * random;
 		temp->next = NULL;
 
@@ -31,7 +28,7 @@ struct rtype *create_recruits(int deaths, double wc)
 			temp->next = head;
 			head = temp;
 		} else {
-			member = head;
+			struct rtype *member = head;
 
 			while (member->next != NULL &&
 			       member->next->randomwc < temp->randomwc) {
@@ -48,7 +45,6 @@ struct rtype *create_recruits(int deaths, double wc)
 
 void kill(struct rtype *recruit, struct itype *i_first, int n, double cost)
 {
-	struct itype *i;
 	int pick;
 
 	for (; recruit != NULL; recruit = recruit->next) {
@@ -58,7 +54,7 @@ void kill(struct rtype *recruit, struct itype *i_first, int n, double cost)
 		} while ((i_first + pick)->age ==
 			 0); // ... that is not already dead
 
-		i = i_first + pick;
+		struct itype *i = i_first + pick;
 		i->qBDefault = recruit->qBDefault;
 		i->qBDecided = i->qBDefault;
 		i->qBSeenSum = 0.0;
@@ -78,10 +74,8 @@ void kill(struct rtype *recruit, struct itype *i_first, int n, double cost)
 
 void free_recruits(struct rtype *head)
 {
-	struct rtype *member;
-
 	while (head != NULL) {
-		member = head;
+		struct rtype *member = head;
 		head = head->next;
 		free(member);
 	}
