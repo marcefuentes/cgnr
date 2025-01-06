@@ -23,7 +23,7 @@ void choose_partner(struct itype *i, struct itype *i_last, int groupsize)
 
 		for (int c = 0; c < groupsize; c++) {
 
-			struct gtype *temp = malloc(sizeof *temp);
+			struct gtype *temp = malloc(sizeof(*temp));
 			if (temp == NULL) {
 				printf("\nFailed malloc (choose)");
 				exit(EXIT_FAILURE);

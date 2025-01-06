@@ -166,7 +166,7 @@ void caso(struct ptype *p_first, char *filename)
 	int sequence = 0;
 
 	for (int r = 0; r < gRuns; r++) {
-		struct itype *i_first = calloc(gN, sizeof *i_first);
+		struct itype *i_first = calloc(gN, sizeof(*i_first));
 		if (i_first == NULL) {
 			printf("\nFailed calloc (individuals)");
 			exit(EXIT_FAILURE);
@@ -174,7 +174,7 @@ void caso(struct ptype *p_first, char *filename)
 
 		struct itype *i_last = i_first + gN;
 
-		struct pruntype *prun_first = calloc(gPeriods + 1, sizeof *prun_first);
+		struct pruntype *prun_first = calloc(gPeriods + 1, sizeof(*prun_first));
 		if (prun_first == NULL) {
 			printf("\nFailed calloc (periods of each run)");
 			exit(EXIT_FAILURE);
@@ -279,8 +279,6 @@ void caso(struct ptype *p_first, char *filename)
 
 void start_population(struct itype *i, struct itype *i_last)
 {
-	struct itype *j;
-
 	i->qBDefault = 0.1;
 	i->qBDecided = i->qBDefault;
 	i->qBSeenSum = 0.0;
@@ -292,11 +290,11 @@ void start_population(struct itype *i, struct itype *i_last)
 	i->cost = 0.0;
 	i->age = 0;
 
-	for (j = i + 1; j < i_last; j++) {
+	for (struct itype *j = i + 1; j < i_last; j++) {
 		*j = *i;
 	}
 
-	for (j = i + 1; i < i_last; i += 2, j += 2) {
+	for (struct itype *j = i + 1; i < i_last; i += 2, j += 2) {
 		i->partner = j;
 		j->partner = i;
 	}
@@ -305,11 +303,10 @@ void start_population(struct itype *i, struct itype *i_last)
 double fitness(struct itype *i, struct itype *i_last)
 {
 	double wC = 0.0;
-	double qA, qB;
 
 	for (; i < i_last; i++) {
-		qA = 1.0 - i->qBDecided;
-		qB = i->qBDecided * (1.0 - gGiven) +
+		double qA = 1.0 - i->qBDecided;
+		double qB = i->qBDecided * (1.0 - gGiven) +
 		     i->partner->qBDecided * gGiven;
 		i->w = fmax(0.0, ces(qA, qB) - i->cost);
 		wC += i->w;
