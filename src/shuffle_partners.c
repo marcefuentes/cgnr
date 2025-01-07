@@ -7,12 +7,12 @@
 // Global variable
 extern gsl_rng *rng;
 
-void shuffle_partners(struct itype *i, struct itype *i_last, int groupsize)
+int shuffle_partners(struct itype *i, struct itype *i_last, int groupsize)
 {
-	int *c = calloc(groupsize, sizeof *c);
+	int *c = calloc(groupsize, sizeof(*c));
 	if (c == NULL) {
-		printf("\nFailed calloc (shuffle_partners)");
-		exit(EXIT_FAILURE);
+		printf("\nFailed calloc (shuffle_partners).");
+		return -1;
 	}
 
 	for (int a = 0; a < groupsize; a++) {
@@ -29,4 +29,6 @@ void shuffle_partners(struct itype *i, struct itype *i_last, int groupsize)
 	}
 
 	free(c);
+
+	return 0;
 }

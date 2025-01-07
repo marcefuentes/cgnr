@@ -19,12 +19,13 @@ const char *headersr[CORRELATIONS] = {
 
 void file_write_error(char *filename);
 
-void write_headers_csv(char *filename)
+int write_headers_csv(char *filename)
 {
 	FILE *fp;
 
 	if ((fp = fopen(filename, "a+")) == NULL) {
 		file_write_error(filename);
+		return -1;
 	}
 
 	fprintf(fp, "alpha,logES,Given,Time");
@@ -41,14 +42,17 @@ void write_headers_csv(char *filename)
 	fprintf(fp, "\n");
 
 	fclose(fp);
+
+	return 0;
 }
 
-void write_headers_frq(char *filename)
+int write_headers_frq(char *filename)
 {
 	FILE *fp;
 
 	if ((fp = fopen(filename, "a+")) == NULL) {
 		file_write_error(filename);
+		return -1;
 	}
 
 	fprintf(fp, "alpha,logES,Given,Time");
@@ -66,14 +70,17 @@ void write_headers_frq(char *filename)
 	fprintf(fp, "\n");
 
 	fclose(fp);
+
+	return 0;
 }
 
-void write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last)
+int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last)
 {
 	FILE *fp;
 
 	if ((fp = fopen(filename, "a+")) == NULL) {
 		file_write_error(filename);
+		return -1;
 	}
 
 	for (; p < p_last; p++) {
@@ -93,14 +100,17 @@ void write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last)
 	}
 
 	fclose(fp);
+
+	return 0;
 }
 
-void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
+int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
 {
 	FILE *fp;
 
 	if ((fp = fopen(filename, "a+")) == NULL) {
 		file_write_error(filename);
+		return -1;
 	}
 
 	for (; p < p_last; p++) {
@@ -120,9 +130,11 @@ void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
 	}
 
 	fclose(fp);
+
+	return 0;
 }
 
-void write_ics(char *filename, int sequence, float alpha, float logES, float Given,
+int write_ics(char *filename, int sequence, float alpha, float logES, float Given,
 	     int t, struct itype *i, struct itype *i_last)
 {
 	char new_filename[18];
@@ -133,6 +145,7 @@ void write_ics(char *filename, int sequence, float alpha, float logES, float Giv
 
 	if ((fp = fopen(new_filename, "a+")) == NULL) {
 		file_write_error(new_filename);
+		return -1;
 	}
 
 	fprintf(fp, "alpha,"
@@ -163,14 +176,17 @@ void write_ics(char *filename, int sequence, float alpha, float logES, float Giv
 	}
 
 	fclose(fp);
+
+	return 0;
 }
 
-void write_time_elapsed(char *filename, float time_elapsed)
+int write_time_elapsed(char *filename, float time_elapsed)
 {
 	FILE *fp;
 
 	if ((fp = fopen(filename, "a+")) == NULL) {
 		file_write_error(filename);
+		return -1;
 	}
 
 	fprintf(fp, "TimeElapsed,");
@@ -220,10 +236,11 @@ void write_time_elapsed(char *filename, float time_elapsed)
 	fprintf(fp, "\n");
 
 	fclose(fp);
+
+	return 0;
 }
 
 void file_write_error(char *filename)
 {
-	fprintf(stderr, "Can't open file %s to write.\n", filename);
-	exit(EXIT_FAILURE);
+	fprintf(stderr, "Failed to open file %s for writing.\n", filename);
 }

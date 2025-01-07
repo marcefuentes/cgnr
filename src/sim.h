@@ -62,7 +62,7 @@ struct rtype {
 // Functions
 
 void decide_qB(struct itype *i, struct itype *i_last, int imimic);
-void shuffle_partners(struct itype *i, struct itype *i_last, int groupsize);
+int shuffle_partners(struct itype *i, struct itype *i_last, int groupsize);
 int choose_partner(struct itype *i, struct itype *i_last, int groupsize);
 struct rtype *create_recruits(int deaths, double wc);
 void free_recruits(struct rtype *recruit);
@@ -76,10 +76,10 @@ int read_int(FILE *fp, const char *format, int *value,
 	     const char *error_message);
 double read_double(FILE *fp, const char *format, double *value,
 		   const char *error_message);
-void write_headers_csv(char *filename);
-void write_headers_frq(char *filename);
-void write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last);
-void write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last);
-void write_ics(char *filename, int sequence, float alpha, float logES,
+int write_headers_csv(char *filename);
+int write_headers_frq(char *filename);
+int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last);
+int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last);
+int write_ics(char *filename, int sequence, float alpha, float logES,
 	     float Given, int t, struct itype *i, struct itype *i_last);
-void write_time_elapsed(char *filename, float time_elapsed);
+int write_time_elapsed(char *filename, float time_elapsed);

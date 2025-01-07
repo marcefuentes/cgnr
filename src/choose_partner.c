@@ -23,7 +23,7 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 
 		head = create_shuffled_list(groupsize);
 		if (head == NULL) {
-			fprintf(stderr, "\nFailed create_shuffled_list (choose_partner).");
+			fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
 			free_gtype_list(&head);
 			return -1;
 		}
@@ -80,7 +80,7 @@ struct gtype *create_shuffled_list(int groupsize)
 	for (int c = 0; c < groupsize; c++) {
 		struct gtype *temp = malloc(sizeof(*temp));
 		if (temp == NULL) {
-			fprintf(stderr, "\nFailed malloc (create_shuffled_list).");
+			fprintf(stderr, "Failed malloc (create_shuffled_list).\n");
 			free_gtype_list(&head);
 			return NULL;
 		}
@@ -105,7 +105,7 @@ void free_gtype_list(struct gtype **head)
 bool willing(struct itype *a, struct itype *b)
 {
 	if (a == NULL || b == NULL || a->partner == NULL) {
-		fprintf(stderr, "\nNull pointer encountered in willing().");
+		fprintf(stderr, "Null pointer encountered in willing().\n");
 	}
 
 	if ((b->qBSeen - a->partner->qBSeen > a->ChooseGrain) ||

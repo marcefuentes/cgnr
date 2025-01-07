@@ -42,7 +42,7 @@ double glogES, grho; // Elasticity of substitution. ES = 1/(1 - rho)
 
 // Functions
 
-void read_globals(char *filename);
+int read_globals(char *filename);
 int caso(struct ptype *p_first, char *filename);
 void start_population(struct itype *i, struct itype *i_last);
 double fitness(struct itype *i, struct itype *i_last);
@@ -75,9 +75,18 @@ int main(int argc, char *argv[])
 	snprintf(glo, sizeof(glo), "%s.glo", filename);
 	snprintf(ics, sizeof(ics), "%s.ics", filename);
 
-	write_headers_csv(csv);
-	write_headers_frq(frq);
-	read_globals(glo);
+	if (write_headers_csv(csv) < 0) {
+		fprintf(stderr, "Failed write_headers_csv.\n");
+		exit(EXIT_FAILURE);
+	}
+	if (write_headers_frq(frq) < 0) {
+		fprintf(stderr, "Failed write_headers_frq.\n");
+		exit(EXIT_FAILURE);
+	}
+	if (read_globals(glo) < 0) {
+		fprintf(stderr, "Failed read_globals.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	rng = gsl_rng_alloc(gsl_rng_taus);
 	if (rng == NULL) {
@@ -108,25 +117,38 @@ int main(int argc, char *argv[])
 	}
 
 	stats_runs(p_first, p_last, gRuns);
-	write_stats_csv(csv, p_first, p_last); // Writes periodic data
-	write_stats_frq(frq, p_first, p_last); // Writes periodic data
+	if (write_stats_csv(csv, p_first, p_last) < 0) {
+		fprintf(stderr, "Failed write_stats_csv.\n");
+		gsl_rng_free(rng);
+		free(p_first);
+		exit(EXIT_FAILURE);
+	}
+	if (write_stats_frq(frq, p_first, p_last) < 0) {;
+		fprintf(stderr, "Failed write_stats_frq.\n");
+		gsl_rng_free(rng);
+		free(p_first);
+		exit(EXIT_FAILURE);
+	}
 
 	free(p_first);
 
 	gsl_rng_free(rng);
 
-	write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC);
+	if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) < 0) {
+		fprintf(stderr, "Failed write_time_elapsed.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	return 0;
 }
 
-void read_globals(char *filename)
+int read_globals(char *filename)
 {
 	FILE *fp;
 
 	if ((fp = fopen(filename, "r")) == NULL) {
-		fprintf(stderr, "Can't open file %s to read.\n", filename);
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "Failed to open file %s for reading.\n", filename);
+		return -1;
 	}
 
 	gSeed = read_int(fp, "Seed,%i\n", &gSeed, "Seed");
@@ -165,6 +187,8 @@ void read_globals(char *filename)
 	gGroupSize = pow(2.0, gGroupSize);
 	gCost = pow(2.0, gCost);
 	grho = 1.0 - 1.0 / pow(2.0, glogES);
+
+	return 0;
 }
 
 int caso(struct ptype *p_first, char *filename)
@@ -174,16 +198,17 @@ int caso(struct ptype *p_first, char *filename)
 	for (int r = 0; r < gRuns; r++) {
 		struct itype *i_first = calloc(gN, sizeof(*i_first));
 		if (i_first == NULL) {
-			printf("\nFailed calloc (individuals)");
-			exit(EXIT_FAILURE);
+			fprintf(stderr, "\nFailed calloc (individuals)");
+			return -1;
 		}
 
 		struct itype *i_last = i_first + gN;
 
 		struct pruntype *prun_first = calloc(gPeriods + 1, sizeof(*prun_first));
 		if (prun_first == NULL) {
-			printf("\nFailed calloc (periods of each run)");
-			exit(EXIT_FAILURE);
+			fprintf(stderr, "\nFailed calloc (periods of each run)");
+			free_memory(i_first, prun_first);
+			return -1;
 		}
 
 		struct pruntype *prun_last = prun_first + gPeriods + 1;
@@ -214,7 +239,11 @@ int caso(struct ptype *p_first, char *filename)
 			}
 
 			if (gShuffle == 1) {
-				shuffle_partners(i_first, i_last, gGroupSize);
+				if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
+					fprintf(stderr, "\nFailed shuffle_partners.");
+					free_memory(i_first, prun_first);
+					return -1;
+				}
 			}
 
 			if (gPartnerChoice == 1) {
@@ -230,6 +259,11 @@ int caso(struct ptype *p_first, char *filename)
 			if (deaths > 0) {
 				struct rtype *recruit_first =
 					create_recruits(deaths, wC);
+				if (recruit_first == NULL) {
+					fprintf(stderr, "\nFailed create_recruits.");
+					free_memory(i_first, prun_first);
+					return -1;
+				}
 				struct itype *i = i_first;
 
 				for (struct rtype *recruit = recruit_first;
@@ -280,10 +314,9 @@ int caso(struct ptype *p_first, char *filename)
 			}
 		}
 
-		free(i_first);
 
 		stats_end(prun_first, prun_last, p_first);
-		free(prun_first);
+		free_memory(i_first, prun_first);
 	}
 
 	return 0;

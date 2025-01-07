@@ -14,8 +14,8 @@ struct rtype *create_recruits(int deaths, double wc)
 	for (int d = 0; d < deaths; d++) {
 		struct rtype *temp = malloc(sizeof(*temp));
 		if (temp == NULL) {
-			fprintf(stderr, "\nFailed malloc (create_recruits)");
-			exit(EXIT_FAILURE);
+			fprintf(stderr, "\nFailed malloc (create_recruits).");
+			return NULL;
 		}
 
 		double random = gsl_rng_uniform(rng);
