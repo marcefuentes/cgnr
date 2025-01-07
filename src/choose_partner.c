@@ -19,9 +19,7 @@ bool willing(struct itype *a, struct itype *b);
 int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 {
 	for (struct itype *i = i_first; i < i_last; i += groupsize) {
-		struct gtype *head = NULL;
-
-		head = create_shuffled_list(groupsize);
+		struct gtype *head = create_shuffled_list(groupsize);
 		if (head == NULL) {
 			fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
 			free_gtype_list(&head);
@@ -31,10 +29,8 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 		while (head != NULL && head->next != NULL) {
 			struct gtype *previous = head;
 			struct gtype *temp = head->next;
-			struct itype *j = i +
-			    head->ind; // j is a nickname of i + head->ind to make the lines below more readable
-			struct itype *k = i +
-			    temp->ind; // k is a nickname of i + temp->ind to make the lines below more readable
+			struct itype *j = i + head->ind;
+			struct itype *k = i + temp->ind;
 
 			while (temp != NULL &&
 			    (willing(j, k) == false || willing(k, j) == false)) {
