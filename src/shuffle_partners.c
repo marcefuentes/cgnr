@@ -11,7 +11,7 @@ int shuffle_partners(struct itype *i, struct itype *i_last, int groupsize)
 {
 	int *c = calloc(groupsize, sizeof(*c));
 	if (c == NULL) {
-		printf("\nFailed calloc (shuffle_partners).");
+		printf("Failed calloc (shuffle_partners).\n");
 		return -1;
 	}
 

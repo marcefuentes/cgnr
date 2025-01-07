@@ -14,7 +14,7 @@ struct rtype *create_recruits(int deaths, double wc)
 	for (int d = 0; d < deaths; d++) {
 		struct rtype *temp = malloc(sizeof(*temp));
 		if (temp == NULL) {
-			fprintf(stderr, "\nFailed malloc (create_recruits).");
+			fprintf(stderr, "Failed malloc (create_recruits).\n");
 			return NULL;
 		}
 

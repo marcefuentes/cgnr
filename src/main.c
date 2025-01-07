@@ -198,7 +198,7 @@ int caso(struct ptype *p_first, char *filename)
 	for (int r = 0; r < gRuns; r++) {
 		struct itype *i_first = calloc(gN, sizeof(*i_first));
 		if (i_first == NULL) {
-			fprintf(stderr, "\nFailed calloc (individuals)");
+			fprintf(stderr, "Failed calloc (individuals).\n");
 			return -1;
 		}
 
@@ -206,7 +206,7 @@ int caso(struct ptype *p_first, char *filename)
 
 		struct pruntype *prun_first = calloc(gPeriods + 1, sizeof(*prun_first));
 		if (prun_first == NULL) {
-			fprintf(stderr, "\nFailed calloc (periods of each run)");
+			fprintf(stderr, "Failed calloc (periods of each run).\n");
 			free_memory(i_first, prun_first);
 			return -1;
 		}
@@ -240,7 +240,7 @@ int caso(struct ptype *p_first, char *filename)
 
 			if (gShuffle == 1) {
 				if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
-					fprintf(stderr, "\nFailed shuffle_partners.");
+					fprintf(stderr, "Failed shuffle_partners.\n");
 					free_memory(i_first, prun_first);
 					return -1;
 				}
@@ -248,7 +248,7 @@ int caso(struct ptype *p_first, char *filename)
 
 			if (gPartnerChoice == 1) {
 				if (choose_partner(i_first, i_last, gGroupSize) < 0) {
-					fprintf(stderr, "\nFailed choose_partner.");
+					fprintf(stderr, "Failed choose_partner.\n");
 					free_memory(i_first, prun_first);
 					return -1;
 				}
@@ -260,7 +260,7 @@ int caso(struct ptype *p_first, char *filename)
 				struct rtype *recruit_first =
 					create_recruits(deaths, wC);
 				if (recruit_first == NULL) {
-					fprintf(stderr, "\nFailed create_recruits.");
+					fprintf(stderr, "Failed create_recruits.\n");
 					free_memory(i_first, prun_first);
 					return -1;
 				}
