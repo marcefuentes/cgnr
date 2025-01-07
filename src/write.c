@@ -17,6 +17,8 @@ const char *headersr[CORRELATIONS] = {
 	"r_Mimic_Imimic",    "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"
 };
 
+void file_write_error(char *filename);
+
 void write_headers_csv(char *filename)
 {
 	FILE *fp;
