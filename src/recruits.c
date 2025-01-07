@@ -72,11 +72,11 @@ void kill(struct rtype *recruit, struct itype *i_first, int n, double cost)
 	}
 }
 
-void free_recruits(struct rtype *head)
+void free_rtype_list(struct rtype **head)
 {
-	while (head != NULL) {
-		struct rtype *member = head;
-		head = head->next;
-		free(member);
+	while (*head != NULL) {
+		struct rtype *temp = *head;
+		*head = (*head)->next;
+		free(temp);
 	}
 }

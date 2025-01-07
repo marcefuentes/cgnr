@@ -65,7 +65,7 @@ void decide_qB(struct itype *i, struct itype *i_last, int imimic);
 int shuffle_partners(struct itype *i, struct itype *i_last, int groupsize);
 int choose_partner(struct itype *i, struct itype *i_last, int groupsize);
 struct rtype *create_recruits(int deaths, double wc);
-void free_recruits(struct rtype *recruit);
+void free_rtype_list(struct rtype **recruit);
 void kill(struct rtype *recruit, struct itype *i_first, int n, double cost);
 void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun,
 		  int n);

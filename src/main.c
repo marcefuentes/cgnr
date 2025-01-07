@@ -306,7 +306,7 @@ int caso(struct ptype *p_first, char *filename)
 				}
 
 				kill(recruit_first, i_first, gN, gCost);
-				free_recruits(recruit_first);
+				free_rtype_list(&recruit_first);
 			}
 
 			if (gReciprocity == 1) {
