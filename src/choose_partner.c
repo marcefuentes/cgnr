@@ -12,7 +12,7 @@ struct gtype {
 	struct gtype *next;
 } ;
 
-struct gtype *create_shuffled_list(int groupsize);
+struct gtype *create_shuffled_list(int size);
 void free_gtype_list(struct gtype **head);
 bool willing(struct itype *a, struct itype *b);
 
@@ -68,12 +68,12 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 	return 0;
 }
 
-struct gtype *create_shuffled_list(int groupsize)
+struct gtype *create_shuffled_list(int size)
 {
 	struct gtype *head = NULL;
-	int start = gsl_rng_uniform_int(rng, groupsize);
+	int start = gsl_rng_uniform_int(rng, size);
 
-	for (int c = 0; c < groupsize; c++) {
+	for (int c = 0; c < size; c++) {
 		struct gtype *temp = malloc(sizeof(*temp));
 		if (temp == NULL) {
 			fprintf(stderr, "Failed malloc (create_shuffled_list).\n");
@@ -81,7 +81,7 @@ struct gtype *create_shuffled_list(int groupsize)
 			return NULL;
 		}
 
-		temp->ind = (start + c) % groupsize;
+		temp->ind = (start + c) % size;
 		temp->next = head;
 		head = temp;
 	}
