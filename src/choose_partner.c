@@ -105,7 +105,7 @@ void free_gtype_list(struct gtype **head)
 bool willing(struct itype *a, struct itype *b)
 {
 	if (a == NULL || b == NULL || a->partner == NULL) {
-		fprintf(stderr, "Null pointer encountered in willing().\n");
+		fprintf(stderr, "Null pointer encountered in willing.\n");
 	}
 
 	if ((b->qBSeen - a->partner->qBSeen > a->ChooseGrain) ||
