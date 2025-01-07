@@ -43,11 +43,12 @@ double glogES, grho; // Elasticity of substitution. ES = 1/(1 - rho)
 // Functions
 
 void read_globals(char *filename);
-void caso(struct ptype *p_first, char *filename);
+int caso(struct ptype *p_first, char *filename);
 void start_population(struct itype *i, struct itype *i_last);
 double fitness(struct itype *i, struct itype *i_last);
 double ces(double qA, double qB); // glogES, galpha
 void update_scores(struct itype *i, struct itype *i_last);
+void free_memory(struct itype *i_first, struct pruntype *prun_first);
 
 int main(int argc, char *argv[])
 {
@@ -99,7 +100,12 @@ int main(int argc, char *argv[])
 
 	struct ptype *p_last = p_first + gPeriods + 1;
 
-	caso(p_first, ics);
+	if (caso(p_first, ics) < 0) {
+		fprintf(stderr, "Failed caso.\n");
+		gsl_rng_free(rng);
+		free(p_first);
+		exit(EXIT_FAILURE);
+	}
 
 	stats_runs(p_first, p_last, gRuns);
 	write_stats_csv(csv, p_first, p_last); // Writes periodic data
@@ -161,7 +167,7 @@ void read_globals(char *filename)
 	grho = 1.0 - 1.0 / pow(2.0, glogES);
 }
 
-void caso(struct ptype *p_first, char *filename)
+int caso(struct ptype *p_first, char *filename)
 {
 	int sequence = 0;
 
@@ -212,7 +218,11 @@ void caso(struct ptype *p_first, char *filename)
 			}
 
 			if (gPartnerChoice == 1) {
-				choose_partner(i_first, i_last, gGroupSize);
+				if (choose_partner(i_first, i_last, gGroupSize) < 0) {
+					fprintf(stderr, "\nFailed choose_partner.");
+					free_memory(i_first, prun_first);
+					return -1;
+				}
 			}
 
 			int deaths = gsl_ran_binomial(rng, gDeathRate, gN);
@@ -275,6 +285,8 @@ void caso(struct ptype *p_first, char *filename)
 		stats_end(prun_first, prun_last, p_first);
 		free(prun_first);
 	}
+
+	return 0;
 }
 
 void start_population(struct itype *i, struct itype *i_last)
@@ -340,4 +352,12 @@ void update_scores(struct itype *i, struct itype *i_last)
 		i->qBSeenSum += i->qBSeen;
 		i->qBSeen_lt = i->qBSeenSum / i->age;
 	}
+}
+
+void free_memory(struct itype *i_first, struct pruntype *prun_first)
+{
+	free(i_first);
+	i_first = NULL;
+	free(prun_first);
+	prun_first = NULL;
 }
