@@ -1,5 +1,5 @@
 # Variables
-TARGET_NAME = cgnr
+TARGET_NAME = $(shell basename $(shell pwd))
 CC = gcc
 CFLAGS = -Wall
 CFLAGS_DEBUG = $(CFLAGS) -g
@@ -44,11 +44,16 @@ release: $(RELEASE_TARGET)
 
 test: $(TEST_TARGET)
 	@echo "Running tests..."
-	cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
-	mv $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
-	rm -f $(TESTDIR)/000.frq $(TESTDIR)/000*.ics
+	@cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
+	@mv $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
+	@rm -f $(TESTDIR)/000.frq $(TESTDIR)/000*.ics
 	./$(TEST_TARGET) $(TESTDIR)/000
-	-diff $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
+	@if diff $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv > /dev/null; then \
+                echo "Output remains the same. Good refactoring!"; \
+        else \
+                echo "Differences found in CSV files:"; \
+                diff $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv || true; \
+        fi
 
 # Link rules
 $(DEBUG_TARGET): $(OBJECTS_DEBUG)
