@@ -123,7 +123,8 @@ int main(int argc, char *argv[])
 		free(p_first);
 		exit(EXIT_FAILURE);
 	}
-	if (write_stats_frq(frq, p_first, p_last) < 0) {;
+	if (write_stats_frq(frq, p_first, p_last) < 0) {
+		;
 		fprintf(stderr, "Failed write_stats_frq.\n");
 		gsl_rng_free(rng);
 		free(p_first);
@@ -134,7 +135,8 @@ int main(int argc, char *argv[])
 
 	gsl_rng_free(rng);
 
-	if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) < 0) {
+	if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) <
+	    0) {
 		fprintf(stderr, "Failed write_time_elapsed.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -147,7 +149,8 @@ int read_globals(char *filename)
 	FILE *fp;
 
 	if ((fp = fopen(filename, "r")) == NULL) {
-		fprintf(stderr, "Failed to open file %s for reading.\n", filename);
+		fprintf(stderr, "Failed to open file %s for reading.\n",
+			filename);
 		return -1;
 	}
 
@@ -204,9 +207,11 @@ int caso(struct ptype *p_first, char *filename)
 
 		struct itype *i_last = i_first + gN;
 
-		struct pruntype *prun_first = calloc(gPeriods + 1, sizeof(*prun_first));
+		struct pruntype *prun_first =
+			calloc(gPeriods + 1, sizeof(*prun_first));
 		if (prun_first == NULL) {
-			fprintf(stderr, "Failed calloc (periods of each run).\n");
+			fprintf(stderr,
+				"Failed calloc (periods of each run).\n");
 			free_memory(i_first, prun_first);
 			return -1;
 		}
@@ -227,9 +232,10 @@ int caso(struct ptype *p_first, char *filename)
 				stats_period(i_first, i_last, prun, gN);
 				prun++;
 				if (gRuns == 1) {
-					write_ics(filename, sequence, (float)galpha,
-						(float)glogES, (float)gGiven,
-						t + 1, i_first, i_last);
+					write_ics(filename, sequence,
+						  (float)galpha, (float)glogES,
+						  (float)gGiven, t + 1, i_first,
+						  i_last);
 					sequence++;
 				}
 			}
@@ -239,16 +245,20 @@ int caso(struct ptype *p_first, char *filename)
 			}
 
 			if (gShuffle == 1) {
-				if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
-					fprintf(stderr, "Failed shuffle_partners.\n");
+				if (shuffle_partners(i_first, i_last,
+						     gGroupSize) < 0) {
+					fprintf(stderr,
+						"Failed shuffle_partners.\n");
 					free_memory(i_first, prun_first);
 					return -1;
 				}
 			}
 
 			if (gPartnerChoice == 1) {
-				if (choose_partner(i_first, i_last, gGroupSize) < 0) {
-					fprintf(stderr, "Failed choose_partner.\n");
+				if (choose_partner(i_first, i_last,
+						   gGroupSize) < 0) {
+					fprintf(stderr,
+						"Failed choose_partner.\n");
 					free_memory(i_first, prun_first);
 					return -1;
 				}
@@ -260,7 +270,8 @@ int caso(struct ptype *p_first, char *filename)
 				struct rtype *recruit_first =
 					create_recruits(deaths, wC);
 				if (recruit_first == NULL) {
-					fprintf(stderr, "Failed create_recruits.\n");
+					fprintf(stderr,
+						"Failed create_recruits.\n");
 					free_memory(i_first, prun_first);
 					return -1;
 				}
@@ -351,7 +362,7 @@ double fitness(struct itype *i, struct itype *i_last)
 	for (; i < i_last; i++) {
 		double qA = 1.0 - i->qBDecided;
 		double qB = i->qBDecided * (1.0 - gGiven) +
-		     i->partner->qBDecided * gGiven;
+			    i->partner->qBDecided * gGiven;
 		i->w = fmax(0.0, ces(qA, qB) - i->cost);
 		wC += i->w;
 		i->wCumulative = wC;
