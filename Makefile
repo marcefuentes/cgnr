@@ -43,7 +43,7 @@ release: $(RELEASE_TARGET)
 	@echo "Built release target"
 
 test: $(TEST_TARGET)
-	@echo "Running tests..."
+	@echo "Running test..."
 	@cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
 	@mv $(TESTDIR)/000.csv $(TESTDIR)/old_000.csv
 	@rm -f $(TESTDIR)/000.frq $(TESTDIR)/000*.ics
