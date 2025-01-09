@@ -124,7 +124,6 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	if (write_stats_frq(frq, p_first, p_last) < 0) {
-		;
 		fprintf(stderr, "Failed write_stats_frq.\n");
 		gsl_rng_free(rng);
 		free(p_first);
