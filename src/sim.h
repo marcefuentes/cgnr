@@ -81,5 +81,5 @@ int write_headers_frq(char *filename);
 int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last);
 int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last);
 int write_ics(char *filename, int sequence, float alpha, float logES,
-	     float Given, int t, struct itype *i, struct itype *i_last);
+	      float Given, int t, struct itype *i, struct itype *i_last);
 int write_time_elapsed(char *filename, float time_elapsed);
