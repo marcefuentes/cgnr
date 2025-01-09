@@ -314,7 +314,6 @@ int caso(struct ptype *p_first, char *filename)
 			}
 		}
 
-
 		stats_end(prun_first, prun_last, p_first);
 		free_memory(i_first, prun_first);
 	}
