@@ -134,14 +134,15 @@ int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
 	return 0;
 }
 
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given,
-	     int t, struct itype *i, struct itype *i_last)
+int write_ics(char *filename, int sequence, float alpha, float logES,
+	      float Given, int t, struct itype *i, struct itype *i_last)
 {
 	char new_filename[18];
 	double wc = 0.0;
 	FILE *fp;
 
-	snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, sequence);
+	snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename,
+		 sequence);
 
 	if ((fp = fopen(new_filename, "a+")) == NULL) {
 		file_write_error(new_filename);
