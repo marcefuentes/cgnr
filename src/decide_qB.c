@@ -10,14 +10,16 @@ void decide_qB(struct itype *i, struct itype *i_last, int imimic)
 	for (; i < i_last; i++) {
 		if (i->age > 0 && i->partner->age > 0) {
 			if (i->partner == i->oldpartner) {
-				if (imimic == 1 && i->Imimic_ltGrain < i->MimicGrain) {
+				if (imimic == 1 &&
+				    i->Imimic_ltGrain < i->MimicGrain) {
 					partner = i->partner->qBSeen_lt;
 					grain = i->Imimic_ltGrain;
 				} else {
 					partner = i->partner->qBSeen;
 					grain = i->MimicGrain;
 				}
-				i->qBDecided = calculate(i->qBDefault, partner, grain);
+				i->qBDecided =
+					calculate(i->qBDefault, partner, grain);
 			} else if (imimic == 1) {
 				if (i->Imimic_ltGrain < i->ImimicGrain) {
 					partner = i->partner->qBSeen_lt;
@@ -26,9 +28,9 @@ void decide_qB(struct itype *i, struct itype *i_last, int imimic)
 					partner = i->partner->qBSeen;
 					grain = i->ImimicGrain;
 				}
-				i->qBDecided = calculate(i->qBDefault, partner, grain);
-			}
-			else {
+				i->qBDecided =
+					calculate(i->qBDefault, partner, grain);
+			} else {
 				i->qBDecided = i->qBDefault;
 			}
 		} else {

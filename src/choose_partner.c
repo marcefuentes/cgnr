@@ -10,7 +10,7 @@ extern gsl_rng *rng;
 struct gtype {
 	int ind;
 	struct gtype *next;
-} ;
+};
 
 struct gtype *create_shuffled_list(int size);
 void free_gtype_list(struct gtype **head);
@@ -21,7 +21,8 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 	for (struct itype *i = i_first; i < i_last; i += groupsize) {
 		struct gtype *head = create_shuffled_list(groupsize);
 		if (head == NULL) {
-			fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
+			fprintf(stderr,
+				"Failed create_shuffled_list (choose_partner).\n");
 			free_gtype_list(&head);
 			return -1;
 		}
@@ -32,8 +33,8 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 			struct itype *j = i + head->ind;
 			struct itype *k = i + temp->ind;
 
-			while (temp != NULL &&
-			    (willing(j, k) == false || willing(k, j) == false)) {
+			while (temp != NULL && (willing(j, k) == false ||
+						willing(k, j) == false)) {
 				previous = temp;
 				temp = temp->next;
 				if (temp != NULL) {
@@ -62,7 +63,6 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize)
 			head = NULL;
 			free(temp);
 		}
-
 	}
 
 	return 0;
@@ -76,7 +76,8 @@ struct gtype *create_shuffled_list(int size)
 	for (int c = 0; c < size; c++) {
 		struct gtype *temp = malloc(sizeof(*temp));
 		if (temp == NULL) {
-			fprintf(stderr, "Failed malloc (create_shuffled_list).\n");
+			fprintf(stderr,
+				"Failed malloc (create_shuffled_list).\n");
 			free_gtype_list(&head);
 			return NULL;
 		}
