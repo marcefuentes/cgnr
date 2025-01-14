@@ -1,247 +1,228 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "sim.h"
 
-const char *headersc[CONTINUOUS_V] = {
-	"w",	       "qBDefault",	 "qBSeen",
-	"ChooseGrain", "Choose_ltGrain", "MimicGrain",
-	"ImimicGrain", "Imimic_ltGrain"
-};
+const char *headersc[CONTINUOUS_V] = {"w",          "qBDefault",   "qBSeen",        "ChooseGrain", "Choose_ltGrain",
+                                      "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
 
 const char *headersr[CORRELATIONS] = {
-	"r_qB_Choose",	     "r_qB_Choose_lt",	   "r_qB_Mimic",
-	"r_qB_Imimic",	     "r_qB_Imimic_lt",	   "r_Choose_Choose_lt",
-	"r_Choose_Mimic",    "r_Choose_Imimic",	   "r_Choose_Imimic_lt",
-	"r_Choose_lt_Mimic", "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt",
-	"r_Mimic_Imimic",    "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"
-};
+    "r_qB_Choose",        "r_qB_Choose_lt",        "r_qB_Mimic",      "r_qB_Imimic",        "r_qB_Imimic_lt",
+    "r_Choose_Choose_lt", "r_Choose_Mimic",        "r_Choose_Imimic", "r_Choose_Imimic_lt", "r_Choose_lt_Mimic",
+    "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt", "r_Mimic_Imimic",  "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"};
 
 void file_write_error(char *filename);
 
-int write_headers_csv(char *filename)
-{
-	FILE *fp;
+int write_headers_csv(char *filename) {
+    FILE *fp;
 
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
-		return -1;
-	}
+    if ((fp = fopen(filename, "a+")) == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
 
-	fprintf(fp, "alpha,logES,Given,Time");
+    fprintf(fp, "alpha,logES,Given,Time");
 
-	for (int v = 0; v < CONTINUOUS_V; v++) {
-		fprintf(fp, ",%smean,%smeanSD", headersc[v], headersc[v]);
-		fprintf(fp, ",%ssd,%ssdSD", headersc[v], headersc[v]);
-	}
+    for (int v = 0; v < CONTINUOUS_V; v++) {
+        fprintf(fp, ",%smean,%smeanSD", headersc[v], headersc[v]);
+        fprintf(fp, ",%ssd,%ssdSD", headersc[v], headersc[v]);
+    }
 
-	for (int c = 0; c < CORRELATIONS; c++) {
-		fprintf(fp, ",%s,%sSD", headersr[c], headersr[c]);
-	}
+    for (int c = 0; c < CORRELATIONS; c++) {
+        fprintf(fp, ",%s,%sSD", headersr[c], headersr[c]);
+    }
 
-	fprintf(fp, "\n");
+    fprintf(fp, "\n");
 
-	fclose(fp);
+    fclose(fp);
 
-	return 0;
+    return 0;
 }
 
-int write_headers_frq(char *filename)
-{
-	FILE *fp;
+int write_headers_frq(char *filename) {
+    FILE *fp;
 
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
-		return -1;
-	}
+    if ((fp = fopen(filename, "a+")) == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
 
-	fprintf(fp, "alpha,logES,Given,Time");
+    fprintf(fp, "alpha,logES,Given,Time");
 
-	for (int v = 0; v < CONTINUOUS_V; v++) {
-		fprintf(fp, ",%smedian,%smedianSD", headersc[v], headersc[v]);
-		fprintf(fp, ",%siqr,%siqrSD", headersc[v], headersc[v]);
+    for (int v = 0; v < CONTINUOUS_V; v++) {
+        fprintf(fp, ",%smedian,%smedianSD", headersc[v], headersc[v]);
+        fprintf(fp, ",%siqr,%siqrSD", headersc[v], headersc[v]);
 
-		for (int b = 0; b < BINS; b++) {
-			fprintf(fp, ",%s%i,%s%iSD", headersc[v], b, headersc[v],
-				b);
-		}
-	}
+        for (int b = 0; b < BINS; b++) {
+            fprintf(fp, ",%s%i,%s%iSD", headersc[v], b, headersc[v], b);
+        }
+    }
 
-	fprintf(fp, "\n");
+    fprintf(fp, "\n");
 
-	fclose(fp);
+    fclose(fp);
 
-	return 0;
+    return 0;
 }
 
-int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last)
-{
-	FILE *fp;
+int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last) {
+    FILE *fp;
 
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
-		return -1;
-	}
+    if ((fp = fopen(filename, "a+")) == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
 
-	for (; p < p_last; p++) {
-		fprintf(fp, "%f,%f,%f,%i", p->alpha, p->logES, p->Given,
-			p->time);
+    for (; p < p_last; p++) {
+        fprintf(fp, "%f,%f,%f,%i", p->alpha, p->logES, p->Given, p->time);
 
-		for (int v = 0; v < CONTINUOUS_V; v++) {
-			fprintf(fp, ",%f,%f", p->mean[v], p->mean2[v]);
-			fprintf(fp, ",%f,%f", p->sd[v], p->sd2[v]);
-		}
+        for (int v = 0; v < CONTINUOUS_V; v++) {
+            fprintf(fp, ",%f,%f", p->mean[v], p->mean2[v]);
+            fprintf(fp, ",%f,%f", p->sd[v], p->sd2[v]);
+        }
 
-		for (int c = 0; c < CORRELATIONS; c++) {
-			fprintf(fp, ",%f,%f", p->corr[c], p->corr2[c]);
-		}
+        for (int c = 0; c < CORRELATIONS; c++) {
+            fprintf(fp, ",%f,%f", p->corr[c], p->corr2[c]);
+        }
 
-		fprintf(fp, "\n");
-	}
+        fprintf(fp, "\n");
+    }
 
-	fclose(fp);
+    fclose(fp);
 
-	return 0;
+    return 0;
 }
 
-int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last)
-{
-	FILE *fp;
+int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last) {
+    FILE *fp;
 
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
-		return -1;
-	}
+    if ((fp = fopen(filename, "a+")) == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
 
-	for (; p < p_last; p++) {
-		fprintf(fp, "%f,%f,%f,%i", p->alpha, p->logES, p->Given,
-			p->time);
+    for (; p < p_last; p++) {
+        fprintf(fp, "%f,%f,%f,%i", p->alpha, p->logES, p->Given, p->time);
 
-		for (int v = 0; v < CONTINUOUS_V; v++) {
-			fprintf(fp, ",%f,%f", p->median[v], p->median2[v]);
-			fprintf(fp, ",%f,%f", p->iqr[v], p->iqr2[v]);
+        for (int v = 0; v < CONTINUOUS_V; v++) {
+            fprintf(fp, ",%f,%f", p->median[v], p->median2[v]);
+            fprintf(fp, ",%f,%f", p->iqr[v], p->iqr2[v]);
 
-			for (int b = 0; b < BINS; b++) {
-				fprintf(fp, ",%f,%f", p->c[v][b], p->c2[v][b]);
-			}
-		}
+            for (int b = 0; b < BINS; b++) {
+                fprintf(fp, ",%f,%f", p->c[v][b], p->c2[v][b]);
+            }
+        }
 
-		fprintf(fp, "\n");
-	}
+        fprintf(fp, "\n");
+    }
 
-	fclose(fp);
+    fclose(fp);
 
-	return 0;
+    return 0;
 }
 
-int write_ics(char *filename, int sequence, float alpha, float logES,
-	      float Given, int t, struct itype *i, struct itype *i_last)
-{
-	char new_filename[18];
-	double wc = 0.0;
-	FILE *fp;
+int write_ics(char *filename, int sequence, float alpha, float logES, float Given, int t, struct itype *i,
+              struct itype *i_last) {
+    char   new_filename[18];
+    double wc = 0.0;
+    FILE  *fp;
 
-	snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename,
-		 sequence);
+    snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, sequence);
 
-	if ((fp = fopen(new_filename, "a+")) == NULL) {
-		file_write_error(new_filename);
-		return -1;
-	}
+    if ((fp = fopen(new_filename, "a+")) == NULL) {
+        file_write_error(new_filename);
+        return -1;
+    }
 
-	fprintf(fp, "alpha,"
-		    "logES,"
-		    "Given,"
-		    "Time,"
-		    "qBDefault,"
-		    "qBDecided,"
-		    "qBSeen,"
-		    "qBSeen_j,"
-		    "w,"
-		    "ChooseGrain,"
-		    "Choose_ltGrain,"
-		    "MimicGrain,"
-		    "ImimicGrain,"
-		    "Imimic_ltGrain,"
-		    "cost,"
-		    "age");
+    fprintf(fp,
+            "alpha,"
+            "logES,"
+            "Given,"
+            "Time,"
+            "qBDefault,"
+            "qBDecided,"
+            "qBSeen,"
+            "qBSeen_j,"
+            "w,"
+            "ChooseGrain,"
+            "Choose_ltGrain,"
+            "MimicGrain,"
+            "ImimicGrain,"
+            "Imimic_ltGrain,"
+            "cost,"
+            "age");
 
-	for (; i < i_last; i++) {
-		fprintf(fp, "\n%f,%f,%f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i",
-			alpha, logES, Given, t, i->qBDefault, i->qBDecided,
-			i->qBSeen, i->partner->qBSeen, i->wCumulative - wc,
-			i->ChooseGrain, i->Choose_ltGrain, i->MimicGrain,
-			i->ImimicGrain, i->Imimic_ltGrain, i->cost, i->age);
+    for (; i < i_last; i++) {
+        fprintf(fp, "\n%f,%f,%f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, t, i->qBDefault,
+                i->qBDecided, i->qBSeen, i->partner->qBSeen, i->wCumulative - wc, i->ChooseGrain, i->Choose_ltGrain,
+                i->MimicGrain, i->ImimicGrain, i->Imimic_ltGrain, i->cost, i->age);
 
-		wc = i->wCumulative;
-	}
+        wc = i->wCumulative;
+    }
 
-	fclose(fp);
+    fclose(fp);
 
-	return 0;
+    return 0;
 }
 
-int write_time_elapsed(char *filename, float time_elapsed)
-{
-	FILE *fp;
+int write_time_elapsed(char *filename, float time_elapsed) {
+    FILE *fp;
 
-	if ((fp = fopen(filename, "a+")) == NULL) {
-		file_write_error(filename);
-		return -1;
-	}
+    if ((fp = fopen(filename, "a+")) == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
 
-	fprintf(fp, "TimeElapsed,");
+    fprintf(fp, "TimeElapsed,");
 
-	if (time_elapsed < 10.0) {
-		fprintf(fp, "%f", time_elapsed);
-	} else {
-		int minute = 60;
-		int hour = minute * 60;
-		int day = hour * 24;
+    if (time_elapsed < 10.0) {
+        fprintf(fp, "%f", time_elapsed);
+    } else {
+        int minute = 60;
+        int hour = minute * 60;
+        int day = hour * 24;
 
-		int s = time_elapsed;
-		int d = s / day;
-		s -= d * day;
-		int h = s / hour;
-		s -= h * hour;
-		int m = s / minute;
-		s -= m * minute;
+        int s = time_elapsed;
+        int d = s / day;
+        s -= d * day;
+        int h = s / hour;
+        s -= h * hour;
+        int m = s / minute;
+        s -= m * minute;
 
-		if (d > 0) {
-			fprintf(fp, "%i-", d);
+        if (d > 0) {
+            fprintf(fp, "%i-", d);
 
-			if (h < 10) {
-				fprintf(fp, "0");
-			}
-		}
+            if (h < 10) {
+                fprintf(fp, "0");
+            }
+        }
 
-		if (d > 0 || h > 0) {
-			fprintf(fp, "%i:", h);
+        if (d > 0 || h > 0) {
+            fprintf(fp, "%i:", h);
 
-			if (m < 10) {
-				fprintf(fp, "0");
-			}
-		}
+            if (m < 10) {
+                fprintf(fp, "0");
+            }
+        }
 
-		if (d > 0 || h > 0 || m > 0) {
-			fprintf(fp, "%i:", m);
+        if (d > 0 || h > 0 || m > 0) {
+            fprintf(fp, "%i:", m);
 
-			if (s < 10) {
-				fprintf(fp, "0");
-			}
-		}
+            if (s < 10) {
+                fprintf(fp, "0");
+            }
+        }
 
-		fprintf(fp, "%i", (int)s);
-	}
+        fprintf(fp, "%i", (int)s);
+    }
 
-	fprintf(fp, "\n");
+    fprintf(fp, "\n");
 
-	fclose(fp);
+    fclose(fp);
 
-	return 0;
+    return 0;
 }
 
-void file_write_error(char *filename)
-{
-	fprintf(stderr, "Failed to open file %s for writing.\n", filename);
-}
+void file_write_error(char *filename) { fprintf(stderr, "Failed to open file %s for writing.\n", filename); }
