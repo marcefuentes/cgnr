@@ -22,7 +22,6 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize) {
         struct gtype *head = create_shuffled_list(groupsize);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
-            free_gtype_list(&head);
             return -1;
         }
 
