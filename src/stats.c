@@ -2,7 +2,7 @@
 
 #include "sim.h"
 
-int    select_bin(double binsize, double v);
+int    select_bin(double v);
 double stdev(double sum, double sum2, int n);
 double correlation(double x, double y, double xy, double x2, double y2, int n);
 
@@ -10,7 +10,6 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
     int    bin[CONTINUOUS_V][BINS] = {{0}};
     int    correlationPairs[CORRELATIONS][2] = {{2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {3, 4}, {3, 5}, {3, 6},
                                                 {3, 7}, {4, 5}, {4, 6}, {4, 7}, {5, 6}, {5, 7}, {6, 7}};
-    double binsize = 1.0 / BINS;
     double f;
 
     for (int v = 0; v < CONTINUOUS_V; v++) {
@@ -28,7 +27,7 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
                                             &i->ImimicGrain, &i->Imimic_ltGrain};
 
         for (int v = 0; v < CONTINUOUS_V; v++) {
-            bin[v][select_bin(binsize, *properties[v])]++;
+            bin[v][select_bin(*properties[v])]++;
             prun->mean[v] += *properties[v];
             prun->sd[v] += *properties[v] * (*properties[v]);
         }
@@ -91,9 +90,10 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
     }
 }
 
-int select_bin(double binsize, double v) {
-    double ceiling = binsize;
-    int    bin = 0;
+int select_bin(double v) {
+    static const double binsize = 1.0 / BINS;
+    double              ceiling = binsize;
+    int                 bin = 0;
 
     while (v > ceiling) {
         ceiling += binsize;
