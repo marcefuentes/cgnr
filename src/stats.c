@@ -11,7 +11,7 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
     int    correlationPairs[CORRELATIONS][2] = {{2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {3, 4}, {3, 5}, {3, 6},
                                                 {3, 7}, {4, 5}, {4, 6}, {4, 7}, {5, 6}, {5, 7}, {6, 7}};
     double binsize = 1.0 / BINS;
-    double f, qi, qs;
+    double f;
 
     for (int v = 0; v < CONTINUOUS_V; v++) {
         prun->mean[v] = 0.0;
@@ -61,7 +61,7 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
             prun->frc[v][b] = (double)bin[v][b] / n;
         }
 
-        int b = 0;
+        int    b = 0;
         double e = 0.0;
 
         for (f = prun->frc[v][b]; f < 0.25; f += prun->frc[v][b]) {
@@ -69,7 +69,7 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
             b++;
         }
 
-        qi = (double)b / BINS + (0.25 - e) / ((f - e) * BINS);
+        double qi = (double)b / BINS + (0.25 - e) / ((f - e) * BINS);
 
         for (; f < 0.5; f += prun->frc[v][b]) {
             e = f;
@@ -83,7 +83,7 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
             b++;
         }
 
-        qs = (double)b / BINS + (0.75 - e) / ((f - e) * BINS);
+        double qs = (double)b / BINS + (0.75 - e) / ((f - e) * BINS);
         prun->iqr[v] = qs - qi;
 
         prun->sd[v] = stdev(prun->mean[v], prun->sd[v], n);
