@@ -11,8 +11,7 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
     int    correlationPairs[CORRELATIONS][2] = {{2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {3, 4}, {3, 5}, {3, 6},
                                                 {3, 7}, {4, 5}, {4, 6}, {4, 7}, {5, 6}, {5, 7}, {6, 7}};
     double binsize = 1.0 / BINS;
-    double e, f, qi, qs;
-    int    b;
+    double f, qi, qs;
 
     for (int v = 0; v < CONTINUOUS_V; v++) {
         prun->mean[v] = 0.0;
@@ -58,12 +57,12 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
     }
 
     for (int v = 0; v < CONTINUOUS_V; v++) {
-        for (b = 0; b < BINS; b++) {
+        for (int b = 0; b < BINS; b++) {
             prun->frc[v][b] = (double)bin[v][b] / n;
         }
 
-        b = 0;
-        e = 0.0;
+        int b = 0;
+        double e = 0.0;
 
         for (f = prun->frc[v][b]; f < 0.25; f += prun->frc[v][b]) {
             e = f;
