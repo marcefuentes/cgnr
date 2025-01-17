@@ -93,14 +93,14 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
 
 int select_bin(double binsize, double v) {
     double ceiling = binsize;
-    int    b = 0;
+    int    bin = 0;
 
     while (v > ceiling) {
         ceiling += binsize;
-        b++;
+        bin++;
     }
 
-    return b;
+    return bin;
 }
 
 void stats_end(struct pruntype *prun, struct pruntype *prun_last, struct ptype *p) {
