@@ -11,7 +11,7 @@ extern gsl_rng *rng;
 int shuffle_partners(struct itype *i, struct itype *i_last, int groupsize) {
     int *c = calloc(groupsize, sizeof(*c));
     if (c == NULL) {
-        printf("Failed calloc (shuffle_partners).\n");
+        fprintf(stderr, "Failed calloc (shuffle_partners).\n");
         return -1;
     }
 
