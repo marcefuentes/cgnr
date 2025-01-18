@@ -37,6 +37,7 @@ all: release
 # Build rules
 debug: $(DEBUG_TARGET)
 	@echo "Running gdb..."
+	@cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
 	gdb --args $(DEBUG_TARGET)
 
 release: $(RELEASE_TARGET)

@@ -177,10 +177,10 @@ double stdev(double sum, double sum2, int n) {
 }
 
 double correlation(double x, double y, double xy, double x2, double y2, int n) {
-    double r, numerator, denominator;
+    double numerator = n * xy - x * y;
+    double denominator = sqrt((n * x2 - x * x) * (n * y2 - y * y));
 
-    numerator = n * xy - x * y;
-    denominator = sqrt((n * x2 - x * x) * (n * y2 - y * y));
+    double r;
 
     if (denominator > 0.0) {
         r = numerator / denominator;
