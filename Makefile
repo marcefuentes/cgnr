@@ -1,7 +1,7 @@
 # Variables
 TARGET_NAME = $(shell basename $(shell pwd))
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -Wextra -Wpedantic -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-align -Wstrict-aliasing=2 -Wpointer-arith -Wundef -Wcast-qual -Wstrict-overflow=5 -Wwrite-strings -Winline -Wredundant-decls -Wno-unused-parameter
 CFLAGS_DEBUG = $(CFLAGS) -g
 CFLAGS_RELEASE = $(CFLAGS) -DNDEBUG -O3 -finline-functions
 CFLAGS_TEST = $(CFLAGS) -DNDEBUG -O3 -finline-functions

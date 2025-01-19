@@ -3,10 +3,10 @@
 #include "sim.h"
 
 int    select_bin(double v);
-double stdev(double sum, double sum2, int n);
-double correlation(double x, double y, double xy, double x2, double y2, int n);
+double stdev(double sum, double sum2, unsigned int n);
+double correlation(double x, double y, double xy, double x2, double y2, unsigned int n);
 
-void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, int n) {
+void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, unsigned int n) {
     int    bin[CONTINUOUS_V][BINS] = {{0}};
     int    correlationPairs[CORRELATIONS][2] = {{2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {3, 4}, {3, 5}, {3, 6},
                                                 {3, 7}, {4, 5}, {4, 6}, {4, 7}, {5, 6}, {5, 7}, {6, 7}};
@@ -136,7 +136,7 @@ void stats_end(struct pruntype *prun, struct pruntype *prun_last, struct ptype *
     }
 }
 
-void stats_runs(struct ptype *p, struct ptype *p_last, int runs) {
+void stats_runs(struct ptype *p, struct ptype *p_last, unsigned int runs) {
     for (; p < p_last; p++) {
         for (int v = 0; v < CONTINUOUS_V; v++) {
             for (int b = 0; b < BINS; b++) {
@@ -161,7 +161,7 @@ void stats_runs(struct ptype *p, struct ptype *p_last, int runs) {
     }
 }
 
-double stdev(double sum, double sum2, int n) {
+double stdev(double sum, double sum2, unsigned int n) {
     double sd;
 
     // When the standard deviation is zero, small roundoff errors can
@@ -176,7 +176,7 @@ double stdev(double sum, double sum2, int n) {
     return sd;
 }
 
-double correlation(double x, double y, double xy, double x2, double y2, int n) {
+double correlation(double x, double y, double xy, double x2, double y2, unsigned int n) {
     double numerator = n * xy - x * y;
     double denominator = sqrt((n * x2 - x * x) * (n * y2 - y * y));
 

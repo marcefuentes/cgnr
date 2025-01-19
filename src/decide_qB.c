@@ -37,7 +37,7 @@ void decide_qB(struct itype *i, struct itype *i_last, int imimic) {
 }
 
 double calculate(double focal, double partner, double grain) {
-    int    block = (partner - focal) / grain;
+    int    block = (int)((partner - focal) / grain);
     double block_near = focal + grain * block;
     double block_far;
 

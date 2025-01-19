@@ -34,7 +34,6 @@ int write_headers_csv(char *filename) {
     }
 
     fprintf(fp, "\n");
-
     fclose(fp);
 
     return 0;
@@ -60,7 +59,6 @@ int write_headers_frq(char *filename) {
     }
 
     fprintf(fp, "\n");
-
     fclose(fp);
 
     return 0;
@@ -75,7 +73,7 @@ int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last) {
     }
 
     for (; p < p_last; p++) {
-        fprintf(fp, "%f,%f,%f,%i", p->alpha, p->logES, p->Given, p->time);
+        fprintf(fp, "%f,%f,%f,%lu", p->alpha, p->logES, p->Given, p->time);
 
         for (int v = 0; v < CONTINUOUS_V; v++) {
             fprintf(fp, ",%f,%f", p->mean[v], p->mean2[v]);
@@ -103,7 +101,7 @@ int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last) {
     }
 
     for (; p < p_last; p++) {
-        fprintf(fp, "%f,%f,%f,%i", p->alpha, p->logES, p->Given, p->time);
+        fprintf(fp, "%f,%f,%f,%lu", p->alpha, p->logES, p->Given, p->time);
 
         for (int v = 0; v < CONTINUOUS_V; v++) {
             fprintf(fp, ",%f,%f", p->median[v], p->median2[v]);
@@ -122,7 +120,7 @@ int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last) {
     return 0;
 }
 
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given, int t, struct itype *i,
+int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t, struct itype *i,
               struct itype *i_last) {
     char   new_filename[18];
     double wc = 0.0;
@@ -154,7 +152,7 @@ int write_ics(char *filename, int sequence, float alpha, float logES, float Give
             "age");
 
     for (; i < i_last; i++) {
-        fprintf(fp, "\n%f,%f,%f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, t, i->qBDefault,
+        fprintf(fp, "\n%f,%f,%f,%lu,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, t, i->qBDefault,
                 i->qBDecided, i->qBSeen, i->partner->qBSeen, i->wCumulative - wc, i->ChooseGrain, i->Choose_ltGrain,
                 i->MimicGrain, i->ImimicGrain, i->Imimic_ltGrain, i->cost, i->age);
 
@@ -183,7 +181,7 @@ int write_time_elapsed(char *filename, float time_elapsed) {
         int hour = minute * 60;
         int day = hour * 24;
 
-        int s = time_elapsed;
+        int s = (int)time_elapsed;
         int d = s / day;
         s -= d * day;
         int h = s / hour;

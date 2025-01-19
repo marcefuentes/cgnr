@@ -9,19 +9,20 @@
 extern gsl_rng *rng;
 
 struct gtype {
-    int           ind;
+    unsigned int  ind;
     struct gtype *next;
 };
 
-struct gtype *create_shuffled_list(int size);
+struct gtype *create_shuffled_list(unsigned int size);
 void          free_gtype_list(struct gtype **head);
 bool          willing(struct itype *a, struct itype *b);
 
-int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize) {
+int choose_partner(struct itype *i_first, struct itype *i_last, unsigned int groupsize) {
     for (struct itype *i = i_first; i < i_last; i += groupsize) {
         struct gtype *head = create_shuffled_list(groupsize);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
+            free_gtype_list(&head);
             return -1;
         }
 
@@ -65,15 +66,14 @@ int choose_partner(struct itype *i_first, struct itype *i_last, int groupsize) {
     return 0;
 }
 
-struct gtype *create_shuffled_list(int size) {
+struct gtype *create_shuffled_list(unsigned int size) {
     struct gtype *head = NULL;
-    int           start = gsl_rng_uniform_int(rng, size);
+    unsigned int  start = (unsigned int)gsl_rng_uniform_int(rng, size);
 
-    for (int c = 0; c < size; c++) {
+    for (unsigned int c = 0; c < size; c++) {
         struct gtype *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             fprintf(stderr, "Failed malloc (create_shuffled_list).\n");
-            free_gtype_list(&head);
             return NULL;
         }
 

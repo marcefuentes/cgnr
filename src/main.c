@@ -10,6 +10,12 @@
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "sim.h"
 
+#define READ_KEY(fp, key, var, type)                \
+    if (read_key_value(fp, key, &var, #type) < 0) { \
+        fclose(fp);                                 \
+        return -1;                                  \
+    }
+
 /* Simulates reciprocity and partner choice.
  *
  * Create file x.glo with global constants and factors.
@@ -21,25 +27,25 @@ gsl_rng *rng;  // Random number generator
 
 // Global variables needed in this file
 
-int    gSeed;  // Seed random numbers
-int    gN;     // Population size
-int    gRuns;
-int    gTime;
-int    gPeriods;            // Periods recorded
-double gqBMutationSize;     // For qBDefault
-double gGrainMutationSize;  // For ChooseGrain and MimicGrain
-double gDeathRate;
-int    gGroupSize;  // Number of individuals that an individual can watch (including itself)
-double gCost;
-int    gPartnerChoice;
-int    gReciprocity;
-int    gIndirectR;
-int    gLanguage;  // Individuals access lifelong behavior of partners
-int    gShuffle;   // Shuffle partners in markets every time step
-double gGiven;
-double galpha;
-double glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
-                      // CES fitness function: w = (alpha*qA^rho + (1 - alpha)*qB^rho)^(1/rho)
+int           gSeed;  // Seed random numbers
+unsigned int  gN;     // Population size
+unsigned int  gRuns;
+unsigned long gTime;
+unsigned int  gPeriods;            // Periods recorded
+double        gqBMutationSize;     // For qBDefault
+double        gGrainMutationSize;  // For ChooseGrain and MimicGrain
+double        gDeathRate;
+unsigned int  gGroupSize;  // Number of individuals that an individual can watch (including itself)
+double        gCost;
+int           gPartnerChoice;
+int           gReciprocity;
+int           gIndirectR;
+int           gLanguage;  // Individuals access lifelong behavior of partners
+int           gShuffle;   // Shuffle partners in markets every time step
+double        gGiven;
+double        galpha;
+double        glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
+                             // CES fitness function: w = (alpha*qA^rho + (1 - alpha)*qB^rho)^(1/rho)
 
 // Functions
 
@@ -97,7 +103,7 @@ int main(int argc, char *argv[]) {
     if (gSeed == 1) {
         struct timeval tv;
         gettimeofday(&tv, 0);
-        gsl_rng_set(rng, tv.tv_sec + tv.tv_usec);
+        gsl_rng_set(rng, (unsigned long)(tv.tv_sec) + (unsigned long)(tv.tv_usec));
     }
 
     struct ptype *p_first = calloc(gPeriods + 1, sizeof(*p_first));
@@ -150,34 +156,34 @@ int read_globals(char *filename) {
         return -1;
     }
 
-    gSeed = read_int(fp, "Seed,%i\n", &gSeed, "Seed");
-    gN = read_int(fp, "N,%i\n", &gN, "N");
-    gRuns = read_int(fp, "Runs,%i\n", &gRuns, "Runs");
-    gTime = read_int(fp, "Time,%i\n", &gTime, "Time");
-    gPeriods = read_int(fp, "Periods,%i\n", &gPeriods, "Periods");
-    gqBMutationSize = read_double(fp, "qBMutationSize,%lf\n", &gqBMutationSize, "qBMutationSize");
-    gGrainMutationSize = read_double(fp, "GrainMutationSize,%lf\n", &gGrainMutationSize, "GrainMutationSize");
-    gDeathRate = read_double(fp, "DeathRate,%lf\n", &gDeathRate, "DeathRate");
-    gGroupSize = read_int(fp, "GroupSize,%i\n", &gGroupSize, "GroupSize");
-    gCost = read_double(fp, "Cost,%lf\n", &gCost, "Cost");
-    gPartnerChoice = read_int(fp, "PartnerChoice,%i\n", &gPartnerChoice, "PartnerChoice");
-    gReciprocity = read_int(fp, "Reciprocity,%i\n", &gReciprocity, "Reciprocity");
-    gIndirectR = read_int(fp, "IndirectR,%i\n", &gIndirectR, "IndirectR");
-    gLanguage = read_int(fp, "Language,%i\n", &gLanguage, "Language");
-    gShuffle = read_int(fp, "Shuffle,%i\n", &gShuffle, "Shuffle");
-    galpha = read_double(fp, "alpha,%lf\n", &galpha, "alpha");
-    glogES = read_double(fp, "logES,%lf\n", &glogES, "logES");
-    gGiven = read_double(fp, "Given,%lf\n", &gGiven, "Given");
+    READ_KEY(fp, "Seed", gSeed, int);
+    READ_KEY(fp, "N", gN, unsigned int);
+    READ_KEY(fp, "Runs", gRuns, unsigned int);
+    READ_KEY(fp, "Time", gTime, unsigned long);
+    READ_KEY(fp, "Periods", gPeriods, unsigned int);
+    READ_KEY(fp, "qBMutationSize", gqBMutationSize, double);
+    READ_KEY(fp, "GrainMutationSize", gGrainMutationSize, double);
+    READ_KEY(fp, "DeathRate", gDeathRate, double);
+    READ_KEY(fp, "GroupSize", gGroupSize, unsigned int);
+    READ_KEY(fp, "Cost", gCost, double);
+    READ_KEY(fp, "PartnerChoice", gPartnerChoice, int);
+    READ_KEY(fp, "Reciprocity", gReciprocity, int);
+    READ_KEY(fp, "IndirectR", gIndirectR, int);
+    READ_KEY(fp, "Language", gLanguage, int);
+    READ_KEY(fp, "Shuffle", gShuffle, int);
+    READ_KEY(fp, "alpha", galpha, double);
+    READ_KEY(fp, "logES", glogES, double);
+    READ_KEY(fp, "Given", gGiven, double);
 
     fclose(fp);
 
-    gN = pow(2.0, gN);
-    gTime = pow(2.0, gTime);
-    gPeriods = pow(2.0, gPeriods);
+    gN = (unsigned int)(pow(2.0, (double)gN) + 0.5);
+    gTime = (unsigned long)(pow(2.0, (double)gTime) + 0.5);
+    gPeriods = (unsigned int)(pow(2.0, (double)gPeriods) + 0.5);
     gqBMutationSize = pow(2.0, gqBMutationSize);
     gGrainMutationSize = pow(2.0, gGrainMutationSize);
     gDeathRate = pow(2.0, gDeathRate);
-    gGroupSize = pow(2.0, gGroupSize);
+    gGroupSize = (unsigned int)(pow(2.0, (double)gGroupSize) + 0.5);
     gCost = pow(2.0, gCost);
     grho = 1.0 - 1.0 / pow(2.0, glogES);
 
@@ -187,7 +193,7 @@ int read_globals(char *filename) {
 int caso(struct ptype *p_first, char *filename) {
     int sequence = 0;
 
-    for (int r = 0; r < gRuns; r++) {
+    for (unsigned int r = 0; r < gRuns; r++) {
         struct itype *i_first = calloc(gN, sizeof(*i_first));
         if (i_first == NULL) {
             fprintf(stderr, "Failed calloc (individuals).\n");
@@ -208,7 +214,7 @@ int caso(struct ptype *p_first, char *filename) {
 
         start_population(i_first, i_last);
 
-        for (int t = 0; t < gTime; t++) {
+        for (unsigned long t = 0; t < gTime; t++) {
             double wC = fitness(i_first, i_last);
 
             if (t == 0 || (t + 1) % (gTime / gPeriods) == 0) {
@@ -244,7 +250,7 @@ int caso(struct ptype *p_first, char *filename) {
                 }
             }
 
-            int deaths = gsl_ran_binomial(rng, gDeathRate, gN);
+            unsigned int deaths = gsl_ran_binomial(rng, gDeathRate, gN);
 
             if (deaths > 0) {
                 struct rtype *recruit_first = create_recruits(deaths, wC);
@@ -271,9 +277,15 @@ int caso(struct ptype *p_first, char *filename) {
                         recruit->Choose_ltGrain = i->Choose_ltGrain;
                         recruit->Imimic_ltGrain = i->Imimic_ltGrain;
                     }
+
+		recruit->cost = -gCost * (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) +
+					  log(recruit->MimicGrain) + log(recruit->ImimicGrain) +
+					  log(recruit->Imimic_ltGrain));
+
+
                 }
 
-                kill(recruit_first, i_first, gN, gCost);
+                kill(recruit_first, i_first, gN);
                 free_rtype_list(&recruit_first);
             }
 

@@ -8,25 +8,25 @@
 // Structures
 
 struct ptype {
-    int    time;
-    double alpha, logES, Given;
-    double mean[CONTINUOUS_V], mean2[CONTINUOUS_V];
-    double sd[CONTINUOUS_V], sd2[CONTINUOUS_V];
-    double c[CONTINUOUS_V][BINS], c2[CONTINUOUS_V][BINS];
-    double median[CONTINUOUS_V], median2[CONTINUOUS_V];
-    double iqr[CONTINUOUS_V], iqr2[CONTINUOUS_V];
-    double corr[CORRELATIONS], corr2[CORRELATIONS];
+    unsigned long time;
+    double        alpha, logES, Given;
+    double        mean[CONTINUOUS_V], mean2[CONTINUOUS_V];
+    double        sd[CONTINUOUS_V], sd2[CONTINUOUS_V];
+    double        c[CONTINUOUS_V][BINS], c2[CONTINUOUS_V][BINS];
+    double        median[CONTINUOUS_V], median2[CONTINUOUS_V];
+    double        iqr[CONTINUOUS_V], iqr2[CONTINUOUS_V];
+    double        corr[CORRELATIONS], corr2[CORRELATIONS];
 };
 
 struct pruntype {
-    int    time;
-    double alpha, logES, Given;
-    double mean[CONTINUOUS_V];
-    double sd[CONTINUOUS_V];
-    double frc[CONTINUOUS_V][BINS];
-    double median[CONTINUOUS_V];
-    double iqr[CONTINUOUS_V];
-    double corr[CORRELATIONS];
+    unsigned long time;
+    double        alpha, logES, Given;
+    double        mean[CONTINUOUS_V];
+    double        sd[CONTINUOUS_V];
+    double        frc[CONTINUOUS_V][BINS];
+    double        median[CONTINUOUS_V];
+    double        iqr[CONTINUOUS_V];
+    double        corr[CORRELATIONS];
 };
 
 struct itype {
@@ -43,7 +43,7 @@ struct itype {
     double        ImimicGrain;
     double        Imimic_ltGrain;
     double        cost;  // Information costs
-    int           age;   // It can't be killed. It isn't known to, and doesn't know, group mates
+    unsigned int  age;   // It can't be killed. It isn't known to, and doesn't know, group mates
     struct itype *oldpartner;
     struct itype *partner;
 };
@@ -56,26 +56,26 @@ struct rtype {
     double        MimicGrain;
     double        ImimicGrain;
     double        Imimic_ltGrain;
+    double        cost;
     struct rtype *next;
 };
 
 // Functions
 
+int           choose_partner(struct itype *i, struct itype *i_last, unsigned int groupsize);
+struct rtype *create_recruits(unsigned int deaths, double wc);
 void          decide_qB(struct itype *i, struct itype *i_last, int imimic);
-int           shuffle_partners(struct itype *i, struct itype *i_last, int groupsize);
-int           choose_partner(struct itype *i, struct itype *i_last, int groupsize);
-struct rtype *create_recruits(int deaths, double wc);
 void          free_rtype_list(struct rtype **recruit);
-void          kill(struct rtype *recruit, struct itype *i_first, int n, double cost);
-void          stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, int n);
+void          kill(struct rtype *recruit, struct itype *i_first, unsigned int n);
+int           read_key_value(FILE *fp, const char *expected_key, void *value, const char *type);
+int           shuffle_partners(struct itype *i, struct itype *i_last, unsigned int groupsize);
 void          stats_end(struct pruntype *prun, struct pruntype *prun_last, struct ptype *p);
-void          stats_runs(struct ptype *p, struct ptype *p_last, int runs);
-int           read_int(FILE *fp, const char *format, int *value, const char *error_message);
-double        read_double(FILE *fp, const char *format, double *value, const char *error_message);
+void          stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, unsigned int n);
+void          stats_runs(struct ptype *p, struct ptype *p_last, unsigned int runs);
 int           write_headers_csv(char *filename);
 int           write_headers_frq(char *filename);
-int           write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last);
-int           write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last);
-int           write_ics(char *filename, int sequence, float alpha, float logES, float Given, int t, struct itype *i,
-                        struct itype *i_last);
-int           write_time_elapsed(char *filename, float time_elapsed);
+int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t, struct itype *i,
+              struct itype *i_last);
+int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last);
+int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last);
+int write_time_elapsed(char *filename, float time_elapsed);

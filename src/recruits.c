@@ -8,10 +8,10 @@
 // Global variable
 extern gsl_rng *rng;
 
-struct rtype *create_recruits(int deaths, double wc) {
+struct rtype *create_recruits(unsigned int deaths, double wc) {
     struct rtype *head = NULL;
 
-    for (int d = 0; d < deaths; d++) {
+    for (unsigned int d = 0; d < deaths; d++) {
         struct rtype *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             fprintf(stderr, "Failed malloc (create_recruits).\n");
@@ -42,13 +42,13 @@ struct rtype *create_recruits(int deaths, double wc) {
     return head;
 }
 
-void kill(struct rtype *recruit, struct itype *i_first, int n, double cost) {
-    int pick;
+void kill(struct rtype *recruit, struct itype *i_first, unsigned int n) {
+    unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
         do {
-            pick = gsl_rng_uniform_int(rng,
-                                       n);  // Kills an individual...
+            pick = (unsigned int)gsl_rng_uniform_int(rng,
+                                                     n);  // Kills an individual...
         } while ((i_first + pick)->age == 0);  // ... that is not already dead
 
         struct itype *i = i_first + pick;
@@ -61,8 +61,7 @@ void kill(struct rtype *recruit, struct itype *i_first, int n, double cost) {
         i->MimicGrain = recruit->MimicGrain;
         i->ImimicGrain = recruit->ImimicGrain;
         i->Imimic_ltGrain = recruit->Imimic_ltGrain;
-        i->cost = -cost * (log(i->ChooseGrain) + log(i->Choose_ltGrain) + log(i->MimicGrain) + log(i->ImimicGrain) +
-                           log(i->Imimic_ltGrain));
+        i->cost = recruit->cost;
         i->age = 0;
     }
 }
