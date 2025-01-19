@@ -278,11 +278,9 @@ int caso(struct ptype *p_first, char *filename) {
                         recruit->Imimic_ltGrain = i->Imimic_ltGrain;
                     }
 
-		recruit->cost = -gCost * (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) +
-					  log(recruit->MimicGrain) + log(recruit->ImimicGrain) +
-					  log(recruit->Imimic_ltGrain));
-
-
+                    recruit->cost =
+                        -gCost * (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) + log(recruit->MimicGrain) +
+                                  log(recruit->ImimicGrain) + log(recruit->Imimic_ltGrain));
                 }
 
                 kill(recruit_first, i_first, gN);
