@@ -49,13 +49,13 @@ double        glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
 
 // Functions
 
-int    read_globals(char *filename);
 int    caso(struct ptype *p_first, char *filename);
-void   start_population(struct itype *i, struct itype *i_last);
-double fitness(struct itype *i, struct itype *i_last);
 double ces(double qA, double qB);  // glogES, galpha
-void   update_scores(struct itype *i, struct itype *i_last);
+double fitness(struct itype *i, struct itype *i_last);
 void   free_memory(struct itype *i_first, struct pruntype *prun_first);
+int    read_globals(char *filename);
+void   start_population(struct itype *i, struct itype *i_last);
+void   update_scores(struct itype *i, struct itype *i_last);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
