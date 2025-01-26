@@ -5,8 +5,6 @@ obj/
 results*/
 python/slurm/settings_project/project.py
 store
-000.glo
-*.frq
-*.ics*
+000*
 *.mp4
 *.png
