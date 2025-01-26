@@ -121,7 +121,7 @@ def process_variant(constraint, free_slots, test, last_job_file):
         if all_submitted:
             if test:
                 print(f"Would remove {last_job_file}.{colors['reset']}")
-            else:
+            elif os.path.isfile(last_job_file):
                 os.remove(last_job_file)
             print(
                 f"{colors['bold']}{colors['green']}All jobs submitted{colors['reset']}\n"
