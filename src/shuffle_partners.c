@@ -9,26 +9,26 @@
 extern gsl_rng *rng;
 
 int shuffle_partners(struct itype *i, struct itype *i_last, unsigned int groupsize) {
-    unsigned int *c = calloc(groupsize, sizeof(*c));
-    if (c == NULL) {
+    unsigned int *random = calloc(groupsize, sizeof(*random));
+    if (random == NULL) {
         fprintf(stderr, "Failed calloc (shuffle_partners).\n");
         return -1;
     }
 
-    for (unsigned int a = 0; a < groupsize; a++) {
-        c[a] = a;
+    for (unsigned int individual = 0; individual < groupsize; individual++) {
+        random[individual] = individual;
     }
 
     for (; i < i_last; i += groupsize) {
-        gsl_ran_shuffle(rng, c, groupsize, sizeof(unsigned int));
+        gsl_ran_shuffle(rng, random, groupsize, sizeof(unsigned int));
 
-        for (unsigned int a = 0; a < groupsize; a += 2) {
-            (i + c[a])->partner = i + c[a + 1];
-            (i + c[a + 1])->partner = i + c[a];
+        for (unsigned int individual = 0; individual < groupsize; individual += 2) {
+            (i + random[individual])->partner = i + random[individual + 1];
+            (i + random[individual + 1])->partner = i + random[individual];
         }
     }
 
-    free(c);
+    free(random);
 
     return 0;
 }
