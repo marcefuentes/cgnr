@@ -52,7 +52,6 @@ double        glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
 int    caso(struct ptype *p_first, char *filename);
 double ces(double qA, double qB);  // glogES, galpha
 double fitness(struct itype *i, struct itype *i_last);
-void   free_memory(struct itype *i_first, struct pruntype *prun_first);
 int    read_globals(char *filename);
 void   start_population(struct itype *i, struct itype *i_last);
 void   update_scores(struct itype *i, struct itype *i_last);
@@ -70,15 +69,21 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    char        csv[MAX_FILENAME_LEN];
-    char        frq[MAX_FILENAME_LEN];
-    char        glo[MAX_FILENAME_LEN];
-    char        ics[MAX_FILENAME_LEN];
     const char *filename = argv[1];
+
+    char glo[MAX_FILENAME_LEN];
+    snprintf(glo, sizeof(glo), "%s.glo", filename);
+    if (read_globals(glo) < 0) {
+        fprintf(stderr, "Failed read_globals.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char csv[MAX_FILENAME_LEN];
+    char frq[MAX_FILENAME_LEN];
+    char ics[MAX_FILENAME_LEN];
 
     snprintf(csv, sizeof(csv), "%s.csv", filename);
     snprintf(frq, sizeof(frq), "%s.frq", filename);
-    snprintf(glo, sizeof(glo), "%s.glo", filename);
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
     if (write_headers_csv(csv) < 0) {
@@ -87,10 +92,6 @@ int main(int argc, char *argv[]) {
     }
     if (write_headers_frq(frq) < 0) {
         fprintf(stderr, "Failed write_headers_frq.\n");
-        exit(EXIT_FAILURE);
-    }
-    if (read_globals(glo) < 0) {
-        fprintf(stderr, "Failed read_globals.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -205,7 +206,8 @@ int caso(struct ptype *p_first, char *filename) {
         struct pruntype *prun_first = calloc(gPeriods + 1, sizeof(*prun_first));
         if (prun_first == NULL) {
             fprintf(stderr, "Failed calloc (periods of each run).\n");
-            free_memory(i_first, prun_first);
+            free(i_first);
+            free(prun_first);
             return -1;
         }
 
@@ -237,7 +239,8 @@ int caso(struct ptype *p_first, char *filename) {
             if (gShuffle == 1) {
                 if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed shuffle_partners.\n");
-                    free_memory(i_first, prun_first);
+                    free(i_first);
+		    free(prun_first);
                     return -1;
                 }
             }
@@ -245,7 +248,8 @@ int caso(struct ptype *p_first, char *filename) {
             if (gPartnerChoice == 1) {
                 if (choose_partner(i_first, i_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed choose_partner.\n");
-                    free_memory(i_first, prun_first);
+                    free(i_first);
+		    free(prun_first);
                     return -1;
                 }
             }
@@ -256,7 +260,8 @@ int caso(struct ptype *p_first, char *filename) {
                 struct rtype *recruit_first = create_recruits(deaths, wC);
                 if (recruit_first == NULL) {
                     fprintf(stderr, "Failed create_recruits.\n");
-                    free_memory(i_first, prun_first);
+                    free(i_first);
+		    free(prun_first);
                     return -1;
                 }
                 struct itype *i = i_first;
@@ -293,7 +298,8 @@ int caso(struct ptype *p_first, char *filename) {
         }
 
         stats_end(prun_first, prun_last, p_first);
-        free_memory(i_first, prun_first);
+        free(i_first);
+	free(prun_first);
     }
 
     return 0;
@@ -356,11 +362,4 @@ void update_scores(struct itype *i, struct itype *i_last) {
         i->qBSeenSum += i->qBSeen;
         i->qBSeen_lt = i->qBSeenSum / i->age;
     }
-}
-
-void free_memory(struct itype *i_first, struct pruntype *prun_first) {
-    free(i_first);
-    i_first = NULL;
-    free(prun_first);
-    prun_first = NULL;
 }
