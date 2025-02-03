@@ -12,7 +12,7 @@ struct ptype {
     double        alpha, logES, Given;
     double        mean[CONTINUOUS_V], mean2[CONTINUOUS_V];
     double        sd[CONTINUOUS_V], sd2[CONTINUOUS_V];
-    double        c[CONTINUOUS_V][BINS], c2[CONTINUOUS_V][BINS];
+    double        frc[CONTINUOUS_V][BINS], frc2[CONTINUOUS_V][BINS];
     double        median[CONTINUOUS_V], median2[CONTINUOUS_V];
     double        iqr[CONTINUOUS_V], iqr2[CONTINUOUS_V];
     double        corr[CORRELATIONS], corr2[CORRELATIONS];

@@ -24,13 +24,13 @@ int write_headers_csv(char *filename) {
 
     fprintf(fp, "alpha,logES,Given,Time");
 
-    for (int v = 0; v < CONTINUOUS_V; v++) {
-        fprintf(fp, ",%smean,%smeanSD", headersc[v], headersc[v]);
-        fprintf(fp, ",%ssd,%ssdSD", headersc[v], headersc[v]);
+    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        fprintf(fp, ",%smean,%smeanSD", headersc[variable], headersc[variable]);
+        fprintf(fp, ",%ssd,%ssdSD", headersc[variable], headersc[variable]);
     }
 
-    for (int c = 0; c < CORRELATIONS; c++) {
-        fprintf(fp, ",%s,%sSD", headersr[c], headersr[c]);
+    for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
+        fprintf(fp, ",%s,%sSD", headersr[correlation], headersr[correlation]);
     }
 
     fprintf(fp, "\n");
@@ -49,12 +49,12 @@ int write_headers_frq(char *filename) {
 
     fprintf(fp, "alpha,logES,Given,Time");
 
-    for (int v = 0; v < CONTINUOUS_V; v++) {
-        fprintf(fp, ",%smedian,%smedianSD", headersc[v], headersc[v]);
-        fprintf(fp, ",%siqr,%siqrSD", headersc[v], headersc[v]);
+    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        fprintf(fp, ",%smedian,%smedianSD", headersc[variable], headersc[variable]);
+        fprintf(fp, ",%siqr,%siqrSD", headersc[variable], headersc[variable]);
 
-        for (int b = 0; b < BINS; b++) {
-            fprintf(fp, ",%s%i,%s%iSD", headersc[v], b, headersc[v], b);
+        for (int bin = 0; bin < BINS; bin++) {
+            fprintf(fp, ",%s%i,%s%iSD", headersc[variable], bin, headersc[variable], bin);
         }
     }
 
@@ -75,13 +75,13 @@ int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last) {
     for (; p < p_last; p++) {
         fprintf(fp, "%f,%f,%f,%lu", p->alpha, p->logES, p->Given, p->time);
 
-        for (int v = 0; v < CONTINUOUS_V; v++) {
-            fprintf(fp, ",%f,%f", p->mean[v], p->mean2[v]);
-            fprintf(fp, ",%f,%f", p->sd[v], p->sd2[v]);
+        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            fprintf(fp, ",%f,%f", p->mean[variable], p->mean2[variable]);
+            fprintf(fp, ",%f,%f", p->sd[variable], p->sd2[variable]);
         }
 
-        for (int c = 0; c < CORRELATIONS; c++) {
-            fprintf(fp, ",%f,%f", p->corr[c], p->corr2[c]);
+        for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
+            fprintf(fp, ",%f,%f", p->corr[correlation], p->corr2[correlation]);
         }
 
         fprintf(fp, "\n");
@@ -103,12 +103,12 @@ int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last) {
     for (; p < p_last; p++) {
         fprintf(fp, "%f,%f,%f,%lu", p->alpha, p->logES, p->Given, p->time);
 
-        for (int v = 0; v < CONTINUOUS_V; v++) {
-            fprintf(fp, ",%f,%f", p->median[v], p->median2[v]);
-            fprintf(fp, ",%f,%f", p->iqr[v], p->iqr2[v]);
+        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            fprintf(fp, ",%f,%f", p->median[variable], p->median2[variable]);
+            fprintf(fp, ",%f,%f", p->iqr[variable], p->iqr2[variable]);
 
-            for (int b = 0; b < BINS; b++) {
-                fprintf(fp, ",%f,%f", p->c[v][b], p->c2[v][b]);
+            for (int bin = 0; bin < BINS; bin++) {
+                fprintf(fp, ",%f,%f", p->frc[variable][bin], p->frc2[variable][bin]);
             }
         }
 
