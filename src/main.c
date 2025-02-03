@@ -240,7 +240,7 @@ int caso(struct ptype *p_first, char *filename) {
                 if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed shuffle_partners.\n");
                     free(i_first);
-		    free(prun_first);
+                    free(prun_first);
                     return -1;
                 }
             }
@@ -249,7 +249,7 @@ int caso(struct ptype *p_first, char *filename) {
                 if (choose_partner(i_first, i_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed choose_partner.\n");
                     free(i_first);
-		    free(prun_first);
+                    free(prun_first);
                     return -1;
                 }
             }
@@ -261,7 +261,7 @@ int caso(struct ptype *p_first, char *filename) {
                 if (recruit_first == NULL) {
                     fprintf(stderr, "Failed create_recruits.\n");
                     free(i_first);
-		    free(prun_first);
+                    free(prun_first);
                     return -1;
                 }
                 struct itype *i = i_first;
@@ -299,7 +299,7 @@ int caso(struct ptype *p_first, char *filename) {
 
         stats_end(prun_first, prun_last, p_first);
         free(i_first);
-	free(prun_first);
+        free(prun_first);
     }
 
     return 0;
