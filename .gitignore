@@ -1,10 +1,5 @@
 __pycache__/
 bin/
-charts/
 obj/
-results*/
 python/slurm/settings_project/project.py
-store
 000*
-*.mp4
-*.png
