@@ -1,5 +1,5 @@
 # Variables
-TARGET_NAME = $(shell basename $(shell pwd))
+TARGET_NAME = executable
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-align -Wstrict-aliasing=2 -Wpointer-arith -Wundef -Wcast-qual -Wstrict-overflow=5 -Wwrite-strings -Winline -Wredundant-decls -Wno-unused-parameter
 CFLAGS_DEBUG = $(CFLAGS) -g
@@ -9,22 +9,24 @@ CFLAGS_TEST = $(CFLAGS) -DNDEBUG -O3 -finline-functions
 LIBS = -lm -lgsl -lgslcblas
 
 SRCDIR = src
+INCDIR = $(SRCDIR)/include
+MODULEDIR = $(SRCDIR)/modules
 DTNORMDIR = dtnorm/src
 OBJDIR = obj
 BINDIR = bin
 TESTDIR = test
 
-INCLUDES = -I$(SRCDIR) -I$(DTNORMDIR)
+INCLUDES = -I$(DTNORMDIR) -I$(INCDIR)
 
-SOURCES = $(wildcard $(SRCDIR)/*.c) $(wildcard $(DTNORMDIR)/*.c)
+SOURCES = $(wildcard $(MODULEDIR)/*.c) $(SRCDIR)/main.c $(wildcard $(DTNORMDIR)/*.c)
 
 OBJDIR_DEBUG = $(OBJDIR)/debug
 OBJDIR_RELEASE = $(OBJDIR)/release
 OBJDIR_TEST = $(OBJDIR)/test
 
-OBJECTS_DEBUG = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_DEBUG)/%.o, $(SOURCES))
-OBJECTS_RELEASE = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_RELEASE)/%.o, $(SOURCES))
-OBJECTS_TEST = $(patsubst $(SRCDIR)/%.c, $(OBJDIR_TEST)/%.o, $(SOURCES))
+OBJECTS_DEBUG = $(patsubst $(MODULEDIR)/%.c, $(OBJDIR_DEBUG)/%.o, $(SOURCES))
+OBJECTS_RELEASE = $(patsubst $(MODULEDIR)/%.c, $(OBJDIR_RELEASE)/%.o, $(SOURCES))
+OBJECTS_TEST = $(patsubst $(MODULEDIR)/%.c, $(OBJDIR_TEST)/%.o, $(SOURCES))
 
 DEBUG_TARGET = $(BINDIR)/$(TARGET_NAME)_debug
 RELEASE_TARGET = $(BINDIR)/$(TARGET_NAME)
@@ -69,27 +71,39 @@ $(TEST_TARGET): $(OBJECTS_TEST)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) $^ $(LIBS) -o $@
 
 # Compilation rules
-$(OBJDIR_DEBUG)/%.o: $(SRCDIR)/%.c $(SRCDIR)/sim.h
+$(OBJDIR_DEBUG)/%.o: $(MODULEDIR)/%.c $(INCDIR)/sim.h  # Compile modules for debug
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_RELEASE)/%.o: $(SRCDIR)/%.c $(SRCDIR)/sim.h
+$(OBJDIR_RELEASE)/%.o: $(MODULEDIR)/%.c $(INCDIR)/sim.h # Compile modules for release
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_TEST)/%.o: $(SRCDIR)/%.c $(SRCDIR)/sim.h
+$(OBJDIR_TEST)/%.o: $(MODULEDIR)/%.c $(INCDIR)/sim.h  # Compile modules for test
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_DEBUG)/%.o: $(DTNORMDIR)/%.c
+$(OBJDIR_DEBUG)/main.o: $(SRCDIR)/main.c $(INCDIR)/sim.h  # Compile main.c for debug
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_RELEASE)/%.o: $(DTNORMDIR)/%.c
+$(OBJDIR_RELEASE)/main.o: $(SRCDIR)/main.c $(INCDIR)/sim.h # Compile main.c for release
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_TEST)/%.o: $(DTNORMDIR)/%.c
+$(OBJDIR_TEST)/main.o: $(SRCDIR)/main.c $(INCDIR)/sim.h  # Compile main.c for test
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR_DEBUG)/%.o: $(DTNORMDIR)/%.c  # Compile dtnorm for debug
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR_RELEASE)/%.o: $(DTNORMDIR)/%.c # Compile dtnorm for release
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR_TEST)/%.o: $(DTNORMDIR)/%.c  # Compile dtnorm for test
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
