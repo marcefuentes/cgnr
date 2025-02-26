@@ -45,14 +45,14 @@ release: $(RELEASE_TARGET)
 
 test: $(TEST_TARGET)
 	@echo "Running test..."
-	@rm -f $(TESTDIR)/000*
-	@cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
-	./$(TEST_TARGET) $(TESTDIR)/000
-	@if diff $(TESTDIR)/000.csv $(TESTDIR)/test.csv > /dev/null; then \
+	@rm -f $(TESTDIR)/0000*
+	@cp $(TESTDIR)/test.glo $(TESTDIR)/0000.glo
+	./$(TEST_TARGET) $(TESTDIR)/0000
+	@if diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null; then \
                 echo "Output remains the same. Good refactoring!"; \
         else \
                 echo "Differences found in CSV files:"; \
-                diff $(TESTDIR)/000.csv $(TESTDIR)/test.csv || true; \
+                diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv || true; \
         fi
 
 # Link rules
@@ -95,4 +95,4 @@ $(OBJDIR_TEST)/%.o: $(DTNORMDIR)/%.c
 
 # Clean rule
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	rm -rf $(OBJDIR) $(BINDIR) $(TESTDIR)/0000*
