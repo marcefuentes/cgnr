@@ -53,26 +53,26 @@ static int select_bin(double binsize, double value) {
     return bin;
 }
 
-void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *p) {
-    for (; agg < agg_last; agg++, p++) {
-        p->alpha = agg->alpha;
-        p->logES = agg->logES;
-        p->Given = agg->Given;
-        p->time = agg->time;
+void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall) {
+    for (; agg < agg_last; agg++, aggall++) {
+        aggall->alpha = agg->alpha;
+        aggall->logES = agg->logES;
+        aggall->Given = agg->Given;
+        aggall->time = agg->time;
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             for (int bin = 0; bin < BINS; bin++) {
-                accumulate_sums(agg->frc[variable][bin], &p->frc[variable][bin], &p->frc2[variable][bin]);
+                accumulate_sums(agg->frc[variable][bin], &aggall->frc[variable][bin], &aggall->frc2[variable][bin]);
             }
 
-            accumulate_sums(agg->median[variable], &p->median[variable], &p->median2[variable]);
-            accumulate_sums(agg->iqr[variable], &p->iqr[variable], &p->iqr2[variable]);
-            accumulate_sums(agg->mean[variable], &p->mean[variable], &p->mean2[variable]);
-            accumulate_sums(agg->sd[variable], &p->sd[variable], &p->sd2[variable]);
+            accumulate_sums(agg->median[variable], &aggall->median[variable], &aggall->median2[variable]);
+            accumulate_sums(agg->iqr[variable], &aggall->iqr[variable], &aggall->iqr2[variable]);
+            accumulate_sums(agg->mean[variable], &aggall->mean[variable], &aggall->mean2[variable]);
+            accumulate_sums(agg->sd[variable], &aggall->sd[variable], &aggall->sd2[variable]);
         }
 
         for (int c = 0; c < CORRELATIONS; c++) {
-            accumulate_sums(agg->corr[c], &p->corr[c], &p->corr2[c]);
+            accumulate_sums(agg->corr[c], &aggall->corr[c], &aggall->corr2[c]);
         }
     }
 }
@@ -160,21 +160,21 @@ void stats_period(struct Individual *i, struct Individual *i_last, struct Aggreg
     }
 }
 
-void stats_runs(struct Aggregate *p, struct Aggregate *p_last, unsigned int runs) {
-    for (; p < p_last; p++) {
+void stats_runs(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs) {
+    for (; aggall < aggall_last; aggall++) {
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             for (int bin = 0; bin < BINS; bin++) {
-                mean_sd(&p->frc[variable][bin], &p->frc2[variable][bin], runs);
+                mean_sd(&aggall->frc[variable][bin], &aggall->frc2[variable][bin], runs);
             }
 
-            mean_sd(&p->median[variable], &p->median2[variable], runs);
-            mean_sd(&p->iqr[variable], &p->iqr2[variable], runs);
-            mean_sd(&p->mean[variable], &p->mean2[variable], runs);
-            mean_sd(&p->sd[variable], &p->sd2[variable], runs);
+            mean_sd(&aggall->median[variable], &aggall->median2[variable], runs);
+            mean_sd(&aggall->iqr[variable], &aggall->iqr2[variable], runs);
+            mean_sd(&aggall->mean[variable], &aggall->mean2[variable], runs);
+            mean_sd(&aggall->sd[variable], &aggall->sd2[variable], runs);
         }
 
         for (int c = 0; c < CORRELATIONS; c++) {
-            mean_sd(&p->corr[c], &p->corr2[c], runs);
+            mean_sd(&aggall->corr[c], &aggall->corr2[c], runs);
         }
     }
 }

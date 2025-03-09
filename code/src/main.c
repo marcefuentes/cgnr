@@ -49,7 +49,7 @@ double        glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
 
 // Functions
 
-int    caso(struct Aggregate *p_first, char *filename);
+int    caso(struct Aggregate *aggall_first, char *filename);
 double ces(double qA, double qB);  // glogES, galpha
 double fitness(struct Individual *i, struct Individual *i_last);
 int    read_globals(char *filename);
@@ -107,39 +107,38 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tv.tv_sec) + (unsigned long)(tv.tv_usec));
     }
 
-    struct Aggregate *p_first = calloc(gPeriods + 1, sizeof(*p_first));
-    if (p_first == NULL) {
+    struct Aggregate *aggall_first = calloc(gPeriods + 1, sizeof(*aggall_first));
+    if (aggall_first == NULL) {
         fprintf(stderr, "Failed calloc (periods).\n");
         gsl_rng_free(rng);
         exit(EXIT_FAILURE);
     }
 
-    struct Aggregate *p_last = p_first + gPeriods + 1;
+    struct Aggregate *aggall_last = aggall_first + gPeriods + 1;
 
-    if (caso(p_first, ics) < 0) {
+    if (caso(aggall_first, ics) < 0) {
         fprintf(stderr, "Failed caso.\n");
         gsl_rng_free(rng);
-        free(p_first);
+        free(aggall_first);
         exit(EXIT_FAILURE);
     }
 
-    stats_runs(p_first, p_last, gRuns);
-    if (write_stats_csv(csv, p_first, p_last) < 0) {
+    stats_runs(aggall_first, aggall_last, gRuns);
+    if (write_stats_csv(csv, aggall_first, aggall_last) < 0) {
         fprintf(stderr, "Failed write_stats_csv.\n");
         gsl_rng_free(rng);
-        free(p_first);
+        free(aggall_first);
         exit(EXIT_FAILURE);
     }
-    if (write_stats_frq(frq, p_first, p_last) < 0) {
+    if (write_stats_frq(frq, aggall_first, aggall_last) < 0) {
         fprintf(stderr, "Failed write_stats_frq.\n");
         gsl_rng_free(rng);
-        free(p_first);
+        free(aggall_first);
         exit(EXIT_FAILURE);
     }
 
-    free(p_first);
-
     gsl_rng_free(rng);
+    free(aggall_first);
 
     if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) < 0) {
         fprintf(stderr, "Failed write_time_elapsed.\n");
@@ -191,7 +190,7 @@ int read_globals(char *filename) {
     return 0;
 }
 
-int caso(struct Aggregate *p_first, char *filename) {
+int caso(struct Aggregate *aggall_first, char *filename) {
     int sequence = 0;
 
     for (unsigned int r = 0; r < gRuns; r++) {
@@ -297,7 +296,7 @@ int caso(struct Aggregate *p_first, char *filename) {
             }
         }
 
-        stats_end(agg_first, agg_last, p_first);
+        stats_end(agg_first, agg_last, aggall_first);
         free(i_first);
         free(agg_first);
     }

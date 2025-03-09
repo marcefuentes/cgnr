@@ -64,7 +64,7 @@ int write_headers_frq(char *filename) {
     return 0;
 }
 
-int write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_last) {
+int write_stats_csv(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
     FILE *fp;
 
     if ((fp = fopen(filename, "a+")) == NULL) {
@@ -72,16 +72,16 @@ int write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_las
         return -1;
     }
 
-    for (; p < p_last; p++) {
-        fprintf(fp, "%f,%f,%f,%lu", p->alpha, p->logES, p->Given, p->time);
+    for (; aggall < aggall_last; aggall++) {
+        fprintf(fp, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            fprintf(fp, ",%f,%f", p->mean[variable], p->mean2[variable]);
-            fprintf(fp, ",%f,%f", p->sd[variable], p->sd2[variable]);
+            fprintf(fp, ",%f,%f", aggall->mean[variable], aggall->mean2[variable]);
+            fprintf(fp, ",%f,%f", aggall->sd[variable], aggall->sd2[variable]);
         }
 
         for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
-            fprintf(fp, ",%f,%f", p->corr[correlation], p->corr2[correlation]);
+            fprintf(fp, ",%f,%f", aggall->corr[correlation], aggall->corr2[correlation]);
         }
 
         fprintf(fp, "\n");
@@ -92,7 +92,7 @@ int write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_las
     return 0;
 }
 
-int write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_last) {
+int write_stats_frq(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
     FILE *fp;
 
     if ((fp = fopen(filename, "a+")) == NULL) {
@@ -100,15 +100,15 @@ int write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_las
         return -1;
     }
 
-    for (; p < p_last; p++) {
-        fprintf(fp, "%f,%f,%f,%lu", p->alpha, p->logES, p->Given, p->time);
+    for (; aggall < aggall_last; aggall++) {
+        fprintf(fp, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            fprintf(fp, ",%f,%f", p->median[variable], p->median2[variable]);
-            fprintf(fp, ",%f,%f", p->iqr[variable], p->iqr2[variable]);
+            fprintf(fp, ",%f,%f", aggall->median[variable], aggall->median2[variable]);
+            fprintf(fp, ",%f,%f", aggall->iqr[variable], aggall->iqr2[variable]);
 
             for (int bin = 0; bin < BINS; bin++) {
-                fprintf(fp, ",%f,%f", p->frc[variable][bin], p->frc2[variable][bin]);
+                fprintf(fp, ",%f,%f", aggall->frc[variable][bin], aggall->frc2[variable][bin]);
             }
         }
 

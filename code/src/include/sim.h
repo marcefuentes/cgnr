@@ -60,11 +60,11 @@ int             read_key_value(FILE *fp, const char *expected_key, void *value, 
 int             shuffle_partners(struct Individual *i, struct Individual *i_last, unsigned int groupsize);
 void            stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *p);
 void            stats_period(struct Individual *i, struct Individual *i_last, struct Aggregate *agg, unsigned int n);
-void            stats_runs(struct Aggregate *p, struct Aggregate *p_last, unsigned int runs);
+void            stats_runs(struct Aggregate *p, struct Aggregate *aggall_last, unsigned int runs);
 int             write_headers_csv(char *filename);
 int             write_headers_frq(char *filename);
 int             write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t,
                           struct Individual *i, struct Individual *i_last);
-int             write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_last);
-int             write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_last);
+int             write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *aggall_last);
+int             write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *aggall_last);
 int             write_time_elapsed(char *filename, float time_elapsed);
