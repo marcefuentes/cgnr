@@ -8,11 +8,11 @@
 // Global variable
 extern gsl_rng *rng;
 
-struct rtype *create_recruits(unsigned int deaths, double wc) {
-    struct rtype *head = NULL;
+struct Recruit *create_recruits(unsigned int deaths, double wc) {
+    struct Recruit *head = NULL;
 
     for (unsigned int d = 0; d < deaths; d++) {
-        struct rtype *temp = malloc(sizeof(*temp));
+        struct Recruit *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             fprintf(stderr, "Failed malloc (create_recruits).\n");
             return NULL;
@@ -28,7 +28,7 @@ struct rtype *create_recruits(unsigned int deaths, double wc) {
             temp->next = head;
             head = temp;
         } else {
-            struct rtype *member = head;
+            struct Recruit *member = head;
 
             while (member->next != NULL && member->next->randomwc < temp->randomwc) {
                 member = member->next;
@@ -42,7 +42,7 @@ struct rtype *create_recruits(unsigned int deaths, double wc) {
     return head;
 }
 
-void kill(struct rtype *recruit, struct itype *i_first, unsigned int n) {
+void kill(struct Recruit *recruit, struct itype *i_first, unsigned int n) {
     unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
@@ -66,9 +66,9 @@ void kill(struct rtype *recruit, struct itype *i_first, unsigned int n) {
     }
 }
 
-void free_rtype_list(struct rtype **head) {
+void free_Recruit_list(struct Recruit **head) {
     while (*head != NULL) {
-        struct rtype *temp = *head;
+        struct Recruit *temp = *head;
         *head = (*head)->next;
         free(temp);
     }

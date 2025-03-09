@@ -53,31 +53,31 @@ static int select_bin(double binsize, double value) {
     return bin;
 }
 
-void stats_end(struct pruntype *prun, struct pruntype *prun_last, struct ptype *p) {
-    for (; prun < prun_last; prun++, p++) {
-        p->alpha = prun->alpha;
-        p->logES = prun->logES;
-        p->Given = prun->Given;
-        p->time = prun->time;
+void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *p) {
+    for (; agg < agg_last; agg++, p++) {
+        p->alpha = agg->alpha;
+        p->logES = agg->logES;
+        p->Given = agg->Given;
+        p->time = agg->time;
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             for (int bin = 0; bin < BINS; bin++) {
-                accumulate_sums(prun->frc[variable][bin], &p->frc[variable][bin], &p->frc2[variable][bin]);
+                accumulate_sums(agg->frc[variable][bin], &p->frc[variable][bin], &p->frc2[variable][bin]);
             }
 
-            accumulate_sums(prun->median[variable], &p->median[variable], &p->median2[variable]);
-            accumulate_sums(prun->iqr[variable], &p->iqr[variable], &p->iqr2[variable]);
-            accumulate_sums(prun->mean[variable], &p->mean[variable], &p->mean2[variable]);
-            accumulate_sums(prun->sd[variable], &p->sd[variable], &p->sd2[variable]);
+            accumulate_sums(agg->median[variable], &p->median[variable], &p->median2[variable]);
+            accumulate_sums(agg->iqr[variable], &p->iqr[variable], &p->iqr2[variable]);
+            accumulate_sums(agg->mean[variable], &p->mean[variable], &p->mean2[variable]);
+            accumulate_sums(agg->sd[variable], &p->sd[variable], &p->sd2[variable]);
         }
 
         for (int c = 0; c < CORRELATIONS; c++) {
-            accumulate_sums(prun->corr[c], &p->corr[c], &p->corr2[c]);
+            accumulate_sums(agg->corr[c], &p->corr[c], &p->corr2[c]);
         }
     }
 }
 
-void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, unsigned int n) {
+void stats_period(struct itype *i, struct itype *i_last, struct Aggregate *agg, unsigned int n) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
     double bins1 = 1.0 / BINS;
     double binsize[CONTINUOUS_V] = {1.0 / BINS, bins1, bins1, bins1, bins1, bins1, bins1, bins1};
@@ -85,12 +85,12 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
                                                 {3, 7}, {4, 5}, {4, 6}, {4, 7}, {5, 6}, {5, 7}, {6, 7}};
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        prun->mean[variable] = 0.0;
-        prun->sd[variable] = 0.0;
+        agg->mean[variable] = 0.0;
+        agg->sd[variable] = 0.0;
     }
 
     for (int c = 0; c < CORRELATIONS; c++) {
-        prun->corr[c] = 0.0;
+        agg->corr[c] = 0.0;
     }
 
     for (; i < i_last; i++) {
@@ -100,68 +100,67 @@ void stats_period(struct itype *i, struct itype *i_last, struct pruntype *prun, 
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             count[variable][select_bin(binsize[variable], *properties[variable])]++;
-            accumulate_sums(*properties[variable], &prun->mean[variable], &prun->sd[variable]);
+            accumulate_sums(*properties[variable], &agg->mean[variable], &agg->sd[variable]);
         }
 
-        prun->corr[0] += i->qBSeen * i->ChooseGrain;
-        prun->corr[1] += i->qBSeen * i->Choose_ltGrain;
-        prun->corr[2] += i->qBSeen * i->MimicGrain;
-        prun->corr[3] += i->qBSeen * i->ImimicGrain;
-        prun->corr[4] += i->qBSeen * i->Imimic_ltGrain;
-        prun->corr[5] += i->ChooseGrain * i->Choose_ltGrain;
-        prun->corr[6] += i->ChooseGrain * i->MimicGrain;
-        prun->corr[7] += i->ChooseGrain * i->ImimicGrain;
-        prun->corr[8] += i->ChooseGrain * i->Imimic_ltGrain;
-        prun->corr[9] += i->Choose_ltGrain * i->MimicGrain;
-        prun->corr[10] += i->Choose_ltGrain * i->ImimicGrain;
-        prun->corr[11] += i->Choose_ltGrain * i->Imimic_ltGrain;
-        prun->corr[12] += i->MimicGrain * i->ImimicGrain;
-        prun->corr[13] += i->MimicGrain * i->Imimic_ltGrain;
-        prun->corr[14] += i->ImimicGrain * i->Imimic_ltGrain;
+        agg->corr[0] += i->qBSeen * i->ChooseGrain;
+        agg->corr[1] += i->qBSeen * i->Choose_ltGrain;
+        agg->corr[2] += i->qBSeen * i->MimicGrain;
+        agg->corr[3] += i->qBSeen * i->ImimicGrain;
+        agg->corr[4] += i->qBSeen * i->Imimic_ltGrain;
+        agg->corr[5] += i->ChooseGrain * i->Choose_ltGrain;
+        agg->corr[6] += i->ChooseGrain * i->MimicGrain;
+        agg->corr[7] += i->ChooseGrain * i->ImimicGrain;
+        agg->corr[8] += i->ChooseGrain * i->Imimic_ltGrain;
+        agg->corr[9] += i->Choose_ltGrain * i->MimicGrain;
+        agg->corr[10] += i->Choose_ltGrain * i->ImimicGrain;
+        agg->corr[11] += i->Choose_ltGrain * i->Imimic_ltGrain;
+        agg->corr[12] += i->MimicGrain * i->ImimicGrain;
+        agg->corr[13] += i->MimicGrain * i->Imimic_ltGrain;
+        agg->corr[14] += i->ImimicGrain * i->Imimic_ltGrain;
     }
 
     for (int c = 0; c < CORRELATIONS; c++) {
-        prun->corr[c] =
-            correlation(prun->mean[correlationPairs[c][0]], prun->mean[correlationPairs[c][1]], prun->corr[c],
-                        prun->sd[correlationPairs[c][0]], prun->sd[correlationPairs[c][1]], n);
+        agg->corr[c] = correlation(agg->mean[correlationPairs[c][0]], agg->mean[correlationPairs[c][1]], agg->corr[c],
+                                   agg->sd[correlationPairs[c][0]], agg->sd[correlationPairs[c][1]], n);
     }
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
         for (int bin = 0; bin < BINS; bin++) {
-            prun->frc[variable][bin] = (double)count[variable][bin] / n;
+            agg->frc[variable][bin] = (double)count[variable][bin] / n;
         }
 
         int    bin = 0;
         double previousfr = 0.0;
-        double fr = prun->frc[variable][bin];
+        double fr = agg->frc[variable][bin];
 
-        for (; fr < 0.25; fr += prun->frc[variable][bin]) {
+        for (; fr < 0.25; fr += agg->frc[variable][bin]) {
             previousfr = fr;
             bin++;
         }
 
         double lower_quartile = (double)bin / BINS + (0.25 - previousfr) / ((fr - previousfr) * BINS);
 
-        for (; fr < 0.50; fr += prun->frc[variable][bin]) {
+        for (; fr < 0.50; fr += agg->frc[variable][bin]) {
             previousfr = fr;
             bin++;
         }
 
-        prun->median[variable] = (double)bin / BINS + (0.5 - previousfr) / ((fr - previousfr) * BINS);
+        agg->median[variable] = (double)bin / BINS + (0.5 - previousfr) / ((fr - previousfr) * BINS);
 
-        for (; fr < 0.75; fr += prun->frc[variable][bin]) {
+        for (; fr < 0.75; fr += agg->frc[variable][bin]) {
             previousfr = fr;
             bin++;
         }
 
         double upper_quartile = (double)bin / BINS + (0.75 - previousfr) / ((fr - previousfr) * BINS);
-        prun->iqr[variable] = upper_quartile - lower_quartile;
+        agg->iqr[variable] = upper_quartile - lower_quartile;
 
-        mean_sd(&prun->mean[variable], &prun->sd[variable], n);
+        mean_sd(&agg->mean[variable], &agg->sd[variable], n);
     }
 }
 
-void stats_runs(struct ptype *p, struct ptype *p_last, unsigned int runs) {
+void stats_runs(struct Aggregate *p, struct Aggregate *p_last, unsigned int runs) {
     for (; p < p_last; p++) {
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             for (int bin = 0; bin < BINS; bin++) {

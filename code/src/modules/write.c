@@ -64,7 +64,7 @@ int write_headers_frq(char *filename) {
     return 0;
 }
 
-int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last) {
+int write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_last) {
     FILE *fp;
 
     if ((fp = fopen(filename, "a+")) == NULL) {
@@ -92,7 +92,7 @@ int write_stats_csv(char *filename, struct ptype *p, struct ptype *p_last) {
     return 0;
 }
 
-int write_stats_frq(char *filename, struct ptype *p, struct ptype *p_last) {
+int write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_last) {
     FILE *fp;
 
     if ((fp = fopen(filename, "a+")) == NULL) {

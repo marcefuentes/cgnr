@@ -49,7 +49,7 @@ double        glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
 
 // Functions
 
-int    caso(struct ptype *p_first, char *filename);
+int    caso(struct Aggregate *p_first, char *filename);
 double ces(double qA, double qB);  // glogES, galpha
 double fitness(struct itype *i, struct itype *i_last);
 int    read_globals(char *filename);
@@ -107,14 +107,14 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tv.tv_sec) + (unsigned long)(tv.tv_usec));
     }
 
-    struct ptype *p_first = calloc(gPeriods + 1, sizeof(*p_first));
+    struct Aggregate *p_first = calloc(gPeriods + 1, sizeof(*p_first));
     if (p_first == NULL) {
         fprintf(stderr, "Failed calloc (periods).\n");
         gsl_rng_free(rng);
         exit(EXIT_FAILURE);
     }
 
-    struct ptype *p_last = p_first + gPeriods + 1;
+    struct Aggregate *p_last = p_first + gPeriods + 1;
 
     if (caso(p_first, ics) < 0) {
         fprintf(stderr, "Failed caso.\n");
@@ -191,7 +191,7 @@ int read_globals(char *filename) {
     return 0;
 }
 
-int caso(struct ptype *p_first, char *filename) {
+int caso(struct Aggregate *p_first, char *filename) {
     int sequence = 0;
 
     for (unsigned int r = 0; r < gRuns; r++) {
@@ -203,16 +203,16 @@ int caso(struct ptype *p_first, char *filename) {
 
         struct itype *i_last = i_first + gN;
 
-        struct pruntype *prun_first = calloc(gPeriods + 1, sizeof(*prun_first));
-        if (prun_first == NULL) {
+        struct Aggregate *agg_first = calloc(gPeriods + 1, sizeof(*agg_first));
+        if (agg_first == NULL) {
             fprintf(stderr, "Failed calloc (periods of each run).\n");
             free(i_first);
-            free(prun_first);
+            free(agg_first);
             return -1;
         }
 
-        struct pruntype *prun_last = prun_first + gPeriods + 1;
-        struct pruntype *prun = prun_first;
+        struct Aggregate *agg_last = agg_first + gPeriods + 1;
+        struct Aggregate *agg = agg_first;
 
         start_population(i_first, i_last);
 
@@ -220,12 +220,12 @@ int caso(struct ptype *p_first, char *filename) {
             double wC = fitness(i_first, i_last);
 
             if (t == 0 || (t + 1) % (gTime / gPeriods) == 0) {
-                prun->alpha = galpha;
-                prun->logES = glogES;
-                prun->Given = gGiven;
-                prun->time = t + 1;
-                stats_period(i_first, i_last, prun, gN);
-                prun++;
+                agg->alpha = galpha;
+                agg->logES = glogES;
+                agg->Given = gGiven;
+                agg->time = t + 1;
+                stats_period(i_first, i_last, agg, gN);
+                agg++;
                 if (gRuns == 1) {
                     write_ics(filename, sequence, (float)galpha, (float)glogES, (float)gGiven, t + 1, i_first, i_last);
                     sequence++;
@@ -240,7 +240,7 @@ int caso(struct ptype *p_first, char *filename) {
                 if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed shuffle_partners.\n");
                     free(i_first);
-                    free(prun_first);
+                    free(agg_first);
                     return -1;
                 }
             }
@@ -249,7 +249,7 @@ int caso(struct ptype *p_first, char *filename) {
                 if (choose_partner(i_first, i_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed choose_partner.\n");
                     free(i_first);
-                    free(prun_first);
+                    free(agg_first);
                     return -1;
                 }
             }
@@ -257,16 +257,16 @@ int caso(struct ptype *p_first, char *filename) {
             unsigned int deaths = gsl_ran_binomial(rng, gDeathRate, gN);
 
             if (deaths > 0) {
-                struct rtype *recruit_first = create_recruits(deaths, wC);
+                struct Recruit *recruit_first = create_recruits(deaths, wC);
                 if (recruit_first == NULL) {
                     fprintf(stderr, "Failed create_recruits.\n");
                     free(i_first);
-                    free(prun_first);
+                    free(agg_first);
                     return -1;
                 }
                 struct itype *i = i_first;
 
-                for (struct rtype *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
+                for (struct Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
                     while (recruit->randomwc > i->wCumulative) {
                         i++;
                     }
@@ -289,7 +289,7 @@ int caso(struct ptype *p_first, char *filename) {
                 }
 
                 kill(recruit_first, i_first, gN);
-                free_rtype_list(&recruit_first);
+                free_Recruit_list(&recruit_first);
             }
 
             if (gReciprocity == 1) {
@@ -297,9 +297,9 @@ int caso(struct ptype *p_first, char *filename) {
             }
         }
 
-        stats_end(prun_first, prun_last, p_first);
+        stats_end(agg_first, agg_last, p_first);
         free(i_first);
-        free(prun_first);
+        free(agg_first);
     }
 
     return 0;
