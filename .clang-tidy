@@ -1,0 +1,15 @@
+Checks: >
+  -*,
+  clang-analyzer-*,-clang-analyzer-core.AssumingTheConditionIsTrue,
+  bugprone-*,
+  performance-*,
+  readability-*,
+  modernize-*,
+  portability-*,
+  misc-*,
+  -clang-analyzer-core.UndefinedBinaryOperatorResult,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
+
+HeaderFilterRegex: '.*'
+FormatStyle: file
+
