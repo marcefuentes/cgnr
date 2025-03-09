@@ -1,9 +1,6 @@
 #include <stdio.h>
 
-#define BINS 64
-#define CONTINUOUS_V 8
-#define CORRELATIONS 15
-#define MAX_FILENAME_LEN 20
+enum { BINS = 64, CONTINUOUS_V = 8, CORRELATIONS = 15, MAX_FILENAME_LEN = 22 };
 
 // Structures
 
@@ -51,20 +48,20 @@ struct Recruit {
 
 // Functions
 
-int             choose_partner(struct Individual *i, struct Individual *i_last, unsigned int groupsize);
-struct Recruit *create_recruits(unsigned int deaths, double wc);
-void            decide_qB(struct Individual *i, struct Individual *i_last, int imimic);
-void            free_Recruit_list(struct Recruit **recruit);
-void            kill(struct Recruit *recruit, struct Individual *i_first, unsigned int n);
-int             read_key_value(FILE *fp, const char *expected_key, void *value, const char *type);
-int             shuffle_partners(struct Individual *i, struct Individual *i_last, unsigned int groupsize);
-void            stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *p);
-void            stats_period(struct Individual *i, struct Individual *i_last, struct Aggregate *agg, unsigned int n);
-void            stats_runs(struct Aggregate *p, struct Aggregate *aggall_last, unsigned int runs);
-int             write_headers_csv(char *filename);
-int             write_headers_frq(char *filename);
-int             write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t,
-                          struct Individual *i, struct Individual *i_last);
-int             write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *aggall_last);
-int             write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *aggall_last);
-int             write_time_elapsed(char *filename, float time_elapsed);
+int             choose_partner(struct Individual *ind, struct Individual *ind_last, unsigned int groupsize);
+struct Recruit *create_recruits(unsigned int deaths, double wcumulative);
+void            decide_qB(struct Individual *ind, struct Individual *ind_last, int imimic);
+void            free_recruit_list(struct Recruit **head);
+void            kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int n);
+int             read_key_value(FILE *file_pointer, const char *expected_key, void *value, const char *type);
+int             shuffle_partners(struct Individual *ind, struct Individual *ind_last, unsigned int groupsize);
+void            stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall);
+void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg, unsigned int n);
+void stats_runs(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs);
+int  write_headers_csv(char *filename);
+int  write_headers_frq(char *filename);
+int  write_stats_csv(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last);
+int  write_stats_frq(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last);
+int  write_time_elapsed(char *filename, float time_elapsed);
+int  write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long time,
+               struct Individual *ind, struct Individual *ind_last);

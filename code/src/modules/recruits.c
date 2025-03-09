@@ -1,5 +1,4 @@
 #include <gsl/gsl_rng.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,18 +7,19 @@
 // Global variable
 extern gsl_rng *rng;
 
-struct Recruit *create_recruits(unsigned int deaths, double wc) {
+struct Recruit *create_recruits(unsigned int deaths, double wcumulative) {
     struct Recruit *head = NULL;
 
-    for (unsigned int d = 0; d < deaths; d++) {
+    for (unsigned int death = 0; death < deaths; death++) {
         struct Recruit *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             fprintf(stderr, "Failed malloc (create_recruits).\n");
+            free_recruit_list(&head);
             return NULL;
         }
 
         double random = gsl_rng_uniform(rng);
-        temp->randomwc = wc * random;
+        temp->randomwc = wcumulative * random;
         temp->next = NULL;
 
         // Inserts into ascending randomwc
@@ -42,31 +42,31 @@ struct Recruit *create_recruits(unsigned int deaths, double wc) {
     return head;
 }
 
-void kill(struct Recruit *recruit, struct Individual *i_first, unsigned int n) {
+void kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int n) {
     unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
         do {
             pick = (unsigned int)gsl_rng_uniform_int(rng,
                                                      n);  // Kills an individual...
-        } while ((i_first + pick)->age == 0);  // ... that is not already dead
+        } while ((ind_first + pick)->age == 0);  // ... that is not already dead
 
-        struct Individual *i = i_first + pick;
-        i->qBDefault = recruit->qBDefault;
-        i->qBDecided = i->qBDefault;
-        i->qBSeenSum = 0.0;
-        i->qBSeen_lt = 0.0;
-        i->ChooseGrain = recruit->ChooseGrain;
-        i->Choose_ltGrain = recruit->Choose_ltGrain;
-        i->MimicGrain = recruit->MimicGrain;
-        i->ImimicGrain = recruit->ImimicGrain;
-        i->Imimic_ltGrain = recruit->Imimic_ltGrain;
-        i->cost = recruit->cost;
-        i->age = 0;
+        struct Individual *ind = ind_first + pick;
+        ind->qBDefault = recruit->qBDefault;
+        ind->qBDecided = ind->qBDefault;
+        ind->qBSeenSum = 0.0;
+        ind->qBSeen_lt = 0.0;
+        ind->ChooseGrain = recruit->ChooseGrain;
+        ind->Choose_ltGrain = recruit->Choose_ltGrain;
+        ind->MimicGrain = recruit->MimicGrain;
+        ind->ImimicGrain = recruit->ImimicGrain;
+        ind->Imimic_ltGrain = recruit->Imimic_ltGrain;
+        ind->cost = recruit->cost;
+        ind->age = 0;
     }
 }
 
-void free_Recruit_list(struct Recruit **head) {
+void free_recruit_list(struct Recruit **head) {
     while (*head != NULL) {
         struct Recruit *temp = *head;
         *head = (*head)->next;

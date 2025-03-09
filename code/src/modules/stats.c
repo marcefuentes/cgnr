@@ -77,7 +77,7 @@ void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggrega
     }
 }
 
-void stats_period(struct Individual *i, struct Individual *i_last, struct Aggregate *agg, unsigned int n) {
+void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg, unsigned int n) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
     double bins1 = 1.0 / BINS;
     double binsize[CONTINUOUS_V] = {1.0 / BINS, bins1, bins1, bins1, bins1, bins1, bins1, bins1};
@@ -93,31 +93,31 @@ void stats_period(struct Individual *i, struct Individual *i_last, struct Aggreg
         agg->corr[c] = 0.0;
     }
 
-    for (; i < i_last; i++) {
-        double *properties[CONTINUOUS_V] = {&i->w,           &i->qBDefault,      &i->qBSeen,
-                                            &i->ChooseGrain, &i->Choose_ltGrain, &i->MimicGrain,
-                                            &i->ImimicGrain, &i->Imimic_ltGrain};
+    for (; ind < ind_last; ind++) {
+        double *properties[CONTINUOUS_V] = {&ind->w,           &ind->qBDefault,      &ind->qBSeen,
+                                            &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
+                                            &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             count[variable][select_bin(binsize[variable], *properties[variable])]++;
             accumulate_sums(*properties[variable], &agg->mean[variable], &agg->sd[variable]);
         }
 
-        agg->corr[0] += i->qBSeen * i->ChooseGrain;
-        agg->corr[1] += i->qBSeen * i->Choose_ltGrain;
-        agg->corr[2] += i->qBSeen * i->MimicGrain;
-        agg->corr[3] += i->qBSeen * i->ImimicGrain;
-        agg->corr[4] += i->qBSeen * i->Imimic_ltGrain;
-        agg->corr[5] += i->ChooseGrain * i->Choose_ltGrain;
-        agg->corr[6] += i->ChooseGrain * i->MimicGrain;
-        agg->corr[7] += i->ChooseGrain * i->ImimicGrain;
-        agg->corr[8] += i->ChooseGrain * i->Imimic_ltGrain;
-        agg->corr[9] += i->Choose_ltGrain * i->MimicGrain;
-        agg->corr[10] += i->Choose_ltGrain * i->ImimicGrain;
-        agg->corr[11] += i->Choose_ltGrain * i->Imimic_ltGrain;
-        agg->corr[12] += i->MimicGrain * i->ImimicGrain;
-        agg->corr[13] += i->MimicGrain * i->Imimic_ltGrain;
-        agg->corr[14] += i->ImimicGrain * i->Imimic_ltGrain;
+        agg->corr[0] += ind->qBSeen * ind->ChooseGrain;
+        agg->corr[1] += ind->qBSeen * ind->Choose_ltGrain;
+        agg->corr[2] += ind->qBSeen * ind->MimicGrain;
+        agg->corr[3] += ind->qBSeen * ind->ImimicGrain;
+        agg->corr[4] += ind->qBSeen * ind->Imimic_ltGrain;
+        agg->corr[5] += ind->ChooseGrain * ind->Choose_ltGrain;
+        agg->corr[6] += ind->ChooseGrain * ind->MimicGrain;
+        agg->corr[7] += ind->ChooseGrain * ind->ImimicGrain;
+        agg->corr[8] += ind->ChooseGrain * ind->Imimic_ltGrain;
+        agg->corr[9] += ind->Choose_ltGrain * ind->MimicGrain;
+        agg->corr[10] += ind->Choose_ltGrain * ind->ImimicGrain;
+        agg->corr[11] += ind->Choose_ltGrain * ind->Imimic_ltGrain;
+        agg->corr[12] += ind->MimicGrain * ind->ImimicGrain;
+        agg->corr[13] += ind->MimicGrain * ind->Imimic_ltGrain;
+        agg->corr[14] += ind->ImimicGrain * ind->Imimic_ltGrain;
     }
 
     for (int c = 0; c < CORRELATIONS; c++) {

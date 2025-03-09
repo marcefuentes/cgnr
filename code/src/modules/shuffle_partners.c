@@ -8,7 +8,7 @@
 // Global variable
 extern gsl_rng *rng;
 
-int shuffle_partners(struct Individual *i, struct Individual *i_last, unsigned int groupsize) {
+int shuffle_partners(struct Individual *ind, struct Individual *ind_last, unsigned int groupsize) {
     unsigned int *random = calloc(groupsize, sizeof(*random));
     if (random == NULL) {
         fprintf(stderr, "Failed calloc (shuffle_partners).\n");
@@ -19,12 +19,12 @@ int shuffle_partners(struct Individual *i, struct Individual *i_last, unsigned i
         random[individual] = individual;
     }
 
-    for (; i < i_last; i += groupsize) {
+    for (; ind < ind_last; ind += groupsize) {
         gsl_ran_shuffle(rng, random, groupsize, sizeof(unsigned int));
 
         for (unsigned int individual = 0; individual < groupsize; individual += 2) {
-            (i + random[individual])->partner = i + random[individual + 1];
-            (i + random[individual + 1])->partner = i + random[individual];
+            (ind + random[individual])->partner = ind + random[individual + 1];
+            (ind + random[individual + 1])->partner = ind + random[individual];
         }
     }
 

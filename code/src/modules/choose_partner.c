@@ -15,10 +15,10 @@ struct List {
 
 struct List *create_shuffled_list(unsigned int size);
 void         free_list(struct List **head);
-bool         willing(struct Individual *a, struct Individual *b);
+bool         willing(struct Individual *ind_a, struct Individual *ind_b);
 
-int choose_partner(struct Individual *i_first, struct Individual *i_last, unsigned int groupsize) {
-    for (struct Individual *i = i_first; i < i_last; i += groupsize) {
+int choose_partner(struct Individual *ind_first, struct Individual *ind_last, unsigned int groupsize) {
+    for (struct Individual *ind = ind_first; ind < ind_last; ind += groupsize) {
         struct List *head = create_shuffled_list(groupsize);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
@@ -29,22 +29,22 @@ int choose_partner(struct Individual *i_first, struct Individual *i_last, unsign
         while (head != NULL && head->next != NULL) {
             struct List       *previous = head;
             struct List       *temp = head->next;
-            struct Individual *j = i + head->ind;
-            struct Individual *k = i + temp->ind;
+            struct Individual *ind_j = ind + head->ind;
+            struct Individual *ind_k = ind + temp->ind;
 
-            while (temp != NULL && (willing(j, k) == false || willing(k, j) == false)) {
+            while (temp != NULL && (willing(ind_j, ind_k) == false || willing(ind_k, ind_j) == false)) {
                 previous = temp;
                 temp = temp->next;
                 if (temp != NULL) {
-                    k = i + temp->ind;
+                    ind_k = ind + temp->ind;
                 }
             }
 
             if (temp != NULL) {
-                k->partner->partner = j->partner;
-                j->partner->partner = k->partner;
-                k->partner = j;
-                j->partner = k;
+                ind_k->partner->partner = ind_j->partner;
+                ind_j->partner->partner = ind_k->partner;
+                ind_k->partner = ind_j;
+                ind_j->partner = ind_k;
 
                 previous->next = temp->next;
 
@@ -70,14 +70,14 @@ struct List *create_shuffled_list(unsigned int size) {
     struct List *head = NULL;
     unsigned int start = (unsigned int)gsl_rng_uniform_int(rng, size);
 
-    for (unsigned int c = 0; c < size; c++) {
+    for (unsigned int individual = 0; individual < size; individual++) {
         struct List *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             fprintf(stderr, "Failed malloc (create_shuffled_list).\n");
             return NULL;
         }
 
-        temp->ind = (start + c) % size;
+        temp->ind = (start + individual) % size;
         temp->next = head;
         head = temp;
     }
@@ -93,13 +93,14 @@ void free_list(struct List **head) {
     }
 }
 
-bool willing(struct Individual *a, struct Individual *b) {
-    if (a == NULL || b == NULL || a->partner == NULL) {
+bool willing(struct Individual *ind_a, struct Individual *ind_b) {
+    if (ind_a == NULL || ind_b == NULL || ind_a->partner == NULL) {
         fprintf(stderr, "Null pointer encountered in willing.\n");
+        return false;
     }
 
-    if ((b->qBSeen - a->partner->qBSeen > a->ChooseGrain) ||
-        (b->qBSeen_lt - a->partner->qBSeen_lt > a->Choose_ltGrain)) {
+    if ((ind_b->qBSeen - ind_a->partner->qBSeen > ind_a->ChooseGrain) ||
+        (ind_b->qBSeen_lt - ind_a->partner->qBSeen_lt > ind_a->Choose_ltGrain)) {
         return true;
     }
 

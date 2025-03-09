@@ -4,47 +4,48 @@
 
 double calculate(double focal, double partner, double grain);
 
-void decide_qB(struct Individual *i, struct Individual *i_last, int imimic) {
-    double grain, partner;
+void decide_qB(struct Individual *ind, struct Individual *ind_last, int imimic) {
+    double grain;
+    double partner;
 
-    for (; i < i_last; i++) {
-        if (i->age > 0 && i->partner->age > 0) {
-            if (i->partner == i->oldpartner) {
-                if (imimic == 1 && i->Imimic_ltGrain < i->MimicGrain) {
-                    partner = i->partner->qBSeen_lt;
-                    grain = i->Imimic_ltGrain;
+    for (; ind < ind_last; ind++) {
+        if (ind->age > 0 && ind->partner->age > 0) {
+            if (ind->partner == ind->oldpartner) {
+                if (imimic == 1 && ind->Imimic_ltGrain < ind->MimicGrain) {
+                    partner = ind->partner->qBSeen_lt;
+                    grain = ind->Imimic_ltGrain;
                 } else {
-                    partner = i->partner->qBSeen;
-                    grain = i->MimicGrain;
+                    partner = ind->partner->qBSeen;
+                    grain = ind->MimicGrain;
                 }
-                i->qBDecided = calculate(i->qBDefault, partner, grain);
+                ind->qBDecided = calculate(ind->qBDefault, partner, grain);
             } else if (imimic == 1) {
-                if (i->Imimic_ltGrain < i->ImimicGrain) {
-                    partner = i->partner->qBSeen_lt;
-                    grain = i->Imimic_ltGrain;
+                if (ind->Imimic_ltGrain < ind->ImimicGrain) {
+                    partner = ind->partner->qBSeen_lt;
+                    grain = ind->Imimic_ltGrain;
                 } else {
-                    partner = i->partner->qBSeen;
-                    grain = i->ImimicGrain;
+                    partner = ind->partner->qBSeen;
+                    grain = ind->ImimicGrain;
                 }
-                i->qBDecided = calculate(i->qBDefault, partner, grain);
+                ind->qBDecided = calculate(ind->qBDefault, partner, grain);
             } else {
-                i->qBDecided = i->qBDefault;
+                ind->qBDecided = ind->qBDefault;
             }
         } else {
-            i->qBDecided = i->qBDefault;
+            ind->qBDecided = ind->qBDefault;
         }
     }
 }
 
 double calculate(double focal, double partner, double grain) {
     int    block = (int)((partner - focal) / grain);
-    double block_near = focal + grain * block;
+    double block_near = focal + (grain * block);
     double block_far;
 
     if (block < 0) {
-        block_far = fmax(0.0, focal + grain * (block - 1));
+        block_far = fmax(0.0, focal + (grain * (block - 1)));
     } else if (block > 0) {
-        block_far = fmin(1.0, focal + grain * (block + 1));
+        block_far = fmin(1.0, focal + (grain * (block + 1)));
     }
 
     if (block != 0) {

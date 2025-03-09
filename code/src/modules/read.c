@@ -4,12 +4,12 @@
 
 #include "sim.h"
 
-int read_key_value(FILE *fp, const char *expected_key, void *value, const char *type) {
+int read_key_value(FILE *file_pointer, const char *expected_key, void *value, const char *type) {
     char line[128];
     char key[64];
     char val[64];
 
-    if (fgets(line, sizeof(line), fp) == NULL) {
+    if (fgets(line, sizeof(line), file_pointer) == NULL) {
         fprintf(stderr, "Unexpected end of file while reading %s.\n", expected_key);
         return -1;
     }

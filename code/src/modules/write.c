@@ -15,125 +15,120 @@ const char *headersr[CORRELATIONS] = {
 void file_write_error(char *filename);
 
 int write_headers_csv(char *filename) {
-    FILE *fp;
-
-    if ((fp = fopen(filename, "a+")) == NULL) {
+    FILE *file_pointer = fopen(filename, "a+");
+    if (file_pointer == NULL) {
         file_write_error(filename);
         return -1;
     }
 
-    fprintf(fp, "alpha,logES,Given,Time");
+    fprintf(file_pointer, "alpha,logES,Given,Time");
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        fprintf(fp, ",%smean,%smeanSD", headersc[variable], headersc[variable]);
-        fprintf(fp, ",%ssd,%ssdSD", headersc[variable], headersc[variable]);
+        fprintf(file_pointer, ",%smean,%smeanSD", headersc[variable], headersc[variable]);
+        fprintf(file_pointer, ",%ssd,%ssdSD", headersc[variable], headersc[variable]);
     }
 
     for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
-        fprintf(fp, ",%s,%sSD", headersr[correlation], headersr[correlation]);
+        fprintf(file_pointer, ",%s,%sSD", headersr[correlation], headersr[correlation]);
     }
 
-    fprintf(fp, "\n");
-    fclose(fp);
+    fprintf(file_pointer, "\n");
+    fclose(file_pointer);
 
     return 0;
 }
 
 int write_headers_frq(char *filename) {
-    FILE *fp;
-
-    if ((fp = fopen(filename, "a+")) == NULL) {
+    FILE *file_pointer = fopen(filename, "a+");
+    if (file_pointer == NULL) {
         file_write_error(filename);
         return -1;
     }
 
-    fprintf(fp, "alpha,logES,Given,Time");
+    fprintf(file_pointer, "alpha,logES,Given,Time");
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        fprintf(fp, ",%smedian,%smedianSD", headersc[variable], headersc[variable]);
-        fprintf(fp, ",%siqr,%siqrSD", headersc[variable], headersc[variable]);
+        fprintf(file_pointer, ",%smedian,%smedianSD", headersc[variable], headersc[variable]);
+        fprintf(file_pointer, ",%siqr,%siqrSD", headersc[variable], headersc[variable]);
 
         for (int bin = 0; bin < BINS; bin++) {
-            fprintf(fp, ",%s%i,%s%iSD", headersc[variable], bin, headersc[variable], bin);
+            fprintf(file_pointer, ",%s%i,%s%iSD", headersc[variable], bin, headersc[variable], bin);
         }
     }
 
-    fprintf(fp, "\n");
-    fclose(fp);
+    fprintf(file_pointer, "\n");
+    fclose(file_pointer);
 
     return 0;
 }
 
 int write_stats_csv(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
-    FILE *fp;
-
-    if ((fp = fopen(filename, "a+")) == NULL) {
+    FILE *file_pointer = fopen(filename, "a+");
+    if (file_pointer == NULL) {
         file_write_error(filename);
         return -1;
     }
 
     for (; aggall < aggall_last; aggall++) {
-        fprintf(fp, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
+        fprintf(file_pointer, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            fprintf(fp, ",%f,%f", aggall->mean[variable], aggall->mean2[variable]);
-            fprintf(fp, ",%f,%f", aggall->sd[variable], aggall->sd2[variable]);
+            fprintf(file_pointer, ",%f,%f", aggall->mean[variable], aggall->mean2[variable]);
+            fprintf(file_pointer, ",%f,%f", aggall->sd[variable], aggall->sd2[variable]);
         }
 
         for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
-            fprintf(fp, ",%f,%f", aggall->corr[correlation], aggall->corr2[correlation]);
+            fprintf(file_pointer, ",%f,%f", aggall->corr[correlation], aggall->corr2[correlation]);
         }
 
-        fprintf(fp, "\n");
+        fprintf(file_pointer, "\n");
     }
 
-    fclose(fp);
+    fclose(file_pointer);
 
     return 0;
 }
 
 int write_stats_frq(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
-    FILE *fp;
-
-    if ((fp = fopen(filename, "a+")) == NULL) {
+    FILE *file_pointer = fopen(filename, "a+");
+    if (file_pointer == NULL) {
         file_write_error(filename);
         return -1;
     }
 
     for (; aggall < aggall_last; aggall++) {
-        fprintf(fp, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
+        fprintf(file_pointer, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            fprintf(fp, ",%f,%f", aggall->median[variable], aggall->median2[variable]);
-            fprintf(fp, ",%f,%f", aggall->iqr[variable], aggall->iqr2[variable]);
+            fprintf(file_pointer, ",%f,%f", aggall->median[variable], aggall->median2[variable]);
+            fprintf(file_pointer, ",%f,%f", aggall->iqr[variable], aggall->iqr2[variable]);
 
             for (int bin = 0; bin < BINS; bin++) {
-                fprintf(fp, ",%f,%f", aggall->frc[variable][bin], aggall->frc2[variable][bin]);
+                fprintf(file_pointer, ",%f,%f", aggall->frc[variable][bin], aggall->frc2[variable][bin]);
             }
         }
 
-        fprintf(fp, "\n");
+        fprintf(file_pointer, "\n");
     }
 
-    fclose(fp);
+    fclose(file_pointer);
 
     return 0;
 }
 
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t,
-              struct Individual *i, struct Individual *i_last) {
-    char   new_filename[18];
-    double wc = 0.0;
-    FILE  *fp;
+int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long time,
+              struct Individual *ind, struct Individual *ind_last) {
+    char new_filename[18];
 
     snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, sequence);
 
-    if ((fp = fopen(new_filename, "a+")) == NULL) {
+    FILE *file_pointer = fopen(new_filename, "a+");
+    if (file_pointer == NULL) {
         file_write_error(new_filename);
         return -1;
     }
 
-    fprintf(fp,
+    fprintf(file_pointer,
             "alpha,"
             "logES,"
             "Given,"
@@ -151,74 +146,75 @@ int write_ics(char *filename, int sequence, float alpha, float logES, float Give
             "cost,"
             "age");
 
-    for (; i < i_last; i++) {
-        fprintf(fp, "\n%f,%f,%f,%lu,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, t, i->qBDefault,
-                i->qBDecided, i->qBSeen, i->partner->qBSeen, i->wCumulative - wc, i->ChooseGrain, i->Choose_ltGrain,
-                i->MimicGrain, i->ImimicGrain, i->Imimic_ltGrain, i->cost, i->age);
+    double wcumulative = 0.0;
+    for (; ind < ind_last; ind++) {
+        fprintf(file_pointer, "\n%f,%f,%f,%lu,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, time,
+                ind->qBDefault, ind->qBDecided, ind->qBSeen, ind->partner->qBSeen, ind->wCumulative - wcumulative,
+                ind->ChooseGrain, ind->Choose_ltGrain, ind->MimicGrain, ind->ImimicGrain, ind->Imimic_ltGrain,
+                ind->cost, ind->age);
 
-        wc = i->wCumulative;
+        wcumulative = ind->wCumulative;
     }
 
-    fclose(fp);
+    fclose(file_pointer);
 
     return 0;
 }
 
 int write_time_elapsed(char *filename, float time_elapsed) {
-    FILE *fp;
-
-    if ((fp = fopen(filename, "a+")) == NULL) {
+    FILE *file_pointer = fopen(filename, "a+");
+    if (file_pointer == NULL) {
         file_write_error(filename);
         return -1;
     }
 
-    fprintf(fp, "TimeElapsed,");
+    fprintf(file_pointer, "TimeElapsed,");
 
     if (time_elapsed < 10.0) {
-        fprintf(fp, "%f", time_elapsed);
+        fprintf(file_pointer, "%f", time_elapsed);
     } else {
         int minute = 60;
         int hour = minute * 60;
         int day = hour * 24;
 
-        int s = (int)time_elapsed;
-        int d = s / day;
-        s -= d * day;
-        int h = s / hour;
-        s -= h * hour;
-        int m = s / minute;
-        s -= m * minute;
+        int seconds = (int)time_elapsed;
+        int days = seconds / day;
+        seconds -= days * day;
+        int hours = seconds / hour;
+        seconds -= hours * hour;
+        int minutes = seconds / minute;
+        seconds -= minutes * minute;
 
-        if (d > 0) {
-            fprintf(fp, "%i-", d);
+        if (days > 0) {
+            fprintf(file_pointer, "%i-", days);
 
-            if (h < 10) {
-                fprintf(fp, "0");
+            if (hours < 10) {
+                fprintf(file_pointer, "0");
             }
         }
 
-        if (d > 0 || h > 0) {
-            fprintf(fp, "%i:", h);
+        if (days > 0 || hours > 0) {
+            fprintf(file_pointer, "%i:", hours);
 
-            if (m < 10) {
-                fprintf(fp, "0");
+            if (minutes < 10) {
+                fprintf(file_pointer, "0");
             }
         }
 
-        if (d > 0 || h > 0 || m > 0) {
-            fprintf(fp, "%i:", m);
+        if (days > 0 || hours > 0 || minutes > 0) {
+            fprintf(file_pointer, "%i:", minutes);
 
-            if (s < 10) {
-                fprintf(fp, "0");
+            if (seconds < 10) {
+                fprintf(file_pointer, "0");
             }
         }
 
-        fprintf(fp, "%i", (int)s);
+        fprintf(file_pointer, "%i", seconds);
     }
 
-    fprintf(fp, "\n");
+    fprintf(file_pointer, "\n");
 
-    fclose(fp);
+    fclose(file_pointer);
 
     return 0;
 }

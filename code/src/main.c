@@ -10,10 +10,10 @@
 #include "../dtnorm/src/dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "include/sim.h"
 
-#define READ_KEY(fp, key, var, type)                \
-    if (read_key_value(fp, key, &var, #type) < 0) { \
-        fclose(fp);                                 \
-        return -1;                                  \
+#define READ_KEY(file_pointer, key, var, type)                  \
+    if (read_key_value(file_pointer, key, &(var), #type) < 0) { \
+        fclose(file_pointer);                                   \
+        return -1;                                              \
     }
 
 /* Simulates reciprocity and partner choice.
@@ -51,10 +51,10 @@ double        glogES, grho;  // Elasticity of substitution. ES = 1/(1 - rho)
 
 int    caso(struct Aggregate *aggall_first, char *filename);
 double ces(double qA, double qB);  // glogES, galpha
-double fitness(struct Individual *i, struct Individual *i_last);
+double fitness(struct Individual *ind, struct Individual *ind_last);
 int    read_globals(char *filename);
-void   start_population(struct Individual *i, struct Individual *i_last);
-void   update_scores(struct Individual *i, struct Individual *i_last);
+void   start_population(struct Individual *ind, struct Individual *ind_last);
+void   update_scores(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -102,9 +102,9 @@ int main(int argc, char *argv[]) {
     }
 
     if (gSeed == 1) {
-        struct timeval tv;
-        gettimeofday(&tv, 0);
-        gsl_rng_set(rng, (unsigned long)(tv.tv_sec) + (unsigned long)(tv.tv_usec));
+        struct timeval tval;
+        gettimeofday(&tval, 0);
+        gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
     struct Aggregate *aggall_first = calloc(gPeriods + 1, sizeof(*aggall_first));
@@ -149,33 +149,32 @@ int main(int argc, char *argv[]) {
 }
 
 int read_globals(char *filename) {
-    FILE *fp;
-
-    if ((fp = fopen(filename, "r")) == NULL) {
+    FILE *file_pointer = fopen(filename, "r");
+    if (file_pointer == NULL) {
         fprintf(stderr, "Failed to open file %s for reading.\n", filename);
         return -1;
     }
 
-    READ_KEY(fp, "Seed", gSeed, int);
-    READ_KEY(fp, "N", gN, unsigned int);
-    READ_KEY(fp, "Runs", gRuns, unsigned int);
-    READ_KEY(fp, "Time", gTime, unsigned long);
-    READ_KEY(fp, "Periods", gPeriods, unsigned int);
-    READ_KEY(fp, "qBMutationSize", gqBMutationSize, double);
-    READ_KEY(fp, "GrainMutationSize", gGrainMutationSize, double);
-    READ_KEY(fp, "DeathRate", gDeathRate, double);
-    READ_KEY(fp, "GroupSize", gGroupSize, unsigned int);
-    READ_KEY(fp, "Cost", gCost, double);
-    READ_KEY(fp, "PartnerChoice", gPartnerChoice, int);
-    READ_KEY(fp, "Reciprocity", gReciprocity, int);
-    READ_KEY(fp, "IndirectR", gIndirectR, int);
-    READ_KEY(fp, "Language", gLanguage, int);
-    READ_KEY(fp, "Shuffle", gShuffle, int);
-    READ_KEY(fp, "alpha", galpha, double);
-    READ_KEY(fp, "logES", glogES, double);
-    READ_KEY(fp, "Given", gGiven, double);
+    READ_KEY(file_pointer, "Seed", gSeed, int);
+    READ_KEY(file_pointer, "N", gN, unsigned int);
+    READ_KEY(file_pointer, "Runs", gRuns, unsigned int);
+    READ_KEY(file_pointer, "Time", gTime, unsigned long);
+    READ_KEY(file_pointer, "Periods", gPeriods, unsigned int);
+    READ_KEY(file_pointer, "qBMutationSize", gqBMutationSize, double);
+    READ_KEY(file_pointer, "GrainMutationSize", gGrainMutationSize, double);
+    READ_KEY(file_pointer, "DeathRate", gDeathRate, double);
+    READ_KEY(file_pointer, "GroupSize", gGroupSize, unsigned int);
+    READ_KEY(file_pointer, "Cost", gCost, double);
+    READ_KEY(file_pointer, "PartnerChoice", gPartnerChoice, int);
+    READ_KEY(file_pointer, "Reciprocity", gReciprocity, int);
+    READ_KEY(file_pointer, "IndirectR", gIndirectR, int);
+    READ_KEY(file_pointer, "Language", gLanguage, int);
+    READ_KEY(file_pointer, "Shuffle", gShuffle, int);
+    READ_KEY(file_pointer, "alpha", galpha, double);
+    READ_KEY(file_pointer, "logES", glogES, double);
+    READ_KEY(file_pointer, "Given", gGiven, double);
 
-    fclose(fp);
+    fclose(file_pointer);
 
     gN = (unsigned int)(pow(2.0, (double)gN) + 0.5);
     gTime = (unsigned long)(pow(2.0, (double)gTime) + 0.5);
@@ -193,19 +192,19 @@ int read_globals(char *filename) {
 int caso(struct Aggregate *aggall_first, char *filename) {
     int sequence = 0;
 
-    for (unsigned int r = 0; r < gRuns; r++) {
-        struct Individual *i_first = calloc(gN, sizeof(*i_first));
-        if (i_first == NULL) {
+    for (unsigned int run = 0; run < gRuns; run++) {
+        struct Individual *ind_first = calloc(gN, sizeof(*ind_first));
+        if (ind_first == NULL) {
             fprintf(stderr, "Failed calloc (individuals).\n");
             return -1;
         }
 
-        struct Individual *i_last = i_first + gN;
+        struct Individual *ind_last = ind_first + gN;
 
         struct Aggregate *agg_first = calloc(gPeriods + 1, sizeof(*agg_first));
         if (agg_first == NULL) {
             fprintf(stderr, "Failed calloc (periods of each run).\n");
-            free(i_first);
+            free(ind_first);
             free(agg_first);
             return -1;
         }
@@ -213,41 +212,42 @@ int caso(struct Aggregate *aggall_first, char *filename) {
         struct Aggregate *agg_last = agg_first + gPeriods + 1;
         struct Aggregate *agg = agg_first;
 
-        start_population(i_first, i_last);
+        start_population(ind_first, ind_last);
 
-        for (unsigned long t = 0; t < gTime; t++) {
-            double wC = fitness(i_first, i_last);
+        for (unsigned long time = 0; time < gTime; time++) {
+            double wcumulative = fitness(ind_first, ind_last);
 
-            if (t == 0 || (t + 1) % (gTime / gPeriods) == 0) {
+            if (time == 0 || (time + 1) % (gTime / gPeriods) == 0) {
                 agg->alpha = galpha;
                 agg->logES = glogES;
                 agg->Given = gGiven;
-                agg->time = t + 1;
-                stats_period(i_first, i_last, agg, gN);
+                agg->time = time + 1;
+                stats_period(ind_first, ind_last, agg, gN);
                 agg++;
                 if (gRuns == 1) {
-                    write_ics(filename, sequence, (float)galpha, (float)glogES, (float)gGiven, t + 1, i_first, i_last);
+                    write_ics(filename, sequence, (float)galpha, (float)glogES, (float)gGiven, time + 1, ind_first,
+                              ind_last);
                     sequence++;
                 }
             }
 
             if (gLanguage == 1) {
-                update_scores(i_first, i_last);
+                update_scores(ind_first, ind_last);
             }
 
             if (gShuffle == 1) {
-                if (shuffle_partners(i_first, i_last, gGroupSize) < 0) {
+                if (shuffle_partners(ind_first, ind_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed shuffle_partners.\n");
-                    free(i_first);
+                    free(ind_first);
                     free(agg_first);
                     return -1;
                 }
             }
 
             if (gPartnerChoice == 1) {
-                if (choose_partner(i_first, i_last, gGroupSize) < 0) {
+                if (choose_partner(ind_first, ind_last, gGroupSize) < 0) {
                     fprintf(stderr, "Failed choose_partner.\n");
-                    free(i_first);
+                    free(ind_first);
                     free(agg_first);
                     return -1;
                 }
@@ -256,30 +256,30 @@ int caso(struct Aggregate *aggall_first, char *filename) {
             unsigned int deaths = gsl_ran_binomial(rng, gDeathRate, gN);
 
             if (deaths > 0) {
-                struct Recruit *recruit_first = create_recruits(deaths, wC);
+                struct Recruit *recruit_first = create_recruits(deaths, wcumulative);
                 if (recruit_first == NULL) {
                     fprintf(stderr, "Failed create_recruits.\n");
-                    free(i_first);
+                    free(ind_first);
                     free(agg_first);
                     return -1;
                 }
-                struct Individual *i = i_first;
+                struct Individual *ind = ind_first;
 
                 for (struct Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
-                    while (recruit->randomwc > i->wCumulative) {
-                        i++;
+                    while (recruit->randomwc > ind->wCumulative) {
+                        ind++;
                     }
 
-                    recruit->qBDefault = dtnorm(i->qBDefault, gqBMutationSize, 0.0, 1.0, rng);
-                    recruit->ChooseGrain = dtnorm(i->ChooseGrain, gGrainMutationSize, 0.0, 1.0, rng);
-                    recruit->MimicGrain = dtnorm(i->MimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
-                    recruit->ImimicGrain = dtnorm(i->ImimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
+                    recruit->qBDefault = dtnorm(ind->qBDefault, gqBMutationSize, 0.0, 1.0, rng);
+                    recruit->ChooseGrain = dtnorm(ind->ChooseGrain, gGrainMutationSize, 0.0, 1.0, rng);
+                    recruit->MimicGrain = dtnorm(ind->MimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
+                    recruit->ImimicGrain = dtnorm(ind->ImimicGrain, gGrainMutationSize, 0.0, 1.0, rng);
                     if (gLanguage == 1) {
-                        recruit->Choose_ltGrain = dtnorm(i->Choose_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
-                        recruit->Imimic_ltGrain = dtnorm(i->Imimic_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
+                        recruit->Choose_ltGrain = dtnorm(ind->Choose_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
+                        recruit->Imimic_ltGrain = dtnorm(ind->Imimic_ltGrain, gGrainMutationSize, 0.0, 1.0, rng);
                     } else {
-                        recruit->Choose_ltGrain = i->Choose_ltGrain;
-                        recruit->Imimic_ltGrain = i->Imimic_ltGrain;
+                        recruit->Choose_ltGrain = ind->Choose_ltGrain;
+                        recruit->Imimic_ltGrain = ind->Imimic_ltGrain;
                     }
 
                     recruit->cost =
@@ -287,61 +287,60 @@ int caso(struct Aggregate *aggall_first, char *filename) {
                                   log(recruit->ImimicGrain) + log(recruit->Imimic_ltGrain));
                 }
 
-                kill(recruit_first, i_first, gN);
-                free_Recruit_list(&recruit_first);
+                kill(recruit_first, ind_first, gN);
+                free_recruit_list(&recruit_first);
             }
 
             if (gReciprocity == 1) {
-                decide_qB(i_first, i_last, gIndirectR);
+                decide_qB(ind_first, ind_last, gIndirectR);
             }
         }
 
         stats_end(agg_first, agg_last, aggall_first);
-        free(i_first);
+        free(ind_first);
         free(agg_first);
     }
 
     return 0;
 }
 
-void start_population(struct Individual *i, struct Individual *i_last) {
-    i->qBDefault = 0.1;
-    i->qBDecided = i->qBDefault;
-    i->qBSeenSum = 0.0;
-    i->ChooseGrain = 1.0;
-    i->Choose_ltGrain = 1.0;
-    i->MimicGrain = 1.0;
-    i->ImimicGrain = 1.0;
-    i->Imimic_ltGrain = 1.0;
-    i->cost = 0.0;
-    i->age = 0;
+void start_population(struct Individual *ind, struct Individual *ind_last) {
+    ind->qBDefault = 0.1;
+    ind->qBDecided = ind->qBDefault;
+    ind->qBSeenSum = 0.0;
+    ind->ChooseGrain = 1.0;
+    ind->Choose_ltGrain = 1.0;
+    ind->MimicGrain = 1.0;
+    ind->ImimicGrain = 1.0;
+    ind->Imimic_ltGrain = 1.0;
+    ind->cost = 0.0;
+    ind->age = 0;
 
-    for (struct Individual *j = i + 1; j < i_last; j++) {
-        *j = *i;
+    for (struct Individual *ind_j = ind + 1; ind_j < ind_last; ind_j++) {
+        *ind_j = *ind;
     }
 
-    for (struct Individual *j = i + 1; i < i_last; i += 2, j += 2) {
-        i->partner = j;
-        j->partner = i;
+    for (struct Individual *ind_j = ind + 1; ind < ind_last; ind += 2, ind_j += 2) {
+        ind->partner = ind_j;
+        ind_j->partner = ind;
     }
 }
 
-double fitness(struct Individual *i, struct Individual *i_last) {
-    double wC = 0.0;
+double fitness(struct Individual *ind, struct Individual *ind_last) {
+    double wcumulative = 0.0;
 
-    for (; i < i_last; i++) {
-        double qA = 1.0 - i->qBDecided;
-        double qB = i->qBDecided * (1.0 - gGiven) + i->partner->qBDecided * gGiven;
-        i->w = fmax(0.0, ces(qA, qB) - i->cost);
-        wC += i->w;
-        i->wCumulative = wC;
-
-        i->age++;
-        i->qBSeen = i->qBDecided;
-        i->oldpartner = i->partner;
+    for (; ind < ind_last; ind++) {
+        double qA = 1.0 - ind->qBDecided;
+        double qB = (ind->qBDecided * (1.0 - gGiven)) + (ind->partner->qBDecided * gGiven);
+        ind->w = fmax(0.0, ces(qA, qB) - ind->cost);
+        wcumulative += ind->w;
+        ind->wCumulative = wcumulative;
+        ind->age++;
+        ind->qBSeen = ind->qBDecided;
+        ind->oldpartner = ind->partner;
     }
 
-    return wC;
+    return wcumulative;
 }
 
 double ces(double qA, double qB) {
@@ -350,15 +349,15 @@ double ces(double qA, double qB) {
     if (grho > -0.001 && grho < 0.001) {
         w = pow(qA, 1.0 - galpha) * pow(qB, galpha);  // Cobb-Douglas
     } else {
-        w = pow((1.0 - galpha) * pow(qA, grho) + galpha * pow(qB, grho), 1.0 / grho);
+        w = pow(((1.0 - galpha) * pow(qA, grho)) + (galpha * pow(qB, grho)), 1.0 / grho);
     }
 
     return w;
 }
 
-void update_scores(struct Individual *i, struct Individual *i_last) {
-    for (; i < i_last; i++) {
-        i->qBSeenSum += i->qBSeen;
-        i->qBSeen_lt = i->qBSeenSum / i->age;
+void update_scores(struct Individual *ind, struct Individual *ind_last) {
+    for (; ind < ind_last; ind++) {
+        ind->qBSeenSum += ind->qBSeen;
+        ind->qBSeen_lt = ind->qBSeenSum / ind->age;
     }
 }
