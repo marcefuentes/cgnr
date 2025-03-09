@@ -8,7 +8,7 @@
 #include <time.h>
 
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
-#include "sim.h"
+#include "include/sim.h"
 
 #define READ_KEY(fp, key, var, type)                \
     if (read_key_value(fp, key, &var, #type) < 0) { \
