@@ -7,7 +7,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-#include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
+#include "../dtnorm/src/dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "include/sim.h"
 
 #define READ_KEY(fp, key, var, type)                \
