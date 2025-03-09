@@ -18,23 +18,23 @@ struct Aggregate {
     double        corr[CORRELATIONS], corr2[CORRELATIONS];
 };
 
-struct itype {
-    double        w;
-    double        qBDefault;
-    double        qBDecided;  // qB for next round
-    double        qBSeen;     // qB in present round
-    double        qBSeenSum;  // sum of qBSeen since birth
-    double        qBSeen_lt;  // average qBSeen since birth
-    double        wCumulative;
-    double        ChooseGrain;
-    double        Choose_ltGrain;
-    double        MimicGrain;
-    double        ImimicGrain;
-    double        Imimic_ltGrain;
-    double        cost;  // Information costs
-    unsigned int  age;   // It can't be killed. It isn't known to, and doesn't know, group mates
-    struct itype *oldpartner;
-    struct itype *partner;
+struct Individual {
+    double             w;
+    double             qBDefault;
+    double             qBDecided;  // qB for next round
+    double             qBSeen;     // qB in present round
+    double             qBSeenSum;  // sum of qBSeen since birth
+    double             qBSeen_lt;  // average qBSeen since birth
+    double             wCumulative;
+    double             ChooseGrain;
+    double             Choose_ltGrain;
+    double             MimicGrain;
+    double             ImimicGrain;
+    double             Imimic_ltGrain;
+    double             cost;  // Information costs
+    unsigned int       age;   // It can't be killed. It isn't known to, and doesn't know, group mates
+    struct Individual *oldpartner;
+    struct Individual *partner;
 };
 
 struct Recruit {
@@ -51,20 +51,20 @@ struct Recruit {
 
 // Functions
 
-int             choose_partner(struct itype *i, struct itype *i_last, unsigned int groupsize);
+int             choose_partner(struct Individual *i, struct Individual *i_last, unsigned int groupsize);
 struct Recruit *create_recruits(unsigned int deaths, double wc);
-void            decide_qB(struct itype *i, struct itype *i_last, int imimic);
+void            decide_qB(struct Individual *i, struct Individual *i_last, int imimic);
 void            free_Recruit_list(struct Recruit **recruit);
-void            kill(struct Recruit *recruit, struct itype *i_first, unsigned int n);
+void            kill(struct Recruit *recruit, struct Individual *i_first, unsigned int n);
 int             read_key_value(FILE *fp, const char *expected_key, void *value, const char *type);
-int             shuffle_partners(struct itype *i, struct itype *i_last, unsigned int groupsize);
+int             shuffle_partners(struct Individual *i, struct Individual *i_last, unsigned int groupsize);
 void            stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *p);
-void            stats_period(struct itype *i, struct itype *i_last, struct Aggregate *agg, unsigned int n);
+void            stats_period(struct Individual *i, struct Individual *i_last, struct Aggregate *agg, unsigned int n);
 void            stats_runs(struct Aggregate *p, struct Aggregate *p_last, unsigned int runs);
 int             write_headers_csv(char *filename);
 int             write_headers_frq(char *filename);
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t, struct itype *i,
-              struct itype *i_last);
-int write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_last);
-int write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_last);
-int write_time_elapsed(char *filename, float time_elapsed);
+int             write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t,
+                          struct Individual *i, struct Individual *i_last);
+int             write_stats_csv(char *filename, struct Aggregate *p, struct Aggregate *p_last);
+int             write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_last);
+int             write_time_elapsed(char *filename, float time_elapsed);

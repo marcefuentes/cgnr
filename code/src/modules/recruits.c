@@ -42,7 +42,7 @@ struct Recruit *create_recruits(unsigned int deaths, double wc) {
     return head;
 }
 
-void kill(struct Recruit *recruit, struct itype *i_first, unsigned int n) {
+void kill(struct Recruit *recruit, struct Individual *i_first, unsigned int n) {
     unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
@@ -51,7 +51,7 @@ void kill(struct Recruit *recruit, struct itype *i_first, unsigned int n) {
                                                      n);  // Kills an individual...
         } while ((i_first + pick)->age == 0);  // ... that is not already dead
 
-        struct itype *i = i_first + pick;
+        struct Individual *i = i_first + pick;
         i->qBDefault = recruit->qBDefault;
         i->qBDecided = i->qBDefault;
         i->qBSeenSum = 0.0;

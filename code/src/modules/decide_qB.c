@@ -4,7 +4,7 @@
 
 double calculate(double focal, double partner, double grain);
 
-void decide_qB(struct itype *i, struct itype *i_last, int imimic) {
+void decide_qB(struct Individual *i, struct Individual *i_last, int imimic) {
     double grain, partner;
 
     for (; i < i_last; i++) {

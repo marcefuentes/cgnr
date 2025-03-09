@@ -77,7 +77,7 @@ void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggrega
     }
 }
 
-void stats_period(struct itype *i, struct itype *i_last, struct Aggregate *agg, unsigned int n) {
+void stats_period(struct Individual *i, struct Individual *i_last, struct Aggregate *agg, unsigned int n) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
     double bins1 = 1.0 / BINS;
     double binsize[CONTINUOUS_V] = {1.0 / BINS, bins1, bins1, bins1, bins1, bins1, bins1, bins1};

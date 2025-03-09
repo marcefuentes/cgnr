@@ -120,8 +120,8 @@ int write_stats_frq(char *filename, struct Aggregate *p, struct Aggregate *p_las
     return 0;
 }
 
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t, struct itype *i,
-              struct itype *i_last) {
+int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long t,
+              struct Individual *i, struct Individual *i_last) {
     char   new_filename[18];
     double wc = 0.0;
     FILE  *fp;

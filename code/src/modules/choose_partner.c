@@ -15,10 +15,10 @@ struct gtype {
 
 struct gtype *create_shuffled_list(unsigned int size);
 void          free_gtype_list(struct gtype **head);
-bool          willing(struct itype *a, struct itype *b);
+bool          willing(struct Individual *a, struct Individual *b);
 
-int choose_partner(struct itype *i_first, struct itype *i_last, unsigned int groupsize) {
-    for (struct itype *i = i_first; i < i_last; i += groupsize) {
+int choose_partner(struct Individual *i_first, struct Individual *i_last, unsigned int groupsize) {
+    for (struct Individual *i = i_first; i < i_last; i += groupsize) {
         struct gtype *head = create_shuffled_list(groupsize);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
@@ -27,10 +27,10 @@ int choose_partner(struct itype *i_first, struct itype *i_last, unsigned int gro
         }
 
         while (head != NULL && head->next != NULL) {
-            struct gtype *previous = head;
-            struct gtype *temp = head->next;
-            struct itype *j = i + head->ind;
-            struct itype *k = i + temp->ind;
+            struct gtype      *previous = head;
+            struct gtype      *temp = head->next;
+            struct Individual *j = i + head->ind;
+            struct Individual *k = i + temp->ind;
 
             while (temp != NULL && (willing(j, k) == false || willing(k, j) == false)) {
                 previous = temp;
@@ -93,7 +93,7 @@ void free_gtype_list(struct gtype **head) {
     }
 }
 
-bool willing(struct itype *a, struct itype *b) {
+bool willing(struct Individual *a, struct Individual *b) {
     if (a == NULL || b == NULL || a->partner == NULL) {
         fprintf(stderr, "Null pointer encountered in willing.\n");
     }
