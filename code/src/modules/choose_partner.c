@@ -17,9 +17,9 @@ struct List *create_shuffled_list(unsigned int size);
 void         free_list(struct List **head);
 bool         willing(struct Individual *ind_a, struct Individual *ind_b);
 
-int choose_partner(struct Individual *ind_first, struct Individual *ind_last, unsigned int groupsize) {
-    for (struct Individual *ind = ind_first; ind < ind_last; ind += groupsize) {
-        struct List *head = create_shuffled_list(groupsize);
+int choose_partner(struct Individual *ind_first, struct Individual *ind_last, unsigned int group_size) {
+    for (struct Individual *ind = ind_first; ind < ind_last; ind += group_size) {
+        struct List *head = create_shuffled_list(group_size);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
             free_list(&head);
