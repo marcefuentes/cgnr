@@ -43,7 +43,7 @@ static void   accumulate_sums(double value, double *sum, double *sum2);
 static void   mean_sd(double *sum, double *sum2, unsigned int n);
 double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n);
 static double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq);
-static int    select_bin(double binsize, double value);
+static int    select_bin(double bin_size, double value);
 
 static void accumulate_sums(double value, double *sum, double *sum2) {
     *sum += value;
@@ -109,12 +109,12 @@ double quartile(struct Aggregate *agg, int variable, double threshold, int *bin,
     return ((double)*bin / BINS) + ((threshold - cumulativeFreq) / (delta * BINS));
 }
 
-static int select_bin(double binsize, double value) {
-    double ceiling = binsize;
+static int select_bin(double bin_size, double value) {
+    double ceiling = bin_size;
     int    bin = 0;
 
     while (value > ceiling) {
-        ceiling += binsize;
+        ceiling += bin_size;
         bin++;
     }
 
@@ -148,8 +148,8 @@ void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggrega
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg,
                   unsigned int population_size) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
-    double binsize[CONTINUOUS_V] = {1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS,
-                                    1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS};
+    double bin_size[CONTINUOUS_V] = {1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS,
+                                     1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS};
     int    correlationPairs[PAIRS][2] = {
         {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_GRAIN},        {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_LT_GRAIN},
         {VARIABLE_Q_B_SEEN, VARIABLE_MIMIC_GRAIN},         {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_GRAIN},
@@ -175,7 +175,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
                                             &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            count[variable][select_bin(binsize[variable], *properties[variable])]++;
+            count[variable][select_bin(bin_size[variable], *properties[variable])]++;
             accumulate_sums(*properties[variable], &agg->mean[variable], &agg->sd[variable]);
         }
 
