@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef GLOBALS_H
+#define GLOBALS_H
 
 struct GlobalVariables {
     int           seed;
@@ -27,4 +27,4 @@ extern struct GlobalVariables globals;
 
 int read_globals(const char *filename);
 
-#endif  // CONFIG_H
+#endif  // GLOBALS_H

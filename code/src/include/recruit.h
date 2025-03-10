@@ -18,6 +18,6 @@ struct Recruit {
 // Functions for handling recruits
 struct Recruit *create_recruits(unsigned int deaths, double w_cumulative);
 void            free_recruit_list(struct Recruit **head);
-void            kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int n);
+void            kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int population_size);
 
-#endif
+#endif  // RECRUIT_H
