@@ -4,14 +4,14 @@
 
 double calculate(double focal, double partner, double grain);
 
-void decide_qB(struct Individual *ind, struct Individual *ind_last, int imimic) {
+void decide_qB(struct Individual *ind, struct Individual *ind_last, int indirect_r) {
     double grain;
     double partner;
 
     for (; ind < ind_last; ind++) {
         if (ind->age > 0 && ind->partner->age > 0) {
             if (ind->partner == ind->oldpartner) {
-                if (imimic == 1 && ind->Imimic_ltGrain < ind->MimicGrain) {
+                if (indirect_r == 1 && ind->Imimic_ltGrain < ind->MimicGrain) {
                     partner = ind->partner->qBSeen_lt;
                     grain = ind->Imimic_ltGrain;
                 } else {
@@ -19,7 +19,7 @@ void decide_qB(struct Individual *ind, struct Individual *ind_last, int imimic) 
                     grain = ind->MimicGrain;
                 }
                 ind->qBDecided = calculate(ind->qBDefault, partner, grain);
-            } else if (imimic == 1) {
+            } else if (indirect_r == 1) {
                 if (ind->Imimic_ltGrain < ind->ImimicGrain) {
                     partner = ind->partner->qBSeen_lt;
                     grain = ind->Imimic_ltGrain;
