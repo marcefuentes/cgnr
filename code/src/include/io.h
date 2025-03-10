@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 
-#include "aggregate.h"   // Needed for writing aggregate stats
-#include "individual.h"  // Needed for writing individual data
+#include "aggregate.h"
+#include "individual.h"
 
 #define MAX_FILENAME_LEN 22
 

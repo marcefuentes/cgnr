@@ -1,7 +1,7 @@
 #ifndef AGGREGATE_H
 #define AGGREGATE_H
 
-#include "individual.h"  // Needed for stats functions using Individual
+#include "individual.h"
 
 #define BINS 64
 #define CONTINUOUS_V 8

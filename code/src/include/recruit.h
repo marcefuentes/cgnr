@@ -1,7 +1,7 @@
 #ifndef RECRUIT_H
 #define RECRUIT_H
 
-#include "individual.h"  // Needed since Recruit interacts with Individual
+#include "individual.h"
 
 struct Recruit {
     double          randomwc;
