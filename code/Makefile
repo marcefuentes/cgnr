@@ -77,27 +77,27 @@ $(TEST_TARGET): $(OBJECTS_TEST)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) $^ $(LIBS) -o $@
 
 # Compilation rules
-$(OBJDIR_DEBUG)/%.o: $(MODULEDIR)/%.c $(INCDIR)/sim.h  # Compile modules for debug
+$(OBJDIR_DEBUG)/%.o: $(MODULEDIR)/%.c  # Compile modules for debug
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_RELEASE)/%.o: $(MODULEDIR)/%.c $(INCDIR)/sim.h # Compile modules for release
+$(OBJDIR_RELEASE)/%.o: $(MODULEDIR)/%.c # Compile modules for release
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_TEST)/%.o: $(MODULEDIR)/%.c $(INCDIR)/sim.h  # Compile modules for test
+$(OBJDIR_TEST)/%.o: $(MODULEDIR)/%.c  # Compile modules for test
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_DEBUG)/main.o: $(SRCDIR)/main.c $(INCDIR)/sim.h  # Compile main.c for debug
+$(OBJDIR_DEBUG)/main.o: $(SRCDIR)/main.c  # Compile main.c for debug
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_RELEASE)/main.o: $(SRCDIR)/main.c $(INCDIR)/sim.h # Compile main.c for release
+$(OBJDIR_RELEASE)/main.o: $(SRCDIR)/main.c # Compile main.c for release
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_TEST)/main.o: $(SRCDIR)/main.c $(INCDIR)/sim.h  # Compile main.c for test
+$(OBJDIR_TEST)/main.o: $(SRCDIR)/main.c  # Compile main.c for test
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 

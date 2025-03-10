@@ -1,0 +1,23 @@
+#ifndef RECRUIT_H
+#define RECRUIT_H
+
+#include "individual.h"  // Needed since Recruit interacts with Individual
+
+struct Recruit {
+    double          randomwc;
+    double          qBDefault;
+    double          ChooseGrain;
+    double          Choose_ltGrain;
+    double          MimicGrain;
+    double          ImimicGrain;
+    double          Imimic_ltGrain;
+    double          cost;
+    struct Recruit *next;
+};
+
+// Functions for handling recruits
+struct Recruit *create_recruits(unsigned int deaths, double wcumulative);
+void            free_recruit_list(struct Recruit **head);
+void            kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int n);
+
+#endif

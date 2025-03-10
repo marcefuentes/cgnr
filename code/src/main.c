@@ -7,8 +7,11 @@
 #include <sys/time.h>
 #include <time.h>
 
+#include "aggregate.h"
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
-#include "sim.h"
+#include "individual.h"
+#include "io.h"
+#include "recruit.h"
 
 #define READ_KEY(file_pointer, key, var, type)                  \
     if (read_key_value(file_pointer, key, &(var), #type) < 0) { \

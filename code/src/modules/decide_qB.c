@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "sim.h"
+#include "individual.h"
 
 double calculate(double focal, double partner, double grain);
 

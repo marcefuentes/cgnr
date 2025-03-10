@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "sim.h"
-
 int read_key_value(FILE *file_pointer, const char *expected_key, void *value, const char *type) {
     char line[128];
     char key[64];

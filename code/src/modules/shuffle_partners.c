@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sim.h"
+#include "individual.h"
 
 // Global variable
 extern gsl_rng *rng;

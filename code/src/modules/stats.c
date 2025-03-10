@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "sim.h"
+#include "aggregate.h"
 
 #define EPSILON 1e-6
 #define LOWER_QUARTILE 0.25

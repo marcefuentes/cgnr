@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sim.h"
+#include "recruit.h"
 
 // Global variable
 extern gsl_rng *rng;
