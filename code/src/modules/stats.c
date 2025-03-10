@@ -40,7 +40,7 @@ enum {
 
 static void   accumulate_sums(double value, double *sum, double *sum2);
 static void   mean_sd(double *sum, double *sum2, unsigned int n);
-double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n);
+double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2);
 static double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq);
 static int    select_bin(double binsize, double value);
 
@@ -66,9 +66,9 @@ static void mean_sd(double *sum, double *sum2, unsigned int n) {
     *sum /= n;
 }
 
-double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n) {
-    double numerator = (n * sum_xy) - (sum_x * sum_y);
-    double denominator = sqrt(((n * sum_x2) - (sum_x * sum_x)) * ((n * sum_y2) - (sum_y * sum_y)));
+double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2) {
+    double numerator = sum_xy - (sum_x * sum_y);
+    double denominator = sqrt((sum_x2 - (sum_x * sum_x)) * (sum_y2 - (sum_y * sum_y)));
     double pearson_r = 0.0;
 
     if (denominator > 0.0) {
@@ -196,8 +196,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
 
     for (int pair = 0; pair < PAIRS; pair++) {
         agg->corr[pair] =
-            pearson_r(agg->mean[correlationPairs[pair][0]], agg->mean[correlationPairs[pair][1]], agg->corr[pair],
-                      agg->sd[correlationPairs[pair][0]], agg->sd[correlationPairs[pair][1]], n);
+            pearson_r(agg->mean[correlationPairs[pair][0]], agg->mean[correlationPairs[pair][1]], agg->corr[pair] * n,
+                      agg->sd[correlationPairs[pair][0]] * n, agg->sd[correlationPairs[pair][1]] * n);
     }
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
