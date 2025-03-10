@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-enum { BINS = 64, CONTINUOUS_V = 8, CORRELATIONS = 15, MAX_FILENAME_LEN = 22 };
+enum { BINS = 64, CONTINUOUS_V = 8, PAIRS = 15, MAX_FILENAME_LEN = 22 };
 
 // Structures
 
@@ -12,7 +12,7 @@ struct Aggregate {
     double        frc[CONTINUOUS_V][BINS], frc2[CONTINUOUS_V][BINS];
     double        median[CONTINUOUS_V], median2[CONTINUOUS_V];
     double        iqr[CONTINUOUS_V], iqr2[CONTINUOUS_V];
-    double        corr[CORRELATIONS], corr2[CORRELATIONS];
+    double        corr[PAIRS], corr2[PAIRS];
 };
 
 struct Individual {

@@ -7,7 +7,7 @@
 const char *headersc[CONTINUOUS_V] = {"w",          "qBDefault",   "qBSeen",        "ChooseGrain", "Choose_ltGrain",
                                       "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
 
-const char *headersr[CORRELATIONS] = {
+const char *headersr[PAIRS] = {
     "r_qB_Choose",        "r_qB_Choose_lt",        "r_qB_Mimic",      "r_qB_Imimic",        "r_qB_Imimic_lt",
     "r_Choose_Choose_lt", "r_Choose_Mimic",        "r_Choose_Imimic", "r_Choose_Imimic_lt", "r_Choose_lt_Mimic",
     "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt", "r_Mimic_Imimic",  "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"};
@@ -28,8 +28,8 @@ int write_headers_csv(char *filename) {
         fprintf(file_pointer, ",%ssd,%ssdSD", headersc[variable], headersc[variable]);
     }
 
-    for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
-        fprintf(file_pointer, ",%s,%sSD", headersr[correlation], headersr[correlation]);
+    for (int pair = 0; pair < PAIRS; pair++) {
+        fprintf(file_pointer, ",%s,%sSD", headersr[pair], headersr[pair]);
     }
 
     fprintf(file_pointer, "\n");
@@ -77,8 +77,8 @@ int write_stats_csv(char *filename, struct Aggregate *aggall, struct Aggregate *
             fprintf(file_pointer, ",%f,%f", aggall->sd[variable], aggall->sd2[variable]);
         }
 
-        for (int correlation = 0; correlation < CORRELATIONS; correlation++) {
-            fprintf(file_pointer, ",%f,%f", aggall->corr[correlation], aggall->corr2[correlation]);
+        for (int pair = 0; pair < PAIRS; pair++) {
+            fprintf(file_pointer, ",%f,%f", aggall->corr[pair], aggall->corr2[pair]);
         }
 
         fprintf(file_pointer, "\n");

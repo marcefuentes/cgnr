@@ -1,27 +1,52 @@
+#include <limits.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "sim.h"
 
-static void accumulate_sums(double value, double *sum, double *sum2);
-double      correlation(double x, double y, double xy, double x2, double y2, unsigned int n);
-static void mean_sd(double *sum, double *sum2, unsigned int n);
-static int  select_bin(double binsize, double value);
+#define EPSILON 1e-6
+#define LOWER_QUARTILE 0.25
+#define MEDIAN 0.50
+#define UPPER_QUARTILE 0.75
+
+enum {
+    VARIABLE_W = 0,
+    VARIABLE_Q_B_DEFAULT = 1,
+    VARIABLE_Q_B_SEEN = 2,
+    VARIABLE_CHOOSE_GRAIN = 3,
+    VARIABLE_CHOOSE_LT_GRAIN = 4,
+    VARIABLE_MIMIC_GRAIN = 5,
+    VARIABLE_IMIMIC_GRAIN = 6,
+    VARIABLE_IMIMIC_LT_GRAIN = 7
+};
+
+enum {
+    CORR_Q_B_SEEN_CHOOSE_GRAIN = 0,
+    CORR_Q_B_SEEN_CHOOSE_LT_GRAIN = 1,
+    CORR_Q_B_SEEN_MIMIC_GRAIN = 2,
+    CORR_Q_B_SEEN_IMIMIC_GRAIN = 3,
+    CORR_Q_B_SEEN_IMIMIC_LT_GRAIN = 4,
+    CORR_CHOOSE_GRAIN_CHOOSE_LT_GRAIN = 5,
+    CORR_CHOOSE_GRAIN_MIMIC_GRAIN = 6,
+    CORR_CHOOSE_GRAIN_IMIMIC_GRAIN = 7,
+    CORR_CHOOSE_GRAIN_IMIMIC_LT_GRAIN = 8,
+    CORR_CHOOSE_LT_GRAIN_MIMIC_GRAIN = 9,
+    CORR_CHOOSE_LT_GRAIN_IMIMIC_GRAIN = 10,
+    CORR_CHOOSE_LT_GRAIN_IMIMIC_LT_GRAIN = 11,
+    CORR_MIMIC_GRAIN_IMIMIC_GRAIN = 12,
+    CORR_MIMIC_GRAIN_IMIMIC_LT_GRAIN = 13,
+    CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN = 14
+};
+
+static void   accumulate_sums(double value, double *sum, double *sum2);
+static void   mean_sd(double *sum, double *sum2, unsigned int n);
+double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n);
+static double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq);
+static int    select_bin(double binsize, double value);
 
 static void accumulate_sums(double value, double *sum, double *sum2) {
     *sum += value;
     *sum2 += value * value;
-}
-
-double correlation(double x, double y, double xy, double x2, double y2, unsigned int n) {
-    double numerator = n * xy - x * y;
-    double denominator = sqrt((n * x2 - x * x) * (n * y2 - y * y));
-    double r = 0.0;
-
-    if (denominator > 0.0) {
-        r = numerator / denominator;
-    }
-
-    return r;
 }
 
 static void mean_sd(double *sum, double *sum2, unsigned int n) {
@@ -39,6 +64,48 @@ static void mean_sd(double *sum, double *sum2, unsigned int n) {
     }
 
     *sum /= n;
+}
+
+double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n) {
+    double numerator = (n * sum_xy) - (sum_x * sum_y);
+    double denominator = sqrt(((n * sum_x2) - (sum_x * sum_x)) * ((n * sum_y2) - (sum_y * sum_y)));
+    double pearson_r = 0.0;
+
+    if (denominator > 0.0) {
+        pearson_r = numerator / denominator;
+    }
+
+    return pearson_r;
+}
+
+double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq) {
+    double cumulativeFreq = *previousfreq;
+    double freq = 0.0;
+
+    while (cumulativeFreq < threshold) {
+        if (*bin >= INT_MAX) {  // Prevent overflow
+            fprintf(stderr, "Error: bin overflow in quartile.\n");
+            return 0.0;  // Or other error handling
+        }
+        freq = agg->frc[variable][*bin];
+        cumulativeFreq += freq;
+        (*bin)++;
+    }
+
+    if (cumulativeFreq > threshold) {
+        (*bin)--;
+        cumulativeFreq -= freq;  // Correct cumulativeFreq
+    }
+
+    *previousfreq = cumulativeFreq;  // Update previousfreq
+    double delta = agg->frc[variable][*bin];
+    if (fabs(delta - 0.0) < EPSILON) {
+        // Handle division by zero.
+        fprintf(stderr, "Error: Division by zero in quartile.\n");
+        return 0.0;
+    }
+
+    return ((double)*bin / BINS) + ((threshold - cumulativeFreq) / (delta * BINS));
 }
 
 static int select_bin(double binsize, double value) {
@@ -71,26 +138,33 @@ void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggrega
             accumulate_sums(agg->sd[variable], &aggall->sd[variable], &aggall->sd2[variable]);
         }
 
-        for (int c = 0; c < CORRELATIONS; c++) {
-            accumulate_sums(agg->corr[c], &aggall->corr[c], &aggall->corr2[c]);
+        for (int pair = 0; pair < PAIRS; pair++) {
+            accumulate_sums(agg->corr[pair], &aggall->corr[pair], &aggall->corr2[pair]);
         }
     }
 }
 
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg, unsigned int n) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
-    double bins1 = 1.0 / BINS;
-    double binsize[CONTINUOUS_V] = {1.0 / BINS, bins1, bins1, bins1, bins1, bins1, bins1, bins1};
-    int    correlationPairs[CORRELATIONS][2] = {{2, 3}, {2, 4}, {2, 5}, {2, 6}, {2, 7}, {3, 4}, {3, 5}, {3, 6},
-                                                {3, 7}, {4, 5}, {4, 6}, {4, 7}, {5, 6}, {5, 7}, {6, 7}};
+    double binsize[CONTINUOUS_V] = {1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS,
+                                    1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS};
+    int    correlationPairs[PAIRS][2] = {
+        {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_GRAIN},        {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_LT_GRAIN},
+        {VARIABLE_Q_B_SEEN, VARIABLE_MIMIC_GRAIN},         {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_GRAIN},
+        {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_LT_GRAIN},     {VARIABLE_CHOOSE_GRAIN, VARIABLE_CHOOSE_LT_GRAIN},
+        {VARIABLE_CHOOSE_GRAIN, VARIABLE_MIMIC_GRAIN},     {VARIABLE_CHOOSE_GRAIN, VARIABLE_IMIMIC_GRAIN},
+        {VARIABLE_CHOOSE_GRAIN, VARIABLE_IMIMIC_LT_GRAIN}, {VARIABLE_CHOOSE_LT_GRAIN, VARIABLE_MIMIC_GRAIN},
+        {VARIABLE_CHOOSE_LT_GRAIN, VARIABLE_IMIMIC_GRAIN}, {VARIABLE_CHOOSE_LT_GRAIN, VARIABLE_IMIMIC_LT_GRAIN},
+        {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_GRAIN},     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN},
+        {VARIABLE_IMIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN}};
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
         agg->mean[variable] = 0.0;
         agg->sd[variable] = 0.0;
     }
 
-    for (int c = 0; c < CORRELATIONS; c++) {
-        agg->corr[c] = 0.0;
+    for (int pair = 0; pair < PAIRS; pair++) {
+        agg->corr[pair] = 0.0;
     }
 
     for (; ind < ind_last; ind++) {
@@ -103,26 +177,27 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
             accumulate_sums(*properties[variable], &agg->mean[variable], &agg->sd[variable]);
         }
 
-        agg->corr[0] += ind->qBSeen * ind->ChooseGrain;
-        agg->corr[1] += ind->qBSeen * ind->Choose_ltGrain;
-        agg->corr[2] += ind->qBSeen * ind->MimicGrain;
-        agg->corr[3] += ind->qBSeen * ind->ImimicGrain;
-        agg->corr[4] += ind->qBSeen * ind->Imimic_ltGrain;
-        agg->corr[5] += ind->ChooseGrain * ind->Choose_ltGrain;
-        agg->corr[6] += ind->ChooseGrain * ind->MimicGrain;
-        agg->corr[7] += ind->ChooseGrain * ind->ImimicGrain;
-        agg->corr[8] += ind->ChooseGrain * ind->Imimic_ltGrain;
-        agg->corr[9] += ind->Choose_ltGrain * ind->MimicGrain;
-        agg->corr[10] += ind->Choose_ltGrain * ind->ImimicGrain;
-        agg->corr[11] += ind->Choose_ltGrain * ind->Imimic_ltGrain;
-        agg->corr[12] += ind->MimicGrain * ind->ImimicGrain;
-        agg->corr[13] += ind->MimicGrain * ind->Imimic_ltGrain;
-        agg->corr[14] += ind->ImimicGrain * ind->Imimic_ltGrain;
+        agg->corr[CORR_Q_B_SEEN_CHOOSE_GRAIN] += ind->qBSeen * ind->ChooseGrain;
+        agg->corr[CORR_Q_B_SEEN_CHOOSE_LT_GRAIN] += ind->qBSeen * ind->Choose_ltGrain;
+        agg->corr[CORR_Q_B_SEEN_MIMIC_GRAIN] += ind->qBSeen * ind->MimicGrain;
+        agg->corr[CORR_Q_B_SEEN_IMIMIC_GRAIN] += ind->qBSeen * ind->ImimicGrain;
+        agg->corr[CORR_Q_B_SEEN_IMIMIC_LT_GRAIN] += ind->qBSeen * ind->Imimic_ltGrain;
+        agg->corr[CORR_CHOOSE_GRAIN_CHOOSE_LT_GRAIN] += ind->ChooseGrain * ind->Choose_ltGrain;
+        agg->corr[CORR_CHOOSE_GRAIN_MIMIC_GRAIN] += ind->ChooseGrain * ind->MimicGrain;
+        agg->corr[CORR_CHOOSE_GRAIN_IMIMIC_GRAIN] += ind->ChooseGrain * ind->ImimicGrain;
+        agg->corr[CORR_CHOOSE_GRAIN_IMIMIC_LT_GRAIN] += ind->ChooseGrain * ind->Imimic_ltGrain;
+        agg->corr[CORR_CHOOSE_LT_GRAIN_MIMIC_GRAIN] += ind->Choose_ltGrain * ind->MimicGrain;
+        agg->corr[CORR_CHOOSE_LT_GRAIN_IMIMIC_GRAIN] += ind->Choose_ltGrain * ind->ImimicGrain;
+        agg->corr[CORR_CHOOSE_LT_GRAIN_IMIMIC_LT_GRAIN] += ind->Choose_ltGrain * ind->Imimic_ltGrain;
+        agg->corr[CORR_MIMIC_GRAIN_IMIMIC_GRAIN] += ind->MimicGrain * ind->ImimicGrain;
+        agg->corr[CORR_MIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->MimicGrain * ind->Imimic_ltGrain;
+        agg->corr[CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->ImimicGrain * ind->Imimic_ltGrain;
     }
 
-    for (int c = 0; c < CORRELATIONS; c++) {
-        agg->corr[c] = correlation(agg->mean[correlationPairs[c][0]], agg->mean[correlationPairs[c][1]], agg->corr[c],
-                                   agg->sd[correlationPairs[c][0]], agg->sd[correlationPairs[c][1]], n);
+    for (int pair = 0; pair < PAIRS; pair++) {
+        agg->corr[pair] =
+            pearson_r(agg->mean[correlationPairs[pair][0]], agg->mean[correlationPairs[pair][1]], agg->corr[pair],
+                      agg->sd[correlationPairs[pair][0]], agg->sd[correlationPairs[pair][1]], n);
     }
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
@@ -131,29 +206,13 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
         }
 
         int    bin = 0;
-        double previousfr = 0.0;
-        double fr = agg->frc[variable][bin];
+        double previousfreq = 0.0;
 
-        for (; fr < 0.25; fr += agg->frc[variable][bin]) {
-            previousfr = fr;
-            bin++;
-        }
+        double lower_quartile = quartile(agg, variable, LOWER_QUARTILE, &bin, &previousfreq);
+        double median = quartile(agg, variable, MEDIAN, &bin, &previousfreq);
+        double upper_quartile = quartile(agg, variable, UPPER_QUARTILE, &bin, &previousfreq);
 
-        double lower_quartile = (double)bin / BINS + (0.25 - previousfr) / ((fr - previousfr) * BINS);
-
-        for (; fr < 0.50; fr += agg->frc[variable][bin]) {
-            previousfr = fr;
-            bin++;
-        }
-
-        agg->median[variable] = (double)bin / BINS + (0.5 - previousfr) / ((fr - previousfr) * BINS);
-
-        for (; fr < 0.75; fr += agg->frc[variable][bin]) {
-            previousfr = fr;
-            bin++;
-        }
-
-        double upper_quartile = (double)bin / BINS + (0.75 - previousfr) / ((fr - previousfr) * BINS);
+        agg->median[variable] = median;
         agg->iqr[variable] = upper_quartile - lower_quartile;
 
         mean_sd(&agg->mean[variable], &agg->sd[variable], n);
@@ -173,8 +232,8 @@ void stats_runs(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigne
             mean_sd(&aggall->sd[variable], &aggall->sd2[variable], runs);
         }
 
-        for (int c = 0; c < CORRELATIONS; c++) {
-            mean_sd(&aggall->corr[c], &aggall->corr2[c], runs);
+        for (int pair = 0; pair < PAIRS; pair++) {
+            mean_sd(&aggall->corr[pair], &aggall->corr2[pair], runs);
         }
     }
 }
