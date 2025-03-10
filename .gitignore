@@ -2,4 +2,4 @@ __pycache__/
 bin/
 obj/
 python/slurm/settings_project/project.py
-000*
+0000*
