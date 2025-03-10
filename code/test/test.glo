@@ -11,8 +11,8 @@ Cost,-15
 PartnerChoice,1
 Reciprocity,1
 IndirectR,1
-Language,0
-Shuffle,0
+Language,1
+Shuffle,1
 alpha,0.5
 logES,0
 Given,1.0
