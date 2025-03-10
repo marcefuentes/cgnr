@@ -7,8 +7,8 @@
 #include <sys/time.h>
 #include <time.h>
 
-#include "../dtnorm/src/dtnorm.h"  // From https://github.com/alanrogers/dtnorm
-#include "include/sim.h"
+#include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
+#include "sim.h"
 
 #define READ_KEY(file_pointer, key, var, type)                  \
     if (read_key_value(file_pointer, key, &(var), #type) < 0) { \
