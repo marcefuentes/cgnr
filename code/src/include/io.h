@@ -6,7 +6,7 @@
 #include "aggregate.h"
 #include "individual.h"
 
-#define MAX_FILENAME_LEN 22
+enum { MAX_FILENAME_LEN = 22 };
 
 // File I/O functions
 int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);

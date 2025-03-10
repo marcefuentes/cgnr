@@ -3,9 +3,7 @@
 
 #include "individual.h"
 
-#define BINS 64
-#define CONTINUOUS_V 8
-#define PAIRS 15
+enum { BINS = 64, CONTINUOUS_V = 8, PAIRS = 15 };
 
 struct Aggregate {
     unsigned long time;
