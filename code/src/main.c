@@ -1,15 +1,12 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
 
-#include "aggregate.h"
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
-#include "individual.h"
 #include "io.h"
 #include "recruit.h"
 
