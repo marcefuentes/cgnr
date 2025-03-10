@@ -1,13 +1,65 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int read_key_value(FILE *file_pointer, const char *expected_key, void *value, const char *type) {
+#include "globals.h"
+
+struct GlobalVariables globals;
+
+int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);
+
+int read_globals(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        fprintf(stderr, "Failed to open file %s for reading.\n", filename);
+        return -1;
+    }
+
+    if (read_key_value(file, "Seed", &globals.seed, "int") ||
+        read_key_value(file, "N", &globals.population_size, "unsigned int") ||
+        read_key_value(file, "Runs", &globals.runs, "unsigned int") ||
+        read_key_value(file, "Time", &globals.time, "unsigned long") ||
+        read_key_value(file, "Periods", &globals.periods, "unsigned int") ||
+        read_key_value(file, "qBMutationSize", &globals.qb_mutation_size, "double") ||
+        read_key_value(file, "GrainMutationSize", &globals.grain_mutation_size, "double") ||
+        read_key_value(file, "DeathRate", &globals.death_rate, "double") ||
+        read_key_value(file, "GroupSize", &globals.group_size, "unsigned int") ||
+        read_key_value(file, "Cost", &globals.cost, "double") ||
+        read_key_value(file, "PartnerChoice", &globals.partner_choice, "int") ||
+        read_key_value(file, "Reciprocity", &globals.reciprocity, "int") ||
+        read_key_value(file, "IndirectR", &globals.indirect_r, "int") ||
+        read_key_value(file, "Language", &globals.language, "int") ||
+        read_key_value(file, "Shuffle", &globals.shuffle, "int") ||
+        read_key_value(file, "alpha", &globals.alpha, "double") ||
+        read_key_value(file, "logES", &globals.loges, "double") ||
+        read_key_value(file, "Given", &globals.given, "double")) {
+        fprintf(stderr, "Failed to read globals from file %s.\n", filename);
+        fclose(file);
+        return -1;
+    }
+
+    fclose(file);
+
+    globals.population_size = (unsigned int)(pow(2.0, (double)globals.population_size) + 0.5);
+    globals.time = (unsigned long)(pow(2.0, (double)globals.time) + 0.5);
+    globals.periods = (unsigned int)(pow(2.0, (double)globals.periods) + 0.5);
+    globals.qb_mutation_size = pow(2.0, globals.qb_mutation_size);
+    globals.grain_mutation_size = pow(2.0, globals.grain_mutation_size);
+    globals.death_rate = pow(2.0, globals.death_rate);
+    globals.group_size = (unsigned int)(pow(2.0, (double)globals.group_size) + 0.5);
+    globals.cost = pow(2.0, globals.cost);
+    globals.rho = 1.0 - 1.0 / pow(2.0, globals.loges);
+
+    return 0;
+}
+
+int read_key_value(FILE *file, const char *expected_key, void *value, const char *type) {
     char line[128];
     char key[64];
     char val[64];
 
-    if (fgets(line, sizeof(line), file_pointer) == NULL) {
+    if (fgets(line, sizeof(line), file) == NULL) {
         fprintf(stderr, "Unexpected end of file while reading %s.\n", expected_key);
         return -1;
     }
