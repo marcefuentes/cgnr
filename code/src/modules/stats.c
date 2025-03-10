@@ -145,7 +145,8 @@ void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggrega
     }
 }
 
-void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg, unsigned int n) {
+void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg,
+                  unsigned int population_size) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
     double binsize[CONTINUOUS_V] = {1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS,
                                     1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS};
@@ -198,12 +199,12 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
     for (int pair = 0; pair < PAIRS; pair++) {
         agg->corr[pair] =
             pearson_r(agg->mean[correlationPairs[pair][0]], agg->mean[correlationPairs[pair][1]], agg->corr[pair],
-                      agg->sd[correlationPairs[pair][0]], agg->sd[correlationPairs[pair][1]], n);
+                      agg->sd[correlationPairs[pair][0]], agg->sd[correlationPairs[pair][1]], population_size);
     }
 
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
         for (int bin = 0; bin < BINS; bin++) {
-            agg->frc[variable][bin] = (double)count[variable][bin] / n;
+            agg->frc[variable][bin] = (double)count[variable][bin] / population_size;
         }
 
         int    bin = 0;
@@ -216,7 +217,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
         agg->median[variable] = median;
         agg->iqr[variable] = upper_quartile - lower_quartile;
 
-        mean_sd(&agg->mean[variable], &agg->sd[variable], n);
+        mean_sd(&agg->mean[variable], &agg->sd[variable], population_size);
     }
 }
 

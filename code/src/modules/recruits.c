@@ -43,13 +43,13 @@ struct Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     return head;
 }
 
-void kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int n) {
+void kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int population_size) {
     unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
         do {
             pick = (unsigned int)gsl_rng_uniform_int(rng,
-                                                     n);  // Kills an individual...
+                                                     population_size);  // Kills an individual...
         } while ((ind_first + pick)->age == 0);  // ... that is not already dead
 
         struct Individual *ind = ind_first + pick;
