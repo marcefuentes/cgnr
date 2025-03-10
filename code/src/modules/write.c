@@ -1,7 +1,9 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "io.h"
+#include "aggregate.h"
+#include "individual.h"
 
 const char *headersc[CONTINUOUS_V] = {"w",          "qBDefault",   "qBSeen",        "ChooseGrain", "Choose_ltGrain",
                                       "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};

@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "aggregate.h"
+#include "individual.h"
 
 #define EPSILON 1e-6
 #define LOWER_QUARTILE 0.25
@@ -40,7 +41,7 @@ enum {
 
 static void   accumulate_sums(double value, double *sum, double *sum2);
 static void   mean_sd(double *sum, double *sum2, unsigned int n);
-double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, int n);
+double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n);
 static double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq);
 static int    select_bin(double binsize, double value);
 
@@ -66,7 +67,7 @@ static void mean_sd(double *sum, double *sum2, unsigned int n) {
     *sum /= n;
 }
 
-double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, int n) {
+double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n) {
     double numerator = (n * sum_xy) - (sum_x * sum_y);
     double denominator = sqrt(((n * sum_x2) - (sum_x * sum_x)) * ((n * sum_y2) - (sum_y * sum_y)));
     double pearson_r = 0.0;
