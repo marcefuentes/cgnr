@@ -149,7 +149,7 @@ int caso(struct Aggregate *aggall_first, char *filename) {
         start_population(ind_first, ind_last);
 
         for (unsigned long time = 0; time < globals.time; time++) {
-            double wcumulative = fitness(ind_first, ind_last);
+            double w_cumulative = fitness(ind_first, ind_last);
 
             if (time == 0 || (time + 1) % (globals.time / globals.periods) == 0) {
                 agg->alpha = globals.alpha;
@@ -190,7 +190,7 @@ int caso(struct Aggregate *aggall_first, char *filename) {
             unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
 
             if (deaths > 0) {
-                struct Recruit *recruit_first = create_recruits(deaths, wcumulative);
+                struct Recruit *recruit_first = create_recruits(deaths, w_cumulative);
                 if (recruit_first == NULL) {
                     fprintf(stderr, "Failed create_recruits.\n");
                     free(ind_first);
@@ -263,20 +263,20 @@ void start_population(struct Individual *ind, struct Individual *ind_last) {
 }
 
 double fitness(struct Individual *ind, struct Individual *ind_last) {
-    double wcumulative = 0.0;
+    double w_cumulative = 0.0;
 
     for (; ind < ind_last; ind++) {
         double qA = 1.0 - ind->qBDecided;
         double qB = (ind->qBDecided * (1.0 - globals.given)) + (ind->partner->qBDecided * globals.given);
         ind->w = fmax(0.0, ces(qA, qB) - ind->cost);
-        wcumulative += ind->w;
-        ind->wCumulative = wcumulative;
+        w_cumulative += ind->w;
+        ind->wCumulative = w_cumulative;
         ind->age++;
         ind->qBSeen = ind->qBDecided;
         ind->oldpartner = ind->partner;
     }
 
-    return wcumulative;
+    return w_cumulative;
 }
 
 double ces(double qA, double qB) {

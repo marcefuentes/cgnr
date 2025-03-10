@@ -8,7 +8,7 @@
 // Global variable
 extern gsl_rng *rng;
 
-struct Recruit *create_recruits(unsigned int deaths, double wcumulative) {
+struct Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     struct Recruit *head = NULL;
 
     for (unsigned int death = 0; death < deaths; death++) {
@@ -20,7 +20,7 @@ struct Recruit *create_recruits(unsigned int deaths, double wcumulative) {
         }
 
         double random = gsl_rng_uniform(rng);
-        temp->randomwc = wcumulative * random;
+        temp->randomwc = w_cumulative * random;
         temp->next = NULL;
 
         // Inserts into ascending randomwc

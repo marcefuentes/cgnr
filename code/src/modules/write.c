@@ -147,13 +147,13 @@ int write_ics(char *filename, int sequence, float alpha, float logES, float Give
             "cost,"
             "age");
 
-    double wcumulative = 0.0;
+    double w_cumulative = 0.0;
     for (; ind < ind_last; ind++) {
         fprintf(file, "\n%f,%f,%f,%lu,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, time, ind->qBDefault,
-                ind->qBDecided, ind->qBSeen, ind->partner->qBSeen, ind->wCumulative - wcumulative, ind->ChooseGrain,
+                ind->qBDecided, ind->qBSeen, ind->partner->qBSeen, ind->wCumulative - w_cumulative, ind->ChooseGrain,
                 ind->Choose_ltGrain, ind->MimicGrain, ind->ImimicGrain, ind->Imimic_ltGrain, ind->cost, ind->age);
 
-        wcumulative = ind->wCumulative;
+        w_cumulative = ind->wCumulative;
     }
 
     fclose(file);
