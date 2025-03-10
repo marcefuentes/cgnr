@@ -9,6 +9,7 @@
 
 #include "aggregate.h"
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
+#include "fitness.h"
 #include "globals.h"
 #include "individual.h"
 #include "io.h"
@@ -26,7 +27,6 @@ gsl_rng *rng;  // Random number generator
 // Functions
 
 int    caso(struct Aggregate *aggall_first, char *filename);
-double ces(double qA, double qB);  // globals.loges, globals.alpha
 double fitness(struct Individual *ind, struct Individual *ind_last);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
 void   update_scores(struct Individual *ind, struct Individual *ind_last);
@@ -268,7 +268,7 @@ double fitness(struct Individual *ind, struct Individual *ind_last) {
     for (; ind < ind_last; ind++) {
         double qA = 1.0 - ind->qBDecided;
         double qB = (ind->qBDecided * (1.0 - globals.given)) + (ind->partner->qBDecided * globals.given);
-        ind->w = fmax(0.0, ces(qA, qB) - ind->cost);
+        ind->w = fmax(0.0, ces(qA, qB, globals.alpha, globals.rho) - ind->cost);
         w_cumulative += ind->w;
         ind->wCumulative = w_cumulative;
         ind->age++;
@@ -277,19 +277,6 @@ double fitness(struct Individual *ind, struct Individual *ind_last) {
     }
 
     return w_cumulative;
-}
-
-double ces(double qA, double qB) {
-    double w;
-
-    if (globals.rho > -0.001 && globals.rho < 0.001) {
-        w = pow(qA, 1.0 - globals.alpha) * pow(qB, globals.alpha);  // Cobb-Douglas
-    } else {
-        w = pow(((1.0 - globals.alpha) * pow(qA, globals.rho)) + (globals.alpha * pow(qB, globals.rho)),
-                1.0 / globals.rho);
-    }
-
-    return w;
 }
 
 void update_scores(struct Individual *ind, struct Individual *ind_last) {
