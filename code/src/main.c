@@ -232,7 +232,7 @@ int caso(struct Aggregate *aggall_first, char *filename) {
             }
         }
 
-        stats_end(agg_first, agg_last, aggall_first);
+        stats_end_of_run(agg_first, agg_last, aggall_first);
         free(ind_first);
         free(agg_first);
     }

@@ -121,7 +121,7 @@ static int select_bin(double bin_size, double value) {
     return bin;
 }
 
-void stats_end(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall) {
+void stats_end_of_run(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall) {
     for (; agg < agg_last; agg++, aggall++) {
         aggall->alpha = agg->alpha;
         aggall->logES = agg->logES;
