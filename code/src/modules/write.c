@@ -15,7 +15,7 @@ const char *headersr[PAIRS] = {
 
 void file_write_error(char *filename);
 
-int write_headers_csv(char *filename) {
+int write_csv_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
         file_write_error(filename);
@@ -39,31 +39,7 @@ int write_headers_csv(char *filename) {
     return 0;
 }
 
-int write_headers_frq(char *filename) {
-    FILE *file = fopen(filename, "a+");
-    if (file == NULL) {
-        file_write_error(filename);
-        return -1;
-    }
-
-    fprintf(file, "alpha,logES,Given,Time");
-
-    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        fprintf(file, ",%smedian,%smedianSD", headersc[variable], headersc[variable]);
-        fprintf(file, ",%siqr,%siqrSD", headersc[variable], headersc[variable]);
-
-        for (int bin = 0; bin < BINS; bin++) {
-            fprintf(file, ",%s%i,%s%iSD", headersc[variable], bin, headersc[variable], bin);
-        }
-    }
-
-    fprintf(file, "\n");
-    fclose(file);
-
-    return 0;
-}
-
-int write_stats_csv(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
+int write_csv_stats(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
         file_write_error(filename);
@@ -90,7 +66,31 @@ int write_stats_csv(char *filename, struct Aggregate *aggall, struct Aggregate *
     return 0;
 }
 
-int write_stats_frq(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
+int write_frq_headers(char *filename) {
+    FILE *file = fopen(filename, "a+");
+    if (file == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
+
+    fprintf(file, "alpha,logES,Given,Time");
+
+    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        fprintf(file, ",%smedian,%smedianSD", headersc[variable], headersc[variable]);
+        fprintf(file, ",%siqr,%siqrSD", headersc[variable], headersc[variable]);
+
+        for (int bin = 0; bin < BINS; bin++) {
+            fprintf(file, ",%s%i,%s%iSD", headersc[variable], bin, headersc[variable], bin);
+        }
+    }
+
+    fprintf(file, "\n");
+    fclose(file);
+
+    return 0;
+}
+
+int write_frq_stats(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
         file_write_error(filename);

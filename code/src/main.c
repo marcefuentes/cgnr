@@ -61,12 +61,12 @@ int main(int argc, char *argv[]) {
     snprintf(frq, sizeof(frq), "%s.frq", filename);
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
-    if (write_headers_csv(csv) < 0) {
-        fprintf(stderr, "Failed write_headers_csv.\n");
+    if (write_csv_headers(csv) < 0) {
+        fprintf(stderr, "Failed write_csv_headers.\n");
         exit(EXIT_FAILURE);
     }
-    if (write_headers_frq(frq) < 0) {
-        fprintf(stderr, "Failed write_headers_frq.\n");
+    if (write_frq_headers(frq) < 0) {
+        fprintf(stderr, "Failed write_frq_headers.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -99,14 +99,14 @@ int main(int argc, char *argv[]) {
     }
 
     stats_runs(aggall_first, aggall_last, globals.runs);
-    if (write_stats_csv(csv, aggall_first, aggall_last) < 0) {
-        fprintf(stderr, "Failed write_stats_csv.\n");
+    if (write_csv_stats(csv, aggall_first, aggall_last) < 0) {
+        fprintf(stderr, "Failed write_csv_stats.\n");
         gsl_rng_free(rng);
         free(aggall_first);
         exit(EXIT_FAILURE);
     }
-    if (write_stats_frq(frq, aggall_first, aggall_last) < 0) {
-        fprintf(stderr, "Failed write_stats_frq.\n");
+    if (write_frq_stats(frq, aggall_first, aggall_last) < 0) {
+        fprintf(stderr, "Failed write_frq_stats.\n");
         gsl_rng_free(rng);
         free(aggall_first);
         exit(EXIT_FAILURE);
