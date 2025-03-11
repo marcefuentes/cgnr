@@ -1,11 +1,11 @@
-#ifndef AGGREGATE_H
-#define AGGREGATE_H
+#ifndef STATS_H
+#define STATS_H
 
 #include "individual.h"
 
 enum { BINS = 64, CONTINUOUS_V = 8, PAIRS = 15 };
 
-struct Aggregate {
+struct Stats {
     unsigned long time;
     double        alpha, logES, Given;
     double        mean[CONTINUOUS_V], mean2[CONTINUOUS_V];
@@ -16,11 +16,11 @@ struct Aggregate {
     double        corr[PAIRS], corr2[PAIRS];
 };
 
-// Functions for handling aggregate statistics
-void stats_end_of_simulation(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall);
-void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg,
+// Functions for handling statsregate statistics
+int  stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename);
+int  stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename);
+void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, struct Stats *statsall);
+void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size);
-int  stats_csv(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs, char *filename);
-int  stats_frq(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs, char *filename);
 
 #endif  // AGGREGATE_H

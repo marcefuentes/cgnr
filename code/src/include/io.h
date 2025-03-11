@@ -1,15 +1,11 @@
 #ifndef IO_H
 #define IO_H
 
-#include <stdio.h>
-
 #include "individual.h"
 
 enum { MAX_FILENAME_LEN = 22 };
 
 // File I/O functions
-int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);
-
 int write_time_elapsed(char *filename, float time_elapsed);
 int write_ics(char *filename, int sequence, float alpha, float loges, float given, unsigned long time,
               struct Individual *ind, struct Individual *ind_last);

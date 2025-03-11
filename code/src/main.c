@@ -7,13 +7,13 @@
 #include <sys/time.h>
 #include <time.h>
 
-#include "aggregate.h"
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "globals.h"
 #include "individual.h"
 #include "io.h"
 #include "math_tools.h"
 #include "recruit.h"
+#include "stats.h"
 
 /* Simulates reciprocity and partner choice.
  *
@@ -26,7 +26,7 @@ gsl_rng *rng;  // Random number generator
 
 // Functions
 
-int    simulation(struct Aggregate *aggall_first, char *filename);
+int    simulation(struct Stats *statsall_first, char *filename);
 double fitness(struct Individual *ind, struct Individual *ind_last);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
 void   update_scores(struct Individual *ind, struct Individual *ind_last);
@@ -65,47 +65,47 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
-    struct Aggregate *aggall_first = calloc(globals.periods + 1, sizeof(*aggall_first));
-    if (aggall_first == NULL) {
-        fprintf(stderr, "Failed calloc (aggregator).\n");
+    struct Stats *statsall_first = calloc(globals.periods + 1, sizeof(*statsall_first));
+    if (statsall_first == NULL) {
+        fprintf(stderr, "Failed calloc (statsregator).\n");
         gsl_rng_free(rng);
         exit(EXIT_FAILURE);
     }
 
-    struct Aggregate *aggall_last = aggall_first + globals.periods + 1;
+    struct Stats *statsall_last = statsall_first + globals.periods + 1;
 
     char ics[MAX_FILENAME_LEN];
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
     for (unsigned int run = 0; run < globals.runs; run++) {
-        if (simulation(aggall_first, ics) < 0) {
+        if (simulation(statsall_first, ics) < 0) {
             fprintf(stderr, "Failed simulation.\n");
             gsl_rng_free(rng);
-            free(aggall_first);
+            free(statsall_first);
             exit(EXIT_FAILURE);
         }
     }
 
     char csv[MAX_FILENAME_LEN];
     snprintf(csv, sizeof(csv), "%s.csv", filename);
-    if (stats_csv(aggall_first, aggall_last, globals.runs, csv) < 0) {
+    if (stats_csv(statsall_first, statsall_last, globals.runs, csv) < 0) {
         fprintf(stderr, "Failed stats_all_runs.\n");
         gsl_rng_free(rng);
-        free(aggall_first);
+        free(statsall_first);
         exit(EXIT_FAILURE);
     }
 
     char frq[MAX_FILENAME_LEN];
     snprintf(frq, sizeof(frq), "%s.frq", filename);
-    if (stats_frq(aggall_first, aggall_last, globals.runs, frq) < 0) {
+    if (stats_frq(statsall_first, statsall_last, globals.runs, frq) < 0) {
         fprintf(stderr, "Failed stats_all_runs.\n");
         gsl_rng_free(rng);
-        free(aggall_first);
+        free(statsall_first);
         exit(EXIT_FAILURE);
     }
 
     gsl_rng_free(rng);
-    free(aggall_first);
+    free(statsall_first);
 
     if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) < 0) {
         fprintf(stderr, "Failed write_time_elapsed.\n");
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-int simulation(struct Aggregate *aggall_first, char *filename) {
+int simulation(struct Stats *statsall_first, char *filename) {
     int sequence = 0;
 
     struct Individual *ind_first = calloc(globals.population_size, sizeof(*ind_first));
@@ -126,16 +126,16 @@ int simulation(struct Aggregate *aggall_first, char *filename) {
 
     struct Individual *ind_last = ind_first + globals.population_size;
 
-    struct Aggregate *agg_first = calloc(globals.periods + 1, sizeof(*agg_first));
-    if (agg_first == NULL) {
+    struct Stats *stats_first = calloc(globals.periods + 1, sizeof(*stats_first));
+    if (stats_first == NULL) {
         fprintf(stderr, "Failed calloc (periods).\n");
         free(ind_first);
-        free(agg_first);
+        free(stats_first);
         return -1;
     }
 
-    struct Aggregate *agg_last = agg_first + globals.periods + 1;
-    struct Aggregate *agg = agg_first;
+    struct Stats *stats_last = stats_first + globals.periods + 1;
+    struct Stats *stats = stats_first;
 
     start_population(ind_first, ind_last);
 
@@ -143,12 +143,12 @@ int simulation(struct Aggregate *aggall_first, char *filename) {
         double w_cumulative = fitness(ind_first, ind_last);
 
         if (time == 0 || (time + 1) % (globals.time / globals.periods) == 0) {
-            agg->alpha = globals.alpha;
-            agg->logES = globals.loges;
-            agg->Given = globals.given;
-            agg->time = time + 1;
-            stats_period(ind_first, ind_last, agg, globals.population_size);
-            agg++;
+            stats->alpha = globals.alpha;
+            stats->logES = globals.loges;
+            stats->Given = globals.given;
+            stats->time = time + 1;
+            stats_period(ind_first, ind_last, stats, globals.population_size);
+            stats++;
             if (globals.runs == 1) {
                 write_ics(filename, sequence, (float)globals.alpha, (float)globals.loges, (float)globals.given,
                           time + 1, ind_first, ind_last);
@@ -164,7 +164,7 @@ int simulation(struct Aggregate *aggall_first, char *filename) {
             if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
                 fprintf(stderr, "Failed shuffle_partners.\n");
                 free(ind_first);
-                free(agg_first);
+                free(stats_first);
                 return -1;
             }
         }
@@ -173,7 +173,7 @@ int simulation(struct Aggregate *aggall_first, char *filename) {
             if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
                 fprintf(stderr, "Failed choose_partner.\n");
                 free(ind_first);
-                free(agg_first);
+                free(stats_first);
                 return -1;
             }
         }
@@ -185,7 +185,7 @@ int simulation(struct Aggregate *aggall_first, char *filename) {
             if (recruit_first == NULL) {
                 fprintf(stderr, "Failed create_recruits.\n");
                 free(ind_first);
-                free(agg_first);
+                free(stats_first);
                 return -1;
             }
             struct Individual *ind = ind_first;
@@ -221,9 +221,9 @@ int simulation(struct Aggregate *aggall_first, char *filename) {
         }
     }
 
-    stats_end_of_simulation(agg_first, agg_last, aggall_first);
+    stats_end_of_simulation(stats_first, stats_last, statsall_first);
     free(ind_first);
-    free(agg_first);
+    free(stats_first);
 
     return 0;
 }
