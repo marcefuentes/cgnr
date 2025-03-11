@@ -1,11 +1,10 @@
-#include <limits.h>
 #include <math.h>
 #include <stdio.h>
 
 #include "aggregate.h"
 #include "individual.h"
+#include "math_tools.h"
 
-#define EPSILON 1e-6
 #define LOWER_QUARTILE 0.25
 #define MEDIAN 0.50
 #define UPPER_QUARTILE 0.75
@@ -39,89 +38,7 @@ enum {
     CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN = 14
 };
 
-static void   accumulate_sums(double value, double *sum, double *sum2);
-static void   mean_sd(double *sum, double *sum2, unsigned int n);
-double        pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n);
-static double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq);
-static int    select_bin(double bin_size, double value);
-
-static void accumulate_sums(double value, double *sum, double *sum2) {
-    *sum += value;
-    *sum2 += value * value;
-}
-
-static void mean_sd(double *sum, double *sum2, unsigned int n) {
-    if (n > 1) {
-        double numerator = *sum2 - (*sum * *sum / n);
-        double variance = numerator / (n - 1);
-
-        if (variance < 0.0) {
-            variance = 0.0;
-        }
-
-        *sum2 = sqrt(variance);
-    } else {
-        *sum2 = 0.0;
-    }
-
-    *sum /= n;
-}
-
-double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n) {
-    double numerator = (n * sum_xy) - (sum_x * sum_y);
-    double denominator = sqrt(((n * sum_x2) - (sum_x * sum_x)) * ((n * sum_y2) - (sum_y * sum_y)));
-    double pearson_r = 0.0;
-
-    if (denominator > 0.0) {
-        pearson_r = numerator / denominator;
-    }
-
-    return pearson_r;
-}
-
-double quartile(struct Aggregate *agg, int variable, double threshold, int *bin, double *previousfreq) {
-    double cumulativeFreq = *previousfreq;
-    double freq = 0.0;
-
-    while (cumulativeFreq < threshold) {
-        if (*bin >= INT_MAX) {  // Prevent overflow
-            fprintf(stderr, "Error: bin overflow in quartile.\n");
-            return 0.0;  // Or other error handling
-        }
-        freq = agg->frc[variable][*bin];
-        cumulativeFreq += freq;
-        (*bin)++;
-    }
-
-    if (cumulativeFreq > threshold) {
-        (*bin)--;
-        cumulativeFreq -= freq;  // Correct cumulativeFreq
-    }
-
-    *previousfreq = cumulativeFreq;  // Update previousfreq
-    double delta = agg->frc[variable][*bin];
-    if (fabs(delta - 0.0) < EPSILON) {
-        // Handle division by zero.
-        fprintf(stderr, "Error: Division by zero in quartile.\n");
-        return 0.0;
-    }
-
-    return ((double)*bin / BINS) + ((threshold - cumulativeFreq) / (delta * BINS));
-}
-
-static int select_bin(double bin_size, double value) {
-    double ceiling = bin_size;
-    int    bin = 0;
-
-    while (value > ceiling) {
-        ceiling += bin_size;
-        bin++;
-    }
-
-    return bin;
-}
-
-void stats_end_of_run(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall) {
+void stats_end_of_simulation(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall) {
     for (; agg < agg_last; agg++, aggall++) {
         aggall->alpha = agg->alpha;
         aggall->logES = agg->logES;
@@ -130,17 +47,23 @@ void stats_end_of_run(struct Aggregate *agg, struct Aggregate *agg_last, struct 
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             for (int bin = 0; bin < BINS; bin++) {
-                accumulate_sums(agg->frc[variable][bin], &aggall->frc[variable][bin], &aggall->frc2[variable][bin]);
+                aggall->frc[variable][bin] += agg->frc[variable][bin];
+                aggall->frc2[variable][bin] += agg->frc[variable][bin] * agg->frc[variable][bin];
             }
 
-            accumulate_sums(agg->median[variable], &aggall->median[variable], &aggall->median2[variable]);
-            accumulate_sums(agg->iqr[variable], &aggall->iqr[variable], &aggall->iqr2[variable]);
-            accumulate_sums(agg->mean[variable], &aggall->mean[variable], &aggall->mean2[variable]);
-            accumulate_sums(agg->sd[variable], &aggall->sd[variable], &aggall->sd2[variable]);
+            aggall->median[variable] += agg->median[variable];
+            aggall->iqr[variable] += agg->iqr[variable];
+            aggall->mean[variable] += agg->mean[variable];
+            aggall->sd[variable] += agg->sd[variable];
+            aggall->median2[variable] += agg->median[variable] * agg->median[variable];
+            aggall->iqr2[variable] += agg->iqr[variable] * agg->iqr[variable];
+            aggall->mean2[variable] += agg->mean[variable] * agg->mean[variable];
+            aggall->sd2[variable] += agg->sd[variable] * agg->sd[variable];
         }
 
         for (int pair = 0; pair < PAIRS; pair++) {
-            accumulate_sums(agg->corr[pair], &aggall->corr[pair], &aggall->corr2[pair]);
+            aggall->corr[pair] += agg->corr[pair];
+            aggall->corr2[pair] += agg->corr[pair] * agg->corr[pair];
         }
     }
 }
@@ -176,7 +99,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
 
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
             count[variable][select_bin(bin_size[variable], *properties[variable])]++;
-            accumulate_sums(*properties[variable], &agg->mean[variable], &agg->sd[variable]);
+            agg->mean[variable] += *properties[variable];
+            agg->sd[variable] += *properties[variable] * *properties[variable];
         }
 
         agg->corr[CORR_Q_B_SEEN_CHOOSE_GRAIN] += ind->qBSeen * ind->ChooseGrain;
@@ -210,32 +134,13 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct Ag
         int    bin = 0;
         double previousfreq = 0.0;
 
-        double lower_quartile = quartile(agg, variable, LOWER_QUARTILE, &bin, &previousfreq);
-        double median = quartile(agg, variable, MEDIAN, &bin, &previousfreq);
-        double upper_quartile = quartile(agg, variable, UPPER_QUARTILE, &bin, &previousfreq);
-
+        double lower_quartile = quartile(agg->frc[variable], BINS, LOWER_QUARTILE, &bin, &previousfreq);
+        double median = quartile(agg->frc[variable], BINS, MEDIAN, &bin, &previousfreq);
+        double upper_quartile = quartile(agg->frc[variable], BINS, UPPER_QUARTILE, &bin, &previousfreq);
         agg->median[variable] = median;
         agg->iqr[variable] = upper_quartile - lower_quartile;
 
-        mean_sd(&agg->mean[variable], &agg->sd[variable], population_size);
-    }
-}
-
-void stats_runs(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs) {
-    for (; aggall < aggall_last; aggall++) {
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            for (int bin = 0; bin < BINS; bin++) {
-                mean_sd(&aggall->frc[variable][bin], &aggall->frc2[variable][bin], runs);
-            }
-
-            mean_sd(&aggall->median[variable], &aggall->median2[variable], runs);
-            mean_sd(&aggall->iqr[variable], &aggall->iqr2[variable], runs);
-            mean_sd(&aggall->mean[variable], &aggall->mean2[variable], runs);
-            mean_sd(&aggall->sd[variable], &aggall->sd2[variable], runs);
-        }
-
-        for (int pair = 0; pair < PAIRS; pair++) {
-            mean_sd(&aggall->corr[pair], &aggall->corr2[pair], runs);
-        }
+        agg->sd[variable] = stdev(agg->mean[variable], agg->sd[variable], population_size);
+        agg->mean[variable] = agg->mean[variable] / population_size;
     }
 }

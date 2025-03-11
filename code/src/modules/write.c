@@ -4,6 +4,7 @@
 
 #include "aggregate.h"
 #include "individual.h"
+#include "math_tools.h"
 
 const char *headersc[CONTINUOUS_V] = {"w",          "qBDefault",   "qBSeen",        "ChooseGrain", "Choose_ltGrain",
                                       "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
@@ -14,6 +15,78 @@ const char *headersr[PAIRS] = {
     "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt", "r_Mimic_Imimic",  "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"};
 
 void file_write_error(char *filename);
+int  write_csv_headers(char *filename);
+int  write_frq_headers(char *filename);
+
+int stats_csv(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs, char *filename) {
+    if (write_csv_headers(filename) < 0) {
+        fprintf(stderr, "Failed write_csv_headers.\n");
+        return -1;
+    }
+
+    FILE *file = fopen(filename, "a+");
+    if (file == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
+
+    for (; aggall < aggall_last; aggall++) {
+        fprintf(file, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
+
+        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            aggall->mean2[variable] = stdev(aggall->mean[variable], aggall->mean2[variable], runs);
+            aggall->mean[variable] = aggall->mean[variable] / runs;
+            fprintf(file, ",%f,%f", aggall->mean[variable], aggall->mean2[variable]);
+            aggall->sd2[variable] = stdev(aggall->sd[variable], aggall->sd2[variable], runs);
+            aggall->sd[variable] = aggall->sd[variable] / runs;
+            fprintf(file, ",%f,%f", aggall->sd[variable], aggall->sd2[variable]);
+        }
+
+        for (int pair = 0; pair < PAIRS; pair++) {
+            aggall->corr2[pair] = stdev(aggall->corr[pair], aggall->corr2[pair], runs);
+            aggall->corr[pair] = aggall->corr[pair] / runs;
+            fprintf(file, ",%f,%f", aggall->corr[pair], aggall->corr2[pair]);
+        }
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
+    return 0;
+}
+
+int stats_frq(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs, char *filename) {
+    if (write_frq_headers(filename) < 0) {
+        fprintf(stderr, "Failed write_frq_headers.\n");
+        return -1;
+    }
+
+    FILE *file = fopen(filename, "a+");
+    if (file == NULL) {
+        file_write_error(filename);
+        return -1;
+    }
+
+    for (; aggall < aggall_last; aggall++) {
+        fprintf(file, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
+        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            aggall->median2[variable] = stdev(aggall->median[variable], aggall->median2[variable], runs);
+            aggall->median[variable] = aggall->median[variable] / runs;
+            fprintf(file, ",%f,%f", aggall->median[variable], aggall->median2[variable]);
+            aggall->iqr2[variable] = stdev(aggall->iqr[variable], aggall->iqr2[variable], runs);
+            aggall->iqr[variable] = aggall->iqr[variable] / runs;
+            fprintf(file, ",%f,%f", aggall->iqr[variable], aggall->iqr2[variable]);
+            for (int bin = 0; bin < BINS; bin++) {
+                aggall->frc2[variable][bin] = stdev(aggall->frc[variable][bin], aggall->frc2[variable][bin], runs);
+                aggall->frc[variable][bin] = aggall->frc[variable][bin] / runs;
+                fprintf(file, ",%f,%f", aggall->frc[variable][bin], aggall->frc2[variable][bin]);
+            }
+        }
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
+    return 0;
+}
 
 int write_csv_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
@@ -39,33 +112,6 @@ int write_csv_headers(char *filename) {
     return 0;
 }
 
-int write_csv_stats(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
-    FILE *file = fopen(filename, "a+");
-    if (file == NULL) {
-        file_write_error(filename);
-        return -1;
-    }
-
-    for (; aggall < aggall_last; aggall++) {
-        fprintf(file, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
-
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            fprintf(file, ",%f,%f", aggall->mean[variable], aggall->mean2[variable]);
-            fprintf(file, ",%f,%f", aggall->sd[variable], aggall->sd2[variable]);
-        }
-
-        for (int pair = 0; pair < PAIRS; pair++) {
-            fprintf(file, ",%f,%f", aggall->corr[pair], aggall->corr2[pair]);
-        }
-
-        fprintf(file, "\n");
-    }
-
-    fclose(file);
-
-    return 0;
-}
-
 int write_frq_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
@@ -85,33 +131,6 @@ int write_frq_headers(char *filename) {
     }
 
     fprintf(file, "\n");
-    fclose(file);
-
-    return 0;
-}
-
-int write_frq_stats(char *filename, struct Aggregate *aggall, struct Aggregate *aggall_last) {
-    FILE *file = fopen(filename, "a+");
-    if (file == NULL) {
-        file_write_error(filename);
-        return -1;
-    }
-
-    for (; aggall < aggall_last; aggall++) {
-        fprintf(file, "%f,%f,%f,%lu", aggall->alpha, aggall->logES, aggall->Given, aggall->time);
-
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-            fprintf(file, ",%f,%f", aggall->median[variable], aggall->median2[variable]);
-            fprintf(file, ",%f,%f", aggall->iqr[variable], aggall->iqr2[variable]);
-
-            for (int bin = 0; bin < BINS; bin++) {
-                fprintf(file, ",%f,%f", aggall->frc[variable][bin], aggall->frc2[variable][bin]);
-            }
-        }
-
-        fprintf(file, "\n");
-    }
-
     fclose(file);
 
     return 0;

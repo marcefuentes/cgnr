@@ -9,10 +9,10 @@
 
 #include "aggregate.h"
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
-#include "fitness.h"
 #include "globals.h"
 #include "individual.h"
 #include "io.h"
+#include "math_tools.h"
 #include "recruit.h"
 
 /* Simulates reciprocity and partner choice.
@@ -26,7 +26,7 @@ gsl_rng *rng;  // Random number generator
 
 // Functions
 
-int    caso(struct Aggregate *aggall_first, char *filename);
+int    simulation(struct Aggregate *aggall_first, char *filename);
 double fitness(struct Individual *ind, struct Individual *ind_last);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
 void   update_scores(struct Individual *ind, struct Individual *ind_last);
@@ -53,23 +53,6 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    char csv[MAX_FILENAME_LEN];
-    char frq[MAX_FILENAME_LEN];
-    char ics[MAX_FILENAME_LEN];
-
-    snprintf(csv, sizeof(csv), "%s.csv", filename);
-    snprintf(frq, sizeof(frq), "%s.frq", filename);
-    snprintf(ics, sizeof(ics), "%s.ics", filename);
-
-    if (write_csv_headers(csv) < 0) {
-        fprintf(stderr, "Failed write_csv_headers.\n");
-        exit(EXIT_FAILURE);
-    }
-    if (write_frq_headers(frq) < 0) {
-        fprintf(stderr, "Failed write_frq_headers.\n");
-        exit(EXIT_FAILURE);
-    }
-
     rng = gsl_rng_alloc(gsl_rng_taus);
     if (rng == NULL) {
         fprintf(stderr, "Failed gsl_rng_alloc.\n");
@@ -84,29 +67,38 @@ int main(int argc, char *argv[]) {
 
     struct Aggregate *aggall_first = calloc(globals.periods + 1, sizeof(*aggall_first));
     if (aggall_first == NULL) {
-        fprintf(stderr, "Failed calloc (periods).\n");
+        fprintf(stderr, "Failed calloc (aggregator).\n");
         gsl_rng_free(rng);
         exit(EXIT_FAILURE);
     }
 
     struct Aggregate *aggall_last = aggall_first + globals.periods + 1;
 
-    if (caso(aggall_first, ics) < 0) {
-        fprintf(stderr, "Failed caso.\n");
+    char ics[MAX_FILENAME_LEN];
+    snprintf(ics, sizeof(ics), "%s.ics", filename);
+
+    for (unsigned int run = 0; run < globals.runs; run++) {
+        if (simulation(aggall_first, ics) < 0) {
+            fprintf(stderr, "Failed simulation.\n");
+            gsl_rng_free(rng);
+            free(aggall_first);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    char csv[MAX_FILENAME_LEN];
+    snprintf(csv, sizeof(csv), "%s.csv", filename);
+    if (stats_csv(aggall_first, aggall_last, globals.runs, csv) < 0) {
+        fprintf(stderr, "Failed stats_all_runs.\n");
         gsl_rng_free(rng);
         free(aggall_first);
         exit(EXIT_FAILURE);
     }
 
-    stats_runs(aggall_first, aggall_last, globals.runs);
-    if (write_csv_stats(csv, aggall_first, aggall_last) < 0) {
-        fprintf(stderr, "Failed write_csv_stats.\n");
-        gsl_rng_free(rng);
-        free(aggall_first);
-        exit(EXIT_FAILURE);
-    }
-    if (write_frq_stats(frq, aggall_first, aggall_last) < 0) {
-        fprintf(stderr, "Failed write_frq_stats.\n");
+    char frq[MAX_FILENAME_LEN];
+    snprintf(frq, sizeof(frq), "%s.frq", filename);
+    if (stats_frq(aggall_first, aggall_last, globals.runs, frq) < 0) {
+        fprintf(stderr, "Failed stats_all_runs.\n");
         gsl_rng_free(rng);
         free(aggall_first);
         exit(EXIT_FAILURE);
@@ -123,119 +115,115 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-int caso(struct Aggregate *aggall_first, char *filename) {
+int simulation(struct Aggregate *aggall_first, char *filename) {
     int sequence = 0;
 
-    for (unsigned int run = 0; run < globals.runs; run++) {
-        struct Individual *ind_first = calloc(globals.population_size, sizeof(*ind_first));
-        if (ind_first == NULL) {
-            fprintf(stderr, "Failed calloc (individuals).\n");
-            return -1;
-        }
+    struct Individual *ind_first = calloc(globals.population_size, sizeof(*ind_first));
+    if (ind_first == NULL) {
+        fprintf(stderr, "Failed calloc (individuals).\n");
+        return -1;
+    }
 
-        struct Individual *ind_last = ind_first + globals.population_size;
+    struct Individual *ind_last = ind_first + globals.population_size;
 
-        struct Aggregate *agg_first = calloc(globals.periods + 1, sizeof(*agg_first));
-        if (agg_first == NULL) {
-            fprintf(stderr, "Failed calloc (periods of each run).\n");
-            free(ind_first);
-            free(agg_first);
-            return -1;
-        }
-
-        struct Aggregate *agg_last = agg_first + globals.periods + 1;
-        struct Aggregate *agg = agg_first;
-
-        start_population(ind_first, ind_last);
-
-        for (unsigned long time = 0; time < globals.time; time++) {
-            double w_cumulative = fitness(ind_first, ind_last);
-
-            if (time == 0 || (time + 1) % (globals.time / globals.periods) == 0) {
-                agg->alpha = globals.alpha;
-                agg->logES = globals.loges;
-                agg->Given = globals.given;
-                agg->time = time + 1;
-                stats_period(ind_first, ind_last, agg, globals.population_size);
-                agg++;
-                if (globals.runs == 1) {
-                    write_ics(filename, sequence, (float)globals.alpha, (float)globals.loges, (float)globals.given,
-                              time + 1, ind_first, ind_last);
-                    sequence++;
-                }
-            }
-
-            if (globals.language == 1) {
-                update_scores(ind_first, ind_last);
-            }
-
-            if (globals.shuffle == 1) {
-                if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
-                    fprintf(stderr, "Failed shuffle_partners.\n");
-                    free(ind_first);
-                    free(agg_first);
-                    return -1;
-                }
-            }
-
-            if (globals.partner_choice == 1) {
-                if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
-                    fprintf(stderr, "Failed choose_partner.\n");
-                    free(ind_first);
-                    free(agg_first);
-                    return -1;
-                }
-            }
-
-            unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
-
-            if (deaths > 0) {
-                struct Recruit *recruit_first = create_recruits(deaths, w_cumulative);
-                if (recruit_first == NULL) {
-                    fprintf(stderr, "Failed create_recruits.\n");
-                    free(ind_first);
-                    free(agg_first);
-                    return -1;
-                }
-                struct Individual *ind = ind_first;
-
-                for (struct Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
-                    while (recruit->randomwc > ind->wCumulative) {
-                        ind++;
-                    }
-
-                    recruit->qBDefault = dtnorm(ind->qBDefault, globals.qb_mutation_size, 0.0, 1.0, rng);
-                    recruit->ChooseGrain = dtnorm(ind->ChooseGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                    recruit->MimicGrain = dtnorm(ind->MimicGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                    recruit->ImimicGrain = dtnorm(ind->ImimicGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                    if (globals.language == 1) {
-                        recruit->Choose_ltGrain =
-                            dtnorm(ind->Choose_ltGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                        recruit->Imimic_ltGrain =
-                            dtnorm(ind->Imimic_ltGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                    } else {
-                        recruit->Choose_ltGrain = ind->Choose_ltGrain;
-                        recruit->Imimic_ltGrain = ind->Imimic_ltGrain;
-                    }
-
-                    recruit->cost = -globals.cost * (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) +
-                                                     log(recruit->MimicGrain) + log(recruit->ImimicGrain) +
-                                                     log(recruit->Imimic_ltGrain));
-                }
-
-                kill(recruit_first, ind_first, globals.population_size);
-                free_recruit_list(&recruit_first);
-            }
-
-            if (globals.reciprocity == 1) {
-                decide_qB(ind_first, ind_last, globals.indirect_r);
-            }
-        }
-
-        stats_end_of_run(agg_first, agg_last, aggall_first);
+    struct Aggregate *agg_first = calloc(globals.periods + 1, sizeof(*agg_first));
+    if (agg_first == NULL) {
+        fprintf(stderr, "Failed calloc (periods).\n");
         free(ind_first);
         free(agg_first);
+        return -1;
     }
+
+    struct Aggregate *agg_last = agg_first + globals.periods + 1;
+    struct Aggregate *agg = agg_first;
+
+    start_population(ind_first, ind_last);
+
+    for (unsigned long time = 0; time < globals.time; time++) {
+        double w_cumulative = fitness(ind_first, ind_last);
+
+        if (time == 0 || (time + 1) % (globals.time / globals.periods) == 0) {
+            agg->alpha = globals.alpha;
+            agg->logES = globals.loges;
+            agg->Given = globals.given;
+            agg->time = time + 1;
+            stats_period(ind_first, ind_last, agg, globals.population_size);
+            agg++;
+            if (globals.runs == 1) {
+                write_ics(filename, sequence, (float)globals.alpha, (float)globals.loges, (float)globals.given,
+                          time + 1, ind_first, ind_last);
+                sequence++;
+            }
+        }
+
+        if (globals.language == 1) {
+            update_scores(ind_first, ind_last);
+        }
+
+        if (globals.shuffle == 1) {
+            if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
+                fprintf(stderr, "Failed shuffle_partners.\n");
+                free(ind_first);
+                free(agg_first);
+                return -1;
+            }
+        }
+
+        if (globals.partner_choice == 1) {
+            if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
+                fprintf(stderr, "Failed choose_partner.\n");
+                free(ind_first);
+                free(agg_first);
+                return -1;
+            }
+        }
+
+        unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
+
+        if (deaths > 0) {
+            struct Recruit *recruit_first = create_recruits(deaths, w_cumulative);
+            if (recruit_first == NULL) {
+                fprintf(stderr, "Failed create_recruits.\n");
+                free(ind_first);
+                free(agg_first);
+                return -1;
+            }
+            struct Individual *ind = ind_first;
+
+            for (struct Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
+                while (recruit->randomwc > ind->wCumulative) {
+                    ind++;
+                }
+
+                recruit->qBDefault = dtnorm(ind->qBDefault, globals.qb_mutation_size, 0.0, 1.0, rng);
+                recruit->ChooseGrain = dtnorm(ind->ChooseGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
+                recruit->MimicGrain = dtnorm(ind->MimicGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
+                recruit->ImimicGrain = dtnorm(ind->ImimicGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
+                if (globals.language == 1) {
+                    recruit->Choose_ltGrain = dtnorm(ind->Choose_ltGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
+                    recruit->Imimic_ltGrain = dtnorm(ind->Imimic_ltGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
+                } else {
+                    recruit->Choose_ltGrain = ind->Choose_ltGrain;
+                    recruit->Imimic_ltGrain = ind->Imimic_ltGrain;
+                }
+
+                recruit->cost = -globals.cost *
+                                (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) + log(recruit->MimicGrain) +
+                                 log(recruit->ImimicGrain) + log(recruit->Imimic_ltGrain));
+            }
+
+            kill(recruit_first, ind_first, globals.population_size);
+            free_recruit_list(&recruit_first);
+        }
+
+        if (globals.reciprocity == 1) {
+            decide_qB(ind_first, ind_last, globals.indirect_r);
+        }
+    }
+
+    stats_end_of_simulation(agg_first, agg_last, aggall_first);
+    free(ind_first);
+    free(agg_first);
 
     return 0;
 }

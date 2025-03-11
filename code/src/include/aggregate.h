@@ -17,9 +17,10 @@ struct Aggregate {
 };
 
 // Functions for handling aggregate statistics
-void stats_end_of_run(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall);
+void stats_end_of_simulation(struct Aggregate *agg, struct Aggregate *agg_last, struct Aggregate *aggall);
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Aggregate *agg,
                   unsigned int population_size);
-void stats_runs(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs);
+int  stats_csv(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs, char *filename);
+int  stats_frq(struct Aggregate *aggall, struct Aggregate *aggall_last, unsigned int runs, char *filename);
 
 #endif  // AGGREGATE_H
