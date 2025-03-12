@@ -7,7 +7,6 @@
 #include <sys/time.h>
 #include <time.h>
 
-#include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "globals.h"
 #include "individual.h"
 #include "io.h"
@@ -188,30 +187,8 @@ int simulation(struct Stats *statsall_first, char *filename) {
                 free(stats_first);
                 return -1;
             }
-            struct Individual *ind = ind_first;
-
-            for (struct Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
-                while (recruit->randomwc > ind->wCumulative) {
-                    ind++;
-                }
-
-                recruit->qBDefault = dtnorm(ind->qBDefault, globals.qb_mutation_size, 0.0, 1.0, rng);
-                recruit->ChooseGrain = dtnorm(ind->ChooseGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                recruit->MimicGrain = dtnorm(ind->MimicGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                recruit->ImimicGrain = dtnorm(ind->ImimicGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                if (globals.language == 1) {
-                    recruit->Choose_ltGrain = dtnorm(ind->Choose_ltGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                    recruit->Imimic_ltGrain = dtnorm(ind->Imimic_ltGrain, globals.grain_mutation_size, 0.0, 1.0, rng);
-                } else {
-                    recruit->Choose_ltGrain = ind->Choose_ltGrain;
-                    recruit->Imimic_ltGrain = ind->Imimic_ltGrain;
-                }
-
-                recruit->cost = -globals.cost *
-                                (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) + log(recruit->MimicGrain) +
-                                 log(recruit->ImimicGrain) + log(recruit->Imimic_ltGrain));
-            }
-
+            mutate(ind_first, recruit_first, globals.qb_mutation_size, globals.grain_mutation_size, globals.cost,
+                   globals.language);
             kill(recruit_first, ind_first, globals.population_size);
             free_recruit_list(&recruit_first);
         }
