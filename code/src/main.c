@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
     char csv[MAX_FILENAME_LEN];
     snprintf(csv, sizeof(csv), "%s.csv", filename);
     if (stats_csv(statsall_first, statsall_last, globals.runs, csv) < 0) {
-        fprintf(stderr, "Failed stats_all_runs.\n");
+        fprintf(stderr, "Failed stats_csv.\n");
         gsl_rng_free(rng);
         free(statsall_first);
         exit(EXIT_FAILURE);
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
     char frq[MAX_FILENAME_LEN];
     snprintf(frq, sizeof(frq), "%s.frq", filename);
     if (stats_frq(statsall_first, statsall_last, globals.runs, frq) < 0) {
-        fprintf(stderr, "Failed stats_all_runs.\n");
+        fprintf(stderr, "Failed stats_frq.\n");
         gsl_rng_free(rng);
         free(statsall_first);
         exit(EXIT_FAILURE);
