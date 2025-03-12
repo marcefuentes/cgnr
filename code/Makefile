@@ -24,19 +24,23 @@ OBJDIR_DEBUG = $(OBJDIR)/debug
 OBJDIR_RELEASE = $(OBJDIR)/release
 OBJDIR_TEST = $(OBJDIR)/test
 
-OBJECTS_DEBUG = $(patsubst $(MODULEDIR)/%.c, $(OBJDIR_DEBUG)/%.o, $(SOURCES))
-OBJECTS_RELEASE = $(patsubst $(MODULEDIR)/%.c, $(OBJDIR_RELEASE)/%.o, $(SOURCES))
-OBJECTS_TEST = $(patsubst $(MODULEDIR)/%.c, $(OBJDIR_TEST)/%.o, $(SOURCES))
+# Object files using base filenames (requires unique .c filenames)
+OBJECTS_DEBUG = $(addprefix $(OBJDIR_DEBUG)/, $(notdir $(SOURCES:.c=.o)))
+OBJECTS_RELEASE = $(addprefix $(OBJDIR_RELEASE)/, $(notdir $(SOURCES:.c=.o)))
+OBJECTS_TEST = $(addprefix $(OBJDIR_TEST)/, $(notdir $(SOURCES:.c=.o)))
 
 DEBUG_TARGET = $(BINDIR)/$(TARGET_NAME)_debug
 RELEASE_TARGET = $(BINDIR)/$(TARGET_NAME)
 TEST_TARGET = $(BINDIR)/$(TARGET_NAME)_test
 
+# Tell make where to look for source files
+vpath %.c $(MODULEDIR) $(SRCDIR) $(DTNORMDIR)
+
 .PHONY: all debug release test clean
 
 all: release
 
-# Build rules
+# Build targets
 debug: $(DEBUG_TARGET)
 	@echo "Running gdb..."
 	@cp $(TESTDIR)/test.glo $(TESTDIR)/000.glo
@@ -58,53 +62,29 @@ test: $(TEST_TARGET)
 		echo -e "\033[1;31mDifferences found\033[0m" ; \
 	 )
 
-# Link rules
+# Linking rules
 $(DEBUG_TARGET): $(OBJECTS_DEBUG)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) $^ $(LIBS) -o $@
+	$(CC) $(CFLAGS_DEBUG) $^ $(LIBS) -o $@
 
 $(RELEASE_TARGET): $(OBJECTS_RELEASE)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) $^ $(LIBS) -o $@
+	$(CC) $(CFLAGS_RELEASE) $^ $(LIBS) -o $@
 
 $(TEST_TARGET): $(OBJECTS_TEST)
 	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS_TEST) $(INCLUDES) $^ $(LIBS) -o $@
+	$(CC) $(CFLAGS_TEST) $^ $(LIBS) -o $@
 
-# Compilation rules
-$(OBJDIR_DEBUG)/%.o: $(MODULEDIR)/%.c  # Compile modules for debug
+# Static pattern rules for compilation
+$(OBJECTS_DEBUG): $(OBJDIR_DEBUG)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_RELEASE)/%.o: $(MODULEDIR)/%.c # Compile modules for release
+$(OBJECTS_RELEASE): $(OBJDIR_RELEASE)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
 
-$(OBJDIR_TEST)/%.o: $(MODULEDIR)/%.c  # Compile modules for test
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR_DEBUG)/main.o: $(SRCDIR)/main.c  # Compile main.c for debug
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR_RELEASE)/main.o: $(SRCDIR)/main.c # Compile main.c for release
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR_TEST)/main.o: $(SRCDIR)/main.c  # Compile main.c for test
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR_DEBUG)/%.o: $(DTNORMDIR)/%.c  # Compile dtnorm for debug
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR_RELEASE)/%.o: $(DTNORMDIR)/%.c # Compile dtnorm for release
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS_RELEASE) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR_TEST)/%.o: $(DTNORMDIR)/%.c  # Compile dtnorm for test
+$(OBJECTS_TEST): $(OBJDIR_TEST)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS_TEST) $(INCLUDES) -c $< -o $@
 
