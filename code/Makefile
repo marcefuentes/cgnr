@@ -44,24 +44,18 @@ debug: $(DEBUG_TARGET)
 
 release: $(RELEASE_TARGET)
 	@echo "Built release target"
-
 test: $(TEST_TARGET)
 	@echo "Running test..."
 	@rm -f $(TESTDIR)/0000*
 	@cp $(TESTDIR)/test.glo $(TESTDIR)/0000.glo
 	./$(TEST_TARGET) $(TESTDIR)/0000
-	@if diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null; then \
-		echo -e "Output remains the same for csv. \033[1;32mGood refactoring!\033[0m"; \
-	else \
-		echo "Differences found in CSV files:"; \
-		diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv || true; \
-	fi
-	@if diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq > /dev/null; then \
-		echo -e "Output remains the same for frq. \033[1;32mGood refactoring!\033[0m"; \
-	else \
-		echo "Differences found in FRQ files:"; \
-		diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq || true; \
-	fi
+
+	@diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null 2>&1 && \
+	 diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq > /dev/null 2>&1 && \
+	 echo -e "Output is the same. \033[1;32mGood refactoring!\033[0m" || \
+	 ( \
+		echo -e "\033[1;31mDifferences found\033[0m" ; \
+	 )
 
 # Link rules
 $(DEBUG_TARGET): $(OBJECTS_DEBUG)
