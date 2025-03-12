@@ -51,17 +51,17 @@ test: $(TEST_TARGET)
 	@cp $(TESTDIR)/test.glo $(TESTDIR)/0000.glo
 	./$(TEST_TARGET) $(TESTDIR)/0000
 	@if diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null; then \
-                echo -e "Output remains the same for csv. \033[1;32mGood refactoring!\033[0m"; \
-        else \
-                echo "Differences found in CSV files:"; \
-                diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv || true; \
-        fi
+		echo -e "Output remains the same for csv. \033[1;32mGood refactoring!\033[0m"; \
+	else \
+		echo "Differences found in CSV files:"; \
+		diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv || true; \
+	fi
 	@if diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq > /dev/null; then \
-                echo -e "Output remains the same for frq. \033[1;32mGood refactoring!\033[0m"; \
-        else \
-                echo "Differences found in FRQ files:"; \
-                diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq || true; \
-        fi
+		echo -e "Output remains the same for frq. \033[1;32mGood refactoring!\033[0m"; \
+	else \
+		echo "Differences found in FRQ files:"; \
+		diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq || true; \
+	fi
 
 # Link rules
 $(DEBUG_TARGET): $(OBJECTS_DEBUG)
