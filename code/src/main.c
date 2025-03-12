@@ -25,6 +25,7 @@ gsl_rng *rng;  // Random number generator
 
 // Functions
 
+int    error_simulation(const char *msg, struct Individual *ind_first, struct Stats *stats_first);
 double fitness(struct Individual *ind, struct Individual *ind_last);
 int    simulation(struct Stats *statsall_first, char *filename);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
@@ -160,19 +161,13 @@ int simulation(struct Stats *statsall_first, char *filename) {
 
         if (globals.shuffle == 1) {
             if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
-                fprintf(stderr, "Failed shuffle_partners.\n");
-                free(ind_first);
-                free(stats_first);
-                return -1;
+                return error_simulation("Failed shuffle_partners.", ind_first, stats_first);
             }
         }
 
         if (globals.partner_choice == 1) {
             if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
-                fprintf(stderr, "Failed choose_partner.\n");
-                free(ind_first);
-                free(stats_first);
-                return -1;
+                return error_simulation("Failed choose_partner.", ind_first, stats_first);
             }
         }
 
@@ -181,10 +176,7 @@ int simulation(struct Stats *statsall_first, char *filename) {
         if (deaths > 0) {
             struct Recruit *recruit_first = create_recruits(deaths, w_cumulative);
             if (recruit_first == NULL) {
-                fprintf(stderr, "Failed create_recruits.\n");
-                free(ind_first);
-                free(stats_first);
-                return -1;
+                return error_simulation("Failed create_recruits.", ind_first, stats_first);
             }
             mutate(ind_first, recruit_first, globals.qb_mutation_size, globals.grain_mutation_size, globals.cost,
                    globals.language);
@@ -241,4 +233,11 @@ double fitness(struct Individual *ind, struct Individual *ind_last) {
     }
 
     return w_cumulative;
+}
+
+int error_simulation(const char *msg, struct Individual *ind_first, struct Stats *stats_first) {
+    fprintf(stderr, "%s\n", msg);
+    free(ind_first);
+    free(stats_first);
+    return -1;
 }
