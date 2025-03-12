@@ -1,4 +1,3 @@
-#include <limits.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -28,15 +27,11 @@ double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, doubl
     return pearson_r;
 }
 
-double quartile(double *frequencies, int num_bins, double percentile, int *bin, double *previous_freq) {
+double quartile(const double *frequencies, int num_bins, double percentile, int *bin, double *previous_freq) {
     double cumulative_freq = *previous_freq;
     double freq = 0.0;
 
     while (cumulative_freq < percentile) {
-        if (*bin >= INT_MAX) {  // Prevent overflow
-            fprintf(stderr, "Error: bin overflow in quartile.\n");
-            return 0.0;  // Or other error handling
-        }
         freq = frequencies[*bin];
         cumulative_freq += freq;
         (*bin)++;
