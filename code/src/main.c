@@ -25,8 +25,8 @@ gsl_rng *rng;  // Random number generator
 
 // Functions
 
-int    simulation(struct Stats *statsall_first, char *filename);
 double fitness(struct Individual *ind, struct Individual *ind_last);
+int    simulation(struct Stats *statsall_first, char *filename);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
     struct Stats *statsall_first = calloc(globals.periods + 1, sizeof(*statsall_first));
     if (statsall_first == NULL) {
-        fprintf(stderr, "Failed calloc (statsregator).\n");
+        fprintf(stderr, "Failed calloc (stats).\n");
         gsl_rng_free(rng);
         exit(EXIT_FAILURE);
     }
