@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if (strlen(argv[1]) > 9) {
-        fprintf(stderr, "The argument must have fewer than 9 characters.\n");
+    if (strlen(argv[1]) > MAX_ARG_LENGTH) {
+        fprintf(stderr, "The argument must have fewer than %d characters.\n", MAX_ARG_LENGTH);
         exit(EXIT_FAILURE);
     }
 

@@ -3,7 +3,7 @@
 
 #include "individual.h"
 
-enum { MAX_FILENAME_LEN = 22 };
+enum { MAX_ARG_LENGTH = 9, MAX_FILENAME_LEN = 22 };
 
 // File I/O functions
 int write_time_elapsed(char *filename, float time_elapsed);
