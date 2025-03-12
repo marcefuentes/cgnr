@@ -44,6 +44,7 @@ debug: $(DEBUG_TARGET)
 
 release: $(RELEASE_TARGET)
 	@echo "Built release target"
+
 test: $(TEST_TARGET)
 	@echo "Running test..."
 	@rm -f $(TESTDIR)/0000*
