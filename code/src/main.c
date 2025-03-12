@@ -28,7 +28,6 @@ gsl_rng *rng;  // Random number generator
 int    simulation(struct Stats *statsall_first, char *filename);
 double fitness(struct Individual *ind, struct Individual *ind_last);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
-void   update_scores(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -242,11 +241,4 @@ double fitness(struct Individual *ind, struct Individual *ind_last) {
     }
 
     return w_cumulative;
-}
-
-void update_scores(struct Individual *ind, struct Individual *ind_last) {
-    for (; ind < ind_last; ind++) {
-        ind->qBSeenSum += ind->qBSeen;
-        ind->qBSeen_lt = ind->qBSeenSum / ind->age;
-    }
 }
