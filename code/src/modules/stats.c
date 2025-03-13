@@ -37,18 +37,22 @@ enum {
 };
 
 void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, struct Stats *statsall) {
+    // Globals and time
     for (; stats < stats_last; stats++, statsall++) {
         statsall->alpha = stats->alpha;
         statsall->logES = stats->logES;
         statsall->Given = stats->Given;
         statsall->time = stats->time;
 
+        // Continous variables
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            // Bins
             for (int bin = 0; bin < BINS; bin++) {
                 statsall->frc[variable][bin] += stats->frc[variable][bin];
                 statsall->frc2[variable][bin] += stats->frc[variable][bin] * stats->frc[variable][bin];
             }
 
+            // Quartiles
             statsall->median[variable] += stats->median[variable];
             statsall->iqr[variable] += stats->iqr[variable];
             statsall->mean[variable] += stats->mean[variable];
@@ -59,6 +63,7 @@ void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, stru
             statsall->sd2[variable] += stats->sd[variable] * stats->sd[variable];
         }
 
+        // Correlations
         for (int pair = 0; pair < PAIRS; pair++) {
             statsall->corr[pair] += stats->corr[pair];
             statsall->corr2[pair] += stats->corr[pair] * stats->corr[pair];
@@ -72,6 +77,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     double bin_size[CONTINUOUS_V];
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
         bin_size[variable] = 1.0 / BINS;
+        stats->mean[variable] = 0.0;
+        stats->sd[variable] = 0.0;
     }
 
     int correlationPairs[PAIRS][2] = {
@@ -84,11 +91,6 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_GRAIN},     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN},
         {VARIABLE_IMIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN}};
 
-    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        stats->mean[variable] = 0.0;
-        stats->sd[variable] = 0.0;
-    }
-
     for (int pair = 0; pair < PAIRS; pair++) {
         stats->corr[pair] = 0.0;
     }
@@ -98,12 +100,16 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
                                             &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
                                             &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
+        // Continous variables
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            // Bins
             count[variable][select_bin(bin_size[variable], *properties[variable])]++;
+            // Mean and standard deviation
             stats->mean[variable] += *properties[variable];
             stats->sd[variable] += *properties[variable] * *properties[variable];
         }
 
+        // Correlations
         stats->corr[CORR_Q_B_SEEN_CHOOSE_GRAIN] += ind->qBSeen * ind->ChooseGrain;
         stats->corr[CORR_Q_B_SEEN_CHOOSE_LT_GRAIN] += ind->qBSeen * ind->Choose_ltGrain;
         stats->corr[CORR_Q_B_SEEN_MIMIC_GRAIN] += ind->qBSeen * ind->MimicGrain;
@@ -121,17 +127,21 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         stats->corr[CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->ImimicGrain * ind->Imimic_ltGrain;
     }
 
+    // Correlations
     for (int pair = 0; pair < PAIRS; pair++) {
         stats->corr[pair] =
             pearson_r(stats->mean[correlationPairs[pair][0]], stats->mean[correlationPairs[pair][1]], stats->corr[pair],
                       stats->sd[correlationPairs[pair][0]], stats->sd[correlationPairs[pair][1]], population_size);
     }
 
+    // Continous variables
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        // Bins
         for (int bin = 0; bin < BINS; bin++) {
             stats->frc[variable][bin] = (double)count[variable][bin] / population_size;
         }
 
+        // Quartiles
         int    bin = 0;
         double previousfreq = 0.0;
 
@@ -141,6 +151,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         stats->median[variable] = median;
         stats->iqr[variable] = upper_quartile - lower_quartile;
 
+        // Mean and standard deviation
         stats->sd[variable] = stdev(stats->mean[variable], stats->sd[variable], population_size);
         stats->mean[variable] = stats->mean[variable] / population_size;
     }

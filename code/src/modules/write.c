@@ -6,10 +6,9 @@
 #include "math_tools.h"
 #include "stats.h"
 
-const char *headersc[CONTINUOUS_V] = {"w",          "qBDefault",   "qBSeen",        "ChooseGrain", "Choose_ltGrain",
-                                      "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
-
-const char *headersr[PAIRS] = {
+const char *headers_continuous[CONTINUOUS_V] = {
+    "w", "qBDefault", "qBSeen", "ChooseGrain", "Choose_ltGrain", "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
+const char *headers_correlations[PAIRS] = {
     "r_qB_Choose",        "r_qB_Choose_lt",        "r_qB_Mimic",      "r_qB_Imimic",        "r_qB_Imimic_lt",
     "r_Choose_Choose_lt", "r_Choose_Mimic",        "r_Choose_Imimic", "r_Choose_Imimic_lt", "r_Choose_lt_Mimic",
     "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt", "r_Mimic_Imimic",  "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"};
@@ -31,9 +30,12 @@ int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
     }
 
     for (; statsall < statsall_last; statsall++) {
+        // Globals and time
         fprintf(file, "%f,%f,%f,%lu", statsall->alpha, statsall->logES, statsall->Given, statsall->time);
 
+        // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            // Mean and standard deviation
             statsall->mean2[variable] = stdev(statsall->mean[variable], statsall->mean2[variable], runs);
             statsall->mean[variable] = statsall->mean[variable] / runs;
             fprintf(file, ",%f,%f", statsall->mean[variable], statsall->mean2[variable]);
@@ -42,15 +44,18 @@ int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
             fprintf(file, ",%f,%f", statsall->sd[variable], statsall->sd2[variable]);
         }
 
+        // Correlations
         for (int pair = 0; pair < PAIRS; pair++) {
             statsall->corr2[pair] = stdev(statsall->corr[pair], statsall->corr2[pair], runs);
             statsall->corr[pair] = statsall->corr[pair] / runs;
             fprintf(file, ",%f,%f", statsall->corr[pair], statsall->corr2[pair]);
         }
+
         fprintf(file, "\n");
     }
 
     fclose(file);
+
     return 0;
 }
 
@@ -67,14 +72,20 @@ int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
     }
 
     for (; statsall < statsall_last; statsall++) {
+        // Globals and time
         fprintf(file, "%f,%f,%f,%lu", statsall->alpha, statsall->logES, statsall->Given, statsall->time);
+
+        // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+            // Quartiles
             statsall->median2[variable] = stdev(statsall->median[variable], statsall->median2[variable], runs);
             statsall->median[variable] = statsall->median[variable] / runs;
             fprintf(file, ",%f,%f", statsall->median[variable], statsall->median2[variable]);
             statsall->iqr2[variable] = stdev(statsall->iqr[variable], statsall->iqr2[variable], runs);
             statsall->iqr[variable] = statsall->iqr[variable] / runs;
             fprintf(file, ",%f,%f", statsall->iqr[variable], statsall->iqr2[variable]);
+
+            // Bins
             for (int bin = 0; bin < BINS; bin++) {
                 statsall->frc2[variable][bin] =
                     stdev(statsall->frc[variable][bin], statsall->frc2[variable][bin], runs);
@@ -82,10 +93,12 @@ int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
                 fprintf(file, ",%f,%f", statsall->frc[variable][bin], statsall->frc2[variable][bin]);
             }
         }
+
         fprintf(file, "\n");
     }
 
     fclose(file);
+
     return 0;
 }
 
@@ -96,15 +109,18 @@ int write_csv_headers(char *filename) {
         return -1;
     }
 
+    // Globals and time
     fprintf(file, "alpha,logES,Given,Time");
 
+    // Continuous variables
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        fprintf(file, ",%smean,%smeanSD", headersc[variable], headersc[variable]);
-        fprintf(file, ",%ssd,%ssdSD", headersc[variable], headersc[variable]);
+        fprintf(file, ",%smean,%smeanSD", headers_continuous[variable], headers_continuous[variable]);
+        fprintf(file, ",%ssd,%ssdSD", headers_continuous[variable], headers_continuous[variable]);
     }
 
+    // Correlations
     for (int pair = 0; pair < PAIRS; pair++) {
-        fprintf(file, ",%s,%sSD", headersr[pair], headersr[pair]);
+        fprintf(file, ",%s,%sSD", headers_correlations[pair], headers_correlations[pair]);
     }
 
     fprintf(file, "\n");
@@ -120,14 +136,18 @@ int write_frq_headers(char *filename) {
         return -1;
     }
 
+    // Globals and time
     fprintf(file, "alpha,logES,Given,Time");
 
+    // Continuous variables
     for (int variable = 0; variable < CONTINUOUS_V; variable++) {
-        fprintf(file, ",%smedian,%smedianSD", headersc[variable], headersc[variable]);
-        fprintf(file, ",%siqr,%siqrSD", headersc[variable], headersc[variable]);
+        // Quartiles
+        fprintf(file, ",%smedian,%smedianSD", headers_continuous[variable], headers_continuous[variable]);
+        fprintf(file, ",%siqr,%siqrSD", headers_continuous[variable], headers_continuous[variable]);
 
+        // Bins
         for (int bin = 0; bin < BINS; bin++) {
-            fprintf(file, ",%s%i,%s%iSD", headersc[variable], bin, headersc[variable], bin);
+            fprintf(file, ",%s%i,%s%iSD", headers_continuous[variable], bin, headers_continuous[variable], bin);
         }
     }
 
