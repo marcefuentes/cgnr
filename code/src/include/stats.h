@@ -16,11 +16,11 @@ struct Stats {
     double        corr[PAIRS], corr2[PAIRS];
 };
 
-// Functions for handling statsregate statistics
+// Functions for handling statistics
 int  stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename);
 int  stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename);
 void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, struct Stats *statsall);
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size);
 
-#endif  // AGGREGATE_H
+#endif  // STATS_H

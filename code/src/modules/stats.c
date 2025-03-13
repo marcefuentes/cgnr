@@ -69,9 +69,12 @@ void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, stru
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size) {
     int    count[CONTINUOUS_V][BINS] = {{0}};
-    double bin_size[CONTINUOUS_V] = {1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS,
-                                     1.0 / BINS, 1.0 / BINS, 1.0 / BINS, 1.0 / BINS};
-    int    correlationPairs[PAIRS][2] = {
+    double bin_size[CONTINUOUS_V];
+    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        bin_size[variable] = 1.0 / BINS;
+    }
+
+    int correlationPairs[PAIRS][2] = {
         {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_GRAIN},        {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_LT_GRAIN},
         {VARIABLE_Q_B_SEEN, VARIABLE_MIMIC_GRAIN},         {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_GRAIN},
         {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_LT_GRAIN},     {VARIABLE_CHOOSE_GRAIN, VARIABLE_CHOOSE_LT_GRAIN},
