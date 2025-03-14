@@ -96,17 +96,17 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     }
 
     for (; ind < ind_last; ind++) {
-        double *properties[CONTINUOUS_VARS] = {&ind->w,           &ind->qBDefault,      &ind->qBSeen,
-                                               &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
-                                               &ind->ImimicGrain, &ind->Imimic_ltGrain};
+        double *continuous_vars[CONTINUOUS_VARS] = {&ind->w,           &ind->qBDefault,      &ind->qBSeen,
+                                                    &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
+                                                    &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
         // Continous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Bins
-            count[variable][select_bin(bin_size[variable], *properties[variable])]++;
+            count[variable][select_bin(bin_size[variable], *continuous_vars[variable])]++;
             // Mean and standard deviation
-            stats->mean[variable] += *properties[variable];
-            stats->sd[variable] += *properties[variable] * *properties[variable];
+            stats->mean[variable] += *continuous_vars[variable];
+            stats->sd[variable] += *continuous_vars[variable] * *continuous_vars[variable];
         }
 
         // Correlations
