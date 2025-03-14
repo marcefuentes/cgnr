@@ -6,7 +6,7 @@
 #include "math_tools.h"
 #include "stats.h"
 
-const char *headers_continuous[CONTINUOUS_V] = {
+const char *headers_continuous[CONTINUOUS_VARS] = {
     "w", "qBDefault", "qBSeen", "ChooseGrain", "Choose_ltGrain", "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
 const char *headers_correlations[PAIRS] = {
     "r_qB_Choose",        "r_qB_Choose_lt",        "r_qB_Mimic",      "r_qB_Imimic",        "r_qB_Imimic_lt",
@@ -34,7 +34,7 @@ int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
         fprintf(file, "%f,%f,%f,%lu", statsall->alpha, statsall->logES, statsall->Given, statsall->time);
 
         // Continuous variables
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Mean and standard deviation
             statsall->mean2[variable] = stdev(statsall->mean[variable], statsall->mean2[variable], runs);
             statsall->mean[variable] = statsall->mean[variable] / runs;
@@ -76,7 +76,7 @@ int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
         fprintf(file, "%f,%f,%f,%lu", statsall->alpha, statsall->logES, statsall->Given, statsall->time);
 
         // Continuous variables
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Quartiles
             statsall->median2[variable] = stdev(statsall->median[variable], statsall->median2[variable], runs);
             statsall->median[variable] = statsall->median[variable] / runs;
@@ -113,7 +113,7 @@ int write_csv_headers(char *filename) {
     fprintf(file, "alpha,logES,Given,Time");
 
     // Continuous variables
-    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+    for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         fprintf(file, ",%smean,%smeanSD", headers_continuous[variable], headers_continuous[variable]);
         fprintf(file, ",%ssd,%ssdSD", headers_continuous[variable], headers_continuous[variable]);
     }
@@ -140,7 +140,7 @@ int write_frq_headers(char *filename) {
     fprintf(file, "alpha,logES,Given,Time");
 
     // Continuous variables
-    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+    for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         // Quartiles
         fprintf(file, ",%smedian,%smedianSD", headers_continuous[variable], headers_continuous[variable]);
         fprintf(file, ",%siqr,%siqrSD", headers_continuous[variable], headers_continuous[variable]);

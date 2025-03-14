@@ -45,7 +45,7 @@ void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, stru
         statsall->time = stats->time;
 
         // Continous variables
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Bins
             for (int bin = 0; bin < BINS; bin++) {
                 statsall->frc[variable][bin] += stats->frc[variable][bin];
@@ -73,9 +73,9 @@ void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, stru
 
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size) {
-    int    count[CONTINUOUS_V][BINS] = {{0}};
-    double bin_size[CONTINUOUS_V];
-    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+    int    count[CONTINUOUS_VARS][BINS] = {{0}};
+    double bin_size[CONTINUOUS_VARS];
+    for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         bin_size[variable] = 1.0 / BINS;
         stats->mean[variable] = 0.0;
         stats->sd[variable] = 0.0;
@@ -96,12 +96,12 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     }
 
     for (; ind < ind_last; ind++) {
-        double *properties[CONTINUOUS_V] = {&ind->w,           &ind->qBDefault,      &ind->qBSeen,
-                                            &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
-                                            &ind->ImimicGrain, &ind->Imimic_ltGrain};
+        double *properties[CONTINUOUS_VARS] = {&ind->w,           &ind->qBDefault,      &ind->qBSeen,
+                                               &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
+                                               &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
         // Continous variables
-        for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+        for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Bins
             count[variable][select_bin(bin_size[variable], *properties[variable])]++;
             // Mean and standard deviation
@@ -135,7 +135,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     }
 
     // Continous variables
-    for (int variable = 0; variable < CONTINUOUS_V; variable++) {
+    for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         // Bins
         for (int bin = 0; bin < BINS; bin++) {
             stats->frc[variable][bin] = (double)count[variable][bin] / population_size;

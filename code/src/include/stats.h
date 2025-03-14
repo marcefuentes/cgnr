@@ -3,16 +3,16 @@
 
 #include "individual.h"
 
-enum { BINS = 64, CONTINUOUS_V = 8, PAIRS = 15 };
+enum { BINS = 64, CONTINUOUS_VARS = 8, PAIRS = 15 };
 
 struct Stats {
     unsigned long time;
     double        alpha, logES, Given;
-    double        mean[CONTINUOUS_V], mean2[CONTINUOUS_V];
-    double        sd[CONTINUOUS_V], sd2[CONTINUOUS_V];
-    double        frc[CONTINUOUS_V][BINS], frc2[CONTINUOUS_V][BINS];
-    double        median[CONTINUOUS_V], median2[CONTINUOUS_V];
-    double        iqr[CONTINUOUS_V], iqr2[CONTINUOUS_V];
+    double        mean[CONTINUOUS_VARS], mean2[CONTINUOUS_VARS];
+    double        sd[CONTINUOUS_VARS], sd2[CONTINUOUS_VARS];
+    double        frc[CONTINUOUS_VARS][BINS], frc2[CONTINUOUS_VARS][BINS];
+    double        median[CONTINUOUS_VARS], median2[CONTINUOUS_VARS];
+    double        iqr[CONTINUOUS_VARS], iqr2[CONTINUOUS_VARS];
     double        corr[PAIRS], corr2[PAIRS];
 };
 
