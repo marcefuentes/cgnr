@@ -208,8 +208,8 @@ void start_population(struct Individual *ind, struct Individual *ind_last) {
     ind->cost = 0.0;
     ind->age = 0;
 
-    for (struct Individual *ind_j = ind + 1; ind_j < ind_last; ind_j++) {
-        *ind_j = *ind;
+    for (struct Individual *ind_i = ind + 1; ind_i < ind_last; ind_i++) {
+        *ind_i = *ind;
     }
 
     for (struct Individual *ind_j = ind + 1; ind < ind_last; ind += 2, ind_j += 2) {
