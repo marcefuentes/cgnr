@@ -21,26 +21,28 @@
 
 // Global variables
 
-gsl_rng *rng;  // Random number generator
+gsl_rng *rng = NULL;  // Random number generator
 
 // Functions
 
-int    error_simulation(const char *msg, struct Individual *ind_first, struct Stats *stats_first);
 double fitness(struct Individual *ind, struct Individual *ind_last);
 int    simulation(struct Stats *statsall_first, char *filename);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
-    clock_t start = clock();
+    clock_t       start = clock();
+    int           ret = EXIT_FAILURE;
+    struct Stats *statsall_first = NULL;
+    char          ics[MAX_FILENAME_LEN];
 
     if (argc != 2) {
         fprintf(stderr, "You must run the program with an argument.\n");
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
     if (strlen(argv[1]) > MAX_ARG_LENGTH) {
         fprintf(stderr, "The argument must have fewer than %d characters.\n", MAX_ARG_LENGTH);
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
     const char *filename = argv[1];
@@ -49,13 +51,13 @@ int main(int argc, char *argv[]) {
     snprintf(glo, sizeof(glo), "%s.glo", filename);
     if (read_globals(glo) < 0) {
         fprintf(stderr, "Failed read_globals.\n");
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
     rng = gsl_rng_alloc(gsl_rng_taus);
     if (rng == NULL) {
         fprintf(stderr, "Failed gsl_rng_alloc.\n");
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
     if (globals.seed == 1) {
@@ -64,24 +66,20 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
-    struct Stats *statsall_first = calloc(globals.periods + 1, sizeof(*statsall_first));
+    statsall_first = calloc(globals.periods + 1, sizeof(*statsall_first));
     if (statsall_first == NULL) {
         fprintf(stderr, "Failed calloc (stats).\n");
-        gsl_rng_free(rng);
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
     struct Stats *statsall_last = statsall_first + globals.periods + 1;
 
-    char ics[MAX_FILENAME_LEN];
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
     for (unsigned int run = 0; run < globals.runs; run++) {
         if (simulation(statsall_first, ics) < 0) {
             fprintf(stderr, "Failed simulation.\n");
-            gsl_rng_free(rng);
-            free(statsall_first);
-            exit(EXIT_FAILURE);
+            goto cleanup;
         }
     }
 
@@ -89,48 +87,53 @@ int main(int argc, char *argv[]) {
     snprintf(csv, sizeof(csv), "%s.csv", filename);
     if (stats_csv(statsall_first, statsall_last, globals.runs, csv) < 0) {
         fprintf(stderr, "Failed stats_csv.\n");
-        gsl_rng_free(rng);
-        free(statsall_first);
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
     char frq[MAX_FILENAME_LEN];
     snprintf(frq, sizeof(frq), "%s.frq", filename);
     if (stats_frq(statsall_first, statsall_last, globals.runs, frq) < 0) {
         fprintf(stderr, "Failed stats_frq.\n");
-        gsl_rng_free(rng);
-        free(statsall_first);
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
-
-    gsl_rng_free(rng);
-    free(statsall_first);
 
     if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) < 0) {
         fprintf(stderr, "Failed write_time_elapsed.\n");
-        exit(EXIT_FAILURE);
+        goto cleanup;
     }
 
-    return 0;
+    ret = EXIT_SUCCESS;
+
+cleanup:
+    if (rng != NULL) {
+        gsl_rng_free(rng);
+        rng = NULL;
+    }
+    if (statsall_first != NULL) {
+        free(statsall_first);
+        statsall_first = NULL;
+    }
+    return ret;
 }
 
 int simulation(struct Stats *statsall_first, char *filename) {
-    int sequence = 0;
+    int                ret = -1;
+    int                sequence = 0;
+    struct Individual *ind_first = NULL;
+    struct Stats      *stats_first = NULL;
 
-    struct Individual *ind_first = calloc(globals.population_size, sizeof(*ind_first));
+    ind_first = calloc(globals.population_size, sizeof(*ind_first));
     if (ind_first == NULL) {
         fprintf(stderr, "Failed calloc (individuals).\n");
-        return -1;
+        goto cleanup;
     }
 
     struct Individual *ind_last = ind_first + globals.population_size;
 
-    struct Stats *stats_first = calloc(globals.periods + 1, sizeof(*stats_first));
+    stats_first = calloc(globals.periods + 1, sizeof(*stats_first));
     if (stats_first == NULL) {
         fprintf(stderr, "Failed calloc (periods).\n");
-        free(ind_first);
-        free(stats_first);
-        return -1;
+        goto cleanup;
     }
 
     struct Stats *stats_last = stats_first + globals.periods + 1;
@@ -160,14 +163,20 @@ int simulation(struct Stats *statsall_first, char *filename) {
         }
 
         if (globals.shuffle == 1) {
-            if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
-                return error_simulation("Failed shuffle_partners.", ind_first, stats_first);
+            int shuffle_result = -1;
+            shuffle_result = shuffle_partners(ind_first, ind_last, globals.group_size);
+            if (shuffle_result < 0) {
+                fprintf(stderr, "Failed shuffle_partners.\n");
+                goto cleanup;
             }
         }
 
         if (globals.partner_choice == 1) {
-            if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
-                return error_simulation("Failed choose_partner.", ind_first, stats_first);
+            int choose_partner_result = -1;
+            choose_partner_result = choose_partner(ind_first, ind_last, globals.group_size);
+            if (choose_partner_result < 0) {
+                fprintf(stderr, "Failed choose_partner.\n");
+                goto cleanup;
             }
         }
 
@@ -176,7 +185,8 @@ int simulation(struct Stats *statsall_first, char *filename) {
         if (deaths > 0) {
             struct Recruit *recruit_first = create_recruits(deaths, w_cumulative);
             if (recruit_first == NULL) {
-                return error_simulation("Failed create_recruits.", ind_first, stats_first);
+                fprintf(stderr, "Failed create_recruits.\n");
+                goto cleanup;
             }
             mutate(ind_first, recruit_first, globals.qb_mutation_size, globals.grain_mutation_size, globals.cost,
                    globals.language);
@@ -190,10 +200,19 @@ int simulation(struct Stats *statsall_first, char *filename) {
     }
 
     stats_end_of_simulation(stats_first, stats_last, statsall_first);
-    free(ind_first);
-    free(stats_first);
+    ret = 0;
 
-    return 0;
+cleanup:
+    if (ind_first != NULL) {
+        free(ind_first);
+        ind_first = NULL;
+    }
+    if (stats_first != NULL) {
+        free(stats_first);
+        stats_first = NULL;
+    }
+
+    return ret;
 }
 
 void start_population(struct Individual *ind, struct Individual *ind_last) {
@@ -233,11 +252,4 @@ double fitness(struct Individual *ind, struct Individual *ind_last) {
     }
 
     return w_cumulative;
-}
-
-int error_simulation(const char *msg, struct Individual *ind_first, struct Stats *stats_first) {
-    fprintf(stderr, "%s\n", msg);
-    free(ind_first);
-    free(stats_first);
-    return -1;
 }
