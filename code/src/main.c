@@ -163,18 +163,14 @@ int simulation(struct Stats *statsall_first, char *filename) {
         }
 
         if (globals.shuffle == 1) {
-            int shuffle_result = -1;
-            shuffle_result = shuffle_partners(ind_first, ind_last, globals.group_size);
-            if (shuffle_result < 0) {
+            if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
                 fprintf(stderr, "Failed shuffle_partners.\n");
                 goto cleanup;
             }
         }
 
         if (globals.partner_choice == 1) {
-            int choose_partner_result = -1;
-            choose_partner_result = choose_partner(ind_first, ind_last, globals.group_size);
-            if (choose_partner_result < 0) {
+            if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
                 fprintf(stderr, "Failed choose_partner.\n");
                 goto cleanup;
             }
