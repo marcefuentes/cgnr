@@ -21,6 +21,7 @@ struct GlobalVariables {
     double        loges;
     double        given;
     double        rho;
+    unsigned long time_per_period;
 };
 
 extern struct GlobalVariables globals;

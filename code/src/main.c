@@ -141,7 +141,7 @@ int simulation(struct Stats *statsall_first, char *filename) {
     for (unsigned long time = 0; time < globals.time; time++) {
         double w_cumulative = fitness(ind_first, ind_last);
 
-        if (time == 0 || (time + 1) % (globals.time / globals.periods) == 0) {
+        if (time == 0 || (time + 1) % globals.time_per_period == 0) {
             stats->alpha = globals.alpha;
             stats->logES = globals.loges;
             stats->Given = globals.given;

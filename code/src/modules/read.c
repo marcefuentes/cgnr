@@ -50,6 +50,7 @@ int read_globals(const char *filename) {
     globals.group_size = (unsigned int)(pow(2.0, (double)globals.group_size) + 0.5);
     globals.cost = pow(2.0, globals.cost);
     globals.rho = 1.0 - 1.0 / pow(2.0, globals.loges);
+    globals.time_per_period = globals.time / globals.periods;
 
     return 0;
 }
