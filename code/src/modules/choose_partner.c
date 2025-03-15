@@ -73,7 +73,6 @@ struct List *create_shuffled_list(unsigned int size) {
     for (unsigned int individual = 0; individual < size; individual++) {
         struct List *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
-            fprintf(stderr, "Failed malloc (create_shuffled_list).\n");
             return NULL;
         }
 

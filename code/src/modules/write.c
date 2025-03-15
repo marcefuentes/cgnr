@@ -1,8 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#include "individual.h"
+#include "io.h"
 #include "math_tools.h"
 #include "stats.h"
 
@@ -13,20 +11,17 @@ const char *headers_correlations[PAIRS] = {
     "r_Choose_Choose_lt", "r_Choose_Mimic",        "r_Choose_Imimic", "r_Choose_Imimic_lt", "r_Choose_lt_Mimic",
     "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt", "r_Mimic_Imimic",  "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"};
 
-void file_write_error(char *filename);
-int  write_csv_headers(char *filename);
-int  write_frq_headers(char *filename);
+int write_csv_headers(char *filename);
+int write_frq_headers(char *filename);
 
 int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename) {
     if (write_csv_headers(filename) < 0) {
-        fprintf(stderr, "Failed write_csv_headers.\n");
-        return -1;
+        return file_write_error(filename);
     }
 
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
-        file_write_error(filename);
-        return -1;
+        return file_write_error(filename);
     }
 
     for (; statsall < statsall_last; statsall++) {
@@ -61,14 +56,12 @@ int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
 
 int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename) {
     if (write_frq_headers(filename) < 0) {
-        fprintf(stderr, "Failed write_frq_headers.\n");
-        return -1;
+        return file_write_error(filename);
     }
 
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
-        file_write_error(filename);
-        return -1;
+        return file_write_error(filename);
     }
 
     for (; statsall < statsall_last; statsall++) {
@@ -105,8 +98,7 @@ int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
 int write_csv_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
-        file_write_error(filename);
-        return -1;
+        return file_write_error(filename);
     }
 
     // Globals and time
@@ -132,8 +124,7 @@ int write_csv_headers(char *filename) {
 int write_frq_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
-        file_write_error(filename);
-        return -1;
+        return file_write_error(filename);
     }
 
     // Globals and time
@@ -156,107 +147,3 @@ int write_frq_headers(char *filename) {
 
     return 0;
 }
-
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long time,
-              struct Individual *ind, struct Individual *ind_last) {
-    char new_filename[18];
-
-    snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, sequence);
-
-    FILE *file = fopen(new_filename, "a+");
-    if (file == NULL) {
-        file_write_error(new_filename);
-        return -1;
-    }
-
-    fprintf(file,
-            "alpha,"
-            "logES,"
-            "Given,"
-            "Time,"
-            "qBDefault,"
-            "qBDecided,"
-            "qBSeen,"
-            "qBSeen_j,"
-            "w,"
-            "ChooseGrain,"
-            "Choose_ltGrain,"
-            "MimicGrain,"
-            "ImimicGrain,"
-            "Imimic_ltGrain,"
-            "cost,"
-            "age");
-
-    double w_cumulative = 0.0;
-    for (; ind < ind_last; ind++) {
-        fprintf(file, "\n%f,%f,%f,%lu,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i", alpha, logES, Given, time, ind->qBDefault,
-                ind->qBDecided, ind->qBSeen, ind->partner->qBSeen, ind->wCumulative - w_cumulative, ind->ChooseGrain,
-                ind->Choose_ltGrain, ind->MimicGrain, ind->ImimicGrain, ind->Imimic_ltGrain, ind->cost, ind->age);
-
-        w_cumulative = ind->wCumulative;
-    }
-
-    fclose(file);
-
-    return 0;
-}
-
-int write_time_elapsed(char *filename, float time_elapsed) {
-    FILE *file = fopen(filename, "a+");
-    if (file == NULL) {
-        file_write_error(filename);
-        return -1;
-    }
-
-    fprintf(file, "TimeElapsed,");
-
-    if (time_elapsed < 10.0) {
-        fprintf(file, "%f", time_elapsed);
-    } else {
-        int minute = 60;
-        int hour = minute * 60;
-        int day = hour * 24;
-
-        int seconds = (int)time_elapsed;
-        int days = seconds / day;
-        seconds -= days * day;
-        int hours = seconds / hour;
-        seconds -= hours * hour;
-        int minutes = seconds / minute;
-        seconds -= minutes * minute;
-
-        if (days > 0) {
-            fprintf(file, "%i-", days);
-
-            if (hours < 10) {
-                fprintf(file, "0");
-            }
-        }
-
-        if (days > 0 || hours > 0) {
-            fprintf(file, "%i:", hours);
-
-            if (minutes < 10) {
-                fprintf(file, "0");
-            }
-        }
-
-        if (days > 0 || hours > 0 || minutes > 0) {
-            fprintf(file, "%i:", minutes);
-
-            if (seconds < 10) {
-                fprintf(file, "0");
-            }
-        }
-
-        fprintf(file, "%i", seconds);
-    }
-
-    fprintf(file, "\n");
-
-    fclose(file);
-
-    return 0;
-}
-
-void file_write_error(char *filename) { fprintf(stderr, "Failed to open file %s for writing.\n", filename); }
