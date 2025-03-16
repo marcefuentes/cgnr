@@ -58,14 +58,16 @@ void stats_end_of_simulation(struct Stats *stats_current_run, struct Stats *stat
 
             // Quartiles
             stats_all_runs_p->median[variable] += stats_current_run_p->median[variable];
-            stats_all_runs_p->iqr[variable] += stats_current_run_p->iqr[variable];
-            stats_all_runs_p->mean[variable] += stats_current_run_p->mean[variable];
-            stats_all_runs_p->sd[variable] += stats_current_run_p->sd[variable];
             stats_all_runs_p->median2[variable] +=
                 stats_current_run_p->median[variable] * stats_current_run_p->median[variable];
+            stats_all_runs_p->iqr[variable] += stats_current_run_p->iqr[variable];
             stats_all_runs_p->iqr2[variable] += stats_current_run_p->iqr[variable] * stats_current_run_p->iqr[variable];
+
+            // Mean and standard deviation
+            stats_all_runs_p->mean[variable] += stats_current_run_p->mean[variable];
             stats_all_runs_p->mean2[variable] +=
                 stats_current_run_p->mean[variable] * stats_current_run_p->mean[variable];
+            stats_all_runs_p->sd[variable] += stats_current_run_p->sd[variable];
             stats_all_runs_p->sd2[variable] += stats_current_run_p->sd[variable] * stats_current_run_p->sd[variable];
         }
 
