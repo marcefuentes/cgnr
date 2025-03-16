@@ -36,37 +36,43 @@ enum {
     CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN = 14
 };
 
-void stats_end_of_simulation(struct Stats *stats, struct Stats *statsall, unsigned int periods) {
+void stats_end_of_simulation(struct Stats *stats_current_run, struct Stats *stats_all_runs, unsigned int periods) {
+    struct Stats *stats_current_run_p = stats_current_run;
+    struct Stats *stats_all_runs_p = stats_all_runs;
+
     // Globals and time
-    for (unsigned int period = 0; period < periods; period++, stats++, statsall++) {
-        statsall->alpha = stats->alpha;
-        statsall->logES = stats->logES;
-        statsall->Given = stats->Given;
-        statsall->time = stats->time;
+    for (unsigned int period = 0; period < periods; period++, stats_current_run_p++, stats_all_runs_p++) {
+        stats_all_runs_p->alpha = stats_current_run_p->alpha;
+        stats_all_runs_p->logES = stats_current_run_p->logES;
+        stats_all_runs_p->Given = stats_current_run_p->Given;
+        stats_all_runs_p->time = stats_current_run_p->time;
 
         // Continous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Bins
             for (int bin = 0; bin < BINS; bin++) {
-                statsall->frc[variable][bin] += stats->frc[variable][bin];
-                statsall->frc2[variable][bin] += stats->frc[variable][bin] * stats->frc[variable][bin];
+                stats_all_runs_p->frc[variable][bin] += stats_current_run_p->frc[variable][bin];
+                stats_all_runs_p->frc2[variable][bin] +=
+                    stats_current_run_p->frc[variable][bin] * stats_current_run_p->frc[variable][bin];
             }
 
             // Quartiles
-            statsall->median[variable] += stats->median[variable];
-            statsall->iqr[variable] += stats->iqr[variable];
-            statsall->mean[variable] += stats->mean[variable];
-            statsall->sd[variable] += stats->sd[variable];
-            statsall->median2[variable] += stats->median[variable] * stats->median[variable];
-            statsall->iqr2[variable] += stats->iqr[variable] * stats->iqr[variable];
-            statsall->mean2[variable] += stats->mean[variable] * stats->mean[variable];
-            statsall->sd2[variable] += stats->sd[variable] * stats->sd[variable];
+            stats_all_runs_p->median[variable] += stats_current_run_p->median[variable];
+            stats_all_runs_p->iqr[variable] += stats_current_run_p->iqr[variable];
+            stats_all_runs_p->mean[variable] += stats_current_run_p->mean[variable];
+            stats_all_runs_p->sd[variable] += stats_current_run_p->sd[variable];
+            stats_all_runs_p->median2[variable] +=
+                stats_current_run_p->median[variable] * stats_current_run_p->median[variable];
+            stats_all_runs_p->iqr2[variable] += stats_current_run_p->iqr[variable] * stats_current_run_p->iqr[variable];
+            stats_all_runs_p->mean2[variable] +=
+                stats_current_run_p->mean[variable] * stats_current_run_p->mean[variable];
+            stats_all_runs_p->sd2[variable] += stats_current_run_p->sd[variable] * stats_current_run_p->sd[variable];
         }
 
         // Correlations
         for (int pair = 0; pair < PAIRS; pair++) {
-            statsall->corr[pair] += stats->corr[pair];
-            statsall->corr2[pair] += stats->corr[pair] * stats->corr[pair];
+            stats_all_runs_p->corr[pair] += stats_current_run_p->corr[pair];
+            stats_all_runs_p->corr2[pair] += stats_current_run_p->corr[pair] * stats_current_run_p->corr[pair];
         }
     }
 }
