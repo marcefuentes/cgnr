@@ -36,9 +36,9 @@ enum {
     CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN = 14
 };
 
-void stats_end_of_simulation(struct Stats *stats, struct Stats *stats_last, struct Stats *statsall) {
+void stats_end_of_simulation(struct Stats *stats, struct Stats *statsall, unsigned int periods) {
     // Globals and time
-    for (; stats < stats_last; stats++, statsall++) {
+    for (unsigned int period = 0; period < periods; period++, stats++, statsall++) {
         statsall->alpha = stats->alpha;
         statsall->logES = stats->logES;
         statsall->Given = stats->Given;

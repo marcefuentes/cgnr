@@ -14,7 +14,7 @@ const char *headers_correlations[PAIRS] = {
 int write_csv_headers(char *filename);
 int write_frq_headers(char *filename);
 
-int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename) {
+int stats_csv(struct Stats *stats_all_runs, unsigned int periods, unsigned int runs, char *filename) {
     if (write_csv_headers(filename) < 0) {
         return file_write_error(filename);
     }
@@ -24,26 +24,27 @@ int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
         return file_write_error(filename);
     }
 
-    for (; statsall < statsall_last; statsall++) {
+    struct Stats *stats_p = stats_all_runs;
+    for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
-        fprintf(file, "%f,%f,%f,%lu", statsall->alpha, statsall->logES, statsall->Given, statsall->time);
+        fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
 
         // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Mean and standard deviation
-            statsall->mean2[variable] = stdev(statsall->mean[variable], statsall->mean2[variable], runs);
-            statsall->mean[variable] = statsall->mean[variable] / runs;
-            fprintf(file, ",%f,%f", statsall->mean[variable], statsall->mean2[variable]);
-            statsall->sd2[variable] = stdev(statsall->sd[variable], statsall->sd2[variable], runs);
-            statsall->sd[variable] = statsall->sd[variable] / runs;
-            fprintf(file, ",%f,%f", statsall->sd[variable], statsall->sd2[variable]);
+            stats_p->mean2[variable] = stdev(stats_p->mean[variable], stats_p->mean2[variable], runs);
+            stats_p->mean[variable] = stats_p->mean[variable] / runs;
+            fprintf(file, ",%f,%f", stats_p->mean[variable], stats_p->mean2[variable]);
+            stats_p->sd2[variable] = stdev(stats_p->sd[variable], stats_p->sd2[variable], runs);
+            stats_p->sd[variable] = stats_p->sd[variable] / runs;
+            fprintf(file, ",%f,%f", stats_p->sd[variable], stats_p->sd2[variable]);
         }
 
         // Correlations
         for (int pair = 0; pair < PAIRS; pair++) {
-            statsall->corr2[pair] = stdev(statsall->corr[pair], statsall->corr2[pair], runs);
-            statsall->corr[pair] = statsall->corr[pair] / runs;
-            fprintf(file, ",%f,%f", statsall->corr[pair], statsall->corr2[pair]);
+            stats_p->corr2[pair] = stdev(stats_p->corr[pair], stats_p->corr2[pair], runs);
+            stats_p->corr[pair] = stats_p->corr[pair] / runs;
+            fprintf(file, ",%f,%f", stats_p->corr[pair], stats_p->corr2[pair]);
         }
 
         fprintf(file, "\n");
@@ -54,7 +55,7 @@ int stats_csv(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
     return 0;
 }
 
-int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int runs, char *filename) {
+int stats_frq(struct Stats *stats_all_runs, unsigned int periods, unsigned int runs, char *filename) {
     if (write_frq_headers(filename) < 0) {
         return file_write_error(filename);
     }
@@ -64,26 +65,26 @@ int stats_frq(struct Stats *statsall, struct Stats *statsall_last, unsigned int 
         return file_write_error(filename);
     }
 
-    for (; statsall < statsall_last; statsall++) {
+    struct Stats *stats_p = stats_all_runs;
+    for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
-        fprintf(file, "%f,%f,%f,%lu", statsall->alpha, statsall->logES, statsall->Given, statsall->time);
+        fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
 
         // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Quartiles
-            statsall->median2[variable] = stdev(statsall->median[variable], statsall->median2[variable], runs);
-            statsall->median[variable] = statsall->median[variable] / runs;
-            fprintf(file, ",%f,%f", statsall->median[variable], statsall->median2[variable]);
-            statsall->iqr2[variable] = stdev(statsall->iqr[variable], statsall->iqr2[variable], runs);
-            statsall->iqr[variable] = statsall->iqr[variable] / runs;
-            fprintf(file, ",%f,%f", statsall->iqr[variable], statsall->iqr2[variable]);
+            stats_p->median2[variable] = stdev(stats_p->median[variable], stats_p->median2[variable], runs);
+            stats_p->median[variable] = stats_p->median[variable] / runs;
+            fprintf(file, ",%f,%f", stats_p->median[variable], stats_p->median2[variable]);
+            stats_p->iqr2[variable] = stdev(stats_p->iqr[variable], stats_p->iqr2[variable], runs);
+            stats_p->iqr[variable] = stats_p->iqr[variable] / runs;
+            fprintf(file, ",%f,%f", stats_p->iqr[variable], stats_p->iqr2[variable]);
 
             // Bins
             for (int bin = 0; bin < BINS; bin++) {
-                statsall->frc2[variable][bin] =
-                    stdev(statsall->frc[variable][bin], statsall->frc2[variable][bin], runs);
-                statsall->frc[variable][bin] = statsall->frc[variable][bin] / runs;
-                fprintf(file, ",%f,%f", statsall->frc[variable][bin], statsall->frc2[variable][bin]);
+                stats_p->frc2[variable][bin] = stdev(stats_p->frc[variable][bin], stats_p->frc2[variable][bin], runs);
+                stats_p->frc[variable][bin] = stats_p->frc[variable][bin] / runs;
+                fprintf(file, ",%f,%f", stats_p->frc[variable][bin], stats_p->frc2[variable][bin]);
             }
         }
 

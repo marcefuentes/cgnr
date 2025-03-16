@@ -6,11 +6,11 @@ const char *headers =
     "alpha,logES,Given,Time,qBDefault,qBDecided,qBSeen,qBSeen_j,w,ChooseGrain,Choose_ltGrain,MimicGrain,ImimicGrain,"
     "Imimic_ltGrain,cost,age";
 
-int write_ics(char *filename, int sequence, float alpha, float logES, float Given, unsigned long time,
+int write_ics(char *filename, unsigned int period, float alpha, float logES, float Given, unsigned long time,
               struct Individual *ind, struct Individual *ind_last) {
     char new_filename[18];
 
-    snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, sequence);
+    snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, period);
 
     FILE *file = fopen(new_filename, "a+");
     if (file == NULL) {
