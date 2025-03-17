@@ -99,6 +99,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         stats.corr[pair] =
             pearson_r(stats.mean[correlationPairs[pair][0]], stats.mean[correlationPairs[pair][1]], stats.corr[pair],
                       stats.sd[correlationPairs[pair][0]], stats.sd[correlationPairs[pair][1]], population_size);
+        stats_all_runs->corr[pair] += stats.corr[pair];
+        stats_all_runs->corr2[pair] += stats.corr[pair] * stats.corr[pair];
     }
 
     // Continous variables
@@ -106,6 +108,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         // Bins
         for (int bin = 0; bin < BINS; bin++) {
             stats.frc[variable][bin] = (double)count[variable][bin] / population_size;
+            stats_all_runs->frc[variable][bin] += stats.frc[variable][bin];
+            stats_all_runs->frc2[variable][bin] += stats.frc[variable][bin] * stats.frc[variable][bin];
         }
 
         // Quartiles
@@ -116,37 +120,18 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         double median = quartile(stats.frc[variable], BINS, MEDIAN, &bin, &previousfreq);
         double upper_quartile = quartile(stats.frc[variable], BINS, UPPER_QUARTILE, &bin, &previousfreq);
         stats.median[variable] = median;
-        stats.iqr[variable] = upper_quartile - lower_quartile;
-
-        // Mean and standard deviation
-        stats.sd[variable] = stdev(stats.mean[variable], stats.sd[variable], population_size);
-        stats.mean[variable] = stats.mean[variable] / population_size;
-    }
-
-    // Continous variables
-    for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
-        // Bins
-        for (int bin = 0; bin < BINS; bin++) {
-            stats_all_runs->frc[variable][bin] += stats.frc[variable][bin];
-            stats_all_runs->frc2[variable][bin] += stats.frc[variable][bin] * stats.frc[variable][bin];
-        }
-
-        // Quartiles
         stats_all_runs->median[variable] += stats.median[variable];
         stats_all_runs->median2[variable] += stats.median[variable] * stats.median[variable];
+        stats.iqr[variable] = upper_quartile - lower_quartile;
         stats_all_runs->iqr[variable] += stats.iqr[variable];
         stats_all_runs->iqr2[variable] += stats.iqr[variable] * stats.iqr[variable];
 
         // Mean and standard deviation
-        stats_all_runs->mean[variable] += stats.mean[variable];
-        stats_all_runs->mean2[variable] += stats.mean[variable] * stats.mean[variable];
+        stats.sd[variable] = stdev(stats.mean[variable], stats.sd[variable], population_size);
         stats_all_runs->sd[variable] += stats.sd[variable];
         stats_all_runs->sd2[variable] += stats.sd[variable] * stats.sd[variable];
-    }
-
-    // Correlations
-    for (int pair = 0; pair < PAIRS; pair++) {
-        stats_all_runs->corr[pair] += stats.corr[pair];
-        stats_all_runs->corr2[pair] += stats.corr[pair] * stats.corr[pair];
+        stats.mean[variable] = stats.mean[variable] / population_size;
+        stats_all_runs->mean[variable] += stats.mean[variable];
+        stats_all_runs->mean2[variable] += stats.mean[variable] * stats.mean[variable];
     }
 }
