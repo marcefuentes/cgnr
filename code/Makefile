@@ -47,7 +47,7 @@ debug: $(DEBUG_TARGET)
 	gdb --args $(DEBUG_TARGET)
 
 release: $(RELEASE_TARGET)
-	@echo "Built release target"
+	@echo -e "\033[1;32mBuilt release target\033[0m"
 
 test: $(TEST_TARGET)
 	@echo "Running test..."
