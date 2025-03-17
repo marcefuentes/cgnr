@@ -8,12 +8,18 @@ enum { BINS = 64, CONTINUOUS_VARS = 8, PAIRS = 15 };
 struct Stats {
     unsigned long time;
     double        alpha, logES, Given;
-    double        mean[CONTINUOUS_VARS], mean2[CONTINUOUS_VARS];
-    double        sd[CONTINUOUS_VARS], sd2[CONTINUOUS_VARS];
-    double        frc[CONTINUOUS_VARS][BINS], frc2[CONTINUOUS_VARS][BINS];
-    double        median[CONTINUOUS_VARS], median2[CONTINUOUS_VARS];
-    double        iqr[CONTINUOUS_VARS], iqr2[CONTINUOUS_VARS];
-    double        corr[PAIRS], corr2[PAIRS];
+
+    // Acumulators
+    double sum[CONTINUOUS_VARS], sum2[CONTINUOUS_VARS];
+    double sum_xy[PAIRS];
+
+    // Statistics
+    double mean[CONTINUOUS_VARS], mean2[CONTINUOUS_VARS];
+    double sd[CONTINUOUS_VARS], sd2[CONTINUOUS_VARS];
+    double frc[CONTINUOUS_VARS][BINS], frc2[CONTINUOUS_VARS][BINS];
+    double median[CONTINUOUS_VARS], median2[CONTINUOUS_VARS];
+    double iqr[CONTINUOUS_VARS], iqr2[CONTINUOUS_VARS];
+    double corr[PAIRS], corr2[PAIRS];
 };
 
 // Functions for handling statistics

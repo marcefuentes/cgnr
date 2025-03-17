@@ -53,12 +53,12 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
 
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         bin_size[variable] = 1.0 / BINS;
-        stats.mean[variable] = 0.0;
-        stats.sd[variable] = 0.0;
+        stats.sum[variable] = 0.0;
+        stats.sum2[variable] = 0.0;
     }
 
     for (int pair = 0; pair < PAIRS; pair++) {
-        stats.corr[pair] = 0.0;
+        stats.sum_xy[pair] = 0.0;
     }
 
     for (; ind < ind_last; ind++) {
@@ -72,34 +72,34 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
             count[variable][select_bin(bin_size[variable], *continuous_vars[variable])]++;
 
             // Mean and standard deviation
-            stats.mean[variable] += *continuous_vars[variable];
-            stats.sd[variable] += *continuous_vars[variable] * *continuous_vars[variable];
+            stats.sum[variable] += *continuous_vars[variable];
+            stats.sum2[variable] += *continuous_vars[variable] * *continuous_vars[variable];
         }
 
         // Correlations
-        stats.corr[CORR_Q_B_SEEN_CHOOSE_GRAIN] += ind->qBSeen * ind->ChooseGrain;
-        stats.corr[CORR_Q_B_SEEN_CHOOSE_LT_GRAIN] += ind->qBSeen * ind->Choose_ltGrain;
-        stats.corr[CORR_Q_B_SEEN_MIMIC_GRAIN] += ind->qBSeen * ind->MimicGrain;
-        stats.corr[CORR_Q_B_SEEN_IMIMIC_GRAIN] += ind->qBSeen * ind->ImimicGrain;
-        stats.corr[CORR_Q_B_SEEN_IMIMIC_LT_GRAIN] += ind->qBSeen * ind->Imimic_ltGrain;
-        stats.corr[CORR_CHOOSE_GRAIN_CHOOSE_LT_GRAIN] += ind->ChooseGrain * ind->Choose_ltGrain;
-        stats.corr[CORR_CHOOSE_GRAIN_MIMIC_GRAIN] += ind->ChooseGrain * ind->MimicGrain;
-        stats.corr[CORR_CHOOSE_GRAIN_IMIMIC_GRAIN] += ind->ChooseGrain * ind->ImimicGrain;
-        stats.corr[CORR_CHOOSE_GRAIN_IMIMIC_LT_GRAIN] += ind->ChooseGrain * ind->Imimic_ltGrain;
-        stats.corr[CORR_CHOOSE_LT_GRAIN_MIMIC_GRAIN] += ind->Choose_ltGrain * ind->MimicGrain;
-        stats.corr[CORR_CHOOSE_LT_GRAIN_IMIMIC_GRAIN] += ind->Choose_ltGrain * ind->ImimicGrain;
-        stats.corr[CORR_CHOOSE_LT_GRAIN_IMIMIC_LT_GRAIN] += ind->Choose_ltGrain * ind->Imimic_ltGrain;
-        stats.corr[CORR_MIMIC_GRAIN_IMIMIC_GRAIN] += ind->MimicGrain * ind->ImimicGrain;
-        stats.corr[CORR_MIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->MimicGrain * ind->Imimic_ltGrain;
-        stats.corr[CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->ImimicGrain * ind->Imimic_ltGrain;
+        stats.sum_xy[CORR_Q_B_SEEN_CHOOSE_GRAIN] += ind->qBSeen * ind->ChooseGrain;
+        stats.sum_xy[CORR_Q_B_SEEN_CHOOSE_LT_GRAIN] += ind->qBSeen * ind->Choose_ltGrain;
+        stats.sum_xy[CORR_Q_B_SEEN_MIMIC_GRAIN] += ind->qBSeen * ind->MimicGrain;
+        stats.sum_xy[CORR_Q_B_SEEN_IMIMIC_GRAIN] += ind->qBSeen * ind->ImimicGrain;
+        stats.sum_xy[CORR_Q_B_SEEN_IMIMIC_LT_GRAIN] += ind->qBSeen * ind->Imimic_ltGrain;
+        stats.sum_xy[CORR_CHOOSE_GRAIN_CHOOSE_LT_GRAIN] += ind->ChooseGrain * ind->Choose_ltGrain;
+        stats.sum_xy[CORR_CHOOSE_GRAIN_MIMIC_GRAIN] += ind->ChooseGrain * ind->MimicGrain;
+        stats.sum_xy[CORR_CHOOSE_GRAIN_IMIMIC_GRAIN] += ind->ChooseGrain * ind->ImimicGrain;
+        stats.sum_xy[CORR_CHOOSE_GRAIN_IMIMIC_LT_GRAIN] += ind->ChooseGrain * ind->Imimic_ltGrain;
+        stats.sum_xy[CORR_CHOOSE_LT_GRAIN_MIMIC_GRAIN] += ind->Choose_ltGrain * ind->MimicGrain;
+        stats.sum_xy[CORR_CHOOSE_LT_GRAIN_IMIMIC_GRAIN] += ind->Choose_ltGrain * ind->ImimicGrain;
+        stats.sum_xy[CORR_CHOOSE_LT_GRAIN_IMIMIC_LT_GRAIN] += ind->Choose_ltGrain * ind->Imimic_ltGrain;
+        stats.sum_xy[CORR_MIMIC_GRAIN_IMIMIC_GRAIN] += ind->MimicGrain * ind->ImimicGrain;
+        stats.sum_xy[CORR_MIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->MimicGrain * ind->Imimic_ltGrain;
+        stats.sum_xy[CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->ImimicGrain * ind->Imimic_ltGrain;
     }
 
     // Correlations
     for (int pair = 0; pair < PAIRS; pair++) {
         int    var1 = correlationPairs[pair][0];
         int    var2 = correlationPairs[pair][1];
-        double corr = pearson_r(stats.mean[var1], stats.mean[var2], stats.corr[pair], stats.sd[var1], stats.sd[var2],
-                                population_size);
+        double corr = pearson_r(stats.sum[var1], stats.sum[var2], stats.sum_xy[pair], stats.sum2[var1],
+                                stats.sum2[var2], population_size);
         stats_all_runs->corr[pair] += corr;
         stats_all_runs->corr2[pair] += corr * corr;
     }
@@ -128,11 +128,11 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         stats_all_runs->iqr2[variable] += iqr * iqr;
 
         // Mean and standard deviation
-        double st_dev = stdev(stats.mean[variable], stats.sd[variable], population_size);
-        stats_all_runs->sd[variable] += st_dev;
-        stats_all_runs->sd2[variable] += st_dev * st_dev;
-        double mean = stats.mean[variable] / population_size;
+        double mean = stats.sum[variable] / population_size;
         stats_all_runs->mean[variable] += mean;
         stats_all_runs->mean2[variable] += mean * mean;
+        double st_dev = stdev(stats.sum[variable], stats.sum2[variable], population_size);
+        stats_all_runs->sd[variable] += st_dev;
+        stats_all_runs->sd2[variable] += st_dev * st_dev;
     }
 }
