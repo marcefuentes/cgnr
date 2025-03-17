@@ -70,6 +70,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Bins
             count[variable][select_bin(bin_size[variable], *continuous_vars[variable])]++;
+
             // Mean and standard deviation
             stats.mean[variable] += *continuous_vars[variable];
             stats.sd[variable] += *continuous_vars[variable] * *continuous_vars[variable];
