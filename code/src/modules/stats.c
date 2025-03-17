@@ -116,9 +116,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         double previousfreq = 0.0;
 
         double lower_quartile = quartile(stats.frc[variable], BINS, LOWER_QUARTILE, &bin, &previousfreq);
-        double median = quartile(stats.frc[variable], BINS, MEDIAN, &bin, &previousfreq);
+        stats.median[variable] = quartile(stats.frc[variable], BINS, MEDIAN, &bin, &previousfreq);
         double upper_quartile = quartile(stats.frc[variable], BINS, UPPER_QUARTILE, &bin, &previousfreq);
-        stats.median[variable] = median;
         stats_all_runs->median[variable] += stats.median[variable];
         stats_all_runs->median2[variable] += stats.median[variable] * stats.median[variable];
         stats.iqr[variable] = upper_quartile - lower_quartile;
