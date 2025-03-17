@@ -3,9 +3,9 @@
 #include "individual.h"
 #include "math_tools.h"
 
-#define LOWER_QUARTILE 0.25
-#define MEDIAN 0.50
-#define UPPER_QUARTILE 0.75
+static const double LOWER_QUARTILE = 0.25;
+static const double MEDIAN = 0.50;
+static const double UPPER_QUARTILE = 0.75;
 
 enum {
     VARIABLE_W = 0,
