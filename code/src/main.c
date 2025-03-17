@@ -27,8 +27,8 @@ gsl_rng *rng = NULL;  // Random number generator
 
 struct Individual *allocate_individuals(unsigned int population_size);
 double             fitness(struct Individual *ind, struct Individual *ind_last);
-int                simulation(struct Stats *stats, char *filename);
 void               initial_pairs(struct Individual *ind, struct Individual *ind_last);
+int                simulation(struct Stats *stats, char *filename);
 
 int main(int argc, char *argv[]) {
     clock_t       start = clock();
