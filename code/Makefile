@@ -55,12 +55,21 @@ test: $(TEST_TARGET)
 	@cp $(TESTDIR)/test.glo $(TESTDIR)/0000.glo
 	./$(TEST_TARGET) $(TESTDIR)/0000
 
-	@diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null 2>&1 && \
-	 diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq > /dev/null 2>&1 && \
-	 echo -e "Output is the same. \033[1;32mGood refactoring!\033[0m" || \
-	 ( \
-		echo -e "\033[1;31mDifferences found\033[0m" ; \
-	 )
+	# Check CSV
+	@if diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null 2>&1; then \
+		echo -e "CSV output is the same. \033[1;32mGood refactoring!\033[0m"; \
+	else \
+		echo -e "CSV output \033[1;31mDIFFERENCES FOUND\033[0m"; \
+		diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv || true; \
+	fi
+
+	# Check FRQ
+	@if diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq > /dev/null 2>&1; then \
+		echo -e "FRQ output is the same. \033[1;32mGood refactoring!\033[0m"; \
+	else \
+		echo -e "FRQ output \033[1;31mDIFFERENCES FOUND\033[0m"; \
+		diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq || true; \
+	fi
 
 # Linking rules
 $(DEBUG_TARGET): $(OBJECTS_DEBUG)
