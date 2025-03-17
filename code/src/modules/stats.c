@@ -46,7 +46,7 @@ static const int    correlationPairs[PAIRS][2] = {
     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_GRAIN},     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN},
     {VARIABLE_IMIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN}};
 
-void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats_all_runs,
+void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size) {
     int    count[CONTINUOUS_VARS][BINS] = {{0}};
     double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
@@ -92,8 +92,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         // Bins
         for (int bin = 0; bin < BINS; bin++) {
             double frc = (double)count[variable][bin] / population_size;
-            stats_all_runs->frc[variable][bin] += frc;
-            stats_all_runs->frc2[variable][bin] += frc * frc;
+            stats->frc[variable][bin] += frc;
+            stats->frc2[variable][bin] += frc * frc;
             freq[variable][bin] = frc;  // For quartiles
         }
 
@@ -104,19 +104,19 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         double lower_quartile = quartile(freq[variable], BINS, LOWER_QUARTILE, &bin, &previousfreq);
         double median = quartile(freq[variable], BINS, MEDIAN, &bin, &previousfreq);
         double upper_quartile = quartile(freq[variable], BINS, UPPER_QUARTILE, &bin, &previousfreq);
-        stats_all_runs->median[variable] += median;
-        stats_all_runs->median2[variable] += median * median;
+        stats->median[variable] += median;
+        stats->median2[variable] += median * median;
         double iqr = upper_quartile - lower_quartile;
-        stats_all_runs->iqr[variable] += iqr;
-        stats_all_runs->iqr2[variable] += iqr * iqr;
+        stats->iqr[variable] += iqr;
+        stats->iqr2[variable] += iqr * iqr;
 
         // Mean and standard deviation
         double mean = sum[variable] / population_size;
-        stats_all_runs->mean[variable] += mean;
-        stats_all_runs->mean2[variable] += mean * mean;
+        stats->mean[variable] += mean;
+        stats->mean2[variable] += mean * mean;
         double st_dev = stdev(sum[variable], sum2[variable], population_size);
-        stats_all_runs->sd[variable] += st_dev;
-        stats_all_runs->sd2[variable] += st_dev * st_dev;
+        stats->sd[variable] += st_dev;
+        stats->sd2[variable] += st_dev * st_dev;
     }
 
     // Correlations
@@ -124,7 +124,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         int    var_x = correlationPairs[pair][0];
         int    var_y = correlationPairs[pair][1];
         double corr = pearson_r(sum[var_x], sum[var_y], sum_xy[pair], sum2[var_x], sum2[var_y], population_size);
-        stats_all_runs->corr[pair] += corr;
-        stats_all_runs->corr2[pair] += corr * corr;
+        stats->corr[pair] += corr;
+        stats->corr2[pair] += corr * corr;
     }
 }
