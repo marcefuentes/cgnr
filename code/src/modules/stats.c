@@ -3,10 +3,6 @@
 #include "individual.h"
 #include "math_tools.h"
 
-static const double LOWER_QUARTILE = 0.25;
-static const double MEDIAN = 0.50;
-static const double UPPER_QUARTILE = 0.75;
-
 enum {
     VARIABLE_W = 0,
     VARIABLE_Q_B_DEFAULT = 1,
@@ -36,7 +32,10 @@ enum {
     CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN = 14
 };
 
-static const int correlationPairs[PAIRS][2] = {
+static const double LOWER_QUARTILE = 0.25;
+static const double MEDIAN = 0.50;
+static const double UPPER_QUARTILE = 0.75;
+static const int    correlationPairs[PAIRS][2] = {
     {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_GRAIN},        {VARIABLE_Q_B_SEEN, VARIABLE_CHOOSE_LT_GRAIN},
     {VARIABLE_Q_B_SEEN, VARIABLE_MIMIC_GRAIN},         {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_GRAIN},
     {VARIABLE_Q_B_SEEN, VARIABLE_IMIMIC_LT_GRAIN},     {VARIABLE_CHOOSE_GRAIN, VARIABLE_CHOOSE_LT_GRAIN},
