@@ -1,7 +1,7 @@
 #ifndef MATH_TOOLS_H
 #define MATH_TOOLS_H
 
-double ces(double qA, double qB, double alpha, double rho);
+double ces(double q_A, double q_B, double alpha, double rho);
 double pearson_r(double sum_x, double sum_y, double sum_xy, double sum_x2, double sum_y2, unsigned int n);
 double quartile(const double *frequencies, int num_bins, double quartile, int *bin, double *previous_freq);
 int    select_bin(double bin_size, double value);

@@ -3,13 +3,13 @@
 
 #define EPSILON 1e-6
 
-double ces(double qA, double qB, double alpha, double rho) {
+double ces(double q_A, double q_B, double alpha, double rho) {
     double fitness;
 
     if (fabs(rho - 0.0) < EPSILON) {
-        fitness = pow(qA, 1.0 - alpha) * pow(qB, alpha);  // Cobb-Douglas
+        fitness = pow(q_A, 1.0 - alpha) * pow(q_B, alpha);  // Cobb-Douglas
     } else {
-        fitness = pow(((1.0 - alpha) * pow(qA, rho)) + (alpha * pow(qB, rho)), 1.0 / rho);
+        fitness = pow(((1.0 - alpha) * pow(q_A, rho)) + (alpha * pow(q_B, rho)), 1.0 / rho);
     }
 
     return fitness;
