@@ -94,16 +94,6 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         stats.sum_xy[CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->ImimicGrain * ind->Imimic_ltGrain;
     }
 
-    // Correlations
-    for (int pair = 0; pair < PAIRS; pair++) {
-        int    var1 = correlationPairs[pair][0];
-        int    var2 = correlationPairs[pair][1];
-        double corr = pearson_r(stats.sum[var1], stats.sum[var2], stats.sum_xy[pair], stats.sum2[var1],
-                                stats.sum2[var2], population_size);
-        stats_all_runs->corr[pair] += corr;
-        stats_all_runs->corr2[pair] += corr * corr;
-    }
-
     // Continous variables
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         // Bins
@@ -134,5 +124,15 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         double st_dev = stdev(stats.sum[variable], stats.sum2[variable], population_size);
         stats_all_runs->sd[variable] += st_dev;
         stats_all_runs->sd2[variable] += st_dev * st_dev;
+    }
+
+    // Correlations
+    for (int pair = 0; pair < PAIRS; pair++) {
+        int    var1 = correlationPairs[pair][0];
+        int    var2 = correlationPairs[pair][1];
+        double corr = pearson_r(stats.sum[var1], stats.sum[var2], stats.sum_xy[pair], stats.sum2[var1],
+                                stats.sum2[var2], population_size);
+        stats_all_runs->corr[pair] += corr;
+        stats_all_runs->corr2[pair] += corr * corr;
     }
 }
