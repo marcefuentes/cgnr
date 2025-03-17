@@ -62,9 +62,9 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     }
 
     for (; ind < ind_last; ind++) {
-        double *const continuous_vars[CONTINUOUS_VARS] = {&ind->w,           &ind->qBDefault,      &ind->qBSeen,
-                                                          &ind->ChooseGrain, &ind->Choose_ltGrain, &ind->MimicGrain,
-                                                          &ind->ImimicGrain, &ind->Imimic_ltGrain};
+        const double *const continuous_vars[CONTINUOUS_VARS] = {
+            &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
+            &ind->MimicGrain, &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
         // Continous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
