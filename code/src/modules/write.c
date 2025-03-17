@@ -14,7 +14,7 @@ const char *headers_correlations[PAIRS] = {
 int write_csv_headers(char *filename);
 int write_frq_headers(char *filename);
 
-int stats_csv(struct Stats *stats_all_runs, unsigned int periods, unsigned int runs, char *filename) {
+int stats_csv(struct Stats *stats, unsigned int periods, unsigned int runs, char *filename) {
     if (write_csv_headers(filename) < 0) {
         return file_write_error(filename);
     }
@@ -24,7 +24,7 @@ int stats_csv(struct Stats *stats_all_runs, unsigned int periods, unsigned int r
         return file_write_error(filename);
     }
 
-    struct Stats *stats_p = stats_all_runs;
+    struct Stats *stats_p = stats;
     for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
         fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
@@ -55,7 +55,7 @@ int stats_csv(struct Stats *stats_all_runs, unsigned int periods, unsigned int r
     return 0;
 }
 
-int stats_frq(struct Stats *stats_all_runs, unsigned int periods, unsigned int runs, char *filename) {
+int stats_frq(struct Stats *stats, unsigned int periods, unsigned int runs, char *filename) {
     if (write_frq_headers(filename) < 0) {
         return file_write_error(filename);
     }
@@ -65,7 +65,7 @@ int stats_frq(struct Stats *stats_all_runs, unsigned int periods, unsigned int r
         return file_write_error(filename);
     }
 
-    struct Stats *stats_p = stats_all_runs;
+    struct Stats *stats_p = stats;
     for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
         fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
