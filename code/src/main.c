@@ -25,9 +25,10 @@ gsl_rng *rng = NULL;  // Random number generator
 
 // Functions
 
-double fitness(struct Individual *ind, struct Individual *ind_last);
-int    simulation(struct Stats *stats, char *filename);
-void   start_population(struct Individual *ind, struct Individual *ind_last);
+struct Individual *allocate_individuals(unsigned int population_size);
+double             fitness(struct Individual *ind, struct Individual *ind_last);
+int                simulation(struct Stats *stats, char *filename);
+void               start_population(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
     clock_t       start = clock();
@@ -116,9 +117,7 @@ cleanup:
 
 int simulation(struct Stats *stats, char *filename) {
     int                ret = -1;
-    struct Individual *ind_first = NULL;
-
-    ind_first = calloc(globals.population_size, sizeof(*ind_first));
+    struct Individual *ind_first = allocate_individuals(globals.population_size);
     if (ind_first == NULL) {
         fprintf(stderr, "Failed calloc (individuals).\n");
         goto cleanup;
@@ -194,25 +193,31 @@ cleanup:
     return ret;
 }
 
-void start_population(struct Individual *ind, struct Individual *ind_last) {
-    ind->qBDefault = 0.1;
-    ind->qBDecided = ind->qBDefault;
-    ind->qBSeenSum = 0.0;
-    ind->ChooseGrain = 1.0;
-    ind->Choose_ltGrain = 1.0;
-    ind->MimicGrain = 1.0;
-    ind->ImimicGrain = 1.0;
-    ind->Imimic_ltGrain = 1.0;
-    ind->cost = 0.0;
-    ind->age = 0;
+struct Individual *allocate_individuals(unsigned int population_size) {
+    struct Individual *ind = calloc(population_size, sizeof(*ind));
+    if (ind == NULL) {
+        fprintf(stderr, "Failed to allocate individuals.\n");
+        return NULL;
+    }
 
+    ind[0] = INITIAL_INDIVIDUAL;
+
+    for (unsigned int i = 1; i < population_size; i++) {
+        ind[i] = ind[0];  // Struct assignment (fast)
+    }
+
+    return ind;
+}
+
+void start_population(struct Individual *ind, struct Individual *ind_last) {
     for (struct Individual *ind_i = ind + 1; ind_i < ind_last; ind_i++) {
         *ind_i = *ind;
     }
 
-    for (struct Individual *ind_j = ind + 1; ind < ind_last; ind += 2, ind_j += 2) {
-        ind->partner = ind_j;
-        ind_j->partner = ind;
+    struct Individual *ind_j = ind + 1;
+    for (struct Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
+        ind_i->partner = ind_j;
+        ind_j->partner = ind_i;
     }
 }
 
