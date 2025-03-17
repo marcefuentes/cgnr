@@ -28,7 +28,7 @@ gsl_rng *rng = NULL;  // Random number generator
 struct Individual *allocate_individuals(unsigned int population_size);
 double             fitness(struct Individual *ind, struct Individual *ind_last);
 int                simulation(struct Stats *stats, char *filename);
-void               start_population(struct Individual *ind, struct Individual *ind_last);
+void               initial_pairs(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
     clock_t       start = clock();
@@ -125,7 +125,7 @@ int simulation(struct Stats *stats, char *filename) {
 
     struct Individual *ind_last = ind_first + globals.population_size;
 
-    start_population(ind_first, ind_last);
+    initial_pairs(ind_first, ind_last);
 
     unsigned int period = 0;
 
@@ -209,7 +209,7 @@ struct Individual *allocate_individuals(unsigned int population_size) {
     return ind;
 }
 
-void start_population(struct Individual *ind, struct Individual *ind_last) {
+void initial_pairs(struct Individual *ind, struct Individual *ind_last) {
     struct Individual *ind_j = ind + 1;
     for (struct Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
         ind_i->partner = ind_j;
