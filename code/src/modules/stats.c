@@ -96,9 +96,10 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
 
     // Correlations
     for (int pair = 0; pair < PAIRS; pair++) {
-        stats.corr[pair] =
-            pearson_r(stats.mean[correlationPairs[pair][0]], stats.mean[correlationPairs[pair][1]], stats.corr[pair],
-                      stats.sd[correlationPairs[pair][0]], stats.sd[correlationPairs[pair][1]], population_size);
+        int var1 = correlationPairs[pair][0];
+        int var2 = correlationPairs[pair][1];
+        stats.corr[pair] = pearson_r(stats.mean[var1], stats.mean[var2], stats.corr[pair], stats.sd[var1],
+                                     stats.sd[var2], population_size);
         stats_all_runs->corr[pair] += stats.corr[pair];
         stats_all_runs->corr2[pair] += stats.corr[pair] * stats.corr[pair];
     }
