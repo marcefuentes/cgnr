@@ -127,10 +127,10 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
 
     // Correlations
     for (int pair = 0; pair < PAIRS; pair++) {
-        int    var1 = correlationPairs[pair][0];
-        int    var2 = correlationPairs[pair][1];
-        double corr = pearson_r(stats.sum[var1], stats.sum[var2], stats.sum_xy[pair], stats.sum2[var1],
-                                stats.sum2[var2], population_size);
+        int    var_x = correlationPairs[pair][0];
+        int    var_y = correlationPairs[pair][1];
+        double corr = pearson_r(stats.sum[var_x], stats.sum[var_y], stats.sum_xy[pair], stats.sum2[var_x],
+                                stats.sum2[var_y], population_size);
         stats_all_runs->corr[pair] += corr;
         stats_all_runs->corr2[pair] += corr * corr;
     }
