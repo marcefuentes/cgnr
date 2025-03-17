@@ -25,8 +25,8 @@ struct Stats {
 };
 
 // Functions for handling statistics
-int  stats_csv(struct Stats *statsall, unsigned int periods, unsigned int runs, char *filename);
-int  stats_frq(struct Stats *statsall, unsigned int periods, unsigned int runs, char *filename);
+int  stats_csv(struct Stats *stats, unsigned int periods, unsigned int runs, char *filename);
+int  stats_frq(struct Stats *stats, unsigned int periods, unsigned int runs, char *filename);
 void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size);
 
