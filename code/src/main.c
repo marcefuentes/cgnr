@@ -210,10 +210,6 @@ struct Individual *allocate_individuals(unsigned int population_size) {
 }
 
 void start_population(struct Individual *ind, struct Individual *ind_last) {
-    for (struct Individual *ind_i = ind + 1; ind_i < ind_last; ind_i++) {
-        *ind_i = *ind;
-    }
-
     struct Individual *ind_j = ind + 1;
     for (struct Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
         ind_i->partner = ind_j;
