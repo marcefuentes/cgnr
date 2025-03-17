@@ -220,9 +220,9 @@ double fitness(struct Individual *ind, struct Individual *ind_last) {
     double w_cumulative = 0.0;
 
     for (; ind < ind_last; ind++) {
-        double qA = 1.0 - ind->qBDecided;
-        double qB = (ind->qBDecided * (1.0 - globals.given)) + (ind->partner->qBDecided * globals.given);
-        ind->w = fmax(0.0, ces(qA, qB, globals.alpha, globals.rho) - ind->cost);
+        double q_A = 1.0 - ind->qBDecided;
+        double q_B = (ind->qBDecided * (1.0 - globals.given)) + (ind->partner->qBDecided * globals.given);
+        ind->w = fmax(0.0, ces(q_A, q_B, globals.alpha, globals.rho) - ind->cost);
         w_cumulative += ind->w;
         ind->wCumulative = w_cumulative;
         ind->age++;
