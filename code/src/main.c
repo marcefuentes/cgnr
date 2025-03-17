@@ -26,13 +26,13 @@ gsl_rng *rng = NULL;  // Random number generator
 // Functions
 
 double fitness(struct Individual *ind, struct Individual *ind_last);
-int    simulation(struct Stats *stats_all_runs, char *filename);
+int    simulation(struct Stats *stats, char *filename);
 void   start_population(struct Individual *ind, struct Individual *ind_last);
 
 int main(int argc, char *argv[]) {
     clock_t       start = clock();
     int           ret = EXIT_FAILURE;
-    struct Stats *stats_all_runs = NULL;
+    struct Stats *stats = NULL;
     char          ics[MAX_FILENAME_LEN];
 
     if (argc != 2) {
@@ -66,8 +66,8 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
-    stats_all_runs = calloc(globals.periods + 1, sizeof(*stats_all_runs));
-    if (stats_all_runs == NULL) {
+    stats = calloc(globals.periods + 1, sizeof(*stats));
+    if (stats == NULL) {
         fprintf(stderr, "Failed calloc (stats).\n");
         goto cleanup;
     }
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
     for (unsigned int run = 0; run < globals.runs; run++) {
-        if (simulation(stats_all_runs, ics) < 0) {
+        if (simulation(stats, ics) < 0) {
             fprintf(stderr, "Failed simulation.\n");
             goto cleanup;
         }
@@ -83,14 +83,14 @@ int main(int argc, char *argv[]) {
 
     char csv[MAX_FILENAME_LEN];
     snprintf(csv, sizeof(csv), "%s.csv", filename);
-    if (stats_csv(stats_all_runs, globals.periods + 1, globals.runs, csv) < 0) {
+    if (stats_csv(stats, globals.periods + 1, globals.runs, csv) < 0) {
         fprintf(stderr, "Failed stats_csv.\n");
         goto cleanup;
     }
 
     char frq[MAX_FILENAME_LEN];
     snprintf(frq, sizeof(frq), "%s.frq", filename);
-    if (stats_frq(stats_all_runs, globals.periods + 1, globals.runs, frq) < 0) {
+    if (stats_frq(stats, globals.periods + 1, globals.runs, frq) < 0) {
         fprintf(stderr, "Failed stats_frq.\n");
         goto cleanup;
     }
@@ -107,17 +107,16 @@ cleanup:
         gsl_rng_free(rng);
         rng = NULL;
     }
-    if (stats_all_runs != NULL) {
-        free(stats_all_runs);
-        stats_all_runs = NULL;
+    if (stats != NULL) {
+        free(stats);
+        stats = NULL;
     }
     return ret;
 }
 
-int simulation(struct Stats *stats_all_runs, char *filename) {
+int simulation(struct Stats *stats, char *filename) {
     int                ret = -1;
     struct Individual *ind_first = NULL;
-    struct Stats      *stats_current_run = NULL;
 
     ind_first = calloc(globals.population_size, sizeof(*ind_first));
     if (ind_first == NULL) {
@@ -127,12 +126,6 @@ int simulation(struct Stats *stats_all_runs, char *filename) {
 
     struct Individual *ind_last = ind_first + globals.population_size;
 
-    stats_current_run = calloc(globals.periods + 1, sizeof(*stats_current_run));
-    if (stats_current_run == NULL) {
-        fprintf(stderr, "Failed calloc (periods).\n");
-        goto cleanup;
-    }
-
     start_population(ind_first, ind_last);
 
     unsigned int period = 0;
@@ -141,12 +134,11 @@ int simulation(struct Stats *stats_all_runs, char *filename) {
         double w_cumulative = fitness(ind_first, ind_last);
 
         if (time == 0 || (time + 1) % globals.time_per_period == 0) {
-            struct Stats *stats_current = stats_current_run + period;
-            stats_current->alpha = globals.alpha;
-            stats_current->logES = globals.loges;
-            stats_current->Given = globals.given;
-            stats_current->time = time + 1;
-            stats_period(ind_first, ind_last, stats_current, globals.population_size);
+            stats[period].alpha = globals.alpha;
+            stats[period].logES = globals.loges;
+            stats[period].Given = globals.given;
+            stats[period].time = time + 1;
+            stats_period(ind_first, ind_last, stats + period, globals.population_size);
             if (globals.runs == 1) {
                 write_ics(filename, period, (float)globals.alpha, (float)globals.loges, (float)globals.given, time + 1,
                           ind_first, ind_last);
@@ -191,17 +183,12 @@ int simulation(struct Stats *stats_all_runs, char *filename) {
         }
     }
 
-    stats_end_of_simulation(stats_current_run, stats_all_runs, globals.periods + 1);
     ret = 0;
 
 cleanup:
     if (ind_first != NULL) {
         free(ind_first);
         ind_first = NULL;
-    }
-    if (stats_current_run != NULL) {
-        free(stats_current_run);
-        stats_current_run = NULL;
     }
 
     return ret;
