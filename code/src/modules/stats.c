@@ -108,9 +108,10 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         // Bins
         for (int bin = 0; bin < BINS; bin++) {
-            stats.frc[variable][bin] = (double)count[variable][bin] / population_size;
-            stats_all_runs->frc[variable][bin] += stats.frc[variable][bin];
-            stats_all_runs->frc2[variable][bin] += stats.frc[variable][bin] * stats.frc[variable][bin];
+            double frc = (double)count[variable][bin] / population_size;
+            stats_all_runs->frc[variable][bin] += frc;
+            stats_all_runs->frc2[variable][bin] += frc * frc;
+            stats.frc[variable][bin] = frc;  // For quartiles
         }
 
         // Quartiles
@@ -118,20 +119,20 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         double previousfreq = 0.0;
 
         double lower_quartile = quartile(stats.frc[variable], BINS, LOWER_QUARTILE, &bin, &previousfreq);
-        stats.median[variable] = quartile(stats.frc[variable], BINS, MEDIAN, &bin, &previousfreq);
+        double median = quartile(stats.frc[variable], BINS, MEDIAN, &bin, &previousfreq);
         double upper_quartile = quartile(stats.frc[variable], BINS, UPPER_QUARTILE, &bin, &previousfreq);
-        stats_all_runs->median[variable] += stats.median[variable];
-        stats_all_runs->median2[variable] += stats.median[variable] * stats.median[variable];
-        stats.iqr[variable] = upper_quartile - lower_quartile;
-        stats_all_runs->iqr[variable] += stats.iqr[variable];
-        stats_all_runs->iqr2[variable] += stats.iqr[variable] * stats.iqr[variable];
+        stats_all_runs->median[variable] += median;
+        stats_all_runs->median2[variable] += median * median;
+        double iqr = upper_quartile - lower_quartile;
+        stats_all_runs->iqr[variable] += iqr;
+        stats_all_runs->iqr2[variable] += iqr * iqr;
 
         // Mean and standard deviation
-        stats.sd[variable] = stdev(stats.mean[variable], stats.sd[variable], population_size);
-        stats_all_runs->sd[variable] += stats.sd[variable];
-        stats_all_runs->sd2[variable] += stats.sd[variable] * stats.sd[variable];
-        stats.mean[variable] = stats.mean[variable] / population_size;
-        stats_all_runs->mean[variable] += stats.mean[variable];
-        stats_all_runs->mean2[variable] += stats.mean[variable] * stats.mean[variable];
+        double st_dev = stdev(stats.mean[variable], stats.sd[variable], population_size);
+        stats_all_runs->sd[variable] += st_dev;
+        stats_all_runs->sd2[variable] += st_dev * st_dev;
+        double mean = stats.mean[variable] / population_size;
+        stats_all_runs->mean[variable] += mean;
+        stats_all_runs->mean2[variable] += mean * mean;
     }
 }
