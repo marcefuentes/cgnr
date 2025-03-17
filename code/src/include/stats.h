@@ -6,14 +6,22 @@
 enum { BINS = 64, CONTINUOUS_VARS = 8, PAIRS = 15 };
 
 struct Stats {
+    double        alpha;
+    double        logES;
+    double        Given;
     unsigned long time;
-    double        alpha, logES, Given;
-    double        mean[CONTINUOUS_VARS], mean2[CONTINUOUS_VARS];
-    double        sd[CONTINUOUS_VARS], sd2[CONTINUOUS_VARS];
-    double        frc[CONTINUOUS_VARS][BINS], frc2[CONTINUOUS_VARS][BINS];
-    double        median[CONTINUOUS_VARS], median2[CONTINUOUS_VARS];
-    double        iqr[CONTINUOUS_VARS], iqr2[CONTINUOUS_VARS];
-    double        corr[PAIRS], corr2[PAIRS];
+    double        mean[CONTINUOUS_VARS];
+    double        mean2[CONTINUOUS_VARS];
+    double        sd[CONTINUOUS_VARS];
+    double        sd2[CONTINUOUS_VARS];
+    double        frc[CONTINUOUS_VARS][BINS];
+    double        frc2[CONTINUOUS_VARS][BINS];
+    double        median[CONTINUOUS_VARS];
+    double        median2[CONTINUOUS_VARS];
+    double        iqr[CONTINUOUS_VARS];
+    double        iqr2[CONTINUOUS_VARS];
+    double        corr[PAIRS];
+    double        corr2[PAIRS];
 };
 
 // Functions for handling statistics
