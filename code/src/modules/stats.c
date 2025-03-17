@@ -32,6 +32,7 @@ enum {
     CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN = 14
 };
 
+static const double BIN_SIZE = 1.0 / BINS;
 static const double LOWER_QUARTILE = 0.25;
 static const double MEDIAN = 0.50;
 static const double UPPER_QUARTILE = 0.75;
@@ -49,10 +50,8 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
                   unsigned int population_size) {
     struct Stats stats;
     int          count[CONTINUOUS_VARS][BINS] = {{0}};
-    double       bin_size[CONTINUOUS_VARS];
 
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
-        bin_size[variable] = 1.0 / BINS;
         stats.sum[variable] = 0.0;
         stats.sum2[variable] = 0.0;
     }
@@ -69,7 +68,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
         // Continous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Bins
-            count[variable][select_bin(bin_size[variable], *continuous_vars[variable])]++;
+            count[variable][select_bin(BIN_SIZE, *continuous_vars[variable])]++;
 
             // Mean and standard deviation
             stats.sum[variable] += *continuous_vars[variable];
