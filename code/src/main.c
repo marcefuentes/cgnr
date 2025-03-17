@@ -203,7 +203,7 @@ struct Individual *allocate_individuals(unsigned int population_size) {
     ind[0] = INITIAL_INDIVIDUAL;
 
     for (unsigned int i = 1; i < population_size; i++) {
-        ind[i] = ind[0];  // Struct assignment (fast)
+        ind[i] = ind[0];
     }
 
     return ind;
