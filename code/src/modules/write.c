@@ -25,6 +25,8 @@ int stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filen
     }
 
     Stats *stats_p = stats;
+    double mean;
+    double st_dev;
     for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
         fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
@@ -32,19 +34,19 @@ int stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filen
         // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Mean and standard deviation
-            stats_p->mean2[variable] = stdev(stats_p->mean[variable], stats_p->mean2[variable], runs);
-            stats_p->mean[variable] = stats_p->mean[variable] / runs;
-            fprintf(file, ",%f,%f", stats_p->mean[variable], stats_p->mean2[variable]);
-            stats_p->sd2[variable] = stdev(stats_p->sd[variable], stats_p->sd2[variable], runs);
-            stats_p->sd[variable] = stats_p->sd[variable] / runs;
-            fprintf(file, ",%f,%f", stats_p->sd[variable], stats_p->sd2[variable]);
+            mean = stats_p->mean[variable] / runs;
+            st_dev = stdev(stats_p->mean[variable], stats_p->mean2[variable], runs);
+            fprintf(file, ",%f,%f", mean, st_dev);
+            mean = stats_p->sd[variable] / runs;
+            st_dev = stdev(stats_p->sd[variable], stats_p->sd2[variable], runs);
+            fprintf(file, ",%f,%f", mean, st_dev);
         }
 
         // Correlations
         for (int pair = 0; pair < PAIRS; pair++) {
-            stats_p->corr2[pair] = stdev(stats_p->corr[pair], stats_p->corr2[pair], runs);
-            stats_p->corr[pair] = stats_p->corr[pair] / runs;
-            fprintf(file, ",%f,%f", stats_p->corr[pair], stats_p->corr2[pair]);
+            mean = stats_p->corr[pair] / runs;
+            st_dev = stdev(stats_p->corr[pair], stats_p->corr2[pair], runs);
+            fprintf(file, ",%f,%f", mean, st_dev);
         }
 
         fprintf(file, "\n");
@@ -66,6 +68,8 @@ int stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filen
     }
 
     Stats *stats_p = stats;
+    double mean;
+    double st_dev;
     for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
         fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
@@ -73,18 +77,18 @@ int stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filen
         // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Quartiles
-            stats_p->median2[variable] = stdev(stats_p->median[variable], stats_p->median2[variable], runs);
-            stats_p->median[variable] = stats_p->median[variable] / runs;
-            fprintf(file, ",%f,%f", stats_p->median[variable], stats_p->median2[variable]);
-            stats_p->iqr2[variable] = stdev(stats_p->iqr[variable], stats_p->iqr2[variable], runs);
-            stats_p->iqr[variable] = stats_p->iqr[variable] / runs;
-            fprintf(file, ",%f,%f", stats_p->iqr[variable], stats_p->iqr2[variable]);
+            mean = stats_p->median[variable] / runs;
+            st_dev = stdev(stats_p->median[variable], stats_p->median2[variable], runs);
+            fprintf(file, ",%f,%f", mean, st_dev);
+            mean = stats_p->iqr[variable] / runs;
+            st_dev = stdev(stats_p->iqr[variable], stats_p->iqr2[variable], runs);
+            fprintf(file, ",%f,%f", mean, st_dev);
 
             // Bins
             for (int bin = 0; bin < BINS; bin++) {
-                stats_p->frc2[variable][bin] = stdev(stats_p->frc[variable][bin], stats_p->frc2[variable][bin], runs);
-                stats_p->frc[variable][bin] = stats_p->frc[variable][bin] / runs;
-                fprintf(file, ",%f,%f", stats_p->frc[variable][bin], stats_p->frc2[variable][bin]);
+                mean = stats_p->frc[variable][bin] / runs;
+                st_dev = stdev(stats_p->frc[variable][bin], stats_p->frc2[variable][bin], runs);
+                fprintf(file, ",%f,%f", mean, st_dev);
             }
         }
 
