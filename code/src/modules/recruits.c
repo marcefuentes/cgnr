@@ -10,7 +10,40 @@
 // Global variable
 extern gsl_rng *rng;
 
-Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
+typedef struct Recruit {
+    double          randomwc;
+    double          qBDefault;
+    double          ChooseGrain;
+    double          Choose_ltGrain;
+    double          MimicGrain;
+    double          ImimicGrain;
+    double          Imimic_ltGrain;
+    double          cost;
+    struct Recruit *next;
+} Recruit;
+
+static Recruit *create_recruits(unsigned int deaths, double w_cumulative);
+static void     free_recruit_list(Recruit **head);
+static void     kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size);
+static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
+                   double cost, int language);
+
+int handle_recruitment(Individual *ind_first, Individual *ind_last, unsigned int deaths, double w_cumulative,
+                       double qb_mutation_size, double grain_mutation_size, double cost, int language,
+                       unsigned int population_size) {
+    Recruit *recruit_first = create_recruits(deaths, w_cumulative);
+    if (recruit_first == NULL) {
+        fprintf(stderr, "Failed create_recruits.\n");
+        return -1;
+    }
+    mutate(recruit_first, ind_first, qb_mutation_size, grain_mutation_size, cost, language);
+    kill(recruit_first, ind_first, population_size);
+    free_recruit_list(&recruit_first);
+
+    return 0;
+}
+
+static Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     Recruit *head = NULL;
 
     for (unsigned int death = 0; death < deaths; death++) {
@@ -45,7 +78,7 @@ Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     return head;
 }
 
-void kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size) {
+static void kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size) {
     unsigned int pick;
 
     for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
@@ -69,8 +102,8 @@ void kill(Recruit *recruit_first, Individual *ind_first, unsigned int population
     }
 }
 
-void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
-            double cost, int language) {
+static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
+                   double cost, int language) {
     Individual *ind = ind_first;
     for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
         while (recruit->randomwc > ind->wCumulative) {
@@ -94,7 +127,7 @@ void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_si
     }
 }
 
-void free_recruit_list(Recruit **head) {
+static void free_recruit_list(Recruit **head) {
     while (*head != NULL) {
         Recruit *temp = *head;
         *head = (*head)->next;

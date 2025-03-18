@@ -161,15 +161,12 @@ static int simulation(Stats *stats, char *filename) {
         unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
 
         if (deaths > 0) {
-            Recruit *recruit_first = create_recruits(deaths, w_cumulative);
-            if (recruit_first == NULL) {
-                fprintf(stderr, "Failed create_recruits.\n");
+            if (handle_recruitment(ind_first, ind_last, deaths, w_cumulative, globals.qb_mutation_size,
+                                   globals.grain_mutation_size, globals.cost, globals.language,
+                                   globals.population_size) < 0) {
+                fprintf(stderr, "Failed handle_recruitment.\n");
                 goto cleanup;
             }
-            mutate(recruit_first, ind_first, globals.qb_mutation_size, globals.grain_mutation_size, globals.cost,
-                   globals.language);
-            kill(recruit_first, ind_first, globals.population_size);
-            free_recruit_list(&recruit_first);
         }
 
         if (globals.reciprocity == 1) {
