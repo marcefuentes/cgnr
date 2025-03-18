@@ -203,19 +203,11 @@ Individual *allocate_individuals(unsigned int population_size) {
 
     ind[0] = INITIAL_INDIVIDUAL;
 
-    for (unsigned int i = 1; i < population_size; i++) {
-        ind[i] = ind[0];
+    for (unsigned int individual = 1; individual < population_size; individual++) {
+        ind[individual] = ind[0];
     }
 
     return ind;
-}
-
-void initial_pairs(Individual *ind, Individual *ind_last) {
-    Individual *ind_j = ind + 1;
-    for (Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
-        ind_i->partner = ind_j;
-        ind_j->partner = ind_i;
-    }
 }
 
 double fitness(Individual *ind_first, Individual *ind_last) {
@@ -233,4 +225,12 @@ double fitness(Individual *ind_first, Individual *ind_last) {
     }
 
     return w_cumulative;
+}
+
+void initial_pairs(Individual *ind, Individual *ind_last) {
+    Individual *ind_j = ind + 1;
+    for (Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
+        ind_i->partner = ind_j;
+        ind_j->partner = ind_i;
+    }
 }
