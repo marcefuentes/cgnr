@@ -46,7 +46,7 @@ static const int    correlationPairs[PAIRS][2] = {
     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_GRAIN},     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN},
     {VARIABLE_IMIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN}};
 
-void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
+void stats_period(struct Individual *ind_first, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size) {
     int    count[CONTINUOUS_VARS][BINS] = {{0}};
     double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
@@ -54,7 +54,7 @@ void stats_period(struct Individual *ind, struct Individual *ind_last, struct St
     double sum2[CONTINUOUS_VARS] = {0.0};
     double sum_xy[PAIRS] = {0.0};
 
-    for (; ind < ind_last; ind++) {
+    for (struct Individual *ind = ind_first; ind < ind_last; ind++) {
         const double *const continuous_vars[CONTINUOUS_VARS] = {
             &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
             &ind->MimicGrain, &ind->ImimicGrain, &ind->Imimic_ltGrain};
