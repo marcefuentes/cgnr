@@ -10,7 +10,6 @@
 #include "individual.h"
 #include "io.h"
 #include "math_tools.h"
-#include "recruit.h"
 #include "stats.h"
 
 /* Simulates reciprocity and partner choice.
