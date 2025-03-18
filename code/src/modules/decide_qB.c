@@ -4,11 +4,11 @@
 
 double calculate(double focal, double partner, double grain);
 
-void decide_qB(Individual *ind, Individual *ind_last, int indirect_r) {
+void decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r) {
     double grain;
     double partner;
 
-    for (; ind < ind_last; ind++) {
+    for (Individual *ind = ind_first; ind < ind_last; ind++) {
         if (ind->age > 0 && ind->partner->age > 0) {
             if (ind->partner == ind->oldpartner) {
                 if (indirect_r == 1 && ind->Imimic_ltGrain < ind->MimicGrain) {
