@@ -116,7 +116,8 @@ cleanup:
 }
 
 int simulation(Stats *stats, char *filename) {
-    int         ret = -1;
+    int ret = -1;
+
     Individual *ind_first = allocate_individuals(globals.population_size);
     if (ind_first == NULL) {
         fprintf(stderr, "Failed calloc (individuals).\n");
@@ -217,10 +218,10 @@ void initial_pairs(Individual *ind, Individual *ind_last) {
     }
 }
 
-double fitness(Individual *ind, Individual *ind_last) {
+double fitness(Individual *ind_first, Individual *ind_last) {
     double w_cumulative = 0.0;
 
-    for (; ind < ind_last; ind++) {
+    for (Individual *ind = ind_first; ind < ind_last; ind++) {
         double q_A = 1.0 - ind->qBDecided;
         double q_B = (ind->qBDecided * (1.0 - globals.given)) + (ind->partner->qBDecided * globals.given);
         ind->w = fmax(0.0, ces(q_A, q_B, globals.alpha, globals.rho) - ind->cost);
