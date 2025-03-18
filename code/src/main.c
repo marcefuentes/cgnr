@@ -29,6 +29,7 @@ static Individual *allocate_individuals(unsigned int population_size);
 static double      fitness(Individual *ind, Individual *ind_last);
 static void        initial_pairs(Individual *ind, Individual *ind_last);
 static int         simulation(Stats *stats, char *filename);
+static int         time_to_analyze(unsigned long time);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -133,7 +134,7 @@ static int simulation(Stats *stats, char *filename) {
     for (unsigned long time = 0; time < globals.time; time++) {
         double w_cumulative = fitness(ind_first, ind_last);
 
-        if (time == 0 || (time + 1) % globals.time_per_period == 0) {
+        if (time_to_analyze(time) == 1) {
             stats[period].alpha = globals.alpha;
             stats[period].logES = globals.loges;
             stats[period].Given = globals.given;
@@ -227,10 +228,17 @@ static double fitness(Individual *ind_first, Individual *ind_last) {
     return w_cumulative;
 }
 
-static void initial_pairs(Individual *ind, Individual *ind_last) {
-    Individual *ind_j = ind + 1;
-    for (Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
+static void initial_pairs(Individual *ind_first, Individual *ind_last) {
+    Individual *ind_j = ind_first + 1;
+    for (Individual *ind_i = ind_first; ind_i < ind_last; ind_i += 2, ind_j += 2) {
         ind_i->partner = ind_j;
         ind_j->partner = ind_i;
     }
+}
+
+static int time_to_analyze(unsigned long time) {
+    if (time == 0 || (time + 1) % globals.time_per_period == 0) {
+        return 1;
+    }
+    return 0;
 }
