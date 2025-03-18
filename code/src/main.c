@@ -25,13 +25,13 @@ gsl_rng *rng = NULL;  // Random number generator
 
 // Functions
 
-static Individual  *allocate_individuals(unsigned int population_size);
-static double       fitness(Individual *ind_first, Individual *ind_last);
-static unsigned int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last,
-                            unsigned long time, unsigned int period);
-static void         initial_pairs(Individual *ind_first, Individual *ind_last);
-static int          simulation(Stats *stats, char *filename);
-static int          time_to_analyze(unsigned long time);
+static Individual *allocate_individuals(unsigned int population_size);
+static double      fitness(Individual *ind_first, Individual *ind_last);
+static int  analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
+                    int period);
+static void initial_pairs(Individual *ind_first, Individual *ind_last);
+static int  simulation(Stats *stats, char *filename);
+static int  time_to_analyze(unsigned long time);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
-    stats = calloc(globals.periods + 1, sizeof(*stats));
+    stats = calloc((unsigned int)globals.periods + 1, sizeof(*stats));
     if (stats == NULL) {
         fprintf(stderr, "Failed calloc (stats).\n");
         goto cleanup;
@@ -131,13 +131,17 @@ static int simulation(Stats *stats, char *filename) {
 
     initial_pairs(ind_first, ind_last);
 
-    unsigned int period = 0;
+    int period = 0;
 
     for (unsigned long time = 0; time < globals.time; time++) {
         double w_cumulative = fitness(ind_first, ind_last);
 
         if (time_to_analyze(time) == 1) {
             period = analyze(stats, filename, ind_first, ind_last, time, period);
+            if (period < 1) {
+                fprintf(stderr, "Failed analyze.\n");
+                goto cleanup;
+            }
         }
 
         if (globals.language == 1) {
@@ -201,16 +205,19 @@ static Individual *allocate_individuals(unsigned int population_size) {
     return ind;
 }
 
-static unsigned int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last,
-                            unsigned long time, unsigned int period) {
+static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
+                   int period) {
     stats[period].alpha = globals.alpha;
     stats[period].logES = globals.loges;
     stats[period].Given = globals.given;
     stats[period].time = time + 1;
     stats_period(ind_first, ind_last, &stats[period], globals.population_size);
     if (globals.runs == 1) {
-        write_ics(filename, period, (float)globals.alpha, (float)globals.loges, (float)globals.given, time + 1,
-                  ind_first, ind_last);
+        if (write_ics(filename, period, (float)globals.alpha, (float)globals.loges, (float)globals.given, time + 1,
+                      ind_first, ind_last) < 0) {
+            fprintf(stderr, "Failed write_ics.\n");
+            return -1;
+        }
     }
 
     return period + 1;
