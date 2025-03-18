@@ -25,10 +25,10 @@ gsl_rng *rng = NULL;  // Random number generator
 
 // Functions
 
-struct Individual *allocate_individuals(unsigned int population_size);
-double             fitness(struct Individual *ind, struct Individual *ind_last);
-void               initial_pairs(struct Individual *ind, struct Individual *ind_last);
-int                simulation(struct Stats *stats, char *filename);
+Individual *allocate_individuals(unsigned int population_size);
+double      fitness(Individual *ind, Individual *ind_last);
+void        initial_pairs(Individual *ind, Individual *ind_last);
+int         simulation(struct Stats *stats, char *filename);
 
 int main(int argc, char *argv[]) {
     clock_t       start = clock();
@@ -116,14 +116,14 @@ cleanup:
 }
 
 int simulation(struct Stats *stats, char *filename) {
-    int                ret = -1;
-    struct Individual *ind_first = allocate_individuals(globals.population_size);
+    int         ret = -1;
+    Individual *ind_first = allocate_individuals(globals.population_size);
     if (ind_first == NULL) {
         fprintf(stderr, "Failed calloc (individuals).\n");
         goto cleanup;
     }
 
-    struct Individual *ind_last = ind_first + globals.population_size;
+    Individual *ind_last = ind_first + globals.population_size;
 
     initial_pairs(ind_first, ind_last);
 
@@ -193,8 +193,8 @@ cleanup:
     return ret;
 }
 
-struct Individual *allocate_individuals(unsigned int population_size) {
-    struct Individual *ind = calloc(population_size, sizeof(*ind));
+Individual *allocate_individuals(unsigned int population_size) {
+    Individual *ind = calloc(population_size, sizeof(*ind));
     if (ind == NULL) {
         fprintf(stderr, "Failed to allocate individuals.\n");
         return NULL;
@@ -209,15 +209,15 @@ struct Individual *allocate_individuals(unsigned int population_size) {
     return ind;
 }
 
-void initial_pairs(struct Individual *ind, struct Individual *ind_last) {
-    struct Individual *ind_j = ind + 1;
-    for (struct Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
+void initial_pairs(Individual *ind, Individual *ind_last) {
+    Individual *ind_j = ind + 1;
+    for (Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
         ind_i->partner = ind_j;
         ind_j->partner = ind_i;
     }
 }
 
-double fitness(struct Individual *ind, struct Individual *ind_last) {
+double fitness(Individual *ind, Individual *ind_last) {
     double w_cumulative = 0.0;
 
     for (; ind < ind_last; ind++) {

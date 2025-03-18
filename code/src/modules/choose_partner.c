@@ -15,10 +15,10 @@ typedef struct List {
 
 List *create_shuffled_list(unsigned int size);
 void  free_list(List **head);
-bool  willing(struct Individual *ind_a, struct Individual *ind_b);
+bool  willing(Individual *ind_a, Individual *ind_b);
 
-int choose_partner(struct Individual *ind_first, struct Individual *ind_last, unsigned int group_size) {
-    for (struct Individual *ind = ind_first; ind < ind_last; ind += group_size) {
+int choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size) {
+    for (Individual *ind = ind_first; ind < ind_last; ind += group_size) {
         List *head = create_shuffled_list(group_size);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
@@ -27,10 +27,10 @@ int choose_partner(struct Individual *ind_first, struct Individual *ind_last, un
         }
 
         while (head != NULL && head->next != NULL) {
-            List              *previous = head;
-            List              *temp = head->next;
-            struct Individual *ind_j = ind + head->ind;
-            struct Individual *ind_k = ind + temp->ind;
+            List       *previous = head;
+            List       *temp = head->next;
+            Individual *ind_j = ind + head->ind;
+            Individual *ind_k = ind + temp->ind;
 
             while (temp != NULL && (willing(ind_j, ind_k) == false || willing(ind_k, ind_j) == false)) {
                 previous = temp;
@@ -92,7 +92,7 @@ void free_list(List **head) {
     }
 }
 
-bool willing(struct Individual *ind_a, struct Individual *ind_b) {
+bool willing(Individual *ind_a, Individual *ind_b) {
     if (ind_a == NULL || ind_b == NULL || ind_a->partner == NULL) {
         fprintf(stderr, "Null pointer encountered in willing.\n");
         return false;

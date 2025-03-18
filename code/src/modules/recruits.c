@@ -45,7 +45,7 @@ struct Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     return head;
 }
 
-void kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int population_size) {
+void kill(struct Recruit *recruit, Individual *ind_first, unsigned int population_size) {
     unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
@@ -54,7 +54,7 @@ void kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int po
                                                      population_size);  // Kills an individual...
         } while ((ind_first + pick)->age == 0);  // ... that is not already dead
 
-        struct Individual *ind = ind_first + pick;
+        Individual *ind = ind_first + pick;
         ind->qBDefault = recruit->qBDefault;
         ind->qBDecided = ind->qBDefault;
         ind->qBSeenSum = 0.0;
@@ -69,8 +69,8 @@ void kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int po
     }
 }
 
-void mutate(struct Individual *ind, struct Recruit *recruit, double qb_mutation_size, double grain_mutation_size,
-            double cost, int language) {
+void mutate(Individual *ind, struct Recruit *recruit, double qb_mutation_size, double grain_mutation_size, double cost,
+            int language) {
     for (; recruit != NULL; recruit = recruit->next) {
         while (recruit->randomwc > ind->wCumulative) {
             ind++;

@@ -47,10 +47,10 @@ debug: $(DEBUG_TARGET)
 	gdb --args $(DEBUG_TARGET)
 
 release: $(RELEASE_TARGET)
-	@echo -e "\033[1;32mBuilt release target\033[0m"
+	@echo -e "\033[0;32mBuilt release target\033[0m"
 
 test: $(TEST_TARGET)
-	@echo "Running test..."
+	@echo -e "\033[0;33mRunning test...\033[0m"
 	@rm -f $(TESTDIR)/0000*
 	@cp $(TESTDIR)/test.glo $(TESTDIR)/0000.glo
 	./$(TEST_TARGET) $(TESTDIR)/0000

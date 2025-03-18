@@ -56,12 +56,12 @@ typedef struct {
 } AccumulatedData;
 
 static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsigned int population_size);
-static void process_individuals(struct Individual *ind_first, struct Individual *ind_last, AccumulatedData *data);
+static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data);
 
-static void process_individuals(struct Individual *ind_first, struct Individual *ind_last, AccumulatedData *data) {
+static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data) {
     memset(data, 0, sizeof(*data));
 
-    for (struct Individual *ind = ind_first; ind < ind_last; ind++) {
+    for (Individual *ind = ind_first; ind < ind_last; ind++) {
         const double *const continuous_vars[CONTINUOUS_VARS] = {
             &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
             &ind->MimicGrain, &ind->ImimicGrain, &ind->Imimic_ltGrain};
@@ -130,8 +130,7 @@ static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsig
     }
 }
 
-void stats_period(struct Individual *ind_first, struct Individual *ind_last, struct Stats *stats,
-                  unsigned int population_size) {
+void stats_period(Individual *ind_first, Individual *ind_last, struct Stats *stats, unsigned int population_size) {
     AccumulatedData data;
 
     process_individuals(ind_first, ind_last, &data);

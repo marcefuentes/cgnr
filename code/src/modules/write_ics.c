@@ -7,7 +7,7 @@ const char *headers =
     "Imimic_ltGrain,cost,age";
 
 int write_ics(char *filename, unsigned int period, float alpha, float logES, float Given, unsigned long time,
-              struct Individual *ind, struct Individual *ind_last) {
+              Individual *ind, Individual *ind_last) {
     char new_filename[18];
 
     snprintf(new_filename, sizeof(new_filename), "%s_%04d.ics", filename, period);
