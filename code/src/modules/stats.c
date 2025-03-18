@@ -133,6 +133,7 @@ static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsig
 void stats_period(struct Individual *ind_first, struct Individual *ind_last, struct Stats *stats,
                   unsigned int population_size) {
     AccumulatedData data;
+
     process_individuals(ind_first, ind_last, &data);
     compute_statistics(&data, stats, population_size);
 }
