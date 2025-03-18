@@ -171,7 +171,7 @@ int simulation(Stats *stats, char *filename) {
                 fprintf(stderr, "Failed create_recruits.\n");
                 goto cleanup;
             }
-            mutate(ind_first, recruit_first, globals.qb_mutation_size, globals.grain_mutation_size, globals.cost,
+            mutate(recruit_first, ind_first, globals.qb_mutation_size, globals.grain_mutation_size, globals.cost,
                    globals.language);
             kill(recruit_first, ind_first, globals.population_size);
             free_recruit_list(&recruit_first);

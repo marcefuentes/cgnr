@@ -18,8 +18,8 @@ typedef struct Recruit {
 // Functions for handling recruits
 Recruit *create_recruits(unsigned int deaths, double w_cumulative);
 void     free_recruit_list(Recruit **head);
-void     kill(Recruit *recruit, Individual *ind_first, unsigned int population_size);
-void mutate(Individual *ind_first, Recruit *recruit, double qb_mutation_size, double grain_mutation_size, double cost,
-            int language);
+void     kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size);
+void     mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
+                double cost, int language);
 
 #endif  // RECRUIT_H

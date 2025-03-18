@@ -45,10 +45,10 @@ Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     return head;
 }
 
-void kill(Recruit *recruit, Individual *ind_first, unsigned int population_size) {
+void kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size) {
     unsigned int pick;
 
-    for (; recruit != NULL; recruit = recruit->next) {
+    for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
         do {
             pick = (unsigned int)gsl_rng_uniform_int(rng,
                                                      population_size);  // Kills an individual...
@@ -69,9 +69,10 @@ void kill(Recruit *recruit, Individual *ind_first, unsigned int population_size)
     }
 }
 
-void mutate(Individual *ind, Recruit *recruit, double qb_mutation_size, double grain_mutation_size, double cost,
-            int language) {
-    for (; recruit != NULL; recruit = recruit->next) {
+void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
+            double cost, int language) {
+    Individual *ind = ind_first;
+    for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
         while (recruit->randomwc > ind->wCumulative) {
             ind++;
         }
