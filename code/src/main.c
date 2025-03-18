@@ -148,26 +148,19 @@ static int simulation(Stats *stats, char *filename) {
             update_scores(ind_first, ind_last);
         }
 
-        if (globals.shuffle == 1) {
-            int result = shuffle_partners(ind_first, ind_last, globals.group_size);
-            if (result < 0) {
-                fprintf(stderr, "Failed shuffle_partners.\n");
-                goto cleanup;
-            }
+        if (globals.shuffle == 1 && shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
+            fprintf(stderr, "Failed shuffle_partners.\n");
+            goto cleanup;
         }
 
-        if (globals.partner_choice == 1) {
-            int result = choose_partner(ind_first, ind_last, globals.group_size);
-            if (result < 0) {
-                fprintf(stderr, "Failed choose_partner.\n");
-                goto cleanup;
-            }
+        if (globals.partner_choice == 1 && choose_partner(ind_first, ind_last, globals.group_size) < 0) {
+            fprintf(stderr, "Failed choose_partner.\n");
+            goto cleanup;
         }
 
-        int result =
-            handle_recruitment(ind_first, ind_last, w_cumulative, globals.death_rate, globals.qb_mutation_size,
-                               globals.grain_mutation_size, globals.cost, globals.language, globals.population_size);
-        if (result < 0) {
+        if (handle_recruitment(ind_first, ind_last, w_cumulative, globals.death_rate, globals.qb_mutation_size,
+                               globals.grain_mutation_size, globals.cost, globals.language,
+                               globals.population_size) < 0) {
             fprintf(stderr, "Failed handle_recruitment.\n");
             goto cleanup;
         }
