@@ -28,13 +28,13 @@ gsl_rng *rng = NULL;  // Random number generator
 Individual *allocate_individuals(unsigned int population_size);
 double      fitness(Individual *ind, Individual *ind_last);
 void        initial_pairs(Individual *ind, Individual *ind_last);
-int         simulation(struct Stats *stats, char *filename);
+int         simulation(Stats *stats, char *filename);
 
 int main(int argc, char *argv[]) {
-    clock_t       start = clock();
-    int           ret = EXIT_FAILURE;
-    struct Stats *stats = NULL;
-    char          ics[MAX_FILENAME_LEN];
+    clock_t start = clock();
+    int     ret = EXIT_FAILURE;
+    Stats  *stats = NULL;
+    char    ics[MAX_FILENAME_LEN];
 
     if (argc != 2) {
         fprintf(stderr, "You must run the program with an argument.\n");
@@ -115,7 +115,7 @@ cleanup:
     return ret;
 }
 
-int simulation(struct Stats *stats, char *filename) {
+int simulation(Stats *stats, char *filename) {
     int         ret = -1;
     Individual *ind_first = allocate_individuals(globals.population_size);
     if (ind_first == NULL) {

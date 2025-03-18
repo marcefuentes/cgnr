@@ -55,7 +55,7 @@ typedef struct {
     double sum_xy[PAIRS];
 } AccumulatedData;
 
-static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsigned int population_size);
+static void compute_statistics(AccumulatedData *data, Stats *stats, unsigned int population_size);
 static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data);
 
 static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data) {
@@ -85,7 +85,7 @@ static void process_individuals(Individual *ind_first, Individual *ind_last, Acc
     }
 }
 
-static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsigned int population_size) {
+static void compute_statistics(AccumulatedData *data, Stats *stats, unsigned int population_size) {
     double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
 
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
@@ -130,7 +130,7 @@ static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsig
     }
 }
 
-void stats_period(Individual *ind_first, Individual *ind_last, struct Stats *stats, unsigned int population_size) {
+void stats_period(Individual *ind_first, Individual *ind_last, Stats *stats, unsigned int population_size) {
     AccumulatedData data;
 
     process_individuals(ind_first, ind_last, &data);
