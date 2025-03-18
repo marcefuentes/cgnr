@@ -137,7 +137,8 @@ static int simulation(Stats *stats, char *filename) {
         double w_cumulative = fitness(ind_first, ind_last);
 
         if (time_to_analyze(time) == 1) {
-            if (analyze(stats, filename, ind_first, ind_last, time, period) < 0) {
+            int result = analyze(stats, filename, ind_first, ind_last, time, period);
+            if (result < 0) {
                 fprintf(stderr, "Failed analyze.\n");
                 goto cleanup;
             }
@@ -149,14 +150,16 @@ static int simulation(Stats *stats, char *filename) {
         }
 
         if (globals.shuffle == 1) {
-            if (shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
+            int result = shuffle_partners(ind_first, ind_last, globals.group_size);
+            if (result < 0) {
                 fprintf(stderr, "Failed shuffle_partners.\n");
                 goto cleanup;
             }
         }
 
         if (globals.partner_choice == 1) {
-            if (choose_partner(ind_first, ind_last, globals.group_size) < 0) {
+            int result = choose_partner(ind_first, ind_last, globals.group_size);
+            if (result < 0) {
                 fprintf(stderr, "Failed choose_partner.\n");
                 goto cleanup;
             }
@@ -165,9 +168,10 @@ static int simulation(Stats *stats, char *filename) {
         unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
 
         if (deaths > 0) {
-            if (handle_recruitment(ind_first, ind_last, deaths, w_cumulative, globals.qb_mutation_size,
-                                   globals.grain_mutation_size, globals.cost, globals.language,
-                                   globals.population_size) < 0) {
+            int result = handle_recruitment(ind_first, ind_last, deaths, w_cumulative, globals.qb_mutation_size,
+                                            globals.grain_mutation_size, globals.cost, globals.language,
+                                            globals.population_size);
+            if (result < 0) {
                 fprintf(stderr, "Failed handle_recruitment.\n");
                 goto cleanup;
             }
