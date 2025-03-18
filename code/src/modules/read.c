@@ -5,7 +5,7 @@
 
 #include "globals.h"
 
-struct GlobalVariables globals;
+GlobalVariables globals;
 
 int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);
 
