@@ -1,5 +1,7 @@
 #include "stats.h"
 
+#include <string.h>
+
 #include "individual.h"
 #include "math_tools.h"
 
@@ -46,52 +48,48 @@ static const int    correlationPairs[PAIRS][2] = {
     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_GRAIN},     {VARIABLE_MIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN},
     {VARIABLE_IMIMIC_GRAIN, VARIABLE_IMIMIC_LT_GRAIN}};
 
-void stats_period(struct Individual *ind_first, struct Individual *ind_last, struct Stats *stats,
-                  unsigned int population_size) {
-    int    count[CONTINUOUS_VARS][BINS] = {{0}};
-    double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
-    double sum[CONTINUOUS_VARS] = {0.0};
-    double sum2[CONTINUOUS_VARS] = {0.0};
-    double sum_xy[PAIRS] = {0.0};
+typedef struct {
+    int    count[CONTINUOUS_VARS][BINS];
+    double sum[CONTINUOUS_VARS];
+    double sum2[CONTINUOUS_VARS];
+    double sum_xy[PAIRS];
+} AccumulatedData;
 
+static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsigned int population_size);
+static void process_individuals(struct Individual *ind_first, struct Individual *ind_last, AccumulatedData *data);
+
+static void process_individuals(struct Individual *ind_first, struct Individual *ind_last, AccumulatedData *data) {
+    memset(data, 0, sizeof(*data));
     for (struct Individual *ind = ind_first; ind < ind_last; ind++) {
         const double *const continuous_vars[CONTINUOUS_VARS] = {
             &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
             &ind->MimicGrain, &ind->ImimicGrain, &ind->Imimic_ltGrain};
 
-        // Continous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
-            // Bins
-            count[variable][select_bin(BIN_SIZE, *continuous_vars[variable])]++;
+            double value = *continuous_vars[variable];
+            // Counts for frequencies
+            data->count[variable][select_bin(BIN_SIZE, value)]++;
 
-            // Mean and standard deviation
-            sum[variable] += *continuous_vars[variable];
-            sum2[variable] += *continuous_vars[variable] * *continuous_vars[variable];
+            // Sums for mean and standard deviation
+            data->sum[variable] += value;
+            data->sum2[variable] += value * value;
         }
 
-        // Correlations
-        sum_xy[CORR_Q_B_SEEN_CHOOSE_GRAIN] += ind->qBSeen * ind->ChooseGrain;
-        sum_xy[CORR_Q_B_SEEN_CHOOSE_LT_GRAIN] += ind->qBSeen * ind->Choose_ltGrain;
-        sum_xy[CORR_Q_B_SEEN_MIMIC_GRAIN] += ind->qBSeen * ind->MimicGrain;
-        sum_xy[CORR_Q_B_SEEN_IMIMIC_GRAIN] += ind->qBSeen * ind->ImimicGrain;
-        sum_xy[CORR_Q_B_SEEN_IMIMIC_LT_GRAIN] += ind->qBSeen * ind->Imimic_ltGrain;
-        sum_xy[CORR_CHOOSE_GRAIN_CHOOSE_LT_GRAIN] += ind->ChooseGrain * ind->Choose_ltGrain;
-        sum_xy[CORR_CHOOSE_GRAIN_MIMIC_GRAIN] += ind->ChooseGrain * ind->MimicGrain;
-        sum_xy[CORR_CHOOSE_GRAIN_IMIMIC_GRAIN] += ind->ChooseGrain * ind->ImimicGrain;
-        sum_xy[CORR_CHOOSE_GRAIN_IMIMIC_LT_GRAIN] += ind->ChooseGrain * ind->Imimic_ltGrain;
-        sum_xy[CORR_CHOOSE_LT_GRAIN_MIMIC_GRAIN] += ind->Choose_ltGrain * ind->MimicGrain;
-        sum_xy[CORR_CHOOSE_LT_GRAIN_IMIMIC_GRAIN] += ind->Choose_ltGrain * ind->ImimicGrain;
-        sum_xy[CORR_CHOOSE_LT_GRAIN_IMIMIC_LT_GRAIN] += ind->Choose_ltGrain * ind->Imimic_ltGrain;
-        sum_xy[CORR_MIMIC_GRAIN_IMIMIC_GRAIN] += ind->MimicGrain * ind->ImimicGrain;
-        sum_xy[CORR_MIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->MimicGrain * ind->Imimic_ltGrain;
-        sum_xy[CORR_IMIMIC_GRAIN_IMIMIC_LT_GRAIN] += ind->ImimicGrain * ind->Imimic_ltGrain;
+        // Sums for correlations
+        for (int pair = 0; pair < PAIRS; pair++) {
+            int var_x = correlationPairs[pair][0];
+            int var_y = correlationPairs[pair][1];
+            data->sum_xy[pair] += *continuous_vars[var_x] * *continuous_vars[var_y];
+        }
     }
+}
 
-    // Continous variables
+static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsigned int population_size) {
+    double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
-        // Bins
+        // Frequencies
         for (int bin = 0; bin < BINS; bin++) {
-            double frc = (double)count[variable][bin] / population_size;
+            double frc = (double)data->count[variable][bin] / population_size;
             stats->frc[variable][bin] += frc;
             stats->frc2[variable][bin] += frc * frc;
             freq[variable][bin] = frc;  // For quartiles
@@ -111,10 +109,10 @@ void stats_period(struct Individual *ind_first, struct Individual *ind_last, str
         stats->iqr2[variable] += iqr * iqr;
 
         // Mean and standard deviation
-        double mean = sum[variable] / population_size;
+        double mean = data->sum[variable] / population_size;
         stats->mean[variable] += mean;
         stats->mean2[variable] += mean * mean;
-        double st_dev = stdev(sum[variable], sum2[variable], population_size);
+        double st_dev = stdev(data->sum[variable], data->sum2[variable], population_size);
         stats->sd[variable] += st_dev;
         stats->sd2[variable] += st_dev * st_dev;
     }
@@ -123,8 +121,16 @@ void stats_period(struct Individual *ind_first, struct Individual *ind_last, str
     for (int pair = 0; pair < PAIRS; pair++) {
         int    var_x = correlationPairs[pair][0];
         int    var_y = correlationPairs[pair][1];
-        double corr = pearson_r(sum[var_x], sum[var_y], sum_xy[pair], sum2[var_x], sum2[var_y], population_size);
+        double corr = pearson_r(data->sum[var_x], data->sum[var_y], data->sum_xy[pair], data->sum2[var_x],
+                                data->sum2[var_y], population_size);
         stats->corr[pair] += corr;
         stats->corr2[pair] += corr * corr;
     }
+}
+
+void stats_period(struct Individual *ind_first, struct Individual *ind_last, struct Stats *stats,
+                  unsigned int population_size) {
+    AccumulatedData data;
+    process_individuals(ind_first, ind_last, &data);
+    compute_statistics(&data, stats, population_size);
 }
