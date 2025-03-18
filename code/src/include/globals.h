@@ -1,7 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-struct GlobalVariables {
+typedef struct GlobalVariables {
     int           seed;
     unsigned int  population_size;
     unsigned int  runs;
@@ -22,9 +22,9 @@ struct GlobalVariables {
     double        given;
     double        rho;
     unsigned long time_per_period;
-};
+} GlobalVariables;
 
-extern struct GlobalVariables globals;
+extern GlobalVariables globals;
 
 int read_globals(const char *filename);
 

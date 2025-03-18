@@ -38,9 +38,9 @@ typedef struct Individual {
                   .oldpartner = NULL,    \
                   .partner = NULL})
 
-int  choose_partner(Individual *ind, Individual *ind_last, unsigned int group_size);
-void decide_qB(Individual *ind, Individual *ind_last, int indirect_r);
-int  shuffle_partners(Individual *ind, Individual *ind_last, unsigned int group_size);
-void update_scores(Individual *ind, Individual *ind_last);
+int  choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size);
+void decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
+int  shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size);
+void update_scores(Individual *ind_first, Individual *ind_last);
 
 #endif  // INDIVIDUAL_H

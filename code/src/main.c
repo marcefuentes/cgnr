@@ -166,7 +166,7 @@ int simulation(Stats *stats, char *filename) {
         unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
 
         if (deaths > 0) {
-            struct Recruit *recruit_first = create_recruits(deaths, w_cumulative);
+            Recruit *recruit_first = create_recruits(deaths, w_cumulative);
             if (recruit_first == NULL) {
                 fprintf(stderr, "Failed create_recruits.\n");
                 goto cleanup;

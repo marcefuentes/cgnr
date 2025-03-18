@@ -3,7 +3,7 @@
 
 #include "individual.h"
 
-struct Recruit {
+typedef struct Recruit {
     double          randomwc;
     double          qBDefault;
     double          ChooseGrain;
@@ -13,13 +13,13 @@ struct Recruit {
     double          Imimic_ltGrain;
     double          cost;
     struct Recruit *next;
-};
+} Recruit;
 
 // Functions for handling recruits
-struct Recruit *create_recruits(unsigned int deaths, double w_cumulative);
-void            free_recruit_list(struct Recruit **head);
-void            kill(struct Recruit *recruit, struct Individual *ind_first, unsigned int population_size);
-void mutate(struct Individual *ind, struct Recruit *recruit, double qb_mutation_size, double grain_mutation_size,
-            double cost, int language);
+Recruit *create_recruits(unsigned int deaths, double w_cumulative);
+void     free_recruit_list(Recruit **head);
+void     kill(Recruit *recruit, Individual *ind_first, unsigned int population_size);
+void mutate(Individual *ind_first, Recruit *recruit, double qb_mutation_size, double grain_mutation_size, double cost,
+            int language);
 
 #endif  // RECRUIT_H

@@ -10,11 +10,11 @@
 // Global variable
 extern gsl_rng *rng;
 
-struct Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
-    struct Recruit *head = NULL;
+Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
+    Recruit *head = NULL;
 
     for (unsigned int death = 0; death < deaths; death++) {
-        struct Recruit *temp = malloc(sizeof(*temp));
+        Recruit *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             fprintf(stderr, "Failed malloc (create_recruits).\n");
             free_recruit_list(&head);
@@ -31,7 +31,7 @@ struct Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
             temp->next = head;
             head = temp;
         } else {
-            struct Recruit *member = head;
+            Recruit *member = head;
 
             while (member->next != NULL && member->next->randomwc < temp->randomwc) {
                 member = member->next;
@@ -45,7 +45,7 @@ struct Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     return head;
 }
 
-void kill(struct Recruit *recruit, Individual *ind_first, unsigned int population_size) {
+void kill(Recruit *recruit, Individual *ind_first, unsigned int population_size) {
     unsigned int pick;
 
     for (; recruit != NULL; recruit = recruit->next) {
@@ -69,7 +69,7 @@ void kill(struct Recruit *recruit, Individual *ind_first, unsigned int populatio
     }
 }
 
-void mutate(Individual *ind, struct Recruit *recruit, double qb_mutation_size, double grain_mutation_size, double cost,
+void mutate(Individual *ind, Recruit *recruit, double qb_mutation_size, double grain_mutation_size, double cost,
             int language) {
     for (; recruit != NULL; recruit = recruit->next) {
         while (recruit->randomwc > ind->wCumulative) {
@@ -93,9 +93,9 @@ void mutate(Individual *ind, struct Recruit *recruit, double qb_mutation_size, d
     }
 }
 
-void free_recruit_list(struct Recruit **head) {
+void free_recruit_list(Recruit **head) {
     while (*head != NULL) {
-        struct Recruit *temp = *head;
+        Recruit *temp = *head;
         *head = (*head)->next;
         free(temp);
     }
