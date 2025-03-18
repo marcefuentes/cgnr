@@ -24,12 +24,12 @@ gsl_rng *rng = NULL;  // Random number generator
 // Functions
 
 static Individual *allocate_individuals(unsigned int population_size);
-static double      fitness(Individual *ind_first, Individual *ind_last);
-static int  analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                    unsigned int period);
-static void initial_pairs(Individual *ind_first, Individual *ind_last);
-static int  simulation(Stats *stats, char *filename);
-static int  time_to_analyze(unsigned long time);
+static int    analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
+                      unsigned int period);
+static double fitness(Individual *ind_first, Individual *ind_last);
+static void   initial_pairs(Individual *ind_first, Individual *ind_last);
+static int    simulation(Stats *stats, char *filename);
+static int    time_to_analyze(unsigned long time);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
