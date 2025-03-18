@@ -6,7 +6,7 @@ typedef struct GlobalVariables {
     unsigned int  population_size;
     unsigned int  runs;
     unsigned long time;
-    int           periods;
+    unsigned int  periods;
     double        qb_mutation_size;
     double        grain_mutation_size;
     double        death_rate;

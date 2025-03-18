@@ -28,7 +28,7 @@ gsl_rng *rng = NULL;  // Random number generator
 static Individual *allocate_individuals(unsigned int population_size);
 static double      fitness(Individual *ind_first, Individual *ind_last);
 static int  analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                    int period);
+                    unsigned int period);
 static void initial_pairs(Individual *ind_first, Individual *ind_last);
 static int  simulation(Stats *stats, char *filename);
 static int  time_to_analyze(unsigned long time);
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
-    stats = calloc((unsigned int)globals.periods + 1, sizeof(*stats));
+    stats = calloc(globals.periods + 1, sizeof(*stats));
     if (stats == NULL) {
         fprintf(stderr, "Failed calloc (stats).\n");
         goto cleanup;
@@ -131,17 +131,17 @@ static int simulation(Stats *stats, char *filename) {
 
     initial_pairs(ind_first, ind_last);
 
-    int period = 0;
+    unsigned int period = 0;
 
     for (unsigned long time = 0; time < globals.time; time++) {
         double w_cumulative = fitness(ind_first, ind_last);
 
         if (time_to_analyze(time) == 1) {
-            period = analyze(stats, filename, ind_first, ind_last, time, period);
-            if (period < 1) {
+            if (analyze(stats, filename, ind_first, ind_last, time, period) < 0) {
                 fprintf(stderr, "Failed analyze.\n");
                 goto cleanup;
             }
+            period++;
         }
 
         if (globals.language == 1) {
@@ -206,7 +206,7 @@ static Individual *allocate_individuals(unsigned int population_size) {
 }
 
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                   int period) {
+                   unsigned int period) {
     stats[period].alpha = globals.alpha;
     stats[period].logES = globals.loges;
     stats[period].Given = globals.given;
@@ -220,7 +220,7 @@ static int analyze(Stats *stats, char *filename, Individual *ind_first, Individu
         }
     }
 
-    return period + 1;
+    return 0;
 }
 
 static double fitness(Individual *ind_first, Individual *ind_last) {

@@ -20,7 +20,7 @@ int read_globals(const char *filename) {
         read_key_value(file, "N", &globals.population_size, "unsigned int") ||
         read_key_value(file, "Runs", &globals.runs, "unsigned int") ||
         read_key_value(file, "Time", &globals.time, "unsigned long") ||
-        read_key_value(file, "Periods", &globals.periods, "int") ||
+        read_key_value(file, "Periods", &globals.periods, "unsigned int") ||
         read_key_value(file, "qBMutationSize", &globals.qb_mutation_size, "double") ||
         read_key_value(file, "GrainMutationSize", &globals.grain_mutation_size, "double") ||
         read_key_value(file, "DeathRate", &globals.death_rate, "double") ||
@@ -43,14 +43,14 @@ int read_globals(const char *filename) {
 
     globals.population_size = (unsigned int)(pow(2.0, (double)globals.population_size) + 0.5);
     globals.time = (unsigned long)(pow(2.0, (double)globals.time) + 0.5);
-    globals.periods = (int)(pow(2.0, (double)globals.periods) + 0.5);
+    globals.periods = (unsigned int)(pow(2.0, (double)globals.periods) + 0.5);
     globals.qb_mutation_size = pow(2.0, globals.qb_mutation_size);
     globals.grain_mutation_size = pow(2.0, globals.grain_mutation_size);
     globals.death_rate = pow(2.0, globals.death_rate);
     globals.group_size = (unsigned int)(pow(2.0, (double)globals.group_size) + 0.5);
     globals.cost = pow(2.0, globals.cost);
     globals.rho = 1.0 - 1.0 / pow(2.0, globals.loges);
-    globals.time_per_period = globals.time / (long unsigned int)globals.periods;
+    globals.time_per_period = globals.time / globals.periods;
 
     return 0;
 }

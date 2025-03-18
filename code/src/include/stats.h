@@ -25,8 +25,8 @@ typedef struct Stats {
 } Stats;
 
 // Functions for handling statistics
-int  stats_csv(Stats *stats, int periods, unsigned int runs, char *filename);
-int  stats_frq(Stats *stats, int periods, unsigned int runs, char *filename);
+int  stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filename);
+int  stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filename);
 void stats_period(Individual *ind_first, Individual *ind_last, Stats *stats, unsigned int population_size);
 
 #endif  // STATS_H

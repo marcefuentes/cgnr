@@ -14,7 +14,7 @@ const char *headers_correlations[PAIRS] = {
 static int write_csv_headers(char *filename);
 static int write_frq_headers(char *filename);
 
-int stats_csv(Stats *stats, int periods, unsigned int runs, char *filename) {
+int stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filename) {
     if (write_csv_headers(filename) < 0) {
         return file_write_error(filename);
     }
@@ -27,7 +27,7 @@ int stats_csv(Stats *stats, int periods, unsigned int runs, char *filename) {
     Stats *stats_p = stats;
     double mean;
     double st_dev;
-    for (int period = 0; period < periods; period++, stats_p++) {
+    for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
         fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
 
@@ -57,7 +57,7 @@ int stats_csv(Stats *stats, int periods, unsigned int runs, char *filename) {
     return 0;
 }
 
-int stats_frq(Stats *stats, int periods, unsigned int runs, char *filename) {
+int stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filename) {
     if (write_frq_headers(filename) < 0) {
         return file_write_error(filename);
     }
@@ -70,7 +70,7 @@ int stats_frq(Stats *stats, int periods, unsigned int runs, char *filename) {
     Stats *stats_p = stats;
     double mean;
     double st_dev;
-    for (int period = 0; period < periods; period++, stats_p++) {
+    for (unsigned int period = 0; period < periods; period++, stats_p++) {
         // Globals and time
         fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
 
