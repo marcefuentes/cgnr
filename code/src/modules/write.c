@@ -11,8 +11,8 @@ const char *headers_correlations[PAIRS] = {
     "r_Choose_Choose_lt", "r_Choose_Mimic",        "r_Choose_Imimic", "r_Choose_Imimic_lt", "r_Choose_lt_Mimic",
     "r_Choose_lt_Imimic", "r_Choose_lt_Imimic_lt", "r_Mimic_Imimic",  "r_Mimic_Imimic_lt",  "r_Imimic_Imimic_lt"};
 
-int write_csv_headers(char *filename);
-int write_frq_headers(char *filename);
+static int write_csv_headers(char *filename);
+static int write_frq_headers(char *filename);
 
 int stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filename) {
     if (write_csv_headers(filename) < 0) {
@@ -100,7 +100,7 @@ int stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filen
     return 0;
 }
 
-int write_csv_headers(char *filename) {
+static int write_csv_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
         return file_write_error(filename);
@@ -126,7 +126,7 @@ int write_csv_headers(char *filename) {
     return 0;
 }
 
-int write_frq_headers(char *filename) {
+static int write_frq_headers(char *filename) {
     FILE *file = fopen(filename, "a+");
     if (file == NULL) {
         return file_write_error(filename);
