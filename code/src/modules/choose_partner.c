@@ -8,18 +8,18 @@
 // Global variable
 extern gsl_rng *rng;
 
-struct List {
+typedef struct List {
     unsigned int ind;
     struct List *next;
-};
+} List;
 
-struct List *create_shuffled_list(unsigned int size);
-void         free_list(struct List **head);
-bool         willing(struct Individual *ind_a, struct Individual *ind_b);
+List *create_shuffled_list(unsigned int size);
+void  free_list(List **head);
+bool  willing(struct Individual *ind_a, struct Individual *ind_b);
 
 int choose_partner(struct Individual *ind_first, struct Individual *ind_last, unsigned int group_size) {
     for (struct Individual *ind = ind_first; ind < ind_last; ind += group_size) {
-        struct List *head = create_shuffled_list(group_size);
+        List *head = create_shuffled_list(group_size);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
             free_list(&head);
@@ -27,8 +27,8 @@ int choose_partner(struct Individual *ind_first, struct Individual *ind_last, un
         }
 
         while (head != NULL && head->next != NULL) {
-            struct List       *previous = head;
-            struct List       *temp = head->next;
+            List              *previous = head;
+            List              *temp = head->next;
             struct Individual *ind_j = ind + head->ind;
             struct Individual *ind_k = ind + temp->ind;
 
@@ -57,7 +57,7 @@ int choose_partner(struct Individual *ind_first, struct Individual *ind_last, un
         }
 
         if (head != NULL) {
-            struct List *temp = head;
+            List *temp = head;
             head = NULL;
             free(temp);
         }
@@ -66,12 +66,12 @@ int choose_partner(struct Individual *ind_first, struct Individual *ind_last, un
     return 0;
 }
 
-struct List *create_shuffled_list(unsigned int size) {
-    struct List *head = NULL;
+List *create_shuffled_list(unsigned int size) {
+    List        *head = NULL;
     unsigned int start = (unsigned int)gsl_rng_uniform_int(rng, size);
 
     for (unsigned int individual = 0; individual < size; individual++) {
-        struct List *temp = malloc(sizeof(*temp));
+        List *temp = malloc(sizeof(*temp));
         if (temp == NULL) {
             return NULL;
         }
@@ -84,9 +84,9 @@ struct List *create_shuffled_list(unsigned int size) {
     return head;
 }
 
-void free_list(struct List **head) {
+void free_list(List **head) {
     while (*head != NULL) {
-        struct List *temp = *head;
+        List *temp = *head;
         *head = (*head)->next;
         free(temp);
     }
