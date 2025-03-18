@@ -25,11 +25,13 @@ gsl_rng *rng = NULL;  // Random number generator
 
 // Functions
 
-static Individual *allocate_individuals(unsigned int population_size);
-static double      fitness(Individual *ind, Individual *ind_last);
-static void        initial_pairs(Individual *ind, Individual *ind_last);
-static int         simulation(Stats *stats, char *filename);
-static int         time_to_analyze(unsigned long time);
+static Individual  *allocate_individuals(unsigned int population_size);
+static double       fitness(Individual *ind_first, Individual *ind_last);
+static unsigned int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last,
+                            unsigned long time, unsigned int period);
+static void         initial_pairs(Individual *ind_first, Individual *ind_last);
+static int          simulation(Stats *stats, char *filename);
+static int          time_to_analyze(unsigned long time);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -135,16 +137,7 @@ static int simulation(Stats *stats, char *filename) {
         double w_cumulative = fitness(ind_first, ind_last);
 
         if (time_to_analyze(time) == 1) {
-            stats[period].alpha = globals.alpha;
-            stats[period].logES = globals.loges;
-            stats[period].Given = globals.given;
-            stats[period].time = time + 1;
-            stats_period(ind_first, ind_last, &stats[period], globals.population_size);
-            if (globals.runs == 1) {
-                write_ics(filename, period, (float)globals.alpha, (float)globals.loges, (float)globals.given, time + 1,
-                          ind_first, ind_last);
-            }
-            period++;
+            period = analyze(stats, filename, ind_first, ind_last, time, period);
         }
 
         if (globals.language == 1) {
@@ -209,6 +202,21 @@ static Individual *allocate_individuals(unsigned int population_size) {
     }
 
     return ind;
+}
+
+static unsigned int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last,
+                            unsigned long time, unsigned int period) {
+    stats[period].alpha = globals.alpha;
+    stats[period].logES = globals.loges;
+    stats[period].Given = globals.given;
+    stats[period].time = time + 1;
+    stats_period(ind_first, ind_last, &stats[period], globals.population_size);
+    if (globals.runs == 1) {
+        write_ics(filename, period, (float)globals.alpha, (float)globals.loges, (float)globals.given, time + 1,
+                  ind_first, ind_last);
+    }
+
+    return period + 1;
 }
 
 static double fitness(Individual *ind_first, Individual *ind_last) {
