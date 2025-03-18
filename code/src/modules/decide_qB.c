@@ -2,7 +2,7 @@
 
 #include "individual.h"
 
-double calculate(double focal, double partner, double grain);
+static double calculate(double focal, double partner, double grain);
 
 void decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r) {
     double grain;
@@ -37,7 +37,7 @@ void decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r) {
     }
 }
 
-double calculate(double focal, double partner, double grain) {
+static double calculate(double focal, double partner, double grain) {
     int    block = (int)((partner - focal) / grain);
     double block_near = focal + (grain * block);
     double block_far;
