@@ -1,4 +1,3 @@
-#include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 #include <math.h>
 #include <stdio.h>
@@ -165,16 +164,12 @@ static int simulation(Stats *stats, char *filename) {
             }
         }
 
-        unsigned int deaths = gsl_ran_binomial(rng, globals.death_rate, globals.population_size);
-
-        if (deaths > 0) {
-            int result = handle_recruitment(ind_first, ind_last, deaths, w_cumulative, globals.qb_mutation_size,
-                                            globals.grain_mutation_size, globals.cost, globals.language,
-                                            globals.population_size);
-            if (result < 0) {
-                fprintf(stderr, "Failed handle_recruitment.\n");
-                goto cleanup;
-            }
+        int result =
+            handle_recruitment(ind_first, ind_last, w_cumulative, globals.death_rate, globals.qb_mutation_size,
+                               globals.grain_mutation_size, globals.cost, globals.language, globals.population_size);
+        if (result < 0) {
+            fprintf(stderr, "Failed handle_recruitment.\n");
+            goto cleanup;
         }
 
         if (globals.reciprocity == 1) {

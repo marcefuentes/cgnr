@@ -1,3 +1,4 @@
+#include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 #include <math.h>
 #include <stdio.h>
@@ -28,17 +29,22 @@ static void     kill(Recruit *recruit_first, Individual *ind_first, unsigned int
 static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
                    double cost, int language);
 
-int handle_recruitment(Individual *ind_first, Individual *ind_last, unsigned int deaths, double w_cumulative,
+int handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
                        double qb_mutation_size, double grain_mutation_size, double cost, int language,
                        unsigned int population_size) {
-    Recruit *recruit_first = create_recruits(deaths, w_cumulative);
-    if (recruit_first == NULL) {
-        fprintf(stderr, "Failed create_recruits.\n");
-        return -1;
+    unsigned int deaths = gsl_ran_binomial(rng, death_rate, population_size);
+
+    if (deaths > 0) {
+        Recruit *recruit_first = create_recruits(deaths, w_cumulative);
+        if (recruit_first == NULL) {
+            fprintf(stderr, "Failed create_recruits.\n");
+            return -1;
+        }
+
+        mutate(recruit_first, ind_first, qb_mutation_size, grain_mutation_size, cost, language);
+        kill(recruit_first, ind_first, population_size);
+        free_recruit_list(&recruit_first);
     }
-    mutate(recruit_first, ind_first, qb_mutation_size, grain_mutation_size, cost, language);
-    kill(recruit_first, ind_first, population_size);
-    free_recruit_list(&recruit_first);
 
     return 0;
 }
