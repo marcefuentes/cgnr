@@ -7,7 +7,7 @@
 
 GlobalVariables globals;
 
-int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);
+static int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);
 
 int read_globals(const char *filename) {
     FILE *file = fopen(filename, "r");
@@ -55,7 +55,7 @@ int read_globals(const char *filename) {
     return 0;
 }
 
-int read_key_value(FILE *file, const char *expected_key, void *value, const char *type) {
+static int read_key_value(FILE *file, const char *expected_key, void *value, const char *type) {
     char line[128];
     char key[64];
     char val[64];
