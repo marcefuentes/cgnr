@@ -5,7 +5,7 @@
 
 enum { BINS = 64, CONTINUOUS_VARS = 8, PAIRS = 15 };
 
-struct Stats {
+typedef struct Stats {
     double        alpha;
     double        logES;
     double        Given;
@@ -22,12 +22,11 @@ struct Stats {
     double        iqr2[CONTINUOUS_VARS];
     double        corr[PAIRS];
     double        corr2[PAIRS];
-};
+} Stats;
 
 // Functions for handling statistics
-int  stats_csv(struct Stats *stats, unsigned int periods, unsigned int runs, char *filename);
-int  stats_frq(struct Stats *stats, unsigned int periods, unsigned int runs, char *filename);
-void stats_period(struct Individual *ind, struct Individual *ind_last, struct Stats *stats,
-                  unsigned int population_size);
+int  stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filename);
+int  stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filename);
+void stats_period(Individual *ind, Individual *ind_last, Stats *stats, unsigned int population_size);
 
 #endif  // STATS_H
