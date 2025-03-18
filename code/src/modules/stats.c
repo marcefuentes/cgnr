@@ -60,6 +60,7 @@ static void process_individuals(struct Individual *ind_first, struct Individual 
 
 static void process_individuals(struct Individual *ind_first, struct Individual *ind_last, AccumulatedData *data) {
     memset(data, 0, sizeof(*data));
+
     for (struct Individual *ind = ind_first; ind < ind_last; ind++) {
         const double *const continuous_vars[CONTINUOUS_VARS] = {
             &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
@@ -86,6 +87,7 @@ static void process_individuals(struct Individual *ind_first, struct Individual 
 
 static void compute_statistics(AccumulatedData *data, struct Stats *stats, unsigned int population_size) {
     double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
+
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
         // Frequencies
         for (int bin = 0; bin < BINS; bin++) {
