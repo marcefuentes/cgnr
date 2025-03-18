@@ -13,9 +13,9 @@ typedef struct List {
     struct List *next;
 } List;
 
-List *create_shuffled_list(unsigned int size);
-void  free_list(List **head);
-bool  willing(Individual *ind_a, Individual *ind_b);
+static List *create_shuffled_list(unsigned int size);
+static void  free_list(List **head);
+static bool  willing(Individual *ind_a, Individual *ind_b);
 
 int choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size) {
     for (Individual *ind = ind_first; ind < ind_last; ind += group_size) {
@@ -66,7 +66,7 @@ int choose_partner(Individual *ind_first, Individual *ind_last, unsigned int gro
     return 0;
 }
 
-List *create_shuffled_list(unsigned int size) {
+static List *create_shuffled_list(unsigned int size) {
     List        *head = NULL;
     unsigned int start = (unsigned int)gsl_rng_uniform_int(rng, size);
 
@@ -84,7 +84,7 @@ List *create_shuffled_list(unsigned int size) {
     return head;
 }
 
-void free_list(List **head) {
+static void free_list(List **head) {
     while (*head != NULL) {
         List *temp = *head;
         *head = (*head)->next;
@@ -92,7 +92,7 @@ void free_list(List **head) {
     }
 }
 
-bool willing(Individual *ind_a, Individual *ind_b) {
+static bool willing(Individual *ind_a, Individual *ind_b) {
     if (ind_a == NULL || ind_b == NULL || ind_a->partner == NULL) {
         fprintf(stderr, "Null pointer encountered in willing.\n");
         return false;
