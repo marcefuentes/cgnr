@@ -6,7 +6,6 @@
 
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "individual.h"
-#include "recruit.h"
 
 // Global variable
 extern gsl_rng *rng;
