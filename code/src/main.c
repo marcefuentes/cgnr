@@ -25,10 +25,10 @@ gsl_rng *rng = NULL;  // Random number generator
 
 // Functions
 
-Individual *allocate_individuals(unsigned int population_size);
-double      fitness(Individual *ind, Individual *ind_last);
-void        initial_pairs(Individual *ind, Individual *ind_last);
-int         simulation(Stats *stats, char *filename);
+static Individual *allocate_individuals(unsigned int population_size);
+static double      fitness(Individual *ind, Individual *ind_last);
+static void        initial_pairs(Individual *ind, Individual *ind_last);
+static int         simulation(Stats *stats, char *filename);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -115,7 +115,7 @@ cleanup:
     return ret;
 }
 
-int simulation(Stats *stats, char *filename) {
+static int simulation(Stats *stats, char *filename) {
     int ret = -1;
 
     Individual *ind_first = allocate_individuals(globals.population_size);
@@ -194,7 +194,7 @@ cleanup:
     return ret;
 }
 
-Individual *allocate_individuals(unsigned int population_size) {
+static Individual *allocate_individuals(unsigned int population_size) {
     Individual *ind = calloc(population_size, sizeof(*ind));
     if (ind == NULL) {
         fprintf(stderr, "Failed to allocate individuals.\n");
@@ -210,7 +210,7 @@ Individual *allocate_individuals(unsigned int population_size) {
     return ind;
 }
 
-double fitness(Individual *ind_first, Individual *ind_last) {
+static double fitness(Individual *ind_first, Individual *ind_last) {
     double w_cumulative = 0.0;
 
     for (Individual *ind = ind_first; ind < ind_last; ind++) {
@@ -227,7 +227,7 @@ double fitness(Individual *ind_first, Individual *ind_last) {
     return w_cumulative;
 }
 
-void initial_pairs(Individual *ind, Individual *ind_last) {
+static void initial_pairs(Individual *ind, Individual *ind_last) {
     Individual *ind_j = ind + 1;
     for (Individual *ind_i = ind; ind_i < ind_last; ind_i += 2, ind_j += 2) {
         ind_i->partner = ind_j;
