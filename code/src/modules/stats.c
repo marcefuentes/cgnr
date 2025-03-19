@@ -58,33 +58,6 @@ typedef struct {
 static void compute_statistics(AccumulatedData *data, Stats *stats, unsigned int population_size);
 static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data);
 
-static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data) {
-    memset(data, 0, sizeof(*data));
-
-    for (Individual *ind = ind_first; ind < ind_last; ind++) {
-        const double *const continuous_vars[CONTINUOUS_VARS] = {
-            &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
-            &ind->MimicGrain, &ind->ImimicGrain, &ind->Imimic_ltGrain};
-
-        for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
-            double value = *continuous_vars[variable];
-            // Counts for frequencies
-            data->count[variable][select_bin(BIN_SIZE, value)]++;
-
-            // Sums for mean and standard deviation
-            data->sum[variable] += value;
-            data->sum2[variable] += value * value;
-        }
-
-        // Sums for correlations
-        for (int pair = 0; pair < PAIRS; pair++) {
-            int var_x = correlationPairs[pair][0];
-            int var_y = correlationPairs[pair][1];
-            data->sum_xy[pair] += *continuous_vars[var_x] * *continuous_vars[var_y];
-        }
-    }
-}
-
 static void compute_statistics(AccumulatedData *data, Stats *stats, unsigned int population_size) {
     double freq[CONTINUOUS_VARS][BINS] = {{0.0}};
 
@@ -127,6 +100,33 @@ static void compute_statistics(AccumulatedData *data, Stats *stats, unsigned int
                                 data->sum2[var_y], population_size);
         stats->corr[pair] += corr;
         stats->corr2[pair] += corr * corr;
+    }
+}
+
+static void process_individuals(Individual *ind_first, Individual *ind_last, AccumulatedData *data) {
+    memset(data, 0, sizeof(*data));
+
+    for (Individual *ind = ind_first; ind < ind_last; ind++) {
+        const double *const continuous_vars[CONTINUOUS_VARS] = {
+            &ind->w,          &ind->qBDefault,   &ind->qBSeen,        &ind->ChooseGrain, &ind->Choose_ltGrain,
+            &ind->MimicGrain, &ind->ImimicGrain, &ind->Imimic_ltGrain};
+
+        for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
+            double value = *continuous_vars[variable];
+            // Counts for frequencies
+            data->count[variable][select_bin(BIN_SIZE, value)]++;
+
+            // Sums for mean and standard deviation
+            data->sum[variable] += value;
+            data->sum2[variable] += value * value;
+        }
+
+        // Sums for correlations
+        for (int pair = 0; pair < PAIRS; pair++) {
+            int var_x = correlationPairs[pair][0];
+            int var_y = correlationPairs[pair][1];
+            data->sum_xy[pair] += *continuous_vars[var_x] * *continuous_vars[var_y];
+        }
     }
 }
 
