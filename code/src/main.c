@@ -18,9 +18,10 @@
 
 static Individual *allocate_individuals(unsigned int population_size);
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                   unsigned int period);
-static int simulation(Stats *stats, char *filename);
-static int time_to_analyze(unsigned long time);
+                   unsigned int period, double alpha, double loges, double given, unsigned int population_size,
+                   unsigned int runs);
+static int simulation(Stats *stats, char *filename, GlobalVariables *globals);
+static int time_to_analyze(unsigned long time, unsigned long time_per_period);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -30,19 +31,20 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         fprintf(stderr, "You must run the program with an argument.\n");
-        goto cleanup;
+        return EXIT_FAILURE;
     }
 
     if (strlen(argv[1]) > MAX_ARG_LENGTH) {
         fprintf(stderr, "The argument must have fewer than %d characters.\n", MAX_ARG_LENGTH);
-        goto cleanup;
+        return EXIT_FAILURE;
     }
 
     const char *filename = argv[1];
 
     char glo[MAX_FILENAME_LEN];
     snprintf(glo, sizeof(glo), "%s.glo", filename);
-    if (read_globals(glo) < 0) {
+    GlobalVariables globals;
+    if (read_globals(glo, &globals) < 0) {
         fprintf(stderr, "Failed read_globals.\n");
         goto cleanup;
     }
@@ -56,7 +58,7 @@ int main(int argc, char *argv[]) {
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
     for (unsigned int run = 0; run < globals.runs; run++) {
-        if (simulation(stats, ics) < 0) {
+        if (simulation(stats, ics, &globals) < 0) {
             fprintf(stderr, "Failed simulation.\n");
             goto cleanup;
         }
@@ -95,26 +97,27 @@ cleanup:
     return ret;
 }
 
-static int simulation(Stats *stats, char *filename) {
+static int simulation(Stats *stats, char *filename, GlobalVariables *globals) {
     int ret = -1;
 
-    Individual *ind_first = allocate_individuals(globals.population_size);
+    Individual *ind_first = allocate_individuals(globals->population_size);
     if (ind_first == NULL) {
         fprintf(stderr, "Failed calloc (individuals).\n");
         goto cleanup;
     }
 
-    Individual *ind_last = ind_first + globals.population_size;
+    Individual *ind_last = ind_first + globals->population_size;
 
     initial_pairs(ind_first, ind_last);
 
     unsigned int period = 0;
 
-    for (unsigned long time = 0; time < globals.time; time++) {
-        double w_cumulative = fitness(ind_first, ind_last, globals.given, globals.alpha, globals.rho);
+    for (unsigned long time = 0; time < globals->time; time++) {
+        double w_cumulative = fitness(ind_first, ind_last, globals->given, globals->alpha, globals->rho);
 
-        if (time_to_analyze(time) == 1) {
-            int result = analyze(stats, filename, ind_first, ind_last, time, period);
+        if (time_to_analyze(time, globals->time_per_period) == 1) {
+            int result = analyze(stats, filename, ind_first, ind_last, time, period, globals->alpha, globals->loges,
+                                 globals->given, globals->population_size, globals->runs);
             if (result < 0) {
                 fprintf(stderr, "Failed analyze.\n");
                 goto cleanup;
@@ -122,29 +125,30 @@ static int simulation(Stats *stats, char *filename) {
             period++;
         }
 
-        if (globals.language == 1) {
+        if (globals->language == 1) {
             update_scores(ind_first, ind_last);
         }
 
-        if (globals.shuffle == 1 && shuffle_partners(ind_first, ind_last, globals.group_size, globals.rng) < 0) {
+        if (globals->shuffle == 1 && shuffle_partners(ind_first, ind_last, globals->group_size, globals->rng) < 0) {
             fprintf(stderr, "Failed shuffle_partners.\n");
             goto cleanup;
         }
 
-        if (globals.partner_choice == 1 && choose_partner(ind_first, ind_last, globals.group_size, globals.rng) < 0) {
+        if (globals->partner_choice == 1 &&
+            choose_partner(ind_first, ind_last, globals->group_size, globals->rng) < 0) {
             fprintf(stderr, "Failed choose_partner.\n");
             goto cleanup;
         }
 
-        if (handle_recruitment(ind_first, ind_last, w_cumulative, globals.death_rate, globals.qb_mutation_size,
-                               globals.grain_mutation_size, globals.cost, globals.language, globals.population_size,
-                               globals.rng) < 0) {
+        if (handle_recruitment(ind_first, ind_last, w_cumulative, globals->death_rate, globals->qb_mutation_size,
+                               globals->grain_mutation_size, globals->cost, globals->language, globals->population_size,
+                               globals->rng) < 0) {
             fprintf(stderr, "Failed handle_recruitment.\n");
             goto cleanup;
         }
 
-        if (globals.reciprocity == 1) {
-            decide_qB(ind_first, ind_last, globals.indirect_r);
+        if (globals->reciprocity == 1) {
+            decide_qB(ind_first, ind_last, globals->indirect_r);
         }
     }
 
@@ -176,14 +180,15 @@ static Individual *allocate_individuals(unsigned int population_size) {
 }
 
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                   unsigned int period) {
-    stats[period].alpha = globals.alpha;
-    stats[period].logES = globals.loges;
-    stats[period].Given = globals.given;
+                   unsigned int period, double alpha, double loges, double given, unsigned int population_size,
+                   unsigned int runs) {
+    stats[period].alpha = alpha;
+    stats[period].logES = loges;
+    stats[period].Given = given;
     stats[period].time = time + 1;
-    stats_period(ind_first, ind_last, &stats[period], globals.population_size);
-    if (globals.runs == 1 && write_ics(filename, period, (float)globals.alpha, (float)globals.loges,
-                                       (float)globals.given, time + 1, ind_first, ind_last) < 0) {
+    stats_period(ind_first, ind_last, &stats[period], population_size);
+    if (runs == 1 &&
+        write_ics(filename, period, (float)alpha, (float)loges, (float)given, time + 1, ind_first, ind_last) < 0) {
         fprintf(stderr, "Failed write_ics.\n");
         return -1;
     }
@@ -191,8 +196,8 @@ static int analyze(Stats *stats, char *filename, Individual *ind_first, Individu
     return 0;
 }
 
-static int time_to_analyze(unsigned long time) {
-    if (time == 0 || (time + 1) % globals.time_per_period == 0) {
+static int time_to_analyze(unsigned long time, unsigned long time_per_period) {
+    if (time == 0 || (time + 1) % time_per_period == 0) {
         return 1;
     }
     return 0;

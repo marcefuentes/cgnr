@@ -27,8 +27,6 @@ typedef struct GlobalVariables {
     unsigned long time_per_period;
 } GlobalVariables;
 
-extern GlobalVariables globals;
-
-int read_globals(const char *filename);
+int read_globals(const char *filename, GlobalVariables *globals);
 
 #endif  // GLOBALS_H
