@@ -3,7 +3,7 @@
 
 #include <gsl/gsl_rng.h>
 
-typedef struct GlobalVariables {
+typedef struct Globals {
     int           seed;
     unsigned int  population_size;
     unsigned int  runs;
@@ -25,8 +25,8 @@ typedef struct GlobalVariables {
     double        rho;
     gsl_rng      *rng;
     unsigned long time_per_period;
-} GlobalVariables;
+} Globals;
 
-int read_globals(const char *filename, GlobalVariables *globals);
+int read_globals(const char *filename, Globals *globals);
 
 #endif  // GLOBALS_H

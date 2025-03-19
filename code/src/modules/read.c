@@ -9,7 +9,7 @@
 
 static int read_key_value(FILE *file, const char *expected_key, void *value, const char *type);
 
-int read_globals(const char *filename, GlobalVariables *globals) {
+int read_globals(const char *filename, Globals *globals) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         fprintf(stderr, "Failed to open file %s for reading.\n", filename);

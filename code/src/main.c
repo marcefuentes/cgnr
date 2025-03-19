@@ -20,7 +20,7 @@ static Individual *allocate_individuals(unsigned int population_size);
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
                    unsigned int period, double alpha, double loges, double given, unsigned int population_size,
                    unsigned int runs);
-static int simulation(Stats *stats, char *filename, GlobalVariables *globals);
+static int simulation(Stats *stats, char *filename, Globals *globals);
 static int time_to_analyze(unsigned long time, unsigned long time_per_period);
 
 int main(int argc, char *argv[]) {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 
     char glo[MAX_FILENAME_LEN];
     snprintf(glo, sizeof(glo), "%s.glo", filename);
-    GlobalVariables globals;
+    Globals globals;
     if (read_globals(glo, &globals) < 0) {
         fprintf(stderr, "Failed read_globals.\n");
         goto cleanup;
@@ -97,7 +97,7 @@ cleanup:
     return ret;
 }
 
-static int simulation(Stats *stats, char *filename, GlobalVariables *globals) {
+static int simulation(Stats *stats, char *filename, Globals *globals) {
     int ret = -1;
 
     Individual *ind_first = allocate_individuals(globals->population_size);
