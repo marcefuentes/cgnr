@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
         gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
-    stats = calloc(globals.periods + 1, sizeof(*stats));
+    stats = calloc(globals.periods, sizeof(*stats));
     if (stats == NULL) {
         fprintf(stderr, "Failed calloc (stats).\n");
         goto cleanup;
@@ -85,14 +85,14 @@ int main(int argc, char *argv[]) {
 
     char csv[MAX_FILENAME_LEN];
     snprintf(csv, sizeof(csv), "%s.csv", filename);
-    if (stats_csv(stats, globals.periods + 1, globals.runs, csv) < 0) {
+    if (stats_csv(stats, globals.periods, globals.runs, csv) < 0) {
         fprintf(stderr, "Failed stats_csv.\n");
         goto cleanup;
     }
 
     char frq[MAX_FILENAME_LEN];
     snprintf(frq, sizeof(frq), "%s.frq", filename);
-    if (stats_frq(stats, globals.periods + 1, globals.runs, frq) < 0) {
+    if (stats_frq(stats, globals.periods, globals.runs, frq) < 0) {
         fprintf(stderr, "Failed stats_frq.\n");
         goto cleanup;
     }
