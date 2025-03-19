@@ -43,6 +43,7 @@ void decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
 int  handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
                         double qb_mutation_size, double grain_mutation_size, double cost, int language,
                         unsigned int population_size);
+void initial_pairs(Individual *ind_first, Individual *ind_last);
 int  shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size);
 void update_scores(Individual *ind_first, Individual *ind_last);
 

@@ -27,7 +27,6 @@ static Individual *allocate_individuals(unsigned int population_size);
 static int    analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
                       unsigned int period);
 static double fitness(Individual *ind_first, Individual *ind_last);
-static void   initial_pairs(Individual *ind_first, Individual *ind_last);
 static int    simulation(Stats *stats, char *filename);
 static int    time_to_analyze(unsigned long time);
 
@@ -227,14 +226,6 @@ static double fitness(Individual *ind_first, Individual *ind_last) {
     }
 
     return w_cumulative;
-}
-
-static void initial_pairs(Individual *ind_first, Individual *ind_last) {
-    Individual *ind_j = ind_first + 1;
-    for (Individual *ind_i = ind_first; ind_i < ind_last; ind_i += 2, ind_j += 2) {
-        ind_i->partner = ind_j;
-        ind_j->partner = ind_i;
-    }
 }
 
 static int time_to_analyze(unsigned long time) {
