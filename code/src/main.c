@@ -28,6 +28,8 @@ int main(int argc, char *argv[]) {
     Stats  *stats = NULL;
     char    ics[MAX_FILENAME_LEN];
 
+    // Check arguments and read global constants
+
     if (argc != 2) {
         fprintf(stderr, "You must run the program with an argument.\n");
         return EXIT_FAILURE;
@@ -48,11 +50,15 @@ int main(int argc, char *argv[]) {
         goto cleanup;
     }
 
+    // Allocate memory
+
     stats = calloc(globals.periods, sizeof(*stats));
     if (stats == NULL) {
         fprintf(stderr, "Failed calloc (stats).\n");
         goto cleanup;
     }
+
+    // Run the simulation
 
     snprintf(ics, sizeof(ics), "%s.ics", filename);
 
@@ -62,6 +68,8 @@ int main(int argc, char *argv[]) {
             goto cleanup;
         }
     }
+
+    // Write the results
 
     char csv[MAX_FILENAME_LEN];
     snprintf(csv, sizeof(csv), "%s.csv", filename);
@@ -76,6 +84,8 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Failed stats_frq.\n");
         goto cleanup;
     }
+
+    // End
 
     if (write_time_elapsed(glo, (float)(clock() - start) / CLOCKS_PER_SEC) < 0) {
         fprintf(stderr, "Failed write_time_elapsed.\n");
