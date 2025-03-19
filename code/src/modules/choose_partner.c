@@ -5,21 +5,18 @@
 
 #include "individual.h"
 
-// Global variable
-extern gsl_rng *rng;
-
 typedef struct List {
     unsigned int ind;
     struct List *next;
 } List;
 
-static List *create_shuffled_list(unsigned int size);
+static List *create_shuffled_list(unsigned int size, gsl_rng *rng);
 static void  free_list(List **head);
 static bool  willing(Individual *ind_a, Individual *ind_b);
 
-int choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size) {
+int choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng) {
     for (Individual *ind = ind_first; ind < ind_last; ind += group_size) {
-        List *head = create_shuffled_list(group_size);
+        List *head = create_shuffled_list(group_size, rng);
         if (head == NULL) {
             fprintf(stderr, "Failed create_shuffled_list (choose_partner).\n");
             free_list(&head);
@@ -66,7 +63,7 @@ int choose_partner(Individual *ind_first, Individual *ind_last, unsigned int gro
     return 0;
 }
 
-static List *create_shuffled_list(unsigned int size) {
+static List *create_shuffled_list(unsigned int size, gsl_rng *rng) {
     List        *head = NULL;
     unsigned int start = (unsigned int)gsl_rng_uniform_int(rng, size);
 

@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
+#include <time.h>
 
 #include "globals.h"
 
@@ -51,6 +53,18 @@ int read_globals(const char *filename) {
     globals.cost = pow(2.0, globals.cost);
     globals.rho = 1.0 - 1.0 / pow(2.0, globals.loges);
     globals.time_per_period = globals.time / (globals.periods - 1);
+
+    globals.rng = NULL;  // Random number generator
+    globals.rng = gsl_rng_alloc(gsl_rng_taus);
+    if (globals.rng == NULL) {
+        fprintf(stderr, "Failed gsl_rng_alloc.\n");
+    }
+
+    if (globals.seed == 1) {
+        struct timeval tval;
+        gettimeofday(&tval, 0);
+        gsl_rng_set(globals.rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
+    }
 
     return 0;
 }

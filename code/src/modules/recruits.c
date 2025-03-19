@@ -7,9 +7,6 @@
 #include "dtnorm.h"  // From https://github.com/alanrogers/dtnorm
 #include "individual.h"
 
-// Global variable
-extern gsl_rng *rng;
-
 typedef struct Recruit {
     double          randomwc;
     double          qBDefault;
@@ -22,33 +19,33 @@ typedef struct Recruit {
     struct Recruit *next;
 } Recruit;
 
-static Recruit *create_recruits(unsigned int deaths, double w_cumulative);
+static Recruit *create_recruits(unsigned int deaths, double w_cumulative, gsl_rng *rng);
 static void     free_recruit_list(Recruit **head);
-static void     kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size);
+static void     kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size, gsl_rng *rng);
 static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
-                   double cost, int language);
+                   double cost, int language, gsl_rng *rng);
 
 int handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
                        double qb_mutation_size, double grain_mutation_size, double cost, int language,
-                       unsigned int population_size) {
+                       unsigned int population_size, gsl_rng *rng) {
     unsigned int deaths = gsl_ran_binomial(rng, death_rate, population_size);
 
     if (deaths > 0) {
-        Recruit *recruit_first = create_recruits(deaths, w_cumulative);
+        Recruit *recruit_first = create_recruits(deaths, w_cumulative, rng);
         if (recruit_first == NULL) {
             fprintf(stderr, "Failed create_recruits.\n");
             return -1;
         }
 
-        mutate(recruit_first, ind_first, qb_mutation_size, grain_mutation_size, cost, language);
-        kill(recruit_first, ind_first, population_size);
+        mutate(recruit_first, ind_first, qb_mutation_size, grain_mutation_size, cost, language, rng);
+        kill(recruit_first, ind_first, population_size, rng);
         free_recruit_list(&recruit_first);
     }
 
     return 0;
 }
 
-static Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
+static Recruit *create_recruits(unsigned int deaths, double w_cumulative, gsl_rng *rng) {
     Recruit *head = NULL;
 
     for (unsigned int death = 0; death < deaths; death++) {
@@ -83,7 +80,7 @@ static Recruit *create_recruits(unsigned int deaths, double w_cumulative) {
     return head;
 }
 
-static void kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size) {
+static void kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size, gsl_rng *rng) {
     unsigned int pick;
 
     for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
@@ -108,7 +105,7 @@ static void kill(Recruit *recruit_first, Individual *ind_first, unsigned int pop
 }
 
 static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
-                   double cost, int language) {
+                   double cost, int language, gsl_rng *rng) {
     Individual *ind = ind_first;
     for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
         while (recruit->randomwc > ind->wCumulative) {

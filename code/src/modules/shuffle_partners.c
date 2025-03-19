@@ -5,10 +5,7 @@
 
 #include "individual.h"
 
-// Global variable
-extern gsl_rng *rng;
-
-int shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size) {
+int shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng) {
     unsigned int *random = calloc(group_size, sizeof(*random));
     if (random == NULL) {
         fprintf(stderr, "Failed calloc (shuffle_partners).\n");

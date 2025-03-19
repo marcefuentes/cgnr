@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <gsl/gsl_rng.h>
+
 typedef struct GlobalVariables {
     int           seed;
     unsigned int  population_size;
@@ -21,6 +23,7 @@ typedef struct GlobalVariables {
     double        loges;
     double        given;
     double        rho;
+    gsl_rng      *rng;
     unsigned long time_per_period;
 } GlobalVariables;
 

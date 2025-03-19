@@ -56,17 +56,15 @@ test: $(TEST_TARGET)
 	./$(TEST_TARGET) $(TESTDIR)/0000
 
 	@if diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv > /dev/null 2>&1; then \
-		echo -e "csv output is the same. \033[1;32mGood refactoring!\033[0m"; \
+		echo -e "0000.csv is the same. \033[1;32mGood refactoring!\033[0m"; \
 	else \
-		echo -e "csv output \033[1;31mDIFFERENCES FOUND\033[0m"; \
-		diff $(TESTDIR)/0000.csv $(TESTDIR)/test.csv || true; \
+		echo -e "0000.csv: \033[1;31mDifferences found\033[0m"; \
 	fi
 
 	@if diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq > /dev/null 2>&1; then \
-		echo -e "frq output is the same. \033[1;32mGood refactoring!\033[0m"; \
+		echo -e "0000.frq is the same. \033[1;32mGood refactoring!\033[0m"; \
 	else \
-		echo -e "frq output \033[1;31mDIFFERENCES FOUND\033[0m"; \
-		diff $(TESTDIR)/0000.frq $(TESTDIR)/test.frq || true; \
+		echo -e "0000.frq: \033[1;31mDifferences found\033[0m"; \
 	fi
 
 # Linking rules

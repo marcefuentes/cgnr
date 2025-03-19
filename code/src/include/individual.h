@@ -1,6 +1,8 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
+#include <gsl/gsl_rng.h>
+
 typedef struct Individual {
     unsigned int       age;
     double             qBDefault;
@@ -38,13 +40,14 @@ typedef struct Individual {
                   .oldpartner = NULL,    \
                   .partner = NULL})
 
-int  choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size);
-void decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
-int  handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
-                        double qb_mutation_size, double grain_mutation_size, double cost, int language,
-                        unsigned int population_size);
-void initial_pairs(Individual *ind_first, Individual *ind_last);
-int  shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size);
-void update_scores(Individual *ind_first, Individual *ind_last);
+int    choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
+void   decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
+double fitness(Individual *ind_first, Individual *ind_last, double given, double alpha, double rho);
+int    handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
+                          double qb_mutation_size, double grain_mutation_size, double cost, int language,
+                          unsigned int population_size, gsl_rng *rng);
+void   initial_pairs(Individual *ind_first, Individual *ind_last);
+int    shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
+void   update_scores(Individual *ind_first, Individual *ind_last);
 
 #endif  // INDIVIDUAL_H

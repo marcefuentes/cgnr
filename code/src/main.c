@@ -1,15 +1,12 @@
 #include <gsl/gsl_rng.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
 #include <time.h>
 
 #include "globals.h"
 #include "individual.h"
 #include "io.h"
-#include "math_tools.h"
 #include "stats.h"
 
 /* Simulates reciprocity and partner choice.
@@ -17,18 +14,13 @@
  * Create file x.glo with global constants and factors.
  * Run the program with argument x (e.g. 1 if file is 1.glo). */
 
-// Global variables
-
-gsl_rng *rng = NULL;  // Random number generator
-
 // Functions
 
 static Individual *allocate_individuals(unsigned int population_size);
-static int    analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                      unsigned int period);
-static double fitness(Individual *ind_first, Individual *ind_last);
-static int    simulation(Stats *stats, char *filename);
-static int    time_to_analyze(unsigned long time);
+static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
+                   unsigned int period);
+static int simulation(Stats *stats, char *filename);
+static int time_to_analyze(unsigned long time);
 
 int main(int argc, char *argv[]) {
     clock_t start = clock();
@@ -53,18 +45,6 @@ int main(int argc, char *argv[]) {
     if (read_globals(glo) < 0) {
         fprintf(stderr, "Failed read_globals.\n");
         goto cleanup;
-    }
-
-    rng = gsl_rng_alloc(gsl_rng_taus);
-    if (rng == NULL) {
-        fprintf(stderr, "Failed gsl_rng_alloc.\n");
-        goto cleanup;
-    }
-
-    if (globals.seed == 1) {
-        struct timeval tval;
-        gettimeofday(&tval, 0);
-        gsl_rng_set(rng, (unsigned long)(tval.tv_sec) + (unsigned long)(tval.tv_usec));
     }
 
     stats = calloc(globals.periods, sizeof(*stats));
@@ -104,9 +84,9 @@ int main(int argc, char *argv[]) {
     ret = EXIT_SUCCESS;
 
 cleanup:
-    if (rng != NULL) {
-        gsl_rng_free(rng);
-        rng = NULL;
+    if (globals.rng != NULL) {
+        gsl_rng_free(globals.rng);
+        globals.rng = NULL;
     }
     if (stats != NULL) {
         free(stats);
@@ -131,7 +111,7 @@ static int simulation(Stats *stats, char *filename) {
     unsigned int period = 0;
 
     for (unsigned long time = 0; time < globals.time; time++) {
-        double w_cumulative = fitness(ind_first, ind_last);
+        double w_cumulative = fitness(ind_first, ind_last, globals.given, globals.alpha, globals.rho);
 
         if (time_to_analyze(time) == 1) {
             int result = analyze(stats, filename, ind_first, ind_last, time, period);
@@ -146,19 +126,19 @@ static int simulation(Stats *stats, char *filename) {
             update_scores(ind_first, ind_last);
         }
 
-        if (globals.shuffle == 1 && shuffle_partners(ind_first, ind_last, globals.group_size) < 0) {
+        if (globals.shuffle == 1 && shuffle_partners(ind_first, ind_last, globals.group_size, globals.rng) < 0) {
             fprintf(stderr, "Failed shuffle_partners.\n");
             goto cleanup;
         }
 
-        if (globals.partner_choice == 1 && choose_partner(ind_first, ind_last, globals.group_size) < 0) {
+        if (globals.partner_choice == 1 && choose_partner(ind_first, ind_last, globals.group_size, globals.rng) < 0) {
             fprintf(stderr, "Failed choose_partner.\n");
             goto cleanup;
         }
 
         if (handle_recruitment(ind_first, ind_last, w_cumulative, globals.death_rate, globals.qb_mutation_size,
-                               globals.grain_mutation_size, globals.cost, globals.language,
-                               globals.population_size) < 0) {
+                               globals.grain_mutation_size, globals.cost, globals.language, globals.population_size,
+                               globals.rng) < 0) {
             fprintf(stderr, "Failed handle_recruitment.\n");
             goto cleanup;
         }
@@ -209,23 +189,6 @@ static int analyze(Stats *stats, char *filename, Individual *ind_first, Individu
     }
 
     return 0;
-}
-
-static double fitness(Individual *ind_first, Individual *ind_last) {
-    double w_cumulative = 0.0;
-
-    for (Individual *ind = ind_first; ind < ind_last; ind++) {
-        double q_A = 1.0 - ind->qBDecided;
-        double q_B = (ind->qBDecided * (1.0 - globals.given)) + (ind->partner->qBDecided * globals.given);
-        ind->w = fmax(0.0, ces(q_A, q_B, globals.alpha, globals.rho) - ind->cost);
-        w_cumulative += ind->w;
-        ind->wCumulative = w_cumulative;
-        ind->age++;
-        ind->qBSeen = ind->qBDecided;
-        ind->oldpartner = ind->partner;
-    }
-
-    return w_cumulative;
 }
 
 static int time_to_analyze(unsigned long time) {
