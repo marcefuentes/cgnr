@@ -24,28 +24,28 @@ int stats_csv(Stats *stats, unsigned int periods, unsigned int runs, char *filen
         return file_write_error(filename);
     }
 
-    Stats *stats_p = stats;
     double mean;
     double st_dev;
-    for (unsigned int period = 0; period < periods; period++, stats_p++) {
+    for (unsigned int period = 0; period < periods; period++) {
         // Globals and time
-        fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
+        fprintf(file, "%f,%f,%f,%lu", stats[period].alpha, stats[period].logES, stats[period].Given,
+                stats[period].time);
 
         // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Mean and standard deviation
-            mean = stats_p->mean[variable] / runs;
-            st_dev = stdev(stats_p->mean[variable], stats_p->mean2[variable], runs);
+            mean = stats[period].mean[variable] / runs;
+            st_dev = stdev(stats[period].mean[variable], stats[period].mean2[variable], runs);
             fprintf(file, ",%f,%f", mean, st_dev);
-            mean = stats_p->sd[variable] / runs;
-            st_dev = stdev(stats_p->sd[variable], stats_p->sd2[variable], runs);
+            mean = stats[period].sd[variable] / runs;
+            st_dev = stdev(stats[period].sd[variable], stats[period].sd2[variable], runs);
             fprintf(file, ",%f,%f", mean, st_dev);
         }
 
         // Correlations
         for (int pair = 0; pair < PAIRS; pair++) {
-            mean = stats_p->corr[pair] / runs;
-            st_dev = stdev(stats_p->corr[pair], stats_p->corr2[pair], runs);
+            mean = stats[period].corr[pair] / runs;
+            st_dev = stdev(stats[period].corr[pair], stats[period].corr2[pair], runs);
             fprintf(file, ",%f,%f", mean, st_dev);
         }
 
@@ -67,27 +67,27 @@ int stats_frq(Stats *stats, unsigned int periods, unsigned int runs, char *filen
         return file_write_error(filename);
     }
 
-    Stats *stats_p = stats;
     double mean;
     double st_dev;
-    for (unsigned int period = 0; period < periods; period++, stats_p++) {
+    for (unsigned int period = 0; period < periods; period++) {
         // Globals and time
-        fprintf(file, "%f,%f,%f,%lu", stats_p->alpha, stats_p->logES, stats_p->Given, stats_p->time);
+        fprintf(file, "%f,%f,%f,%lu", stats[period].alpha, stats[period].logES, stats[period].Given,
+                stats[period].time);
 
         // Continuous variables
         for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
             // Quartiles
-            mean = stats_p->median[variable] / runs;
-            st_dev = stdev(stats_p->median[variable], stats_p->median2[variable], runs);
+            mean = stats[period].median[variable] / runs;
+            st_dev = stdev(stats[period].median[variable], stats[period].median2[variable], runs);
             fprintf(file, ",%f,%f", mean, st_dev);
-            mean = stats_p->iqr[variable] / runs;
-            st_dev = stdev(stats_p->iqr[variable], stats_p->iqr2[variable], runs);
+            mean = stats[period].iqr[variable] / runs;
+            st_dev = stdev(stats[period].iqr[variable], stats[period].iqr2[variable], runs);
             fprintf(file, ",%f,%f", mean, st_dev);
 
             // Bins
             for (int bin = 0; bin < BINS; bin++) {
-                mean = stats_p->frc[variable][bin] / runs;
-                st_dev = stdev(stats_p->frc[variable][bin], stats_p->frc2[variable][bin], runs);
+                mean = stats[period].frc[variable][bin] / runs;
+                st_dev = stdev(stats[period].frc[variable][bin], stats[period].frc2[variable][bin], runs);
                 fprintf(file, ",%f,%f", mean, st_dev);
             }
         }
