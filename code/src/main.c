@@ -17,8 +17,7 @@
 
 static Individual *allocate_individuals(unsigned int population_size);
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                   unsigned int period, double alpha, double loges, double given, unsigned int population_size,
-                   unsigned int runs);
+                   unsigned int period, Globals *globals);
 static int simulation(Stats *stats, char *filename, Globals *globals);
 static int time_to_analyze(unsigned long time, unsigned long time_per_period);
 
@@ -125,8 +124,7 @@ static int simulation(Stats *stats, char *filename, Globals *globals) {
         double w_cumulative = fitness(ind_first, ind_last, globals->given, globals->alpha, globals->rho);
 
         if (time_to_analyze(time, globals->time_per_period) == 1) {
-            int result = analyze(stats, filename, ind_first, ind_last, time, period, globals->alpha, globals->loges,
-                                 globals->given, globals->population_size, globals->runs);
+            int result = analyze(stats, filename, ind_first, ind_last, time, period, globals);
             if (result < 0) {
                 fprintf(stderr, "Failed analyze.\n");
                 goto cleanup;
@@ -187,15 +185,14 @@ static Individual *allocate_individuals(unsigned int population_size) {
 }
 
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
-                   unsigned int period, double alpha, double loges, double given, unsigned int population_size,
-                   unsigned int runs) {
-    stats[period].alpha = alpha;
-    stats[period].logES = loges;
-    stats[period].Given = given;
+                   unsigned int period, Globals *globals) {
+    stats[period].alpha = globals->alpha;
+    stats[period].logES = globals->loges;
+    stats[period].Given = globals->given;
     stats[period].time = time + 1;
-    stats_period(ind_first, ind_last, &stats[period], population_size);
-    if (runs == 1 &&
-        write_ics(filename, period, (float)alpha, (float)loges, (float)given, time + 1, ind_first, ind_last) < 0) {
+    stats_period(ind_first, ind_last, &stats[period], globals->population_size);
+    if (globals->runs == 1 && write_ics(filename, period, (float)globals->alpha, (float)globals->loges,
+                                        (float)globals->given, time + 1, ind_first, ind_last) < 0) {
         fprintf(stderr, "Failed write_ics.\n");
         return -1;
     }
