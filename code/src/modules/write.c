@@ -6,6 +6,7 @@
 
 const char *headers_continuous[CONTINUOUS_VARS] = {
     "w", "qBDefault", "qBSeen", "ChooseGrain", "Choose_ltGrain", "MimicGrain", "ImimicGrain", "Imimic_ltGrain"};
+const char  headers_global[] = "alpha,logES,Given,Time";
 const char *headers_correlations[PAIRS] = {
     "r_qB_Choose",        "r_qB_Choose_lt",        "r_qB_Mimic",      "r_qB_Imimic",        "r_qB_Imimic_lt",
     "r_Choose_Choose_lt", "r_Choose_Mimic",        "r_Choose_Imimic", "r_Choose_Imimic_lt", "r_Choose_lt_Mimic",
@@ -107,7 +108,7 @@ static int write_csv_headers(char *filename) {
     }
 
     // Globals and time
-    fprintf(file, "alpha,logES,Given,Time");
+    fprintf(file, "%s", headers_global);
 
     // Continuous variables
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
@@ -133,7 +134,7 @@ static int write_frq_headers(char *filename) {
     }
 
     // Globals and time
-    fprintf(file, "alpha,logES,Given,Time");
+    fprintf(file, "%s", headers_global);
 
     // Continuous variables
     for (int variable = 0; variable < CONTINUOUS_VARS; variable++) {
