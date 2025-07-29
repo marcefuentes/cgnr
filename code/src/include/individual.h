@@ -3,6 +3,8 @@
 
 #include <gsl/gsl_rng.h>
 
+#include "globals.h"
+
 typedef struct Individual {
     unsigned int       age;
     double             qBDefault;
@@ -43,9 +45,7 @@ typedef struct Individual {
 int    choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
 void   decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
 double fitness(Individual *ind_first, Individual *ind_last, double given, double alpha, double rho);
-int    handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
-                          double qb_mutation_size, double grain_mutation_size, double cost, int language,
-                          unsigned int population_size, gsl_rng *rng);
+int    handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, Globals *globals);
 void   initial_pairs(Individual *ind_first, Individual *ind_last);
 int    shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
 void   update_scores(Individual *ind_first, Individual *ind_last);

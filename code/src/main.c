@@ -149,9 +149,7 @@ static int simulation(Stats *stats, char *filename, Globals *globals) {
             goto cleanup;
         }
 
-        if (handle_recruitment(ind_first, ind_last, w_cumulative, globals->death_rate, globals->qb_mutation_size,
-                               globals->grain_mutation_size, globals->cost, globals->language, globals->population_size,
-                               globals->rng) < 0) {
+        if (handle_recruitment(ind_first, ind_last, w_cumulative, globals) < 0) {
             fprintf(stderr, "Failed handle_recruitment.\n");
             goto cleanup;
         }

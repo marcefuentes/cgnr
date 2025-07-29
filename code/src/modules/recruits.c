@@ -22,23 +22,20 @@ typedef struct Recruit {
 static Recruit *create_recruits(unsigned int deaths, double w_cumulative, gsl_rng *rng);
 static void     free_recruit_list(Recruit **head);
 static void     kill(Recruit *recruit_first, Individual *ind_first, unsigned int population_size, gsl_rng *rng);
-static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
-                   double cost, int language, gsl_rng *rng);
+static void     mutate(Recruit *recruit_first, Individual *ind_first, Globals *globals);
 
-int handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, double death_rate,
-                       double qb_mutation_size, double grain_mutation_size, double cost, int language,
-                       unsigned int population_size, gsl_rng *rng) {
-    unsigned int deaths = gsl_ran_binomial(rng, death_rate, population_size);
+int handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, Globals *globals) {
+    unsigned int deaths = gsl_ran_binomial(globals->rng, globals->death_rate, globals->population_size);
 
     if (deaths > 0) {
-        Recruit *recruit_first = create_recruits(deaths, w_cumulative, rng);
+        Recruit *recruit_first = create_recruits(deaths, w_cumulative, globals->rng);
         if (recruit_first == NULL) {
             fprintf(stderr, "Failed create_recruits.\n");
             return -1;
         }
 
-        mutate(recruit_first, ind_first, qb_mutation_size, grain_mutation_size, cost, language, rng);
-        kill(recruit_first, ind_first, population_size, rng);
+        mutate(recruit_first, ind_first, globals);
+        kill(recruit_first, ind_first, globals->population_size, globals->rng);
         free_recruit_list(&recruit_first);
     }
 
@@ -104,28 +101,28 @@ static void kill(Recruit *recruit_first, Individual *ind_first, unsigned int pop
     }
 }
 
-static void mutate(Recruit *recruit_first, Individual *ind_first, double qb_mutation_size, double grain_mutation_size,
-                   double cost, int language, gsl_rng *rng) {
+static void mutate(Recruit *recruit_first, Individual *ind_first, Globals *globals) {
     Individual *ind = ind_first;
     for (Recruit *recruit = recruit_first; recruit != NULL; recruit = recruit->next) {
         while (recruit->randomwc > ind->wCumulative) {
             ind++;
         }
 
-        recruit->qBDefault = dtnorm(ind->qBDefault, qb_mutation_size, 0.0, 1.0, rng);
-        recruit->ChooseGrain = dtnorm(ind->ChooseGrain, grain_mutation_size, 0.0, 1.0, rng);
-        recruit->MimicGrain = dtnorm(ind->MimicGrain, grain_mutation_size, 0.0, 1.0, rng);
-        recruit->ImimicGrain = dtnorm(ind->ImimicGrain, grain_mutation_size, 0.0, 1.0, rng);
-        if (language == 1) {
-            recruit->Choose_ltGrain = dtnorm(ind->Choose_ltGrain, grain_mutation_size, 0.0, 1.0, rng);
-            recruit->Imimic_ltGrain = dtnorm(ind->Imimic_ltGrain, grain_mutation_size, 0.0, 1.0, rng);
+        recruit->qBDefault = dtnorm(ind->qBDefault, globals->qb_mutation_size, 0.0, 1.0, globals->rng);
+        recruit->ChooseGrain = dtnorm(ind->ChooseGrain, globals->grain_mutation_size, 0.0, 1.0, globals->rng);
+        recruit->MimicGrain = dtnorm(ind->MimicGrain, globals->grain_mutation_size, 0.0, 1.0, globals->rng);
+        recruit->ImimicGrain = dtnorm(ind->ImimicGrain, globals->grain_mutation_size, 0.0, 1.0, globals->rng);
+        if (globals->language == 1) {
+            recruit->Choose_ltGrain = dtnorm(ind->Choose_ltGrain, globals->grain_mutation_size, 0.0, 1.0, globals->rng);
+            recruit->Imimic_ltGrain = dtnorm(ind->Imimic_ltGrain, globals->grain_mutation_size, 0.0, 1.0, globals->rng);
         } else {
             recruit->Choose_ltGrain = ind->Choose_ltGrain;
             recruit->Imimic_ltGrain = ind->Imimic_ltGrain;
         }
 
-        recruit->cost = -cost * (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) + log(recruit->MimicGrain) +
-                                 log(recruit->ImimicGrain) + log(recruit->Imimic_ltGrain));
+        recruit->cost =
+            -globals->cost * (log(recruit->ChooseGrain) + log(recruit->Choose_ltGrain) + log(recruit->MimicGrain) +
+                              log(recruit->ImimicGrain) + log(recruit->Imimic_ltGrain));
     }
 }
 
