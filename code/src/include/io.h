@@ -8,7 +8,7 @@ enum { MAX_ARG_LENGTH = 9, MAX_FILENAME_LEN = 22 };
 // File I/O functions
 int file_write_error(char *filename);
 int write_time_elapsed(char *filename, float time_elapsed);
-int write_ics(char *filename, unsigned int period, float alpha, float loges, float given, unsigned long time,
-              Individual *ind_first, Individual *ind_last);
+int write_ics(char *filename, unsigned int period, unsigned long time, Individual *ind_first, Individual *ind_last,
+              Globals *globals);
 
 #endif  // IO_H

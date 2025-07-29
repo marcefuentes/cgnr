@@ -174,8 +174,7 @@ static int analyze(Stats *stats, char *filename, Individual *ind_first, Individu
     stats[period].Given = globals->given;
     stats[period].time = time + 1;
     stats_period(ind_first, ind_last, &stats[period], globals->population_size);
-    if (globals->runs == 1 && write_ics(filename, period, (float)globals->alpha, (float)globals->loges,
-                                        (float)globals->given, time + 1, ind_first, ind_last) < 0) {
+    if (globals->runs == 1 && write_ics(filename, period, time + 1, ind_first, ind_last, globals) < 0) {
         fprintf(stderr, "Failed write_ics.\n");
         return -1;
     }
