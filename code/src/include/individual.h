@@ -42,12 +42,13 @@ typedef struct Individual {
                   .oldpartner = NULL,    \
                   .partner = NULL})
 
-int    choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
-void   decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
-double fitness(Individual *ind_first, Individual *ind_last, double given, double alpha, double rho);
-int    handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, Globals *globals);
-void   initial_pairs(Individual *ind_first, Individual *ind_last);
-int    shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
-void   update_scores(Individual *ind_first, Individual *ind_last);
+int         choose_partner(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
+void        decide_qB(Individual *ind_first, Individual *ind_last, int indirect_r);
+double      fitness(Individual *ind_first, Individual *ind_last, double given, double alpha, double rho);
+int         handle_recruitment(Individual *ind_first, Individual *ind_last, double w_cumulative, Globals *globals);
+void        initial_pairs(Individual *ind_first, Individual *ind_last);
+int         shuffle_partners(Individual *ind_first, Individual *ind_last, unsigned int group_size, gsl_rng *rng);
+void        update_scores(Individual *ind_first, Individual *ind_last);
+Individual *allocate_individuals(unsigned int population_size);
 
 #endif  // INDIVIDUAL_H

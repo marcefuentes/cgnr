@@ -15,7 +15,6 @@
 
 // Functions
 
-static Individual *allocate_individuals(unsigned int population_size);
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
                    unsigned int period, Globals *globals);
 static int simulation(Stats *stats, char *filename, Globals *globals);
@@ -166,22 +165,6 @@ cleanup:
     }
 
     return ret;
-}
-
-static Individual *allocate_individuals(unsigned int population_size) {
-    Individual *ind = calloc(population_size, sizeof(*ind));
-    if (ind == NULL) {
-        fprintf(stderr, "Failed to allocate individuals.\n");
-        return NULL;
-    }
-
-    ind[0] = INITIAL_INDIVIDUAL;
-
-    for (unsigned int individual = 1; individual < population_size; individual++) {
-        ind[individual] = ind[0];
-    }
-
-    return ind;
 }
 
 static int analyze(Stats *stats, char *filename, Individual *ind_first, Individual *ind_last, unsigned long time,
