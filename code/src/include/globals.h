@@ -27,6 +27,4 @@ typedef struct Globals {
     unsigned long time_per_period;
 } Globals;
 
-int read_globals(const char *filename, Globals *globals);
-
 #endif  // GLOBALS_H

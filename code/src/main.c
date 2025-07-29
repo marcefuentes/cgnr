@@ -3,9 +3,9 @@
 #include <string.h>
 #include <time.h>
 
-#include "globals.h"
 #include "individual.h"
 #include "io.h"
+#include "read.h"
 #include "stats.h"
 
 /* Simulates reciprocity and partner choice.
